@@ -1,0 +1,13 @@
+(async()=>{
+  const b64=(window.__estB64||[]).join('');
+  const bin=atob(b64);
+  const bytes=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+  const fd=new FormData();
+  fd.append('file',new Blob([bytes],{type:'image/webp'}),'estoque-fifo-web.webp');
+  fd.append('title','Aero Suite — Estoque FIFO');
+  fd.append('alt_text','Itens em estoque com rastreio FIFO');
+  const m=await wp.apiFetch({path:'/wp/v2/media',method:'POST',body:fd});
+  window.__estUrl=m.source_url;
+  return m.source_url;
+})()

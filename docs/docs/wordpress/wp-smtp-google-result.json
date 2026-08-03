@@ -1,0 +1,16 @@
+{
+  "snapshot": {
+    "mailer": true,
+    "host": "smtp.gmail.com",
+    "port": "587",
+    "user": "contato@aerosuite.com.br",
+    "from": "contato@aerosuite.com.br"
+  },
+  "saved": {},
+  "test": {
+    "success": false,
+    "fail": true,
+    "excerpt": "E-mail de teste Exportar Ações programadas Eventos de depuração\nE-mail de teste\nEnviar um e-mail de teste\n\nOcorreu um problema ao enviar o e-mail de teste.\n\nNão foi possível autenticar sua conta SMTP.\n\nIsso significa que conseguimos nos conectar ao seu servidor SMTP, mas não conseguimos continuar us"
+  },
+  "at": "2026-06-09T15:36:11.688Z"
+}

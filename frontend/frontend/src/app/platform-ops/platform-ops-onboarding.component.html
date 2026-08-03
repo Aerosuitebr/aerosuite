@@ -1,0 +1,387 @@
+<p-toast></p-toast>
+
+<section class="ops-page-canvas ops-page">
+  <header class="ops-page-header ops-onboarding-header">
+    <div>
+      <h2>{{ 'platformOps.onboarding.title' | translate }}</h2>
+      <p>{{ 'platformOps.onboarding.subtitle' | translate }}</p>
+    </div>
+    <button
+      pButton
+      type="button"
+      class="p-button-outlined ops-refresh-btn"
+      icon="pi pi-refresh"
+      [label]="'audit.refresh' | translate"
+      (click)="reload()"
+      [loading]="loading">
+    </button>
+  </header>
+
+  <div class="ops-onboarding-kpis" *ngIf="hub">
+    <button
+      type="button"
+      class="ops-onboarding-kpi ops-onboarding-kpi--pending"
+      [class.ops-onboarding-kpi--selected]="isKpiSelected('pending')"
+      [attr.aria-pressed]="isKpiSelected('pending')"
+      (click)="toggleKpiFilter('pending')">
+      <span class="ops-onboarding-kpi-label-row">
+        <span class="ops-onboarding-kpi-led ops-onboarding-kpi-led--pending" aria-hidden="true"></span>
+        <span class="ops-onboarding-kpi-label">{{ 'platformOps.onboarding.kpi.pending' | translate }}</span>
+      </span>
+      <strong class="ops-onboarding-kpi-value">{{ hub.pendingInfo }}</strong>
+    </button>
+    <button
+      type="button"
+      class="ops-onboarding-kpi ops-onboarding-kpi--progress"
+      [class.ops-onboarding-kpi--selected]="isKpiSelected('inProgress')"
+      [attr.aria-pressed]="isKpiSelected('inProgress')"
+      (click)="toggleKpiFilter('inProgress')">
+      <span class="ops-onboarding-kpi-label-row">
+        <span class="ops-onboarding-kpi-led ops-onboarding-kpi-led--progress" aria-hidden="true"></span>
+        <span class="ops-onboarding-kpi-label">{{ 'platformOps.onboarding.kpi.inProgress' | translate }}</span>
+      </span>
+      <strong class="ops-onboarding-kpi-value">{{ hub.inProgress }}</strong>
+    </button>
+    <button
+      type="button"
+      class="ops-onboarding-kpi ops-onboarding-kpi--ready"
+      [class.ops-onboarding-kpi--selected]="isKpiSelected('ready')"
+      [attr.aria-pressed]="isKpiSelected('ready')"
+      (click)="toggleKpiFilter('ready')">
+      <span class="ops-onboarding-kpi-label-row">
+        <span class="ops-onboarding-kpi-led ops-onboarding-kpi-led--ready" aria-hidden="true"></span>
+        <span class="ops-onboarding-kpi-label">{{ 'platformOps.onboarding.kpi.ready' | translate }}</span>
+      </span>
+      <strong class="ops-onboarding-kpi-value">{{ hub.ready }}</strong>
+    </button>
+    <button
+      type="button"
+      class="ops-onboarding-kpi ops-onboarding-kpi--completed"
+      [class.ops-onboarding-kpi--selected]="isKpiSelected('completed')"
+      [attr.aria-pressed]="isKpiSelected('completed')"
+      (click)="toggleKpiFilter('completed')">
+      <span class="ops-onboarding-kpi-label-row">
+        <span class="ops-onboarding-kpi-led ops-onboarding-kpi-led--completed" aria-hidden="true"></span>
+        <span class="ops-onboarding-kpi-label">{{ 'platformOps.onboarding.kpi.completed' | translate }}</span>
+      </span>
+      <strong class="ops-onboarding-kpi-value">{{ hub.completed }}</strong>
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="ops-loading">{{ 'platformOps.common.loading' | translate }}</div>
+
+  <div class="ops-list-frame" *ngIf="!loading && hub">
+    <div class="ops-onboarding-toolbar">
+      <label class="ops-onboarding-search" for="ops-onboarding-search">
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <input
+          pInputText
+          id="ops-onboarding-search"
+          type="search"
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchChange($event)"
+          [placeholder]="'platformOps.onboarding.search.placeholder' | translate"
+          [attr.aria-label]="'platformOps.onboarding.search.placeholder' | translate"
+          autocomplete="off" />
+      </label>
+    </div>
+
+    <div class="ops-onboarding-filter-bar" *ngIf="hasActiveFilters()">
+      <div class="ops-onboarding-filter-summary">
+        <span class="ops-filter-count">
+          {{ 'platformOps.operators.filter.count' | translate:{ count: totalCount() } }}
+        </span>
+        <span class="ops-filter-chip" *ngIf="kpiFilterLabelKey() as labelKey">
+          {{ labelKey | translate }}
+        </span>
+        <span class="ops-filter-query" *ngIf="activeSearchTerm()">
+          «{{ activeSearchTerm() }}»
+        </span>
+      </div>
+      <button type="button" class="ops-onboarding-filter-clear" (click)="clearFilters()">
+        {{ 'platformOps.billing.filter.clear' | translate }}
+      </button>
+    </div>
+
+    <div class="ops-onboarding-table-shell">
+      <p-table
+        [value]="paginatedItems()"
+        [loading]="loading"
+        styleClass="ops-table ops-onboarding-table p-datatable-sm"
+        [rowHover]="true">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ 'platformOps.onboarding.col.org' | translate }}</th>
+            <th>{{ 'platformOps.onboarding.col.status' | translate }}</th>
+            <th>{{ 'platformOps.onboarding.col.progress' | translate }}</th>
+            <th>{{ 'platformOps.onboarding.col.contact' | translate }}</th>
+            <th class="ops-col-actions">{{ 'platformOps.onboarding.col.actions' | translate }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td class="ops-col-org">
+              <div class="ops-org-cell">
+                <strong class="ops-org-cell__name">{{ row.tenantNome }}</strong>
+                <span class="ops-org-cell__code">{{ row.tenantCodigo }}</span>
+              </div>
+            </td>
+            <td><span class="ops-onboarding-status">{{ statusLabel(row.status) }}</span></td>
+            <td><span class="ops-onboarding-progress">{{ progressLabel(row) }}</span></td>
+            <td>
+              <span *ngIf="row.primaryContactEmail; else noContact" class="ops-onboarding-contact">{{ row.primaryContactEmail }}</span>
+              <ng-template #noContact><span class="ops-muted-dash">—</span></ng-template>
+            </td>
+            <td class="ops-col-actions">
+              <button
+                pButton
+                type="button"
+                class="p-button-text p-button-rounded"
+                icon="pi pi-comments"
+                [attr.aria-label]="'platformOps.onboarding.open' | translate"
+                (click)="openDrawer(row)">
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5" class="ops-empty-cell">
+              {{ (hasActiveFilters() ? 'platformOps.onboarding.emptyFiltered' : 'platformOps.onboarding.empty') | translate }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <footer class="ops-table-footer" *ngIf="!loading && totalCount() > 0">
+        <div class="ops-footer-page-size">
+          <span class="ops-footer-page-size-label">{{ 'platformOps.billing.footer.pageSizePrefix' | translate }}</span>
+          <p-dropdown
+            [options]="pageSizeOptions"
+            optionLabel="label"
+            optionValue="value"
+            [(ngModel)]="pageSize"
+            (onChange)="onPageSizeChange()"
+            styleClass="ops-footer-page-size-dropdown"
+            panelStyleClass="ops-dark-dropdown-panel"
+            [appendTo]="'body'">
+          </p-dropdown>
+          <span class="ops-footer-page-size-label">{{ 'platformOps.billing.footer.pageSizeSuffix' | translate }}</span>
+        </div>
+
+        <nav class="ops-footer-pagination" [attr.aria-label]="'platformOps.billing.footer.nextPage' | translate">
+          <button
+            type="button"
+            class="ops-page-btn ops-page-btn--nav"
+            [disabled]="currentPage <= 1"
+            [attr.aria-label]="'platformOps.billing.footer.prevPage' | translate"
+            (click)="goToPage(currentPage - 1)">
+            &lt;
+          </button>
+          <ng-container *ngFor="let slot of paginationSlots()">
+            <span *ngIf="slot === 'ellipsis'" class="ops-page-ellipsis" aria-hidden="true">…</span>
+            <button
+              *ngIf="slot !== 'ellipsis'"
+              type="button"
+              class="ops-page-btn"
+              [class.ops-page-btn--active]="slot === currentPage"
+              (click)="goToPage(+slot)">
+              {{ slot }}
+            </button>
+          </ng-container>
+          <button
+            type="button"
+            class="ops-page-btn ops-page-btn--nav"
+            [disabled]="currentPage >= totalPages()"
+            [attr.aria-label]="'platformOps.billing.footer.nextPage' | translate"
+            (click)="goToPage(currentPage + 1)">
+            &gt;
+          </button>
+        </nav>
+
+        <div class="ops-footer-meta">
+          <span class="ops-footer-range">{{ footerRangeText() }}</span>
+        </div>
+      </footer>
+    </div>
+  </div>
+</section>
+
+<p-sidebar
+  [(visible)]="drawerVisible"
+  position="right"
+  styleClass="ops-onboarding-drawer"
+  [style]="{ width: 'min(540px, 96vw)' }"
+  (onHide)="closeDrawer()">
+  <ng-template pTemplate="header">
+    <span class="ops-drawer-title">{{ 'platformOps.onboarding.drawer.title' | translate }}</span>
+  </ng-template>
+
+  <div *ngIf="detailLoading" class="ops-loading">{{ 'platformOps.common.loading' | translate }}</div>
+
+  <div class="ops-onboarding-drawer-body" *ngIf="detail && !detailLoading">
+    <p class="ops-drawer-org">{{ detail.tenantNome }} <code>{{ detail.tenantCodigo }}</code></p>
+
+    <section class="ops-onboarding-section" *ngIf="detail.publicFormUrl">
+      <h4>{{ 'platformOps.onboarding.section.publicForm' | translate }}</h4>
+      <p class="ops-public-link">{{ detail.publicFormUrl }}</p>
+      <div class="ops-inline-actions">
+        <button pButton type="button" icon="pi pi-copy" class="p-button-outlined p-button-sm"
+          [label]="'platformOps.onboarding.copyLink' | translate" (click)="copyPublicLink()"></button>
+        <span *ngIf="detail.publicSubmittedAt" class="ops-submitted-badge">
+          {{ 'platformOps.onboarding.formSubmitted' | translate }}
+        </span>
+      </div>
+    </section>
+
+    <section class="ops-onboarding-section">
+      <h4>{{ 'platformOps.onboarding.section.meta' | translate }}</h4>
+      <label>{{ 'platformOps.onboarding.field.status' | translate }}</label>
+      <p-dropdown
+        [options]="statusOptions"
+        optionLabel="labelKey"
+        optionValue="value"
+        [(ngModel)]="detail.status"
+        styleClass="ops-dark-field-dropdown"
+        panelStyleClass="ops-dark-dropdown-panel"
+        [appendTo]="'body'">
+        <ng-template pTemplate="selectedItem" let-opt>{{ opt.labelKey | translate }}</ng-template>
+        <ng-template pTemplate="item" let-opt>{{ opt.labelKey | translate }}</ng-template>
+      </p-dropdown>
+      <label>{{ 'platformOps.onboarding.field.contactName' | translate }}</label>
+      <input pInputText class="ops-dark-input" [(ngModel)]="detail.primaryContactName" />
+      <label>{{ 'platformOps.onboarding.field.contactEmail' | translate }}</label>
+      <input pInputText class="ops-dark-input" type="email" [(ngModel)]="detail.primaryContactEmail" />
+      <label>{{ 'platformOps.onboarding.field.contactPhone' | translate }}</label>
+      <input pInputText class="ops-dark-input" [(ngModel)]="detail.primaryContactPhone" />
+      <label>{{ 'platformOps.onboarding.field.notes' | translate }}</label>
+      <textarea pInputTextarea class="ops-dark-input" rows="3" [(ngModel)]="detail.notes"></textarea>
+      <button pButton type="button" class="ops-save-meta-btn" [label]="'platformOps.onboarding.saveMeta' | translate" (click)="saveDetailMeta()"></button>
+    </section>
+
+    <section class="ops-onboarding-section">
+      <h4>{{ 'platformOps.onboarding.section.welcome' | translate }}</h4>
+      <p class="ops-section-hint">{{ 'platformOps.onboarding.welcomeHint' | translate }}</p>
+      <div class="ops-welcome-reset">
+        <p-checkbox [(ngModel)]="welcomeResetPassword" [binary]="true" inputId="welcome-reset-pwd"></p-checkbox>
+        <label for="welcome-reset-pwd">{{ 'platformOps.onboarding.welcomeResetPassword' | translate }}</label>
+      </div>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-envelope"
+        class="ops-send-btn"
+        [label]="'platformOps.onboarding.resendWelcome' | translate"
+        [loading]="resendingWelcome"
+        (click)="resendWelcome()">
+      </button>
+    </section>
+
+    <section class="ops-onboarding-section">
+      <h4>{{ 'platformOps.onboarding.section.checklist' | translate }}</h4>
+      <ul class="ops-onboarding-checklist">
+        <li *ngFor="let req of detail.requirements">
+          <p-checkbox
+            [binary]="true"
+            [ngModel]="req.fulfilled"
+            (ngModelChange)="toggleRequirement(req.requirementKey, $event)"
+            [inputId]="'req-' + req.requirementKey">
+          </p-checkbox>
+          <label [for]="'req-' + req.requirementKey">{{ requirementLabel(req.requirementKey) }}</label>
+        </li>
+      </ul>
+    </section>
+
+    <section class="ops-onboarding-section">
+      <h4>{{ 'platformOps.onboarding.section.send' | translate }}</h4>
+      <label>{{ 'platformOps.onboarding.field.channel' | translate }}</label>
+      <p-dropdown
+        [options]="channelOptions"
+        optionLabel="labelKey"
+        optionValue="value"
+        [(ngModel)]="sendChannel"
+        (onChange)="onChannelChange()"
+        styleClass="ops-dark-field-dropdown"
+        panelStyleClass="ops-dark-dropdown-panel"
+        [appendTo]="'body'">
+        <ng-template pTemplate="selectedItem" let-opt>{{ opt.labelKey | translate }}</ng-template>
+        <ng-template pTemplate="item" let-opt>{{ opt.labelKey | translate }}</ng-template>
+      </p-dropdown>
+      <label>{{ 'platformOps.onboarding.field.template' | translate }}</label>
+      <div class="ops-template-row">
+        <p-dropdown
+          [options]="filteredTemplates"
+          optionLabel="nameLabel"
+          optionValue="code"
+          [(ngModel)]="sendTemplateCode"
+          (onChange)="onTemplateChange()"
+          styleClass="ops-dark-field-dropdown ops-template-dropdown"
+          panelStyleClass="ops-dark-dropdown-panel"
+          [appendTo]="'body'">
+        </p-dropdown>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-pencil"
+          class="p-button-outlined p-button-sm"
+          [attr.aria-label]="'platformOps.onboarding.editTemplate' | translate"
+          (click)="openTemplateEditor()">
+        </button>
+      </div>
+      <label *ngIf="sendChannel === 'EMAIL'">{{ 'platformOps.onboarding.field.recipientEmail' | translate }}</label>
+      <input *ngIf="sendChannel === 'EMAIL'" pInputText class="ops-dark-input" type="email" [(ngModel)]="sendRecipientEmail" />
+      <label *ngIf="sendChannel === 'WHATSAPP'">{{ 'platformOps.onboarding.field.recipientPhone' | translate }}</label>
+      <input *ngIf="sendChannel === 'WHATSAPP'" pInputText class="ops-dark-input" [(ngModel)]="sendRecipientPhone" />
+      <label>{{ 'platformOps.onboarding.field.recipientName' | translate }}</label>
+      <input pInputText class="ops-dark-input" [(ngModel)]="sendRecipientName" (ngModelChange)="applyTemplatePreview()" />
+      <label>{{ 'platformOps.onboarding.field.subject' | translate }}</label>
+      <input pInputText class="ops-dark-input" [(ngModel)]="sendSubjectOverride" />
+      <label>{{ 'platformOps.onboarding.field.body' | translate }}</label>
+      <textarea pInputTextarea class="ops-dark-input ops-body-preview" rows="8" [(ngModel)]="sendBodyOverride"></textarea>
+      <button
+        pButton
+        type="button"
+        [icon]="sendChannel === 'WHATSAPP' ? 'pi pi-whatsapp' : 'pi pi-send'"
+        class="ops-send-btn"
+        [label]="(sendChannel === 'WHATSAPP' ? 'platformOps.onboarding.openWhatsapp' : 'platformOps.onboarding.send') | translate"
+        [loading]="sending"
+        (click)="sendMessage()">
+      </button>
+    </section>
+
+    <section class="ops-onboarding-section" *ngIf="detail.messages.length">
+      <h4>{{ 'platformOps.onboarding.section.history' | translate }}</h4>
+      <ul class="ops-onboarding-history">
+        <li *ngFor="let msg of detail.messages">
+          <time>{{ msg.createdAt | date:'dd MMM yyyy, HH:mm' }}</time>
+          <strong>{{ msg.subject }} <span class="ops-channel-tag">{{ msg.channel }}</span></strong>
+          <span>{{ messageRecipientLabel(msg) }} · {{ msg.deliveryStatus }}</span>
+        </li>
+      </ul>
+    </section>
+  </div>
+</p-sidebar>
+
+<p-dialog
+  [(visible)]="templateDialogVisible"
+  [modal]="true"
+  [style]="{ width: 'min(1100px, 96vw)' }"
+  [header]="'platformOps.onboarding.editTemplateTitle' | translate"
+  styleClass="ops-template-dialog">
+  <div class="ops-template-dialog-body" *ngIf="editingTemplate">
+    <app-platform-ops-template-editor
+      [nameLabel]="editingTemplate.nameLabel"
+      (nameLabelChange)="editingTemplate.nameLabel = $event"
+      [subjectTemplate]="editingTemplate.subjectTemplate"
+      (subjectTemplateChange)="editingTemplate.subjectTemplate = $event"
+      [bodyTemplate]="editingTemplate.bodyTemplate"
+      (bodyTemplateChange)="editingTemplate.bodyTemplate = $event"
+      [plainText]="editingTemplate.channel === 'WHATSAPP'"
+      [previewVars]="templatePreviewVars">
+    </app-platform-ops-template-editor>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton type="button" class="p-button-text ops-template-cancel-btn" [label]="'platformOps.common.cancel' | translate" (click)="templateDialogVisible = false"></button>
+    <button pButton type="button" class="ops-template-save-btn" [label]="'platformOps.common.save' | translate" [loading]="savingTemplate" (click)="saveTemplate()"></button>
+  </ng-template>
+</p-dialog>

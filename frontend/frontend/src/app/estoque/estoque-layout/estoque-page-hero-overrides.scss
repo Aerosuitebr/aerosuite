@@ -1,0 +1,175 @@
+/* Telas do módulo Estoque em largura/altura úteis da área de conteúdo */
+:host ::ng-deep .estoque-content {
+  > * {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .as-page,
+  .invoice-detail-page,
+  .entrada-shell,
+  .dashboard-container,
+  .rastreio-page,
+  .consulta-container,
+  .quarentena-page,
+  .estoque-minimo-lote,
+  [class$='-container'] {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .as-page,
+  .invoice-detail-page,
+  .entrada-shell {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .as-page {
+    min-height: 0;
+    height: auto;
+    overflow-x: clip;
+    overflow-y: visible;
+  }
+
+  app-page-hero {
+    display: block;
+    width: 100%;
+    flex-shrink: 0;
+
+    .as-page-hero {
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+
+  /* Scroll vertical da página + horizontal nas tabelas (módulo fora do app-layout) */
+  .table-section,
+  .table-card,
+  .table-container,
+  .data-card,
+  .as-table-card {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  .p-datatable {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .p-datatable:not(.p-datatable-responsive-stack) {
+    .p-datatable-wrapper,
+    .p-datatable-table-container,
+    .p-datatable-scrollable-body,
+    .p-datatable-scrollable-table-container {
+      max-width: 100%;
+      min-width: 0;
+      max-height: none !important;
+      height: auto !important;
+      overflow-x: auto !important;
+      overflow-y: visible !important;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+    }
+  }
+}
+
+/* Botões e ícones claros nos page-heroes dentro do módulo Estoque */
+:host ::ng-deep .estoque-content app-page-hero {
+  .as-page-hero__kicker .pi,
+  .as-page-hero__title .pi {
+    color: #fff;
+  }
+
+  .as-page-hero__actions {
+    .p-button-outlined,
+    .p-button-outlined.p-button-secondary,
+    .p-button-outlined.p-button-success,
+    .p-button-outlined.p-button-danger,
+    .p-button-outlined.p-button-warning,
+    .p-button-outlined.p-button-info {
+      color: #fff;
+      border-color: #0369a1;
+
+      .p-button-label,
+      .p-button-icon {
+        color: #fff;
+      }
+
+      &:enabled:hover,
+      &:not(:disabled):hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.08);
+        border-color: #0284c7;
+
+        .p-button-label,
+        .p-button-icon {
+          color: #fff;
+        }
+      }
+    }
+
+    .p-button-text,
+    .p-button-text.p-button-secondary {
+      color: #fff;
+
+      .p-button-label,
+      .p-button-icon {
+        color: #fff;
+      }
+
+      &:enabled:hover,
+      &:not(:disabled):hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+
+        .p-button-label,
+        .p-button-icon {
+          color: #fff;
+        }
+      }
+    }
+
+    .p-button-text {
+      border-color: transparent;
+
+      &:enabled:hover,
+      &:not(:disabled):hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    .icon-btn {
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.16);
+        color: #fff;
+      }
+    }
+  }
+}
+
+@media (max-width: 1023px) {
+  :host ::ng-deep .estoque-content {
+    .p-datatable:not(.p-datatable-responsive-stack) {
+      .p-datatable-thead > tr > th,
+      .p-datatable-tbody > tr > td {
+        white-space: nowrap;
+      }
+    }
+  }
+}

@@ -1,0 +1,1 @@
+{"method":"Runtime.evaluate","params":{"expression":"(async()=>{eval(window.__footerInline);})()","awaitPromise":true,"returnByValue":true},"viewId":"097ced"}

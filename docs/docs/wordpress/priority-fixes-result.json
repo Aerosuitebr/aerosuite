@@ -1,0 +1,95 @@
+{
+  "at": "2026-06-03T18:16:25.434Z",
+  "sitemapBefore": {
+    "status": 200,
+    "ok": true,
+    "preview": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"https://aerosuite.com.br/wp-sitemap-index.xsl\" ?>\n<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"><sitemap><loc>https://aerosuite.com.br/wp-sitemap-posts-post-1.xml</loc></sitemap><sitemap><loc>https://ae"
+  },
+  "wpformsBefore": {
+    "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#wpforms-form-12') to be visible\n"
+  },
+  "permalinks": {
+    "ok": true
+  },
+  "pluginsBefore": [
+    {
+      "plugin": "complianz-gdpr/complianz-gpdr",
+      "name": "Complianz | Consentimento de cookies para GDPR/CCPA",
+      "version": "7.4.6"
+    },
+    {
+      "plugin": "extendify/extendify",
+      "name": "Extendify - Assistente de Onboarding e IA para WordPress",
+      "version": "2.3.1"
+    },
+    {
+      "plugin": "google-analytics-for-wordpress/googleanalytics",
+      "name": "Google Analytics for WordPress by MonsterInsights",
+      "version": "10.2.2"
+    },
+    {
+      "plugin": "imagify/imagify",
+      "name": "Imagify",
+      "version": "2.2.8"
+    },
+    {
+      "plugin": "backup/backup",
+      "name": "JetBackup",
+      "version": "3.1.21.3"
+    },
+    {
+      "plugin": "rocket-lazy-load/rocket-lazy-load",
+      "name": "Lazy Load - Optimize Images",
+      "version": "2.4.0"
+    },
+    {
+      "plugin": "really-simple-ssl/rlrsssl-really-simple-ssl",
+      "name": "Really Simple Security",
+      "version": "9.5.11"
+    },
+    {
+      "plugin": "sugar-calendar-lite/sugar-calendar-lite",
+      "name": "Sugar Calendar (Lite)",
+      "version": "3.11.1"
+    },
+    {
+      "plugin": "translatepress-multilingual/index",
+      "name": "TranslatePress - Multilingual",
+      "version": "3.2.1"
+    },
+    {
+      "plugin": "wpforms-lite/wpforms",
+      "name": "WPForms Lite",
+      "version": "1.10.1"
+    },
+    {
+      "plugin": "wp-mail-smtp/wp_mail_smtp",
+      "name": "WP Mail SMTP",
+      "version": "4.8.0"
+    }
+  ],
+  "pluginUpdates": {
+    "ok": true,
+    "updated": [
+      "bulk_attempted"
+    ]
+  },
+  "smtpIsolation": {
+    "baseline": {
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#wpforms-form-12') to be visible\n"
+    },
+    "smtpOff": {
+      "error": "page.evaluate: Object"
+    }
+  },
+  "sitemapAfter": {
+    "status": 200,
+    "ok": true,
+    "preview": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"https://aerosuite.com.br/wp-sitemap-index.xsl\" ?>\n<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"><sitemap><loc>https://aerosuite.com.br/wp-sitemap-posts-post-1.xml</loc></sitemap><sitemap><loc>https://ae"
+  },
+  "wpformsAfter": {
+    "status": 500,
+    "ok": false,
+    "bodyPreview": "<p>Há um erro crítico no seu site.</p><p><a href=\"https://wordpress.org/documentation/article/faq-troubleshooting/\">Saiba mais sobre a como resolver problemas do WordPress.</a></p>"
+  }
+}

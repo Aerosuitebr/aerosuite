@@ -1,0 +1,34 @@
+# Arquivos de ambiente (não commitar credenciais)
+.env
+.env.local
+.env.*.local
+
+# Arquivos de build
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+bin/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos temporários
+*.tmp
+*.bak
+*.swp
+*~
+

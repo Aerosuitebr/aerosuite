@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia de Operação Git — Aero Suite</title>
+</head>
+<body style="margin:0;padding:0;background:#e2e8f0;font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:#0f172a;">
+
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#e2e8f0;padding:32px 12px;">
+  <tr><td align="center">
+    <table role="presentation" width="680" cellspacing="0" cellpadding="0" border="0" style="max-width:680px;width:100%;">
+      <tr>
+        <td style="background:linear-gradient(145deg,#020617 0%,#0f172a 75%,#1e293b 100%);padding:36px 40px;text-align:center;">
+          <img src="{{LOGO_CID_SRC}}" alt="Aero Suite" width="64" height="64" style="display:block;margin:0 auto 16px auto;" />
+          <div style="font-size:26px;font-weight:700;color:#f8fafc;">Guia de Operação Git</div>
+          <div style="font-size:15px;color:#94a3b8;margin-top:8px;">Ambiente remoto · aerosuite-br/aerosuite</div>
+          <div style="margin-top:16px;font-size:12px;color:#bae6fd;">📎 PDF em anexo · {{PDF_SIZE_MB}} MB</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="background:#ffffff;padding:32px 40px;">
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#334155;">Prezados(as),</p>
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#475569;">
+            Encaminho o <strong>Guia de Operação Git — Ambiente Remoto</strong> (versão 1.0, 18/jun/2026),
+            documento de referência para manutenção do código no repositório oficial
+            <a href="https://github.com/aerosuite-br/aerosuite" style="color:#2563eb;text-decoration:none;">github.com/aerosuite-br/aerosuite</a>.
+          </p>
+          <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#475569;">
+            O PDF em anexo consolida, em formato premium e passo a passo, todos os procedimentos necessários:
+            autenticação <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:12px;">gh auth login</code>,
+            fluxo diário na branch <strong>desenv</strong>, Pull Requests para <strong>master</strong>,
+            pipeline CI/CD, secrets, ambientes staging/production, releases e solução de problemas frequentes.
+          </p>
+
+          <div style="background:#eff6ff;border:1px solid #93c5fd;border-radius:12px;padding:18px 20px;margin-bottom:20px;">
+            <strong style="color:#1d4ed8;font-size:15px;">Conteúdo principal do guia</strong>
+            <ul style="margin:12px 0 0;padding-left:20px;font-size:14px;color:#1e40af;line-height:1.65;">
+              <li>Visão geral da organização <strong>@aerosuite-br</strong> e pré-requisitos</li>
+              <li>Autenticação GitHub CLI com escopo <strong>workflow</strong> (obrigatório para CI)</li>
+              <li>Clone, pull, commit, push e estratégia de branches</li>
+              <li>Pull Requests, CODEOWNERS e checklist de qualidade</li>
+              <li>CI (Maven, npm, i18n menu) e validação local antes do push</li>
+              <li>Secrets, variables e ambientes GitHub Actions</li>
+              <li>Release com tags e deploy em produção (Hetzner)</li>
+            </ul>
+          </div>
+
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:20px;">
+            <strong style="color:#0f172a;font-size:14px;">Fluxo resumido</strong>
+            <p style="margin:10px 0 0;font-size:14px;color:#475569;line-height:1.7;font-family:Consolas,monospace;background:#f1f5f9;padding:12px 14px;border-radius:8px;">
+              desenv ──(PR + CI verde)──► master ──(tag v*)──► deploy produção
+            </p>
+          </div>
+
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.7;color:#64748b;">
+            Solicito que todos os envolvidos no desenvolvimento sigam este guia a partir de agora.
+            Dúvidas sobre acesso à organização, convites ou credenciais devem ser tratadas diretamente
+            com a diretoria de TI — <strong>nunca</strong> compartilhar tokens ou senhas por e-mail ou chat.
+          </p>
+
+          <p style="margin:24px 0 0;font-size:14px;color:#64748b;line-height:1.6;">
+            Atenciosamente,<br>
+            <strong style="color:#0f172a;">Wellem Lyra</strong><br>
+            Diretor de TI · Aero Suite<br>
+            <a href="mailto:wellemlyra@aerosuite.com.br" style="color:#2563eb;text-decoration:none;">wellemlyra@aerosuite.com.br</a>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td style="background:#f1f5f9;padding:16px 40px;text-align:center;font-size:11px;color:#94a3b8;line-height:1.5;">
+          Aero Suite — Gestão Aeronáutica Integrada · Documento interno de operações<br>
+          Repositório: aerosuite-br/aerosuite · Versão 1.0 · 18/jun/2026
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>

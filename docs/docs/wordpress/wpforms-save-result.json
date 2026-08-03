@@ -1,0 +1,18 @@
+{
+  "before": null,
+  "save": {
+    "status": 200,
+    "json": {
+      "success": false,
+      "data": "Algo deu errado ao realizar esta ação."
+    },
+    "nonceUsed": true
+  },
+  "after": null,
+  "previewType": null,
+  "submit": {
+    "status": 200,
+    "success": false,
+    "body": "{\"success\":false,\"data\":{\"errors\":{\"general\":{\"header\":\"<div id=\\\"wpforms-12-header-error\\\" class=\\\"wpforms-error-container\\\" role=\\\"alert\\\">\\n\\t\\t\\t\\t\\t\\t<span class=\\\"wpforms-hidden\\\" aria-hidden=\\\"false\\\">Mensagem de erro do formul\\u00e1rio<\\/span><p>Formul\\u00e1rio n\\u00e3o foi enviado. Veja os erros abaixo.<\\/p>\\n\\n\\t\\t\\t\\t\\t<\\/div>\"},\"field\":{\"wpforms[fields][1]\":\"Este campo \\u00e9 obrigat\\u00f3rio.\",\"wpforms[fields][2]\":\"Este campo \\u00e9 obrigat\\u00f3rio.\"}}}}"
+  }
+}

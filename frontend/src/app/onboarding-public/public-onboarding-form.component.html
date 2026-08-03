@@ -1,0 +1,66 @@
+<app-auth-shell [cardWide]="true" [cardMaxWidth]="560">
+  <header authHeader class="auth-header">
+    <app-auth-brand-header />
+    <p class="auth-header__subtitle">{{ 'onboardingPublic.title' | translate }}</p>
+  </header>
+
+  <div *ngIf="loading" class="onboarding-public-loading">{{ 'onboardingPublic.loading' | translate }}</div>
+
+  <p-message *ngIf="error && !loading" severity="error" [text]="'onboardingPublic.error' | translate"></p-message>
+
+  <p-message *ngIf="success" severity="success" [text]="'onboardingPublic.success' | translate"></p-message>
+
+  <ng-container *ngIf="formData && !loading && !success">
+    <p class="onboarding-public-intro">
+      {{ 'onboardingPublic.subtitle' | translate:{ nome: formData.organizacaoNome, codigo: formData.organizacaoCodigo } }}
+    </p>
+    <p *ngIf="formData.alreadySubmitted" class="onboarding-public-hint">{{ submittedHint() }}</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="onboarding-public-form">
+      <div class="form-group">
+        <label for="ob-contact-name">{{ 'onboardingPublic.field.contactName' | translate }} *</label>
+        <input id="ob-contact-name" pInputText formControlName="contactName" class="w-full" />
+      </div>
+      <div class="form-group">
+        <label for="ob-contact-email">{{ 'onboardingPublic.field.contactEmail' | translate }} *</label>
+        <input id="ob-contact-email" pInputText type="email" formControlName="contactEmail" class="w-full" />
+      </div>
+      <div class="form-group">
+        <label for="ob-contact-phone">{{ 'onboardingPublic.field.contactPhone' | translate }}</label>
+        <input id="ob-contact-phone" pInputText formControlName="contactPhone" class="w-full" />
+      </div>
+      <div class="form-group">
+        <label for="ob-legal-name">{{ 'onboardingPublic.field.legalName' | translate }}</label>
+        <input id="ob-legal-name" pInputText formControlName="legalName" class="w-full" />
+      </div>
+      <div class="form-group">
+        <label for="ob-legal-doc">{{ 'onboardingPublic.field.legalDocument' | translate }}</label>
+        <input id="ob-legal-doc" pInputText formControlName="legalDocument" class="w-full" />
+      </div>
+      <div class="form-group">
+        <label for="ob-admin-email">{{ 'onboardingPublic.field.adminEmail' | translate }}</label>
+        <input id="ob-admin-email" pInputText type="email" formControlName="adminEmail" class="w-full" />
+      </div>
+      <div class="form-group">
+        <label for="ob-support-email">{{ 'onboardingPublic.field.supportEmail' | translate }}</label>
+        <input id="ob-support-email" pInputText type="email" formControlName="supportEmail" class="w-full" />
+      </div>
+      <div class="form-group">
+        <label for="ob-billing-name">{{ 'onboardingPublic.field.billingName' | translate }}</label>
+        <input id="ob-billing-name" pInputText formControlName="billingContactName" class="w-full" />
+      </div>
+      <div class="form-group">
+        <label for="ob-billing-email">{{ 'onboardingPublic.field.billingEmail' | translate }}</label>
+        <input id="ob-billing-email" pInputText type="email" formControlName="billingContactEmail" class="w-full" />
+      </div>
+      <button
+        pButton
+        type="submit"
+        class="w-full"
+        [label]="'onboardingPublic.submit' | translate"
+        [loading]="submitting"
+        [disabled]="form.invalid">
+      </button>
+    </form>
+  </ng-container>
+</app-auth-shell>

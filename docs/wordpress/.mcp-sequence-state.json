@@ -1,0 +1,77 @@
+{
+  "results": {
+    "0": {
+      "file": ".mcp-cssfull-batch-0.json",
+      "value": {
+        "batch": 0,
+        "from": 0,
+        "to": 4
+      },
+      "raw": {
+        "result": {
+          "type": "object",
+          "value": {
+            "batch": 0,
+            "from": 0,
+            "to": 4
+          }
+        }
+      }
+    },
+    "1": {
+      "file": ".mcp-cssfull-batch-1.json",
+      "value": {
+        "batch": 1,
+        "from": 5,
+        "to": 9
+      },
+      "raw": {
+        "result": {
+          "type": "object",
+          "value": {
+            "batch": 1,
+            "from": 5,
+            "to": 9
+          }
+        }
+      }
+    },
+    "2": {
+      "file": ".mcp-cssfull-batch-2.json",
+      "value": {
+        "batch": 1,
+        "from": 5,
+        "to": 9
+      },
+      "raw": {
+        "result": {
+          "type": "object",
+          "value": {
+            "batch": 1,
+            "from": 5,
+            "to": 9
+          }
+        }
+      }
+    },
+    "3": {
+      "file": ".mcp-cssfull-batch-3.json",
+      "value": {
+        "batch": 3,
+        "from": 15,
+        "to": 19
+      },
+      "raw": {
+        "result": {
+          "type": "object",
+          "value": {
+            "batch": 3,
+            "from": 15,
+            "to": 19
+          }
+        }
+      }
+    }
+  },
+  "errors": []
+}

@@ -1,0 +1,25 @@
+{
+  "at": "2026-06-09T13:40:47.781Z",
+  "actions": [
+    {
+      "needle": "mail.ita.locaweb.com.br",
+      "action": "not-found"
+    },
+    {
+      "needle": "autodiscover.email.locaweb.com.br",
+      "action": "not-found"
+    },
+    {
+      "needle": "domainconnect.locaweb.com.br",
+      "action": "not-found"
+    },
+    {
+      "needle": "pop.aerosuite.com.br",
+      "action": "not-found"
+    },
+    {
+      "needle": "webmail-seguro.com.br",
+      "action": "not-found"
+    }
+  ]
+}

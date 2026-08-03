@@ -1,0 +1,440 @@
+/* Aero Suite — Manual de Homologação (print/PDF) */
+@page {
+  size: A4;
+  margin: 18mm 16mm 22mm 16mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10.5pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.55;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 35%, #0f172a 70%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24mm 20mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(56, 189, 248, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(201, 162, 39, 0.12) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background-image:
+    linear-gradient(rgba(255,255,255,.8) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.8) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 140mm;
+}
+
+.cover-logo {
+  width: 72mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10mm;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,.35));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  background: rgba(56, 189, 248, 0.08);
+  padding: 4px 14px;
+  border-radius: 999px;
+  margin-bottom: 8mm;
+}
+
+.cover h1 {
+  font-size: 28pt;
+  font-weight: 700;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.cover-sub {
+  font-size: 13pt;
+  color: #94a3b8;
+  margin: 0 0 12mm;
+  font-weight: 400;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #c9a227, #e8c547, #c9a227, transparent);
+  margin: 0 auto 10mm;
+  border-radius: 2px;
+}
+
+.cover-meta {
+  font-size: 9pt;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.cover-meta strong {
+  color: #cbd5e1;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 14mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #475569;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 8mm;
+  object-fit: contain;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #0369a1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+h2.chapter-title {
+  font-size: 18pt;
+  color: #0c1929;
+  margin: 0 0 2mm;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h2.chapter-title::before {
+  content: '';
+  display: block;
+  width: 12mm;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #38bdf8);
+  border-radius: 2px;
+  margin-bottom: 3mm;
+}
+
+.chapter-lead {
+  font-size: 11pt;
+  color: #64748b;
+  margin: 0 0 6mm;
+  max-width: 95%;
+}
+
+h3 {
+  font-size: 12pt;
+  color: #0f172a;
+  margin: 6mm 0 3mm;
+  font-weight: 650;
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+}
+
+h3 .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 6mm;
+  height: 6mm;
+  background: #0369a1;
+  color: #fff;
+  font-size: 8pt;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 0 2mm;
+}
+
+h4 {
+  font-size: 10.5pt;
+  color: #334155;
+  margin: 4mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+ul, ol {
+  margin: 0 0 4mm;
+  padding-left: 5mm;
+}
+
+li {
+  margin-bottom: 1.5mm;
+}
+
+li::marker {
+  color: #0284c7;
+}
+
+/* Sumário */
+.toc {
+  page-break-after: always;
+}
+
+.toc h2 {
+  font-size: 16pt;
+  margin-bottom: 6mm;
+  color: #0c1929;
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.5mm 0;
+  border-bottom: 1px dotted #cbd5e1;
+  font-size: 10pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  margin-top: 4mm;
+  border-bottom: none;
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.toc-num {
+  color: #64748b;
+  min-width: 8mm;
+  font-weight: 600;
+}
+
+.toc-title {
+  flex: 1;
+}
+
+/* Componentes didáticos */
+.steps {
+  counter-reset: step;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 5mm;
+}
+
+.steps > li {
+  counter-increment: step;
+  position: relative;
+  padding: 3mm 3mm 3mm 10mm;
+  margin-bottom: 2mm;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #0284c7;
+  border-radius: 0 6px 6px 0;
+}
+
+.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 2.5mm;
+  top: 3mm;
+  width: 5.5mm;
+  height: 5.5mm;
+  background: #0369a1;
+  color: #fff;
+  font-size: 8pt;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 5.5mm;
+  text-align: center;
+}
+
+.callout {
+  padding: 3mm 4mm;
+  border-radius: 6px;
+  margin: 4mm 0;
+  font-size: 9.5pt;
+}
+
+.callout-tip {
+  background: #e6f2fa;
+  border-left: 3px solid #1a5f8a;
+  color: #0c4a6e;
+}
+
+.callout-warn {
+  background: #fff8e6;
+  border-left: 3px solid #9a7209;
+  color: #713f12;
+}
+
+.callout-important {
+  background: #e4f5ec;
+  border-left: 3px solid #0f6b45;
+  color: #064e3b;
+}
+
+.callout strong {
+  display: block;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.route-tag {
+  display: inline-block;
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-size: 8.5pt;
+  background: #f1f5f9;
+  color: #0369a1;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3mm;
+  margin: 4mm 0;
+}
+
+.feature-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 3mm;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.feature-card h4 {
+  margin-top: 0;
+  color: #0369a1;
+  font-size: 10pt;
+}
+
+.feature-card p {
+  font-size: 9pt;
+  color: #64748b;
+  margin: 0;
+}
+
+table.field-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9pt;
+  margin: 3mm 0 5mm;
+}
+
+table.field-table th {
+  background: #0f172a;
+  color: #f8fafc;
+  text-align: left;
+  padding: 2mm 3mm;
+  font-weight: 600;
+}
+
+table.field-table td {
+  border: 1px solid #e2e8f0;
+  padding: 2mm 3mm;
+  vertical-align: top;
+}
+
+table.field-table tr:nth-child(even) td {
+  background: #f8fafc;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+.two-col {
+  columns: 2;
+  column-gap: 6mm;
+}
+
+.avoid-break {
+  break-inside: avoid;
+}

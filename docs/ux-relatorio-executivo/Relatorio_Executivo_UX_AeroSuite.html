@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relatório Executivo de Adequação UX — Aero Suite</title>
+  <style>/* Aero Suite — Relatório Executivo UX (print/PDF A4) */
+@page {
+  size: A4;
+  margin: 16mm 14mm 20mm 14mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.5;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 40%, #0f172a 75%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22mm 18mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 150mm;
+}
+
+.cover-logo {
+  width: 68mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8mm;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.4));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  border: 1px solid rgba(148,163,184,.35);
+  border-radius: 999px;
+  padding: 2.5mm 5mm;
+  margin-bottom: 6mm;
+}
+
+.cover h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+}
+
+.cover-sub {
+  font-size: 11pt;
+  color: #cbd5e1;
+  margin: 0 0 6mm;
+  line-height: 1.45;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a227, transparent);
+  margin: 0 auto 6mm;
+}
+
+.cover-meta {
+  font-size: 9.5pt;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cover-meta strong {
+  color: #e2e8f0;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 12mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #64748b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 7mm;
+  width: auto;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+h2 {
+  font-size: 14pt;
+  color: #0f172a;
+  margin: 0 0 4mm;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 11pt;
+  color: #0369a1;
+  margin: 5mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+.lead {
+  font-size: 10.5pt;
+  color: #334155;
+  margin-bottom: 5mm;
+}
+
+/* Sumário */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+  padding: 2mm 0;
+  border-bottom: 1px dotted #e2e8f0;
+  font-size: 9.5pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: none;
+  padding-top: 4mm;
+  font-size: 10pt;
+}
+
+.toc-num {
+  font-weight: 700;
+  color: #64748b;
+  min-width: 10mm;
+}
+
+/* Score dashboard */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin: 5mm 0 6mm;
+}
+
+.score-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4mm;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.score-card--ok {
+  background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #86efac;
+}
+
+.score-val {
+  font-size: 18pt;
+  font-weight: 800;
+  color: #0369a1;
+  line-height: 1;
+}
+
+.score-card--ok .score-val {
+  color: #15803d;
+}
+
+.score-label {
+  font-size: 7.5pt;
+  color: #64748b;
+  margin-top: 1.5mm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin: 4mm 0;
+}
+
+th, td {
+  border: 1px solid #e2e8f0;
+  padding: 2.5mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Item cards */
+.section-intro {
+  background: #f8fafc;
+  border-left: 3px solid #0369a1;
+  padding: 3mm 4mm;
+  margin-bottom: 5mm;
+  font-size: 9pt;
+  color: #475569;
+}
+
+.item-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 4mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  padding: 2.5mm 4mm;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item-id {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.item-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 9.5pt;
+}
+
+.sev {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.sev--CRITICO { background: #fee2e2; color: #991b1b; }
+.sev--ALTO { background: #ffedd5; color: #9a3412; }
+.sev--MEDIO { background: #fef9c3; color: #854d0e; }
+.sev--INFO { background: #e0e7ff; color: #3730a3; }
+
+.item-body {
+  padding: 3mm 4mm 4mm;
+  font-size: 8.75pt;
+}
+
+.item-row {
+  margin-bottom: 2.5mm;
+}
+
+.item-row:last-child {
+  margin-bottom: 0;
+}
+
+.item-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.5mm;
+}
+
+.item-text {
+  color: #1e293b;
+}
+
+.status-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+/* Assinatura */
+.signature-block {
+  margin-top: 10mm;
+  padding: 6mm;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.signature-line {
+  width: 55mm;
+  border-top: 1px solid #334155;
+  margin: 12mm 0 2mm;
+}
+
+.signature-name {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.signature-role {
+  font-size: 9pt;
+  color: #64748b;
+}
+
+.signature-date {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  margin-top: 2mm;
+}
+
+.callout {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 4mm;
+  margin: 4mm 0;
+  font-size: 9pt;
+}
+
+.callout strong {
+  color: #1d4ed8;
+}
+
+.supplementary {
+  page-break-inside: avoid;
+  margin-bottom: 4mm;
+  padding: 3mm 4mm;
+  border-left: 3px solid #c9a227;
+  background: #fffbeb;
+}
+
+.supplementary h4 {
+  margin: 0 0 1.5mm;
+  font-size: 9.5pt;
+  color: #92400e;
+}
+
+.supplementary p {
+  margin: 0;
+  font-size: 8.75pt;
+  color: #78350f;
+}
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Documento executivo · Confidencial</div>
+    <h1>Relatório Executivo de Adequação UX</h1>
+    <p class="cover-sub">Site institucional aerosuite.com.br<br/>Referência: Relatório Técnico UX Aero Suite v1</p>
+    <div class="cover-gold-line"></div>
+    <p class="cover-meta">
+      <strong>Versão 1.0</strong> · 09 de junho de 2026<br />
+      Analista responsável: <strong>Wellem Lyra</strong><br />
+      Resultado: <strong>32/32 itens aderentes (100%)</strong>
+    </p>
+  </div>
+  <div class="cover-footer">Aero Suite — Gestão aeronáutica integrada</div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Sumário</span>
+  </div>
+  <h2>Conteúdo do relatório</h2>
+  <ul class="toc-list">
+    <li><span class="toc-num">1</span><span class="toc-title">Sumário executivo e metodologia</span></li>
+    <li class="part">Seção 3.1 — Infraestrutura e navegação</li><li><span class="toc-num">3.1.1</span><span class="toc-title">Redirect www → apex</span></li><li><span class="toc-num">3.1.2</span><span class="toc-title">Menu duplicado (tema + Aero Suite)</span></li><li><span class="toc-num">3.1.3</span><span class="toc-title">Travessões em copy visível</span></li>
+<li class="part">Seção 3.2 — Arquitetura de informação (home)</li><li><span class="toc-num">3.2.1</span><span class="toc-title">Comparativo / posicionamento perto do hero</span></li><li><span class="toc-num">3.2.2</span><span class="toc-title">Home longa / conteúdo duplicado</span></li><li><span class="toc-num">3.2.3</span><span class="toc-title">Posicionamento como 2ª seção</span></li>
+<li class="part">Seção 3.3 — Interface visual e componentes</li><li><span class="toc-num">3.3.1</span><span class="toc-title">Falsa affordance em cards estáticos</span></li><li><span class="toc-num">3.3.2</span><span class="toc-title">Ícones equipe padronizados</span></li><li><span class="toc-num">3.3.3</span><span class="toc-title">Grid card 04 — visão executiva</span></li><li><span class="toc-num">3.3.4</span><span class="toc-title">Altura uniforme — cards posicionamento</span></li><li><span class="toc-num">3.3.5</span><span class="toc-title">Tab módulos — estado ativo</span></li>
+<li class="part">Seção 3.4 — Conteúdo, copy e credibilidade</li><li><span class="toc-num">3.4.1</span><span class="toc-title">Tags internas P5.3 / B1 / A3 visíveis</span></li><li><span class="toc-num">3.4.2</span><span class="toc-title">Keywords SEO cruas nos guias</span></li><li><span class="toc-num">3.4.3</span><span class="toc-title">Texto rascunho — visão executiva</span></li><li><span class="toc-num">3.4.4</span><span class="toc-title">Órgãos reguladores com sublinhado falso</span></li><li><span class="toc-num">3.4.5</span><span class="toc-title">Métricas fracas (1+ / 4+)</span></li>
+<li class="part">Seção 3.5 — Screenshots de produto (marketing)</li><li><span class="toc-num">3.5.1</span><span class="toc-title">Dados reais de clientes nas telas</span></li><li><span class="toc-num">3.5.2</span><span class="toc-title">Smoke / Serviço smoke nas telas</span></li><li><span class="toc-num">3.5.3</span><span class="toc-title">Chave i18n common.actions.refresh visível</span></li><li><span class="toc-num">3.5.4</span><span class="toc-title">Servico sem cedilha</span></li><li><span class="toc-num">3.5.5</span><span class="toc-title">CONTENCAO sem acento</span></li><li><span class="toc-num">3.5.6</span><span class="toc-title">Encoding VOAR T??XI</span></li><li><span class="toc-num">3.5.7</span><span class="toc-title">Cards clientes duplicados na home</span></li>
+<li class="part">Seção 4.1 — Funil de conversão e e-mail</li><li><span class="toc-num">4.1.1</span><span class="toc-title">E-mail Gmail pessoal no funil</span></li><li><span class="toc-num">4.1.2</span><span class="toc-title">Título Calendly &quot;Teste&quot;</span></li><li><span class="toc-num">4.1.3</span><span class="toc-title">SPF / DMARC publicados</span></li><li><span class="toc-num">4.1.4</span><span class="toc-title">Layout dedicado /obrigado</span></li><li><span class="toc-num">4.1.5</span><span class="toc-title">URL ?lead=calendly na barra</span></li>
+<li class="part">Seção 5 — Conformidade legal e portfólio</li><li><span class="toc-num">5.1.1</span><span class="toc-title">Autorização formal marcas clientes</span></li><li><span class="toc-num">5.1.2</span><span class="toc-title">LGPD — dados sensíveis em demos</span></li><li><span class="toc-num">5.2.1</span><span class="toc-title">Política de privacidade no rodapé</span></li><li><span class="toc-num">5.2.2</span><span class="toc-title">Consentimento cookies LGPD</span></li>
+    <li><span class="toc-num">A</span><span class="toc-title">Matriz consolidada de verificação</span></li>
+    <li><span class="toc-num">B</span><span class="toc-title">Informações complementares e assinatura</span></li>
+  </ul>
+  <div class="page-footer"><span>Aero Suite · Relatório Executivo UX</span><span>Versão 1.0</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Sumário executivo</span>
+  </div>
+  <h2>Sumário executivo</h2>
+  <p class="lead">
+    Este documento consolida as <strong>32 observações</strong> levantadas no Relatório Técnico UX Aero Suite v1
+    e descreve, de forma técnica e auditável, a resolução de cada item no site institucional
+    <a href="https://aerosuite.com.br">https://aerosuite.com.br</a>, com verificação automatizada em 09 de junho de 2026.
+  </p>
+
+  <div class="score-grid">
+    <div class="score-card score-card--ok"><div class="score-val">32</div><div class="score-label">Aderentes</div></div>
+    <div class="score-card"><div class="score-val">0</div><div class="score-label">Parciais</div></div>
+    <div class="score-card"><div class="score-val">0</div><div class="score-label">Não aderentes</div></div>
+    <div class="score-card score-card--ok"><div class="score-val">100%</div><div class="score-label">Conformidade</div></div>
+  </div>
+
+  <div class="callout">
+    <strong>Conclusão:</strong> Todas as observações consideradas no relatório técnico foram endereçadas e
+    validadas em produção. O site encontra-se em conformidade plena com os critérios de UX, conversão,
+    autenticação de e-mail (Google Workspace), LGPD e autorização de portfólio documentada.
+  </div>
+
+  <h3>Metodologia</h3>
+  <p>
+    Cada item foi mapeado no script <code>docs/wordpress/verify-report-items.mjs</code>, cruzando HTML publicado,
+    DNS (SPF/DMARC/DKIM), Calendly, formulários WPForms, consentimento LGPD e revisão de assets WebP.
+    Complementarmente: <code>verify-ux-adherence.mjs</code> (20 checks), <code>run-site-audit.mjs</code>,
+    <code>check-conversion-infra.mjs</code> e <code>verify-consent-persistence.mjs</code> (6/6).
+  </p>
+  <p>
+    Alterações de conteúdo e layout foram versionadas em <code>docs/wordpress/aerosuite-content.mjs</code>
+    e publicadas via <code>build-gaps-deploy.mjs</code> / <code>run-gaps-deploy.mjs</code>.
+  </p>
+
+  <div class="page-footer"><span>Aero Suite · Relatório Executivo UX</span><span>Sumário executivo</span></div>
+</section>
+
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 3.1</span>
+  </div>
+  <h2>Infraestrutura e navegação</h2>
+  <p class="section-intro">Itens relacionados a roteamento DNS/HTTPS, consistência de menu e padronização tipográfica da copy visível.</p>
+  
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.1.1</span>
+    <span class="item-title">Redirect www → apex</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Acessos via www.aerosuite.com.br não redirecionavam de forma canônica para o domínio apex, fragmentando SEO e métricas.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Regra 301 permanente configurada no Cloudflare (Page Rule / Redirect Rule) apontando www → https://aerosuite.com.br/. Plugin aerosuite-performance reforça redirect em camada WordPress.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">HTTP 301; Location: https://aerosuite.com.br/ — verificado em verify-report-items.mjs e run-www-redirect-cloudflare.mjs.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — fetch redirect: manual</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.1.2</span>
+    <span class="item-title">Menu duplicado (tema + Aero Suite)</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Dois menus de navegação visíveis simultaneamente (tema Extendable + nav customizado Aero Suite), gerando confusão e quebra de hierarquia.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">CSS de deploy (aerosuite-premium.css / as-site-chrome) oculta nav nativo do tema; mantido um único as-supplemental-nav com links institucionais padronizados.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">1 ocorrência de as-supplemental-nav no HTML visível da home.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — contagem de nav no HTML</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.1.3</span>
+    <span class="item-title">Travessões em copy visível</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Uso de travessão tipográfico (—) em textos de marketing, inconsistente com guia editorial pt-BR do site.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Normalização de copy em aerosuite-content.mjs e aerosuite-copy-normalize.mjs; substituição por vírgulas, dois-pontos ou frases curtas.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">0 ocorrências de — em conteúdo visível (home + conformidade + casos).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — regex em HTML visível</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Relatório Executivo UX</span>
+    <span>Seção 3.1 · 1.0</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 3.2</span>
+  </div>
+  <h2>Arquitetura de informação (home)</h2>
+  <p class="section-intro">Hierarquia de seções na página inicial, ordem de leitura e eliminação de conteúdo duplicado entre home e páginas pilares.</p>
+  
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.2.1</span>
+    <span class="item-title">Comparativo / posicionamento perto do hero</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Bloco de posicionamento (público-alvo) aparecia tarde na página, depois de seções extensas, reduzindo clareza comercial.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Reordenação em buildHomeContent(): seção as-audience imediatamente após as-hero, antes de as-command-center.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">indexOf(as-audience) &lt; indexOf(as-command-center) na home publicada.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — ordem de seções no DOM</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.2.2</span>
+    <span class="item-title">Home longa / conteúdo duplicado</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Home repetia grid SGQ (8 ferramentas), benefícios por equipe, hub de conhecimento e fluxos já presentes em /conformidade-regulatoria/ e /solucoes/, gerando scroll excessivo (~70k chars visíveis).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Enxugamento da home (jun/2026): removidos complianceNewToolsBlock, complianceTeamBenefitsBlock, knowledgeHubBlock, flexibilityValueBlock, painBlock e flowBlock. Mantidos: faixa as-compliance-strip (CTA), portfólio compacto as-portfolio__grid--home, FAQ e CTA. Conteúdo SGQ permanece nas páginas dedicadas.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Home ~38k chars; ausência de as-compliance-tools e as-knowledge-hub na home; grid compacto presente.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — verify-report-items.mjs critério 3.2.2</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.2.3</span>
+    <span class="item-title">Posicionamento como 2ª seção</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Relatório exigia hero seguido imediatamente do bloco de posicionamento comercial.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Ordem fixa hero → audience como segunda seção semântica após deploy de conteúdo.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">indexOf(as-hero) &lt; indexOf(as-audience) confirmado.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Relatório Executivo UX</span>
+    <span>Seção 3.2 · 1.0</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 3.3</span>
+  </div>
+  <h2>Interface visual e componentes</h2>
+  <p class="section-intro">Affordances, iconografia, grids responsivos e padrões de interação (tabs ARIA) nos módulos da suíte.</p>
+  
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.3.1</span>
+    <span class="item-title">Falsa affordance em cards estáticos</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Cards de posicionamento (as-audience-card) exibiam hover de link sem serem clicáveis, violando heurística de Nielsen (consistência e padrões).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Regra CSS as-audience-card.as-premium-card:hover neutraliza transformação/sombra de link; cards informativos sem cursor pointer.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Seletor publicado em aerosuite-premium.css via build-gaps-deploy.mjs.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — presença do seletor no HTML/CSS</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.3.2</span>
+    <span class="item-title">Ícones equipe padronizados</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Ícones heterogêneos ou ausentes na seção de benefícios por equipe (conformidade).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">SVG inline padronizado em as-compliance-benefit__icon (24×24, stroke 1.75) em complianceTeamBenefitsBlock — página /conformidade-regulatoria/.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">as-compliance-benefit__icon presente no HTML da página de conformidade.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.3.3</span>
+    <span class="item-title">Grid card 04 — visão executiva</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Quarto tile da visão executiva sem destaque visual (accent), quebrando simetria do grid 2×2.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Classe as-command-tile--accent aplicada ao tile 04 em commandCenterBlock().</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">as-command-tile--accent no HTML da home.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.3.4</span>
+    <span class="item-title">Altura uniforme — cards posicionamento</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Cards de audience com alturas desalinhadas em viewports médios.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Grid CSS as-audience-card com min-height e flex interno; alinhamento validado em breakpoints tablet/desktop.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Componente as-audience-card presente; CSS grid publicado.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Visual + presença estrutural</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.3.5</span>
+    <span class="item-title">Tab módulos — estado ativo</span>
+    <span class="sev sev--INFO">INFO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Showcase de módulos sem indicação clara de aba ativa (acessibilidade).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Implementação ARIA tabs: role=&quot;tab&quot;, aria-selected, data-as-showcase-index e painéis role=&quot;tabpanel&quot; em showcaseBlock() + aerosuite-hero.js.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">role=&quot;tab&quot; e data-as-showcase-index na home.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Relatório Executivo UX</span>
+    <span>Seção 3.3 · 1.0</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 3.4</span>
+  </div>
+  <h2>Conteúdo, copy e credibilidade</h2>
+  <p class="section-intro">Remoção de rascunhos, tags internas de produto, keywords SEO cruas e métricas fracas na comunicação comercial.</p>
+  
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.4.1</span>
+    <span class="item-title">Tags internas P5.3 / B1 / A3 visíveis</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Códigos de roadmap interno (P5.3, B1, A3) expostos ao visitante na copy de marketing.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Substituição por labels legíveis (SMS, CRS, SGQ, etc.) em aerosuite-compliance-blocks.mjs e páginas pilares.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Regex P5.[34]|&gt;B1&lt;|&gt;A3&lt; ausente do HTML visível.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.4.2</span>
+    <span class="item-title">Keywords SEO cruas nos guias</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Strings tipo &quot;software gestão oficina aeronáutica, sistema MRO Brasil&quot; visíveis ao usuário.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Copy reescrita user-facing; keywords restritas a meta description / schema JSON-LD.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Pattern SEO cru ausente do HTML visível.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.4.3</span>
+    <span class="item-title">Texto rascunho — visão executiva</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Placeholder &quot;conteúdo já está completo&quot; ou similar visível na seção executiva.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Copy profissional substituída em commandCenterBlock(); rascunho removido do repositório e redeploy.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Pattern rascunho ausente; copy de comando operacional publicada.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.4.4</span>
+    <span class="item-title">Órgãos reguladores com sublinhado falso</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">&lt;em&gt;órgãos reguladores&lt;/em&gt; simulava hyperlink sem destino.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Substituído por &lt;strong&gt; sem estilo de link; removido sublinhado via CSS.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">&lt;em&gt;órgãos reguladores&lt;/em&gt; ausente da home.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.4.5</span>
+    <span class="item-title">Métricas fracas (1+ / 4+)</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Stats genéricos &quot;1+ operações&quot; / &quot;4+ módulos&quot; sem credibilidade comercial.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">statsBlock() revisado com métricas contextualizadas (5 áreas integradas, rastreabilidade, etc.).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Patterns 1+ opera e 4+ módulos ausentes.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Relatório Executivo UX</span>
+    <span>Seção 3.4 · 1.0</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 3.5</span>
+  </div>
+  <h2>Screenshots de produto (marketing)</h2>
+  <p class="section-intro">Sanitização de capturas de tela publicadas na home: dados reais, encoding, chaves i18n e nomenclatura técnica.</p>
+  
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.5.1</span>
+    <span class="item-title">Dados reais de clientes nas telas</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Screenshots continham nomes reais (GRUPO FARROUPILHA, QUICK MNT, AXIAL AVIATION).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Pipeline recapture-all-screenshots.mjs + marketing-sanitize.mjs; dados fictícios Aero Demo; WebP v6 publicados.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Strings de clientes reais ausentes do HTML; imagens versionadas v6.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático HTML + revisão visual WebP</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.5.2</span>
+    <span class="item-title">Smoke / Serviço smoke nas telas</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Registros de teste visíveis em capturas de produto.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Sanitização na recaptura; substituição por nomenclatura genérica de demonstração.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Cliente Smoke / Servico smoke ausentes do HTML publicado.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.5.3</span>
+    <span class="item-title">Chave i18n common.actions.refresh visível</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Bug de internacionalização expundo chave técnica na UI capturada.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Correção no frontend Angular + recaptura de screenshots após fix i18n.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">common.actions.refresh ausente do HTML da home.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.5.4</span>
+    <span class="item-title">Servico sem cedilha</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Texto &quot;Servico&quot; sem acentuação pt-BR em capturas.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Normalização UTF-8 na recaptura e validação encoding em marketing-sanitize.mjs.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Pattern Servico smoke ausente.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.5.5</span>
+    <span class="item-title">CONTENCAO sem acento</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Label de fase CAPA sem acentuação correta (CONTENÇÃO).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Correção na origem (app) + sanitização nas imagens de marketing.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">CONTENCAO ausente do HTML.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.5.6</span>
+    <span class="item-title">Encoding VOAR T??XI</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Caracteres corrompidos (mojibake) em nomes de aeronaves nas capturas.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Recaptura com charset UTF-8; validação regex T??XI / A??RE na pipeline.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Patterns de mojibake ausentes.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.5.7</span>
+    <span class="item-title">Cards clientes duplicados na home</span>
+    <span class="sev sev--INFO">INFO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Showcase expandido duplicava cards já presentes em /casos/.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">clientsPortfolioBlock() com as-portfolio__grid--home (2 cards compactos + link Ver todos). Showcase full removido da home.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">as-portfolio__grid--home presente; as-portfolio-showcase ausente na home.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Relatório Executivo UX</span>
+    <span>Seção 3.5 · 1.0</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 4.1</span>
+  </div>
+  <h2>Funil de conversão e e-mail</h2>
+  <p class="section-intro">Calendly corporativo, página de obrigado, autenticação de domínio (SPF/DMARC/DKIM) e canal transacional Google Workspace.</p>
+  
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">4.1.1</span>
+    <span class="item-title">E-mail Gmail pessoal no funil</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Calendly e notificações associados a conta Gmail pessoal, prejudicando imagem corporativa.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Conta comercial@aerosuite.com.br no Calendly; SMTP site e API migrados para Google Workspace (contato@ + alias noreply@); senha de app com 2FA; WP Mail SMTP configurado e testado.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Login Calendly corporativo; SPF include:_spf.google.com; teste SMTP OK (WP + API).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Manual Calendly + automático DNS/SMTP</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">4.1.2</span>
+    <span class="item-title">Título Calendly &quot;Teste&quot;</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Evento público exibia &quot;Teste&quot; ou &quot;30 Minute Meeting&quot; em vez de nome comercial.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Renomeado no painel Calendly para &quot;Demonstração Aero Suite — 30 minutos&quot;.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">calendly.com/comercial-aerosuite/30min — título verificado via fetch.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — regex título Calendly</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">4.1.3</span>
+    <span class="item-title">SPF / DMARC publicados</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Autenticação de e-mail incompleta; risco de spam/rejeição.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">DNS Cloudflare: SPF v=spf1 include:_spf.google.com ~all; DMARC v=DMARC1 p=quarantine rua=contato@; DKIM Google TXT publicado.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">check-conversion-infra.mjs: spf.ok, dmarc.ok, dkim.ok.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — DNS TXT</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">4.1.4</span>
+    <span class="item-title">Layout dedicado /obrigado</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Página pós-agendamento genérica ou sem branding Aero Suite.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Página /obrigado/ com bloco as-thank-you, próximos passos e analytics thank_you_view.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">as-thank-you presente; HTTP 200.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático + run-site-audit.mjs</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">4.1.5</span>
+    <span class="item-title">URL ?lead=calendly na barra</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Query string exposta após redirect do Calendly.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Redirect limpo via sessionStorage + history.replaceState (aerosuite-analytics.js); URL canônica /obrigado/.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">URL final sem parâmetro lead=.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Relatório Executivo UX</span>
+    <span>Seção 4.1 · 1.0</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 5</span>
+  </div>
+  <h2>Conformidade legal e portfólio</h2>
+  <p class="section-intro">Autorização formal de marcas de clientes, LGPD em demos visuais, política de privacidade e banner de consentimento.</p>
+  
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">5.1.1</span>
+    <span class="item-title">Autorização formal marcas clientes</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Uso de logo/nome Bellows e King do Rio sem evidência documental.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">E-mails &quot;DE ACORDO&quot; recebidos (2026-06-04); nota as-portfolio-auth-note em /casos/; registro em PORTFOLIO-AUTORIZACAO-EMAILS.md.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">as-portfolio-auth-note no HTML de /casos/.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático + arquivo legal</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">5.1.2</span>
+    <span class="item-title">LGPD — dados sensíveis em demos</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Screenshots continham identificadores de operações reais não autorizadas.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Sanitização WebP v6; remoção de quick mnt, axial aviation, voar t??; dados fictícios.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Patterns LGPD ausentes do HTML da home.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">5.2.1</span>
+    <span class="item-title">Política de privacidade no rodapé</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Links legais ausentes ou inconsistentes entre páginas.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Footer as-site-chrome com links Política de Privacidade, Termos e Segurança em todas as páginas via build-gaps-deploy.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Links privacidade presentes na home e /contato/.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">5.2.2</span>
+    <span class="item-title">Consentimento cookies LGPD</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Banner ausente ou sem persistência entre sessões.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">aerosuite-consent.js: banner first visit, aceite all/necessary, localStorage, data-as-consent no html. verify-consent-persistence.mjs: 6/6.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">aerosuite-consent na home; persistência validada em produção.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — verify-consent-persistence.mjs</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Relatório Executivo UX</span>
+    <span>Seção 5 · 1.0</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Anexo A</span>
+  </div>
+  <h2>Matriz consolidada de verificação</h2>
+  <p class="lead">Status final de cada observação — verificação 09 de junho de 2026.</p>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Severidade</th><th>Observação</th><th>Status</th></tr>
+    </thead>
+    <tbody><tr><td>3.1.1</td><td>CRITICO</td><td>Redirect www → apex</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.1.2</td><td>ALTO</td><td>Menu duplicado (tema + Aero Suite)</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.1.3</td><td>MEDIO</td><td>Travessões em copy visível</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.2.1</td><td>MEDIO</td><td>Comparativo / posicionamento perto do hero</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.2.2</td><td>MEDIO</td><td>Home longa / conteúdo duplicado</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.2.3</td><td>MEDIO</td><td>Posicionamento como 2ª seção</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.3.1</td><td>ALTO</td><td>Falsa affordance em cards estáticos</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.3.2</td><td>ALTO</td><td>Ícones equipe padronizados</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.3.3</td><td>ALTO</td><td>Grid card 04 — visão executiva</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.3.4</td><td>MEDIO</td><td>Altura uniforme — cards posicionamento</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.3.5</td><td>INFO</td><td>Tab módulos — estado ativo</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.4.1</td><td>ALTO</td><td>Tags internas P5.3 / B1 / A3 visíveis</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.4.2</td><td>ALTO</td><td>Keywords SEO cruas nos guias</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.4.3</td><td>CRITICO</td><td>Texto rascunho — visão executiva</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.4.4</td><td>MEDIO</td><td>Órgãos reguladores com sublinhado falso</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.4.5</td><td>MEDIO</td><td>Métricas fracas (1+ / 4+)</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.5.1</td><td>CRITICO</td><td>Dados reais de clientes nas telas</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.5.2</td><td>CRITICO</td><td>Smoke / Serviço smoke nas telas</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.5.3</td><td>CRITICO</td><td>Chave i18n common.actions.refresh visível</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.5.4</td><td>ALTO</td><td>Servico sem cedilha</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.5.5</td><td>ALTO</td><td>CONTENCAO sem acento</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.5.6</td><td>ALTO</td><td>Encoding VOAR T??XI</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.5.7</td><td>INFO</td><td>Cards clientes duplicados na home</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>4.1.1</td><td>CRITICO</td><td>E-mail Gmail pessoal no funil</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>4.1.2</td><td>CRITICO</td><td>Título Calendly &quot;Teste&quot;</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>4.1.3</td><td>ALTO</td><td>SPF / DMARC publicados</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>4.1.4</td><td>ALTO</td><td>Layout dedicado /obrigado</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>4.1.5</td><td>MEDIO</td><td>URL ?lead=calendly na barra</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>5.1.1</td><td>CRITICO</td><td>Autorização formal marcas clientes</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>5.1.2</td><td>CRITICO</td><td>LGPD — dados sensíveis em demos</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>5.2.1</td><td>ALTO</td><td>Política de privacidade no rodapé</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>5.2.2</td><td>ALTO</td><td>Consentimento cookies LGPD</td><td><span class="status-ok">✓ ADERENTE</span></td></tr></tbody>
+  </table>
+  <div class="page-footer"><span>Aero Suite · Relatório Executivo UX</span><span>Anexo A</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Anexo B</span>
+  </div>
+  <h2>Informações complementares</h2>
+  <div class="supplementary"><h4>Verificação automatizada contínua</h4><p>Scripts: verify-report-items.mjs (32 itens), verify-ux-adherence.mjs (20 checks), run-site-audit.mjs, check-conversion-infra.mjs, verify-consent-persistence.mjs. Executados em 09/06/2026 com resultado 32/32 aderente.</p></div>
+<div class="supplementary"><h4>Canal transacional unificado</h4><p>WordPress (contato@), API Quarkus (noreply@ via contato@ SMTP), Calendly (comercial@). SendGrid descontinuado. Senha de app Google com 2FA ativo na conta contato@aerosuite.com.br.</p></div>
+<div class="supplementary"><h4>Próximos passos operacionais (fora escopo UX)</h4><p>GA4 conversões marcadas (P1), Search Console + sitemap, Rich Results Test, PageSpeed ≥ 70 mobile. Não bloqueiam aderência ao relatório UX técnico.</p></div>
+
+  <div class="signature-block">
+    <p class="lead" style="margin-bottom:6mm">
+      Declaro, para os devidos fins, que as informações deste relatório refletem o estado verificado
+      do site institucional Aero Suite na data indicada, com base nas evidências técnicas citadas
+      em cada item e nos scripts de auditoria automatizada do repositório.
+    </p>
+    <div class="signature-line"></div>
+    <div class="signature-name">Wellem Lyra</div>
+    <div class="signature-role">Analista responsável — UX &amp; Conversão Digital</div>
+    <div class="signature-role">Aero Suite</div>
+    <div class="signature-date">09 de junho de 2026 · https://aerosuite.com.br</div>
+  </div>
+
+  <div class="page-footer"><span>Aero Suite · Relatório Executivo UX</span><span>Assinatura · Wellem Lyra</span></div>
+</section>
+
+</body>
+</html>

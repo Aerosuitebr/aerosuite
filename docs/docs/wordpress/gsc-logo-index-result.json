@@ -1,0 +1,31 @@
+{
+  "at": "2026-06-04T13:10:00.000Z",
+  "property": "sc-domain:aerosuite.com.br",
+  "account": "wellemlyra@gmail.com",
+  "logo": {
+    "gscUi": "Não há tela \"Informações da empresa\" nesta propriedade (404 em organization-info). Logo depende do schema Organization no site (512×512 publicado).",
+    "schemaUrl": "https://aerosuite.com.br/wp-content/uploads/2026/06/aerosuite-site-icon-512.png",
+    "ok": true
+  },
+  "indexation": [
+    {
+      "url": "https://aerosuite.com.br/",
+      "status": "indexada",
+      "requestIndexing": "já indexada — solicitar novamente disponível"
+    },
+    {
+      "url": "https://aerosuite.com.br/solucoes/",
+      "status": "detectada, não indexada",
+      "requestIndexing": "cota diária GSC excedida em 04/06/2026 — repetir amanhã"
+    },
+    {
+      "url": "https://aerosuite.com.br/contato/",
+      "status": "pendente inspeção manual (cota)",
+      "requestIndexing": "repetir amanhã via Inspeção de URL"
+    }
+  ],
+  "notes": [
+    "Use propriedade de DOMÍNIO (sc-domain:aerosuite.com.br), não prefixo https://",
+    "Script: node run-gsc-logo-index.mjs (requer gsc-storage.json após login)"
+  ]
+}

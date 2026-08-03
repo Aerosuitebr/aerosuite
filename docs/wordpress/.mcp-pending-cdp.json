@@ -1,0 +1,998 @@
+{
+  "viewId": "4efe11",
+  "note": "CallMcpTool browser_cdp with each invokeFile contents; save response to resultFile; after last part of step write .mcp-runner-result.json",
+  "steps": [
+    {
+      "step": 2,
+      "totalParts": 12,
+      "parts": [
+        {
+          "step": 2,
+          "partIdx": 1,
+          "totalParts": 12,
+          "invokeFile": ".mcp-b64-invokes\\step-02-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 2,
+          "partIdx": 2,
+          "totalParts": 12,
+          "invokeFile": ".mcp-b64-invokes\\step-02-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 2,
+          "partIdx": 3,
+          "totalParts": 12,
+          "invokeFile": ".mcp-b64-invokes\\step-02-part-03.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 2,
+          "partIdx": 4,
+          "totalParts": 12,
+          "invokeFile": ".mcp-b64-invokes\\step-02-part-04.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 2,
+          "partIdx": 5,
+          "totalParts": 12,
+          "invokeFile": ".mcp-b64-invokes\\step-02-part-05.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 2,
+          "partIdx": 6,
+          "totalParts": 12,
+          "invokeFile": ".mcp-b64-invokes\\step-02-part-06.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 2,
+          "partIdx": 7,
+          "totalParts": 12,
+          "invokeFile": ".mcp-b64-invokes\\step-02-part-07.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 2,
+          "partIdx": 8,
+          "totalParts": 12,
+          "invokeFile": ".mcp-b64-invokes\\step-02-part-08.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 2,
+          "partIdx": 9,
+          "totalParts": 12,
+          "invokeFile": ".mcp-b64-invokes\\step-02-part-09.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 2,
+          "partIdx": 10,
+          "totalParts": 12,
+          "invokeFile": ".mcp-b64-invokes\\step-02-part-10.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 2,
+          "partIdx": 11,
+          "totalParts": 12,
+          "invokeFile": ".mcp-b64-invokes\\step-02-part-11.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "totalParts": 10,
+      "parts": [
+        {
+          "step": 3,
+          "partIdx": 0,
+          "totalParts": 10,
+          "invokeFile": ".mcp-b64-invokes\\step-03-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 3,
+          "partIdx": 1,
+          "totalParts": 10,
+          "invokeFile": ".mcp-b64-invokes\\step-03-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 3,
+          "partIdx": 2,
+          "totalParts": 10,
+          "invokeFile": ".mcp-b64-invokes\\step-03-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 3,
+          "partIdx": 3,
+          "totalParts": 10,
+          "invokeFile": ".mcp-b64-invokes\\step-03-part-03.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 3,
+          "partIdx": 4,
+          "totalParts": 10,
+          "invokeFile": ".mcp-b64-invokes\\step-03-part-04.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 3,
+          "partIdx": 5,
+          "totalParts": 10,
+          "invokeFile": ".mcp-b64-invokes\\step-03-part-05.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 3,
+          "partIdx": 6,
+          "totalParts": 10,
+          "invokeFile": ".mcp-b64-invokes\\step-03-part-06.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 3,
+          "partIdx": 7,
+          "totalParts": 10,
+          "invokeFile": ".mcp-b64-invokes\\step-03-part-07.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 3,
+          "partIdx": 8,
+          "totalParts": 10,
+          "invokeFile": ".mcp-b64-invokes\\step-03-part-08.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 3,
+          "partIdx": 9,
+          "totalParts": 10,
+          "invokeFile": ".mcp-b64-invokes\\step-03-part-09.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "totalParts": 2,
+      "parts": [
+        {
+          "step": 4,
+          "partIdx": 0,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-04-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 4,
+          "partIdx": 1,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-04-part-01.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "totalParts": 2,
+      "parts": [
+        {
+          "step": 5,
+          "partIdx": 0,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-05-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 5,
+          "partIdx": 1,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-05-part-01.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "totalParts": 3,
+      "parts": [
+        {
+          "step": 6,
+          "partIdx": 0,
+          "totalParts": 3,
+          "invokeFile": ".mcp-b64-invokes\\step-06-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 6,
+          "partIdx": 1,
+          "totalParts": 3,
+          "invokeFile": ".mcp-b64-invokes\\step-06-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 6,
+          "partIdx": 2,
+          "totalParts": 3,
+          "invokeFile": ".mcp-b64-invokes\\step-06-part-02.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 7,
+      "totalParts": 2,
+      "parts": [
+        {
+          "step": 7,
+          "partIdx": 0,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-07-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 7,
+          "partIdx": 1,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-07-part-01.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 8,
+      "totalParts": 4,
+      "parts": [
+        {
+          "step": 8,
+          "partIdx": 0,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-08-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 8,
+          "partIdx": 1,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-08-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 8,
+          "partIdx": 2,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-08-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 8,
+          "partIdx": 3,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-08-part-03.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 9,
+      "totalParts": 4,
+      "parts": [
+        {
+          "step": 9,
+          "partIdx": 0,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-09-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 9,
+          "partIdx": 1,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-09-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 9,
+          "partIdx": 2,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-09-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 9,
+          "partIdx": 3,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-09-part-03.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 10,
+      "totalParts": 4,
+      "parts": [
+        {
+          "step": 10,
+          "partIdx": 0,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-10-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 10,
+          "partIdx": 1,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-10-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 10,
+          "partIdx": 2,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-10-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 10,
+          "partIdx": 3,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-10-part-03.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 11,
+      "totalParts": 4,
+      "parts": [
+        {
+          "step": 11,
+          "partIdx": 0,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-11-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 11,
+          "partIdx": 1,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-11-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 11,
+          "partIdx": 2,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-11-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 11,
+          "partIdx": 3,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-11-part-03.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 12,
+      "totalParts": 3,
+      "parts": [
+        {
+          "step": 12,
+          "partIdx": 0,
+          "totalParts": 3,
+          "invokeFile": ".mcp-b64-invokes\\step-12-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 12,
+          "partIdx": 1,
+          "totalParts": 3,
+          "invokeFile": ".mcp-b64-invokes\\step-12-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 12,
+          "partIdx": 2,
+          "totalParts": 3,
+          "invokeFile": ".mcp-b64-invokes\\step-12-part-02.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 13,
+      "totalParts": 2,
+      "parts": [
+        {
+          "step": 13,
+          "partIdx": 0,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-13-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 13,
+          "partIdx": 1,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-13-part-01.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 14,
+      "totalParts": 4,
+      "parts": [
+        {
+          "step": 14,
+          "partIdx": 0,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-14-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 14,
+          "partIdx": 1,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-14-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 14,
+          "partIdx": 2,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-14-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 14,
+          "partIdx": 3,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-14-part-03.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 15,
+      "totalParts": 4,
+      "parts": [
+        {
+          "step": 15,
+          "partIdx": 0,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-15-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 15,
+          "partIdx": 1,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-15-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 15,
+          "partIdx": 2,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-15-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 15,
+          "partIdx": 3,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-15-part-03.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 16,
+      "totalParts": 4,
+      "parts": [
+        {
+          "step": 16,
+          "partIdx": 0,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-16-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 16,
+          "partIdx": 1,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-16-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 16,
+          "partIdx": 2,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-16-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 16,
+          "partIdx": 3,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-16-part-03.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 17,
+      "totalParts": 4,
+      "parts": [
+        {
+          "step": 17,
+          "partIdx": 0,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-17-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 17,
+          "partIdx": 1,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-17-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 17,
+          "partIdx": 2,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-17-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 17,
+          "partIdx": 3,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-17-part-03.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 18,
+      "totalParts": 3,
+      "parts": [
+        {
+          "step": 18,
+          "partIdx": 0,
+          "totalParts": 3,
+          "invokeFile": ".mcp-b64-invokes\\step-18-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 18,
+          "partIdx": 1,
+          "totalParts": 3,
+          "invokeFile": ".mcp-b64-invokes\\step-18-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 18,
+          "partIdx": 2,
+          "totalParts": 3,
+          "invokeFile": ".mcp-b64-invokes\\step-18-part-02.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 19,
+      "totalParts": 2,
+      "parts": [
+        {
+          "step": 19,
+          "partIdx": 0,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-19-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 19,
+          "partIdx": 1,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-19-part-01.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 20,
+      "totalParts": 4,
+      "parts": [
+        {
+          "step": 20,
+          "partIdx": 0,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-20-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 20,
+          "partIdx": 1,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-20-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 20,
+          "partIdx": 2,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-20-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 20,
+          "partIdx": 3,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-20-part-03.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 21,
+      "totalParts": 4,
+      "parts": [
+        {
+          "step": 21,
+          "partIdx": 0,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-21-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 21,
+          "partIdx": 1,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-21-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 21,
+          "partIdx": 2,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-21-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 21,
+          "partIdx": 3,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-21-part-03.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 22,
+      "totalParts": 4,
+      "parts": [
+        {
+          "step": 22,
+          "partIdx": 0,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-22-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 22,
+          "partIdx": 1,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-22-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 22,
+          "partIdx": 2,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-22-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 22,
+          "partIdx": 3,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-22-part-03.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 23,
+      "totalParts": 4,
+      "parts": [
+        {
+          "step": 23,
+          "partIdx": 0,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-23-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 23,
+          "partIdx": 1,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-23-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 23,
+          "partIdx": 2,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-23-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 23,
+          "partIdx": 3,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-23-part-03.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 24,
+      "totalParts": 3,
+      "parts": [
+        {
+          "step": 24,
+          "partIdx": 0,
+          "totalParts": 3,
+          "invokeFile": ".mcp-b64-invokes\\step-24-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 24,
+          "partIdx": 1,
+          "totalParts": 3,
+          "invokeFile": ".mcp-b64-invokes\\step-24-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 24,
+          "partIdx": 2,
+          "totalParts": 3,
+          "invokeFile": ".mcp-b64-invokes\\step-24-part-02.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 25,
+      "totalParts": 2,
+      "parts": [
+        {
+          "step": 25,
+          "partIdx": 0,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-25-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 25,
+          "partIdx": 1,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-25-part-01.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 26,
+      "totalParts": 4,
+      "parts": [
+        {
+          "step": 26,
+          "partIdx": 0,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-26-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 26,
+          "partIdx": 1,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-26-part-01.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 26,
+          "partIdx": 2,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-26-part-02.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 26,
+          "partIdx": 3,
+          "totalParts": 4,
+          "invokeFile": ".mcp-b64-invokes\\step-26-part-03.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 27,
+      "totalParts": 2,
+      "parts": [
+        {
+          "step": 27,
+          "partIdx": 0,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-27-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 27,
+          "partIdx": 1,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-27-part-01.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 28,
+      "totalParts": 2,
+      "parts": [
+        {
+          "step": 28,
+          "partIdx": 0,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-28-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 28,
+          "partIdx": 1,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-28-part-01.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    },
+    {
+      "step": 29,
+      "totalParts": 2,
+      "parts": [
+        {
+          "step": 29,
+          "partIdx": 0,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-29-part-00.json",
+          "isFinalEval": false,
+          "resultFile": ".mcp-chunk-result.json"
+        },
+        {
+          "step": 29,
+          "partIdx": 1,
+          "totalParts": 2,
+          "invokeFile": ".mcp-b64-invokes\\step-29-part-01.json",
+          "isFinalEval": true,
+          "resultFile": ".mcp-runner-result.json"
+        }
+      ]
+    }
+  ]
+}

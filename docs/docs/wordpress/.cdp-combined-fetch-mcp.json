@@ -1,0 +1,1 @@
+{"method":"Runtime.evaluate","params":{"expression":"(async()=>{const r=await fetch('http://127.0.0.1:19877/combined');const j=await r.json();return await eval(j.expression);})()","awaitPromise":true,"returnByValue":true},"viewId":"dc48c3"}

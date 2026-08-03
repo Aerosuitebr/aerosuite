@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Proposta Comercial · Aero Suite · OTON PARTS CORP</title>
+  <style>
+@page { size: A4; margin: 14mm 12mm 16mm 12mm; }
+@page :first { margin: 0; }
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 9.5pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif; color: #0f172a; line-height: 1.45; background: #fff; }
+
+.cover {
+  page-break-after: always; min-height: 297mm; width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 35%, #0f172a 70%, #1e293b 100%);
+  color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 18mm 16mm; position: relative; overflow: hidden;
+}
+.cover::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 75% 50% at 50% 0%, rgba(56,189,248,.22) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 40% at 100% 100%, rgba(201,162,39,.16) 0%, transparent 50%);
+  pointer-events: none;
+}
+.cover-grid {
+  position: absolute; inset: 0; opacity: .045;
+  background-image: linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.cover-inner { position: relative; z-index: 1; max-width: 155mm; }
+.cover-logo { width: 52mm; max-width: 100%; height: auto; margin-bottom: 6mm; filter: drop-shadow(0 8px 24px rgba(0,0,0,.45)); }
+.cover-badge {
+  display: inline-block; font-size: 7pt; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: #7dd3fc; border: 1px solid rgba(125,211,252,.4); border-radius: 999px; padding: 2mm 5mm; margin-bottom: 4mm;
+}
+.cover-client { font-size: 12pt; font-weight: 600; color: #e2e8f0; margin-bottom: 2mm; }
+.cover h1 { font-size: 22pt; font-weight: 800; line-height: 1.12; margin: 0 0 3mm; }
+.cover-tagline { font-size: 11pt; color: #94a3b8; margin: 0 0 4mm; }
+.cover-gold-line { width: 48mm; height: 2px; background: linear-gradient(90deg, transparent, #c9a227, #e8c547, #c9a227, transparent); margin: 0 auto 5mm; }
+.cover-sub { font-size: 10pt; color: #cbd5e1; margin: 0 auto 5mm; line-height: 1.45; max-width: 128mm; }
+.cover-meta { font-size: 8.5pt; color: #94a3b8; line-height: 1.65; margin: 6mm 0 0; }
+.cover-meta strong { color: #e2e8f0; }
+.cover-footer {
+  position: absolute; bottom: 10mm; left: 0; right: 0; text-align: center;
+  font-size: 7pt; color: #64748b; letter-spacing: .08em; text-transform: uppercase;
+}
+.cover-seal {
+  display: inline-block; margin-top: 4mm; padding: 2mm 4mm; border: 1px solid rgba(201,162,39,.35); border-radius: 6px;
+  font-size: 7.5pt; color: #fde68a; background: rgba(201,162,39,.08);
+}
+
+.block { margin-bottom: 4mm; }
+.pb { page-break-before: always; }
+.avoid-break { page-break-inside: avoid; }
+
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0; padding-bottom: 2.5mm; margin-bottom: 4mm;
+}
+.page-header img { height: 6mm; }
+.page-header .chapter-label { font-size: 7.5pt; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .08em; }
+.page-footer {
+  margin-top: 5mm; padding-top: 2mm; border-top: 1px solid #e2e8f0;
+  display: flex; justify-content: space-between; font-size: 7pt; color: #94a3b8;
+}
+
+h2 { font-size: 12.5pt; color: #0f172a; margin: 0 0 2.5mm; font-weight: 700; }
+h3 { font-size: 10pt; color: #0369a1; margin: 3.5mm 0 2mm; font-weight: 600; }
+p { margin: 0 0 2.5mm; }
+.lead { font-size: 9.5pt; color: #334155; margin-bottom: 3mm; }
+.right { text-align: right; }
+.small { font-size: 7.5pt; color: #64748b; }
+
+.toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 6mm; list-style: none; padding: 0; margin: 0 0 4mm; }
+.toc-grid li { display: flex; gap: 2mm; padding: 1.5mm 0; border-bottom: 1px dotted #e2e8f0; font-size: 8.5pt; }
+.toc-num { font-weight: 700; color: #0369a1; min-width: 7mm; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2mm; margin: 3mm 0; }
+.kpi-card { border: 1px solid #e2e8f0; border-radius: 5px; padding: 2.5mm; text-align: center; background: #f8fafc; }
+.kpi-card--gold { background: #fffbeb; border-color: #fcd34d; }
+.kpi-val { font-size: 13pt; font-weight: 800; color: #0369a1; line-height: 1; }
+.kpi-card--gold .kpi-val { color: #b45309; }
+.kpi-lbl { font-size: 6.5pt; color: #64748b; margin-top: 1mm; text-transform: uppercase; }
+
+table { width: 100%; border-collapse: collapse; font-size: 8pt; margin: 2mm 0 3mm; }
+th, td { border: 1px solid #e2e8f0; padding: 2mm 2.5mm; text-align: left; vertical-align: top; }
+th { background: #f1f5f9; font-weight: 600; color: #334155; }
+tr:nth-child(even) td { background: #fafafa; }
+.total-row td { background: #eff6ff !important; font-weight: 700; }
+.total-row-gold td { background: #fffbeb !important; font-weight: 700; color: #92400e; }
+.compact td, .compact th { padding: 1.5mm 2mm; font-size: 7.5pt; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+.three-plans { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2.5mm; margin: 3mm 0; }
+.plan-mini {
+  border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; font-size: 7.5pt; page-break-inside: avoid;
+}
+.plan-mini--rec { border: 2px solid #c9a227; }
+.plan-mini-head { padding: 2.5mm 3mm; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; }
+.plan-mini--rec .plan-mini-head { background: #fffbeb; }
+.plan-mini-head strong { display: block; font-size: 8.5pt; color: #0f172a; }
+.plan-price-sm { font-size: 11pt; font-weight: 800; color: #0369a1; margin-top: 1mm; }
+.plan-mini--rec .plan-price-sm { color: #b45309; }
+.plan-mini-body { padding: 2.5mm 3mm; }
+.plan-mini-body ul { margin: 0; padding-left: 3.5mm; }
+.plan-mini-body li { margin-bottom: .8mm; }
+.badge-rec { font-size: 6pt; font-weight: 700; text-transform: uppercase; background: #c9a227; color: #fff; padding: .5mm 2mm; border-radius: 999px; }
+.badge-launch { font-size: 6pt; font-weight: 700; text-transform: uppercase; background: #15803d; color: #fff; padding: .5mm 2mm; border-radius: 999px; }
+
+.flow { display: flex; align-items: stretch; gap: 1.5mm; margin: 2mm 0 3mm; }
+.flow-step {
+  flex: 1; text-align: center; padding: 2mm 1.5mm; font-size: 7pt;
+  background: #f0f9ff; border: 1px solid #7dd3fc; border-radius: 5px;
+}
+.flow-step strong { display: block; font-size: 7.5pt; color: #0369a1; margin-bottom: .5mm; }
+.flow-arrow { align-self: center; color: #94a3b8; font-size: 11pt; font-weight: 700; }
+
+.module-tags { display: flex; flex-wrap: wrap; gap: 1mm; margin: 2mm 0; }
+.tag { font-size: 6.5pt; font-weight: 600; padding: .8mm 2mm; border-radius: 3px; background: #e0f2fe; color: #0369a1; }
+.tag--gold { background: #fef3c7; color: #92400e; }
+
+.callout { background: #eff6ff; border-left: 3px solid #0369a1; padding: 3mm; margin: 3mm 0; font-size: 8.5pt; }
+.callout-gold { background: #fffbeb; border-left-color: #c9a227; }
+.callout-green { background: #ecfdf5; border-left-color: #15803d; }
+.disclaimer { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 5px; padding: 3mm; font-size: 8pt; color: #78350f; margin: 3mm 0; }
+
+.matrix .yes { color: #15803d; font-weight: 700; text-align: center; }
+.matrix .no { color: #cbd5e1; text-align: center; }
+.matrix .partial { color: #b45309; text-align: center; font-size: 7pt; }
+.matrix .best { background: #fffbeb !important; }
+
+.timeline { margin: 2mm 0; }
+.tl-item { display: grid; grid-template-columns: 14mm 1fr; gap: 3mm; margin-bottom: 2mm; font-size: 8pt; }
+.tl-week { font-weight: 700; color: #0369a1; }
+.tl-desc { border-left: 2px solid #e2e8f0; padding-left: 3mm; }
+
+.signature-block {
+  margin-top: 4mm; padding: 4mm; border: 1px solid #e2e8f0; border-radius: 6px; background: #fafafa; page-break-inside: avoid;
+}
+.signature-line { width: 55mm; border-top: 1px solid #334155; margin: 8mm 0 2mm; }
+.signature-name { font-size: 11pt; font-weight: 700; }
+.signature-role, .signature-date { font-size: 8.5pt; color: #64748b; }
+ul.check { margin: 1mm 0; padding-left: 4.5mm; font-size: 8pt; }
+ul.check li { margin-bottom: 1mm; }
+.strike { text-decoration: line-through; color: #94a3b8; font-size: 7pt; }
+  </style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/Aero_Claro.png" alt="Aero Suite" />
+    <div class="cover-badge">Proposta comercial · Promoção de lançamento</div>
+    <div class="cover-client">OTON PARTS CORP</div>
+    <h1>Gestão MRO integrada<br/>com investimento acessível</h1>
+    <div class="cover-gold-line"></div>
+    <p class="cover-tagline">Aero Suite · Plataforma pensada para oficinas Part 145</p>
+    <p class="cover-sub">
+      Da proposta comercial à liberação para serviço, em um único ecossistema digital.
+      Condições especiais da <strong>Promoção de Lançamento</strong> para organizações que fecharem contrato
+      nesta fase inicial de comercialização da suíte.
+    </p>
+    <div class="cover-seal">✦ Valores promocionais · Validade 30 dias</div>
+    <p class="cover-meta">
+      <strong>Destinatário:</strong> Área Comercial · OTON PARTS CORP<br />
+      <strong>Apresentado por:</strong> Wellem Lyra · Diretor de TI · Aero Suite<br />
+      <strong>Data:</strong> 24 de junho de 2026 · <strong>Ref.:</strong> PROP-OTON-2026-0624 · Versão 1.3
+    </p>
+  </div>
+  <div class="cover-footer">Gestão aeronáutica integrada · aerosuite.com.br</div>
+</section>
+
+<!-- PÁGINA 1: Sumário + Carta + KPI -->
+<section class="block">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Apresentação</span>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h2>Sumário</h2>
+      <ul class="toc-grid">
+        <li><span class="toc-num">01</span> Carta e visão executiva</li>
+        <li><span class="toc-num">02</span> Desafio MRO e diferenciais</li>
+        <li><span class="toc-num">03</span> Módulos e fluxo integrado</li>
+        <li><span class="toc-num">04</span> Três modelos de implantação</li>
+        <li><span class="toc-num">05</span> Investimentos discriminados</li>
+        <li><span class="toc-num">06</span> Comparativo e cronograma</li>
+        <li><span class="toc-num">07</span> Condições e próximos passos</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Promoção de Lançamento</h2>
+      <div class="callout-green avoid-break">
+        <strong>O que é:</strong> condições comerciais reduzidas para os primeiros contratos da Aero Suite,
+        enquanto expandimos a base de clientes MRO. Inclui <strong>setup promocional</strong>,
+        <strong>mensalidade abaixo da tabela oficial</strong> e <strong>valor travado por 24 meses</strong>
+        após a assinatura. Ideal para organizações que precisam modernizar a operação sem estourar o orçamento
+        neste momento de mercado mais contido.
+      </div>
+    </div>
+  </div>
+
+  <h2>Carta à Área Comercial da OTON PARTS CORP</h2>
+  <p class="letter-greeting" style="font-size:9pt;">Prezados executivos e equipe comercial,</p>
+  <p style="font-size:9pt;">
+    Apresentamos a <strong>Aero Suite</strong> como resposta prática à fragmentação que ainda domina
+    muitas oficinas: proposta num lugar, OS noutro, estoque em planilha e conformidade em pastas soltas.
+    Nossa plataforma reúne <strong>proposta comercial, ordem de serviço, estoque rastreável, portal do cliente
+    e trilha de auditoria</strong> no mesmo ambiente, com vocabulário nativo Part 145.
+  </p>
+  <p style="font-size:9pt;">
+    Esta proposta traz três formas de adoção (tenant na nuvem, dedicada na nuvem e on-premises no servidor local),
+    com investimento pensado para não onerar o caixa da operação neste ciclo de mercado.
+    Recomendamos o <strong>Plano II</strong> como melhor equilíbrio entre controle e custo mensal previsível.
+  </p>
+
+  <div class="kpi-grid avoid-break">
+    <div class="kpi-card kpi-card--gold">
+      <div class="kpi-val">R$ 2,49k</div>
+      <div class="kpi-lbl">Entrada · Plano I</div>
+    </div>
+    <div class="kpi-card kpi-card--gold">
+      <div class="kpi-val">R$ 5,89k</div>
+      <div class="kpi-lbl">Recomendado · Plano II</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">7 dias</div>
+      <div class="kpi-lbl">Trial gratuito</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">24 meses</div>
+      <div class="kpi-lbl">Valor promocional garantido</div>
+    </div>
+  </div>
+  <div class="page-footer"><span>Aero Suite · Proposta OTON PARTS CORP</span><span>1</span></div>
+</section>
+
+<!-- PÁGINA 2: Desafio + Diferenciais + Fluxo -->
+<section class="block pb">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seções 01–03</span>
+  </div>
+
+  <h2>O desafio das oficinas MRO e como respondemos</h2>
+  <table class="compact avoid-break">
+    <thead>
+      <tr><th>Dor operacional</th><th>Impacto</th><th>Resposta Aero Suite</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Proposta desconectada do hangar</strong></td><td>Retrabalho comercial, escopo impreciso</td><td>Proposta → OS automática</td></tr>
+      <tr><td><strong>Peça sem rastreio</strong></td><td>Risco em auditoria, AOG</td><td>FIFO, certificados, QR Code</td></tr>
+      <tr><td><strong>OS sem trilha</strong></td><td>Dificuldade RBAC 145</td><td>Auditoria OS, CRS, dossiê</td></tr>
+      <tr><td><strong>Cliente sem visibilidade</strong></td><td>Churn, ligações repetidas</td><td>Portal externo integrado</td></tr>
+      <tr><td><strong>SGQ fragmentado</strong></td><td>NC/CAPA soltas</td><td>Conformidade no operacional</td></tr>
+    </tbody>
+  </table>
+
+  <div class="two-col">
+    <div>
+      <h3>Singularidade no mercado</h3>
+      <p class="small">
+        Poucos sistemas nasceram dentro da manutenção aeronáutica brasileira, com FCU, AD/SB,
+        hangar job card, CRS e linguagem que RT e inspetor reconhecem sem adaptação.
+        A plataforma foi desenvolvida com <strong>tecnologias modernas de alta performance,
+        escalabilidade e segurança de dados</strong>, em arquitetura de nuvem com
+        <strong>alta disponibilidade e resiliência</strong> frente a incidentes — requisito
+        para operações que não podem parar no hangar nem em auditoria.
+      </p>
+      <div class="module-tags">
+        <span class="tag tag--gold">FCU</span><span class="tag">OS / Hangar</span><span class="tag">CRS</span>
+        <span class="tag">Estoque</span><span class="tag">Propostas</span><span class="tag">Portal</span>
+        <span class="tag">SGQ</span><span class="tag">LGPD</span><span class="tag">White-label</span>
+      </div>
+    </div>
+    <div>
+      <h3>Benchmark de mercado</h3>
+      <table class="compact">
+        <thead><tr><th>Alternativa</th><th>Faixa típica</th></tr></thead>
+        <tbody>
+          <tr><td>CMMS internacional</td><td>R$ 1.000 – 3.500/mês</td></tr>
+          <tr><td>ERP + adaptação MRO</td><td>R$ 5.000+/mês + setup alto</td></tr>
+          <tr><td>Planilhas + papel</td><td>Custo oculto em horas</td></tr>
+          <tr><td><strong>Aero Suite (promoção)</strong></td><td><strong>Desde R$ 2.490/mês</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Fluxo integrado: da cotação à liberação</h3>
+  <div class="flow avoid-break">
+    <div class="flow-step"><strong>Proposta</strong>Itens, PDF, envio</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><strong>OS</strong>Escopo vinculado</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><strong>Hangar</strong>Job card, assinaturas</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><strong>Estoque</strong>Rastreio PN/SN</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><strong>CRS</strong>Liberação RT</div>
+  </div>
+
+  <h3>Módulos incluídos (pacote Professional+ na promoção de lançamento)</h3>
+  <table class="compact">
+    <thead><tr><th>Módulo</th><th>Capacidades</th><th>Valor OTON</th></tr></thead>
+    <tbody>
+      <tr><td><strong>MRO</strong></td><td>OS, hangar, CRS, auditoria, FCU, AD/SB</td><td>Hangar organizado e auditável</td></tr>
+      <tr><td><strong>Estoque</strong></td><td>FIFO, lotes, certificados, QR, back-to-birth</td><td>Rastreio para fiscalização</td></tr>
+      <tr><td><strong>Comercial</strong></td><td>Propostas, templates, proposta→OS, PDF</td><td>Venda alinhada ao técnico</td></tr>
+      <tr><td><strong>Portal</strong></td><td>Cliente aprova proposta e consulta OS</td><td>Menos atrito comercial</td></tr>
+      <tr><td><strong>Plataforma</strong></td><td>RBAC, MFA, LGPD, chat, tickets, backup</td><td>Governança e segurança</td></tr>
+    </tbody>
+  </table>
+  <p class="small">Módulo Conformidade SGQ completo incluso no Plano II e III; no Plano I disponível como complemento opcional por R$ 390/mês.</p>
+
+  <div class="disclaimer avoid-break">
+    <strong>Nota regulatória:</strong> software de gestão operacional. Não substitui certificação da OM, MOM/MCQ
+    nem parecer de aeronavegabilidade. Apoia auditorias com evidências documentadas.
+  </div>
+  <div class="page-footer"><span>Aero Suite · Proposta OTON PARTS CORP</span><span>2</span></div>
+</section>
+
+<!-- PÁGINA 3: Três planos compactos -->
+<section class="block pb">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 04</span>
+  </div>
+
+  <h2>Três modelos de utilização</h2>
+  <p class="lead">Escolha conforme maturidade digital, política de dados e orçamento disponível neste momento.</p>
+
+  <div class="three-plans avoid-break">
+    <div class="plan-mini">
+      <div class="plan-mini-head">
+        <span class="badge-launch">Promoção</span>
+        <strong>Plano I · Tenant na Nuvem</strong>
+        <div class="plan-price-sm">R$ 2.490<span style="font-size:8pt;font-weight:400">/mês</span></div>
+        <span class="strike">tabela R$ 4.490</span>
+      </div>
+      <div class="plan-mini-body">
+        <p><strong>SaaS multi-tenant</strong>, isolamento lógico, updates automáticos, até 15 usuários.</p>
+        <p><strong>Prós:</strong></p>
+        <ul>
+          <li>Menor mensalidade e setup</li>
+          <li>Go-live em até 30 dias</li>
+          <li>Trial 7 dias sem cartão</li>
+        </ul>
+        <p><strong>Atenção:</strong> infra compartilhada; customização limitada.</p>
+      </div>
+    </div>
+    <div class="plan-mini plan-mini--rec">
+      <div class="plan-mini-head">
+        <span class="badge-rec">Recomendado</span>
+        <strong>Plano II · Dedicada na Nuvem</strong>
+        <div class="plan-price-sm">R$ 5.890<span style="font-size:8pt;font-weight:400">/mês</span></div>
+        <span class="strike">tabela R$ 8.900</span>
+      </div>
+      <div class="plan-mini-body">
+        <p><strong>VPS exclusiva OTON</strong> com <strong>performance isolada</strong> (sem vizinhos consumindo CPU/memória), DPA, backup dedicado, até 30 usuários, SGQ incluso e <strong>maior flexibilidade de customização</strong> do sistema — ideal para auditorias e conformidade regulatória.</p>
+        <p><strong>Prós:</strong></p>
+        <ul>
+          <li>Isolamento total sem comprar servidor</li>
+          <li>Customização de fluxos, campos e relatórios sob demanda</li>
+          <li>SLA 99,5% e suporte prioritário</li>
+          <li>Melhor custo-benefício nesta fase</li>
+        </ul>
+        <p><strong>Atenção:</strong> mensalidade acima do Plano I.</p>
+      </div>
+    </div>
+    <div class="plan-mini">
+      <div class="plan-mini-head">
+        <span class="badge-launch">Promoção</span>
+        <strong>Plano III · On-Premises (Servidor Local)</strong>
+        <div class="plan-price-sm">R$ 4.990<span style="font-size:8pt;font-weight:400">/mês</span></div>
+        <span class="strike">tabela R$ 12.400+</span>
+      </div>
+      <div class="plan-mini-body">
+        <p><strong>Instalação on-premises</strong> no servidor da OTON (ou hardware indicado): licença, manutenção e <strong>máxima liberdade de customização</strong>. Infraestrutura e backup físico sob responsabilidade do cliente.</p>
+        <p><strong>Prós:</strong></p>
+        <ul>
+          <li>Controle local dos dados</li>
+          <li>Operação em rede interna</li>
+          <li>Customização ampliada: integrações, telas e regras de negócio</li>
+        </ul>
+        <p><strong>Atenção:</strong> maior projeto inicial; TI interna necessária.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout avoid-break">
+    <strong>Recomendação:</strong> o <strong>Plano II</strong> entrega isolamento regulatório, SGQ incluso e
+    <strong>flexibilidade para adaptar o sistema</strong> aos fluxos da OTON (campos extras, relatórios e integrações),
+    com mensalidade previsível e sem investimento em servidores físicos.
+  </div>
+
+  <h3>Matriz rápida de decisão</h3>
+  <table class="matrix compact avoid-break">
+    <thead>
+      <tr><th>Critério</th><th>Plano I</th><th class="best">Plano II ⭐</th><th>Plano III</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Mensalidade promocional</td><td>R$ 2.490</td><td class="best"><strong>R$ 5.890</strong></td><td>R$ 4.990</td></tr>
+      <tr><td>Setup (De → Por)</td><td><span class="strike">R$ 4.900</span> → <strong>R$ 1.990</strong></td><td class="best"><span class="strike">R$ 9.900</span> → <strong>R$ 3.500</strong></td><td><span class="strike">R$ 19.900</span> → <strong>R$ 8.500</strong></td></tr>
+      <tr><td>Investimento mês 1</td><td>R$ 4.480</td><td class="best"><strong>R$ 9.390</strong></td><td>R$ 13.490*</td></tr>
+      <tr><td>Usuários incluídos</td><td>15</td><td class="best">30</td><td>Ilimitado</td></tr>
+      <tr><td>SGQ completo</td><td class="partial">Opcional</td><td class="yes best">✓</td><td class="yes">✓</td></tr>
+      <tr><td>Flexibilidade de customização</td><td class="partial">Padrão</td><td class="yes best">Alta</td><td class="yes">Máxima</td></tr>
+      <tr><td>Isolamento</td><td class="partial">Lógico</td><td class="yes best">VPS exclusiva</td><td class="yes">Local</td></tr>
+      <tr><td>Go-live</td><td>30 dias</td><td class="best">30–45 dias</td><td>60–90 dias</td></tr>
+    </tbody>
+  </table>
+  <p class="small">* Plano III mês 1 inclui projeto de implantação on-premises; hardware e infraestrutura local são do cliente.</p>
+  <div class="page-footer"><span>Aero Suite · Proposta OTON PARTS CORP</span><span>3</span></div>
+</section>
+
+<!-- PÁGINA 4: Investimentos -->
+<section class="block pb">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 05</span>
+  </div>
+
+  <h2>Investimentos discriminados (Promoção de Lançamento)</h2>
+  <p class="small">Valores promocionais válidos para contratos assinados até 31/07/2026. Setup com desconto agressivo para facilitar a entrada.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Plano I: Tenant na Nuvem</h3>
+      <table class="compact">
+        <thead><tr><th>Item</th><th class="right">Valor</th></tr></thead>
+        <tbody>
+          <tr><td>Licença mensal (MRO Pro+)</td><td class="right">R$ 2.490/mês</td></tr>
+          <tr><td>Setup + implantação inicial</td><td class="right"><span class="strike">R$ 4.900</span> → <strong>R$ 1.990</strong></td></tr>
+          <tr><td>Treinamento remoto (2 sessões)</td><td class="right">Incluso</td></tr>
+          <tr><td>Armazenamento 50 GB</td><td class="right">Incluso</td></tr>
+          <tr><td>Suporte e-mail e chat</td><td class="right">Incluso</td></tr>
+          <tr><td>Complemento SGQ (opcional)</td><td class="right">+ R$ 390/mês</td></tr>
+          <tr class="total-row"><td><strong>Mensal recorrente</strong></td><td class="right"><strong>R$ 2.490</strong></td></tr>
+          <tr class="total-row"><td><strong>Mês 1 (setup + 1ª mensalidade)</strong></td><td class="right"><strong>R$ 4.480</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h3>Plano II: Dedicada na Nuvem ⭐</h3>
+      <table class="compact">
+        <thead><tr><th>Item</th><th class="right">Valor</th></tr></thead>
+        <tbody>
+          <tr><td>Licença mensal (Enterprise promo)</td><td class="right">R$ 5.890/mês</td></tr>
+          <tr><td>Setup VPS exclusiva + identidade visual</td><td class="right"><span class="strike">R$ 9.900</span> → <strong>R$ 3.500</strong></td></tr>
+          <tr><td>Implantação assistida (20 h)</td><td class="right">Incluso no setup</td></tr>
+          <tr><td>Armazenamento VPS dedicada</td><td class="right">100 GB inclusos*</td></tr>
+          <tr><td>Treinamento remoto (3 sessões)</td><td class="right">Incluso</td></tr>
+          <tr><td>SGQ + portal + API leitura</td><td class="right">Incluso</td></tr>
+          <tr><td>Customização do sistema</td><td class="right">Até 3 ajustes no setup inicial**</td></tr>
+          <tr><td>Suporte prioritário · SLA 99,5%</td><td class="right">Incluso</td></tr>
+          <tr class="total-row-gold"><td><strong>Mensal recorrente</strong></td><td class="right"><strong>R$ 5.890</strong></td></tr>
+          <tr class="total-row-gold"><td><strong>Mês 1 (setup + 1ª mensalidade)</strong></td><td class="right"><strong>R$ 9.390</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="small">* Plano II: franquia de 100 GB para banco de dados e documentos na VPS; excedente tarifado à parte. ** Customizações complexas (novas telas, regras de negócio) orçadas como Horas de Desenvolvimento Tecnológico.</p>
+
+  <h3>Plano III: On-Premises (Servidor Local)</h3>
+  <table class="compact">
+    <thead><tr><th>Item</th><th>Descrição</th><th class="right">Valor</th></tr></thead>
+    <tbody>
+      <tr><td>Licença + manutenção</td><td>Todos os módulos · atualizações, patches e suporte remoto</td><td class="right">R$ 4.990/mês</td></tr>
+      <tr><td>Projeto de implantação</td><td>Instalação on-premises, rede, homologação e parametrização (40 h)</td><td class="right"><span class="strike">R$ 19.900</span> → <strong>R$ 8.500</strong></td></tr>
+      <tr><td>Customização do sistema</td><td>Até 3 ajustes no projeto inicial; demais sob orçamento</td><td class="right">Incluso no projeto</td></tr>
+      <tr><td>Treinamento remoto</td><td>3 sessões por área</td><td class="right">Incluso</td></tr>
+      <tr><td>Hardware e backup</td><td>Servidor, rede, energia e política de backup local</td><td class="right">Por conta do cliente</td></tr>
+      <tr class="total-row"><td colspan="2"><strong>Mensal recorrente</strong></td><td class="right"><strong>R$ 4.990</strong></td></tr>
+      <tr class="total-row"><td colspan="2"><strong>Mês 1 (sem hardware)</strong></td><td class="right"><strong>R$ 13.490</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Projeção de custo total (24 meses)</h3>
+  <table class="compact avoid-break">
+    <thead><tr><th>Plano</th><th>Mês 1</th><th>12 meses</th><th>24 meses</th><th>Observação</th></tr></thead>
+    <tbody>
+      <tr><td>I · Tenant Nuvem</td><td class="right">R$ 4.480</td><td class="right">R$ 31.870</td><td class="right">R$ 61.750</td><td>Entrada mais leve</td></tr>
+      <tr class="best"><td><strong>II · Dedicada Nuvem ⭐</strong></td><td class="right"><strong>R$ 9.390</strong></td><td class="right"><strong>R$ 74.180</strong></td><td class="right"><strong>R$ 144.860</strong></td><td><strong>Melhor relação valor/controle</strong></td></tr>
+      <tr><td>III · On-Premises</td><td class="right">R$ 13.490</td><td class="right">R$ 68.380</td><td class="right">R$ 128.260</td><td>Infraestrutura do cliente</td></tr>
+    </tbody>
+  </table>
+  <p class="small">
+    Valores BRL · validade 30 dias · impostos conforme regime · pagamento anual antecipado: 10% de desconto
+    · valor promocional garantido por 24 meses (reajuste IPCA somente após esse período).
+  </p>
+  <div class="page-footer"><span>Aero Suite · Proposta OTON PARTS CORP</span><span>4</span></div>
+</section>
+
+<!-- PÁGINA 5: Cronograma + Condições + Fechamento -->
+<section class="block pb">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seções 06–07</span>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h2>Cronograma · Plano II</h2>
+      <div class="timeline avoid-break">
+        <div class="tl-item"><div class="tl-week">Sem 1–2</div><div class="tl-desc"><strong>Levantamento:</strong> fluxos, perfis de acesso; inventário de dados legados (importação não inclusa — ver escopo).</div></div>
+        <div class="tl-item"><div class="tl-week">Sem 3–4</div><div class="tl-desc"><strong>Configuração:</strong> VPS, identidade visual, cadastros, modelos de proposta.</div></div>
+        <div class="tl-item"><div class="tl-week">Sem 5–6</div><div class="tl-desc"><strong>Piloto:</strong> OS teste, job card, validação do RT.</div></div>
+        <div class="tl-item"><div class="tl-week">Sem 7–8</div><div class="tl-desc"><strong>Entrada em operação:</strong> acompanhamento assistido por 15 dias.</div></div>
+      </div>
+    </div>
+    <div>
+      <h2>Condições comerciais</h2>
+      <table class="compact">
+        <tbody>
+          <tr><td><strong>Validade</strong></td><td>30 dias (24/06/2026)</td></tr>
+          <tr><td><strong>Faturamento</strong></td><td>PIX, boleto ou cartão · mensal ou anual (−10%)</td></tr>
+          <tr><td><strong>Setup</strong></td><td>50% na assinatura · 50% no go-live</td></tr>
+          <tr><td><strong>Contrato mínimo</strong></td><td>12 meses (Plano I) · 24 meses (II e III)</td></tr>
+          <tr><td><strong>Cancelamento</strong></td><td>60 dias de aviso · exportação de dados inclusa</td></tr>
+          <tr><td><strong>Trial</strong></td><td>7 dias no Plano I, sem cartão</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2>Próximos passos</h2>
+  <table class="compact avoid-break">
+    <thead><tr><th>#</th><th>Ação</th><th>Prazo</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Demonstração executiva (60 min): proposta → OS → hangar → portal</td><td>Esta semana</td></tr>
+      <tr><td>2</td><td>Workshop de escopo com RT, comercial e TI</td><td>Semana +1</td></tr>
+      <tr><td>3</td><td>Assinatura do contrato e 1ª parcela do setup</td><td>Semana +2</td></tr>
+      <tr><td>4</td><td>Início da implantação e entrada em operação em até 45 dias</td><td>Semana +3</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout-gold callout avoid-break">
+    <strong>Oferta exclusiva OTON PARTS CORP (até 31/07/2026):</strong> fechando o <strong>Plano II</strong>,
+    <em>50% de desconto no setup</em> (de R$ 3.500 por <strong>R$ 1.750</strong>) + <em>50% de desconto na 1ª mensalidade</em>.
+    Investimento do 1º mês: <strong>R$ 4.695</strong> (em vez de R$ 9.390).
+  </div>
+
+  <h3>Não incluso</h3>
+  <ul class="check">
+    <li>Certificado digital e emissão fiscal (ERP parceiro)</li>
+    <li>Mensagens WhatsApp/SMS (repasse operadora)</li>
+    <li>Tablets, impressoras e leitores QR do hangar</li>
+    <li>Consultoria regulatória RT / atualização MOM-MCQ</li>
+    <li><strong>Plano II — armazenamento excedente:</strong> acima de 100 GB na VPS (PDFs de certificados CVA, Form 1, etc.) tarifado à parte</li>
+    <li><strong>Customizações excedentes (Planos II e III):</strong> inclusas até 3 modificações de relatórios/campos no setup inicial; novas telas, regras de negócio ou integrações complexas orçadas como Horas de Desenvolvimento Tecnológico</li>
+    <li><strong>Migração de dados legados:</strong> não inclusa no setup — fornecemos templates de importação; carga de planilhas ou bases antigas sob projeto à parte</li>
+  </ul>
+
+  <div class="signature-block">
+    <p style="font-size:9pt;margin-bottom:3mm;">
+      Submeto esta proposta à apreciação da Área Comercial da <strong>OTON PARTS CORP</strong>,
+      com condições pensadas para um mercado exigente e um investimento que cabe no orçamento da operação.
+    </p>
+    <div class="signature-line"></div>
+    <div class="signature-name">Wellem Lyra</div>
+    <div class="signature-role">Diretor de TI · Aero Suite</div>
+    <div class="signature-date">24 de junho de 2026 · wellemlyra@aerosuite.com.br</div>
+  </div>
+  <div class="page-footer"><span>Aero Suite · PROP-OTON-2026-0624 v1.3</span><span>5</span></div>
+</section>
+
+</body>
+</html>

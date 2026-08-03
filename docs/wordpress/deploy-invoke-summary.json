@@ -1,0 +1,78 @@
+{
+  "viewId": "258c93",
+  "actualTabViewId": "6a56ed",
+  "activeTabUrl": "https://aerosuite.com.br/wp-admin/post.php?post=21&action=edit",
+  "steps": {
+    "css-q1": {
+      "len": 8358,
+      "q": 1
+    },
+    "css-q2": {
+      "len": 17035,
+      "q": 2
+    },
+    "css-q3": {
+      "len": 25712,
+      "q": 3
+    },
+    "css-q4": {
+      "len": 34708,
+      "q": 4
+    },
+    "css-verify": {
+      "b64": 34708,
+      "dec": 26030,
+      "hasGrid": true
+    },
+    "css-finalize": {
+      "ok": true,
+      "cssLen": 26030,
+      "hasHeroV2": true,
+      "footerLen": 38416
+    },
+    "enc-init": {
+      "ok": true
+    },
+    "enc-0": {
+      "chunk": 0,
+      "len": 6000
+    },
+    "enc-1": {
+      "chunk": 1,
+      "len": 12000
+    },
+    "enc-2": {
+      "chunk": 2,
+      "len": 18000
+    },
+    "enc-3": {
+      "chunk": 3,
+      "len": 24000
+    },
+    "enc-run": {
+      "ok": true,
+      "homeLen": 17766,
+      "hasHeroV2": true,
+      "sample": "demonstração",
+      "title": "Aero Suite — Gestão aeronáutica para oficinas MRO | Rastreabilidade e conformidade"
+    }
+  },
+  "cssVerify": {
+    "b64": 34708,
+    "dec": 26030,
+    "hasGrid": true
+  },
+  "cssFinalize": {
+    "ok": true,
+    "cssLen": 26030,
+    "hasHeroV2": true,
+    "footerLen": 38416
+  },
+  "encRun": {
+    "ok": true,
+    "homeLen": 17766,
+    "hasHeroV2": true,
+    "sample": "demonstração"
+  },
+  "errors": []
+}

@@ -1,0 +1,30 @@
+{
+  "at": "2026-06-04T04:44:39.189Z",
+  "steps": {
+    "install": {
+      "ok": false,
+      "reason": "install button not found"
+    },
+    "purgeApi": {
+      "ok": false,
+      "error": "<p>Há um erro crítico no seu site.</p><p><a href=\"https://wordpress.org/documentation/article/faq-troubleshooting/\">Saiba mais sobre a como resolver problemas do WordPress.</a></p>"
+    },
+    "purgeUi": {
+      "ok": true,
+      "via": "link"
+    }
+  },
+  "verify": {
+    "https://aerosuite.com.br/": {
+      "hasPanel": false,
+      "hasOld": true,
+      "xCache": "HIT",
+      "len": 248162
+    },
+    "https://aerosuite.com.br/?v=1780548300863": {
+      "hasPanel": false,
+      "hasOld": false,
+      "len": 2699
+    }
+  }
+}

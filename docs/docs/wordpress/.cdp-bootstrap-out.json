@@ -1,0 +1,1 @@
+﻿{"viewId":"868beb","method":"Runtime.evaluate","params":{"expression":"(async()=>{const e=await(await fetch('http://127.0.0.1:18765/expr')).text();let v=eval(e);if(v&&typeof v.then==='function')v=await v;return v;})()","awaitPromise":true,"returnByValue":true}}

@@ -1,0 +1,1 @@
+{"viewId":"f8a339","method":"Runtime.evaluate","params":{"expression":"(async()=>{\n  const r=await fetch('http://127.0.0.1:9877/expr');\n  if(!r.ok) return {ok:false,error:'fetch '+r.status};\n  const j=await r.json();\n  let v=eval(j.params.expression);\n  if(v&&typeof v.then==='function') v=await v;\n  return v;\n})()","awaitPromise":true,"returnByValue":true}}

@@ -1,0 +1,89 @@
+// Aero Suite — design tokens (fonte única para novos módulos e refactors)
+:root {
+  /* Brand — aviation / cockpit */
+  --as-brand-950: #020617;
+  --as-brand-900: #0c1929;
+  --as-brand-800: #0f172a;
+  --as-brand-700: #1e293b;
+  --as-brand-600: #334155;
+  --as-brand-500: #475569;
+
+  /* Accent */
+  --as-accent-sky: #38bdf8;
+  --as-accent-sky-deep: #0284c7;
+  --as-accent-gold: #c9a227;
+  --as-accent-gold-bright: #e8c547;
+
+  /* Semantic */
+  --as-success: #0f6b45;
+  --as-success-bg: #e4f5ec;
+  --as-warning: #9a7209;
+  --as-warning-bg: #fff8e6;
+  --as-danger: #9b1c1c;
+  --as-danger-bg: #fce8e8;
+  --as-info: #1a5f8a;
+  --as-info-bg: #e6f2fa;
+
+  /* Surfaces — light (default) */
+  --as-bg-page: #f1f5f9;
+  --as-bg-elevated: #ffffff;
+  --as-bg-muted: #f8fafc;
+  --as-table-row-hover: #e2e8f0;
+  --as-border: #e2e8f0;
+  --as-border-strong: #cbd5e1;
+  --as-text: #0f172a;
+  --as-text-muted: #475569;
+  --as-text-subtle: #475569;
+
+  /* Typography */
+  --as-font-sans: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --as-font-display: var(--as-font-sans);
+  --as-font-mono: ui-monospace, 'Cascadia Code', 'Segoe UI Mono', monospace;
+  --as-font-instrument: 'DSEG7 Modern', var(--as-font-mono);
+
+  /* Radius & elevation */
+  --as-radius-sm: 6px;
+  --as-radius-md: 10px;
+  --as-radius-lg: 14px;
+  --as-radius-xl: 16px;
+  --as-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --as-shadow-md: 0 4px 16px rgba(15, 23, 42, 0.08);
+  --as-shadow-lg: 0 12px 40px rgba(15, 23, 42, 0.12);
+  --as-shadow-glow-sky: 0 0 24px rgba(56, 189, 248, 0.25);
+
+  /* Motion */
+  --as-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --as-duration-fast: 120ms;
+  --as-duration-normal: 200ms;
+  --as-duration-slow: 320ms;
+
+  /* Focus ring — WCAG-friendly */
+  --as-focus-ring: 2px solid #3b82f6;
+  --as-focus-offset: 2px;
+
+  /* Spacing scale (complementa data-density) */
+  --as-space-1: 0.25rem;
+  --as-space-2: 0.5rem;
+  --as-space-3: 0.75rem;
+  --as-space-4: 1rem;
+  --as-space-5: 1.25rem;
+  --as-space-6: 1.5rem;
+  --as-space-8: 2rem;
+}
+
+[data-theme='dark'],
+.dark-theme {
+  --as-bg-page: #0f172a;
+  --as-bg-elevated: #1e293b;
+  --as-bg-muted: #162032;
+  --as-table-row-hover: #334155;
+  --as-border: #334155;
+  --as-border-strong: #475569;
+  --as-text: #f1f5f9;
+  --as-text-muted: #94a3b8;
+  --as-text-subtle: #64748b;
+  --as-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
+  --as-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --as-shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.45);
+  --as-focus-ring: 2px solid #60a5fa;
+}

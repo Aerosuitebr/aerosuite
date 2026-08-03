@@ -1,0 +1,149 @@
+[
+  {
+    "group": 0,
+    "file": "group-00.json",
+    "indexes": [
+      0
+    ],
+    "awaitPromise": false,
+    "length": 19017
+  },
+  {
+    "group": 1,
+    "file": "group-01.json",
+    "indexes": [
+      1
+    ],
+    "awaitPromise": false,
+    "length": 18858
+  },
+  {
+    "group": 2,
+    "file": "group-02.json",
+    "indexes": [
+      2,
+      3
+    ],
+    "awaitPromise": false,
+    "length": 27025
+  },
+  {
+    "group": 3,
+    "file": "group-03.json",
+    "indexes": [
+      4
+    ],
+    "awaitPromise": true,
+    "length": 693
+  },
+  {
+    "group": 4,
+    "file": "group-04.json",
+    "indexes": [
+      5
+    ],
+    "awaitPromise": false,
+    "length": 18862
+  },
+  {
+    "group": 5,
+    "file": "group-05.json",
+    "indexes": [
+      6
+    ],
+    "awaitPromise": false,
+    "length": 18878
+  },
+  {
+    "group": 6,
+    "file": "group-06.json",
+    "indexes": [
+      7
+    ],
+    "awaitPromise": true,
+    "length": 689
+  },
+  {
+    "group": 7,
+    "file": "group-07.json",
+    "indexes": [
+      8
+    ],
+    "awaitPromise": false,
+    "length": 18870
+  },
+  {
+    "group": 8,
+    "file": "group-08.json",
+    "indexes": [
+      9
+    ],
+    "awaitPromise": false,
+    "length": 18886
+  },
+  {
+    "group": 9,
+    "file": "group-09.json",
+    "indexes": [
+      10,
+      11
+    ],
+    "awaitPromise": false,
+    "length": 26685
+  },
+  {
+    "group": 10,
+    "file": "group-10.json",
+    "indexes": [
+      12
+    ],
+    "awaitPromise": true,
+    "length": 727
+  },
+  {
+    "group": 11,
+    "file": "group-11.json",
+    "indexes": [
+      13
+    ],
+    "awaitPromise": false,
+    "length": 18871
+  },
+  {
+    "group": 12,
+    "file": "group-12.json",
+    "indexes": [
+      14
+    ],
+    "awaitPromise": false,
+    "length": 18887
+  },
+  {
+    "group": 13,
+    "file": "group-13.json",
+    "indexes": [
+      15,
+      16
+    ],
+    "awaitPromise": false,
+    "length": 27973
+  },
+  {
+    "group": 14,
+    "file": "group-14.json",
+    "indexes": [
+      17
+    ],
+    "awaitPromise": true,
+    "length": 712
+  },
+  {
+    "group": 15,
+    "file": "group-15.json",
+    "indexes": [
+      18
+    ],
+    "awaitPromise": true,
+    "length": 17045
+  }
+]

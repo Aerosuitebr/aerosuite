@@ -1,0 +1,125 @@
+﻿.page {
+  padding: 0 8px 2rem;
+}
+
+.alert-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.alert-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+
+  strong {
+    display: block;
+    font-size: 1.4rem;
+  }
+
+  &.danger {
+    border-color: #fecaca;
+    background: #fef2f2;
+  }
+
+  &.warn {
+    border-color: #fde68a;
+    background: #fffbeb;
+  }
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: flex-end;
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+    color: #334155;
+  }
+}
+
+.form-row {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+
+  &--40-60 {
+    grid-template-columns: 2fr 3fr;
+  }
+
+  &--20-40-40 {
+    grid-template-columns: 1fr 2fr 2fr;
+  }
+
+  &--100 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-field {
+  min-width: 0;
+}
+
+.arquivo-block small {
+  display: block;
+  color: #475569;
+  margin-top: 0.25rem;
+}
+
+.arquivo-hint-callout {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e3a8a;
+  margin-top: 0.5rem;
+
+  small {
+    color: inherit;
+    margin: 0;
+  }
+}
+
+.arquivo-nome {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  color: #334155;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: #475569;
+  margin: 0 0 0.75rem;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 520px) {
+  .form-row--40-60,
+  .form-row--20-40-40 {
+    grid-template-columns: 1fr;
+  }
+}

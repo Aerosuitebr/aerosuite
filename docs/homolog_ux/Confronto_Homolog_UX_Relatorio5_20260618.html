@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Confronto Técnico — Homologação UX Relatório 5</title>
+  <style>/* Aero Suite — Relatório Executivo UX (print/PDF A4) */
+@page {
+  size: A4;
+  margin: 16mm 14mm 20mm 14mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.5;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 40%, #0f172a 75%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22mm 18mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 150mm;
+}
+
+.cover-logo {
+  width: 68mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8mm;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.4));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  border: 1px solid rgba(148,163,184,.35);
+  border-radius: 999px;
+  padding: 2.5mm 5mm;
+  margin-bottom: 6mm;
+}
+
+.cover h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+}
+
+.cover-sub {
+  font-size: 11pt;
+  color: #cbd5e1;
+  margin: 0 0 6mm;
+  line-height: 1.45;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a227, transparent);
+  margin: 0 auto 6mm;
+}
+
+.cover-meta {
+  font-size: 9.5pt;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cover-meta strong {
+  color: #e2e8f0;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 12mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #64748b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 7mm;
+  width: auto;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+h2 {
+  font-size: 14pt;
+  color: #0f172a;
+  margin: 0 0 4mm;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 11pt;
+  color: #0369a1;
+  margin: 5mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+.lead {
+  font-size: 10.5pt;
+  color: #334155;
+  margin-bottom: 5mm;
+}
+
+/* Sumário */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+  padding: 2mm 0;
+  border-bottom: 1px dotted #e2e8f0;
+  font-size: 9.5pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: none;
+  padding-top: 4mm;
+  font-size: 10pt;
+}
+
+.toc-num {
+  font-weight: 700;
+  color: #64748b;
+  min-width: 10mm;
+}
+
+/* Score dashboard */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin: 5mm 0 6mm;
+}
+
+.score-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4mm;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.score-card--ok {
+  background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #86efac;
+}
+
+.score-val {
+  font-size: 18pt;
+  font-weight: 800;
+  color: #0369a1;
+  line-height: 1;
+}
+
+.score-card--ok .score-val {
+  color: #15803d;
+}
+
+.score-label {
+  font-size: 7.5pt;
+  color: #64748b;
+  margin-top: 1.5mm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin: 4mm 0;
+}
+
+th, td {
+  border: 1px solid #e2e8f0;
+  padding: 2.5mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Item cards */
+.section-intro {
+  background: #f8fafc;
+  border-left: 3px solid #0369a1;
+  padding: 3mm 4mm;
+  margin-bottom: 5mm;
+  font-size: 9pt;
+  color: #475569;
+}
+
+.item-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 4mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  padding: 2.5mm 4mm;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item-id {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.item-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 9.5pt;
+}
+
+.sev {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.sev--CRITICO { background: #fee2e2; color: #991b1b; }
+.sev--ALTO { background: #ffedd5; color: #9a3412; }
+.sev--MEDIO { background: #fef9c3; color: #854d0e; }
+.sev--INFO { background: #e0e7ff; color: #3730a3; }
+
+.item-body {
+  padding: 3mm 4mm 4mm;
+  font-size: 8.75pt;
+}
+
+.item-row {
+  margin-bottom: 2.5mm;
+}
+
+.item-row:last-child {
+  margin-bottom: 0;
+}
+
+.item-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.5mm;
+}
+
+.item-text {
+  color: #1e293b;
+}
+
+.status-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+/* Assinatura */
+.signature-block {
+  margin-top: 10mm;
+  padding: 6mm;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.signature-line {
+  width: 55mm;
+  border-top: 1px solid #334155;
+  margin: 12mm 0 2mm;
+}
+
+.signature-name {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.signature-role {
+  font-size: 9pt;
+  color: #64748b;
+}
+
+.signature-date {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  margin-top: 2mm;
+}
+
+.callout {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 4mm;
+  margin: 4mm 0;
+  font-size: 9pt;
+}
+
+.callout strong {
+  color: #1d4ed8;
+}
+
+.supplementary {
+  page-break-inside: avoid;
+  margin-bottom: 4mm;
+  padding: 3mm 4mm;
+  border-left: 3px solid #c9a227;
+  background: #fffbeb;
+}
+
+.supplementary h4 {
+  margin: 0 0 1.5mm;
+  font-size: 9.5pt;
+  color: #92400e;
+}
+
+.supplementary p {
+  margin: 0;
+  font-size: 8.75pt;
+  color: #78350f;
+}
+
+.item-meta { font-size: 9pt; color: #64748b; margin: -2mm 0 3mm 0; }
+.confronto-antes { border-left: 3px solid #dc2626; padding-left: 3mm; }
+.confronto-depois { border-left: 3px solid #16a34a; padding-left: 3mm; }
+.item-evidence { font-size: 8.5pt; color: #475569; }
+.status-fixed { color: #15803d; font-weight: 700; font-size: 8pt; }
+.status-ok { color: #15803d; font-weight: 700; font-size: 8pt; }
+.status-pend { color: #b45309; font-weight: 700; font-size: 8pt; }
+.metric-table td, .metric-table th { font-size: 9pt; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Confronto técnico · Relatório 5 · Confidencial</div>
+    <h1>Confronto Técnico — Homologação UX Relatório 5</h1>
+    <p class="cover-sub">Antes e depois dos 13 achados da Sessão 3 com evidências e métricas de eficácia pós-deploy<br/>Referência: Relatório Técnico de Homologação UX — Sessão 3 · Rafaella Nottes Consultoria (18/jun/2026)</p>
+    <div class="cover-gold-line"></div>
+    <p class="cover-meta">
+      <strong>Versão 1.0</strong> · 18 de junho de 2026<br />
+      Ambiente: <strong>https://app.aerosuite.com.br</strong>
+    </p>
+  </div>
+  <div class="cover-footer">Aero Suite — Gestão aeronáutica</div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Sumário executivo</span>
+  </div>
+  <h2>Sumário executivo do confronto</h2>
+  <p class="lead">
+  O Relatório 5 (Sessão 3, 18/jun/2026) catalogou <strong>13 achados novos</strong> (R-02 a R-14) em Relatórios, Dashboard e Conformidade Técnica,
+  incluindo <strong>2 críticos</strong> e <strong>2 altos</strong>.
+  Este documento confronta cada achado com o estado após correção, deploy e verificação em produção.
+  </p>
+
+  <div class="score-grid">
+    <div class="score-card"><div class="score-val">13</div><div class="score-label">Achados totais</div></div>
+    <div class="score-card score-card--ok"><div class="score-val">13</div><div class="score-label">Verificados</div></div>
+    <div class="score-card"><div class="score-val">0</div><div class="score-label">Pendentes</div></div>
+    <div class="score-card score-card--ok"><div class="score-val">2/2</div><div class="score-label">Críticos resolvidos</div></div>
+  </div>
+
+  <h3>Métricas (18 de junho de 2026)</h3>
+  <table class="metric-table">
+    <thead><tr><th>Indicador</th><th>Valor</th></tr></thead>
+    <tbody>
+      <tr><td>Verificações automatizadas / manuais</td><td><strong>13/13</strong></td></tr>
+      <tr><td>Conformidade global</td><td><strong>100.0%</strong> (13/13)</td></tr>
+      <tr><td>Críticos (R-10, R-13)</td><td><strong>100.0%</strong></td></tr>
+      <tr><td>Altos (R-06, R-08)</td><td><strong>100.0%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p class="lead">Verificação via verify-relatorio5-homolog.mjs (código + API + UI em app.aerosuite.com.br) após deploy das correções.</p>
+  <p class="lead">Evidências versionadas em <strong>docs/homolog_ux/evidencias/confronto-relatorio5/20260618</strong>.</p>
+  <div class="page-footer"><span>Aero Suite · Confronto UX</span><span>Sumário</span></div>
+</section>
+
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 1</span>
+  </div>
+  <h2>Achados críticos (R-10, R-13)</h2>
+  <p class="section-intro">Bloqueadores de Conformidade Técnica e checklist Go-live.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">R-10</span>
+    <span class="item-title">Falha sistêmica ao salvar qualquer registro no bloco Conformidade Técnica</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Conformidade Técnica (5 submódulos)</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Em AD/SB, Calibração, Documentos controlados, Habilitações e Não conformidades, salvar retornava &quot;Ocorreu um erro inesperado&quot; — 8 tentativas, 100% de reprodução.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">ConformidadeNaoConformidadeService e SgqDocumentoService: entityManager.flush() após persist antes de operações dependentes do id; FieldLengthValidator nos campos de texto; revisão padrão &quot;00&quot; em documentos SGQ.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">POST API: 5/5 módulos Conformidade Técnica salvaram (AD/SB, Calibração, Documentos SGQ, Habilitações, NC) — status 201, sem erro inesperado</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">POST API nos 5 módulos — status 201, sem erro inesperado (reteste pós-deploy).</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">R-13</span>
+    <span class="item-title">Checklist 100% concluído sem tarefas reais + falha ao salvar progresso</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Kit Go-live (30 dias)</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">15/15 itens marcados sem atividade real; &quot;Salvar progresso&quot; retornava &quot;Falha ao salvar checklist&quot;.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">GoLiveMigracaoService.sanitizarProgressoInflado() reseta progresso inflado em tenants sem atividade; flush() no save; translateApiError no frontend.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">API tenant default: checklist 0/15 concluídos; PUT save status=200. UI go-live: salvar progresso OK, sem 100% inflado para tenant ativo</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">API tenant default: 0/15 concluídos; PUT save 200; UI salvar progresso OK.</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Relatório 5</span>
+    <span>Seção 1</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 2</span>
+  </div>
+  <h2>Achados de severidade alta (R-06, R-08)</h2>
+  <p class="section-intro">Modais de preview de relatórios — i18n e dados por tipo.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">R-06</span>
+    <span class="item-title">Chave i18n common.actions.close exposta ao usuário</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Modal compartilhado (Relatórios)</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Botão de fechar exibia literalmente &quot;common.actions.close&quot; em 3 modais de preview.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">listings-common-i18n.ts: chave common.actions.close nas 4 línguas; botão usa pipe translate.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Modal preview relatórios exibe botão 'Fechar' traduzido; chave common.actions.close não exposta</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — botão &quot;Fechar&quot; traduzido; chave crua ausente nos 4 modais de preview.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">R-08</span>
+    <span class="item-title">Modais de preview com conteúdo genérico idêntico</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Relatórios — preview (ícone olho)</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Produtos, OS e Fabricantes exibiam as mesmas métricas independentemente do tipo.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">relatorios.component.ts buildViewStats() por tipo; RelatorioAnalyticsService com query params tipo/dataInicio/dataFim; totalFcu no DTO.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Preview por tipo: Produtos 835, OS 2102, Fabricantes 21, FCUs 666 — conteúdo distinto por relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — previews distintos: Produtos 835, OS 2102, Fabricantes 21, FCUs 666.</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Relatório 5</span>
+    <span>Seção 2</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 3</span>
+  </div>
+  <h2>Achados de severidade média (R-02, R-05)</h2>
+  <p class="section-intro">Mensagens de estado e arquitetura de informação do menu.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">R-02</span>
+    <span class="item-title">Mensagem de vazio não reflete filtros aplicados</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Relatórios — Ordens de Serviço por Mês</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">&quot;Sem dados no período&quot; sem indicar tipo de relatório nem datas do filtro.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">chartEmptyMessage contextual em relatorios.component.ts (reports.chart.emptyFor com tipo e datas).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">API resumo filtrado (tipo=os, dataInicio=17/06/2026) OK; osPorMes vazio com filtro 2030 retorna value=0. chartEmptyMessage contextual implementado no frontend</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">API resumo filtrado OK; mensagem contextual implementada no frontend.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">R-05</span>
+    <span class="item-title">Menu sem agrupamento &quot;Conformidade Técnica&quot; conforme manual</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Navegação — menu lateral</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Itens SGQ dispersos em &quot;Administração&quot; sem rótulo Conformidade/SGQ.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Migration V73__menu_conformidade_tecnica_secao.sql: seção Conformidade Técnica; Go-live e Portal externo em seções dedicadas; menu-i18n.ts.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Menu lateral com seção 'Conformidade Técnica' (10 itens): AD/SB, Calibração, Documentos, Habilitações, NC, etc.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">API meu-menu e UI — seção &quot;Conformidade Técnica&quot; com 10 itens.</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Relatório 5</span>
+    <span>Seção 3</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 4</span>
+  </div>
+  <h2>Achados de severidade baixa (R-03, R-04, R-07, R-09, R-11, R-12, R-14)</h2>
+  <p class="section-intro">Polimento de UX, i18n e microcopy.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">R-03</span>
+    <span class="item-title">Excesso de espaço vazio acima dos KPIs</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Home — Dashboard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Grande área vazia entre cabeçalho e cards de KPI na primeira impressão.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">home.component.scss: align-content start para aproximar KPIs do topo.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Home exibe KPIs (Catálogo, Parceiros, Oficina, Equipe, SGQ) com dados; layout align-content:start deployado</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — KPIs visíveis com dados (Catálogo, Parceiros, Oficina, Equipe, SGQ).</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">R-04</span>
+    <span class="item-title">Texto longo sem truncamento na tabela</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Relatórios — tabela Dados Detalhados</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Nome com 280+ caracteres quebrava linha sem reticências nem tooltip.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Classe cell-truncate + pTooltip no nome; coluna com ellipsis.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Tabela relatórios com classe cell-truncate e tooltip no DOM</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — cell-truncate presente na tabela de relatórios.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">R-07</span>
+    <span class="item-title">Botão &quot;Ver gráficos&quot; redundante</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Modal preview de relatório</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Botão apenas fechava modal e rolava até gráfico já visível.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Botão removido do diálogo de preview; gráficos permanecem na página principal.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Botão 'Ver gráficos' ausente na página de relatórios</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — &quot;Ver gráficos&quot; ausente na página de relatórios.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">R-09</span>
+    <span class="item-title">Campo &quot;Part number&quot; em inglês</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Modal Nova AD/SB</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Label em inglês enquanto demais campos em português.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">aero-diretriz-i18n.ts: label &quot;Número de peça (P/N)&quot; nas 4 línguas.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Formulário AD/SB: label 'Número de peça (P/N)' em pt-BR</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — formulário AD/SB com label pt-BR correto.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">R-11</span>
+    <span class="item-title">Microcopy do bloco &quot;Para que serve&quot;</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> AD/SB — bloco explicativo</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Texto repetitivo, sem paralelismo entre as três colunas.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">aero-diretriz-i18n.ts: reescrita com papéis claros (registro, cards, consulta na OS).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Bloco 'Para que serve' com microcopy AD/SB em pt-BR na listagem</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — bloco &quot;Para que serve&quot; com microcopy revisado em pt-BR.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">R-12</span>
+    <span class="item-title">Fluxo de anexo PDF pouco visível</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Documentos controlados / NC</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Upload só após salvar, indicado por frase discreta; inalcançável com R-10 aberto.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">sgq-documento-list: callout arquivo-hint-callout; diálogo permanece aberto após criar para upload.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Callout 'Salve o documento antes de anexar o PDF (máx. 25 MB).' no diálogo de novo documento SGQ</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — callout &quot;Salve o documento antes de anexar o PDF (máx. 25 MB).&quot;</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">R-14</span>
+    <span class="item-title">&quot;No results found&quot; em inglês no autocomplete</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Modal Nova ocorrência — OS vinculada</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Mensagem de vazio do autocomplete em inglês em formulário pt-BR.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">nao-conformidade-list emptyMessage i18n; prime-ng-i18n.service.ts sincroniza PrimeNG com idioma ativo.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Autocomplete OS em NC exibe 'Nenhum resultado encontrado' (sem chave primeng crua)</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — autocomplete exibe &quot;Nenhum resultado encontrado&quot;.</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Relatório 5</span>
+    <span>Seção 4</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Anexo</span>
+  </div>
+  <h2>Matriz consolidada</h2>
+  <table>
+    <thead><tr><th>ID</th><th>Severidade</th><th>Módulo</th><th>Título</th><th>Status</th></tr></thead>
+    <tbody><tr>
+      <td>R-10</td>
+      <td>CRITICO</td>
+      <td>Conformidade Técnica (5 submódulos)</td>
+      <td>Falha sistêmica ao salvar qualquer registro no bloco Conformidade Técnica</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>R-13</td>
+      <td>CRITICO</td>
+      <td>Kit Go-live (30 dias)</td>
+      <td>Checklist 100% concluído sem tarefas reais + falha ao salvar progresso</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>R-06</td>
+      <td>ALTO</td>
+      <td>Modal compartilhado (Relatórios)</td>
+      <td>Chave i18n common.actions.close exposta ao usuário</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>R-08</td>
+      <td>ALTO</td>
+      <td>Relatórios — preview (ícone olho)</td>
+      <td>Modais de preview com conteúdo genérico idêntico</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>R-02</td>
+      <td>MEDIO</td>
+      <td>Relatórios — Ordens de Serviço por Mês</td>
+      <td>Mensagem de vazio não reflete filtros aplicados</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>R-05</td>
+      <td>MEDIO</td>
+      <td>Navegação — menu lateral</td>
+      <td>Menu sem agrupamento &quot;Conformidade Técnica&quot; conforme manual</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>R-03</td>
+      <td>BAIXO</td>
+      <td>Home — Dashboard</td>
+      <td>Excesso de espaço vazio acima dos KPIs</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>R-04</td>
+      <td>BAIXO</td>
+      <td>Relatórios — tabela Dados Detalhados</td>
+      <td>Texto longo sem truncamento na tabela</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>R-07</td>
+      <td>BAIXO</td>
+      <td>Modal preview de relatório</td>
+      <td>Botão &quot;Ver gráficos&quot; redundante</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>R-09</td>
+      <td>BAIXO</td>
+      <td>Modal Nova AD/SB</td>
+      <td>Campo &quot;Part number&quot; em inglês</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>R-11</td>
+      <td>BAIXO</td>
+      <td>AD/SB — bloco explicativo</td>
+      <td>Microcopy do bloco &quot;Para que serve&quot;</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>R-12</td>
+      <td>BAIXO</td>
+      <td>Documentos controlados / NC</td>
+      <td>Fluxo de anexo PDF pouco visível</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>R-14</td>
+      <td>BAIXO</td>
+      <td>Modal Nova ocorrência — OS vinculada</td>
+      <td>&quot;No results found&quot; em inglês no autocomplete</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr></tbody>
+  </table>
+  <div class="page-footer"><span>Aero Suite · Confronto UX</span><span>Anexo</span></div>
+</section>
+
+</body>
+</html>

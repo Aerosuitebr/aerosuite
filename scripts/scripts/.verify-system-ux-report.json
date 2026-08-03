@@ -1,0 +1,118 @@
+{
+  "at": "2026-06-09T21:43:56.282Z",
+  "appUrl": "https://app.aerosuite.com.br",
+  "source": "Relatorio_Tecnico_UX_AeroSuite_1.pdf §3.5 (sistema)",
+  "total": 12,
+  "ok": 12,
+  "fail": 0,
+  "items": [
+    {
+      "id": "3.5.3",
+      "sev": "CRITICO",
+      "item": "Chave i18n common.actions.refresh visível (Painel SGQ)",
+      "route": "/conformidade/painel",
+      "ok": true,
+      "note": "sem ocorrências na rota",
+      "hits": []
+    },
+    {
+      "id": "3.5.5",
+      "sev": "ALTO",
+      "item": "Enum CAPA CONTENCAO sem tradução (NC)",
+      "route": "/conformidade/nao-conformidades",
+      "ok": true,
+      "note": "sem ocorrências na rota",
+      "hits": []
+    },
+    {
+      "id": "3.5.1",
+      "sev": "CRITICO",
+      "item": "Dados reais de clientes na lista de OS",
+      "route": "/os",
+      "ok": true,
+      "note": "sem ocorrências na rota",
+      "hits": []
+    },
+    {
+      "id": "3.5.2",
+      "sev": "CRITICO",
+      "item": "Dados smoke / Servico smoke (Propostas)",
+      "route": "/propostas-comerciais",
+      "ok": true,
+      "note": "sem ocorrências na rota",
+      "hits": []
+    },
+    {
+      "id": "3.5.4",
+      "sev": "ALTO",
+      "item": "Erro ortográfico 'Servico' sem cedilha (Propostas)",
+      "route": "/propostas-comerciais",
+      "ok": true,
+      "note": "sem ocorrências na rota",
+      "hits": []
+    },
+    {
+      "id": "3.5.6",
+      "sev": "ALTO",
+      "item": "Encoding corrompido (??) em textos visíveis",
+      "route": "/os",
+      "ok": true,
+      "note": "sem ocorrências na rota",
+      "hits": []
+    },
+    {
+      "id": "conf.documentos",
+      "sev": "ALTO",
+      "item": "Enums/i18n vazados (Documentos SGQ)",
+      "route": "/conformidade/documentos",
+      "ok": true,
+      "note": "sem ocorrências na rota",
+      "hits": []
+    },
+    {
+      "id": "conf.treinamentos",
+      "sev": "ALTO",
+      "item": "Enums/i18n vazados (Treinamentos)",
+      "route": "/conformidade/treinamentos",
+      "ok": true,
+      "note": "sem ocorrências na rota",
+      "hits": []
+    },
+    {
+      "id": "conf.calibracao",
+      "sev": "ALTO",
+      "item": "Enums/i18n vazados (Calibração)",
+      "route": "/conformidade/calibracao",
+      "ok": true,
+      "note": "sem ocorrências na rota",
+      "hits": []
+    },
+    {
+      "id": "conf.subcontratacao",
+      "sev": "ALTO",
+      "item": "Enums/i18n vazados (Subcontratação)",
+      "route": "/conformidade/subcontratacao",
+      "ok": true,
+      "note": "sem ocorrências na rota",
+      "hits": []
+    },
+    {
+      "id": "conf.habilitacoes",
+      "sev": "MEDIO",
+      "item": "Enums/i18n vazados (Habilitações)",
+      "route": "/conformidade/habilitacoes",
+      "ok": true,
+      "note": "sem ocorrências na rota",
+      "hits": []
+    },
+    {
+      "id": "conf.treinObrig",
+      "sev": "MEDIO",
+      "item": "Enums/i18n vazados (Treinamentos obrigatórios)",
+      "route": "/conformidade/treinamentos-obrigatorios",
+      "ok": true,
+      "note": "sem ocorrências na rota",
+      "hits": []
+    }
+  ]
+}

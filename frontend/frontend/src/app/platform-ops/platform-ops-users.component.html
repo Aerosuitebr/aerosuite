@@ -1,0 +1,204 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  styleClass="ops-confirm-dialog"
+  maskStyleClass="ops-confirm-dialog-mask">
+</p-confirmDialog>
+
+<section class="ops-page">
+  <header class="ops-page-header">
+    <h2>{{ 'platformOps.users.title' | translate }}</h2>
+    <p>{{ 'platformOps.users.subtitle' | translate }}</p>
+  </header>
+
+  <div class="ops-list-frame">
+  <div class="ops-users-toolbar">
+    <div class="ops-toolbar-field">
+      <label for="ops-tenant-select">{{ 'platformOps.users.selectOrg' | translate }}</label>
+      <p-dropdown
+        inputId="ops-tenant-select"
+        [options]="tenantOptions"
+        optionLabel="label"
+        optionValue="value"
+        [(ngModel)]="selectedTenantId"
+        (onChange)="onTenantChange()"
+        [disabled]="loadingTenants"
+        styleClass="ops-filter-dropdown"
+        panelStyleClass="ops-dark-dropdown-panel"
+        [appendTo]="'body'">
+      </p-dropdown>
+    </div>
+
+    <div class="ops-toolbar-field">
+      <label for="ops-tipo-select">{{ 'platformOps.users.filterLabel' | translate }}</label>
+      <p-dropdown
+        inputId="ops-tipo-select"
+        [options]="tipoOptions"
+        optionLabel="labelKey"
+        optionValue="value"
+        [(ngModel)]="tipoFilter"
+        (onChange)="onTipoChange()"
+        [showClear]="false"
+        styleClass="ops-filter-dropdown"
+        panelStyleClass="ops-dark-dropdown-panel"
+        [appendTo]="'body'">
+        <ng-template pTemplate="selectedItem" let-opt>
+          {{ (opt?.labelKey ?? 'platformOps.users.filter.all') | translate }}
+        </ng-template>
+        <ng-template pTemplate="item" let-opt>
+          {{ opt.labelKey | translate }}
+        </ng-template>
+      </p-dropdown>
+    </div>
+  </div>
+
+  <div class="ops-users-table-shell">
+    <p-table
+      [value]="paginatedUsers()"
+      [loading]="loadingUsers"
+      styleClass="ops-table ops-users-table p-datatable-sm"
+      [rowHover]="true">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{ 'platformOps.users.col.name' | translate }}</th>
+          <th>{{ 'platformOps.users.col.email' | translate }}</th>
+          <th>{{ 'platformOps.users.col.type' | translate }}</th>
+          <th>{{ 'platformOps.users.col.profile' | translate }}</th>
+          <th>{{ 'platformOps.users.col.lastAccess' | translate }}</th>
+          <th>{{ 'platformOps.users.col.active' | translate }}</th>
+          <th class="ops-col-actions">{{ 'platformOps.users.col.actions' | translate }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td>
+            <span class="ops-user-name">{{ user.nome | displayText }}</span>
+          </td>
+          <td>
+            <span class="ops-user-email">{{ user.email }}</span>
+          </td>
+          <td>
+            <span class="ops-tipo-badge" [ngClass]="tipoBadgeClass(user)">
+              {{ user.tipo === 'externo' ? ('platformOps.users.type.external' | translate) : ('platformOps.users.type.internal' | translate) }}
+            </span>
+          </td>
+          <td>
+            <span
+              class="ops-perfil-badge"
+              [ngClass]="perfilBadgeClass(user)"
+              *ngIf="perfilLabel(user) as perfil; else noPerfil">{{ perfil }}</span>
+            <ng-template #noPerfil>—</ng-template>
+          </td>
+          <td>
+            <time class="ops-user-date" *ngIf="user.ultimoAcesso; else noAccess" [dateTime]="user.ultimoAcesso">
+              {{ user.ultimoAcesso | date:'dd MMM yyyy, HH:mm' }}
+            </time>
+            <ng-template #noAccess>—</ng-template>
+          </td>
+          <td>
+            <span
+              class="ops-user-status"
+              [class.ops-user-status--active]="user.ativo"
+              [class.ops-user-status--inactive]="!user.ativo">
+              {{ user.ativo ? ('platformOps.users.status.active' | translate) : ('platformOps.users.status.inactive' | translate) }}
+            </span>
+          </td>
+          <td class="ops-col-actions">
+            <div class="ops-row-actions">
+              <button
+                pButton
+                type="button"
+                class="p-button-text p-button-rounded ops-row-action-btn"
+                [class.ops-row-action-btn--danger]="user.ativo"
+                [icon]="user.ativo ? 'pi pi-ban' : 'pi pi-check'"
+                [disabled]="isRowBusy(user)"
+                [pTooltip]="(user.ativo ? 'platformOps.users.action.deactivate' : 'platformOps.users.action.activate') | translate"
+                tooltipPosition="top"
+                [attr.aria-label]="(user.ativo ? 'platformOps.users.action.deactivate' : 'platformOps.users.action.activate') | translate"
+                (click)="confirmToggleActive(user)">
+              </button>
+              <button
+                pButton
+                type="button"
+                class="p-button-text p-button-rounded ops-row-action-btn"
+                icon="pi pi-history"
+                [pTooltip]="'platformOps.users.action.audit' | translate"
+                tooltipPosition="top"
+                [attr.aria-label]="'platformOps.users.action.audit' | translate"
+                (click)="openAuditTrail(user)">
+              </button>
+              <button
+                pButton
+                type="button"
+                class="p-button-text p-button-rounded ops-row-action-btn"
+                icon="pi pi-copy"
+                [pTooltip]="'platformOps.users.action.copyEmail' | translate"
+                tooltipPosition="top"
+                [attr.aria-label]="'platformOps.users.action.copyEmail' | translate"
+                (click)="copyEmail(user)">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="ops-empty-cell">{{ 'platformOps.users.empty' | translate }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <footer class="ops-table-footer" *ngIf="!loadingUsers && totalFilteredCount() > 0">
+      <div class="ops-footer-page-size">
+        <span class="ops-footer-page-size-label">{{ 'platformOps.billing.footer.pageSizePrefix' | translate }}</span>
+        <p-dropdown
+          [options]="pageSizeOptions"
+          optionLabel="label"
+          optionValue="value"
+          [(ngModel)]="pageSize"
+          (onChange)="onPageSizeChange()"
+          styleClass="ops-footer-page-size-dropdown"
+          panelStyleClass="ops-dark-dropdown-panel"
+          [appendTo]="'body'">
+        </p-dropdown>
+        <span class="ops-footer-page-size-label">{{ 'platformOps.billing.footer.pageSizeSuffix' | translate }}</span>
+      </div>
+
+      <nav class="ops-footer-pagination" [attr.aria-label]="'platformOps.billing.footer.nextPage' | translate">
+        <button
+          type="button"
+          class="ops-page-btn ops-page-btn--nav"
+          [disabled]="currentPage <= 1"
+          [attr.aria-label]="'platformOps.billing.footer.prevPage' | translate"
+          (click)="goToPage(currentPage - 1)">
+          &lt;
+        </button>
+        <ng-container *ngFor="let slot of paginationSlots()">
+          <span *ngIf="slot === 'ellipsis'" class="ops-page-ellipsis" aria-hidden="true">…</span>
+          <button
+            *ngIf="slot !== 'ellipsis'"
+            type="button"
+            class="ops-page-btn"
+            [class.ops-page-btn--active]="slot === currentPage"
+            (click)="goToPage(slot)">
+            {{ slot }}
+          </button>
+        </ng-container>
+        <button
+          type="button"
+          class="ops-page-btn ops-page-btn--nav"
+          [disabled]="currentPage >= totalPages()"
+          [attr.aria-label]="'platformOps.billing.footer.nextPage' | translate"
+          (click)="goToPage(currentPage + 1)">
+          &gt;
+        </button>
+      </nav>
+
+      <div class="ops-footer-counts" *ngIf="userList">
+        <span>{{ 'platformOps.users.countInternal' | translate }}: <strong>{{ userList.totalInternos }}</strong></span>
+        <span class="ops-footer-counts-sep" aria-hidden="true">·</span>
+        <span>{{ 'platformOps.users.countExternal' | translate }}: <strong>{{ userList.totalExternos }}</strong></span>
+      </div>
+    </footer>
+  </div>
+  </div>
+</section>

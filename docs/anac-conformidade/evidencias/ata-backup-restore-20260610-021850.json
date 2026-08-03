@@ -1,0 +1,35 @@
+﻿{
+    "schema":  "aerosuite-anac-ata-backup-restore-v1",
+    "reqId":  "REQ-022",
+    "roadmapItem":  "P-003",
+    "generatedAt":  "2026-06-10T02:19:15.0075588-03:00",
+    "durationSec":  24.3,
+    "responsavelTi":  "TI (preencher)",
+    "backupId":  "bf682e05-3a5e-4061-a734-ce623fb85a75",
+    "rtoBackupSec":  13.3,
+    "rpoEstimadoHoras":  "conforme frequencia_backup do tenant",
+    "latestHistory":  {
+                          "id":  114,
+                          "backupDate":  "2026-05-15T22:40:44",
+                          "backupPath":  "D:\\Backup\\BD",
+                          "fileSize":  0,
+                          "status":  "failed",
+                          "errorMessage":  "Cannot run program \"mysqldump\": Exec failed, error: 2 (No such file or directory) ",
+                          "duration":  0
+                      },
+    "backupFileExists":  true,
+    "backupFileDetail":  "D:\\Backup\\BD",
+    "restoreProcedure":  [
+                             "1. Parar API Aero Suite (janela de manutenÃ§Ã£o)",
+                             "2. Restaurar dump MySQL: mysql -u user -p database \u003c arquivo.sql.gz (descompactar se necessÃ¡rio)",
+                             "3. Restaurar pasta uploads conforme manual tÃ©cnico Â§backup",
+                             "4. Subir API e validar login + OS amostra",
+                             "5. Registrar RTO/RPO nesta ata"
+                         ],
+    "restoreTestStatus":  "ARQUIVO_VALIDADO",
+    "assinaturasPendentes":  [
+                                 "TI",
+                                 "RT"
+                             ],
+    "proximaAcao":  "Executar restore em ambiente de homologaÃ§Ã£o e anexar log mysql"
+}

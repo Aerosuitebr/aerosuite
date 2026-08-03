@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: aerosuite-api
+    metrics_path: /q/metrics
+    static_configs:
+      # API no host (Windows/Mac) ou mapeada em 8080
+      - targets: ["host.docker.internal:8080"]
+        labels:
+          service: aerosuite-api
+          env: local

@@ -1,0 +1,10 @@
+import fs from 'fs';
+import { execSync } from 'child_process';
+const file = process.argv[2];
+const port = process.argv[3] || '18777';
+const viewId = process.argv[4] || '86ffcf';
+const a = JSON.parse(fs.readFileSync(file, 'utf8'));
+fs.writeFileSync('.cdp-expr-current.txt', a.params.expression, 'utf8');
+fs.writeFileSync('.cdp-expr-meta.json', JSON.stringify({ viewId }), 'utf8');
+const boot = `(async()=>{const e=await(await fetch('http://127.0.0.1:${port}/expr')).text();let v=eval(e);if(v&&typeof v.then==='function')v=await v;return v;})()`;
+console.log(JSON.stringify({ viewId, method: 'Runtime.evaluate', params: { expression: boot, awaitPromise: true, returnByValue: true } }));

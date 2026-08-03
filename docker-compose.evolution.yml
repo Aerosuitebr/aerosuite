@@ -1,0 +1,95 @@
+# Evolution API (WhatsApp) para desenvolvimento e testes locais.
+#
+# Uso (MySQL no host + API/Web + Evolution):
+#   docker compose -f docker-compose.yml -f docker-compose.evolution.yml up -d --build
+#
+# Uso (MySQL no Compose):
+#   docker compose -f docker-compose.yml -f docker-compose.local-mysql.yml -f docker-compose.evolution.yml up -d --build
+#
+# Evolution no host: http://localhost:18082
+# Webhook interno (Evolution → API): http://api:8080/webhooks/evolution
+#
+# IMPORTANTE: no .env use AERO_SUITE_EVOLUTION_API_BASE_URL=http://evolution-api:8080
+# (env_file tem precedencia sobre environment do compose; localhost quebra dentro do container).
+
+services:
+  evolution-postgres:
+    image: postgres:15-alpine
+    container_name: aerosuite-evolution-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: evolution
+      POSTGRES_PASSWORD: evolution
+      POSTGRES_DB: evolution
+    volumes:
+      - evolution_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U evolution -d evolution"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  evolution-redis:
+    image: redis:7-alpine
+    container_name: aerosuite-evolution-redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  evolution-api:
+    image: evoapicloud/evolution-api:v2.3.7
+    container_name: aerosuite-evolution-api
+    restart: unless-stopped
+    depends_on:
+      evolution-postgres:
+        condition: service_healthy
+      evolution-redis:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:18082:8080"
+    environment:
+      SERVER_URL: http://localhost:18082
+      SERVER_PORT: "8080"
+      AUTHENTICATION_TYPE: apikey
+      AUTHENTICATION_API_KEY: ${EVOLUTION_API_KEY:-aerosuite-evolution-api-key-2024}
+      AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES: "true"
+      DATABASE_ENABLED: "true"
+      DATABASE_PROVIDER: postgresql
+      DATABASE_CONNECTION_URI: postgresql://evolution:evolution@evolution-postgres:5432/evolution?schema=public
+      CACHE_REDIS_ENABLED: "true"
+      CACHE_REDIS_URI: redis://evolution-redis:6379/1
+      CACHE_REDIS_PREFIX_KEY: evolution
+      CACHE_LOCAL_ENABLED: "false"
+      LOG_LEVEL: ERROR,WARN,INFO
+      DEL_INSTANCE: "false"
+      CONFIG_SESSION_PHONE_VERSION: "2.3000.1025062854"
+    volumes:
+      - evolution_instances:/evolution/instances
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:8080/"]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+
+  api:
+    depends_on:
+      evolution-api:
+        condition: service_started
+    environment:
+      WHATSAPP_API_ENABLED: "true"
+      WHATSAPP_API_URL: http://evolution-api:8080
+      WHATSAPP_API_TOKEN: ${EVOLUTION_API_KEY:-aerosuite-evolution-api-key-2024}
+      AERO_SUITE_EVOLUTION_ENABLED: "true"
+      AERO_SUITE_EVOLUTION_API_BASE_URL: http://evolution-api:8080
+      AERO_SUITE_EVOLUTION_ADMIN_API_KEY: ${EVOLUTION_API_KEY:-aerosuite-evolution-api-key-2024}
+      AERO_SUITE_EVOLUTION_WEBHOOK_BASE_URL: http://api:8080
+      AERO_SUITE_EVOLUTION_SYNC_ENABLED: "true"
+      AERO_SUITE_EVOLUTION_CONNECTION_SYNC_ENABLED: "true"
+
+volumes:
+  evolution_instances:
+  evolution_postgres:

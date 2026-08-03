@@ -1,0 +1,44 @@
+package com.aerosuite.dto;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+public record TicketDto(
+    Long id,
+    String numero,
+    String titulo,
+    String descricao,
+    String tipo,
+    String prioridade,
+    String status,
+    String categoria,
+    String subcategoria,
+    String passosReproduzir,
+    String comportamentoEsperado,
+    String comportamentoAtual,
+    String ambiente,
+    String navegador,
+    String sistemaOperacional,
+    String versaoSistema,
+    Long usuarioId,
+    String usuarioNome,
+    String usuarioEmail,
+    Long atendenteId,
+    String atendenteNome,
+    LocalDateTime dataAbertura,
+    LocalDateTime dataPrimeiraResposta,
+    LocalDateTime dataResolucao,
+    LocalDateTime dataFechamento,
+    LocalDateTime dataUltimaAtualizacao,
+    Integer slaPrimeiraRespostaHoras,
+    Integer slaResolucaoHoras,
+    Integer slaPrimeiraRespostaMinutos,
+    Integer slaResolucaoMinutos,
+    Boolean slaPrimeiraRespostaEstourado,
+    Boolean slaResolucaoEstourado,
+    Integer avaliacao,
+    String comentarioAvaliacao,
+    Boolean isActive,
+    List<TicketAttachmentDto> anexos,
+    List<TicketCommentDto> comentarios
+) {}

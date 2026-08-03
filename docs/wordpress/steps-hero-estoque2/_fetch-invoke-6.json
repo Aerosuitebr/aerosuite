@@ -1,0 +1,1 @@
+{"method":"Runtime.evaluate","params":{"expression":"(async()=>{const t=await fetch('http://127.0.0.1:8767/estoque-chunk-18000.js').then(r=>r.text());return new Function(t)();})()","awaitPromise":true,"returnByValue":false}}

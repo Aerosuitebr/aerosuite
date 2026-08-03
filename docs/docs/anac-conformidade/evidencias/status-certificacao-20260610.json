@@ -1,0 +1,23 @@
+{
+    "schema":  "aerosuite-anac-status-certificacao-v1",
+    "generatedAt":  "2026-06-10T11:00:24.4305832-03:00",
+    "gitTag":  "f35a4e1",
+    "evidenciasPass":  11,
+    "evidenciasFail":  0,
+    "readyForAnacSubmission":  true,
+    "documentosGerados":  [
+                              "D:\\Desenvolvimento\\aerosuite\\docs\\anac-conformidade\\evidencias\\ata-contingencia-20260610.md",
+                              "D:\\Desenvolvimento\\aerosuite\\docs\\anac-conformidade\\evidencias\\ata-backup-restore-20260610.md",
+                              "D:\\Desenvolvimento\\aerosuite\\docs\\anac-conformidade\\evidencias\\relatorio-validacao-20260610.md"
+                          ],
+    "pendenciasOrganizacionais":  [
+                                      "Assinar escopo regulatÃ³rio (02) e arquivar PDF em evidencias/escopo-assinado.pdf",
+                                      "Assinar relatÃ³rio de validaÃ§Ã£o e arquivar PDF em evidencias/relatorio-validacao-*.pdf",
+                                      "Assinar atas contingÃªncia e backup em PDF",
+                                      "Executar restore em homologaÃ§Ã£o (VAL-19) e anexar log MySQL",
+                                      "Executar treinamento piloto e arquivar listas de presenÃ§a",
+                                      "Atualizar MOM/MCQ da organizaÃ§Ã£o referenciando o sistema",
+                                      "Nomear RT como interlocutor regulatÃ³rio",
+                                      "Revisar texto de consulta ANAC (18) e submeter conforme roteiro (13)"
+                                  ]
+}

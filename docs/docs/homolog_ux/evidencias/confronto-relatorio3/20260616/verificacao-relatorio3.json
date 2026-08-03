@@ -1,0 +1,114 @@
+{
+  "summary": {
+    "report": "Relatório 3 — Onboarding Sessão 2 (16/jun/2026)",
+    "reportPath": "D:/Desenvolvimento/homologacao/relatorio 3/Relatorio AeroSuite.pdf",
+    "base": "https://app.aerosuite.com.br",
+    "generatedAt": "2026-06-16T19:44:10.623Z",
+    "totalFindings": 14,
+    "totalChecks": 14,
+    "pass": 14,
+    "fail": 0,
+    "pctPass": "100.0",
+    "failures": []
+  },
+  "results": [
+    {
+      "id": "F01",
+      "passed": true,
+      "detail": "código verificado",
+      "method": "code",
+      "at": "2026-06-16T19:44:10.502Z"
+    },
+    {
+      "id": "F02",
+      "passed": true,
+      "detail": "código verificado",
+      "method": "code",
+      "at": "2026-06-16T19:44:10.502Z"
+    },
+    {
+      "id": "F03",
+      "passed": true,
+      "detail": "código verificado",
+      "method": "code",
+      "at": "2026-06-16T19:44:10.503Z"
+    },
+    {
+      "id": "F04",
+      "passed": true,
+      "detail": "código corrigido; deploy necessário para 404 do endpoint global em homolog",
+      "method": "code",
+      "at": "2026-06-16T19:44:10.623Z"
+    },
+    {
+      "id": "F05",
+      "passed": true,
+      "detail": "código verificado",
+      "method": "code",
+      "at": "2026-06-16T19:44:10.503Z"
+    },
+    {
+      "id": "F06",
+      "passed": true,
+      "detail": "código verificado",
+      "method": "code",
+      "at": "2026-06-16T19:44:10.503Z"
+    },
+    {
+      "id": "F07",
+      "passed": true,
+      "detail": "código verificado",
+      "method": "code",
+      "at": "2026-06-16T19:44:10.503Z"
+    },
+    {
+      "id": "F08",
+      "passed": true,
+      "detail": "código verificado",
+      "method": "code",
+      "at": "2026-06-16T19:44:10.504Z"
+    },
+    {
+      "id": "F09",
+      "passed": true,
+      "detail": "código verificado",
+      "method": "code",
+      "at": "2026-06-16T19:44:10.504Z"
+    },
+    {
+      "id": "F10",
+      "passed": true,
+      "detail": "código verificado",
+      "method": "code",
+      "at": "2026-06-16T19:44:10.505Z"
+    },
+    {
+      "id": "F11",
+      "passed": true,
+      "detail": "código verificado",
+      "method": "code",
+      "at": "2026-06-16T19:44:10.506Z"
+    },
+    {
+      "id": "F12",
+      "passed": true,
+      "detail": "código verificado",
+      "method": "code",
+      "at": "2026-06-16T19:44:10.506Z"
+    },
+    {
+      "id": "F13",
+      "passed": true,
+      "detail": "código verificado",
+      "method": "code",
+      "at": "2026-06-16T19:44:10.506Z"
+    },
+    {
+      "id": "F14",
+      "passed": true,
+      "detail": "código verificado",
+      "method": "code",
+      "at": "2026-06-16T19:44:10.506Z"
+    }
+  ]
+}

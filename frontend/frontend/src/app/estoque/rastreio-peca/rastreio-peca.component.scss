@@ -1,0 +1,152 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.rastreio-page {
+  width: 100%;
+  max-width: 100%;
+  flex: 1;
+  box-sizing: border-box;
+  padding: 0 0 2rem;
+}
+
+.page-header {
+  margin-bottom: 1.5rem;
+}
+
+.header-text h1 {
+  margin: 0.35rem 0 0.25rem;
+  font-size: 1.5rem;
+}
+
+.compliance-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #fef3c7, #fde68a);
+  color: #92400e;
+  border: 1px solid #f59e0b;
+}
+
+.search-row {
+  margin-top: 1rem;
+
+  label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.35rem;
+  }
+}
+
+.search-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+
+  .codigo-input {
+    flex: 1 1 220px;
+    min-width: 180px;
+  }
+}
+
+.page-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #64748b;
+
+  i {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+}
+
+.kv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem 1rem;
+}
+
+.kv {
+  .k {
+    display: block;
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-bottom: 0.15rem;
+  }
+
+  .v.cert {
+    font-weight: 600;
+    color: #b45309;
+  }
+}
+
+.timeline-section {
+  margin-top: 1.5rem;
+
+  h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.timeline-empty {
+  color: #64748b;
+}
+
+.timeline-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: #0ea5e9;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.timeline-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 0.5rem;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+
+    .date {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+  }
+
+  p {
+    margin: 0.2rem 0;
+    font-size: 0.88rem;
+  }
+
+  .motivo {
+    color: #334155;
+  }
+}
+
+:host ::ng-deep .item-card {
+  margin-bottom: 0.5rem;
+}

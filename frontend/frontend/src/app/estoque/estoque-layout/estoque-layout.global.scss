@@ -1,0 +1,97 @@
+// Módulo Estoque — overrides globais (fora do encapsulamento do componente)
+
+/* 1) Botões do topo: texto e ícones brancos */
+.estoque-layout .estoque-header {
+  position: relative;
+  z-index: 200;
+
+  .p-button.p-button-outlined.return-btn,
+  .p-button.p-button-outlined.thermal-print-btn,
+  .p-button.p-button-outlined.manuais-btn {
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+
+    .p-button-label,
+    .p-button-icon,
+    .pi {
+      color: #fff !important;
+    }
+
+    &:enabled:hover,
+    &:not(:disabled):hover,
+    &:enabled:active,
+    &:not(:disabled):active,
+    &:focus-visible {
+      color: #fff !important;
+      background: rgba(255, 255, 255, 0.18) !important;
+      border-color: rgba(255, 255, 255, 0.75) !important;
+
+      .p-button-label,
+      .p-button-icon,
+      .pi {
+        color: #fff !important;
+      }
+    }
+  }
+}
+
+/* 2) Menu popup (Manuais) acima do conteúdo */
+.p-menu.p-menu-overlay,
+.p-connected-overlay-enter-done .p-menu {
+  z-index: 1300 !important;
+}
+
+/* 3) Nav de fluxo compacto no mobile/tablet */
+@media (max-width: 1024px) {
+  .estoque-layout .estoque-nav {
+    position: relative;
+    z-index: 150;
+    flex-shrink: 0;
+
+    .nav-items {
+      display: flex;
+      flex-wrap: nowrap !important;
+      align-items: center;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      touch-action: pan-x;
+      gap: 2px;
+    }
+
+    .nav-item {
+      flex: 0 0 auto !important;
+      flex-shrink: 0 !important;
+      width: auto !important;
+      min-width: 48px;
+      max-width: none;
+      padding: 10px 12px;
+      gap: 0;
+
+      .nav-text {
+        display: none !important;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+      }
+
+      .nav-icon i {
+        color: rgba(255, 255, 255, 0.92) !important;
+      }
+
+      &.active .nav-icon i {
+        color: #fff !important;
+      }
+    }
+  }
+
+  .estoque-layout .estoque-content {
+    position: relative;
+    z-index: 1;
+  }
+}

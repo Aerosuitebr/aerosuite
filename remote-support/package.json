@@ -1,0 +1,55 @@
+{
+  "name": "aerosupport",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Plataforma independente de suporte remoto assistido",
+  "author": "AeroSuite Tecnologia",
+  "main": "desktop/main.mjs",
+  "scripts": {
+    "dev": "node tools/dev-server.mjs",
+    "check": "node tools/check.mjs",
+    "desktop:dev": "electron .",
+    "desktop:pack": "electron-builder --dir --win --x64",
+    "desktop:installer": "electron-builder --win nsis --x64",
+    "agent:installer": "electron-builder --config electron-builder.agent.json --win nsis --x64",
+    "test": "node tools/session-integration.test.mjs",
+    "verify": "npm run check && npm test"
+  },
+  "build": {
+    "appId": "com.aerosuite.aerosupport",
+    "productName": "AeroSupport",
+    "asar": true,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "desktop/**/*",
+      "tools/dev-server.mjs",
+      "apps/operator-console/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "AeroSupport-Setup-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "AeroSupport",
+      "deleteAppDataOnUninstall": false
+    }
+  },
+  "devDependencies": {
+    "electron": "^39.8.10",
+    "electron-builder": "^26.15.3"
+  }
+}

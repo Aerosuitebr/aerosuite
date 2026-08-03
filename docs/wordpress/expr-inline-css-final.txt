@@ -1,0 +1,15 @@
+(async () => {
+  const css = window.__cssInline || '';
+  if (css.length < 1000) return { err: 'css missing', len: css.length };
+  let footer = (await wp.apiFetch({ path: '/wp/v2/template-parts/extendable//footer?context=edit' })).content.raw;
+  footer = footer.replace(/<link[^>]*aerosuite-premium-css[^>]*>/g, '');
+  footer = footer.replace(/<!-- wp:html -->[\s\S]*?aerosuite-premium-css[\s\S]*?<!-- \/wp:html -->/g, '');
+  const block = '<!-- wp:html -->\n<style id="aerosuite-premium-css">' + css + '</style>\n<!-- /wp:html -->\n';
+  if (!footer.includes('id="aerosuite-premium-css"')) {
+    footer = block + footer;
+  } else {
+    footer = footer.replace(/<style id="aerosuite-premium-css">[\s\S]*?<\/style>/, '<style id="aerosuite-premium-css">' + css + '</style>');
+  }
+  await wp.apiFetch({ path: '/wp/v2/template-parts/extendable//footer?id=extendable//footer', method: 'POST', data: { content: footer } });
+  return { ok: true, cssLen: css.length };
+})()

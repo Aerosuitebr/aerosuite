@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Equalização de Estoque - Aero Suite</title>
+</head>
+<body style="margin:0;padding:0;background:#f1f5f9;font-family:Segoe UI,Arial,Helvetica,sans-serif;color:#0f172a;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#f1f5f9;padding:24px 0;">
+    <tr><td align="center">
+      <table role="presentation" width="720" cellspacing="0" cellpadding="0" border="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(15,23,42,.08);">
+        <tr>
+          <td style="background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);padding:28px 32px;color:#ffffff;">
+            <div style="font-size:13px;letter-spacing:.18em;color:#93c5fd;text-transform:uppercase;font-weight:600;">Aero Suite Controls &middot; Sistema Aero Suite</div>
+            <div style="font-size:24px;font-weight:700;margin-top:6px;">Equalização do Estoque (Catálogo &times; Módulo de Estoque)</div>
+            <div style="font-size:14px;color:#cbd5e1;margin-top:8px;">Pacote de relatórios para conferência e regularização pela equipe de Suprimento</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:28px 32px 8px 32px;">
+            <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;">Prezada equipe de Suprimento,</p>
+            <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;">
+              No último diagnóstico realizado pelo TI, identificamos divergências entre as quantidades exibidas no
+              <strong>cadastro de Produtos</strong> (campo legado <em>quantity</em>) e o saldo efetivamente registrado
+              no novo <strong>Módulo de Estoque</strong> (tabela <em>item_estoque</em>, com rastreabilidade por
+              fornecedor, invoice e lote). Essa diferença é a principal causa do sistema indicar
+              <strong>&ldquo;estoque zero&rdquo;</strong> em itens que vocês têm fisicamente disponíveis para uso em OS e kits FCU.
+            </p>
+            <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;">
+              Para acelerar a regularização, estamos encaminhando em anexo <strong>dois relatórios</strong> que listam,
+              de forma objetiva, exatamente <strong>o que precisa ser ajustado</strong>. Pedimos a leitura atenta deste
+              e-mail e a execução do passo a passo na sequência indicada.
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:8px 32px 0 32px;">
+            <h3 style="margin:18px 0 10px 0;color:#1e3a8a;font-size:17px;border-bottom:2px solid #e2e8f0;padding-bottom:6px;">
+              1) Arquivos anexos
+            </h3>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;">
+              <tr style="background:#f8fafc;">
+                <th align="left" style="padding:10px 12px;font-size:13px;color:#475569;border-bottom:1px solid #e2e8f0;">Arquivo</th>
+                <th align="left" style="padding:10px 12px;font-size:13px;color:#475569;border-bottom:1px solid #e2e8f0;">Conteúdo</th>
+                <th align="left" style="padding:10px 12px;font-size:13px;color:#475569;border-bottom:1px solid #e2e8f0;">Como usar</th>
+              </tr>
+              <tr>
+                <td style="padding:12px;font-size:13px;border-bottom:1px solid #e2e8f0;font-family:Consolas,monospace;color:#0f172a;">
+                  produtos-discrepancia-estoque.csv
+                </td>
+                <td style="padding:12px;font-size:13px;border-bottom:1px solid #e2e8f0;line-height:1.5;">
+                  159 produtos com divergência entre catálogo e estoque rastreado.<br>
+                  Colunas: <em>id_produto, pn, nome, local_catalogo, qty_catalogo,
+                  qty_estoque_disponivel, diferenca, classificacao</em>.
+                </td>
+                <td style="padding:12px;font-size:13px;border-bottom:1px solid #e2e8f0;line-height:1.5;">
+                  Filtrar pela coluna <strong>classificacao</strong>:
+                  <ul style="margin:6px 0 0 16px;padding:0;">
+                    <li><strong>SEM_ENTRADA_NO_MODULO_ESTOQUE</strong>: cadastrar a entrada no Módulo Estoque (item físico + fornecedor + invoice/lote).</li>
+                    <li><strong>CATALOGO_MAIOR_QUE_ESTOQUE</strong>: completar a diferença com novas entradas conforme a quantidade física real.</li>
+                    <li><strong>ESTOQUE_MAIOR_QUE_CATALOGO</strong>: corrigir o catálogo (cadastro de Produto) para refletir o saldo real.</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:12px;font-size:13px;font-family:Consolas,monospace;color:#0f172a;">
+                  produtos-duplicados-catalogo.csv
+                </td>
+                <td style="padding:12px;font-size:13px;line-height:1.5;">
+                  10 Part Numbers cadastrados em duplicidade no catálogo de Produtos.<br>
+                  Colunas: <em>pn, cadastros, ids, quantidades, locais, nomes</em>.
+                </td>
+                <td style="padding:12px;font-size:13px;line-height:1.5;">
+                  Manter apenas <strong>um cadastro</strong> por P/N (o que tem dados corretos) e
+                  <strong>inativar/excluir</strong> os duplicados, somando as quantidades antes de finalizar para não perder histórico.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:0 32px;">
+            <h3 style="margin:24px 0 10px 0;color:#1e3a8a;font-size:17px;border-bottom:2px solid #e2e8f0;padding-bottom:6px;">
+              2) Passo a passo recomendado
+            </h3>
+            <ol style="margin:0 0 12px 18px;padding:0;font-size:14px;line-height:1.7;color:#0f172a;">
+              <li>Abrir o CSV <strong>produtos-discrepancia-estoque.csv</strong> no Excel
+                (separador <strong>ponto-e-vírgula</strong>, codificação UTF-8 &mdash; já vem pronto, basta dar duplo clique).</li>
+              <li>Resolver primeiro as linhas marcadas como <strong>SEM_ENTRADA_NO_MODULO_ESTOQUE</strong>:
+                fazer a contagem física do P/N e lançar a entrada no menu
+                <strong>Estoque &rarr; Entrada de Mercadoria</strong>, preenchendo fornecedor, invoice/lote e localização.</li>
+              <li>Para <strong>CATALOGO_MAIOR_QUE_ESTOQUE</strong>: lançar entradas complementares apenas pela
+                quantidade que realmente existe na prateleira (não copiar a coluna <em>qty_catalogo</em>).</li>
+              <li>Para <strong>ESTOQUE_MAIOR_QUE_CATALOGO</strong>: corrigir o cadastro do Produto
+                (<strong>Cadastros &rarr; Produtos</strong>) para refletir a realidade física.</li>
+              <li>Tratar o CSV <strong>produtos-duplicados-catalogo.csv</strong>: consolidar os duplicados em
+                um único cadastro por P/N para evitar saldos espalhados.</li>
+              <li>Após cada bloco de ajustes, validar abrindo a tela de <strong>Itens em Estoque</strong> &mdash;
+                o saldo passa a refletir o saldo rastreável (FIFO/lote/invoice).</li>
+            </ol>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:0 32px;">
+            <h3 style="margin:24px 0 10px 0;color:#1e3a8a;font-size:17px;border-bottom:2px solid #e2e8f0;padding-bottom:6px;">
+              3) Por que isso é importante
+            </h3>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-left:4px solid #f59e0b;background:#fffbeb;border-radius:6px;">
+              <tr><td style="padding:14px 16px;font-size:14px;line-height:1.6;color:#92400e;">
+                Sem essa equalização, o sistema continuará indicando <strong>déficit</strong> ao abrir OS com Kit FCU
+                ou marcar trocas eventuais como pagas, mesmo quando o material estiver fisicamente disponível.
+                A partir desta semana, o sistema permite seguir com o pagamento mesmo nesses casos, mas
+                <strong>continua registrando alerta de déficit</strong> para o Suprimento revisar &mdash; por isso a
+                regularização é prioritária.
+              </td></tr>
+            </table>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:0 32px;">
+            <h3 style="margin:24px 0 10px 0;color:#1e3a8a;font-size:17px;border-bottom:2px solid #e2e8f0;padding-bottom:6px;">
+              4) Material de apoio (PDF)
+            </h3>
+            <p style="margin:0 0 8px 0;font-size:14px;line-height:1.6;">
+              No sistema, dentro do módulo <strong>Estoque</strong>, há um botão <strong>Manuais</strong> no canto
+              superior direito. Lá já está disponível o manual:
+              <strong>&ldquo;Equalização do Estoque (Físico &times; Sistema)&rdquo;</strong> &mdash; com o mesmo passo a passo deste e-mail,
+              porém ilustrado e em formato corporativo para impressão.
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:18px 32px 28px 32px;">
+            <h3 style="margin:18px 0 10px 0;color:#1e3a8a;font-size:17px;border-bottom:2px solid #e2e8f0;padding-bottom:6px;">
+              5) Suporte
+            </h3>
+            <p style="margin:0 0 6px 0;font-size:14px;line-height:1.6;">
+              Em caso de dúvida durante o processo, encaminhar mensagem para
+              <a href="mailto:wellemlyra@gmail.com" style="color:#1d4ed8;text-decoration:none;font-weight:600;">wellemlyra@gmail.com</a>
+              que o TI dará suporte imediato. Sugerimos definir um prazo interno de
+              <strong>conclusão por etapas</strong> para facilitar o acompanhamento.
+            </p>
+            <p style="margin:14px 0 0 0;font-size:14px;line-height:1.6;">Atenciosamente,</p>
+            <p style="margin:2px 0 0 0;font-size:14px;line-height:1.6;"><strong>Equipe de Tecnologia da Informação &mdash; Aero Suite Controls</strong></p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="background:#0f172a;color:#cbd5e1;padding:14px 24px;text-align:center;font-size:12px;">
+            Este e-mail foi gerado a partir do diagnóstico de inventário do Sistema Aero Suite.<br>
+            Os arquivos anexos contêm dados internos &mdash; manter sigilo conforme a política de TI.
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>

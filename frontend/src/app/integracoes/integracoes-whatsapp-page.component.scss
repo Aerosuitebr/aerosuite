@@ -1,0 +1,28 @@
+.integracoes-whatsapp-page {
+  .integracoes-whatsapp-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.55rem;
+  }
+
+  .integracoes-whatsapp-hero-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-right: 0.35rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: inherit;
+    max-width: min(100%, 24rem);
+    line-height: 1.35;
+  }
+
+  .integracoes-whatsapp-body {
+    padding-top: 0.25rem;
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "at": "2026-06-04T02:12:25.383Z",
+  "fixPlugins": {
+    "before": [
+      {
+        "plugin": "aerosuite-wpforms-fix-1/aerosuite-wpforms-fix.php",
+        "active": false
+      },
+      {
+        "plugin": "aerosuite-wpforms-fix-3/aerosuite-wpforms-fix.php",
+        "active": false
+      },
+      {
+        "plugin": "aerosuite-wpforms-fix-6/aerosuite-wpforms-fix.php",
+        "active": false
+      },
+      {
+        "plugin": "aerosuite-wpforms-fix-4/aerosuite-wpforms-fix.php",
+        "active": false
+      },
+      {
+        "plugin": "aerosuite-wpforms-fix-5/aerosuite-wpforms-fix.php",
+        "active": false
+      },
+      {
+        "plugin": "aerosuite-wpforms-fix-2/aerosuite-wpforms-fix.php",
+        "active": false
+      },
+      {
+        "plugin": "aerosuite-wpforms-fix-7/aerosuite-wpforms-fix.php",
+        "active": false
+      }
+    ],
+    "deleted": [
+      "aerosuite-wpforms-fix-1/aerosuite-wpforms-fix.php",
+      "aerosuite-wpforms-fix-3/aerosuite-wpforms-fix.php",
+      "aerosuite-wpforms-fix-6/aerosuite-wpforms-fix.php",
+      "aerosuite-wpforms-fix-4/aerosuite-wpforms-fix.php",
+      "aerosuite-wpforms-fix-5/aerosuite-wpforms-fix.php",
+      "aerosuite-wpforms-fix-2/aerosuite-wpforms-fix.php",
+      "aerosuite-wpforms-fix-7/aerosuite-wpforms-fix.php"
+    ],
+    "remaining": []
+  },
+  "orphanForms": {
+    "found": [
+      {
+        "id": "",
+        "title": ""
+      },
+      {
+        "id": "",
+        "title": ""
+      },
+      {
+        "id": "",
+        "title": ""
+      },
+      {
+        "id": "",
+        "title": "327"
+      },
+      {
+        "id": "",
+        "title": "325"
+      },
+      {
+        "id": "",
+        "title": "323"
+      },
+      {
+        "id": "",
+        "title": "Formulário de Contato Simples"
+      },
+      {
+        "id": "",
+        "title": ""
+      }
+    ],
+    "trashed": []
+  },
+  "contato": {
+    "pageMeta": {
+      "hasForm12": false,
+      "hasForm327": false,
+      "snippet": null
+    },
+    "submit": {
+      "status": 200,
+      "success": true
+    }
+  },
+  "debugLog": {
+    "status": 200,
+    "public": true,
+    "bytes": 110156,
+    "preview": "2026-06-03T19:12:15+00:00 boot mem=256M wp_mem=40M\n2026-06-03T19:12:15+00:00 boot mem=256M wp_mem=40M\n2026-06-03T19:12:1"
+  }
+}

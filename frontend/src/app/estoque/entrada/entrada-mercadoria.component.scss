@@ -1,0 +1,492 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.entrada-shell {
+  width: 100%;
+  max-width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.page-top {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.page-top__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  i {
+    font-size: 1.35rem;
+    color: #16a34a;
+  }
+}
+
+.page-top__text {
+  min-width: 0;
+
+  h1 {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+  }
+
+  p {
+    margin: 0.2rem 0 0;
+    font-size: 0.875rem;
+    color: #64748b;
+    line-height: 1.4;
+    max-width: 52rem;
+  }
+}
+
+.steps-bar {
+  flex-shrink: 0;
+  padding: 0.85rem 1.5rem 1rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+:host ::ng-deep .entrada-steps.p-steps {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+
+  .p-steps-item {
+    flex: 1;
+  }
+
+  .p-menuitem-link {
+    background: transparent !important;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .p-steps-number {
+    width: 2rem;
+    height: 2rem;
+    min-width: 2rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 2px solid #e2e8f0;
+    background: #f8fafc;
+    color: #64748b;
+  }
+
+  .p-steps-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #64748b;
+    margin-top: 0.35rem;
+  }
+
+  .p-highlight .p-steps-number {
+    background: #0ea5e9;
+    border-color: #0ea5e9;
+    color: #fff;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+  }
+
+  .p-highlight .p-steps-title {
+    color: #0f172a;
+  }
+
+  .p-steps-item.p-steps-current .p-steps-number {
+    background: #0ea5e9;
+    border-color: #0284c7;
+    color: #fff;
+  }
+
+  .p-steps-item.p-steps-current .p-steps-title {
+    color: #0f172a;
+  }
+}
+
+.wizard-main {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 1.25rem 1.5rem 1.5rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.wizard-body {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.step-content {
+  animation: entradaFade 0.22s ease-out;
+}
+
+@keyframes entradaFade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.step-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.35rem 1.5rem 1.25rem;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.05);
+  min-height: min(560px, calc(100vh - 240px));
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #f1f5f9;
+  flex-shrink: 0;
+
+  .card-header__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    background: #fffbeb;
+    color: #d97706;
+    flex-shrink: 0;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #0f172a;
+  }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.25rem;
+  flex: 1;
+  align-content: start;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+
+  &.full-width {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .help-text {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 0.1rem;
+
+    a {
+      color: #0ea5e9;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .hint {
+    color: #94a3b8;
+    font-size: 0.7rem;
+  }
+
+  &.small {
+    max-width: 120px;
+  }
+}
+
+:host ::ng-deep .wizard-body {
+  .p-inputtext,
+  .p-inputtextarea,
+  .p-dropdown,
+  .p-calendar,
+  .p-inputnumber,
+  .p-autocomplete {
+    width: 100%;
+  }
+
+  .p-dropdown,
+  .p-calendar .p-inputtext,
+  .p-inputtext {
+    border-radius: 10px;
+    border-color: #e2e8f0;
+    min-height: 42px;
+  }
+
+  .p-inputnumber-input {
+    min-height: 42px;
+    border-radius: 10px;
+  }
+
+  .p-autocomplete .p-inputtext {
+    width: 100%;
+  }
+}
+
+.step-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid #f1f5f9;
+  flex-shrink: 0;
+}
+
+:host ::ng-deep .step-nav-btn.p-button {
+  min-width: 8.5rem;
+  height: 42px;
+  white-space: nowrap;
+  border-radius: 10px;
+  justify-content: center;
+
+  .p-button-label {
+    white-space: nowrap;
+  }
+
+  &.p-button-loading .p-button-label {
+    visibility: hidden;
+  }
+}
+
+.fornecedor-option,
+.invoice-option {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0.15rem 0;
+
+  small {
+    color: #64748b;
+    font-size: 0.75rem;
+  }
+}
+
+.produto-sugestao {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 0;
+
+  small {
+    color: #64748b;
+    font-size: 0.75rem;
+  }
+}
+
+.sucesso-content {
+  text-align: center;
+  padding: 20px;
+
+  .sucesso-icon i {
+    font-size: 64px;
+    color: #22c55e;
+  }
+
+  h2 {
+    margin: 16px 0 8px;
+    color: #1e293b;
+  }
+
+  p {
+    color: #64748b;
+  }
+}
+
+.item-resumo {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 24px 0;
+  text-align: left;
+  border: 1px solid #e2e8f0;
+
+  .resumo-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #e2e8f0;
+    gap: 1rem;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    label {
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    span {
+      font-weight: 500;
+      color: #1e293b;
+      text-align: right;
+
+      &.codigo {
+        font-family: ui-monospace, monospace;
+        color: #0ea5e9;
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+.qrcode-preview {
+  margin: 24px 0;
+
+  img {
+    width: 150px;
+    height: 150px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+  }
+
+  p {
+    margin: 8px 0 0;
+    font-size: 13px;
+    color: #64748b;
+  }
+}
+
+.sucesso-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.fornecedor-form {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.form-section {
+  margin-bottom: 24px;
+
+  h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+    font-size: 15px;
+
+    i {
+      color: #0ea5e9;
+    }
+  }
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+:host ::ng-deep {
+  .fornecedor-dialog .p-dialog-content {
+    overflow: visible;
+  }
+
+  .p-dropdown-panel {
+    z-index: 10001 !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+
+    .form-field.full-width {
+      grid-column: 1;
+    }
+  }
+
+  .step-card {
+    min-height: auto;
+  }
+
+  :host ::ng-deep .entrada-steps.p-steps {
+    .p-steps-title {
+      font-size: 0.7rem;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .page-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .step-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  :host ::ng-deep .step-actions .step-nav-btn.p-button {
+    width: 100%;
+    max-width: none;
+  }
+}

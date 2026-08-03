@@ -1,0 +1,3 @@
+identificador;descricao;tipo;localizacao;data_ultima_calibracao;data_proxima_calibracao;certificado_ref;observacoes
+TOR-001;Torquímetro hangar A;FERRAMENTA;Hangar A;2025-06-01;2026-06-01;CERT-2025-001;Importado via kit go-live
+BAL-002;Balança peças;INSTRUMENTO;Almoxarifado;2025-03-01;2026-03-01;CERT-2025-002;

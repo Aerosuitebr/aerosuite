@@ -1,0 +1,17 @@
+Aero Suite instalado no namespace {{ .Release.Namespace }}.
+
+API:  {{ include "aerosuite.fullname" . }}-api:{{ .Values.api.service.port }}
+Web:  {{ include "aerosuite.fullname" . }}-web:{{ .Values.web.service.port }}
+
+{{- if .Values.ingress.enabled }}
+Ingress: https://{{ .Values.ingress.host }}  (API em /api)
+{{- end }}
+
+{{- if .Values.metrics.serviceMonitor.enabled }}
+ServiceMonitor: {{ include "aerosuite.fullname" . }}-api  →  GET /q/metrics
+Confirme que o Prometheus Operator está a correr e que additionalLabels coincidem com o seu release.
+{{- else }}
+Métricas: anotações prometheus.io/* no Pod da API (scraping legado).
+{{- end }}
+
+Health: /q/health/ready  |  /q/health/live

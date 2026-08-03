@@ -1,0 +1,418 @@
+// Premium uplift global — listagens legado sem PageHero explícito
+// Harmoniza .page-header com visual PageHero e dark mode em todo o app
+
+.list-container,
+.fornecedor-container,
+.quarentena-page,
+.controle-acesso-container,
+.relatorios-container,
+.biblioteca-container,
+.associacao-fcu-page {
+  width: 100%;
+  min-height: calc(100vh - 5rem);
+  background: var(--as-bg-page, #f1f5f9);
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
+  padding: 0 1.5rem 2rem;
+}
+
+.as-page.list-container {
+  min-height: 0 !important;
+  padding: 0 1.25rem 0.35rem;
+}
+
+// Hero visual para page-header legado
+.page-header,
+.page-header {
+  margin: 0 -1.5rem 1.25rem;
+
+  @media (max-width: 767px) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  padding: 0;
+  flex-shrink: 0;
+  animation: none;
+
+  .header-content,
+  &:not(:has(.header-content)) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0;
+    padding: 1.75rem 1.5rem 2rem;
+    background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 45%, #0ea5e9 100%);
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: -40px;
+      top: -40px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+  }
+
+  .header-left,
+  .header-text,
+  .header-info {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .page-title,
+  h1 {
+    margin: 0 0 0.35rem;
+    font-size: clamp(1.35rem, 2.5vw, 1.65rem);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: 1.2;
+    color: #fff;
+
+    .pi,
+    i {
+      color: #fbbf24;
+    }
+  }
+
+  .page-subtitle,
+  p {
+    margin: 0;
+    max-width: 720px;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: #e2e8f0;
+    opacity: 0.95;
+  }
+
+  .header-actions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+
+    app-page-help {
+      order: -1;
+    }
+
+    .p-button-outlined:not(:disabled) {
+      color: #fff !important;
+      border-color: #0369a1 !important;
+      background: transparent !important;
+
+      .p-button-label,
+      .p-button-icon,
+      .pi {
+        color: #fff !important;
+      }
+
+      &:enabled:hover {
+        color: #fff !important;
+        border-color: #0284c7 !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+      }
+    }
+
+    .p-button-text:not(:disabled),
+    app-page-help .p-button:not(:disabled) {
+      color: #fff !important;
+
+      .p-button-label,
+      .p-button-icon,
+      .pi {
+        color: #fff !important;
+      }
+    }
+
+    .p-button-primary:not(.p-button-outlined),
+    .add-btn {
+      color: #fff !important;
+      background: rgba(255, 255, 255, 0.15) !important;
+      border-color: rgba(255, 255, 255, 0.35) !important;
+      backdrop-filter: blur(4px);
+
+      .p-button-label,
+      .p-button-icon,
+      .pi {
+        color: #fff !important;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.25) !important;
+        transform: translateY(-1px);
+      }
+    }
+  }
+}
+
+// Variantes por módulo (slate comercial, navy admin)
+.comercial-container .page-header .header-content,
+.proposta-container .page-header .header-content {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+
+// Cards de filtro/tabela premium
+.filters-section,
+.filters-card,
+.filter-bar,
+.table-section,
+.table-card,
+.table-container,
+.data-card {
+  background: var(--as-bg-elevated, #fff);
+  border: 1px solid var(--as-border, #e2e8f0);
+  border-radius: var(--as-radius-lg, 14px);
+  box-shadow: var(--as-shadow-sm);
+}
+
+.filters-section {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 0.65rem;
+  flex-shrink: 0;
+}
+
+.filters-card,
+.filter-bar {
+  padding: 0.6rem 0.85rem;
+  margin-bottom: 0.65rem;
+}
+
+// Busca + totais na mesma linha — menos altura, mais espaço para a tabela
+.as-page.list-container .filters-card,
+.list-container .filters-card {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  padding: 0.6rem 0.85rem;
+  margin-bottom: 0.65rem;
+}
+
+.as-page.list-container .filters-card .search-container,
+.list-container .filters-card .search-container {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-bottom: 0 !important;
+}
+
+.as-page.list-container .filters-card .search-input,
+.list-container .filters-card .search-input {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.as-page.list-container .filters-card .stats-container,
+.list-container .filters-card .stats-container {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.85rem 1.15rem;
+  align-items: center;
+  margin: 0;
+}
+
+.as-page.list-container .filters-card .stat-item,
+.list-container .filters-card .stat-item {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.3rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.as-page.list-container .filters-card .stat-item .stat-number,
+.list-container .filters-card .stat-item .stat-number {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0;
+}
+
+.as-page.list-container .filters-card .stat-item .stat-label,
+.list-container .filters-card .stat-item .stat-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+// PageHero compacto em listagens
+.as-page.list-container > app-page-hero .as-page-hero {
+  margin-bottom: 0.65rem;
+  padding: 1rem 1.25rem 1.15rem;
+}
+
+// Flex column: hero + filtros fixos no fluxo; scroll no main-content
+.as-page.list-container {
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.as-page.list-container > app-page-hero,
+.as-page.list-container > .filters-section {
+  flex-shrink: 0;
+}
+
+.as-page.list-container > .table-section {
+  flex: none;
+  display: block;
+  overflow: visible;
+  margin-bottom: 0;
+}
+
+.as-page.list-container .table-card,
+.as-page.list-container .table-container {
+  overflow: visible;
+}
+
+.as-page.list-container .p-paginator {
+  flex-shrink: 0 !important;
+  display: flex !important;
+  visibility: visible !important;
+}
+
+@media (max-width: 640px) {
+  .as-page.list-container .filters-card,
+  .list-container .filters-card {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+
+  .as-page.list-container .filters-card .search-container,
+  .list-container .filters-card .search-container {
+    flex: 1 1 100%;
+  }
+
+  .as-page.list-container .filters-card .stats-container,
+  .list-container .filters-card .stats-container {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+  }
+}
+
+.table-card,
+.table-container {
+  overflow: hidden;
+  flex: 1;
+}
+
+// Empty states legado
+.empty-message,
+.empty-state {
+  padding: 3rem 1.5rem;
+  text-align: center;
+
+  .empty-icon,
+  .pi-inbox {
+    font-size: 2.5rem;
+    color: var(--as-text-subtle, #475569);
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.125rem;
+    color: var(--as-text, #0f172a);
+  }
+
+  p {
+    margin: 0 0 1.25rem;
+    color: var(--as-text-muted, #64748b);
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+// PrimeNG dialog ARIA helper — focus trap visual
+.p-dialog {
+  .p-dialog-header {
+    font-weight: 600;
+  }
+}
+
+// Dark mode — listagens legado
+[data-theme='dark'] {
+  .list-container,
+  .fornecedor-container,
+  .quarentena-page,
+  .controle-acesso-container,
+  .relatorios-container,
+  .biblioteca-container,
+  .associacao-fcu-page {
+    background: var(--as-bg-page);
+    color: var(--as-text);
+  }
+
+  .page-header .header-content,
+  .page-header:not(:has(.header-content)) {
+    border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+  }
+
+  .filters-card,
+  .filter-bar,
+  .table-card,
+  .table-container,
+  .data-card {
+    background: var(--as-bg-elevated);
+    border-color: var(--as-border);
+    color: var(--as-text);
+  }
+
+  .search-input {
+    background: var(--as-bg-muted);
+    border-color: var(--as-border);
+    color: var(--as-text);
+  }
+
+  .stats-container .stat-item {
+    .stat-number {
+      color: var(--as-text);
+    }
+    .stat-label {
+      color: var(--as-text-muted);
+    }
+  }
+
+  .empty-state h3,
+  .empty-message h3 {
+    color: var(--as-text);
+  }
+
+  .empty-state p,
+  .empty-message p {
+    color: var(--as-text-muted);
+  }
+}
+
+[data-reduce-motion='true'] {
+  .list-container {
+    animation: none;
+  }
+}

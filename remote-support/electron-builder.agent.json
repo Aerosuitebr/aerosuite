@@ -1,0 +1,42 @@
+{
+  "appId": "com.aerosuite.aerosupport.agent",
+  "productName": "AeroSupport Agent",
+  "asar": true,
+  "directories": {
+    "output": "dist-agent"
+  },
+  "extraMetadata": {
+    "main": "desktop/agent-main.mjs"
+  },
+  "files": [
+    "desktop/agent-main.mjs",
+    "desktop/agent-preload.mjs",
+    "tools/dev-server.mjs",
+    "apps/operator-console/**/*",
+    "package.json"
+  ],
+  "extraResources": [
+    {
+      "from": "apps/windows-agent/AeroSupport.InputHelper/bin/Release/net5.0/win-x64/publish",
+      "to": "input-helper",
+      "filter": ["**/*"]
+    }
+  ],
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ],
+    "artifactName": "AeroSupport-Agent-Setup-${version}-${arch}.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "AeroSupport Agent",
+    "deleteAppDataOnUninstall": true
+  }
+}

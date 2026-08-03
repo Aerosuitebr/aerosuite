@@ -1,0 +1,182 @@
+[
+  {
+    "i": 0,
+    "step": ".mcp-cssfull-batch-0.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-0.args.json",
+    "exprLen": 9203
+  },
+  {
+    "i": 1,
+    "step": ".mcp-cssfull-batch-1.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-1.args.json",
+    "exprLen": 9203
+  },
+  {
+    "i": 2,
+    "step": ".mcp-cssfull-batch-2.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-2.args.json",
+    "exprLen": 9210
+  },
+  {
+    "i": 3,
+    "step": ".mcp-cssfull-batch-3.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-3.args.json",
+    "exprLen": 7918
+  },
+  {
+    "i": 4,
+    "step": ".mcp-cssfull-run.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-4.args.json",
+    "exprLen": 155
+  },
+  {
+    "i": 5,
+    "step": ".mcp-css-verify.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-5.args.json",
+    "exprLen": 137
+  },
+  {
+    "i": 6,
+    "step": ".mcp-css-finalize.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-6.args.json",
+    "exprLen": 1353
+  },
+  {
+    "i": 7,
+    "step": ".mcp-enc-init.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-7.args.json",
+    "exprLen": 51
+  },
+  {
+    "i": 8,
+    "step": "enc-0/upload-0.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-8.args.json",
+    "exprLen": 1909
+  },
+  {
+    "i": 9,
+    "step": "enc-0/upload-1.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-9.args.json",
+    "exprLen": 1909
+  },
+  {
+    "i": 10,
+    "step": "enc-0/upload-2.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-10.args.json",
+    "exprLen": 1909
+  },
+  {
+    "i": 11,
+    "step": "enc-0/upload-3.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-11.args.json",
+    "exprLen": 1909
+  },
+  {
+    "i": 12,
+    "step": "enc-0/upload-4.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-12.args.json",
+    "exprLen": 1045
+  },
+  {
+    "i": 13,
+    "step": "enc-0/run",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-13.args.json",
+    "exprLen": 108
+  },
+  {
+    "i": 14,
+    "step": "enc-1/upload-0.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-14.args.json",
+    "exprLen": 1909
+  },
+  {
+    "i": 15,
+    "step": "enc-1/upload-1.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-15.args.json",
+    "exprLen": 1909
+  },
+  {
+    "i": 16,
+    "step": "enc-1/upload-2.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-16.args.json",
+    "exprLen": 1909
+  },
+  {
+    "i": 17,
+    "step": "enc-1/upload-3.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-17.args.json",
+    "exprLen": 1909
+  },
+  {
+    "i": 18,
+    "step": "enc-1/upload-4.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-18.args.json",
+    "exprLen": 1045
+  },
+  {
+    "i": 19,
+    "step": "enc-1/run",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-19.args.json",
+    "exprLen": 108
+  },
+  {
+    "i": 20,
+    "step": "enc-2/upload-0.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-20.args.json",
+    "exprLen": 1909
+  },
+  {
+    "i": 21,
+    "step": "enc-2/upload-1.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-21.args.json",
+    "exprLen": 1909
+  },
+  {
+    "i": 22,
+    "step": "enc-2/upload-2.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-22.args.json",
+    "exprLen": 1909
+  },
+  {
+    "i": 23,
+    "step": "enc-2/upload-3.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-23.args.json",
+    "exprLen": 1909
+  },
+  {
+    "i": 24,
+    "step": "enc-2/upload-4.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-24.args.json",
+    "exprLen": 1045
+  },
+  {
+    "i": 25,
+    "step": "enc-2/run",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-25.args.json",
+    "exprLen": 108
+  },
+  {
+    "i": 26,
+    "step": "enc-3/upload-0.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-26.args.json",
+    "exprLen": 1909
+  },
+  {
+    "i": 27,
+    "step": "enc-3/upload-1.json",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-27.args.json",
+    "exprLen": 297
+  },
+  {
+    "i": 28,
+    "step": "enc-3/run",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-28.args.json",
+    "exprLen": 108
+  },
+  {
+    "i": 29,
+    "step": "enc-run",
+    "argsPath": "D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-step-29.args.json",
+    "exprLen": 794
+  }
+]

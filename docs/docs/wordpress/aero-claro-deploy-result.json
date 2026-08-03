@@ -1,0 +1,380 @@
+{
+  "ok": true,
+  "color": "https://aerosuite.com.br/wp-content/uploads/2026/06/aero-colorido-logo.png",
+  "light": "https://aerosuite.com.br/wp-content/uploads/2026/06/aero-claro-logo.png",
+  "pages": {
+    "2": {
+      "slug": "pagina-exemplo",
+      "patched": 0
+    },
+    "14": {
+      "slug": "recibo-de-ingresso",
+      "patched": 0
+    },
+    "15": {
+      "slug": "detalhes-do-ingresso",
+      "patched": 0
+    },
+    "16": {
+      "slug": "sobre",
+      "patched": 1
+    },
+    "18": {
+      "slug": "contato",
+      "patched": 0
+    },
+    "20": {
+      "slug": "solucoes",
+      "patched": 0
+    },
+    "21": {
+      "slug": "pagina-inicial",
+      "patched": 1
+    },
+    "81": {
+      "slug": "servicos",
+      "patched": 0
+    },
+    "197": {
+      "slug": "blog",
+      "patched": 0
+    },
+    "198": {
+      "slug": "software-gestao-oficina-aeronautica-mro",
+      "patched": 1
+    },
+    "199": {
+      "slug": "estoque-pecas-aeronauticas-rastreabilidade",
+      "patched": 1
+    },
+    "200": {
+      "slug": "ordem-servico-manutencao-aeronaves",
+      "patched": 1
+    },
+    "201": {
+      "slug": "portal-cliente-oficina-aviacao",
+      "patched": 1
+    },
+    "202": {
+      "slug": "propostas-comerciais-servicos-aeronauticos",
+      "patched": 1
+    },
+    "246": {
+      "slug": "politica-de-privacidade-2",
+      "patched": 0
+    },
+    "247": {
+      "slug": "termos-de-uso",
+      "patched": 0
+    },
+    "248": {
+      "slug": "obrigado",
+      "patched": 0
+    },
+    "249": {
+      "slug": "aero-suite-vs-planilhas",
+      "patched": 0
+    },
+    "259": {
+      "slug": "politica-de-privacidade-3",
+      "patched": 0
+    },
+    "263": {
+      "slug": "seguranca-e-dados",
+      "patched": 0
+    },
+    "268": {
+      "slug": "politica-de-privacidade-4",
+      "patched": 0
+    },
+    "270": {
+      "slug": "casos",
+      "patched": 0
+    },
+    "271": {
+      "slug": "bellows-servicos-aeronauticos",
+      "patched": 1
+    },
+    "276": {
+      "slug": "politica-de-privacidade-5",
+      "patched": 0
+    },
+    "279": {
+      "slug": "politica-de-privacidade-6",
+      "patched": 0
+    },
+    "285": {
+      "slug": "politica-de-privacidade-7",
+      "patched": 0
+    },
+    "295": {
+      "slug": "politica-de-privacidade-8",
+      "patched": 0
+    },
+    "299": {
+      "slug": "politica-de-privacidade-9",
+      "patched": 0
+    },
+    "303": {
+      "slug": "king-do-rio-pecas-aeronauticas",
+      "patched": 1
+    },
+    "311": {
+      "slug": "politica-de-privacidade-10",
+      "patched": 0
+    },
+    "317": {
+      "slug": "politica-de-privacidade-11",
+      "patched": 0
+    },
+    "319": {
+      "slug": "politica-de-privacidade-12",
+      "patched": 0
+    },
+    "353": {
+      "slug": "politica-de-privacidade-13",
+      "patched": 0
+    },
+    "359": {
+      "slug": "politica-de-privacidade-14",
+      "patched": 0
+    },
+    "362": {
+      "slug": "politica-de-privacidade-15",
+      "patched": 0
+    },
+    "373": {
+      "slug": "politica-de-privacidade-16",
+      "patched": 0
+    },
+    "377": {
+      "slug": "politica-de-privacidade-17",
+      "patched": 0
+    },
+    "380": {
+      "slug": "politica-de-privacidade-18",
+      "patched": 0
+    },
+    "384": {
+      "slug": "politica-de-privacidade-19",
+      "patched": 0
+    },
+    "388": {
+      "slug": "politica-de-privacidade-20",
+      "patched": 0
+    },
+    "390": {
+      "slug": "politica-de-privacidade-21",
+      "patched": 0
+    },
+    "392": {
+      "slug": "politica-de-privacidade-22",
+      "patched": 0
+    },
+    "394": {
+      "slug": "politica-de-privacidade-23",
+      "patched": 0
+    },
+    "397": {
+      "slug": "politica-de-privacidade-24",
+      "patched": 0
+    },
+    "401": {
+      "slug": "politica-de-privacidade-25",
+      "patched": 0
+    },
+    "404": {
+      "slug": "politica-de-privacidade-26",
+      "patched": 0
+    },
+    "417": {
+      "slug": "politica-de-privacidade-27",
+      "patched": 0
+    },
+    "434": {
+      "slug": "politica-de-privacidade-28",
+      "patched": 0
+    },
+    "445": {
+      "slug": "politica-de-privacidade-29",
+      "patched": 0
+    },
+    "448": {
+      "slug": "politica-de-privacidade-30",
+      "patched": 0
+    },
+    "452": {
+      "slug": "politica-de-privacidade-31",
+      "patched": 0
+    },
+    "456": {
+      "slug": "politica-de-privacidade-32",
+      "patched": 0
+    },
+    "459": {
+      "slug": "politica-de-privacidade-33",
+      "patched": 0
+    },
+    "463": {
+      "slug": "politica-de-privacidade-34",
+      "patched": 0
+    },
+    "465": {
+      "slug": "politica-de-privacidade-35",
+      "patched": 0
+    },
+    "469": {
+      "slug": "politica-de-privacidade-36",
+      "patched": 0
+    },
+    "472": {
+      "slug": "politica-de-privacidade-37",
+      "patched": 0
+    },
+    "476": {
+      "slug": "politica-de-privacidade-38",
+      "patched": 0
+    },
+    "480": {
+      "slug": "politica-de-privacidade-39",
+      "patched": 0
+    },
+    "482": {
+      "slug": "politica-de-privacidade-40",
+      "patched": 0
+    },
+    "484": {
+      "slug": "politica-de-privacidade-41",
+      "patched": 0
+    },
+    "487": {
+      "slug": "politica-de-privacidade-42",
+      "patched": 0
+    },
+    "489": {
+      "slug": "politica-de-privacidade-43",
+      "patched": 0
+    },
+    "491": {
+      "slug": "politica-de-privacidade-44",
+      "patched": 0
+    },
+    "494": {
+      "slug": "politica-de-privacidade-45",
+      "patched": 0
+    },
+    "497": {
+      "slug": "politica-de-privacidade-46",
+      "patched": 0
+    },
+    "499": {
+      "slug": "politica-de-privacidade-47",
+      "patched": 0
+    },
+    "501": {
+      "slug": "politica-de-privacidade-48",
+      "patched": 0
+    },
+    "504": {
+      "slug": "politica-de-privacidade-49",
+      "patched": 0
+    },
+    "530": {
+      "slug": "politica-de-privacidade-50",
+      "patched": 0
+    },
+    "534": {
+      "slug": "conformidade-regulatoria",
+      "patched": 0
+    },
+    "552": {
+      "slug": "politica-de-privacidade-51",
+      "patched": 0
+    },
+    "567": {
+      "slug": "politica-de-privacidade-52",
+      "patched": 0
+    },
+    "581": {
+      "slug": "politica-de-privacidade-53",
+      "patched": 0
+    },
+    "595": {
+      "slug": "politica-de-privacidade-54",
+      "patched": 0
+    },
+    "601": {
+      "slug": "politica-de-privacidade-55",
+      "patched": 0
+    },
+    "603": {
+      "slug": "politica-de-privacidade-56",
+      "patched": 0
+    },
+    "606": {
+      "slug": "politica-de-privacidade-57",
+      "patched": 0
+    },
+    "608": {
+      "slug": "politica-de-privacidade-58",
+      "patched": 0
+    },
+    "611": {
+      "slug": "politica-de-privacidade-59",
+      "patched": 0
+    },
+    "614": {
+      "slug": "politica-de-privacidade-60",
+      "patched": 0
+    },
+    "619": {
+      "slug": "politica-de-privacidade-61",
+      "patched": 0
+    },
+    "631": {
+      "slug": "politica-de-privacidade-62",
+      "patched": 0
+    },
+    "637": {
+      "slug": "politica-de-privacidade-63",
+      "patched": 0
+    },
+    "638": {
+      "slug": "politica-de-privacidade-64",
+      "patched": 0
+    },
+    "653": {
+      "slug": "politica-de-privacidade-65",
+      "patched": 0
+    },
+    "669": {
+      "slug": "politica-de-privacidade-66",
+      "patched": 0
+    },
+    "685": {
+      "slug": "politica-de-privacidade-67",
+      "patched": 0
+    },
+    "702": {
+      "slug": "politica-de-privacidade-68",
+      "patched": 0
+    },
+    "705": {
+      "slug": "politica-de-privacidade-69",
+      "patched": 0
+    },
+    "719": {
+      "slug": "politica-de-privacidade-70",
+      "patched": 0
+    },
+    "729": {
+      "slug": "politica-de-privacidade-71",
+      "patched": 0
+    },
+    "732": {
+      "slug": "politica-de-privacidade-72",
+      "patched": 0
+    }
+  },
+  "footerPatched": 1
+}

@@ -1,0 +1,12 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
+const dir = path.dirname(fileURLToPath(import.meta.url));
+const idx = process.argv[2];
+const viewId = process.argv[3] || 'f29abe';
+execSync(`node "${path.join(dir, 'run-prepared-mcp-sequence.mjs')}" args ${idx} ${viewId}`, { stdio: 'pipe' });
+const args = JSON.parse(fs.readFileSync(path.join(dir, '.mcp-call-args.json'), 'utf8'));
+const out = path.join(dir, `.mcp-payload-${idx}.json`);
+fs.writeFileSync(out, JSON.stringify(args));
+console.log(JSON.stringify({ index: Number(idx), out, exprLen: args.params?.expression?.length ?? 0 }));

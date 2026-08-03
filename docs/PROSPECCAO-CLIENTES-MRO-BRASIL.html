@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inteligência Comercial — OMs ANAC / Prospects MRO Brasil | Aero Suite</title>
+<meta name="description" content="Base de prospecção enterprise: oficinas RBAC 145, OMs certificadas ANAC e candidatos ao Aero Suite.">
+<style>
+:root {
+  --primary:#0a2f6b;--primary-dark:#051a3d;--primary-mid:#0b3d91;--primary-light:#e8eef8;
+  --accent:#c9a227;--accent-bright:#e8c547;--accent-light:#faf6e8;
+  --success:#0f6b45;--success-light:#e4f5ec;--warning:#9a7209;--warning-light:#fff8e6;
+  --danger:#9b1c1c;--danger-light:#fce8e8;--info:#1a5f8a;--info-light:#e6f2fa;
+  --gray-950:#0d1117;--gray-900:#161b22;--gray-700:#444c56;--gray-500:#6e7781;
+  --gray-300:#d0d7de;--gray-200:#e6eaef;--gray-100:#f3f5f8;--gray-50:#fafbfc;
+  --shadow-sm:0 2px 8px rgba(10,47,107,.07);--shadow-md:0 8px 24px rgba(10,47,107,.10);
+  --shadow-lg:0 16px 48px rgba(10,47,107,.14);--radius:10px;--nav-h:56px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + 20px)}
+body{margin:0;font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;color:var(--gray-900);background:#e9edf3;line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+.topnav{position:sticky;top:0;z-index:100;height:var(--nav-h);background:rgba(5,26,61,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,162,39,.25);display:flex;align-items:center;padding:0 24px;gap:24px;box-shadow:var(--shadow-md)}
+.topnav-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;font-size:14px;white-space:nowrap}
+.topnav-brand .logo{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent-bright));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--primary-dark)}
+.topnav-links{display:flex;gap:4px;flex:1;overflow-x:auto;scrollbar-width:none}
+.topnav-links::-webkit-scrollbar{display:none}
+.topnav-links a{color:rgba(255,255,255,.78);text-decoration:none;font-size:12.5px;font-weight:500;padding:8px 12px;border-radius:6px;white-space:nowrap;transition:background .15s,color .15s}
+.topnav-links a:hover{background:rgba(255,255,255,.08);color:#fff}
+.topnav-actions{display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;border:none;text-decoration:none;transition:transform .12s}
+.btn:active{transform:scale(.98)}
+.btn-gold{background:linear-gradient(135deg,var(--accent),var(--accent-bright));color:var(--primary-dark);box-shadow:0 2px 8px rgba(201,162,39,.35)}
+.btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.page{max-width:1280px;margin:0 auto}
+.hero{background:linear-gradient(145deg,var(--primary-dark) 0%,var(--primary) 45%,#0e4a9e 100%);color:#fff;padding:72px 48px 64px;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,#000,transparent)}
+.hero-orb{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none}
+.hero-orb.a{width:420px;height:420px;top:-120px;right:-80px;background:rgba(201,162,39,.22)}
+.hero-orb.b{width:300px;height:300px;bottom:-100px;left:-60px;background:rgba(255,255,255,.06)}
+.hero-inner{position:relative;z-index:1;max-width:900px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(201,162,39,.15);border:1px solid rgba(201,162,39,.45);color:var(--accent-bright);padding:6px 14px;border-radius:30px;font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:20px}
+.hero-eyebrow::before{content:'';width:6px;height:6px;background:var(--accent-bright);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:clamp(32px,5vw,48px);line-height:1.12;margin:0 0 16px;font-weight:700;letter-spacing:-.8px}
+.hero-lead{font-size:18px;font-weight:300;opacity:.9;max-width:720px;margin-bottom:36px;line-height:1.65}
+.hero-meta{display:flex;flex-wrap:wrap;gap:32px;padding-top:28px;border-top:1px solid rgba(255,255,255,.15)}
+.hero-meta dt{font-size:10px;text-transform:uppercase;letter-spacing:1.6px;color:var(--accent-bright);margin-bottom:4px;font-weight:600}
+.hero-meta dd{margin:0;font-size:14px;font-weight:500}
+.kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);background:#fff;border-bottom:1px solid var(--gray-300);box-shadow:var(--shadow-sm)}
+.kpi{padding:28px 24px;text-align:center;border-right:1px solid var(--gray-200)}
+.kpi:last-child{border-right:none}
+.kpi-value{font-size:36px;font-weight:800;color:var(--primary);line-height:1;letter-spacing:-1px}
+.kpi-value.gold{color:var(--accent)}.kpi-value.green{color:var(--success)}.kpi-value.info{color:var(--info)}
+.kpi-label{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--gray-500);font-weight:600;margin-top:8px}
+.kpi-sub{font-size:12px;color:var(--gray-500);margin-top:4px}
+.content-wrap{background:#fff;box-shadow:var(--shadow-lg)}
+section{padding:52px 48px;border-bottom:1px solid var(--gray-200)}
+section:last-child{border-bottom:none}
+.section-num{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+h2.title{font-size:28px;margin:0;color:var(--primary-dark);font-weight:700;letter-spacing:-.4px}
+.section-desc{color:var(--gray-500);font-size:15px;margin:8px 0 0;max-width:640px}
+.section-header{margin-bottom:32px}
+h3{color:var(--primary-dark);font-size:18px;font-weight:600;margin:28px 0 14px}
+h3:first-of-type{margin-top:0}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:22px;box-shadow:0 1px 2px rgba(10,47,107,.04);transition:box-shadow .2s}
+.card:hover{box-shadow:var(--shadow-md)}
+.card-accent{border-top:3px solid var(--primary)}.card-gold{border-top:3px solid var(--accent)}.card-green{border-top:3px solid var(--success)}.card-info{border-top:3px solid var(--info)}
+.card h4{margin:0 0 8px;font-size:15px;color:var(--primary-dark)}.card p{margin:0 0 10px;font-size:13.5px;color:var(--gray-700)}
+.term-card{display:flex;gap:14px;align-items:flex-start}
+.term-icon{width:40px;height:40px;border-radius:10px;background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.term-card strong{display:block;color:var(--primary-dark);margin-bottom:4px}
+.callout{border-radius:var(--radius);padding:20px 24px;margin:24px 0;border-left:4px solid}
+.callout.blue{background:var(--primary-light);border-color:var(--primary)}.callout.gold{background:var(--accent-light);border-color:var(--accent)}.callout.warn{background:var(--warning-light);border-color:var(--warning)}.callout.danger{background:var(--danger-light);border-color:var(--danger)}
+.callout p{margin:0;font-size:14px}.callout strong{color:var(--primary-dark)}
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap}
+.badge-alta{background:var(--success-light);color:var(--success)}.badge-media{background:var(--accent-light);color:var(--warning)}.badge-baixa{background:var(--info-light);color:var(--info)}.badge-indireto{background:var(--gray-100);color:var(--gray-700)}
+.badge-enterprise{background:#ede9fe;color:#5b21b6}.badge-om{background:var(--primary-light);color:var(--primary)}.badge-heli{background:#ecfdf5;color:#047857}.badge-ag{background:#fef3c7;color:#92400e}.badge-exec{background:#f3e8ff;color:#7c3aed}.badge-oem{background:var(--gray-100);color:var(--gray-700)}
+.filter-bar{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:16px;padding:20px 24px;margin-bottom:24px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end}
+.filter-bar label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray-500);display:block;margin-bottom:4px}
+.filter-group{flex:1;min-width:180px}.filter-group.wide{flex:2;min-width:260px}
+.filter-bar input,.filter-bar select{width:100%;padding:10px 14px;border:1px solid var(--gray-300);border-radius:8px;font-size:14px;background:#fff;outline:none}
+.filter-bar input:focus,.filter-bar select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(10,47,107,.12)}
+.filter-count{font-size:13px;color:var(--gray-500);padding-bottom:8px}.filter-count strong{color:var(--primary);font-size:18px}
+.table-wrap{overflow:auto;border:1px solid var(--gray-200);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}
+thead th{background:linear-gradient(180deg,var(--primary),var(--primary-dark));color:#fff;text-align:left;padding:13px 16px;font-weight:600;font-size:12px;white-space:nowrap;position:sticky;top:0;z-index:2}
+tbody td{padding:12px 16px;border-bottom:1px solid var(--gray-100);vertical-align:middle}
+tbody tr:nth-child(even){background:var(--gray-50)}tbody tr:hover{background:var(--primary-light)}tbody tr.hidden{display:none}
+.company-name{font-weight:600;color:var(--primary-dark)}
+.source-link{color:var(--primary-mid);text-decoration:none;font-weight:500;border-bottom:1px dotted var(--primary-mid)}
+.source-link:hover{color:var(--accent);border-color:var(--accent)}
+.source-priority{display:inline-flex;font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:var(--success-light);color:var(--success)}
+.region-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.region-tab{padding:8px 16px;border-radius:30px;border:1px solid var(--gray-300);background:#fff;font-size:13px;font-weight:600;color:var(--gray-700);cursor:pointer;transition:all .15s}
+.region-tab .tab-count{opacity:.65;font-weight:500;margin-left:4px}
+.region-tab:hover{border-color:var(--primary);color:var(--primary)}.region-tab.active{background:var(--primary);border-color:var(--primary);color:#fff}
+.region-panel{display:none}.region-panel.active{display:block}
+.prospect-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.prospect-list li{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:14px 16px;font-size:13.5px}
+.prospect-list li strong{display:block;color:var(--primary-dark);margin-bottom:6px;font-size:14px}
+.prospect-list li span{color:var(--gray-500);font-size:12px;display:block;margin-bottom:6px}
+.fit-row{display:grid;grid-template-columns:100px 1fr 2fr;gap:16px;padding:16px 20px;border-bottom:1px solid var(--gray-200);align-items:start}
+.fit-row:last-child{border-bottom:none}
+.pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin:28px 0;position:relative}
+.pipeline::before{content:'';position:absolute;top:28px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent));z-index:0}
+.pipe-step{text-align:center;position:relative;z-index:1;padding:0 8px}
+.pipe-dot{width:56px;height:56px;border-radius:50%;background:#fff;border:3px solid var(--primary);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:var(--primary);box-shadow:var(--shadow-sm)}
+.pipe-step:last-child .pipe-dot{border-color:var(--accent);background:var(--accent-light);color:var(--warning)}
+.pipe-step h4{margin:0 0 4px;font-size:13px;color:var(--primary-dark)}.pipe-step p{margin:0;font-size:12px;color:var(--gray-500)}
+.action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.action-item{display:flex;gap:14px;padding:18px;background:var(--gray-50);border-radius:var(--radius);border:1px solid var(--gray-200)}
+.action-num{width:36px;height:36px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.action-item h4{margin:0 0 4px;font-size:14px}.action-item p{margin:0;font-size:13px;color:var(--gray-500)}
+.action-owner{display:inline-block;margin-top:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent)}
+.doc-footer{background:var(--gray-950);color:rgba(255,255,255,.65);padding:40px 48px;font-size:13px}
+.doc-footer strong{color:#fff}.doc-footer a{color:var(--accent-bright)}
+@media print{.topnav,.filter-bar,.region-tabs,.topnav-actions{display:none!important}body{background:#fff}.content-wrap{box-shadow:none}section{break-inside:avoid}tbody tr.hidden{display:table-row!important}}
+@media(max-width:1024px){.kpi-strip{grid-template-columns:repeat(3,1fr)}.grid-4,.pipeline{grid-template-columns:repeat(2,1fr)}.pipeline::before{display:none}}
+@media(max-width:768px){section,.hero{padding-left:24px;padding-right:24px}.kpi-strip{grid-template-columns:repeat(2,1fr)}.grid-2,.grid-3,.grid-4,.action-grid,.fit-row{grid-template-columns:1fr}.topnav-links{display:none}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="topnav-brand" href="#top"><span class="logo">AS</span> Aero Suite · Inteligência Comercial</a>
+  <div class="topnav-links">
+    <a href="#contexto">Contexto</a><a href="#fontes">Fontes ANAC</a><a href="#fit">Fit</a>
+    <a href="#master">Base Master</a><a href="#regioes">Regiões</a><a href="#candidatos">Candidatos</a>
+    <a href="#pipeline">Pipeline</a><a href="#acoes">Ações</a>
+  </div>
+  <div class="topnav-actions">
+    <button class="btn btn-ghost" type="button" onclick="window.print()">Imprimir / PDF</button>
+    <a class="btn btn-gold" href="https://app.powerbi.com/view?r=eyJrIjoiZmI0YTE3MDUtY2M2NS00NTNhLTk3MjctZDc1YzYwMjJhMzg2IiwidCI6ImI1NzQ4ZjZlLWI0YTQtNGIyYi1hYjJhLWVmOTUyMjM2ODM2NiJ9" target="_blank" rel="noopener">Power BI ANAC</a>
+  </div>
+</nav>
+
+<div class="page" id="top">
+  <header class="hero">
+    <div class="hero-grid"></div><div class="hero-orb a"></div><div class="hero-orb b"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Confidencial · Uso Interno Comercial</div>
+      <h1>Prospecção Enterprise — OMs Certificadas ANAC</h1>
+      <p class="hero-lead">Base consolidada de oficinas RBAC 145, organizações de manutenção e candidatos estratégicos para o <strong>Aero Suite</strong>. Dados cruzados entre IAC 3141-145-1199, portal ANAC e pesquisa de mercado.</p>
+      <dl class="hero-meta">
+        <div><dt>Documento</dt><dd>PROSPECCAO-CLIENTES-MRO-BRASIL</dd></div>
+        <div><dt>Atualização</dt><dd>Maio 2026</dd></div>
+        <div><dt>Mercado estimado</dt><dd>~150 certificações RBAC 145</dd></div>
+        <div><dt>Prospects catalogados</dt><dd>64 entradas classificadas</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="kpi-strip">
+    <div class="kpi"><div class="kpi-value">~150</div><div class="kpi-label">OMs no Brasil</div><div class="kpi-sub">Inclui bases múltiplas</div></div>
+    <div class="kpi"><div class="kpi-value gold">49</div><div class="kpi-label">Prospects diretos</div><div class="kpi-sub">Tier A e B</div></div>
+    <div class="kpi"><div class="kpi-value green">7</div><div class="kpi-label">Regiões</div><div class="kpi-sub">Cobertura nacional</div></div>
+    <div class="kpi"><div class="kpi-value info">15</div><div class="kpi-label">Enterprise / OEM</div><div class="kpi-sub">Ticket alto</div></div>
+    <div class="kpi"><div class="kpi-value">6</div><div class="kpi-label">Fontes oficiais</div><div class="kpi-sub">ANAC + IAC</div></div>
+  </div>
+
+  <div class="content-wrap">
+    <section id="contexto">
+      <div class="section-header"><div class="section-num">01 · Contexto Regulatório</div><h2 class="title">O que a ANAC certifica</h2><p class="section-desc">Entender o tipo de organização evita prospecção irrelevante e acelera o ciclo de vendas.</p></div>
+      <div class="grid-3">
+        <div class="card card-accent term-card"><div class="term-icon">OM</div><div><strong>OM / Oficina</strong>Organização de Manutenção de Produto Aeronáutico — certificada conforme RBAC 145.</div></div>
+        <div class="card card-accent term-card"><div class="term-icon">145</div><div><strong>RBAC 145</strong>Regulamento de certificação (ex-RBHA 145). Equivalente ao Part 145 (FAA/EASA).</div></div>
+        <div class="card card-accent term-card"><div class="term-icon">EO</div><div><strong>COM / EO</strong>Certificado e Especificações Operativas — classes, produtos e capacidades.</div></div>
+      </div>
+      <div class="callout warn"><p><strong>Atenção comercial:</strong> A IAC 3141 inclui oficinas independentes, MRO de airlines, táxi aéreo com manutenção própria, fabricantes e bases no exterior. Priorize quem executa <strong>OS, rastreio de peças, AD/SB e auditoria</strong>.</p></div>
+      <h3>Tipos de organização na base ANAC</h3>
+      <div class="grid-4">
+        <div class="card"><h4>OM independente</h4><p>Core target — 5 a 80 mecânicos, aviação geral, ag ou regional, helicópteros.</p></div>
+        <div class="card"><h4>MRO de airline</h4><p>GOL, Azul, LATAM — ciclo longo, alto valor.</p></div>
+        <div class="card"><h4>Táxi + oficina</h4><p>Executivo com hangar — volume menor, compliance alto.</p></div>
+        <div class="card"><h4>Fabricante / OEM</h4><p>Embraer, Leonardo — parceria possível; ERP próprio frequente.</p></div>
+      </div>
+    </section>
+
+    <section id="fontes">
+      <div class="section-header"><div class="section-num">02 · Fontes Oficiais</div><h2 class="title">Rastreamento e validação</h2><p class="section-desc">Consultar fonte primária antes de contato. Status e escopo EO/COM podem mudar.</p></div>
+      <div class="table-wrap"><table><thead><tr><th>Fonte</th><th>URL</th><th>Uso</th><th>Prioridade</th></tr></thead><tbody>
+        <tr><td><strong>Dados das OMs — Power BI ANAC</strong></td><td><a class="source-link" href="https://app.powerbi.com/view?r=eyJrIjoiZmI0YTE3MDUtY2M2NS00NTNhLTk3MjctZDc1YzYwMjJhMzg2IiwidCI6ImI1NzQ4ZjZlLWI0YTQtNGIyYi1hYjJhLWVmOTUyMjM2ODM2NiJ9" target="_blank" rel="noopener">app.powerbi.com</a></td><td>Lista mais atual — exportar por UF, produto, status</td><td><span class="source-priority">★ Principal</span></td></tr>
+        <tr><td>Portal Organizações de Manutenção</td><td><a class="source-link" href="https://www.gov.br/anac/pt-br/assuntos/regulados/organizacoes-de-manutencao" target="_blank" rel="noopener">gov.br/anac</a></td><td>EO, homologação, formulários</td><td><span class="badge badge-alta">Alta</span></td></tr>
+        <tr><td>Base legada — oficinas.asp</td><td><a class="source-link" href="https://www2.anac.gov.br/empresas/oficinas.asp" target="_blank" rel="noopener">www2.anac.gov.br</a></td><td>Lista alfabética RBAC 145 (pode estar desatualizada)</td><td><span class="badge badge-media">Média</span></td></tr>
+        <tr><td>IAC 3141-145-1199 (consolidado)</td><td><a class="source-link" href="https://pergamum.anac.gov.br/pergamum/vinculos/IAC3141CONSOLIDADO.pdf" target="_blank" rel="noopener">pergamum.anac.gov.br</a></td><td>Relação histórica (~centenas de entradas)</td><td><span class="badge badge-media">Referência</span></td></tr>
+        <tr><td>Detalhe de base RBAC 145</td><td><a class="source-link" href="https://sistemas.anac.gov.br/certificacao/AvGeral/AIR145BasesDetail.asp" target="_blank" rel="noopener">sistemas.anac.gov.br</a></td><td>Consulta por código de base</td><td><span class="badge badge-alta">Validação</span></td></tr>
+        <tr><td>Emenda COM/EO</td><td><a class="source-link" href="https://www.gov.br/pt-br/servicos/realizar-emenda-a-certificado-de-organizacao-de-manutencao-de-produto-aeronautico-ou-as-suas-especificacoes-operativas" target="_blank" rel="noopener">gov.br/servicos</a></td><td>Alteração de capacidade certificada</td><td><span class="badge badge-indireto">Processo</span></td></tr>
+      </tbody></table></div>
+      <div class="callout blue"><p><strong>Recomendação:</strong> Exportar Power BI ANAC, cruzar com CNPJ, site, LinkedIn, frota (RAB) e classes <strong>C/D/E/F</strong> da EO para scoring 0–100.</p></div>
+    </section>
+
+    <section id="fit">
+      <div class="section-header"><div class="section-num">03 · Fit Comercial</div><h2 class="title">Critérios de priorização Aero Suite</h2></div></div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="fit-row" style="background:var(--gray-50);font-weight:700;font-size:12px;text-transform:uppercase;color:var(--gray-500)"><span>Prioridade</span><span>Perfil</span><span>Justificativa</span></div>
+        <div class="fit-row"><span><span class="badge badge-alta">Alta</span></span><span>OM independente, ag/regional, 5–80 mecânicos</span><span>OS, estoque, AD/SB — pouca TI integrada</span></div>
+        <div class="fit-row"><span><span class="badge badge-alta">Alta</span></span><span>Helicópteros / asa rotativa</span><span>Job card, hangar, capacidade — módulos Aero Suite</span></div>
+        <div class="fit-row"><span><span class="badge badge-media">Média</span></span><span>Táxi/executivo com oficina</span><span>Rastreio, proposta e OS formal</span></div>
+        <div class="fit-row"><span><span class="badge badge-media">Média</span></span><span>Operador com MRO (GOL, Azul, LATAM)</span><span>Ciclo longo; alto valor enterprise</span></div>
+        <div class="fit-row"><span><span class="badge badge-baixa">Baixa</span></span><span>Fabricante (Embraer, Leonardo, Fibraer)</span><span>ERP próprio; parceria OEM</span></div>
+        <div class="fit-row"><span><span class="badge badge-indireto">Indireto</span></span><span>Escolas, cooperativas MMA</span><span>Influência, não comprador core</span></div>
+      </div>
+      <h3>Oferta por tier</h3>
+      <div class="grid-3">
+        <div class="card card-green"><h4>Tier A — OM regional</h4><p>OS + estoque + AD/SB + hangar job card. Piloto 6 meses.</p></div>
+        <div class="card card-gold"><h4>Tier B — Executivo / Heli</h4><p>Rastreio, proposta, capacidade hangar, compliance auditável.</p></div>
+        <div class="card card-info"><h4>Tier C — Enterprise</h4><p>Módulo MRO Aviation premium, multi-base, SLA dedicado.</p></div>
+      </div>
+    </section>
+
+    <section id="master">
+      <div class="section-header"><div class="section-num">04 · Base Master</div><h2 class="title">Todos os prospects consolidados</h2><p class="section-desc">Busca e filtros interativos. Validar COM ativo na ANAC antes de abordagem.</p></div>
+      <div class="filter-bar">
+        <div class="filter-group wide"><label for="searchInput">Buscar empresa</label><input type="search" id="searchInput" placeholder="Nome, região, segmento…" autocomplete="off"></div>
+        <div class="filter-group"><label for="filterRegion">Região</label><select id="filterRegion"><option value="">Todas</option><option value="Sudeste">Sudeste</option><option value="Nacional">Nacional</option><option value="Sul">Sul</option><option value="Centro-Oeste">Centro-Oeste</option><option value="Nordeste">Nordeste</option><option value="Norte">Norte</option><option value="Interior SP">Interior SP</option></select></div>
+        <div class="filter-group"><label for="filterTier">Tier</label><select id="filterTier"><option value="">Todos</option><option value="A">Tier A</option><option value="B">Tier B</option><option value="C">Tier C</option><option value="D">Tier D</option><option value="E">Tier E</option></select></div>
+        <div class="filter-group"><label for="filterSegment">Segmento</label><select id="filterSegment"><option value="">Todos</option><option value="OM">OM</option><option value="Heli">Helicópteros</option><option value="Ag">Ag</option><option value="Exec">Executivo</option><option value="Airline">Airline</option><option value="OEM">OEM</option><option value="Assoc">Associação</option></select></div>
+        <div class="filter-count">Exibindo <strong id="resultCount">0</strong> de <strong id="totalCount">64</strong></div>
+      </div>
+      <div class="table-wrap" style="max-height:640px"><table><thead><tr><th>#</th><th>Empresa</th><th>Região</th><th>UF</th><th>Segmento</th><th>Tier</th><th>Prioridade</th><th>Observação</th></tr></thead><tbody id="masterBody"></tbody></table></div>
+    </section>
+
+    <section id="regioes">
+      <div class="section-header"><div class="section-num">05 · Por Região</div><h2 class="title">Lista curada — oficinas / OMs</h2><p class="section-desc">IAC 3141-145-1199 filtrada por manutenção dedicada.</p></div>
+      <div class="region-tabs" id="regionTabs"><button type="button" class="region-tab active" data-region="Sudeste">Sudeste <span class="tab-count">24</span></button><button type="button" class="region-tab" data-region="Sul">Sul <span class="tab-count">5</span></button><button type="button" class="region-tab" data-region="Centro-Oeste">Centro-Oeste <span class="tab-count">5</span></button><button type="button" class="region-tab" data-region="Nordeste">Nordeste <span class="tab-count">7</span></button><button type="button" class="region-tab" data-region="Norte">Norte <span class="tab-count">2</span></button><button type="button" class="region-tab" data-region="Interior SP">Interior SP <span class="tab-count">5</span></button></div>
+      <div id="regionPanels"><div class="region-panel active" data-panel="Sudeste"><ul class="prospect-list"><li><strong>TECMAER - MANUTENÇÃO E SERVIÇOS LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>ALFA - MANUTENÇÃO DE AERONAVES LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>ALIANÇA MANUTENÇÃO DE AERONAVES LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>AGS – MANUTENÇÃO DE AERONAVES LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>CHEYENNE MANUTENÇÃO DE AERONAVES LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>CONTINENTAL MANUTENÇÃO DE AERONAVES</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>AEROSINOS - MANUTENÇÃO DE AERONAVES LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>AEROVALEY MANUTENÇÃO DE AERONAVES LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>COMAVE - COM. MANUTENÇÃO AERONAVES LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>JC MANUTENÇÃO DE AERONAVES LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>OFICINA AERONÁUTICA ÍCARO LTDA</strong><span>Oficina dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>OMAER - OFICINA DE MANUTENÇÃO</strong><span>Oficina</span> <span class="badge badge-om">OM</span></li><li><strong>OMA - OFICINA MARÍLIA DE AVIAÇÃO LTDA</strong><span>Oficina Marília</span> <span class="badge badge-om">OM</span></li><li><strong>HANGAR 1 MANUTENÇÃO DE AERONAVES LTDA</strong><span>Hangar/MRO</span> <span class="badge badge-om">OM</span></li><li><strong>HANGAR DOIS MANUTENÇÃO DE ANVS LTDA</strong><span>Hangar/MRO</span> <span class="badge badge-om">OM</span></li><li><strong>HELIT – MANUTENÇÃO DE HELICÓPTEROS LTDA</strong><span>Helicópteros</span> <span class="badge badge-heli">Heli</span></li><li><strong>HELIPARK MANUTENÇÃO AERONÁUTICA LTDA</strong><span>Helicópteros</span> <span class="badge badge-heli">Heli</span></li><li><strong>MAR – MANUTENÇÃO DE ASAS ROTATIVAS LTDA</strong><span>Asas rotativas</span> <span class="badge badge-heli">Heli</span></li><li><strong>EDRA HELICENTRO PEÇAS E MANUTENÇÃO LTDA</strong><span>Helicópteros</span> <span class="badge badge-heli">Heli</span></li><li><strong>ANTARES MANUTENÇÃO DE HÉLICES LTDA</strong><span>Hélices</span> <span class="badge badge-om">OM</span></li><li><strong>AERO HÉLICE MANUTENÇÃO LTDA</strong><span>Hélices</span> <span class="badge badge-om">OM</span></li><li><strong>OFICINA DE HÉLICES COSTA</strong><span>Hélices</span> <span class="badge badge-om">OM</span></li><li><strong>AEROSERVICE LTDA</strong><span>Serviços aeronáuticos</span> <span class="badge badge-om">OM</span></li><li><strong>Voetur Táxi Aéreo</strong><span>Aviação executiva</span> <span class="badge badge-exec">Exec</span></li></ul></div><div class="region-panel" data-panel="Sul"><ul class="prospect-list"><li><strong>HELISUL TÁXI AÉREO LTDA</strong><span>Grande operador; manutenção própria</span> <span class="badge badge-heli">Heli</span></li><li><strong>REMASUL AVIAÇÃO E MANUTENÇÃO DE AERONAVES LTDA</strong><span>OM regional</span> <span class="badge badge-om">OM</span></li><li><strong>SAFETY MANUTENÇÃO LTDA</strong><span>Múltiplas unidades na IAC</span> <span class="badge badge-om">OM</span></li><li><strong>AMÉRICA DO SUL SERVIÇOS AERONÁUTICOS LTDA</strong><span>Serviços + manutenção</span> <span class="badge badge-om">OM</span></li><li><strong>ROTOR ASSESSORIA E MANUTENÇÃO AERONÁUTICA LTDA</strong><span>OM asas rotativas</span> <span class="badge badge-heli">Heli</span></li></ul></div><div class="region-panel" data-panel="Centro-Oeste"><ul class="prospect-list"><li><strong>GOIÁS MANUTENÇÃO DE AERONAVES LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>S.M.A. SORRISO MANUTENÇÃO DE AERONÁUTICA LTDA</strong><span>Aviação agrícola / interior</span> <span class="badge badge-ag">Ag</span></li><li><strong>RONDONÓPOLIS MANUTENÇÃO DE AERONAVES</strong><span>Aviação agrícola</span> <span class="badge badge-ag">Ag</span></li><li><strong>GUARÁ TÁXI AÉREO E MANUTENÇÃO LTDA</strong><span>Táxi + oficina</span> <span class="badge badge-exec">Exec</span></li><li><strong>MARCA MANUTENÇÃO DE AERONAVES LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li></ul></div><div class="region-panel" data-panel="Nordeste"><ul class="prospect-list"><li><strong>MANAL - MANUTENÇÃO ALAGOANA DE AERONAVES LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>LMP – MANUTENÇÃO AERONÁUTICA LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>TEMA - TERESINA MANUTENÇÃO DE AERONAVES LTDA</strong><span>OM regional</span> <span class="badge badge-om">OM</span></li><li><strong>SILVA MANUTENÇÃO AERONÁUTICA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>QUICK MANUTENÇÃO DE AERONAVES</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>UTA MANUTENÇÃO DE AERONAVES LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li><li><strong>ABA Manutenção de Aeronaves (Barreiras-BA)</strong><span>Ag + executivo; cert. ANAC/Cirrus/King Air</span> <span class="badge badge-om">OM</span></li></ul></div><div class="region-panel" data-panel="Norte"><ul class="prospect-list"><li><strong>RIO BRANCO MANUTENÇÃO DE AERONAVES LTDA</strong><span>OM regional</span> <span class="badge badge-om">OM</span></li><li><strong>AERONAT (região AM)</strong><span>Verificar CNPJ atual na ANAC</span> <span class="badge badge-om">OM</span></li></ul></div><div class="region-panel" data-panel="Interior SP"><ul class="prospect-list"><li><strong>BMA - BIRIGUI MANUTENÇÃO DE ANV. LTDA</strong><span>Polo agrícola Birigui</span> <span class="badge badge-ag">Ag</span></li><li><strong>AEROTESTE OFICINA DE TESTES LTDA</strong><span>Testes / manutenção</span> <span class="badge badge-om">OM</span></li><li><strong>SANAGRI MANUTENÇÃO DE AERONAVES LTDA</strong><span>Aviação agrícola</span> <span class="badge badge-ag">Ag</span></li><li><strong>AERO RURAL OFICINA DE MANUTENÇÃO</strong><span>Aviação agrícola</span> <span class="badge badge-ag">Ag</span></li><li><strong>STARCRAFT MANUTENÇÃO GERAL DE AERONAVES LTDA</strong><span>OM dedicada</span> <span class="badge badge-om">OM</span></li></ul></div></div>
+    </section>
+
+    <section id="candidatos">
+      <div class="section-header"><div class="section-num">06 · Candidatos Estratégicos</div><h2 class="title">Além do nome "oficina"</h2></div>
+      <h3>Companhias aéreas com MRO próprio</h3>
+      <div class="grid-2">
+        <div class="card card-accent"><h4>GOL / GOL Linhas Aéreas</h4><p>MRO e engenharia. Ciclo enterprise longo.</p><span class="badge badge-enterprise">Enterprise</span></div>
+        <div class="card card-accent"><h4>AZUL Linhas Aéreas</h4><p>Engenharia + manutenção integrada.</p><span class="badge badge-enterprise">Enterprise</span></div>
+        <div class="card card-accent"><h4>LATAM / TAM MRO</h4><p>MRO histórico de grande porte.</p><span class="badge badge-enterprise">Enterprise</span></div>
+        <div class="card card-accent"><h4>Voepass / Passaredo / regionais</h4><p>PMAC + manutenção terceirizada.</p><span class="badge badge-enterprise">Enterprise</span></div>
+      </div>
+      <h3>Fabricantes e grandes players</h3>
+      <div class="grid-2">
+        <div class="card card-gold"><h4>Embraer S.A.</h4><p>SJK, Gavião Peixoto — manutenção e conversão.</p><span class="badge badge-oem">OEM</span></div>
+        <div class="card card-gold"><h4>Leonardo / Helibrás</h4><p>Fabricante + MRO helicópteros.</p><span class="badge badge-oem">OEM</span></div>
+        <div class="card card-gold"><h4>Fibraer Indústria Aeronáutica</h4><p>Aeronaves leves.</p><span class="badge badge-oem">OEM</span></div>
+        <div class="card card-gold"><h4>TBA — Tecnologia Brasileira de Aeronáutica</h4><p>Indústria aeronáutica.</p><span class="badge badge-oem">OEM</span></div>
+      </div>
+      <h3>Executivo / FBO e candidatos quentes</h3>
+      <div class="grid-3">
+        <div class="card card-info"><h4>Líder Signature</h4><p>Múltiplas bases nacionais.</p><span class="badge badge-exec">Executivo</span></div>
+        <div class="card card-info"><h4>Voetur Táxi Aéreo</h4><p>Aviação executiva.</p><span class="badge badge-exec">Executivo</span></div>
+        <div class="card card-info"><h4>ABA Manutenção (Barreiras-BA)</h4><p>Ag + executivo; cert. ANAC/Cirrus/King Air.</p><span class="badge badge-alta">Alta prioridade</span></div>
+      </div>
+      <div class="callout gold"><p><strong>Pipeline ABAG:</strong> Associados categoria Mantenedor em <a class="source-link" href="https://www.abag.org.br/" target="_blank" rel="noopener">abag.org.br</a> — canal para prospecção em aviação geral (LABACE, eventos regionais).</p></div>
+    </section>
+
+    <section id="pipeline">
+      <div class="section-header"><div class="section-num">07 · Pipeline Comercial</div><h2 class="title">Como manter a lista viva</h2></div>
+      <div class="pipeline">
+        <div class="pipe-step"><div class="pipe-dot">1</div><h4>Exportar ANAC</h4><p>Power BI + EO/COM</p></div>
+        <div class="pipe-step"><div class="pipe-dot">2</div><h4>Enriquecer</h4><p>CNPJ, site, frota</p></div>
+        <div class="pipe-step"><div class="pipe-dot">3</div><h4>Classificar</h4><p>Porte e score 0–100</p></div>
+        <div class="pipe-step"><div class="pipe-dot">4</div><h4>CRM</h4><p>Estágio → piloto</p></div>
+        <div class="pipe-step"><div class="pipe-dot">5</div><h4>Case</h4><p>Referência + upsell</p></div>
+      </div>
+      <div class="callout blue"><p>Script futuro sugerido: import CSV ANAC → tabela <code>lead_prospect</code> no módulo comercial. Ver também <a class="source-link" href="PLANO-COMERCIALIZACAO-SUITE.html">Plano de Comercialização</a>.</p></div>
+    </section>
+
+    <section id="acoes">
+      <div class="section-header"><div class="section-num">08 · Próximos Passos</div><h2 class="title">Plano de ação Aero Suite</h2></div>
+      <div class="action-grid">
+        <div class="action-item"><div class="action-num">1</div><div><h4>Validar 30 prospects "Alta" na ANAC</h4><p>Confirmar COM ativo e classes C/D/E/F antes de outreach.</p><span class="action-owner">Comercial</span></div></div>
+        <div class="action-item"><div class="action-num">2</div><div><h4>Piloto: 5 OMs regionais + 2 helicóptero</h4><p>OS + estoque + AD/SB + hangar job card por 6 meses.</p><span class="action-owner">Comercial + Produto</span></div></div>
+        <div class="action-item"><div class="action-num">3</div><div><h4>Eventos ABAG / LABACE / HeliShow</h4><p>Presença e demos ao vivo do Aero Suite.</p><span class="action-owner">Marketing</span></div></div>
+        <div class="action-item"><div class="action-num">4</div><div><h4>Oferta modular por tier</h4><p>SMB piloto vs enterprise MRO Aviation premium.</p><span class="action-owner">Produto</span></div></div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="doc-footer">
+    <p><strong>Aviso legal:</strong> Listagem baseada em documento público histórico (IAC 3141) e pesquisa aberta. Não constitui endosso ANAC. Confirmar certificação vigente e escopo regulatório antes de contato comercial.</p>
+    <p style="margin-top:12px">Aero Suite · Documento interno · Maio 2026 · Companion: <a href="PROSPECCAO-CLIENTES-MRO-BRASIL.md">PROSPECCAO-CLIENTES-MRO-BRASIL.md</a></p>
+  </footer>
+</div>
+
+<script>
+const PROSPECTS = [{"name":"TECMAER - MANUTENÇÃO E SERVIÇOS LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"ALFA - MANUTENÇÃO DE AERONAVES LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"ALIANÇA MANUTENÇÃO DE AERONAVES LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"AGS – MANUTENÇÃO DE AERONAVES LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"CHEYENNE MANUTENÇÃO DE AERONAVES LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"CONTINENTAL MANUTENÇÃO DE AERONAVES","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"AEROSINOS - MANUTENÇÃO DE AERONAVES LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"AEROVALEY MANUTENÇÃO DE AERONAVES LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"COMAVE - COM. MANUTENÇÃO AERONAVES LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"JC MANUTENÇÃO DE AERONAVES LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"OFICINA AERONÁUTICA ÍCARO LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"Oficina dedicada"},{"name":"OMAER - OFICINA DE MANUTENÇÃO","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"Oficina"},{"name":"OMA - OFICINA MARÍLIA DE AVIAÇÃO LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"Oficina Marília"},{"name":"HANGAR 1 MANUTENÇÃO DE AERONAVES LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"Hangar/MRO"},{"name":"HANGAR DOIS MANUTENÇÃO DE ANVS LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"Hangar/MRO"},{"name":"HELIT – MANUTENÇÃO DE HELICÓPTEROS LTDA","region":"Sudeste","uf":"SP","segment":"Heli","tier":"B","priority":"Alta","note":"Helicópteros"},{"name":"HELIPARK MANUTENÇÃO AERONÁUTICA LTDA","region":"Sudeste","uf":"SP","segment":"Heli","tier":"B","priority":"Alta","note":"Helicópteros"},{"name":"MAR – MANUTENÇÃO DE ASAS ROTATIVAS LTDA","region":"Sudeste","uf":"SP","segment":"Heli","tier":"B","priority":"Alta","note":"Asas rotativas"},{"name":"EDRA HELICENTRO PEÇAS E MANUTENÇÃO LTDA","region":"Sudeste","uf":"SP","segment":"Heli","tier":"B","priority":"Alta","note":"Helicópteros"},{"name":"ANTARES MANUTENÇÃO DE HÉLICES LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"Hélices"},{"name":"AERO HÉLICE MANUTENÇÃO LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"Hélices"},{"name":"OFICINA DE HÉLICES COSTA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"Hélices"},{"name":"LÍDER SIGNATURE S/A","region":"Nacional","uf":"Multi","segment":"Exec","tier":"B","priority":"Média","note":"Executivo + manutenção (bases BSB, BHZ…)"},{"name":"VEM – VARIG ENGENHARIA E MANUTENÇÃO S.A.","region":"Sudeste","uf":"RJ","segment":"OM","tier":"C","priority":"Média","note":"Legado Varig — verificar estrutura atual"},{"name":"TAM LINHAS AÉREAS S/A MRO","region":"Sudeste","uf":"SP","segment":"Airline","tier":"C","priority":"Média","note":"MRO companhia aérea"},{"name":"AEROSERVICE LTDA","region":"Sudeste","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"Serviços aeronáuticos"},{"name":"HELISUL TÁXI AÉREO LTDA","region":"Sul","uf":"RS","segment":"Heli","tier":"B","priority":"Alta","note":"Grande operador; manutenção própria"},{"name":"REMASUL AVIAÇÃO E MANUTENÇÃO DE AERONAVES LTDA","region":"Sul","uf":"RS","segment":"OM","tier":"A","priority":"Alta","note":"OM regional"},{"name":"SAFETY MANUTENÇÃO LTDA","region":"Sul","uf":"RS","segment":"OM","tier":"A","priority":"Alta","note":"Múltiplas unidades na IAC"},{"name":"AMÉRICA DO SUL SERVIÇOS AERONÁUTICOS LTDA","region":"Sul","uf":"RS","segment":"OM","tier":"A","priority":"Alta","note":"Serviços + manutenção"},{"name":"SCODA AERONÁUTICA","region":"Sul","uf":"SC","segment":"OEM","tier":"D","priority":"Baixa","note":"Industrial fab./manutenção"},{"name":"ROTOR ASSESSORIA E MANUTENÇÃO AERONÁUTICA LTDA","region":"Sul","uf":"RS","segment":"Heli","tier":"B","priority":"Alta","note":"OM asas rotativas"},{"name":"GOIÁS MANUTENÇÃO DE AERONAVES LTDA","region":"Centro-Oeste","uf":"GO","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"S.M.A. SORRISO MANUTENÇÃO DE AERONÁUTICA LTDA","region":"Centro-Oeste","uf":"MT","segment":"Ag","tier":"A","priority":"Alta","note":"Aviação agrícola / interior"},{"name":"RONDONÓPOLIS MANUTENÇÃO DE AERONAVES","region":"Centro-Oeste","uf":"MT","segment":"Ag","tier":"A","priority":"Alta","note":"Aviação agrícola"},{"name":"GUARÁ TÁXI AÉREO E MANUTENÇÃO LTDA","region":"Centro-Oeste","uf":"GO","segment":"Exec","tier":"B","priority":"Média","note":"Táxi + oficina"},{"name":"MARCA MANUTENÇÃO DE AERONAVES LTDA","region":"Centro-Oeste","uf":"GO","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"MANAL - MANUTENÇÃO ALAGOANA DE AERONAVES LTDA","region":"Nordeste","uf":"AL","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"LMP – MANUTENÇÃO AERONÁUTICA LTDA","region":"Nordeste","uf":"PE","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"TEMA - TERESINA MANUTENÇÃO DE AERONAVES LTDA","region":"Nordeste","uf":"PI","segment":"OM","tier":"A","priority":"Alta","note":"OM regional"},{"name":"SILVA MANUTENÇÃO AERONÁUTICA","region":"Nordeste","uf":"PE","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"QUICK MANUTENÇÃO DE AERONAVES","region":"Nordeste","uf":"BA","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"UTA MANUTENÇÃO DE AERONAVES LTDA","region":"Nordeste","uf":"CE","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"RIO BRANCO MANUTENÇÃO DE AERONAVES LTDA","region":"Norte","uf":"AC","segment":"OM","tier":"A","priority":"Alta","note":"OM regional"},{"name":"AERONAT (região AM)","region":"Norte","uf":"AM","segment":"OM","tier":"A","priority":"Média","note":"Verificar CNPJ atual na ANAC"},{"name":"BMA - BIRIGUI MANUTENÇÃO DE ANV. LTDA","region":"Interior SP","uf":"SP","segment":"Ag","tier":"A","priority":"Alta","note":"Polo agrícola Birigui"},{"name":"AEROTESTE OFICINA DE TESTES LTDA","region":"Interior SP","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"Testes / manutenção"},{"name":"SANAGRI MANUTENÇÃO DE AERONAVES LTDA","region":"Interior SP","uf":"SP","segment":"Ag","tier":"A","priority":"Alta","note":"Aviação agrícola"},{"name":"AERO RURAL OFICINA DE MANUTENÇÃO","region":"Interior SP","uf":"SP","segment":"Ag","tier":"A","priority":"Alta","note":"Aviação agrícola"},{"name":"STARCRAFT MANUTENÇÃO GERAL DE AERONAVES LTDA","region":"Interior SP","uf":"SP","segment":"OM","tier":"A","priority":"Alta","note":"OM dedicada"},{"name":"GOL / GOL Linhas Aéreas","region":"Nacional","uf":"Multi","segment":"Airline","tier":"C","priority":"Média","note":"MRO e engenharia"},{"name":"AZUL Linhas Aéreas Brasileiras","region":"Nacional","uf":"Multi","segment":"Airline","tier":"C","priority":"Média","note":"Engenharia + manutenção"},{"name":"LATAM / TAM","region":"Nacional","uf":"Multi","segment":"Airline","tier":"C","priority":"Média","note":"MRO histórico TAM MRO"},{"name":"Voepass / Passaredo / regionais","region":"Nacional","uf":"Multi","segment":"Airline","tier":"C","priority":"Média","note":"PMAC + manutenção terceirizada"},{"name":"Embraer S.A.","region":"Sudeste","uf":"SP","segment":"OEM","tier":"D","priority":"Baixa","note":"Manutenção, conversão, serviços"},{"name":"Leonardo / Helibrás (Helicópteros do Brasil)","region":"Sudeste","uf":"SP","segment":"OEM","tier":"D","priority":"Baixa","note":"Fabricante + MRO"},{"name":"Fibraer Indústria Aeronáutica","region":"Sudeste","uf":"SP","segment":"OEM","tier":"D","priority":"Baixa","note":"Aeronaves leves"},{"name":"TBA - Tecnologia Brasileira de Aeronáutica","region":"Sudeste","uf":"SP","segment":"OEM","tier":"D","priority":"Baixa","note":"Indústria aeronáutica"},{"name":"Voetur Táxi Aéreo","region":"Sudeste","uf":"SP","segment":"Exec","tier":"B","priority":"Média","note":"Aviação executiva"},{"name":"Infraero aeroportos","region":"Nacional","uf":"Multi","segment":"Exec","tier":"E","priority":"Indireto","note":"Hangaragem — operadores nos hangares"},{"name":"ABA Manutenção de Aeronaves (Barreiras-BA)","region":"Nordeste","uf":"BA","segment":"OM","tier":"A","priority":"Alta","note":"Ag + executivo; cert. ANAC/Cirrus/King Air"},{"name":"ABAG — associados categoria Mantenedor","region":"Nacional","uf":"Multi","segment":"Assoc","tier":"E","priority":"Indireto","note":"Pipeline: abag.org.br / associe-se"},{"name":"Escolas de aviação com oficina didática","region":"Nacional","uf":"Multi","segment":"Assoc","tier":"E","priority":"Indireto","note":"Parceria branding; volume baixo"},{"name":"Cooperativas MMA","region":"Nacional","uf":"Multi","segment":"Assoc","tier":"E","priority":"Indireto","note":"Influência, não comprador core"}];
+
+const SEG_BADGE = { OM:'badge-om', Heli:'badge-heli', Ag:'badge-ag', Exec:'badge-exec', Airline:'badge-enterprise', OEM:'badge-oem', Assoc:'badge-indireto' };
+const PRI_BADGE = { Alta:'badge-alta', 'Média':'badge-media', Baixa:'badge-baixa', Indireto:'badge-indireto' };
+const TIER_LABEL = { A:'Tier A', B:'Tier B', C:'Tier C', D:'Tier D', E:'Tier E' };
+
+function renderTable(rows) {
+  const body = document.getElementById('masterBody');
+  body.innerHTML = rows.map((p, i) => `
+    <tr data-region="${p.region}" data-tier="${p.tier}" data-segment="${p.segment}">
+      <td>${i + 1}</td>
+      <td class="company-name">${p.name}</td>
+      <td>${p.region}</td>
+      <td>${p.uf}</td>
+      <td><span class="badge ${SEG_BADGE[p.segment] || 'badge-om'}">${p.segment}</span></td>
+      <td>${TIER_LABEL[p.tier] || p.tier}</td>
+      <td><span class="badge ${PRI_BADGE[p.priority] || 'badge-indireto'}">${p.priority}</span></td>
+      <td>${p.note}</td>
+    </tr>`).join('');
+  document.getElementById('resultCount').textContent = rows.length;
+}
+
+function applyFilters() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const region = document.getElementById('filterRegion').value;
+  const tier = document.getElementById('filterTier').value;
+  const segment = document.getElementById('filterSegment').value;
+  const filtered = PROSPECTS.filter(p => {
+    if (region && p.region !== region) return false;
+    if (tier && p.tier !== tier) return false;
+    if (segment && p.segment !== segment) return false;
+    if (q) {
+      const hay = (p.name + p.region + p.uf + p.segment + p.note + p.priority).toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  renderTable(filtered);
+}
+
+document.getElementById('searchInput').addEventListener('input', applyFilters);
+document.getElementById('filterRegion').addEventListener('change', applyFilters);
+document.getElementById('filterTier').addEventListener('change', applyFilters);
+document.getElementById('filterSegment').addEventListener('change', applyFilters);
+
+document.querySelectorAll('.region-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.region-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.region-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    const panel = document.querySelector('[data-panel="' + tab.dataset.region + '"]');
+    if (panel) panel.classList.add('active');
+  });
+});
+
+renderTable(PROSPECTS);
+</script>
+</body>
+</html>

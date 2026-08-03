@@ -1,0 +1,899 @@
+// Aero Suite — premium hero dialog system (global)
+// Applies to all PrimeNG p-dialog; use styleClass="as-hero-dialog" for custom hero headers.
+
+/* ── Mask ── */
+.p-dialog-mask.p-component-overlay {
+  background: rgba(15, 23, 42, 0.58) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-dialog-mask.p-component-overlay {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* ── Shell (all dialogs) ── */
+.p-dialog {
+  border: none !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow:
+    0 4px 8px rgba(15, 23, 42, 0.06),
+    0 24px 64px rgba(15, 23, 42, 0.2) !important;
+  font-family: var(--as-font-sans);
+}
+
+/* ── Default header ( [header]="..." ) — todas as modais com título padrão ── */
+.p-dialog-header:has(.p-dialog-title) {
+  padding: 1.15rem 3rem 1.05rem 1.45rem !important;
+  border: none !important;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 48%, #0e7490 100%) !important;
+  color: #fff !important;
+  position: relative;
+}
+
+.p-dialog-header .p-dialog-title {
+  font-size: 1.12rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: #fff !important;
+}
+
+.p-dialog-header:has(.p-dialog-title) .p-dialog-header-icons {
+  position: absolute;
+  top: 50%;
+  right: 0.85rem;
+  transform: translateY(-50%);
+  z-index: 2;
+
+  .p-dialog-header-close,
+  .p-dialog-header-icon {
+    width: 2.1rem !important;
+    height: 2.1rem !important;
+    border-radius: 10px !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    transition: background var(--as-duration-fast) var(--as-ease-out);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.22) !important;
+      color: #fff !important;
+    }
+
+    &:focus-visible {
+      outline: var(--as-focus-ring);
+      outline-offset: var(--as-focus-offset);
+    }
+  }
+}
+
+/* ── Body & footer ── */
+.p-dialog-content {
+  padding: 1.35rem 1.5rem 1.4rem !important;
+  background: #f8fafc !important;
+  color: var(--as-text) !important;
+}
+
+.p-dialog-footer {
+  padding: 0.85rem 1.25rem !important;
+  border-top: 1px solid var(--as-border) !important;
+  background: #fff !important;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Intro / hints inside dialogs */
+.p-dialog-content .dialog-intro,
+.p-dialog-content .as-dialog-intro {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.95rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #475569;
+  background: linear-gradient(165deg, #fff 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+}
+
+.p-dialog-content .orientacao-hint,
+.p-dialog-content .as-dialog-hint {
+  margin: 0.65rem 0 0;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--as-text-muted);
+}
+
+.p-dialog-content .field-label,
+.p-dialog-content .as-dialog-field-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #334155;
+}
+
+/* ── Hero dialog shell (só cabeçalho customizado) ── */
+.p-dialog-header:has(.premium-dialog-header),
+.p-dialog-header:has(.as-dialog-hero),
+.p-dialog-header:has(.modal-header),
+.tenant-premium-dialog .p-dialog-header {
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.p-dialog-header:has(.premium-dialog-header) .p-dialog-header-icons,
+.p-dialog-header:has(.as-dialog-hero) .p-dialog-header-icons,
+.p-dialog-header:has(.modal-header) .p-dialog-header-icons,
+.tenant-premium-dialog .p-dialog-header-icons {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  z-index: 3;
+  transform: none;
+
+  .p-dialog-header-close,
+  .p-dialog-header-icon {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    border-radius: 10px !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.22) !important;
+    }
+  }
+}
+
+.p-dialog:has(.premium-dialog-body),
+.p-dialog:has(.as-dialog-body),
+.tenant-premium-dialog {
+  .p-dialog-content {
+    padding: 0 !important;
+  }
+}
+
+.p-dialog:has(.premium-dialog-footer),
+.p-dialog:has(.as-dialog-footer),
+.tenant-premium-dialog:has(.premium-dialog-footer) {
+  .p-dialog-footer {
+    padding: 0 !important;
+    border: none !important;
+  }
+}
+
+/* Legacy: manter compat sem :has em browsers antigos — tenant-premium-dialog */
+.tenant-premium-dialog {
+  .p-dialog-content {
+    padding: 0 !important;
+  }
+
+  .p-dialog-footer {
+    padding: 0 !important;
+    border: none !important;
+  }
+}
+
+.as-hero-dialog .modal-header,
+.product-selector-modal .modal-header,
+.signature-modal .modal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.35rem 1.5rem 1.2rem;
+  padding-right: 3.25rem;
+  width: 100%;
+  box-sizing: border-box;
+  color: #fff;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 48%, #0e7490 100%);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: -30px;
+    top: -30px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.07);
+    pointer-events: none;
+  }
+
+  .header-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.14);
+    flex-shrink: 0;
+
+    .pi {
+      font-size: 1.15rem;
+      color: #fff;
+    }
+  }
+
+  .header-content h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .header-content p {
+    margin: 0.25rem 0 0;
+    font-size: 0.875rem;
+    color: rgba(226, 232, 240, 0.88);
+  }
+}
+
+/* Hero header block (shared markup) */
+.as-dialog-hero,
+.premium-dialog-header,
+.modal-header.hero-style {
+  position: relative;
+  padding: 1.35rem 1.5rem 1.2rem;
+  padding-right: 3.25rem;
+  width: 100%;
+  box-sizing: border-box;
+  color: #fff;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 48%, #0e7490 100%);
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: -30px;
+    top: -30px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.07);
+    pointer-events: none;
+  }
+
+  &--compact,
+  &.premium-dialog-header--compact {
+    padding: 1.1rem 1.35rem 1rem;
+    padding-right: 3rem;
+  }
+
+  &--sky {
+    background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 45%, #0ea5e9 100%);
+  }
+
+  &--gold {
+    background: linear-gradient(135deg, #0a2f6b 0%, #1e3a5f 50%, #92400e 120%);
+  }
+
+  &--slate {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  }
+}
+
+.as-dialog-hero__kicker,
+.premium-dialog-header .premium-kicker {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  margin-bottom: 0.35rem;
+}
+
+.as-dialog-hero__title,
+.premium-dialog-header .premium-title,
+.modal-header.hero-style h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .pi {
+    color: #fff;
+    font-size: 1.05rem;
+  }
+}
+
+.as-dialog-hero__subtitle,
+.modal-header.hero-style p {
+  margin: 0.35rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: rgba(226, 232, 240, 0.88);
+  font-weight: 400;
+}
+
+.as-dialog-body,
+.premium-dialog-body {
+  padding: 1.25rem 1.5rem 1.35rem;
+  background: #f8fafc;
+}
+
+.as-dialog-footer,
+.premium-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid var(--as-border);
+  background: #fff;
+}
+
+/* ── Comfortable note / observation fields ── */
+.as-dialog-note {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.as-dialog-note__label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #334155;
+}
+
+.as-dialog-note__box {
+  position: relative;
+  border-radius: 14px;
+  padding: 2px;
+  background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 4px 14px rgba(15, 23, 42, 0.06);
+
+  &:focus-within {
+    background: linear-gradient(145deg, #7dd3fc, #0284c7);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.18);
+  }
+}
+
+.as-dialog-note__textarea,
+.p-dialog textarea.p-inputtextarea,
+.p-dialog .p-inputtextarea {
+  display: block;
+  width: 100%;
+  min-height: 7.5rem;
+  max-height: 22rem;
+  padding: 0.9rem 1.05rem !important;
+  border: none !important;
+  border-radius: 12px !important;
+  background: #fff !important;
+  color: var(--as-text) !important;
+  font-size: 0.9375rem !important;
+  line-height: 1.58 !important;
+  resize: vertical !important;
+  box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+  transition:
+    box-shadow var(--as-duration-fast) var(--as-ease-out),
+    background var(--as-duration-fast) var(--as-ease-out);
+
+  &::placeholder {
+    color: var(--as-text-subtle);
+  }
+
+  &:focus {
+    outline: none !important;
+    box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+  }
+}
+
+/* NC/CAPA — campos de texto sem redimensionamento manual */
+.nc-capa-dialog textarea.p-inputtextarea,
+.nc-capa-dialog .p-inputtextarea,
+.trein-obrig-dialog textarea.p-inputtextarea,
+.trein-obrig-dialog .p-inputtextarea,
+.treinamento-dialog textarea.p-inputtextarea,
+.treinamento-dialog .p-inputtextarea,
+.aero-diretriz-dialog textarea.p-inputtextarea,
+.aero-diretriz-dialog .p-inputtextarea,
+.calibracao-dialog textarea.p-inputtextarea,
+.calibracao-dialog .p-inputtextarea,
+.sgq-documento-dialog textarea.p-inputtextarea,
+.sgq-documento-dialog .p-inputtextarea,
+.habilitacao-dialog textarea.p-inputtextarea,
+.habilitacao-dialog .p-inputtextarea {
+  resize: none !important;
+}
+
+/* NC/CAPA — overlay sem blur evita “tremor” visual ao repintar botões no hover */
+.p-dialog-mask.nc-capa-dialog-mask,
+.p-dialog-mask.trein-obrig-dialog-mask,
+.p-dialog-mask.treinamento-dialog-mask,
+.p-dialog-mask.aero-diretriz-dialog-mask,
+.p-dialog-mask.calibracao-dialog-mask,
+.p-dialog-mask.sgq-documento-dialog-mask,
+.p-dialog-mask.habilitacao-dialog-mask {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(15, 23, 42, 0.62) !important;
+}
+
+.nc-capa-dialog,
+.trein-obrig-dialog,
+.treinamento-dialog,
+.aero-diretriz-dialog,
+.calibracao-dialog,
+.sgq-documento-dialog,
+.habilitacao-dialog {
+  contain: layout style;
+  transform: translateZ(0);
+}
+
+/* NC/CAPA — toast centralizado sobre o conteúdo da modal */
+.nc-capa-dialog .nc-capa-toast.p-toast {
+  position: absolute !important;
+  top: 0.75rem !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  width: min(92%, 26rem);
+  z-index: 2;
+  pointer-events: none;
+
+  .p-toast-message {
+    pointer-events: auto;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+  }
+}
+
+.nc-capa-dialog .p-dialog-content {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 0.85rem !important;
+}
+
+.nc-capa-dialog .nc-capa-body {
+  max-height: min(58vh, 32rem);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+
+.nc-capa-dialog .p-dialog-footer,
+.trein-obrig-dialog .p-dialog-footer,
+.treinamento-dialog .p-dialog-footer,
+.conformidade-dialog .p-dialog-footer,
+.aero-diretriz-dialog .p-dialog-footer,
+.calibracao-dialog .p-dialog-footer,
+.sgq-documento-dialog .p-dialog-footer,
+.habilitacao-dialog .p-dialog-footer {
+  padding: 0.75rem 1.25rem !important;
+  overflow: visible;
+}
+
+.nc-capa-dialog .p-dialog-footer .nc-capa-footer,
+.trein-obrig-dialog .p-dialog-footer .trein-obrig-footer,
+.treinamento-dialog .p-dialog-footer .treinamento-footer,
+.conformidade-dialog .p-dialog-footer .dialog-actions,
+.aero-diretriz-dialog .p-dialog-footer .aero-diretriz-footer,
+.calibracao-dialog .p-dialog-footer .calibracao-footer,
+.sgq-documento-dialog .p-dialog-footer .sgq-documento-footer,
+.habilitacao-dialog .p-dialog-footer .habilitacao-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex-shrink: 0;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
+}
+
+.nc-capa-dialog .nc-footer-tip,
+.trein-obrig-dialog .nc-footer-tip,
+.treinamento-dialog .nc-footer-tip,
+.conformidade-dialog .nc-footer-tip,
+.aero-diretriz-dialog .nc-footer-tip,
+.calibracao-dialog .nc-footer-tip,
+.sgq-documento-dialog .nc-footer-tip,
+.habilitacao-dialog .nc-footer-tip {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.nc-capa-dialog .nc-footer-tip--disabled,
+.trein-obrig-dialog .nc-footer-tip--disabled,
+.treinamento-dialog .nc-footer-tip--disabled,
+.conformidade-dialog .nc-footer-tip--disabled,
+.aero-diretriz-dialog .nc-footer-tip--disabled,
+.calibracao-dialog .nc-footer-tip--disabled,
+.sgq-documento-dialog .nc-footer-tip--disabled,
+.habilitacao-dialog .nc-footer-tip--disabled {
+  cursor: not-allowed;
+}
+
+.nc-capa-dialog .nc-footer-tip::after,
+.trein-obrig-dialog .nc-footer-tip::after,
+.treinamento-dialog .nc-footer-tip::after,
+.conformidade-dialog .nc-footer-tip::after,
+.aero-diretriz-dialog .nc-footer-tip::after,
+.calibracao-dialog .nc-footer-tip::after,
+.sgq-documento-dialog .nc-footer-tip::after,
+.habilitacao-dialog .nc-footer-tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 0.45rem);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  background: #1e293b;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.12s ease, visibility 0.12s ease;
+  z-index: 1200;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.22);
+}
+
+.nc-capa-dialog .nc-footer-tip:hover::after,
+.nc-capa-dialog .nc-footer-tip:focus-within::after,
+.trein-obrig-dialog .nc-footer-tip:hover::after,
+.trein-obrig-dialog .nc-footer-tip:focus-within::after,
+.treinamento-dialog .nc-footer-tip:hover::after,
+.treinamento-dialog .nc-footer-tip:focus-within::after,
+.conformidade-dialog .nc-footer-tip:hover::after,
+.conformidade-dialog .nc-footer-tip:focus-within::after,
+.aero-diretriz-dialog .nc-footer-tip:hover::after,
+.aero-diretriz-dialog .nc-footer-tip:focus-within::after,
+.calibracao-dialog .nc-footer-tip:hover::after,
+.calibracao-dialog .nc-footer-tip:focus-within::after,
+.sgq-documento-dialog .nc-footer-tip:hover::after,
+.sgq-documento-dialog .nc-footer-tip:focus-within::after,
+.habilitacao-dialog .nc-footer-tip:hover::after,
+.habilitacao-dialog .nc-footer-tip:focus-within::after {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0.35s;
+}
+
+.nc-capa-dialog .nc-footer-icon-btn.p-button,
+.trein-obrig-dialog .nc-footer-icon-btn.p-button,
+.treinamento-dialog .nc-footer-icon-btn.p-button,
+.conformidade-dialog .nc-footer-icon-btn.p-button,
+.aero-diretriz-dialog .nc-footer-icon-btn.p-button,
+.calibracao-dialog .nc-footer-icon-btn.p-button,
+.sgq-documento-dialog .nc-footer-icon-btn.p-button,
+.habilitacao-dialog .nc-footer-icon-btn.p-button {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border-radius: 10px;
+  justify-content: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
+}
+
+.nc-capa-dialog .nc-footer-icon-btn.p-button.p-button-outlined,
+.trein-obrig-dialog .nc-footer-icon-btn.p-button.p-button-outlined,
+.treinamento-dialog .nc-footer-icon-btn.p-button.p-button-outlined,
+.conformidade-dialog .nc-footer-icon-btn.p-button.p-button-outlined,
+.aero-diretriz-dialog .nc-footer-icon-btn.p-button.p-button-outlined,
+.calibracao-dialog .nc-footer-icon-btn.p-button.p-button-outlined,
+.sgq-documento-dialog .nc-footer-icon-btn.p-button.p-button-outlined,
+.habilitacao-dialog .nc-footer-icon-btn.p-button.p-button-outlined {
+  border-width: 1px !important;
+}
+
+.nc-capa-dialog .nc-footer-icon-btn.p-button:hover:not(:disabled),
+.nc-capa-dialog .nc-footer-icon-btn.p-button:focus-visible:not(:disabled),
+.trein-obrig-dialog .nc-footer-icon-btn.p-button:hover:not(:disabled),
+.trein-obrig-dialog .nc-footer-icon-btn.p-button:focus-visible:not(:disabled),
+.treinamento-dialog .nc-footer-icon-btn.p-button:hover:not(:disabled),
+.treinamento-dialog .nc-footer-icon-btn.p-button:focus-visible:not(:disabled),
+.conformidade-dialog .nc-footer-icon-btn.p-button:hover:not(:disabled),
+.conformidade-dialog .nc-footer-icon-btn.p-button:focus-visible:not(:disabled),
+.aero-diretriz-dialog .nc-footer-icon-btn.p-button:hover:not(:disabled),
+.aero-diretriz-dialog .nc-footer-icon-btn.p-button:focus-visible:not(:disabled),
+.calibracao-dialog .nc-footer-icon-btn.p-button:hover:not(:disabled),
+.calibracao-dialog .nc-footer-icon-btn.p-button:focus-visible:not(:disabled),
+.sgq-documento-dialog .nc-footer-icon-btn.p-button:hover:not(:disabled),
+.sgq-documento-dialog .nc-footer-icon-btn.p-button:focus-visible:not(:disabled),
+.habilitacao-dialog .nc-footer-icon-btn.p-button:hover:not(:disabled),
+.habilitacao-dialog .nc-footer-icon-btn.p-button:focus-visible:not(:disabled) {
+  transform: none;
+  box-shadow: none !important;
+}
+
+.nc-capa-dialog .nc-footer-icon-btn.p-button .p-button-icon,
+.trein-obrig-dialog .nc-footer-icon-btn.p-button .p-button-icon,
+.treinamento-dialog .nc-footer-icon-btn.p-button .p-button-icon,
+.conformidade-dialog .nc-footer-icon-btn.p-button .p-button-icon,
+.aero-diretriz-dialog .nc-footer-icon-btn.p-button .p-button-icon,
+.calibracao-dialog .nc-footer-icon-btn.p-button .p-button-icon,
+.sgq-documento-dialog .nc-footer-icon-btn.p-button .p-button-icon,
+.habilitacao-dialog .nc-footer-icon-btn.p-button .p-button-icon {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.nc-capa-dialog .nc-footer-icon-btn.p-button.p-button-text,
+.trein-obrig-dialog .nc-footer-icon-btn.p-button.p-button-text,
+.treinamento-dialog .nc-footer-icon-btn.p-button.p-button-text,
+.conformidade-dialog .nc-footer-icon-btn.p-button.p-button-text,
+.aero-diretriz-dialog .nc-footer-icon-btn.p-button.p-button-text,
+.calibracao-dialog .nc-footer-icon-btn.p-button.p-button-text,
+.sgq-documento-dialog .nc-footer-icon-btn.p-button.p-button-text,
+.habilitacao-dialog .nc-footer-icon-btn.p-button.p-button-text {
+  width: auto;
+  min-width: 2.5rem;
+  color: #64748b;
+}
+
+.nc-capa-dialog .nc-footer-icon-btn--primary.p-button:not(.p-button-outlined):not(.p-button-text),
+.trein-obrig-dialog .nc-footer-icon-btn--primary.p-button:not(.p-button-outlined):not(.p-button-text),
+.treinamento-dialog .nc-footer-icon-btn--primary.p-button:not(.p-button-outlined):not(.p-button-text),
+.conformidade-dialog .nc-footer-icon-btn--primary.p-button:not(.p-button-outlined):not(.p-button-text),
+.aero-diretriz-dialog .nc-footer-icon-btn--primary.p-button:not(.p-button-outlined):not(.p-button-text),
+.calibracao-dialog .nc-footer-icon-btn--primary.p-button:not(.p-button-outlined):not(.p-button-text),
+.sgq-documento-dialog .nc-footer-icon-btn--primary.p-button:not(.p-button-outlined):not(.p-button-text),
+.habilitacao-dialog .nc-footer-icon-btn--primary.p-button:not(.p-button-outlined):not(.p-button-text) {
+  background: var(--primary-color, #0ea5e9);
+  border-color: var(--primary-color, #0ea5e9);
+}
+
+/* NC/CAPA — destaque de campo inválido */
+.nc-capa-dialog .nc-field--invalid > label,
+.nc-capa-dialog .nc-field--invalid .checkbox-row > label {
+  color: #dc2626;
+}
+
+.nc-capa-dialog .nc-field--invalid input.p-inputtext,
+.nc-capa-dialog .nc-field--invalid textarea.p-inputtextarea,
+.nc-capa-dialog .nc-field--invalid .p-dropdown,
+.nc-capa-dialog .nc-field--invalid .p-autocomplete .p-inputtext,
+.nc-capa-dialog .nc-field--invalid .p-checkbox .p-checkbox-box {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 1px #ef4444 !important;
+}
+
+.nc-capa-dialog .nc-field-error {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  color: #dc2626;
+}
+
+.as-dialog-note__hint {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--as-text-muted);
+}
+
+.as-dialog-note__counter {
+  align-self: flex-end;
+  font-size: 0.75rem;
+  color: var(--as-text-subtle);
+}
+
+/* Inputs inside dialogs — largura total e layout consistente */
+.p-dialog-content {
+  box-sizing: border-box;
+
+  .form-grid,
+  .form-dialog,
+  .os-form,
+  .dialog-content {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .form-field,
+  .field,
+  .field-block {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .p-dropdown,
+  .p-multiselect,
+  .p-autocomplete,
+  .p-inputnumber,
+  .p-calendar,
+  .p-select,
+  p-dropdown,
+  p-multiselect,
+  p-calendar,
+  p-autocomplete {
+    width: 100% !important;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .p-dropdown .p-dropdown-label,
+  .p-multiselect .p-multiselect-label {
+    width: 100%;
+  }
+
+  input.p-inputtext,
+  textarea.p-inputtextarea,
+  .p-inputtext,
+  .form-input,
+  .w-full {
+    width: 100% !important;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+.p-dialog {
+  .p-inputtext,
+  .p-dropdown,
+  .p-multiselect,
+  .p-calendar .p-inputtext {
+    border-radius: 10px !important;
+    border-color: var(--as-border-strong) !important;
+  }
+
+  .p-inputtext:focus,
+  .p-dropdown.p-focus,
+  .p-multiselect.p-focus {
+    border-color: var(--as-accent-sky-deep) !important;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.14) !important;
+  }
+}
+
+/* Confirm dialog premium */
+.p-confirm-dialog {
+  .p-dialog-content {
+    padding: 1.25rem 1.5rem !important;
+  }
+
+  .p-confirm-dialog-icon {
+    font-size: 1.75rem !important;
+    color: var(--as-accent-sky-deep) !important;
+  }
+
+  .p-confirm-dialog-message {
+    line-height: 1.55;
+    color: var(--as-text);
+  }
+
+  .p-dialog-footer {
+    .p-button.as-confirm-safe-reject {
+      background: #f8fafc !important;
+      border-color: #cbd5e1 !important;
+      color: #475569 !important;
+
+      .p-button-label,
+      .p-button-icon {
+        color: #475569 !important;
+      }
+
+      &:hover {
+        background: #f1f5f9 !important;
+        border-color: #94a3b8 !important;
+        color: #334155 !important;
+      }
+    }
+
+    .p-button.as-confirm-safe-reject:focus,
+    .p-button.as-confirm-safe-reject:focus-visible {
+      outline: none !important;
+      box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.28) !important;
+    }
+
+    .p-button.as-confirm-destructive-accept {
+      background: #dc3545 !important;
+      border-color: #dc3545 !important;
+      color: #fff !important;
+
+      .p-button-label,
+      .p-button-icon {
+        color: #fff !important;
+      }
+
+      &:hover {
+        background: #c82333 !important;
+        border-color: #bd2130 !important;
+      }
+    }
+
+    .p-button.as-confirm-destructive-accept:focus,
+    .p-button.as-confirm-destructive-accept:focus-visible {
+      outline: none !important;
+      box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.28) !important;
+    }
+
+    .p-button:focus,
+    .p-button:focus-visible {
+      outline: none !important;
+    }
+  }
+}
+
+/* Dark theme */
+[data-theme='dark'],
+.dark-theme {
+  .p-dialog-content {
+    background: var(--as-bg-muted) !important;
+    color: var(--as-text) !important;
+  }
+
+  .p-dialog-footer {
+    background: var(--as-bg-elevated) !important;
+    border-top-color: var(--as-border) !important;
+  }
+
+  .p-dialog-content .dialog-intro,
+  .p-dialog-content .as-dialog-intro {
+    background: var(--as-bg-elevated);
+    border-color: var(--as-border);
+    color: var(--as-text-muted);
+  }
+
+  .as-dialog-body,
+  .premium-dialog-body {
+    background: var(--as-bg-muted);
+  }
+
+  .as-dialog-footer,
+  .premium-dialog-footer {
+    background: var(--as-bg-elevated);
+    border-top-color: var(--as-border);
+  }
+
+  .as-dialog-note__box {
+    background: linear-gradient(145deg, #334155, #475569);
+  }
+
+  .as-dialog-note__textarea,
+  .p-dialog textarea.p-inputtextarea,
+  .p-dialog .p-inputtextarea {
+    background: var(--as-bg-elevated) !important;
+    color: var(--as-text) !important;
+  }
+
+  .as-hero-dialog .p-dialog-header-icons,
+  .tenant-premium-dialog .p-dialog-header-icons {
+    .p-dialog-header-close,
+    .p-dialog-header-icon {
+      color: rgba(255, 255, 255, 0.92) !important;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .as-dialog-hero,
+  .premium-dialog-header {
+    padding: 1.1rem 1.15rem 1rem;
+    padding-right: 2.75rem;
+  }
+
+  .as-dialog-body,
+  .premium-dialog-body {
+    padding: 1rem 1.15rem 1.1rem;
+  }
+}

@@ -1,0 +1,101 @@
+<section class="ops-page-canvas ops-console">
+  <header class="ops-console-header">
+    <h2>{{ 'platformOps.shell.title' | translate }}</h2>
+    <p>{{ 'platformOps.telemetry.subtitle' | translate }}</p>
+  </header>
+
+  <div *ngIf="loading" class="ops-loading">{{ 'platformOps.common.loading' | translate }}</div>
+
+  <ng-container *ngIf="!loading && telemetry as t">
+    <div class="ops-telemetry-kpis">
+      <article class="ops-telemetry-kpi">
+        <span class="ops-telemetry-kpi-head">
+          <span class="ops-led ops-led--cyan" aria-hidden="true"></span>
+          <span class="ops-telemetry-kpi-label">{{ 'platformOps.telemetry.kpi.mrr' | translate }}</span>
+        </span>
+        <strong class="ops-telemetry-kpi-value">{{ formatMrr(t.mrr) }}</strong>
+      </article>
+      <article class="ops-telemetry-kpi">
+        <span class="ops-telemetry-kpi-head">
+          <span class="ops-led ops-led--green" aria-hidden="true"></span>
+          <span class="ops-telemetry-kpi-label">{{ 'platformOps.telemetry.kpi.tenants' | translate }}</span>
+        </span>
+        <strong class="ops-telemetry-kpi-value">{{ t.activeTenants }}</strong>
+      </article>
+      <article class="ops-telemetry-kpi">
+        <span class="ops-telemetry-kpi-head">
+          <span class="ops-led ops-led--amber" aria-hidden="true"></span>
+          <span class="ops-telemetry-kpi-label">{{ 'platformOps.telemetry.kpi.cluster' | translate }}</span>
+        </span>
+        <strong class="ops-telemetry-kpi-value ops-telemetry-kpi-value--compact">{{ clusterUsageLabel() }}</strong>
+        <span class="ops-telemetry-kpi-meta">{{ 'platformOps.telemetry.kpi.clusterHint' | translate }}</span>
+      </article>
+      <article class="ops-telemetry-kpi">
+        <span class="ops-telemetry-kpi-head">
+          <span class="ops-led ops-led--slate" aria-hidden="true"></span>
+          <span class="ops-telemetry-kpi-label">{{ 'platformOps.telemetry.kpi.storage' | translate }}</span>
+        </span>
+        <strong class="ops-telemetry-kpi-value">{{ formatStorage(t.storageBytes) }}</strong>
+      </article>
+    </div>
+
+    <div class="ops-list-frame">
+      <div class="ops-telemetry-charts">
+        <section class="ops-chart-card">
+          <header class="ops-chart-card-head">
+            <h3>{{ 'platformOps.telemetry.chart.revenueTitle' | translate }}</h3>
+          </header>
+          <div class="ops-chart-canvas" *ngIf="revenueChartData && chartsReady">
+            <p-chart
+              #revenueChart
+              type="line"
+              height="220px"
+              [data]="revenueChartData"
+              [options]="revenueChartOptions"></p-chart>
+          </div>
+        </section>
+        <section class="ops-chart-card">
+          <header class="ops-chart-card-head">
+            <h3>{{ 'platformOps.telemetry.chart.infraTitle' | translate }}</h3>
+          </header>
+          <div class="ops-chart-canvas" *ngIf="infraChartData && chartsReady">
+            <p-chart
+              #infraChart
+              type="line"
+              height="220px"
+              [data]="infraChartData"
+              [options]="infraChartOptions"></p-chart>
+          </div>
+        </section>
+      </div>
+
+      <div class="ops-console-grid">
+        <a class="ops-console-card" routerLink="/plataforma/pagamentos">
+          <i class="pi pi-credit-card"></i>
+          <h3>{{ 'platformOps.nav.billing' | translate }}</h3>
+          <p>{{ 'platformOps.console.card.billing' | translate }}</p>
+        </a>
+        <a class="ops-console-card" routerLink="/plataforma/backup">
+          <i class="pi pi-database"></i>
+          <h3>{{ 'platformOps.nav.backup' | translate }}</h3>
+          <p>{{ 'platformOps.console.card.backup' | translate }}</p>
+        </a>
+        <a class="ops-console-card" routerLink="/plataforma/configuracoes-sistema">
+          <i class="pi pi-cog"></i>
+          <h3>{{ 'platformOps.nav.systemSettings' | translate }}</h3>
+          <p>{{ 'platformOps.console.card.systemSettings' | translate }}</p>
+        </a>
+        <a class="ops-console-card" routerLink="/plataforma/auditoria">
+          <i class="pi pi-shield"></i>
+          <h3>{{ 'platformOps.nav.audit' | translate }}</h3>
+          <p>{{ 'platformOps.console.card.audit' | translate }}</p>
+        </a>
+        <a class="ops-console-card" routerLink="/plataforma/operadores">
+          <i class="pi pi-user-plus"></i>
+          <h3>{{ 'platformOps.nav.operators' | translate }}</h3>
+          <p>{{ 'platformOps.operators.subtitle' | translate }}</p>
+        </a>
+      </div>
+    </div>
+  </ng-container>
+</section>

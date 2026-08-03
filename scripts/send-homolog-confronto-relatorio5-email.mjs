@@ -1,0 +1,120 @@
+#!/usr/bin/env node
+/**
+ * Envia Confronto Relatório 5 — somente se 100% conformidade (0 pendentes).
+ * Uso:
+ *   node scripts/send-homolog-confronto-relatorio5-email.mjs --dry-run
+ *   node scripts/send-homolog-confronto-relatorio5-email.mjs
+ *   node scripts/send-homolog-confronto-relatorio5-email.mjs --to wellemlyra@aerosuite.com.br
+ */
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const nodemailer = require('nodemailer');
+
+const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+const dryRun = process.argv.includes('--dry-run');
+const toArgIdx = process.argv.indexOf('--to');
+const toOverride = toArgIdx >= 0 ? process.argv[toArgIdx + 1] : null;
+const stamp = '20260618';
+
+const { SCORE } = await import(`file://${path.join(root, 'docs/homolog_ux/confronto-relatorio5-data.mjs').replace(/\\/g, '/')}`);
+
+if (SCORE.pending > 0 || Number(SCORE.pctConformidadeAchados) < 100) {
+  console.error(`Envio bloqueado: ${SCORE.pending} pendente(s), conformidade ${SCORE.pctConformidadeAchados}%`);
+  process.exit(1);
+}
+
+function readEnv(name, fallback = null) {
+  if (process.env[name]) return process.env[name];
+  const envPath = path.join(root, '.env');
+  if (!fs.existsSync(envPath)) return fallback;
+  for (const line of fs.readFileSync(envPath, 'utf8').split('\n')) {
+    const m = line.match(new RegExp(`^\\s*${name}\\s*=\\s*(.+)\\s*$`));
+    if (m) return m[1].trim().replace(/^["']|["']$/g, '');
+  }
+  return fallback;
+}
+
+const diretorio = JSON.parse(
+  fs.readFileSync(path.join(root, 'docs/templates/directorio-email-direcao.json'), 'utf8'),
+);
+
+const pdfPath = path.join(root, `docs/homolog_ux/Confronto_Homolog_UX_Relatorio5_${stamp}_verificado.pdf`);
+const htmlPath = path.join(root, `docs/homolog_ux/emails/email-confronto-relatorio5-equipe-${stamp}.html`);
+
+for (const f of [pdfPath, htmlPath]) {
+  if (!fs.existsSync(f)) {
+    console.error('Arquivo ausente:', f);
+    console.error('Execute: node scripts/build-homolog-confronto-relatorio5-pdf.mjs');
+    process.exit(1);
+  }
+}
+
+const pdfMb = (fs.statSync(pdfPath).size / (1024 * 1024)).toFixed(1);
+let html = fs.readFileSync(htmlPath, 'utf8').replaceAll('{{PDF_SIZE_MB}}', pdfMb);
+
+const logoPath = path.join(root, diretorio.logos.hero);
+const logoCid = diretorio.logos.hero_cid || 'aerosuite-hero-logo';
+const logoAttachments = [];
+if (fs.existsSync(logoPath)) {
+  html = html.replaceAll('{{LOGO_CID_SRC}}', `cid:${logoCid}`);
+  logoAttachments.push({
+    filename: path.basename(logoPath),
+    path: logoPath,
+    cid: logoCid,
+    contentDisposition: 'inline',
+    contentType: 'image/png',
+  });
+}
+
+const subject =
+  'Confronto Técnico — Relatório 5 Homologação UX · 13/13 achados verificados (PDF em anexo)';
+const toList = toOverride ? [toOverride] : diretorio.lista_to;
+const host = readEnv('QUARKUS_MAILER_HOST', 'smtp.gmail.com');
+const port = Number(readEnv('QUARKUS_MAILER_PORT', '587'));
+const user = readEnv('QUARKUS_MAILER_USERNAME', 'contato@aerosuite.com.br');
+const pass = readEnv('QUARKUS_MAILER_PASSWORD');
+const from = readEnv('QUARKUS_MAILER_FROM', user);
+
+if (dryRun) {
+  console.log('Dry-run — conformidade', SCORE.pctConformidadeAchados + '%');
+  console.log('Para:', toList.join(', '));
+  console.log('Assunto:', subject);
+  console.log('PDF:', pdfPath, `(${pdfMb} MB)`);
+  process.exit(0);
+}
+
+if (!pass || pass.length < 8) {
+  console.error('Defina QUARKUS_MAILER_PASSWORD no .env');
+  process.exit(1);
+}
+
+const transporter = nodemailer.createTransport({
+  host,
+  port,
+  secure: port === 465,
+  auth: { user, pass },
+  requireTLS: port === 587,
+});
+
+const info = await transporter.sendMail({
+  from: `"${diretorio.from_name}" <${from}>`,
+  to: toList.join(', '),
+  subject,
+  html,
+  attachments: [
+    ...logoAttachments,
+    {
+      filename: 'Confronto_Homolog_UX_Relatorio5_AeroSuite.pdf',
+      path: pdfPath,
+      contentType: 'application/pdf',
+    },
+  ],
+});
+
+console.log('E-mail enviado.');
+console.log('Message-Id:', info.messageId);
+console.log('Para:', toList.join(', '));

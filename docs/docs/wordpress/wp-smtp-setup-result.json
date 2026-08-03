@@ -1,0 +1,23 @@
+{
+  "at": "2026-06-04T02:06:10.398Z",
+  "configure": {
+    "saved": {},
+    "mailerChecked": true,
+    "hasPassEnv": true
+  },
+  "testEmail": {
+    "success": false,
+    "fail": false,
+    "debug": [],
+    "excerpt": "E-mail de teste Exportar Ações programadas Eventos de depuração\nE-mail de teste\nSucesso!\n\nO e-mail de teste em HTML foi enviado! Verifique sua caixa de entrada para se certificar de que foi entregue.\n\nFeito com ♥ pela equipe WP Mail SMTP\n\nSuporte/\nDocumentação/\nPlugins gratuitos\nFacebook\nX\nYouTube\n\nAvalie o WP Mail SMTP ★★★★★ em WordPress.org para nos ajudar a divulgar o plugin. A equipe do WP Mai"
+  },
+  "fix": {
+    "found": true,
+    "active": false
+  },
+  "contato": {
+    "status": 200,
+    "success": true,
+    "body": "{\"success\":true,\"data\":{\"confirmation\":\"<div class=\\\"wpforms-confirmation-container wpforms-confirmation-scroll\\\" id=\\\"wpforms-confirmation-12\\\"><p>Obrigado por nos contatar! Entraremos em contato em breve.<\\/p>\\n<\\/div>\"}}"
+  }
+}

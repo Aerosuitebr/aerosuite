@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plano de Comercialização — Aero Suite</title>
+<style>
+  :root {
+    --primary: #0b3d91;
+    --primary-dark: #062a66;
+    --primary-light: #e7eef9;
+    --accent: #d4a017;
+    --accent-light: #fdf6e3;
+    --success: #1e7a4d;
+    --success-light: #e6f4ec;
+    --warning: #b8860b;
+    --warning-light: #fff8e1;
+    --danger: #b22222;
+    --danger-light: #fbe9e9;
+    --gray-900: #1a1d24;
+    --gray-700: #3d4452;
+    --gray-500: #6b7280;
+    --gray-300: #d1d5db;
+    --gray-100: #f5f6fa;
+    --gray-50: #fafbfc;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 28px rgba(0,0,0,0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    color: var(--gray-900);
+    background: var(--gray-100);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* === CAPA === */
+  .cover {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 60%, #04193f 100%);
+    color: white;
+    padding: 80px 60px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, rgba(212,160,23,0.18), transparent 70%);
+    border-radius: 50%;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; left: -80px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 70%);
+    border-radius: 50%;
+  }
+  .cover-content { position: relative; z-index: 1; }
+  .cover-badge {
+    display: inline-block;
+    background: rgba(212,160,23,0.2);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .cover h1 {
+    font-size: 44px;
+    line-height: 1.15;
+    margin: 0 0 16px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .cover .subtitle {
+    font-size: 20px;
+    font-weight: 300;
+    opacity: 0.92;
+    margin-bottom: 36px;
+    max-width: 760px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.18);
+  }
+  .cover-meta-item {
+    display: flex;
+    flex-direction: column;
+  }
+  .cover-meta-item .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .cover-meta-item .value { font-size: 15px; font-weight: 500; }
+
+  /* === SUMÁRIO === */
+  .toc {
+    background: var(--gray-50);
+    padding: 40px 60px;
+    border-bottom: 1px solid var(--gray-300);
+  }
+  .toc h2 {
+    margin: 0 0 20px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--primary);
+    font-weight: 700;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 32px;
+  }
+  .toc a {
+    text-decoration: none;
+    color: var(--gray-700);
+    padding: 8px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    border-bottom: 1px dotted var(--gray-300);
+    transition: color 0.15s;
+  }
+  .toc a:hover { color: var(--primary); }
+  .toc a .num {
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 28px;
+  }
+
+  /* === SEÇÕES === */
+  section {
+    padding: 56px 60px;
+    border-bottom: 1px solid var(--gray-300);
+  }
+  section:last-child { border-bottom: none; }
+  h2.section-title {
+    font-size: 28px;
+    margin: 0 0 8px;
+    color: var(--primary-dark);
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  h2.section-title .num {
+    color: var(--accent);
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    margin-right: 14px;
+    font-weight: 400;
+  }
+  .section-subtitle {
+    color: var(--gray-500);
+    font-size: 15px;
+    margin-bottom: 32px;
+    font-style: italic;
+  }
+  h3 {
+    color: var(--primary-dark);
+    margin-top: 32px;
+    margin-bottom: 14px;
+    font-size: 19px;
+    font-weight: 600;
+  }
+  h4 {
+    color: var(--gray-700);
+    margin: 22px 0 10px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  p { margin: 0 0 14px; }
+
+  /* === HIGHLIGHT BOX === */
+  .highlight {
+    background: var(--primary-light);
+    border-left: 5px solid var(--primary);
+    padding: 20px 24px;
+    margin: 20px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .highlight strong { color: var(--primary-dark); }
+  .highlight.accent {
+    background: var(--accent-light);
+    border-left-color: var(--accent);
+  }
+  .highlight.success {
+    background: var(--success-light);
+    border-left-color: var(--success);
+  }
+  .highlight.danger {
+    background: var(--danger-light);
+    border-left-color: var(--danger);
+  }
+  .highlight.warning {
+    background: var(--warning-light);
+    border-left-color: var(--warning);
+  }
+
+  /* === CARDS === */
+  .card-grid {
+    display: grid;
+    gap: 20px;
+    margin: 24px 0;
+  }
+  .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .card {
+    background: white;
+    border: 1px solid var(--gray-300);
+    border-radius: 8px;
+    padding: 22px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: var(--shadow-md); }
+  .card .icon-badge {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 22px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+  }
+  .card h4 { margin-top: 0; }
+  .card.feat {
+    border-top: 3px solid var(--primary);
+  }
+  .card.feat.gold { border-top-color: var(--accent); }
+  .card.feat.green { border-top-color: var(--success); }
+  .card.feat.red { border-top-color: var(--danger); }
+
+  /* === STAT BOXES === */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin: 28px 0;
+  }
+  .stat {
+    background: linear-gradient(180deg, white, var(--gray-50));
+    border: 1px solid var(--gray-300);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat .value {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat .value.gold { color: var(--accent); }
+  .stat .value.green { color: var(--success); }
+  .stat .value.red { color: var(--danger); }
+  .stat .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--gray-500);
+    font-weight: 600;
+  }
+
+  /* === TABELAS === */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0 24px;
+    background: white;
+    border: 1px solid var(--gray-300);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    font-size: 14px;
+  }
+  thead th {
+    background: var(--primary);
+    color: white;
+    text-align: left;
+    padding: 12px 14px;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+    border-right: 1px solid rgba(255,255,255,0.18);
+  }
+  thead th:last-child { border-right: none; }
+  thead th.right { text-align: right; }
+  thead th.center { text-align: center; }
+  tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--gray-100);
+    border-right: 1px solid var(--gray-100);
+    vertical-align: top;
+  }
+  tbody td:last-child { border-right: none; }
+  tbody td.right { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody td.center { text-align: center; }
+  tbody tr:nth-child(even) { background: var(--gray-50); }
+  tbody tr:hover { background: var(--primary-light); }
+  tbody tr.total {
+    background: var(--accent-light) !important;
+    font-weight: 700;
+  }
+  tbody tr.total td { border-top: 2px solid var(--accent); }
+
+  /* === BADGES === */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .badge.green { background: var(--success-light); color: var(--success); }
+  .badge.gold  { background: var(--accent-light); color: var(--warning); }
+  .badge.red   { background: var(--danger-light); color: var(--danger); }
+  .badge.blue  { background: var(--primary-light); color: var(--primary); }
+  .badge.gray  { background: var(--gray-100); color: var(--gray-700); }
+
+  /* === ROADMAP === */
+  .roadmap {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 28px 0;
+  }
+  .wave {
+    border-radius: 10px;
+    padding: 24px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .wave.p0 { background: linear-gradient(140deg, #b22222, #7a1414); }
+  .wave.p1 { background: linear-gradient(140deg, #b8860b, #8b6508); }
+  .wave.p2 { background: linear-gradient(140deg, #1e7a4d, #155c3a); }
+  .wave .wave-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+  }
+  .wave h3 { color: white; margin: 0 0 8px; font-size: 19px; }
+  .wave .duration { font-size: 13px; opacity: 0.85; margin-bottom: 14px; }
+  .wave ul {
+    margin: 0; padding-left: 18px;
+    font-size: 13.5px;
+  }
+  .wave ul li { margin-bottom: 6px; line-height: 1.5; }
+  .wave .milestone {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.22);
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  /* === SCENARIO COMPARISON === */
+  .scenarios {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin: 24px 0;
+  }
+  .scenario-card {
+    border: 2px solid var(--gray-300);
+    border-radius: 10px;
+    padding: 22px;
+    background: white;
+  }
+  .scenario-card.realistic {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    transform: scale(1.02);
+  }
+  .scenario-card.optimistic { border-color: var(--success); }
+  .scenario-card.conservative { border-color: var(--gray-500); }
+  .scenario-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+  .scenario-card.conservative .scenario-tag { background: var(--gray-100); color: var(--gray-700); }
+  .scenario-card.realistic .scenario-tag { background: var(--accent); color: white; }
+  .scenario-card.optimistic .scenario-tag { background: var(--success); color: white; }
+  .scenario-card h4 { margin: 0 0 12px; font-size: 17px; color: var(--primary-dark); }
+  .scenario-metric {
+    display: flex; justify-content: space-between;
+    padding: 7px 0;
+    border-bottom: 1px dotted var(--gray-300);
+    font-size: 14px;
+  }
+  .scenario-metric:last-child { border-bottom: none; }
+  .scenario-metric strong { color: var(--primary-dark); font-variant-numeric: tabular-nums; }
+
+  /* === PRICING TABLE === */
+  .pricing {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 28px 0;
+  }
+  .plan {
+    background: white;
+    border: 1px solid var(--gray-300);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .plan.featured {
+    border: 2px solid var(--accent);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+  }
+  .plan-header {
+    background: var(--primary);
+    color: white;
+    padding: 18px 18px 16px;
+    text-align: center;
+    position: relative;
+  }
+  .plan.featured .plan-header {
+    background: linear-gradient(140deg, var(--accent), #b8860b);
+  }
+  .plan-header h4 { margin: 0; color: white; font-size: 17px; }
+  .plan-price {
+    text-align: center;
+    padding: 18px 14px 8px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .plan-price .currency { font-size: 14px; color: var(--gray-500); }
+  .plan-price .amount {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--primary-dark);
+  }
+  .plan-price .period { font-size: 12px; color: var(--gray-500); display: block; }
+  .plan-setup {
+    text-align: center;
+    padding: 8px 14px 14px;
+    font-size: 12px;
+    color: var(--gray-700);
+  }
+  .plan-setup strong { color: var(--accent); }
+  .plan-features {
+    list-style: none;
+    margin: 0;
+    padding: 12px 18px 22px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .plan-features li {
+    padding: 6px 0;
+    border-bottom: 1px dotted var(--gray-300);
+  }
+  .plan-features li:last-child { border-bottom: none; }
+  .plan-features li::before {
+    content: "✓";
+    color: var(--success);
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  /* === MODULE CLASSIFICATION === */
+  .module-group {
+    border-radius: 10px;
+    padding: 22px;
+    margin: 14px 0;
+    border-left: 6px solid;
+  }
+  .module-group.a { background: #f0f7ff; border-left-color: var(--primary); }
+  .module-group.b { background: #fdf6e3; border-left-color: var(--accent); }
+  .module-group.c { background: #e6f4ec; border-left-color: var(--success); }
+  .module-group h4 { margin: 0 0 8px; }
+  .module-tags { margin-top: 10px; }
+  .module-tags .tag {
+    display: inline-block;
+    background: white;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: var(--gray-700);
+    margin: 3px 4px 3px 0;
+    border: 1px solid var(--gray-300);
+  }
+
+  /* === ARCHITECTURE DIAGRAM === */
+  .arch-diagram {
+    background: var(--gray-50);
+    border: 1px dashed var(--gray-300);
+    border-radius: 10px;
+    padding: 28px;
+    margin: 24px 0;
+    text-align: center;
+  }
+  .arch-platform {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-md);
+    min-width: 460px;
+  }
+  .arch-platform strong { font-size: 16px; display: block; margin-bottom: 6px; }
+  .arch-platform-list { font-size: 13px; opacity: 0.92; }
+  .arch-arrow {
+    color: var(--gray-500);
+    font-size: 26px;
+    margin: 4px 0;
+  }
+  .arch-modules {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .arch-module {
+    background: white;
+    border: 2px solid;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 13px;
+  }
+  .arch-module.now { border-color: var(--success); }
+  .arch-module.next { border-color: var(--warning); }
+  .arch-module.future { border-color: var(--gray-300); opacity: 0.7; }
+  .arch-module strong { display: block; color: var(--primary-dark); margin-bottom: 4px; }
+
+  /* === NEXT STEPS === */
+  .next-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--gray-300);
+  }
+  .next-step:last-child { border-bottom: none; }
+  .next-step .step-num {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .next-step .step-content h4 { margin: 0 0 6px; color: var(--primary-dark); }
+  .next-step .step-content p { margin: 0; color: var(--gray-700); }
+
+  /* === FOOTER === */
+  footer {
+    background: var(--gray-900);
+    color: var(--gray-300);
+    padding: 40px 60px;
+    text-align: center;
+    font-size: 13px;
+  }
+  footer .logo {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  footer .meta { opacity: 0.7; font-size: 12px; margin-top: 14px; }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 900px) {
+    .toc-grid, .card-grid.cols-2, .card-grid.cols-3, .card-grid.cols-4,
+    .stat-row, .roadmap, .scenarios, .pricing, .arch-modules {
+      grid-template-columns: 1fr;
+    }
+    section, .cover, .toc, footer { padding-left: 28px; padding-right: 28px; }
+    .cover h1 { font-size: 32px; }
+  }
+
+  /* === PRINT === */
+  @media print {
+    body { background: white; }
+    .page { box-shadow: none; max-width: 100%; }
+    section { page-break-inside: avoid; padding: 32px 28px; }
+    .wave, .scenario-card, .plan { page-break-inside: avoid; }
+    .cover { padding: 40px 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ============ CAPA ============ -->
+  <div class="cover">
+    <div class="cover-content">
+      <span class="cover-badge">Estratégia Comercial · Confidencial</span>
+      <h1>Aero Suite</h1>
+      <div class="subtitle">Plano de Transformação em Produto SaaS Comercial — Análise Técnica, Estratégia de Mercado, Modelo de Receita e Roadmap de Evolução</div>
+      <div class="cover-meta">
+        <div class="cover-meta-item">
+          <span class="label">Documento</span>
+          <span class="value">Diagnóstico + Plano de Negócio</span>
+        </div>
+        <div class="cover-meta-item">
+          <span class="label">Versão</span>
+          <span class="value">1.0</span>
+        </div>
+        <div class="cover-meta-item">
+          <span class="label">Horizonte</span>
+          <span class="value">24 meses</span>
+        </div>
+        <div class="cover-meta-item">
+          <span class="label">Público</span>
+          <span class="value">Decisão Estratégica</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SUMÁRIO ============ -->
+  <div class="toc">
+    <h2>Sumário Executivo</h2>
+    <div class="toc-grid">
+      <a href="#sec-1"><span class="num">01</span>Visão Geral e Recomendação</a>
+      <a href="#sec-2"><span class="num">02</span>Diagnóstico Técnico Atual</a>
+      <a href="#sec-3"><span class="num">03</span>Classificação dos Módulos</a>
+      <a href="#sec-4"><span class="num">04</span>Estratégia de Produto</a>
+      <a href="#sec-5"><span class="num">05</span>Modelos de Entrega</a>
+      <a href="#sec-6"><span class="num">06</span>Estrutura de Preços</a>
+      <a href="#sec-7"><span class="num">07</span>Projeções de Receita</a>
+      <a href="#sec-8"><span class="num">08</span>Custos Operacionais (OPEX)</a>
+      <a href="#sec-9"><span class="num">09</span>Roadmap em 3 Ondas</a>
+      <a href="#sec-10"><span class="num">10</span>Riscos e Mitigações</a>
+      <a href="#sec-11"><span class="num">11</span>Valor de Mercado</a>
+      <a href="#sec-12"><span class="num">12</span>Próximos Passos</a>
+    </div>
+  </div>
+
+  <!-- ============ SEÇÃO 1 — VISÃO GERAL ============ -->
+  <section id="sec-1">
+    <h2 class="section-title"><span class="num">01</span>Visão Geral e Recomendação Estratégica</h2>
+    <p class="section-subtitle">Tese central do plano em uma página</p>
+
+    <div class="highlight accent">
+      <strong>Recomendação principal:</strong> Adotar estratégia <strong>MRO-First (Wedge Strategy)</strong> — comercializar primeiro como suite especializada para manutenção aeronáutica, usando a operação atual da Aero Suite como case de prova, e só após validação no nicho expandir o núcleo horizontal para outros setores industriais.
+    </div>
+
+    <p>O <strong>Aero Suite</strong> possui um ativo técnico relevante já operando em produção: stack moderna (Quarkus 3 + Java 21 + Angular 18), arquitetura em camadas, domínio rico para operação MRO (Ordens de Serviço, FCU, kits, estoque com rastreio FIFO, propostas comerciais, portal externo). Esse conjunto representa de 18 a 24 meses de desenvolvimento que <strong>não precisa ser refeito</strong>.</p>
+
+    <p>Por outro lado, no estado atual o sistema é <strong>monolítico single-tenant</strong>, com autenticação frágil, branding "Aero Suite" embutido no código e ausência de mecanismos de isolamento por empresa. Esses pontos são <strong>bloqueadores objetivos</strong> para vender ao segundo cliente — mas todos endereçáveis em 3 a 6 meses de trabalho focado.</p>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="value">R$ 2,2M</div>
+        <div class="label">ARR Realista Ano 2</div>
+      </div>
+      <div class="stat">
+        <div class="value gold">~R$ 1,1M</div>
+        <div class="label">Lucro Operacional Ano 2</div>
+      </div>
+      <div class="stat">
+        <div class="value green">70%</div>
+        <div class="label">Margem Bruta Esperada</div>
+      </div>
+      <div class="stat">
+        <div class="value">5–7×</div>
+        <div class="label">Múltiplo de Valuation</div>
+      </div>
+    </div>
+
+    <h3>As 4 decisões fundamentais</h3>
+    <div class="card-grid cols-2">
+      <div class="card feat">
+        <div class="icon-badge">01</div>
+        <h4>Foco em nicho antes de horizontalizar</h4>
+        <p>Dominar o mercado MRO brasileiro primeiro (~150 oficinas RBAC 145), depois extrair o core comum para indústria geral.</p>
+      </div>
+      <div class="card feat gold">
+        <div class="icon-badge" style="background: var(--accent-light); color: var(--accent)">02</div>
+        <h4>Cloud Single-Tenant para começar</h4>
+        <p>Uma stack Docker isolada por cliente em VPS dedicada. Reusa 100% do que existe hoje, sem dependência de multi-tenancy completo.</p>
+      </div>
+      <div class="card feat green">
+        <div class="icon-badge" style="background: var(--success-light); color: var(--success)">03</div>
+        <h4>Preço-âncora MRO Pro: R$ 4.490/mês + setup</h4>
+        <p>Posicionamento premium-acessível, com setup obrigatório que filtra cliente curioso e antecipa caixa.</p>
+      </div>
+      <div class="card feat red">
+        <div class="icon-badge" style="background: var(--danger-light); color: var(--danger)">04</div>
+        <h4>P0 técnico imediato: Flyway → JWT → Tenancy</h4>
+        <p>Migrações versionadas, autenticação real e isolamento por tenant antes de qualquer prospecção externa séria.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SEÇÃO 2 — DIAGNÓSTICO ============ -->
+  <section id="sec-2">
+    <h2 class="section-title"><span class="num">02</span>Diagnóstico Técnico Atual</h2>
+    <p class="section-subtitle">O que está pronto, o que precisa evoluir, o que trava a venda</p>
+
+    <h3>Pontos fortes (preservar)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Ativo</th>
+          <th>Localização no projeto</th>
+          <th>Valor comercial</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Stack moderna e produtiva</td><td><code>backend/pom.xml</code>, <code>frontend/package.json</code></td><td>Facilita contratação e evolução</td></tr>
+        <tr><td>Domínio operacional vivido em produção</td><td>Módulos OS, estoque FIFO, propostas, chat, suporte</td><td>Curva de aprendizado já paga</td></tr>
+        <tr><td>Arquitetura em camadas</td><td><code>com.aerosuite.api / service / domain / dto / mapping</code></td><td>Refatoração incremental viável</td></tr>
+        <tr><td>OpenAPI + Micrometer + JSON logging</td><td><code>application.properties</code></td><td>Base para observabilidade enterprise</td></tr>
+        <tr><td>Auditoria de OS operante</td><td><code>com.aerosuite.audit.*</code></td><td>Diferencial em compliance regulatório</td></tr>
+        <tr><td>Geração nativa de PDF</td><td>OpenPDF + POI</td><td>Reduz integração externa</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Bloqueadores (impedem vender ao 2º cliente)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:60px">ID</th>
+          <th>Bloqueador</th>
+          <th>Evidência</th>
+          <th>Impacto comercial</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge red">B1</span></td>
+          <td><strong>Ausência de multi-tenancy</strong> — nenhuma tabela tem <code>tenant_id</code>; nenhuma query filtra por empresa</td>
+          <td>Pesquisa nula em <code>backend/src/main</code></td>
+          <td>Cada cliente exige instância dedicada — custo cresce linearmente</td>
+        </tr>
+        <tr>
+          <td><span class="badge red">B2</span></td>
+          <td><strong>Autenticação insegura</strong> — senha em texto puro; "token" reversível em Base64</td>
+          <td><code>AuthService.java</code>, <code>AuthResource</code></td>
+          <td>Inviável em qualquer due diligence ou auditoria de segurança</td>
+        </tr>
+        <tr>
+          <td><span class="badge red">B3</span></td>
+          <td><strong>Autorização confiando no cliente</strong> — headers <code>X-User-*</code> spoofáveis; sem <code>@RolesAllowed</code></td>
+          <td><code>EstoqueResource</code>, <code>OSResource</code></td>
+          <td>Permissões podem ser burladas trivialmente</td>
+        </tr>
+        <tr>
+          <td><span class="badge red">B4</span></td>
+          <td><strong>Branding hardcoded</strong> — <code>aerosuite_token</code> no localStorage, e-mails @aerosuitecontrols, paths BELLOES_*</td>
+          <td><code>auth.service.ts</code>, <code>docker-compose.yml</code></td>
+          <td>White-label/revenda inviável sem refactor</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Dívidas técnicas críticas (afetam churn e velocidade)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Dívida</th>
+          <th>Risco</th>
+          <th>Esforço estimado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Sem Flyway/Liquibase (SQL avulso em <code>db/scripts/</code>)</td><td>Atualizar N clientes vira caos</td><td class="center"><span class="badge gold">Médio</span></td></tr>
+        <tr><td>2 testes no backend, 0 no frontend</td><td>Refactor de tenancy quebra o produto sem rede de proteção</td><td class="center"><span class="badge red">Alto</span></td></tr>
+        <tr><td>Sem CI/CD pipeline</td><td>Deploy manual → bugs em produção</td><td class="center"><span class="badge green">Baixo</span></td></tr>
+        <tr><td>Sem LGPD / Termos / Política de Privacidade</td><td>Multa ANPD e impede venda B2B</td><td class="center"><span class="badge gold">Médio</span></td></tr>
+        <tr><td>i18n parcial</td><td>Trava expansão internacional</td><td class="center"><span class="badge gold">Médio</span></td></tr>
+        <tr><td>Vertical aeronáutico misturado com módulos genéricos</td><td>Confunde proposta de valor</td><td class="center"><span class="badge gold">Médio</span></td></tr>
+        <tr><td>Endpoints de teste expostos (<code>/api/test-*</code>, <code>/api/fix</code>)</td><td>Vetor de ataque / abuso</td><td class="center"><span class="badge green">Baixo</span></td></tr>
+        <tr><td>Deploy acoplado a Windows + Drive Google</td><td>Não roda em K8s na nuvem</td><td class="center"><span class="badge red">Alto</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ SEÇÃO 3 — MÓDULOS ============ -->
+  <section id="sec-3">
+    <h2 class="section-title"><span class="num">03</span>Classificação dos Módulos</h2>
+    <p class="section-subtitle">O que serve para qualquer empresa, o que é nicho de alto valor, o que precisa generalização</p>
+
+    <div class="module-group a">
+      <h4>(A) Núcleo Genérico — serve qualquer empresa</h4>
+      <p>Tudo isso compõe a <strong>"Plataforma Base"</strong>, vendida em todos os planos.</p>
+      <div class="module-tags">
+        <span class="tag">Autenticação</span>
+        <span class="tag">Usuários</span>
+        <span class="tag">Perfis</span>
+        <span class="tag">Funcionalidades (RBAC)</span>
+        <span class="tag">Controle de Acesso</span>
+        <span class="tag">Notificações</span>
+        <span class="tag">Chat Interno</span>
+        <span class="tag">Suporte (Tickets)</span>
+        <span class="tag">Backup</span>
+        <span class="tag">Configurações</span>
+      </div>
+    </div>
+
+    <div class="module-group c">
+      <h4>(C) Operacional Crítico — adaptável a vários setores (o "ouro comercial")</h4>
+      <p>Empresas de manufatura, MRO, distribuição e instaladoras técnicas pagam alto por <strong>estoque rastreado + propostas + portal cliente</strong>. Após remover dependências específicas de FCU/OS aeronáutica, vira o coração de produtos para múltiplos verticais.</p>
+      <div class="module-tags">
+        <span class="tag">Estoque FIFO</span>
+        <span class="tag">Rastreio por Lote</span>
+        <span class="tag">Invoices</span>
+        <span class="tag">Fornecedores</span>
+        <span class="tag">Movimentações</span>
+        <span class="tag">QR Code</span>
+        <span class="tag">Propostas Comerciais</span>
+        <span class="tag">Templates</span>
+        <span class="tag">Clientes</span>
+        <span class="tag">Portal Externo</span>
+        <span class="tag">Biblioteca de Documentos</span>
+        <span class="tag">Relatórios</span>
+      </div>
+    </div>
+
+    <div class="module-group b">
+      <h4>(B) Vertical Aeronáutica — nicho de ticket alto</h4>
+      <p>Em vez de descartar, esse conjunto vira <strong>"Módulo MRO Aviation"</strong> — extensão paga premium, vendida para oficinas RBAC 145 / Part-145. É o diferencial vertical que justifica preços enterprise.</p>
+      <div class="module-tags">
+        <span class="tag">FCU</span>
+        <span class="tag">FCU Assembly</span>
+        <span class="tag">Associação FCU</span>
+        <span class="tag">Ordens de Serviço (OS)</span>
+        <span class="tag">OS Auditoria</span>
+        <span class="tag">Trocas Eventuais</span>
+        <span class="tag">Manuais Aeronáuticos</span>
+        <span class="tag">Publicações Técnicas</span>
+        <span class="tag">Tipos de Serviço</span>
+        <span class="tag">Fabricantes</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SEÇÃO 4 — ESTRATÉGIA DE PRODUTO ============ -->
+  <section id="sec-4">
+    <h2 class="section-title"><span class="num">04</span>Estratégia de Produto: 2 Produtos, 1 Plataforma</h2>
+    <p class="section-subtitle">Como organizar o portfólio comercial sem fragmentar o time de desenvolvimento</p>
+
+    <div class="arch-diagram">
+      <div class="arch-platform">
+        <strong>🏛 Plataforma Aero Suite (Núcleo + Operacional)</strong>
+        <div class="arch-platform-list">Auth · RBAC · Multi-tenancy · Estoque · Comercial · Suporte · Chat · Portal · White-label · i18n · LGPD</div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-modules">
+        <div class="arch-module now">
+          <strong>Módulo MRO Aviation</strong>
+          FCU, OS aeronáutica, manuais técnicos, RBAC 145
+          <div style="margin-top:8px"><span class="badge green">Disponível agora</span></div>
+        </div>
+        <div class="arch-module next">
+          <strong>Módulo Manufatura</strong>
+          Ordem de produção, BOM, apontamento, controle de qualidade
+          <div style="margin-top:8px"><span class="badge gold">Roadmap 12–18 meses</span></div>
+        </div>
+        <div class="arch-module future">
+          <strong>Módulo Field Service</strong>
+          Mobile, ordem de visita, checklist técnico, georeferenciamento
+          <div style="margin-top:8px"><span class="badge gray">Roadmap 18+ meses</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Por que MRO-First e não generalização imediata?</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Critério</th>
+          <th>MRO-First (recomendado)</th>
+          <th>Horizontal-First</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Concorrência direta</td><td><span class="badge green">Fraca</span> (CMMS gringos, planilhas, Delphi antigo)</td><td><span class="badge red">Brutal</span> (TOTVS, Senior, Omie, Bling)</td></tr>
+        <tr><td>Diferencial técnico</td><td><span class="badge green">Pronto</span> (FCU, OS, auditoria)</td><td><span class="badge red">Genérico</span> — concorrentes têm mais features</td></tr>
+        <tr><td>Ticket médio realista</td><td><strong>R$ 4–10k/mês</strong></td><td>R$ 300–1.500/mês</td></tr>
+        <tr><td>Volume necessário para R$ 2M ARR</td><td>15–30 clientes</td><td>300–800 clientes</td></tr>
+        <tr><td>CAC esperado</td><td><span class="badge green">Baixo</span> (comunidade pequena, indicação)</td><td><span class="badge red">Alto</span> (marketing pago)</td></tr>
+        <tr><td>Defensibilidade</td><td><span class="badge green">Alta</span> (regulatório RBAC 145, FAA Part 145)</td><td><span class="badge gold">Média</span> (commodity)</td></tr>
+        <tr><td>Case de prova já existe?</td><td><strong>Sim — Aero Suite em produção</strong></td><td>Não, ainda</td></tr>
+      </tbody>
+    </table>
+
+    <div class="highlight success">
+      <strong>Princípio estratégico:</strong> dominar um nicho regulado primeiro cria fosso competitivo (compliance + vocabulário + relacionamento) que se traduz em margens altas e churn baixo. Empresas como Salesforce (SFA puro), Shopify (lojinha) e Stripe (pagamentos online) cresceram exatamente assim — só depois se tornaram plataformas.
+    </div>
+  </section>
+
+  <!-- ============ SEÇÃO 5 — MODELOS DE ENTREGA ============ -->
+  <section id="sec-5">
+    <h2 class="section-title"><span class="num">05</span>Modelos de Entrega do Produto</h2>
+    <p class="section-subtitle">Como o cliente recebe e usa o sistema — 4 opções, 1 recomendada para começar</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Modelo</th>
+          <th>Como funciona</th>
+          <th>Esforço técnico</th>
+          <th>Cliente ideal</th>
+          <th>Ticket</th>
+          <th>Quando usar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>A. Cloud Multi-Tenant</strong> (SaaS puro)</td>
+          <td>1 banco/app com <code>tenant_id</code>; cliente faz cadastro e entra</td>
+          <td><span class="badge red">Alto</span></td>
+          <td>PME, self-service</td>
+          <td>Médio</td>
+          <td>A partir do mês 9</td>
+        </tr>
+        <tr>
+          <td><strong>B. Cloud Single-Tenant</strong> dedicado</td>
+          <td>1 stack Docker por cliente em VPS isolada</td>
+          <td><span class="badge green">Baixo</span></td>
+          <td>MRO médio/grande</td>
+          <td>Alto</td>
+          <td><strong>Começa agora</strong></td>
+        </tr>
+        <tr>
+          <td><strong>C. On-premise</strong></td>
+          <td>Stack roda na infra do cliente; suporte remoto</td>
+          <td><span class="badge gold">Médio</span></td>
+          <td>Cliente regulado, dados sensíveis</td>
+          <td>Muito alto</td>
+          <td>Sob demanda enterprise</td>
+        </tr>
+        <tr>
+          <td><strong>D. Híbrido</strong> / Private Cloud</td>
+          <td>Banco no cliente, app na nuvem (ou vice-versa)</td>
+          <td><span class="badge red">Alto</span></td>
+          <td>Aviação grande, militar</td>
+          <td>Premium</td>
+          <td>Casos pontuais</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Recomendação: estratégia em 3 ondas</h3>
+    <div class="roadmap">
+      <div class="wave p0">
+        <span class="wave-tag">🥇 Onda 1 · Mês 1–9</span>
+        <h3>Cloud Single-Tenant Dedicado</h3>
+        <div class="duration">Lançamento comercial em 30–60 dias</div>
+        <ul>
+          <li>Reusa <code>docker-compose.yml</code> existente</li>
+          <li>VPS isolada por cliente (Hetzner / Lightsail)</li>
+          <li>Subdomínio próprio: <code>alpha.aerosuite-suite.com.br</code></li>
+          <li>Backup diário → S3 / Wasabi</li>
+          <li>Atualização via Ansible quando &gt; 5 clientes</li>
+        </ul>
+        <div class="milestone">Marco: 5 clientes pagantes em produção isolada</div>
+      </div>
+      <div class="wave p1">
+        <span class="wave-tag">🥈 Onda 2 · Mês 9–18</span>
+        <h3>Multi-Tenant SaaS</h3>
+        <div class="duration">Escala self-service para PMEs</div>
+        <ul>
+          <li>Cliente PME entra no plano multi-tenant</li>
+          <li>Premium / regulado continua no dedicado</li>
+          <li>2 SKUs vendidos em paralelo</li>
+          <li>Onboarding self-service (trial 14 dias)</li>
+          <li>Stripe / Pagar.me — recorrência automática</li>
+        </ul>
+        <div class="milestone">Marco: R$ 100k+ MRR com 20+ clientes</div>
+      </div>
+      <div class="wave p2">
+        <span class="wave-tag">🥉 Onda 3 · Mês 18+</span>
+        <h3>On-Premise opcional</h3>
+        <div class="duration">Destrava enterprise de grande porte</div>
+        <ul>
+          <li>Instalador empacotado para datacenter cliente</li>
+          <li>Setup R$ 80k+ + manutenção anual</li>
+          <li>Não é produto principal — destravador de venda</li>
+          <li>Permite vender a aviação grande, militar, regulado</li>
+        </ul>
+        <div class="milestone">Marco: 1–2 contratos enterprise/ano</div>
+      </div>
+    </div>
+
+    <h3>Stack de infra recomendada (Onda 1)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Provedor</th>
+          <th class="right">Custo/mês (BRL)</th>
+          <th>Por quê</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>VPS produção por cliente</td><td>Hetzner CX22 (4GB/2vCPU) ou AWS Lightsail</td><td class="right">R$ 60–120</td><td>Encaixa Quarkus + MySQL pequeno</td></tr>
+        <tr><td>Backup automatizado</td><td>Wasabi ou Backblaze B2</td><td class="right">R$ 15–30</td><td>10× mais barato que S3</td></tr>
+        <tr><td>Domínio + DNS + SSL</td><td>Cloudflare</td><td class="right">R$ 0–20</td><td>DNS gerenciado, SSL grátis, WAF leve</td></tr>
+        <tr><td>E-mail transacional</td><td>Brevo ou Mailgun</td><td class="right">R$ 0–60</td><td>300 e-mails/dia grátis no Brevo</td></tr>
+        <tr><td>Monitoramento</td><td>UptimeRobot + Grafana Cloud Free</td><td class="right">R$ 0</td><td>Plano grátis até 10 clientes</td></tr>
+        <tr><td>Helpdesk centralizado</td><td>Chatwoot self-host ou Pipefy</td><td class="right">R$ 0–200</td><td>Tickets multi-canal</td></tr>
+        <tr><td>Servidor de orquestração</td><td>Hetzner CX32 (8GB)</td><td class="right">R$ 130</td><td>Ansible + monitoramento + site comercial</td></tr>
+        <tr class="total"><td colspan="2"><strong>Custo médio por cliente / mês</strong></td><td class="right"><strong>R$ 200–300</strong></td><td>Direta de infra</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ SEÇÃO 6 — PRECIFICAÇÃO ============ -->
+  <section id="sec-6">
+    <h2 class="section-title"><span class="num">06</span>Estrutura de Preços</h2>
+    <p class="section-subtitle">Posicionamento premium-acessível para o segmento MRO brasileiro</p>
+
+    <h3>Planos recorrentes</h3>
+    <div class="pricing">
+      <div class="plan">
+        <div class="plan-header"><h4>MRO Starter</h4></div>
+        <div class="plan-price">
+          <span class="currency">R$</span>
+          <span class="amount">1.490</span>
+          <span class="period">/mês</span>
+        </div>
+        <div class="plan-setup">Setup: <strong>R$ 4.900</strong></div>
+        <ul class="plan-features">
+          <li>Até 5 mecânicos</li>
+          <li>Plataforma base</li>
+          <li>OS + Estoque básico</li>
+          <li>1 unidade operacional</li>
+          <li>Suporte por e-mail</li>
+        </ul>
+      </div>
+      <div class="plan featured">
+        <div class="plan-header"><h4>MRO Professional ⭐</h4></div>
+        <div class="plan-price">
+          <span class="currency">R$</span>
+          <span class="amount">4.490</span>
+          <span class="period">/mês</span>
+        </div>
+        <div class="plan-setup">Setup: <strong>R$ 9.900</strong></div>
+        <ul class="plan-features">
+          <li>Até 25 usuários</li>
+          <li>Tudo do Starter</li>
+          <li>Propostas comerciais</li>
+          <li>FCU + Portal Cliente</li>
+          <li>Auditoria completa</li>
+          <li>Suporte por chat</li>
+        </ul>
+      </div>
+      <div class="plan">
+        <div class="plan-header"><h4>MRO Enterprise</h4></div>
+        <div class="plan-price">
+          <span class="currency">R$</span>
+          <span class="amount">8.900</span>
+          <span class="period">/mês</span>
+        </div>
+        <div class="plan-setup">Setup: <strong>R$ 19.900</strong></div>
+        <ul class="plan-features">
+          <li>Usuários ilimitados</li>
+          <li>Tudo do Professional</li>
+          <li>Multi-unidade</li>
+          <li>API pública</li>
+          <li>SLA 99,5%</li>
+          <li>Suporte por telefone</li>
+        </ul>
+      </div>
+      <div class="plan">
+        <div class="plan-header"><h4>MRO Dedicated</h4></div>
+        <div class="plan-price">
+          <span class="currency">R$</span>
+          <span class="amount">14.900</span>
+          <span class="period">/mês</span>
+        </div>
+        <div class="plan-setup">Setup: <strong>R$ 39.900</strong></div>
+        <ul class="plan-features">
+          <li>Tudo do Enterprise</li>
+          <li>VPS dedicada exclusiva</li>
+          <li>Atualização agendada</li>
+          <li>DPA assinado</li>
+          <li>Backup customizado</li>
+          <li>Suporte 24×7</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Fontes extras de receita (add-ons)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Add-on</th>
+          <th class="right">Preço</th>
+          <th class="center">Margem</th>
+          <th>Observação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Módulo Aeronáutico Premium (AD/SB tracker, manuais)</td><td class="right">+R$ 1.500/mês</td><td class="center"><span class="badge green">90%</span></td><td>Software puro</td></tr>
+        <tr><td>Integração NFe / NFSe</td><td class="right">+R$ 490/mês</td><td class="center"><span class="badge green">70%</span></td><td>Via API parceira</td></tr>
+        <tr><td>WhatsApp Business API</td><td class="right">+R$ 390/mês</td><td class="center"><span class="badge gold">60%</span></td><td>Repasse Meta</td></tr>
+        <tr><td>Usuários adicionais (acima do plano)</td><td class="right">R$ 79/usuário/mês</td><td class="center"><span class="badge green">95%</span></td><td>Cresce com cliente</td></tr>
+        <tr><td>Armazenamento extra (cada 50GB)</td><td class="right">R$ 149/mês</td><td class="center"><span class="badge green">80%</span></td><td>Repasse cloud</td></tr>
+        <tr><td>Treinamento in-loco (1 dia)</td><td class="right">R$ 3.500/dia</td><td class="center"><span class="badge gold">70%</span></td><td>+ deslocamento</td></tr>
+        <tr><td>Customização sob demanda</td><td class="right">R$ 280/hora</td><td class="center"><span class="badge gold">60%</span></td><td>Pacote mínimo 20h</td></tr>
+        <tr><td>Consultoria de implantação</td><td class="right">R$ 8.900 (40h)</td><td class="center"><span class="badge gold">75%</span></td><td>Reduz risco de churn</td></tr>
+      </tbody>
+    </table>
+
+    <div class="highlight">
+      <strong>Por que cobrar setup obrigatório?</strong>
+      <ol style="margin: 10px 0 0; padding-left: 20px">
+        <li>Filtra cliente curioso — quem não paga setup, não usa o produto</li>
+        <li>Cobre os 15–30 dias de implantação (sua hora vale R$ 280–400)</li>
+        <li>Reduz churn cedo — cliente que pagou setup tem investimento emocional</li>
+        <li>Antecipa caixa — capital essencial para crescer no primeiro ano</li>
+      </ol>
+    </div>
+
+    <h3>Benchmark competitivo</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Concorrente</th>
+          <th>Preço comparável</th>
+          <th>Limitação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>CMMS Champion (EUA)</td><td>USD 199–699/mês (R$ 1k–3,5k)</td><td>Em inglês, sem propostas, sem portal cliente</td></tr>
+        <tr><td>Pirxon Aviation (EU)</td><td>~€600/mês sob consulta</td><td>Genérico europeu</td></tr>
+        <tr><td>TOTVS Protheus adaptado</td><td>A partir de R$ 6k/mês + R$ 60k setup</td><td>Não fala vocabulário aeronáutico</td></tr>
+        <tr><td>Planilha + Word (status quo)</td><td>"Grátis" — custa ~R$ 8k/mês em retrabalho</td><td>Sua concorrência real</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ SEÇÃO 7 — PROJEÇÕES ============ -->
+  <section id="sec-7">
+    <h2 class="section-title"><span class="num">07</span>Projeções de Receita</h2>
+    <p class="section-subtitle">3 cenários baseados em premissas conservadoras de churn (3%/mês) e ticket médio (R$ 3.500)</p>
+
+    <div class="scenarios">
+      <div class="scenario-card conservative">
+        <span class="scenario-tag">Conservador</span>
+        <h4>Vendendo devagar</h4>
+        <div class="scenario-metric"><span>6 meses · clientes</span><strong>3</strong></div>
+        <div class="scenario-metric"><span>6 meses · MRR</span><strong>R$ 10.500</strong></div>
+        <div class="scenario-metric"><span>12 meses · clientes</span><strong>8</strong></div>
+        <div class="scenario-metric"><span>12 meses · MRR</span><strong>R$ 28.000</strong></div>
+        <div class="scenario-metric"><span>Receita Ano 1</span><strong>~R$ 396k</strong></div>
+        <div class="scenario-metric"><span>ARR Ano 2</span><strong>~R$ 750k</strong></div>
+      </div>
+      <div class="scenario-card realistic">
+        <span class="scenario-tag">⭐ Realista</span>
+        <h4>Com indicação de cliente</h4>
+        <div class="scenario-metric"><span>6 meses · clientes</span><strong>5</strong></div>
+        <div class="scenario-metric"><span>6 meses · MRR</span><strong>R$ 17.500</strong></div>
+        <div class="scenario-metric"><span>12 meses · clientes</span><strong>15</strong></div>
+        <div class="scenario-metric"><span>12 meses · MRR</span><strong>R$ 52.500</strong></div>
+        <div class="scenario-metric"><span>Receita Ano 1</span><strong>~R$ 450k</strong></div>
+        <div class="scenario-metric"><span>ARR Ano 2</span><strong>R$ 2,2M</strong></div>
+      </div>
+      <div class="scenario-card optimistic">
+        <span class="scenario-tag">Otimista</span>
+        <h4>Case viral + indicação forte</h4>
+        <div class="scenario-metric"><span>6 meses · clientes</span><strong>8</strong></div>
+        <div class="scenario-metric"><span>6 meses · MRR</span><strong>R$ 28.000</strong></div>
+        <div class="scenario-metric"><span>12 meses · clientes</span><strong>25</strong></div>
+        <div class="scenario-metric"><span>12 meses · MRR</span><strong>R$ 87.500</strong></div>
+        <div class="scenario-metric"><span>Receita Ano 1</span><strong>~R$ 750k</strong></div>
+        <div class="scenario-metric"><span>ARR Ano 2</span><strong>R$ 3,6M</strong></div>
+      </div>
+    </div>
+
+    <h3>Detalhamento — cenário realista mês a mês</h3>
+    <table>
+      <thead>
+        <tr>
+          <th class="center">Mês</th>
+          <th class="right">Clientes ativos</th>
+          <th class="right">Novos no mês</th>
+          <th class="right">MRR (R$)</th>
+          <th class="right">Setup do mês</th>
+          <th class="right">Receita total no mês</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="center">3</td><td class="right">1</td><td class="right">0</td><td class="right">3.500</td><td class="right">—</td><td class="right">3.500</td></tr>
+        <tr><td class="center">6</td><td class="right">5</td><td class="right">1</td><td class="right">17.500</td><td class="right">8.500</td><td class="right">26.000</td></tr>
+        <tr><td class="center">9</td><td class="right">10</td><td class="right">2</td><td class="right">35.000</td><td class="right">17.000</td><td class="right">52.000</td></tr>
+        <tr><td class="center">12</td><td class="right">15</td><td class="right">2</td><td class="right">52.500</td><td class="right">17.000</td><td class="right">69.500</td></tr>
+        <tr><td class="center">18</td><td class="right">28</td><td class="right">3</td><td class="right">98.000</td><td class="right">25.500</td><td class="right">123.500</td></tr>
+        <tr class="total"><td class="center">24</td><td class="right">45</td><td class="right">3</td><td class="right">157.500</td><td class="right">25.500</td><td class="right">183.000</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ SEÇÃO 8 — CUSTOS ============ -->
+  <section id="sec-8">
+    <h2 class="section-title"><span class="num">08</span>Custos Operacionais e Lucratividade</h2>
+    <p class="section-subtitle">Quanto custa operar a estrutura e qual o lucro líquido esperado</p>
+
+    <h3>OPEX Ano 1 (cenário realista — 15 clientes ao final)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Categoria de custo</th>
+          <th class="right">Mensal médio</th>
+          <th class="right">Total Ano 1</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Infraestrutura (15 clientes × R$ 200)</td><td class="right">R$ 3.000</td><td class="right">R$ 36.000</td></tr>
+        <tr><td>Servidor central + Wasabi + monitoramento</td><td class="right">R$ 250</td><td class="right">R$ 3.000</td></tr>
+        <tr><td>CTO / Tech Lead (você)</td><td class="right">R$ 12.000</td><td class="right">R$ 144.000</td></tr>
+        <tr><td>Vendedor PJ (a partir do mês 6)</td><td class="right">R$ 6.000 + comissão</td><td class="right">R$ 72.000</td></tr>
+        <tr><td>Customer Success (PJ, mês 9+)</td><td class="right">R$ 4.000</td><td class="right">R$ 16.000</td></tr>
+        <tr><td>Marketing (LinkedIn Ads, eventos AERO/MRO)</td><td class="right">R$ 2.500</td><td class="right">R$ 30.000</td></tr>
+        <tr><td>Contabilidade + jurídico (LGPD, contratos)</td><td class="right">R$ 1.200</td><td class="right">R$ 14.400</td></tr>
+        <tr><td>Tooling (Cursor, Figma, GitHub, Stripe fees)</td><td class="right">R$ 800</td><td class="right">R$ 9.600</td></tr>
+        <tr><td>Reserva (10%)</td><td class="right">—</td><td class="right">R$ 32.500</td></tr>
+        <tr class="total"><td><strong>OPEX Total Ano 1</strong></td><td class="right">—</td><td class="right"><strong>~R$ 358.000</strong></td></tr>
+      </tbody>
+    </table>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="value">R$ 450k</div>
+        <div class="label">Receita Ano 1</div>
+      </div>
+      <div class="stat">
+        <div class="value red">R$ 358k</div>
+        <div class="label">OPEX Ano 1</div>
+      </div>
+      <div class="stat">
+        <div class="value green">~R$ 92k</div>
+        <div class="label">Lucro Ano 1 (reinvestir)</div>
+      </div>
+      <div class="stat">
+        <div class="value gold">5×</div>
+        <div class="label">LTV/CAC esperado</div>
+      </div>
+    </div>
+
+    <h3>Projeção Ano 2 (45 clientes)</h3>
+    <table>
+      <thead>
+        <tr><th>Item</th><th class="right">Valor Ano 2</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Receita total (R$ 157.5k MRR × 12 + setups novos)</td><td class="right"><strong>R$ 2.200.000</strong></td></tr>
+        <tr><td>OPEX (infra + 2 vendedores + 2 CS + você + marketing)</td><td class="right">R$ 1.100.000</td></tr>
+        <tr class="total"><td><strong>Lucro Operacional Ano 2</strong></td><td class="right"><strong>~R$ 1.100.000</strong></td></tr>
+      </tbody>
+    </table>
+
+    <div class="highlight success">
+      <strong>Saúde financeira do modelo:</strong> Margem bruta de ~70% e LTV/CAC ≥ 5× colocam o produto na faixa de "SaaS vertical saudável" — referência para captação de investimento ou negociação de venda futura.
+    </div>
+  </section>
+
+  <!-- ============ SEÇÃO 9 — ROADMAP ============ -->
+  <section id="sec-9">
+    <h2 class="section-title"><span class="num">09</span>Roadmap Técnico em 3 Ondas</h2>
+    <p class="section-subtitle">Ordem inegociável de prioridades — pular ondas custa caro depois</p>
+
+    <div class="roadmap">
+      <div class="wave p0">
+        <span class="wave-tag">P0 · 8–12 semanas</span>
+        <h3>Fundação inegociável</h3>
+        <div class="duration">Sem isso, NÃO prospecte 2º cliente</div>
+        <ul>
+          <li><strong>Flyway</strong> versionando o schema</li>
+          <li>JWT assinado (RS256) + bcrypt nas senhas</li>
+          <li><code>@RolesAllowed</code> em todos os endpoints sensíveis</li>
+          <li>Tabela <code>tenant</code> + coluna <code>tenant_id</code> nas tabelas</li>
+          <li>Filtro automático no Hibernate por tenant</li>
+          <li>CI/CD no GitHub Actions</li>
+          <li>Auditoria de acesso (login, falha, permissão)</li>
+          <li>Backup automatizado + restore testado</li>
+          <li>Remover endpoints <code>/api/test-*</code> e <code>/api/fix</code> do prod</li>
+        </ul>
+        <div class="milestone">Marco: 2 tenants isolados no mesmo banco, sem vazamento</div>
+      </div>
+      <div class="wave p1">
+        <span class="wave-tag">P1 · 6–10 semanas</span>
+        <h3>Pronto para vender</h3>
+        <div class="duration">Habilita prospecção comercial</div>
+        <ul>
+          <li>White-label completo (logo, cores, nome, e-mail)</li>
+          <li>i18n completo (pt-BR + en) com @ngx-translate</li>
+          <li>Portal LGPD (termos, aceite, exclusão de dados)</li>
+          <li>Onboarding self-service</li>
+          <li>Billing via Stripe / Pagar.me</li>
+          <li>Feature flags por tenant (módulo MRO)</li>
+          <li>Hardening de logs (sem PII, sem print)</li>
+          <li>OpenAPI publicado em <code>/q/openapi-ui</code></li>
+        </ul>
+        <div class="milestone">Marco: cliente externo se cadastra e usa em domínio próprio</div>
+      </div>
+      <div class="wave p2">
+        <span class="wave-tag">P2 · 3–6 meses contínuos</span>
+        <h3>Competitivo de mercado</h3>
+        <div class="duration">Atinge ticket enterprise</div>
+        <ul>
+          <li>Prometheus + Grafana + OpenTelemetry</li>
+          <li>Migração para Kubernetes (Helm chart)</li>
+          <li>SSO corporativo (SAML / OIDC)</li>
+          <li>API pública com rate limiting</li>
+          <li>Mobile (Ionic) para estoque/QR</li>
+          <li>Marketplace de integrações</li>
+          <li>Cobertura de testes ≥ 60% + E2E Playwright</li>
+          <li>Certificação SOC2 Type I ou ISO 27001</li>
+        </ul>
+        <div class="milestone">Marco: 1º contrato enterprise (Banco Brasil, Embraer, etc.)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SEÇÃO 10 — RISCOS ============ -->
+  <section id="sec-10">
+    <h2 class="section-title"><span class="num">10</span>Riscos e Mitigações</h2>
+    <p class="section-subtitle">O que pode dar errado e como blindar a operação</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Risco</th>
+          <th>Probabilidade</th>
+          <th>Impacto</th>
+          <th>Mitigação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Aero Suite desestabiliza durante refactor de tenancy</td>
+          <td class="center"><span class="badge gold">Média</span></td>
+          <td class="center"><span class="badge red">Alto</span></td>
+          <td>Branch separada <code>saas/main</code>; Aero Suite em produção segue na <code>main</code>; merge progressivo com testes</td>
+        </tr>
+        <tr>
+          <td>"Vou reescrever do zero" (armadilha de engenharia)</td>
+          <td class="center"><span class="badge red">Alta</span></td>
+          <td class="center"><span class="badge red">Crítico</span></td>
+          <td>Refactor incremental por módulo; nunca reescrever; cada P0 entrega valor isolado</td>
+        </tr>
+        <tr>
+          <td>FCU misturado em telas genéricas gera bugs cruzados</td>
+          <td class="center"><span class="badge gold">Média</span></td>
+          <td class="center"><span class="badge gold">Médio</span></td>
+          <td>Feature flag por tenant desde o P0; testes de regressão automatizados</td>
+        </tr>
+        <tr>
+          <td>LGPD: vazamento de dados entre tenants</td>
+          <td class="center"><span class="badge green">Baixa (após P0)</span></td>
+          <td class="center"><span class="badge red">Crítico</span></td>
+          <td>Filtros automáticos no ORM; testes de isolamento; DPO designado</td>
+        </tr>
+        <tr>
+          <td>Concorrência (TOTVS, Senior) entra no nicho</td>
+          <td class="center"><span class="badge green">Baixa</span></td>
+          <td class="center"><span class="badge gold">Médio</span></td>
+          <td>Velocidade de mercado + relacionamento; certificação RBAC 145 antes deles</td>
+        </tr>
+        <tr>
+          <td>Cliente exige integração ERP fiscal complexa</td>
+          <td class="center"><span class="badge gold">Média</span></td>
+          <td class="center"><span class="badge gold">Médio</span></td>
+          <td>Parceria com gateway fiscal (Tecnospeed, Nuvem Fiscal); cobrar como add-on</td>
+        </tr>
+        <tr>
+          <td>Setup demora &gt; 30 dias (frustração do cliente)</td>
+          <td class="center"><span class="badge gold">Média</span></td>
+          <td class="center"><span class="badge red">Alto</span></td>
+          <td>Playbook de onboarding documentado; checklist de 14 dias; CS dedicado</td>
+        </tr>
+        <tr>
+          <td>Dependência financeira da Aero Suite (cliente único)</td>
+          <td class="center"><span class="badge red">Alta hoje</span></td>
+          <td class="center"><span class="badge red">Alto</span></td>
+          <td>Diversificar carteira até mês 12; nenhum cliente representa &gt; 40% da receita</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ SEÇÃO 11 — VALUATION ============ -->
+  <section id="sec-11">
+    <h2 class="section-title"><span class="num">11</span>Valor de Mercado e Saída</h2>
+    <p class="section-subtitle">Quanto a empresa pode valer ao longo da jornada</p>
+
+    <p>Múltiplos típicos para SaaS B2B vertical regulado no mercado brasileiro 2024–2026, baseados em movimentações observadas (aquisições TOTVS, Linx, Sankhya, expansão de fundos como Astella, Kaszek e Monashees no setor):</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Estágio</th>
+          <th>ARR estimado</th>
+          <th>Múltiplo aplicável</th>
+          <th class="right">Valuation potencial</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Ano 1 (semente)</td><td>R$ 336k</td><td>4–6×</td><td class="right">R$ 1,3M – R$ 2M</td></tr>
+        <tr><td>Ano 2 (validado)</td><td>R$ 1,9M</td><td>5–7×</td><td class="right">R$ 9M – R$ 13M</td></tr>
+        <tr><td>Ano 3 (escala)</td><td>R$ 4M</td><td>6–8×</td><td class="right"><strong>R$ 24M – R$ 32M</strong></td></tr>
+        <tr><td>Ano 5 (líder de nicho)</td><td>R$ 10–15M</td><td>7–10×</td><td class="right"><strong>R$ 70M – R$ 150M</strong></td></tr>
+      </tbody>
+    </table>
+
+    <div class="highlight accent">
+      <strong>Por que vertical regulado tende ao topo da faixa:</strong> defensibilidade alta (compliance + relacionamento + vocabulário técnico), churn naturalmente baixo, expansão dentro do cliente (upsell de módulos e usuários), e mercado total bem dimensionado (não é "tamanho infinito", o que assusta investidor, mas é grande o suficiente para R$ 20M+ ARR).
+    </div>
+
+    <h3>Cenários de saída possíveis (mês 36–60)</h3>
+    <ol>
+      <li><strong>Aquisição estratégica</strong> por TOTVS, Senior ou Linx (querem entrar no vertical MRO)</li>
+      <li><strong>Aquisição por player global</strong> (CMMS internacional querendo presença Brasil)</li>
+      <li><strong>Aquisição por fabricante aeronáutico</strong> (Embraer Services, Helibras) querendo capturar valor da cadeia MRO</li>
+      <li><strong>Investimento Série A</strong> (R$ 8–15M por 15–25% da empresa) para acelerar internacionalização</li>
+      <li><strong>Manter empresa privada</strong>, distribuindo dividendos crescentes (~R$ 1M/ano a partir do Ano 2)</li>
+    </ol>
+  </section>
+
+  <!-- ============ SEÇÃO 12 — PRÓXIMOS PASSOS ============ -->
+  <section id="sec-12">
+    <h2 class="section-title"><span class="num">12</span>Próximos Passos Concretos</h2>
+    <p class="section-subtitle">O que fazer nas próximas 4 semanas</p>
+
+    <div class="next-step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Criar branch <code>saas/foundation</code> no Git</h4>
+        <p>Toda mudança de P0 nasce isolada. A Aero Suite continua na <code>main</code> sem risco até a primeira onda de validação.</p>
+      </div>
+    </div>
+
+    <div class="next-step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>P0 #4 — Migrar para Flyway (2–3 dias)</h4>
+        <p>Adicionar <code>quarkus-flyway</code> no <code>pom.xml</code>; consolidar schema atual como <code>V1__baseline.sql</code>; converter scripts de <code>db/scripts/</code> em migrações versionadas. Base obrigatória para tudo que vem depois.</p>
+      </div>
+    </div>
+
+    <div class="next-step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>P0 #1 — JWT real + bcrypt (4–7 dias)</h4>
+        <p>Substituir o "token Base64" atual por JWT assinado (RS256). Hash de senhas com bcrypt. Aplicar <code>@RolesAllowed</code> nos resources sensíveis (<code>OSResource</code>, <code>EstoqueResource</code>, <code>UsuarioResource</code>).</p>
+      </div>
+    </div>
+
+    <div class="next-step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Documento de visão de produto (1 página)</h4>
+        <p>Definir: nome comercial da suite, posicionamento, ICP (Ideal Customer Profile), 3 dores que resolve, 3 features-âncora. Esse documento orienta marca, marketing e roadmap.</p>
+      </div>
+    </div>
+
+    <div class="next-step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h4>Calculadora de ROI para apresentação comercial</h4>
+        <p>Planilha que recebe parâmetros do prospect (nº OS/mês, valor médio peça, horas técnicas) e mostra economia esperada no Ano 1 com o sistema. Forte no fechamento.</p>
+      </div>
+    </div>
+
+    <div class="next-step">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <h4>Identificar 1 oficina-piloto fora da Aero Suite</h4>
+        <p>Indicada, dentro da rede, com desconto pesado ou gratuita por 6 meses em troca de feedback estruturado e direito de usar como case. Ideal: oficina pequena/média da rede aeronáutica regional.</p>
+      </div>
+    </div>
+
+    <div class="next-step">
+      <div class="step-num">7</div>
+      <div class="step-content">
+        <h4>Documentos legais essenciais</h4>
+        <p>Contrato SaaS, Termo de Adesão, Política de Privacidade, DPA (Data Processing Agreement). Orçamento com advogado especializado: R$ 4–8k — investimento que se paga no 1º contrato.</p>
+      </div>
+    </div>
+
+    <div class="next-step">
+      <div class="step-num">8</div>
+      <div class="step-content">
+        <h4>Página comercial mínima (landing page)</h4>
+        <p>Domínio próprio (ex.: <code>aerosuite-suite.com.br</code>), 1 página com proposta de valor, case Aero Suite, formulário de contato. Sem self-service ainda — apenas captura de lead.</p>
+      </div>
+    </div>
+
+    <div class="highlight success">
+      <strong>Pacote mínimo dos próximos 30 dias:</strong> Flyway + JWT + página comercial + documento de visão. Com isso você sai do "sistema interno" para "produto comercial em validação" sem mexer no que a Aero Suite usa hoje.
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="logo">AEROSUITE SUITE</div>
+    <div>Plano Estratégico de Comercialização · Documento Confidencial</div>
+    <div class="meta">
+      Elaborado como base para decisão executiva · Versão 1.0 · Maio/2026<br>
+      Premissas e projeções estão sujeitas a validação no mercado e podem variar conforme execução
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 512 512" role="img" aria-label="Aero Suite">
+  <defs>
+    <linearGradient id="bg" x1="8%" y1="6%" x2="92%" y2="94%">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="arrow" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7dd3fc"/>
+      <stop offset="100%" stop-color="#bae6fd"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <g transform="translate(256 268)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M -118 -118 Q 0 -152 118 -118" stroke="#062a47" stroke-width="10"/>
+    <circle cx="0" cy="-8" r="52" stroke="#062a47" stroke-width="9"/>
+    <path d="M -34 34 L 0 -34 L 34 34" stroke="#062a47" stroke-width="11"/>
+    <line x1="-22" y1="10" x2="22" y2="10" stroke="#062a47" stroke-width="11"/>
+    <path d="M -92 98 L 0 -92 L 92 98" stroke="#062a47" stroke-width="16"/>
+    <path d="M -108 98 L -58 48 L -18 68 L 58 -8 L 98 -48" stroke="url(#arrow)" stroke-width="18"/>
+    <path d="M 98 -48 L 58 -48 L 98 -88 Z" fill="url(#arrow)" stroke="none"/>
+    <g transform="translate(62 52)">
+      <rect width="54" height="54" rx="10" fill="#fbbf24" stroke="#062a47" stroke-width="6"/>
+      <path d="M 14 28 L 24 38 L 42 16" stroke="#062a47" stroke-width="8"/>
+    </g>
+  </g>
+</svg>

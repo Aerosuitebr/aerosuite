@@ -1,0 +1,594 @@
+{
+  "meta": {
+    "product": "Aero Suite",
+    "tagline": "Gestão aeronáutica",
+    "positioning": "Suite SaaS integrada para oficinas de manutenção aeronáutica (Part 145 / MRO SME): da cotação à peça na OS, com o cliente a acompanhar no portal — sem o custo e a complexidade dos sistemas enterprise.",
+    "primary_audience": "Donos e gestores de oficinas aprovadas (ANAC/RBAC 145), responsáveis técnicos, almoxarifado aeronáutico, comercial MRO",
+    "secondary_audience": "Operadores de componentes (FCU), empresas em digitalização pós-planilha",
+    "language": "pt-BR",
+    "brand_voice": "Confiante, direto, vocabulário aeronáutico real (OS, PN, SN, Part 145, rastreio, hangar). Evitar jargão de ERP genérico. Tom: parceiro que entende a oficina, não vendedor de software.",
+    "legal_safe_phrases": [
+      "Preparado para apoiar auditorias e rastreabilidade",
+      "Ferramenta que implementa o processo da sua oficina",
+      "Não substitui o manual de manutenção nem a aprovação regulatória da organização",
+      "Evidências operacionais integradas — a conformidade formal continua sendo da organização certificada",
+      "Apoia segregação entre execução e liberação (CRS), conforme o perfil e as regras configuradas na oficina"
+    ],
+    "avoid_claims": [
+      "Homologado pela ANAC",
+      "Aprovado / certificado pela ANAC, EASA ou FAA (o software)",
+      "Garante aprovação em fiscalização",
+      "Garante conformidade total ou zero não conformidades",
+      "Substitui o SGQ certificado ou o manual de manutenção",
+      "Auditoria ANAC (como se o produto fosse o órgão ou processo oficial da ANAC)",
+      "Único no mundo (usar: raro no mercado SME, poucos concorrentes integrados neste preço)"
+    ],
+    "claim_replacements": [
+      {
+        "instead_of": "Homologado / aprovado pela ANAC",
+        "use": "Preparado para apoiar auditorias e rastreabilidade na sua organização aprovada"
+      },
+      {
+        "instead_of": "Auditoria ANAC (no título ou como endorsement)",
+        "use": "Preparação para auditoria ou fiscalização regulatória (ANAC, RBAC 145, etc.)"
+      },
+      {
+        "instead_of": "Garante aprovação na fiscalização",
+        "use": "Organiza evidências operacionais para quando o auditor solicitar"
+      },
+      {
+        "instead_of": "Substitui o SGQ",
+        "use": "Complementa o SGQ e o manual de manutenção da oficina — não os substitui"
+      }
+    ],
+    "compliance_review": {
+      "version": "2026-05-18",
+      "status": "approved_for_production",
+      "scope": "Revisão pós-Onda B (B1–B7): títulos, voiceovers, legendas e hashtags",
+      "hashtag_note": "#ANAC e #RBAC145 são contexto de público-alvo, não afirmação de homologação do software."
+    },
+    "product_capabilities_onda_b": [
+      "CRS / liberação para serviço (checklist + PDF)",
+      "Certificado de peça estruturado (8130-3, Form 1, ANAC) + anexo",
+      "Quarentena de material",
+      "Retenção e export arquivo morto de registros",
+      "Job card mobile / hangar",
+      "AD/SB e alertas com prazo",
+      "Habilitações técnicas (RT, inspetor) com validação na emissão de CRS"
+    ],
+    "global_cta": {
+      "primary": "Agende uma demonstração gratuita",
+      "secondary": "Teste a Aero Suite no seu tenant",
+      "url_placeholder": "https://SEU-DOMINIO.com/demo"
+    },
+    "visual_identity": {
+      "logo": "LOGO_AERO.png",
+      "colors_hint": "Azul aviação, branco, acentos âmbar para alertas de conformidade",
+      "settings": ["hangar com aeronave em manutenção", "técnico com tablet", "almoxarifado organizado com etiquetas QR", "escritório MRO moderno", "close-up de peça com part number"]
+    }
+  },
+  "how_to_use_with_ai": {
+    "video_generation": "Para cada cena, copie `scenes[].prompts.video` para Runway, Kling, Pika, Sora ou similar. Mantenha personagem/ambiente consistente referenciando scene 1.",
+    "image_generation": "Use `scenes[].prompts.image` para Midjourney, DALL·E, Flux — storyboard estático ou B-roll.",
+    "voiceover": "Cole `voiceover_full` em ElevenLabs, Play.ht ou CapCut TTS. Voz sugerida: masculina ou feminina, 35-50 anos, sotaque brasileiro neutro, ritmo seguro.",
+    "editing": "Importe JSON no CapCut/Premiere via roteiro; use `on_screen_text` para legendas e `duration_seconds` como guia de cortes.",
+    "caption_social": "Use `social.caption` e `social.hashtags` por vídeo."
+  },
+  "videos": [
+    {
+      "id": "V01_HERO",
+      "title": "A oficina que você construiu merece um sistema à altura",
+      "subtitle": "Manifesto Aero Suite — vídeo principal do site",
+      "duration_seconds": 60,
+      "format": "16:9",
+      "platforms": ["YouTube", "Site", "LinkedIn"],
+      "hook_3_seconds": "Enquanto você fecha a OS no Excel, o auditor pergunta onde está a peça. E se tudo estivesse no mesmo lugar?",
+      "voiceover_full": "Você não abriu uma oficina para viver preso em planilha. A Aero Suite nasceu dentro do mundo real da manutenção aeronáutica. Uma única plataforma: proposta comercial, ordem de serviço, estoque com rastreio, portal do cliente e trilha para quando a auditoria pedir evidências. Do hangar ao almoxarifado, do comercial ao responsável técnico — mesmo dado, mesmo sistema, mesma verdade. Menos retrabalho. Menos correria na véspera da fiscalização. Mais tempo para o que importa: liberar aeronave e componente com segurança. Aero Suite. Gestão aeronáutica. Da cotação à peça na OS. Agende sua demonstração.",
+      "scenes": [
+        {
+          "time": "0:00-0:03",
+          "on_screen_text": "Sua oficina. Um sistema.",
+          "visual_description": "Split screen caótico: Excel + WhatsApp + papel vs tela limpa Aero Suite",
+          "voiceover": "Enquanto você fecha a OS no Excel, o auditor pergunta onde está a peça.",
+          "prompts": {
+            "video": "Cinematic split screen, left side stressed aviation mechanic at messy desk with Excel papers WhatsApp phone, right side clean modern SaaS dashboard blue UI aviation maintenance, dramatic lighting hangar background, 4K",
+            "image": "Aviation maintenance office contrast chaos versus modern software dashboard, photorealistic"
+          }
+        },
+        {
+          "time": "0:04-0:15",
+          "on_screen_text": "Proposta → OS → Estoque → Cliente",
+          "visual_description": "Fluxo animado conectando módulos",
+          "voiceover": "Uma única plataforma: proposta, ordem de serviço, estoque com rastreio, portal do cliente.",
+          "prompts": {
+            "video": "Smooth motion graphics flow diagram aviation MRO workflow proposal work order inventory client portal connected nodes blue gold lines dark background professional",
+            "image": "Infographic aviation MRO workflow four connected modules modern flat design"
+          }
+        },
+        {
+          "time": "0:16-0:35",
+          "on_screen_text": "Feito para Part 145",
+          "visual_description": "Hangar, técnico com tablet, PN/SN na tela",
+          "voiceover": "Do hangar ao almoxarifado. Mesmo dado. Mesmo sistema. Menos retrabalho. Menos correria na véspera da fiscalização.",
+          "prompts": {
+            "video": "Wide shot aircraft hangar maintenance technician holding tablet showing work order part number serial number Brazilian aviation workshop realistic daylight",
+            "image": "Part 145 aircraft maintenance hangar technician tablet work order interface"
+          }
+        },
+        {
+          "time": "0:36-0:55",
+          "on_screen_text": "Aero Suite",
+          "visual_description": "Logo + CTA",
+          "voiceover": "Aero Suite. Gestão aeronáutica. Da cotação à peça na OS.",
+          "prompts": {
+            "video": "Logo reveal Aero Suite aviation SaaS blue white elegant particles hangar bokeh background slow push in",
+            "image": "Aero Suite logo mockup on tablet in aircraft hangar professional branding"
+          }
+        }
+      ],
+      "social": {
+        "caption": "Planilha não é sistema de manutenção aeronáutica. A Aero Suite une comercial, OS, estoque e cliente — com trilha para quando o auditor chegar. 🛩️ Agende uma demo.",
+        "hashtags": ["#AviacaoBrasil", "#Part145", "#MRO", "#ManutencaoAeronautica", "#ANAC", "#SoftwareAeronautico", "#AeroSuite"]
+      }
+    },
+    {
+      "id": "V02_UM_SISTEMA",
+      "title": "Pare de pagar 8 ferramentas que não conversam",
+      "duration_seconds": 45,
+      "format": "9:16",
+      "platforms": ["Instagram Reels", "TikTok", "YouTube Shorts"],
+      "hook_3_seconds": "CRM aqui. Estoque ali. OS no e-mail. Quem aguenta?",
+      "voiceover_full": "O mercado te vendeu silos. Planilha de proposta. Outro sistema de estoque. OS no Word. Cliente no WhatsApp. A Aero Suite quebra o silo: tudo no mesmo tenant, mesmo login, mesma oficina. Proposta comercial integrada. Ordem de serviço com vocabulário aeronáutico de verdade. Estoque com código de rastreio e QR. Portal para o cliente ver a OS sem te ligar dez vezes por dia. Uma suite. Um fluxo. Uma mensalidade que cabe no Part 145 pequeno. Conheça a Aero Suite.",
+      "scenes": [
+        {
+          "time": "0:00-0:05",
+          "on_screen_text": "8 ferramentas. 0 integração.",
+          "visual_description": "Ícones de apps desconectados caindo",
+          "prompts": {
+            "video": "Fast paced motion graphics multiple disconnected app icons Excel WhatsApp email falling chaotic aviation office humor professional",
+            "image": "Too many software icons disconnected aviation business chaos"
+          }
+        },
+        {
+          "time": "0:06-0:25",
+          "on_screen_text": "1 login. Toda a oficina.",
+          "visual_description": "Tour rápido UI: menu comercial, OS, estoque, portal",
+          "prompts": {
+            "video": "Screen recording style smooth scroll modern aviation SaaS dashboard modules commercial work order inventory external portal UI blue theme",
+            "image": "Single aviation management platform dashboard screenshot mockup clean UI"
+          }
+        },
+        {
+          "time": "0:26-0:42",
+          "on_screen_text": "Aero Suite",
+          "visual_description": "CTA vertical",
+          "prompts": {
+            "video": "Vertical smartphone mockup showing Aero Suite app aviation maintenance quick cuts energetic",
+            "image": "Mobile mockup aviation MRO app interface"
+          }
+        }
+      ],
+      "social": {
+        "caption": "CRM + Excel + WhatsApp não é estratégia. É sobrevivência. Integre a operação na Aero Suite. Link na bio.",
+        "hashtags": ["#OficinaAeronautica", "#GestaoMRO", "#AeroSuite", "#SaaS", "#Aviacao"]
+      }
+    },
+    {
+      "id": "V03_OS_MRO",
+      "title": "Ordem de serviço que fala a língua da oficina",
+      "duration_seconds": 50,
+      "format": "16:9",
+      "platforms": ["YouTube", "LinkedIn"],
+      "hook_3_seconds": "TSN, TSO, AD, ATA, PN, SN — se seu ERP não entende isso, não é aeronáutico.",
+      "voiceover_full": "Ordem de serviço genérica é custo escondido. Na Aero Suite, a OS nasce com o vocabulário da manutenção: dados de aeronave e motor, revisão de manual, AD e SB com prazo, observações de serviço, histórico de alterações. Job card no hangar pelo tablet. Liberação para serviço com checklist e CRS em PDF — com regras de perfil e habilitação técnica que a oficina configura. Cada mudança fica registrada na auditoria da OS — quem alterou, quando e o quê. O responsável técnico dorme melhor. O comercial sabe o status. O almoxarifado vê o que foi consumido. Isso não é luxo de companhia aérea. É MRO integrado acessível ao Part 145 médio e pequeno. Aero Suite — sua OS, finalmente no lugar certo.",
+      "scenes": [
+        {
+          "time": "0:00-0:08",
+          "on_screen_text": "PN · SN · TSN · TSO · AD · ATA",
+          "visual_description": "Campos aeronáuticos destacados na tela OS",
+          "prompts": {
+            "video": "Close up aviation work order form fields part number serial number TSN TSO airworthiness directives ATA chapter highlighting UI glow professional",
+            "image": "Aviation work order form technical fields close up realistic software UI"
+          }
+        },
+        {
+          "time": "0:09-0:28",
+          "on_screen_text": "Auditoria automática",
+          "visual_description": "Timeline de auditoria OS",
+          "prompts": {
+            "video": "Software timeline audit log aviation work order changes user timestamp scrolling smooth dark mode UI",
+            "image": "Audit trail timeline aviation maintenance software interface"
+          }
+        },
+        {
+          "time": "0:29-0:48",
+          "on_screen_text": "Menos planilha. Mais hangar.",
+          "visual_description": "Técnico fecha OS no sistema",
+          "prompts": {
+            "video": "Aircraft mechanic satisfied closing work order on rugged tablet in hangar Brazilian Part 145 shop warm lighting",
+            "image": "Mechanic tablet work order completion hangar"
+          }
+        }
+      ],
+      "social": {
+        "caption": "Se seu sistema trata OS como 'pedido de venda', você está no software errado. Aero Suite é MRO de verdade.",
+        "hashtags": ["#OrdemDeServico", "#MRO", "#Part145", "#AeroSuite"]
+      }
+    },
+    {
+      "id": "V04_ESTOQUE_RASTREIO",
+      "title": "Almoxarifado com rastreio que o auditor entende",
+      "duration_seconds": 45,
+      "format": "9:16",
+      "platforms": ["Reels", "Shorts"],
+      "hook_3_seconds": "Onde está a peça? Se a resposta demora 40 minutos, você tem um problema.",
+      "voiceover_full": "Peça aeronáutica sem rastreio é risco. Na Aero Suite: lote, invoice, fornecedor, part number, serial, certificado de conformidade estruturado — tipo 8130-3, Form 1 ou ANAC, com anexo — e validade. Quarentena quando o material precisa ficar isolado. Código de rastreio único. QR Code na etiqueta. Consulta instantânea no chão de fábrica. Saída de estoque amarrada à OS — com validação reforçada opcional: exige OS e motivo detalhado quando sua oficina precisa de governança extra. Do recebimento ao consumo na manutenção, uma linha. Auditor pergunta? Você mostra em segundos. Aero Suite — estoque que trabalha com a OS, não contra ela.",
+      "scenes": [
+        {
+          "time": "0:00-0:06",
+          "on_screen_text": "Scan. Achou.",
+          "visual_description": "Celular escaneia QR na peça",
+          "prompts": {
+            "video": "Hand scanning QR code on aviation parts label warehouse shelf smartphone shows traceability info instant match cinematic",
+            "image": "QR code scan aviation parts inventory warehouse"
+          }
+        },
+        {
+          "time": "0:07-0:22",
+          "on_screen_text": "PN · SN · Lote · Certificado",
+          "visual_description": "Ficha do item estoque",
+          "prompts": {
+            "video": "UI animation aviation inventory item detail part number serial lot certificate conformity shelf life data fields",
+            "image": "Aviation inventory traceability screen mockup"
+          }
+        },
+        {
+          "time": "0:23-0:40",
+          "on_screen_text": "Saída ligada à OS",
+          "visual_description": "Confirmação saída com OS obrigatória",
+          "prompts": {
+            "video": "Warehouse clerk issuing aviation part linked to work order on screen confirmation dialog professional",
+            "image": "Stock issue linked work order aviation software"
+          }
+        }
+      ],
+      "social": {
+        "caption": "Rastreio não é planilha colorida. É QR + OS + histórico. Veja o estoque Aero Suite na prática.",
+        "hashtags": ["#AlmoxarifadoAeronautico", "#Rastreabilidade", "#PartNumber", "#AeroSuite"]
+      }
+    },
+    {
+      "id": "V05_DOSSIE_AUDITORIA",
+      "title": "Preparação para auditoria: dossiê em minutos, não em dias",
+      "compliance_notes": "Não usar 'Auditoria ANAC' como endorsement do produto. ANAC aparece apenas como contexto regulatório do público.",
+      "duration_seconds": 55,
+      "format": "16:9",
+      "platforms": ["YouTube", "LinkedIn", "Apresentação comercial"],
+      "hook_3_seconds": "Véspera de fiscalização e você montando pasta no Word? Isso acabou.",
+      "voiceover_full": "O pesadelo de todo gestor Part 145: na véspera da fiscalização, o auditor pede a OS, as peças consumidas, os anexos, quem acessou o portal do cliente. Você passa o fim de semana juntando PDF. A Aero Suite gera o dossiê de auditoria: dados da OS, anexos, movimentações de estoque ligadas à manutenção, trilha completa de alterações, acessos do portal externo, amostra de log de segurança. Pacote ZIP da organização e política de retenção de registros quando sua oficina precisa de arquivo morto. Um PDF. Uma narrativa. Evidência organizada. Não substituímos seu manual de qualidade nem o SGQ certificado — damos à oficina a ferramenta que o mercado SME raramente teve integrada ao dia a dia. Aero Suite — quando a preparação para auditoria encontra a operação.",
+      "scenes": [
+        {
+          "time": "0:00-0:10",
+          "on_screen_text": "Antes: 3 dias montando pasta",
+          "visual_description": "Pilha de papéis, relógio acelerando",
+          "prompts": {
+            "video": "Stressed aviation quality manager surrounded by paper folders clock fast forward dramatic office night",
+            "image": "Audit preparation chaos papers aviation office"
+          }
+        },
+        {
+          "time": "0:11-0:35",
+          "on_screen_text": "Depois: 1 clique → Dossiê PDF",
+          "visual_description": "Botão exportar dossiê, PDF abrindo seções",
+          "prompts": {
+            "video": "Software export audit dossier PDF aviation work order stock movements audit trail sections page turn satisfying professional UI",
+            "image": "Aviation audit dossier PDF export software dashboard"
+          }
+        },
+        {
+          "time": "0:36-0:52",
+          "on_screen_text": "Preparado para auditoria",
+          "visual_description": "Gestor entrega tablet ao auditor confiante",
+          "prompts": {
+            "video": "Confident aviation facility manager handing tablet showing organized audit report to inspector in hangar meeting professional trust",
+            "image": "Aviation audit meeting tablet dossier professional"
+          }
+        }
+      ],
+      "social": {
+        "caption": "Dossiê para auditoria não deveria ser heroísmo de fim de semana. Export integrado na Aero Suite — apoio à sua organização Part 145, sem substituir o SGQ.",
+        "hashtags": ["#ANAC", "#RBAC145", "#Auditoria", "#Conformidade", "#AeroSuite", "#Part145"]
+      }
+    },
+    {
+      "id": "V06_PORTAL_CLIENTE",
+      "title": "Seu cliente para de ligar 10 vezes por dia",
+      "duration_seconds": 40,
+      "format": "9:16",
+      "platforms": ["Reels", "Shorts", "WhatsApp Status"],
+      "hook_3_seconds": "'Já liberou minha aeronave?' — e se o cliente visse sozinho?",
+      "voiceover_full": "Cliente no escuro é cliente no telefone. O portal externo da Aero Suite dá ao seu cliente login seguro: acompanha a ordem de serviço, documentos liberados, perfil — sem abrir brecha na operação. Usuário externo não cria OS: quem manda na manutenção é a oficina aprovada. Você controla o que ele vê. Ele ganha transparência. Você ganha tempo. Propostas comerciais também entram no jogo: aprovação e acompanhamento sem PDF perdido no e-mail. Aero Suite — fideliza quem confia a aeronave na sua mão.",
+      "scenes": [
+        {
+          "time": "0:00-0:08",
+          "on_screen_text": "10 ligações/dia → 0",
+          "visual_description": "Telefone tocando vs cliente calmo no portal",
+          "prompts": {
+            "video": "Split phone ringing annoyed receptionist vs calm aircraft owner viewing work order status on laptop home office contrast comedy professional",
+            "image": "Before after client communication aviation MRO portal"
+          }
+        },
+        {
+          "time": "0:09-0:28",
+          "on_screen_text": "Portal seguro",
+          "visual_description": "UI portal externo OS e documentos",
+          "prompts": {
+            "video": "Clean external client portal aviation work order status documents download UI white blue trustworthy animation",
+            "image": "Aircraft owner client portal work order tracking mockup"
+          }
+        },
+        {
+          "time": "0:29-0:38",
+          "on_screen_text": "Transparência sem perder controle",
+          "prompts": {
+            "video": "Aviation service center manager smiling while client checks portal on phone hangar background",
+            "image": "MRO client transparency professional relationship"
+          }
+        }
+      ],
+      "social": {
+        "caption": "Portal do cliente não é luxo de airline. É o que separa oficina amadora de oficina premium. Aero Suite.",
+        "hashtags": ["#ExperienciaDoCliente", "#MRO", "#PortalDoCliente", "#AeroSuite"]
+      }
+    },
+    {
+      "id": "V07_COMERCIAL_PROPOSTA",
+      "title": "Da proposta ao 'fechado' sem perder margem",
+      "duration_seconds": 45,
+      "format": "16:9",
+      "platforms": ["LinkedIn", "YouTube"],
+      "hook_3_seconds": "Orçamento aprovado na sexta. OS aberta na segunda. Na mão. De novo.",
+      "voiceover_full": "No MRO, vender mal é executar mal. Propostas comerciais completas na Aero Suite: itens, condições, envio por e-mail, integração com Bling, comunicação WhatsApp. O comercial trabalha no mesmo ecossistema que a oficina. Menos retrabalho entre 'vendemos' e 'abrimos a OS'. Menos peça esquecida no orçamento. Mais previsibilidade de margem. Porque oficina que cresce não precisa de mais um CRM genérico — precisa de comercial que entende manutenção aeronáutica. Aero Suite.",
+      "scenes": [
+        {
+          "time": "0:00-0:12",
+          "on_screen_text": "Proposta profissional",
+          "visual_description": "Proposta PDF bonita com logo da oficina",
+          "prompts": {
+            "video": "Aviation commercial proposal PDF elegant white label logo send email animation professional sales",
+            "image": "Aviation MRO commercial proposal document branded"
+          }
+        },
+        {
+          "time": "0:13-0:30",
+          "on_screen_text": "Bling · WhatsApp · E-mail",
+          "visual_description": "Ícones integração",
+          "prompts": {
+            "video": "Motion graphics integrations Bling WhatsApp email connected to aviation SaaS hub smooth corporate",
+            "image": "Software integrations aviation commercial workflow"
+          }
+        },
+        {
+          "time": "0:31-0:43",
+          "on_screen_text": "Comercial + Oficina = 1 suite",
+          "prompts": {
+            "video": "Sales manager and hangar manager shaking hands same software dashboard overlay aviation business",
+            "image": "Commercial and maintenance team aligned aviation software"
+          }
+        }
+      ],
+      "social": {
+        "caption": "CRM que não fala com a OS é margem evaporando. Comercial integrado na Aero Suite.",
+        "hashtags": ["#PropostaComercial", "#MRO", "#AviacaoExecutiva", "#AeroSuite"]
+      }
+    },
+    {
+      "id": "V08_VS_MERCADO",
+      "title": "Por que não ERP genérico nem MRO de R$ 50 mil/mês",
+      "duration_seconds": 50,
+      "format": "16:9",
+      "platforms": ["YouTube", "Pitch investidor", "Landing page"],
+      "hook_3_seconds": "Três caminhos. Só um foi feito para o Part 145 brasileiro.",
+      "voiceover_full": "Caminho um: ERP genérico adaptado — não fala PN, não nasceu no hangar. Caminho dois: MRO enterprise — poderoso, caro, implementação de meses, feito para airline. Caminho três: Aero Suite — SaaS multi-tenant, vocabulário aeronáutico nativo, estoque com rastreio, portal do cliente, dossiê de auditoria, preço que cabe na oficina média e pequena. White-label com a cara da sua empresa. Quatro idiomas para operação internacional. Você não precisa ser gigante para ter sistema de gigante — precisa do sistema certo. Aero Suite. O caminho três existe.",
+      "scenes": [
+        {
+          "time": "0:00-0:15",
+          "on_screen_text": "ERP genérico ✗ | MRO enterprise $$ | Aero Suite ✓",
+          "visual_description": "Três colunas comparativas animadas",
+          "prompts": {
+            "video": "Three column comparison chart animation aviation software ERP generic expensive enterprise versus Aero Suite sweet spot Brazilian MRO modern motion graphics",
+            "image": "Comparison table aviation software market positioning"
+          }
+        },
+        {
+          "time": "0:16-0:35",
+          "on_screen_text": "SaaS · White-label · i18n",
+          "visual_description": "Logo oficina na interface",
+          "prompts": {
+            "video": "White label aviation software dashboard custom logo colors Brazilian maintenance company branding transition",
+            "image": "White label MRO SaaS branding mockup"
+          }
+        },
+        {
+          "time": "0:36-0:48",
+          "on_screen_text": "O caminho 3 existe",
+          "prompts": {
+            "video": "Small aviation maintenance shop team proud modern software success story cinematic inspirational",
+            "image": "Small Part 145 shop success modern technology"
+          }
+        }
+      ],
+      "social": {
+        "caption": "Entre o Excel e o AMOS existe um terceiro caminho. Chama Aero Suite.",
+        "hashtags": ["#StartupAviacao", "#SaaS", "#MRO", "#AeroSuite", "#Inovacao"]
+      }
+    },
+    {
+      "id": "V09_FCU_ESPECIALISTA",
+      "title": "FCU e componentes: montagem com inteligência",
+      "duration_seconds": 40,
+      "format": "16:9",
+      "platforms": ["YouTube nicho", "LinkedIn técnico"],
+      "hook_3_seconds": "Montagem de FCU no Word? Sério?",
+      "voiceover_full": "Oficinas especializadas em componentes precisam de mais que caixa de texto. Aero Suite traz fluxo de montagem FCU: importação de assembly, part number, serial, ATA, revisão de manual, certificado — estruturado. Menos erro de transcrição. Mais consistência no dossiê técnico. Para quem vive Fuel Control Unit e manutenção de precisão, o sistema acompanha a engenharia do serviço. Aero Suite — do macro da oficina ao micro do componente.",
+      "scenes": [
+        {
+          "time": "0:00-0:12",
+          "on_screen_text": "Assembly estruturado",
+          "visual_description": "Editor FCU com PN/SN/ATA",
+          "prompts": {
+            "video": "Aviation fuel control unit assembly documentation software interface technical fields part number serial ATA revision close up",
+            "image": "FCU assembly aviation maintenance software editor"
+          }
+        },
+        {
+          "time": "0:13-0:35",
+          "on_screen_text": "Menos erro. Mais rastreio.",
+          "visual_description": "Técnico especialista revisa montagem",
+          "prompts": {
+            "video": "Senior aviation component technician reviewing assembly checklist on monitor workshop specialized shop",
+            "image": "Aviation component shop specialist workstation"
+          }
+        }
+      ],
+      "social": {
+        "caption": "FCU não é 'mais uma OS'. É precisão. A Aero Suite entende componente.",
+        "hashtags": ["#FCU", "#ComponentMRO", "#ManutencaoDeComponentes", "#AeroSuite"]
+      }
+    },
+    {
+      "id": "V10_CONFIANCA_SAAS",
+      "title": "Seus dados, sua oficina, isolados e seguros",
+      "duration_seconds": 35,
+      "format": "16:9",
+      "platforms": ["Site", "Due diligence", "LinkedIn"],
+      "hook_3_seconds": "Multi-oficina não pode significar multi-vazamento.",
+      "voiceover_full": "SaaS assusta quem já perdeu dado em planilha compartilhada. A Aero Suite é multi-tenant de verdade: cada organização isolada, acesso por funcionalidade, auditoria de login e permissões, LGPD com aceite e solicitações de titular. Backup e operação documentados para produção. Seu concorrente não vê sua OS. Seu técnico só vê o que deve. Confiança não é slide de vendas — é arquitetura. Aero Suite.",
+      "scenes": [
+        {
+          "time": "0:00-0:18",
+          "on_screen_text": "Tenant isolado · RBAC · LGPD",
+          "visual_description": "Diagrama segurança multi-tenant",
+          "prompts": {
+            "video": "Cybersecurity multi tenant isolation animation aviation cloud SaaS shields locks data separation professional blue",
+            "image": "Multi tenant SaaS security diagram aviation"
+          }
+        },
+        {
+          "time": "0:19-0:32",
+          "on_screen_text": "Auditoria de acesso",
+          "visual_description": "Log de acessos",
+          "prompts": {
+            "video": "Access audit log interface scrolling login security events aviation platform dark UI",
+            "image": "Security audit log software screenshot"
+          }
+        }
+      ],
+      "social": {
+        "caption": "Confiança em SaaS aeronáutico = isolamento + permissão + trilha. Conheça a arquitetura Aero Suite.",
+        "hashtags": ["#LGPD", "#CyberSecurity", "#SaaS", "#AeroSuite"]
+      }
+    },
+    {
+      "id": "V11_CTA_DEMO",
+      "title": "15 minutos que podem mudar sua oficina",
+      "duration_seconds": 30,
+      "format": "9:16",
+      "platforms": ["Ads Meta", "Reels", "Stories"],
+      "hook_3_seconds": "E se em 15 minutos você visse sua OS, estoque e portal rodando juntos?",
+      "voiceover_full": "Sem compromisso. Sem implantação de seis meses. Demonstração real: sua operação, seus módulos, suas dores. Aero Suite — gestão aeronáutica. Clique. Agende. Volte a ter fim de semana.",
+      "scenes": [
+        {
+          "time": "0:00-0:08",
+          "on_screen_text": "Demo gratuita · 15 min",
+          "prompts": {
+            "video": "Calendar app scheduling demo appointment aviation professional quick upbeat motion graphics",
+            "image": "Schedule demo call aviation software CTA"
+          }
+        },
+        {
+          "time": "0:09-0:25",
+          "on_screen_text": "Agende agora →",
+          "visual_description": "Montagem rápida dos melhores frames dos vídeos anteriores",
+          "prompts": {
+            "video": "Fast montage aviation hangar software UI QR scan audit dossier client portal energetic music sync style commercial 30s",
+            "image": "Collage Aero Suite features marketing"
+          }
+        }
+      ],
+      "social": {
+        "caption": "15 min. Uma suite. Sua oficina. 👇 Agende a demo gratuita.",
+        "hashtags": ["#Demo", "#AeroSuite", "#AviacaoBrasil"]
+      }
+    },
+    {
+      "id": "V12_CONFORMIDADE_PART145",
+      "title": "Conformidade operacional Part 145 — sem prometer o que só o SGQ entrega",
+      "subtitle": "Roteiro alinhado à Onda B (CRS, peça, quarentena, retenção, hangar, AD/SB, habilitações)",
+      "duration_seconds": 55,
+      "format": "16:9",
+      "platforms": ["YouTube", "LinkedIn", "Demo comercial Part 145"],
+      "compliance_notes": "Reforçar meta.legal_safe_phrases no fechamento. Não usar homologação do software.",
+      "hook_3_seconds": "CRS, quarentena, AD vencida e licença do inspetor — tudo no mesmo tenant?",
+      "voiceover_full": "Conformidade Part 145 não é slide de vendas: é processo vivo. Na Aero Suite, a liberação para serviço nasce com checklist e CRS em PDF — com perfis que separam quem executou de quem libera, quando sua oficina assim define. Certificado de peça estruturado, não só texto solto. Quarentena quando o material não pode circular. AD e SB com prazo e alerta. Job card no hangar, no tablet. Habilitações de inspetor e responsável técnico com validade — porque emitir CRS sem qualificação registrada não pode ser só confiança. Retenção de registros e pacote para auditoria quando chegar a hora de mostrar evidência. Nós não certificamos sua oficina. Não substituímos seu SGQ. Entregamos a operação integrada que o mercado SME raramente viu neste preço. Aero Suite — preparado para apoiar auditorias. Agende uma demonstração.",
+      "scenes": [
+        {
+          "time": "0:00-0:08",
+          "on_screen_text": "CRS · Checklist · PDF",
+          "visual_description": "Tela emissão CRS e download PDF",
+          "voiceover": "Liberação para serviço com checklist e CRS em PDF.",
+          "prompts": {
+            "video": "Aviation maintenance software CRS release checklist PDF export professional UI hangar tablet realistic",
+            "image": "CRS release to service aviation software screenshot mockup"
+          }
+        },
+        {
+          "time": "0:09-0:20",
+          "on_screen_text": "Peça certificada · Quarentena",
+          "visual_description": "Certificado 8130-3 e status quarentena",
+          "prompts": {
+            "video": "Aviation parts inventory certificate form fields quarantine status warehouse professional UI animation",
+            "image": "Aviation part certificate and quarantine inventory screen"
+          }
+        },
+        {
+          "time": "0:21-0:35",
+          "on_screen_text": "AD/SB · Hangar · Habilitações",
+          "visual_description": "Alertas AD, job card mobile, cadastro RT",
+          "prompts": {
+            "video": "Montage aviation AD SB alerts mobile job card hangar technician technical authorization expiry dashboard smooth corporate",
+            "image": "Aviation compliance dashboard AD alerts job card authorizations"
+          }
+        },
+        {
+          "time": "0:36-0:52",
+          "on_screen_text": "Apoio à auditoria — não substitui o SGQ",
+          "visual_description": "Export dossiê e ZIP retenção",
+          "prompts": {
+            "video": "Audit dossier PDF export aviation MRO organized evidence confident manager tablet inspector meeting professional",
+            "image": "Aviation audit evidence package export software"
+          }
+        }
+      ],
+      "social": {
+        "caption": "Part 145 precisa de evidência no dia a dia — CRS, peça, quarentena, AD/SB e habilitações no mesmo sistema. A Aero Suite apoia sua auditoria; o SGQ continua sendo da sua organização.",
+        "hashtags": ["#Part145", "#Conformidade", "#MRO", "#RBAC145", "#AeroSuite", "#ManutencaoAeronautica"]
+      }
+    }
+  ],
+  "master_prompts_for_specialized_ai": {
+    "runway_or_kling_scene_template": "Cinematic 4K, professional aviation maintenance environment, Brazilian Part 145 aesthetic, realistic lighting, no readable fake UI text unless specified, color grade blue and warm amber accents, {scene_description}. Style: corporate documentary, trustworthy, modern.",
+    "midjourney_still_template": "Photorealistic aviation MRO, Part 145 hangar, {subject}, shallow depth of field, commercial photography, brand colors navy blue white --ar 16:9 --style raw",
+    "elevenlabs_voice_direction": "Brazilian Portuguese neutral accent. Pace: medium-fast for Reels, medium for YouTube. Emotion: confident, warm, authoritative like senior aviation consultant. Emphasize words: Aero Suite, rastreio, auditoria, Part 145, uma plataforma.",
+    "capcut_edit_notes": "Legendas word-by-word nos primeiros 3s. Música: corporate inspirational sem copycat. Transições secas 0.2s em Reels; crossfade suave em YouTube. SFX sutil: whoosh em mudanças de módulo, scan beep no QR.",
+    "heygen_avatar_option": "Apresentador(a) em polo/azul, fundo hangar desfocado, teleprompter com voiceover_full de cada vídeo, gestos moderados."
+  },
+  "production_calendar_suggestion": {
+    "week_1": ["V01_HERO", "V11_CTA_DEMO"],
+    "week_2": ["V02_UM_SISTEMA", "V08_VS_MERCADO"],
+    "week_3": ["V03_OS_MRO", "V04_ESTOQUE_RASTREIO"],
+    "week_4": ["V05_DOSSIE_AUDITORIA", "V06_PORTAL_CLIENTE"],
+    "week_5": ["V07_COMERCIAL_PROPOSTA", "V09_FCU_ESPECIALISTA", "V10_CONFIANCA_SAAS"],
+    "week_6": ["V12_CONFORMIDADE_PART145", "Revisar V03/V04/V05 com screen capture real"]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "at": "2026-06-04T14:41:25.258Z",
+  "targets": {
+    "bellows": "timmaia@bellowscontrols.com.br",
+    "king": "timmaia@kingdorio.com",
+    "cc": "wellemlyra@gmail.com"
+  },
+  "sent": {
+    "at": "2026-06-04T14:42:01+00:00",
+    "sent": [
+      {
+        "to": "timmaia@bellowscontrols.com.br",
+        "cc": "wellemlyra@gmail.com",
+        "ok": true
+      },
+      {
+        "to": "timmaia@kingdorio.com",
+        "cc": "wellemlyra@gmail.com",
+        "ok": true
+      }
+    ]
+  }
+}

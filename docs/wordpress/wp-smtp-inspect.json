@@ -1,0 +1,647 @@
+{
+  "ui": {
+    "url": "https://aerosuite.com.br/wp-admin/admin.php?page=wp-mail-smtp",
+    "title": "Geral ‹ Configurações ‹ — WordPress",
+    "inputs": [
+      {
+        "id": "wp-mail-smtp-setting-upgrade-license-key",
+        "name": "",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-from_email",
+        "name": "wp-mail-smtp[mail][from_email]",
+        "type": "email",
+        "tag": "INPUT",
+        "value": "contato@aerosuite.com.br",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-from_email_force",
+        "name": "wp-mail-smtp[mail][from_email_force]",
+        "type": "checkbox",
+        "tag": "INPUT",
+        "value": "true",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-from_name",
+        "name": "wp-mail-smtp[mail][from_name]",
+        "type": "text",
+        "tag": "INPUT",
+        "value": "Aero Suite",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-from_name_force",
+        "name": "wp-mail-smtp[mail][from_name_force]",
+        "type": "checkbox",
+        "tag": "INPUT",
+        "value": "true",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-return_path",
+        "name": "wp-mail-smtp[mail][return_path]",
+        "type": "checkbox",
+        "tag": "INPUT",
+        "value": "true",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-mail",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "mail",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-sendlayer",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "sendlayer",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-smtpcom",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "smtpcom",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-sendinblue",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "sendinblue",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-amazonses",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "amazonses",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-elasticemail",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "elasticemail",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-gmail",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "gmail",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-mailgun",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "mailgun",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-mailjet",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "mailjet",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-mailersend",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "mailersend",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-mandrill",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "mandrill",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-outlook",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "outlook",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-postmark",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "postmark",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-resend",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "resend",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-sendgrid",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "sendgrid",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-smtp2go",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "smtp2go",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-sparkpost",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "sparkpost",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-zoho",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "zoho",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailer-smtp",
+        "name": "wp-mail-smtp[mail][mailer]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "smtp",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-sendlayer-api_key",
+        "name": "wp-mail-smtp[sendlayer][api_key]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-sendlayer-quick-connect-return-url",
+        "name": "",
+        "type": "hidden",
+        "tag": "INPUT",
+        "value": "https://aerosuite.com.br/wp-admin/admin.php?page=wp-mail-smtp",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-sendlayer-quick-connect-connection-id",
+        "name": "",
+        "type": "hidden",
+        "tag": "INPUT",
+        "value": "primary",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-smtpcom-api_key",
+        "name": "wp-mail-smtp[smtpcom][api_key]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-smtpcom-channel",
+        "name": "wp-mail-smtp[smtpcom][channel]",
+        "type": "text",
+        "tag": "INPUT",
+        "value": "",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-sendinblue-api_key",
+        "name": "wp-mail-smtp[sendinblue][api_key]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-sendinblue-domain",
+        "name": "wp-mail-smtp[sendinblue][domain]",
+        "type": "text",
+        "tag": "INPUT",
+        "value": "",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-elasticemail-api_key",
+        "name": "wp-mail-smtp[elasticemail][api_key]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-gmail-one_click_setup_enabled-lite",
+        "name": "",
+        "type": "checkbox",
+        "tag": "INPUT",
+        "value": "yes",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-gmail-client_id",
+        "name": "wp-mail-smtp[gmail][client_id]",
+        "type": "text",
+        "tag": "INPUT",
+        "value": "",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-gmail-client_secret",
+        "name": "wp-mail-smtp[gmail][client_secret]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-gmail-client_redirect",
+        "name": "",
+        "type": "text",
+        "tag": "INPUT",
+        "value": "https://connect.wpmailsmtp.com/google/",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailgun-api_key",
+        "name": "wp-mail-smtp[mailgun][api_key]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailgun-domain",
+        "name": "wp-mail-smtp[mailgun][domain]",
+        "type": "text",
+        "tag": "INPUT",
+        "value": "",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailgun-region-us",
+        "name": "wp-mail-smtp[mailgun][region]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "US",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailgun-region-eu",
+        "name": "wp-mail-smtp[mailgun][region]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "EU",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailjet-api_key",
+        "name": "wp-mail-smtp[mailjet][api_key]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailjet-secret_key",
+        "name": "wp-mail-smtp[mailjet][secret_key]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailersend-api_key",
+        "name": "wp-mail-smtp[mailersend][api_key]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-mailersend-has_pro_plan",
+        "name": "wp-mail-smtp[mailersend][has_pro_plan]",
+        "type": "checkbox",
+        "tag": "INPUT",
+        "value": "true",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-mandrill-api_key",
+        "name": "wp-mail-smtp[mandrill][api_key]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-postmark-server_api_token",
+        "name": "wp-mail-smtp[postmark][server_api_token]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-postmark-message_stream",
+        "name": "wp-mail-smtp[postmark][message_stream]",
+        "type": "text",
+        "tag": "INPUT",
+        "value": "",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-resend-api_key",
+        "name": "wp-mail-smtp[resend][api_key]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-sendgrid-api_key",
+        "name": "wp-mail-smtp[sendgrid][api_key]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-sendgrid-domain",
+        "name": "wp-mail-smtp[sendgrid][domain]",
+        "type": "text",
+        "tag": "INPUT",
+        "value": "",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-smtp2go-api_key",
+        "name": "wp-mail-smtp[smtp2go][api_key]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-sparkpost-api_key",
+        "name": "wp-mail-smtp[sparkpost][api_key]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-sparkpost-region-us",
+        "name": "wp-mail-smtp[sparkpost][region]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "US",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-sparkpost-region-eu",
+        "name": "wp-mail-smtp[sparkpost][region]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "EU",
+        "visible": false
+      },
+      {
+        "id": "wp-mail-smtp-setting-smtp-host",
+        "name": "wp-mail-smtp[smtp][host]",
+        "type": "text",
+        "tag": "INPUT",
+        "value": "email-ssl.com.br",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-smtp-enc-none",
+        "name": "wp-mail-smtp[smtp][encryption]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "none",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-smtp-enc-ssl",
+        "name": "wp-mail-smtp[smtp][encryption]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "ssl",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-smtp-enc-tls",
+        "name": "wp-mail-smtp[smtp][encryption]",
+        "type": "radio",
+        "tag": "INPUT",
+        "value": "tls",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-smtp-port",
+        "name": "wp-mail-smtp[smtp][port]",
+        "type": "number",
+        "tag": "INPUT",
+        "value": "587",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-smtp-autotls",
+        "name": "wp-mail-smtp[smtp][autotls]",
+        "type": "checkbox",
+        "tag": "INPUT",
+        "value": "yes",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-smtp-auth",
+        "name": "wp-mail-smtp[smtp][auth]",
+        "type": "checkbox",
+        "tag": "INPUT",
+        "value": "yes",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-smtp-user",
+        "name": "wp-mail-smtp[smtp][user]",
+        "type": "text",
+        "tag": "INPUT",
+        "value": "contato@aerosuite.com.br",
+        "visible": true
+      },
+      {
+        "id": "wp-mail-smtp-setting-smtp-pass",
+        "name": "wp-mail-smtp[smtp][pass]",
+        "type": "password",
+        "tag": "INPUT",
+        "value": "[len=0]",
+        "visible": true
+      },
+      {
+        "id": "",
+        "name": "wp-mail-smtp-post",
+        "type": "hidden",
+        "tag": "INPUT",
+        "value": "1",
+        "visible": false
+      }
+    ]
+  },
+  "testInputs": [
+    {
+      "id": "collapse-button",
+      "name": "",
+      "type": "button",
+      "text": "Recolher menu"
+    },
+    {
+      "id": "",
+      "name": "",
+      "type": "button",
+      "text": "Agente de IA"
+    },
+    {
+      "id": "",
+      "name": "",
+      "type": "button",
+      "text": ""
+    },
+    {
+      "id": "_wpnonce",
+      "name": "_wpnonce",
+      "type": "hidden",
+      "text": ""
+    },
+    {
+      "id": "",
+      "name": "_wp_http_referer",
+      "type": "hidden",
+      "text": ""
+    },
+    {
+      "id": "wp-mail-smtp-setting-test_email",
+      "name": "wp-mail-smtp[test][email]",
+      "type": "email",
+      "text": ""
+    },
+    {
+      "id": "wp-mail-smtp-setting-test_email_html",
+      "name": "wp-mail-smtp[test][html]",
+      "type": "checkbox",
+      "text": ""
+    },
+    {
+      "id": "",
+      "name": "",
+      "type": "submit",
+      "text": "Enviar e-mail"
+    },
+    {
+      "id": "",
+      "name": "wp-mail-smtp-post",
+      "type": "hidden",
+      "text": ""
+    },
+    {
+      "id": "",
+      "name": "",
+      "type": "button",
+      "text": "\n\t\tFechar janela\t"
+    }
+  ],
+  "ajaxResult": {
+    "url": "https://aerosuite.com.br/wp-admin/admin-ajax.php",
+    "status": 200,
+    "body": "{\"message\":\"Heartbeat Done\",\"success\":1,\"data\":[],\"system\":{\"version\":\"3.1.21.3\",\"nonce\":\"b0d032d95d\"}}"
+  },
+  "testPage": {
+    "notices": [],
+    "bodyMatch": [
+      "sentimento",
+      "erro ocorre quando o e-mail ou a senha não está correto ou não é o que o servidor SMTP espera.",
+      "erro.",
+      "Sente-se e relaxe enquanto cuidamos de tudo para você! Se você simplesmente não tem tempo ou talvez se sinta um pouco perdido, nós o cobrimos.",
+      "erros abaixo na solicitação de suporte."
+    ]
+  },
+  "plugins": [
+    {
+      "plugin": "aerosuite-wpforms-fix-1/aerosuite-wpforms-fix.php",
+      "active": false,
+      "text": "Selecionar Aero Suite WPForms Fix\n\t\nAero Suite WPForms Fix\nAtivar | Excluir\n\t\n\nMemória, log de erros AJAX e mail seguro "
+    },
+    {
+      "plugin": "aerosuite-wpforms-fix-3/aerosuite-wpforms-fix.php",
+      "active": false,
+      "text": "Selecionar Aero Suite WPForms Fix\n\t\nAero Suite WPForms Fix\nAtivar | Excluir\n\t\n\nMemória 256M, form #12 reparado em memóri"
+    },
+    {
+      "plugin": "aerosuite-wpforms-fix-6/aerosuite-wpforms-fix.php",
+      "active": false,
+      "text": "Selecionar Aero Suite WPForms Fix\n\t\nAero Suite WPForms Fix\nAtivar | Excluir\n\t\n\nMemoria 256M, form #12 reparado, wp_mail "
+    },
+    {
+      "plugin": "aerosuite-wpforms-fix-4/aerosuite-wpforms-fix.php",
+      "active": false,
+      "text": "Selecionar Aero Suite WPForms Fix\n\t\nAero Suite WPForms Fix\nAtivar | Excluir\n\t\n\nMemória 256M e form #12 reparado em memór"
+    },
+    {
+      "plugin": "aerosuite-wpforms-fix-5/aerosuite-wpforms-fix.php",
+      "active": false,
+      "text": "Selecionar Aero Suite WPForms Fix\n\t\nAero Suite WPForms Fix\nAtivar | Excluir\n\t\n\nMemória 256M, form #12 reparado em memóri"
+    },
+    {
+      "plugin": "aerosuite-wpforms-fix-2/aerosuite-wpforms-fix.php",
+      "active": false,
+      "text": "Selecionar Aero Suite WPForms Fix\n\t\nAero Suite WPForms Fix\nAtivar | Excluir\n\t\n\nMemória, log de erros AJAX e mail seguro "
+    },
+    {
+      "plugin": "aerosuite-wpforms-fix-7/aerosuite-wpforms-fix.php",
+      "active": false,
+      "text": "Selecionar Aero Suite WPForms Fix\n\t\nAero Suite WPForms Fix\nAtivar | Excluir\n\t\n\nMemoria 256M, form #12 reparado, emails W"
+    },
+    {
+      "plugin": "wp-mail-smtp/wp_mail_smtp.php",
+      "active": true,
+      "text": "Selecionar WP Mail SMTP\n\t\nWP Mail SMTP\nObtenha o WP Mail SMTP Pro | Configurações | Documentação | Desativar\n\t\n\nSend Wor"
+    }
+  ]
+}

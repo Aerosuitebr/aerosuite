@@ -1,0 +1,117 @@
+{
+  "fields": {
+    "1": {
+      "id": "1",
+      "type": "text",
+      "label": "Nome",
+      "format": "simple",
+      "description": "",
+      "required": "1",
+      "size": "large",
+      "placeholder": "",
+      "limit_count": "1",
+      "limit_mode": "characters",
+      "default_value": "",
+      "css": ""
+    },
+    "2": {
+      "id": "2",
+      "type": "email",
+      "label": "E-mail",
+      "description": "",
+      "required": "1",
+      "size": "large",
+      "placeholder": "",
+      "confirmation_placeholder": "",
+      "default_value": "",
+      "css": ""
+    },
+    "5": {
+      "id": "5",
+      "type": "text",
+      "label": "Empresa",
+      "description": "Razão social ou nome da oficina / OM",
+      "required": "0",
+      "size": "medium",
+      "placeholder": "",
+      "limit_count": "1",
+      "limit_mode": "characters",
+      "default_value": "",
+      "css": ""
+    },
+    "7": {
+      "id": "7",
+      "type": "text",
+      "label": "Telefone",
+      "description": "DDD + número (WhatsApp ou fixo)",
+      "required": "0",
+      "size": "medium",
+      "placeholder": "(00) 00000-0000",
+      "limit_count": "1",
+      "limit_mode": "characters",
+      "default_value": "",
+      "css": ""
+    },
+    "3": {
+      "id": "3",
+      "type": "text",
+      "label": "Leave this field empty",
+      "description": "",
+      "required": "0",
+      "size": "medium",
+      "placeholder": "",
+      "label_hide": "1",
+      "default_value": "",
+      "css": "",
+      "meta": {
+        "invisible": "1"
+      }
+    },
+    "8": {
+      "id": "8",
+      "type": "textarea",
+      "label": "Mensagem",
+      "description": "",
+      "required": "0",
+      "size": "medium",
+      "placeholder": "",
+      "limit_count": "1",
+      "limit_mode": "characters",
+      "default_value": "",
+      "css": ""
+    }
+  },
+  "settings": {
+    "form_title": "Formulário de Contato Simples",
+    "form_desc": "",
+    "submit_text": "Enviar",
+    "submit_text_processing": "Enviando…",
+    "antispam": "1",
+    "ajax_submit": "1",
+    "notification_enable": "1",
+    "notifications": {
+      "1": {
+        "email": "contato@aerosuite.com.br",
+        "subject": "Novo contato — Aero Suite",
+        "sender_name": "Aero Suite",
+        "sender_address": "{admin_email}",
+        "replyto": "{field_id=\"2\"}",
+        "message": "{all_fields}",
+        "enable": "1"
+      }
+    },
+    "confirmations": {
+      "1": {
+        "type": "message",
+        "message": "<p>Obrigado! Recebemos sua mensagem e retornaremos em até um dia útil.</p>",
+        "message_scroll": "1",
+        "page": "19",
+        "redirect": "",
+        "message_entry_preview": ""
+      }
+    }
+  },
+  "meta": {
+    "template": "aerosuite-contact-rebuild"
+  }
+}

@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relatório Estratégico de Infraestrutura Cloud</title>
+  <style>/* Aero Suite — Relatório Executivo UX (print/PDF A4) */
+@page {
+  size: A4;
+  margin: 16mm 14mm 20mm 14mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.5;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 40%, #0f172a 75%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22mm 18mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 150mm;
+}
+
+.cover-logo {
+  width: 68mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8mm;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.4));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  border: 1px solid rgba(148,163,184,.35);
+  border-radius: 999px;
+  padding: 2.5mm 5mm;
+  margin-bottom: 6mm;
+}
+
+.cover h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+}
+
+.cover-sub {
+  font-size: 11pt;
+  color: #cbd5e1;
+  margin: 0 0 6mm;
+  line-height: 1.45;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a227, transparent);
+  margin: 0 auto 6mm;
+}
+
+.cover-meta {
+  font-size: 9.5pt;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cover-meta strong {
+  color: #e2e8f0;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 12mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #64748b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 7mm;
+  width: auto;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+h2 {
+  font-size: 14pt;
+  color: #0f172a;
+  margin: 0 0 4mm;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 11pt;
+  color: #0369a1;
+  margin: 5mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+.lead {
+  font-size: 10.5pt;
+  color: #334155;
+  margin-bottom: 5mm;
+}
+
+/* Sumário */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+  padding: 2mm 0;
+  border-bottom: 1px dotted #e2e8f0;
+  font-size: 9.5pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: none;
+  padding-top: 4mm;
+  font-size: 10pt;
+}
+
+.toc-num {
+  font-weight: 700;
+  color: #64748b;
+  min-width: 10mm;
+}
+
+/* Score dashboard */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin: 5mm 0 6mm;
+}
+
+.score-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4mm;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.score-card--ok {
+  background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #86efac;
+}
+
+.score-val {
+  font-size: 18pt;
+  font-weight: 800;
+  color: #0369a1;
+  line-height: 1;
+}
+
+.score-card--ok .score-val {
+  color: #15803d;
+}
+
+.score-label {
+  font-size: 7.5pt;
+  color: #64748b;
+  margin-top: 1.5mm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin: 4mm 0;
+}
+
+th, td {
+  border: 1px solid #e2e8f0;
+  padding: 2.5mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Item cards */
+.section-intro {
+  background: #f8fafc;
+  border-left: 3px solid #0369a1;
+  padding: 3mm 4mm;
+  margin-bottom: 5mm;
+  font-size: 9pt;
+  color: #475569;
+}
+
+.item-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 4mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  padding: 2.5mm 4mm;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item-id {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.item-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 9.5pt;
+}
+
+.sev {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.sev--CRITICO { background: #fee2e2; color: #991b1b; }
+.sev--ALTO { background: #ffedd5; color: #9a3412; }
+.sev--MEDIO { background: #fef9c3; color: #854d0e; }
+.sev--INFO { background: #e0e7ff; color: #3730a3; }
+
+.item-body {
+  padding: 3mm 4mm 4mm;
+  font-size: 8.75pt;
+}
+
+.item-row {
+  margin-bottom: 2.5mm;
+}
+
+.item-row:last-child {
+  margin-bottom: 0;
+}
+
+.item-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.5mm;
+}
+
+.item-text {
+  color: #1e293b;
+}
+
+.status-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+/* Assinatura */
+.signature-block {
+  margin-top: 10mm;
+  padding: 6mm;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.signature-line {
+  width: 55mm;
+  border-top: 1px solid #334155;
+  margin: 12mm 0 2mm;
+}
+
+.signature-name {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.signature-role {
+  font-size: 9pt;
+  color: #64748b;
+}
+
+.signature-date {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  margin-top: 2mm;
+}
+
+.callout {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 4mm;
+  margin: 4mm 0;
+  font-size: 9pt;
+}
+
+.callout strong {
+  color: #1d4ed8;
+}
+
+.supplementary {
+  page-break-inside: avoid;
+  margin-bottom: 4mm;
+  padding: 3mm 4mm;
+  border-left: 3px solid #c9a227;
+  background: #fffbeb;
+}
+
+.supplementary h4 {
+  margin: 0 0 1.5mm;
+  font-size: 9.5pt;
+  color: #92400e;
+}
+
+.supplementary p {
+  margin: 0;
+  font-size: 8.75pt;
+  color: #78350f;
+}
+
+.muted { font-size: 8pt; color: #64748b; }
+.muted-note { font-size: 8pt; color: #94a3b8; margin-top: 2mm; }
+.arch-diagram { background: #0f172a; color: #7dd3fc; padding: 4mm 5mm; border-radius: 6px; font-size: 7.5pt; line-height: 1.35; white-space: pre; overflow-x: auto; }
+.callout { border-radius: 8px; padding: 4mm 5mm; margin: 4mm 0 6mm 0; font-size: 9pt; line-height: 1.55; }
+.callout-warn { background: #fffbeb; border-left: 4px solid #f59e0b; color: #92400e; }
+.callout-urgent { background: #fef2f2; border-left: 4px solid #dc2626; color: #991b1b; }
+.callout-info { background: #eff6ff; border-left: 4px solid #3b82f6; color: #1e40af; }
+.commercial-box { margin-top: 6mm; }
+.bar-chart { margin: 4mm 0 6mm 0; }
+.bar-row { display: grid; grid-template-columns: 22mm 1fr 14mm; gap: 2mm; align-items: center; margin-bottom: 2.5mm; }
+.bar-label { font-size: 8.5pt; font-weight: 600; color: #334155; }
+.bar-track { height: 5mm; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; background: linear-gradient(90deg, #0ea5e9, #0369a1); border-radius: 3px; }
+.bar-val { font-size: 8pt; font-weight: 700; color: #0f172a; text-align: right; }
+.compare-table th, .compare-table td { font-size: 8.5pt; vertical-align: top; padding: 2mm 2.5mm; }
+.top-card { border: 1px solid #e2e8f0; border-radius: 10px; padding: 4mm 5mm; margin-bottom: 5mm; position: relative; page-break-inside: avoid; }
+.top-card--1 { border-color: #c9a227; background: linear-gradient(135deg, #fffbeb 0%, #fff 40%); }
+.top-card--2 { border-color: #94a3b8; background: #f8fafc; }
+.top-card--3 { border-color: #cd7f32; background: #fff7ed; }
+.top-card__rank { position: absolute; top: 3mm; right: 4mm; font-size: 18pt; font-weight: 800; color: #cbd5e1; }
+.top-card__model { font-size: 8.5pt; color: #64748b; margin: 0 0 2mm 0; }
+.top-card__cost { font-size: 10pt; margin-bottom: 2mm; color: #0f172a; }
+.top-card__verdict { font-size: 9pt; font-weight: 700; color: #15803d; margin-bottom: 3mm; }
+.pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; font-size: 8.5pt; }
+.pros-cons ul { margin: 1mm 0 0 4mm; padding: 0; color: #475569; }
+.roadmap-phase { margin-bottom: 4mm; padding-bottom: 3mm; border-bottom: 1px solid #e2e8f0; }
+.roadmap-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2mm; }
+.roadmap-phase-name { font-weight: 700; font-size: 9.5pt; color: #0f172a; }
+.roadmap-phase ul { margin: 0 0 0 5mm; font-size: 9pt; color: #475569; line-height: 1.5; }
+.signature-block { margin-top: 12mm; padding-top: 6mm; border-top: 2px solid #c9a227; }
+.signature-name { font-size: 12pt; font-weight: 700; color: #0f172a; margin: 0; }
+.signature-role { font-size: 10pt; color: #475569; margin: 1mm 0 0 0; }
+.signature-email { font-size: 9pt; color: #2563eb; }
+.metric-table td { font-size: 9pt; vertical-align: top; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Estratégia · Infraestrutura · Confidencial · Diretoria e Área Comercial</div>
+    <h1>Relatório Estratégico de Infraestrutura Cloud</h1>
+    <p class="cover-sub">Levantamento de opções de hospedagem, custo-benefício e roteiro de implantação para operação SaaS de qualidade<br/>Destinatário: <strong>Área Comercial, Diretoria e Operações</strong></p>
+    <div class="cover-gold-line"></div>
+    <p class="cover-meta">
+      <strong>Versão 1.0</strong> · 18 de junho de 2026<br />
+      Ambiente de referência: <strong>https://app.aerosuite.com.br</strong>
+    </p>
+  </div>
+  <div class="cover-footer">Aero Suite — Gestão aeronáutica</div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Sumário executivo</span>
+  </div>
+  <h2>Sumário executivo</h2>
+  <p class="lead">
+    O Aero Suite atingiu maturidade funcional e de homologação UX suficiente para comercialização ao segmento MRO Part 145.
+    O próximo gargalo não é o código — é a <strong>infraestrutura cloud dedicada</strong> que sustente disponibilidade,
+    segurança multi-tenant e backups auditáveis. Este relatório apresenta o diagnóstico atual, os serviços indispensáveis,
+    a comparação de seis provedores e as <strong>três melhores opções</strong> por custo-benefício.
+  </p>
+
+  <div class="score-grid">
+    <div class="score-card score-card--ok"><div class="score-val">#1</div><div class="score-label">Hetzner + Cloudflare</div></div>
+    <div class="score-card"><div class="score-val">R$ 120+</div><div class="score-label">Custo piloto/mês</div></div>
+    <div class="score-card score-card--ok"><div class="score-val">8,9</div><div class="score-label">Score Hetzner</div></div>
+    <div class="score-card"><div class="score-val">0–15d</div><div class="score-label">Prazo crítico</div></div>
+  </div>
+
+  <div class="callout callout-urgent">
+    <strong>Urgência:</strong> cada semana sem VPS de produção dedicado expõe a operação a risco de indisponibilidade,
+    mistura dev/prod e limita o SLA que a área comercial pode oferecer a clientes seletos.
+  </div>
+
+  <h3>Recomendação em uma linha</h3>
+  <p class="lead">
+    <strong>Provisionar imediatamente Hetzner CPX31 + Cloudflare Tunnel + backups automatizados</strong>,
+    conforme decisão D1 já documentada internamente, com staging em paralelo e evolução para MySQL gerido conforme crescimento.
+  </p>
+
+  <div class="page-footer"><span>Aero Suite · Infraestrutura</span><span>Sumário</span></div>
+</section>
+
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 01</span>
+  </div>
+  <h2>Situação atual — repositório e operação</h2>
+  <p class="section-intro">Antes de comparar provedores, é essencial compreender onde estamos hoje: código, CI e produção já existem, mas a infraestrutura precisa ser formalizada para sustentar o comercial.</p>
+  
+<h3>Repositório e ambientes</h3>
+<table class="metric-table">
+  <tbody>
+    <tr><td><strong>Desenvolvimento local</strong></td><td>D:\Desenvolvimento\aerosuite (desenvolvimento Windows + Docker Compose)</td></tr>
+    <tr><td><strong>Repositório remoto</strong></td><td>https://github.com/aerosuite-br/aerosuite (organização privada aerosuite-br)</td></tr>
+    <tr><td><strong>Branches</strong></td><td>Produção: <strong>master</strong> · Desenvolvimento: <strong>desenv</strong></td></tr>
+    <tr><td><strong>CI/CD</strong></td><td>GitHub Actions — backend Maven, frontend Angular, smoke i18n</td></tr>
+    <tr><td><strong>Produção atual</strong></td><td>https://app.aerosuite.com.br</td></tr>
+    <tr><td><strong>Stack</strong></td><td>Java 21 (Quarkus) · Angular/nginx · MySQL 8 · Docker Compose</td></tr>
+    <tr><td><strong>Decisão registrada</strong></td><td>DECISAO-VPS.md — Hetzner CPX31 aprovado para piloto</td></tr>
+  </tbody>
+</table>
+
+<h3>Fluxo atual (código → cliente)</h3>
+<pre class="arch-diagram">┌─────────────┐     ┌──────────────────┐     ┌─────────────────────────────┐
+│  Cliente    │────▶│  Cloudflare      │────▶│  VPS Produção (Docker)      │
+│  MRO / Web  │     │  DNS · SSL · WAF │     │  nginx:8081 · API:8080      │
+└─────────────┘     │  Tunnel          │     │  MySQL · volumes /var/...   │
+                    └──────────────────┘     └─────────────────────────────┘
+┌─────────────┐     ┌──────────────────┐              ▲
+│  Dev local  │────▶│  GitHub          │── CI/CD ─────┘
+│  + Docker   │     │  aerosuite-br    │     deploy tag master
+└─────────────┘     └──────────────────┘</pre>
+
+<div class="callout callout-warn">
+  <strong>Lacuna operacional:</strong> o repositório remoto e o CI estão maduros, porém a camada de hospedagem dedicada
+  ainda precisa ser provisionada e isolada do ambiente de desenvolvimento — condição necessária para SLA comercial.
+</div>
+  <div class="page-footer">
+    <span>Aero Suite · Infraestrutura Cloud</span>
+    <span>Cap. 01</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 02</span>
+  </div>
+  <h2>Requisitos técnicos da aplicação</h2>
+  <p class="section-intro">O Aero Suite é um SaaS multi-tenant com backend Java, frontend Angular, persistência relacional e grande volume de arquivos técnicos — cada camada de infraestrutura tem função específica.</p>
+  
+<table>
+  <thead><tr><th>Serviço</th><th>Criticidade</th><th>Por que importa</th><th>Especificação piloto</th></tr></thead>
+  <tbody><tr>
+        <td><strong>Computação (API + Web)</strong></td>
+        <td><span class="sev sev--CRITICO">Crítica</span></td>
+        <td>Executa o backend Quarkus e o frontend Angular. Sem capacidade estável, login, OS, estoque e Conformidade Técnica ficam indisponíveis.</td>
+        <td>Mín. 4 vCPU, 8 GB RAM (piloto); Ubuntu 24.04 LTS; Docker CE.</td>
+      </tr><tr>
+        <td><strong>Banco de dados MySQL</strong></td>
+        <td><span class="sev sev--CRITICO">Crítica</span></td>
+        <td>Armazena todos os tenants, RBAC, OS, estoque, SGQ e auditoria. Perda ou corrupção = parada total do negócio.</td>
+        <td>MySQL 8, UTF-8, backups diários + retenção 30 dias; evoluir para instância gerida com réplica.</td>
+      </tr><tr>
+        <td><strong>Armazenamento de arquivos</strong></td>
+        <td><span class="sev sev--ALTO">Alta</span></td>
+        <td>Anexos de OS, PDFs SGQ, logos por tenant, biblioteca técnica e dumps de backup exigem volumes persistentes e expansíveis.</td>
+        <td>NVMe ≥ 160 GB no piloto; pastas /var/aerosuite/{os,empresa-assets,biblioteca,backups}.</td>
+      </tr><tr>
+        <td><strong>CDN / WAF / DNS (Cloudflare)</strong></td>
+        <td><span class="sev sev--ALTO">Alta</span></td>
+        <td>Protege contra ataques, termina SSL, reduz latência percebida e permite Tunnel sem expor portas no servidor.</td>
+        <td>Plano Free ou Pro; Tunnel para 127.0.0.1:8081; DNS app.aerosuite.com.br.</td>
+      </tr><tr>
+        <td><strong>E-mail transacional (SendGrid)</strong></td>
+        <td><span class="sev sev--ALTO">Alta</span></td>
+        <td>Trial, reset de senha, propostas comerciais e alertas de conformidade dependem de entregabilidade profissional.</td>
+        <td>Domínio autenticado (SPF/DKIM); API SendGrid já integrada no backend.</td>
+      </tr><tr>
+        <td><strong>CI/CD (GitHub Actions)</strong></td>
+        <td><span class="sev sev--MEDIO">Média</span></td>
+        <td>Garante que cada release passou por build e testes antes de chegar ao cliente. Já operacional no repositório remoto.</td>
+        <td>Workflows ci.yml, integration-smoke; secrets em GitHub Environments.</td>
+      </tr><tr>
+        <td><strong>Backup e recuperação</strong></td>
+        <td><span class="sev sev--CRITICO">Crítica</span></td>
+        <td>Conformidade Part 145 e LGPD exigem prova de restore. Snapshots do provedor + dumps MySQL automatizados.</td>
+        <td>Snapshot semanal VPS + backup diário BD; teste de restore trimestral documentado.</td>
+      </tr><tr>
+        <td><strong>Monitoramento e alertas</strong></td>
+        <td><span class="sev sev--MEDIO">Média</span></td>
+        <td>Detecta queda de API, disco cheio ou falha de migração Flyway antes do cliente perceber.</td>
+        <td>Prometheus/Grafana (já no repo deploy/observability) ou UptimeRobot + alertas e-mail.</td>
+      </tr></tbody>
+</table>
+  <div class="page-footer">
+    <span>Aero Suite · Infraestrutura Cloud</span>
+    <span>Cap. 02</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 03</span>
+  </div>
+  <h2>Panorama comparativo de provedores</h2>
+  <p class="section-intro">Avaliamos seis cenários reais de mercado, com foco em custo mensal estimado (piloto), capacidade operacional, escala e adequação regulatória para o segmento aeronáutico.</p>
+  
+<p class="lead">Estimativa mensal em reais (câmbio ~R$ 5,50/USD; piloto 1–15 organizações, sem tráfego massivo).</p>
+<table class="compare-table">
+  <thead>
+    <tr><th>#</th><th>Provedor / modelo</th><th>Custo/mês (R$)</th><th>Score total</th><th>Custo-ben.</th><th>Escala</th></tr>
+  </thead>
+  <tbody><tr>
+        <td>1</td>
+        <td><strong>Hetzner Cloud</strong><br/><span class="muted">VPS CPX31 + Docker Compose + Cloudflare Tunnel</span></td>
+        <td>120–155</td>
+        <td>8.9</td>
+        <td>9.5</td>
+        <td>7.5</td>
+      </tr><tr>
+        <td>2</td>
+        <td><strong>DigitalOcean</strong><br/><span class="muted">Premium Droplet 8 GB + Docker Compose + Cloudflare</span></td>
+        <td>265–310</td>
+        <td>8.1</td>
+        <td>7.5</td>
+        <td>8.5</td>
+      </tr><tr>
+        <td>3</td>
+        <td><strong>AWS (Lightsail + RDS)</strong><br/><span class="muted">Lightsail 8 GB + RDS MySQL db.t4g.micro + CloudFront/Route53</span></td>
+        <td>300–470</td>
+        <td>8.0</td>
+        <td>6.5</td>
+        <td>9.5</td>
+      </tr><tr>
+        <td>4</td>
+        <td><strong>Google Cloud (GCE + Cloud SQL)</strong><br/><span class="muted">e2-standard-2 + Cloud SQL MySQL</span></td>
+        <td>385–520</td>
+        <td>7.5</td>
+        <td>6</td>
+        <td>9</td>
+      </tr><tr>
+        <td>5</td>
+        <td><strong>Microsoft Azure</strong><br/><span class="muted">App Service B2 + Azure Database for MySQL</span></td>
+        <td>440–605</td>
+        <td>7.4</td>
+        <td>5.5</td>
+        <td>9</td>
+      </tr><tr>
+        <td>6</td>
+        <td><strong>Locaweb / provedores BR</strong><br/><span class="muted">VPS Linux 8 GB</span></td>
+        <td>190–275</td>
+        <td>6.3</td>
+        <td>7</td>
+        <td>5.5</td>
+      </tr></tbody>
+</table>
+
+<h3>Comparativo de custo mensal estimado (R$)</h3>
+<div class="bar-chart">
+    <div class="bar-row">
+      <div class="bar-label">Hetzner</div>
+      <div class="bar-track"><div class="bar-fill" style="width:19%"></div></div>
+      <div class="bar-val">120</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">DigitalOcean</div>
+      <div class="bar-track"><div class="bar-fill" style="width:43%"></div></div>
+      <div class="bar-val">265</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">AWS</div>
+      <div class="bar-track"><div class="bar-fill" style="width:48%"></div></div>
+      <div class="bar-val">300</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Google</div>
+      <div class="bar-track"><div class="bar-fill" style="width:62%"></div></div>
+      <div class="bar-val">385</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Microsoft</div>
+      <div class="bar-track"><div class="bar-fill" style="width:71%"></div></div>
+      <div class="bar-val">440</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Locaweb</div>
+      <div class="bar-track"><div class="bar-fill" style="width:31%"></div></div>
+      <div class="bar-val">190</div>
+    </div></div>
+
+<h3>Score composto — Top 3 (0–10)</h3>
+<div class="bar-chart">
+    <div class="bar-row">
+      <div class="bar-label">#1 Hetzner</div>
+      <div class="bar-track"><div class="bar-fill" style="width:89%"></div></div>
+      <div class="bar-val">8.9</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">#2 DigitalOcean</div>
+      <div class="bar-track"><div class="bar-fill" style="width:81%"></div></div>
+      <div class="bar-val">8.1</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">#3 AWS</div>
+      <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
+      <div class="bar-val">8</div>
+    </div></div>
+<p class="muted-note">Peso: custo-benefício 40% · operação 25% · escala 20% · conformidade 15%</p>
+  <div class="page-footer">
+    <span>Aero Suite · Infraestrutura Cloud</span>
+    <span>Cap. 03</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 04</span>
+  </div>
+  <h2>Top 3 recomendações</h2>
+  <p class="section-intro">Com base no score composto (custo-benefício 40%, operação 25%, escala 20%, conformidade 15%), estas são as três opções que a Diretoria de TI recomenda à área comercial.</p>
+  
+<article class="top-card top-card--1">
+  <div class="top-card__rank">1º</div>
+  <h3>Hetzner Cloud</h3>
+  <p class="top-card__model">VPS CPX31 + Docker Compose + Cloudflare Tunnel · EU (fsn1/nbg1) — latência ~180–220 ms BR</p>
+  <div class="top-card__cost"><strong>120–155</strong> / mês · ~22–28 USD</div>
+  <p class="top-card__verdict">RECOMENDAÇÃO PRIMÁRIA — implantar imediatamente como produção dedicada.</p>
+  <div class="pros-cons">
+    <div><strong>Vantagens</strong><ul><li>Melhor custo-benefício comprovado no mercado VPS (4 vCPU, 8 GB, 160 GB NVMe).</li><li>Alinhado à decisão interna D1 (DECISAO-VPS.md) e stack Docker já documentada.</li><li>GDPR nativo (datacenter Alemanha); adequado a clientes com requisitos de soberania EU.</li><li>Evolução linear: CCX23 ou MySQL gerido sem mudar aplicação.</li></ul></div>
+    <div><strong>Limitações</strong><ul><li>Latência maior para usuários 100% no Brasil (mitigável com Cloudflare caching).</li><li>Suporte em inglês/alemão; equipe interna assume operação.</li></ul></div>
+  </div>
+</article>
+<article class="top-card top-card--2">
+  <div class="top-card__rank">2º</div>
+  <h3>DigitalOcean</h3>
+  <p class="top-card__model">Premium Droplet 8 GB + Docker Compose + Cloudflare · NYC ou SFO — latência similar à EU</p>
+  <div class="top-card__cost"><strong>265–310</strong> / mês · ~48–56 USD</div>
+  <p class="top-card__verdict">ALTERNATIVA SÓLIDA — se priorizar ecossistema gerenciado e suporte em inglês acessível.</p>
+  <div class="pros-cons">
+    <div><strong>Vantagens</strong><ul><li>Documentação excelente; Managed MySQL e Spaces (S3) integrados no mesmo ecossistema.</li><li>Painel intuitivo para equipe comercial acompanhar status de droplets.</li><li>App Platform disponível para evolução futura sem reescrever deploy.</li></ul></div>
+    <div><strong>Limitações</strong><ul><li>Custo ~2× superior ao Hetzner para recursos equivalentes.</li><li>Sem datacenter no Brasil na linha Droplet padrão.</li></ul></div>
+  </div>
+</article>
+<article class="top-card top-card--3">
+  <div class="top-card__rank">3º</div>
+  <h3>AWS (Lightsail + RDS)</h3>
+  <p class="top-card__model">Lightsail 8 GB + RDS MySQL db.t4g.micro + CloudFront/Route53 · sa-east-1 (São Paulo) disponível para RDS; Lightsail US com CDN BR</p>
+  <div class="top-card__cost"><strong>300–470</strong> / mês · ~55–85 USD</div>
+  <p class="top-card__verdict">CAMINHO ENTERPRISE — adotar quando contratos exigirem AWS ou volume &gt; 30 tenants.</p>
+  <div class="pros-cons">
+    <div><strong>Vantagens</strong><ul><li>Credibilidade enterprise; região São Paulo para banco de dados.</li><li>Caminho natural para escala (ECS, EKS, Aurora) sem troca de provedor.</li><li>Certificações ISO/SOC valorizadas em licitações e grupos aeronáuticos.</li></ul></div>
+    <div><strong>Limitações</strong><ul><li>Custo mais alto e faturamento complexo (múltiplos serviços).</li><li>Curva de aprendizado IAM/VPC para equipe enxuta.</li></ul></div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Infraestrutura Cloud</span>
+    <span>Cap. 04</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 05</span>
+  </div>
+  <h2>Roteiro de implantação e urgência</h2>
+  <p class="section-intro">O caminho não admite postergação: cada semana sem infraestrutura dedicada aumenta risco reputacional e limita a capacidade de onboarding de novos clientes MRO.</p>
+  
+<div class="callout callout-urgent">
+  <strong>Momento crítico de maturidade do produto</strong>
+  <ul><li>Homologação UX concluída em múltiplas rodadas (Relatórios 2–5) com achados erradicados em produção.</li><li>Clientes piloto e segmento MRO Part 145 exigem disponibilidade, isolamento multi-tenant e rastreabilidade.</li><li>Operação atual mistura ambiente de desenvolvimento local com produção compartilhada — risco operacional e de imagem.</li><li>Comercialização ativa requer SLA, backups testados, monitoramento e capacidade de escalar sem refatorar arquitetura.</li><li>Atraso na infraestrutura dedicada compromete credibilidade perante oficinas e consultores de conformidade.</li></ul>
+</div>
+
+<div class="roadmap-phase">
+  <div class="roadmap-head"><span class="roadmap-phase-name">Imediato (0–15 dias)</span><span class="sev sev--CRITICO">CRÍTICA</span></div>
+  <ul><li>Provisionar VPS Hetzner CPX31 dedicado à produção (separado de ambiente de desenvolvimento).</li><li>Executar bootstrap-linux.sh, docker-compose.production.yml e Cloudflare Tunnel.</li><li>Migrar app.aerosuite.com.br para instância dedicada com backups automáticos.</li><li>Documentar credenciais em cofre (1Password/Bitwarden) e runbook OPERACAO-PRODUCAO.md.</li></ul>
+</div>
+<div class="roadmap-phase">
+  <div class="roadmap-head"><span class="roadmap-phase-name">Curto prazo (15–45 dias)</span><span class="sev sev--ALTO">ALTA</span></div>
+  <ul><li>Ambiente staging espelhado (CPX21) com dump anonimizado para homologação da consultora.</li><li>Monitoramento uptime + alertas (API /health, disco, certificado).</li><li>Teste de restore de backup documentado (evidência ANAC/LGPD).</li><li>Pipeline deploy: tag em master → GitHub Actions → pull no servidor produção.</li></ul>
+</div>
+<div class="roadmap-phase">
+  <div class="roadmap-head"><span class="roadmap-phase-name">Médio prazo (2–6 meses)</span><span class="sev sev--MEDIO">MÉDIA</span></div>
+  <ul><li>Separar MySQL para instância gerida quando &gt; 10 tenants ou I/O saturar.</li><li>Upgrade CCX23 (CPU dedicada) ou segundo nó se CPU &gt; 70% sustentado.</li><li>Avaliar CDN cache agressivo e região US (Ashburn) se base de clientes BR crescer.</li></ul>
+</div>
+<div class="roadmap-phase">
+  <div class="roadmap-head"><span class="roadmap-phase-name">Longo prazo (6–18 meses)</span><span class="sev sev--MEDIO">PLANEJADA</span></div>
+  <ul><li>Kubernetes (Helm chart já no repo deploy/helm/aerosuite) para multi-região.</li><li>Object storage S3-compatible para arquivos frios (biblioteca, backups longos).</li><li>AWS/Azure se contrato enterprise exigir — migração facilitada por containers.</li></ul>
+</div>
+<div class="callout callout-info commercial-box">
+  <strong>Mensagem à área comercial</strong><br/>Para a área comercial: a infraestrutura proposta não é um custo técnico abstrato — é o alicerce do SLA que podemos prometer a oficinas homologadas. Com Hetzner + Cloudflare, o investimento mensal inicial fica na faixa de um único contrato piloto MRO, enquanto indisponibilidade ou perda de dados custaria múltiplos contratos e credibilidade no mercado Part 145.
+</div>
+  <div class="page-footer">
+    <span>Aero Suite · Infraestrutura Cloud</span>
+    <span>Cap. 05</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Encerramento</span>
+  </div>
+  <h2>Conclusão e próximos passos</h2>
+  <p class="lead">
+    A análise conclui que o caminho de menor risco e maior retorno para o estágio atual do Aero Suite é a
+    <strong>opção 1 (Hetzner)</strong>, com reserva estratégica em DigitalOcean (opção 2) e AWS (opção 3) conforme
+    volume contratual e exigências enterprise. A área comercial pode comunicar aos prospects que a plataforma opera
+    sobre stack Docker madura, CI verde e arquitetura preparada para escala — faltando apenas a formalização do
+    ambiente de produção dedicado, ação com prazo imediato.
+  </p>
+
+  <table class="metric-table">
+    <thead><tr><th>Ação</th><th>Responsável</th><th>Prazo</th></tr></thead>
+    <tbody>
+      <tr><td>Aprovar budget infra piloto (~R$ 150/mês)</td><td>Diretoria / Comercial</td><td>Imediato</td></tr>
+      <tr><td>Provisionar VPS Hetzner CPX31</td><td>TI (Wellem Lyra)</td><td>0–7 dias</td></tr>
+      <tr><td>Deploy produção + Tunnel Cloudflare</td><td>TI</td><td>7–15 dias</td></tr>
+      <tr><td>Staging + teste de restore</td><td>TI + Qualidade</td><td>15–30 dias</td></tr>
+      <tr><td>Comunicar SLA comercial aos clientes piloto</td><td>Comercial</td><td>Após go-live infra</td></tr>
+    </tbody>
+  </table>
+
+  <div class="signature-block">
+    <p class="signature-name">Wellem Lyra</p>
+    <p class="signature-role">Diretor de TI · Aero Suite</p>
+    <p class="signature-email">wellemlyra@aerosuite.com.br</p>
+    <p class="muted" style="margin-top:4mm;">Documento elaborado em 18 de junho de 2026 · Versão 1.0 · Confidencial · Diretoria e Área Comercial</p>
+  </div>
+
+  <div class="page-footer"><span>Aero Suite · Infraestrutura</span><span>Assinatura</span></div>
+</section>
+
+</body>
+</html>

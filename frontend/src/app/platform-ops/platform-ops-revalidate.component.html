@@ -1,0 +1,150 @@
+<div class="ops-revalidate-backdrop" *ngIf="visible" role="dialog" aria-modal="true">
+
+  <div class="ops-revalidate-card">
+
+    <app-platform-ops-mfa-enroll
+
+      *ngIf="enrollmentMode && mfaSetupToken"
+
+      [setupToken]="mfaSetupToken"
+
+      (completed)="onEnrollmentCompleted()"
+
+      (cancelled)="onEnrollmentCancelled()">
+
+    </app-platform-ops-mfa-enroll>
+
+
+
+    <ng-container *ngIf="!enrollmentMode">
+
+      <header>
+
+        <i class="pi pi-lock" aria-hidden="true"></i>
+
+        <h2>{{ 'platformOps.revalidate.title' | translate }}</h2>
+
+        <p>{{ 'platformOps.revalidate.subtitle' | translate:{ minutes: '' + mfaRevalidateMinutes() } }}</p>
+
+      </header>
+
+
+
+      <label class="ops-revalidate-label" for="revalidate-totp">{{ 'platformOps.login.totp' | translate }}</label>
+
+      <input
+
+        pInputText
+
+        id="revalidate-totp"
+
+        [(ngModel)]="totpCode"
+
+        autocomplete="one-time-code"
+
+        inputmode="numeric"
+
+        maxlength="6"
+
+        pattern="[0-9]*"
+
+        class="ops-revalidate-totp-input"
+
+        (keyup.enter)="submit()" />
+
+      <p class="ops-revalidate-hint">{{ 'platformOps.login.mfaHint' | translate }}</p>
+
+
+
+      <p class="ops-revalidate-error" *ngIf="errorMessage" role="alert">{{ errorMessage }}</p>
+
+
+
+      <div class="ops-revalidate-actions">
+
+        <button
+
+          pButton
+
+          type="button"
+
+          class="ops-revalidate-submit"
+
+          [label]="'platformOps.revalidate.confirm' | translate"
+
+          [loading]="loading"
+
+          (click)="submit()">
+
+        </button>
+
+
+
+        <button
+
+          type="button"
+
+          class="ops-revalidate-help-link"
+
+          (click)="toggleHelp()">
+
+          {{ 'platformOps.revalidate.helpToggle' | translate }}
+
+        </button>
+
+
+
+        <button
+
+          type="button"
+
+          class="ops-revalidate-logout"
+
+          (click)="logout()">
+
+          {{ 'platformOps.shell.logout' | translate }}
+
+        </button>
+
+      </div>
+
+
+
+      <section class="ops-revalidate-help" *ngIf="showHelp">
+
+        <h3>{{ 'platformOps.revalidate.helpTitle' | translate }}</h3>
+
+        <ol>
+
+          <li>{{ 'platformOps.revalidate.helpStep1' | translate }}</li>
+
+          <li>{{ 'platformOps.revalidate.helpStep2' | translate }}</li>
+
+          <li>{{ 'platformOps.revalidate.helpStep3' | translate }}</li>
+
+          <li>{{ 'platformOps.revalidate.helpStep4' | translate }}</li>
+
+        </ol>
+
+        <p class="ops-revalidate-help-note">{{ 'platformOps.revalidate.helpNote' | translate }}</p>
+
+        <button
+
+          type="button"
+
+          class="ops-revalidate-help-setup"
+
+          (click)="goSetupMfa()">
+
+          {{ 'platformOps.revalidate.helpSetup' | translate }}
+
+        </button>
+
+      </section>
+
+    </ng-container>
+
+  </div>
+
+</div>
+

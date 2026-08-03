@@ -1,0 +1,1 @@
+﻿{"viewId":"265634","method":"Runtime.evaluate","params":{"expression":"(async()=>{window.__expr=atob(window.__b64);window.__b64=null;let v=eval(window.__expr);if(v&&typeof v.then==='function')v=await v;return v})()","awaitPromise":true,"returnByValue":true}}

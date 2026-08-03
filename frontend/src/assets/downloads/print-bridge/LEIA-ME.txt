@@ -1,0 +1,12 @@
+Aero Suite — Print Bridge (Windows)
+===================================
+
+1. Extraia todos os arquivos deste ZIP em uma pasta (ex.: Desktop\AeroSuite-PrintBridge).
+2. Dê duplo clique em: Instalar Print Bridge.bat
+3. Se o Windows solicitar, permita a execução.
+4. No Aero Suite (módulo Estoque), clique em "Testar conexão" no guia de impressão térmica.
+
+O bridge permanece ativo após cada login no Windows.
+Impressora padrão: configure em %LOCALAPPDATA%\AeroSuite\PrintBridge\config.json
+
+Suporte: documentação em docs/IMPRESSAO-TERMICA-PPLB.md no repositório Aero Suite.

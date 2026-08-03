@@ -1,0 +1,51 @@
+﻿{
+    "schema":  "aerosuite-anac-ata-contingencia-v1",
+    "reqId":  "REQ-026",
+    "roadmapItem":  "P-002",
+    "generatedAt":  "2026-06-10T10:56:43.1211187-03:00",
+    "durationSec":  22.3,
+    "referencia":  "docs/anac-conformidade/08-plano-contingencia.md",
+    "responsaveis":  {
+                         "rt":  "RT (preencher)",
+                         "ti":  "TI (preencher)"
+                     },
+    "assinaturasPendentes":  [
+                                 "RT",
+                                 "Coordenador produÃ§Ã£o",
+                                 "TI"
+                             ],
+    "checklist":  [
+                      {
+                          "step":  "1. Acionamento RT + TI documentado",
+                          "status":  "MANUAL",
+                          "detail":  "Ver 08-plano-contingencia.md Â§8.4",
+                          "at":  "2026-06-10T10:56:43.1185666-03:00"
+                      },
+                      {
+                          "step":  "2. OperaÃ§Ã£o manual (formulÃ¡rio papel)",
+                          "status":  "MANUAL",
+                          "detail":  "FormulÃ¡rios ANAC / MOM interno",
+                          "at":  "2026-06-10T10:56:43.1195089-03:00"
+                      },
+                      {
+                          "step":  "3. Hangar offline â€” sync pÃ³s-rede",
+                          "status":  "PASS",
+                          "detail":  "api-hangar-offline-sync-smoke.ps1 PASS",
+                          "at":  "2026-06-10T10:56:43.1195089-03:00"
+                      },
+                      {
+                          "step":  "4. ReconciliaÃ§Ã£o OS + anexos scans",
+                          "status":  "MANUAL",
+                          "detail":  "Checklist Â§8.4 passos 1-5",
+                          "at":  "2026-06-10T10:56:43.1205073-03:00"
+                      },
+                      {
+                          "step":  "5. Registro evento SGQ / NC leve",
+                          "status":  "MANUAL",
+                          "detail":  "Qualidade registra apÃ³s reconciliaÃ§Ã£o",
+                          "at":  "2026-06-10T10:56:43.1206144-03:00"
+                      }
+                  ],
+    "resultado":  "APTO_PARA_ASSINATURA",
+    "proximaAcao":  "Exportar PDF assinado: evidencias/ata-contingencia-YYYYMMDD.pdf"
+}

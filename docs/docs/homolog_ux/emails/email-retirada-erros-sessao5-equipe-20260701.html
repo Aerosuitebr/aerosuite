@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório Executivo — Retirada de Erros · Sessão 5</title>
+</head>
+<body style="margin:0;padding:0;background:#e2e8f0;font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:#0f172a;">
+
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#e2e8f0;padding:32px 12px;">
+  <tr><td align="center">
+    <table role="presentation" width="680" cellspacing="0" cellpadding="0" border="0" style="max-width:680px;width:100%;">
+      <tr>
+        <td style="background:linear-gradient(145deg,#020617 0%,#071A33 55%,#0B4F8A 100%);padding:36px 40px;text-align:center;">
+          <img src="{{LOGO_CID_SRC}}" alt="Aero Suite" width="64" height="64" style="display:block;margin:0 auto 16px auto;" />
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#16A7D7;margin-bottom:10px;">Relatório Executivo</div>
+          <div style="font-size:26px;font-weight:700;color:#f8fafc;line-height:1.25;">Retirada de Erros e Encerramento de Apontamentos</div>
+          <div style="font-size:15px;color:#94a3b8;margin-top:10px;">Homologação Funcional · Sessão 5 · 01/jul/2026</div>
+          <div style="margin-top:16px;font-size:12px;color:#bae6fd;">📎 PDF em anexo · {{PDF_SIZE_MB}} MB</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="background:#ffffff;padding:32px 40px;">
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#334155;">
+            Prezados(as),
+          </p>
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#475569;">
+            Encaminho o <strong>Relatório Executivo de Retirada de Erros — Sessão 5</strong>, documento formal que consolida
+            o tratamento dos apontamentos registrados na homologação funcional do Aero Suite. O PDF em anexo apresenta,
+            para cada ocorrência, o <em>erro confrontado</em>, a <em>solução aplicada</em>, o <em>resultado operacional</em>
+            e o rastro de implementação no código-fonte.
+          </p>
+          <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#475569;">
+            O escopo abrange <strong>conta e trial</strong>, <strong>configuração da empresa</strong>, <strong>produtos e fabricantes</strong>,
+            <strong>usuários externos</strong>, <strong>isolamento de documentos multi-tenant</strong> e ajustes de
+            <strong>consistência visual</strong> — com rastreabilidade completa entre relato, diagnóstico, intervenção e evidência de validação.
+          </p>
+
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:20px;">
+            <tr>
+              <td width="25%" style="background:#EAF7FC;border:1px solid #92CDE2;border-radius:10px;padding:14px 10px;text-align:center;">
+                <div style="font-size:22px;font-weight:700;color:#071A33;">12</div>
+                <div style="font-size:11px;color:#667085;margin-top:4px;">apontamentos encerrados</div>
+              </td>
+              <td width="4"></td>
+              <td width="25%" style="background:#EAF7FC;border:1px solid #92CDE2;border-radius:10px;padding:14px 10px;text-align:center;">
+                <div style="font-size:22px;font-weight:700;color:#071A33;">249</div>
+                <div style="font-size:11px;color:#667085;margin-top:4px;">testes aprovados</div>
+              </td>
+              <td width="4"></td>
+              <td width="25%" style="background:#EAF7F1;border:1px solid #86efac;border-radius:10px;padding:14px 10px;text-align:center;">
+                <div style="font-size:22px;font-weight:700;color:#12805C;">0</div>
+                <div style="font-size:11px;color:#667085;margin-top:4px;">falhas e erros</div>
+              </td>
+              <td width="4"></td>
+              <td width="25%" style="background:#FFF5E3;border:1px solid #fcd34d;border-radius:10px;padding:14px 10px;text-align:center;">
+                <div style="font-size:22px;font-weight:700;color:#B36B00;">V89</div>
+                <div style="font-size:11px;color:#667085;margin-top:4px;">migração de isolamento</div>
+              </td>
+            </tr>
+          </table>
+
+          <div style="background:#ecfdf5;border:1px solid #86efac;border-radius:12px;padding:18px 20px;margin-bottom:20px;">
+            <strong style="color:#15803d;font-size:15px;">Resultado consolidado: 12/12 apontamentos encerrados no código</strong>
+            <ul style="margin:12px 0 0;padding-left:20px;font-size:14px;color:#166534;line-height:1.65;">
+              <li><strong>1 crítico</strong> — isolamento de documentos por tenant (<strong>ISOLAMENTO</strong> · migration V89)</li>
+              <li><strong>2 altos</strong> — autopreenchimento CNPJ (<strong>S5-10</strong>) e limite de fabricante (<strong>S5-16</strong>)</li>
+              <li><strong>5 médios</strong> — validação de endereço, layout produto, upload, usuário externo e filtros de inativos</li>
+              <li><strong>3 baixos</strong> — ícones duplicados, barra fixa e primeiro login pós-trial</li>
+              <li><strong>1 decisão de produto</strong> — tema escuro do Chat mantido (<strong>S5-11</strong>)</li>
+            </ul>
+          </div>
+
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:20px;">
+            <strong style="color:#0f172a;font-size:14px;">Matriz resumida de apontamentos</strong>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:12px;font-size:13px;color:#475569;line-height:1.55;">
+              <tr><td style="padding:5px 0;vertical-align:top;width:72px;"><strong>S5-10</strong></td><td>Autopreenchimento de endereço via CNPJ passou a prevalecer sobre dados inválidos preexistentes</td></tr>
+              <tr><td style="padding:5px 0;vertical-align:top;"><strong>S5-01</strong></td><td>Janela controlada no primeiro login após criação da trial</td></tr>
+              <tr><td style="padding:5px 0;vertical-align:top;"><strong>S5-06/07/09</strong></td><td>Validações reforçadas de CEP, UF, cidade, logradouro, número e site</td></tr>
+              <tr><td style="padding:5px 0;vertical-align:top;"><strong>S5-16/14/15</strong></td><td>Limites de fabricante, layout estável e estado coerente do upload de imagem</td></tr>
+              <tr><td style="padding:5px 0;vertical-align:top;"><strong>UX-EXT / S5-18</strong></td><td>Validação de usuário externo e filtros Ativos / Inativos / Todos</td></tr>
+              <tr><td style="padding:5px 0;vertical-align:top;"><strong>ISOLAMENTO</strong></td><td><code style="background:#f1f5f9;padding:1px 5px;border-radius:4px;">tenant_id</code> em documentos, diretório segregado e filtro automático por organização</td></tr>
+              <tr><td style="padding:5px 0;vertical-align:top;"><strong>S5-12/13/17</strong></td><td>Affordances visuais únicos e reserva inferior no formulário de usuário externo</td></tr>
+            </table>
+          </div>
+
+          <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:18px 20px;margin-bottom:20px;">
+            <strong style="color:#b45309;font-size:14px;">Validação automatizada e próximo passo</strong>
+            <p style="margin:10px 0 0;font-size:14px;color:#92400e;line-height:1.65;">
+              Foram executadas as suítes disponíveis no repositório: <strong>25 testes Vitest</strong> no frontend e
+              <strong>224 testes JUnit/Quarkus</strong> no backend — total de <strong>249 aprovados</strong>, sem falhas,
+              erros ou testes ignorados. A migration <strong>V89</strong> deve integrar o próximo ciclo de implantação
+              para efetivar o isolamento de documentos no ambiente alvo.
+            </p>
+          </div>
+
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.7;color:#64748b;">
+            O relatório completo encontra-se em anexo
+            (<code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:12px;">Relatorio_Executivo_Retirada_de_Erros_Sessao_5.pdf</code>).
+            Permaneço à disposição para walkthrough de qualquer apontamento ou alinhamento de reteste com a consultora de qualidade.
+          </p>
+
+          <p style="margin:24px 0 0;font-size:14px;color:#64748b;line-height:1.6;">
+            Atenciosamente,<br>
+            <strong style="color:#0f172a;">Wellem Lyra</strong><br>
+            Diretor de TI · Aero Suite<br>
+            <a href="mailto:wellemlyra@aerosuite.com.br" style="color:#2563eb;text-decoration:none;">wellemlyra@aerosuite.com.br</a>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td style="background:#f1f5f9;padding:16px 40px;text-align:center;font-size:11px;color:#94a3b8;line-height:1.5;">
+          Aero Suite — Gestão Aeronáutica Integrada · Documento interno de homologação funcional<br>
+          Referência: Relatório Executivo de Retirada de Erros — Sessão 5 · 01/jul/2026 · Engenharia, Qualidade e Conformidade
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>

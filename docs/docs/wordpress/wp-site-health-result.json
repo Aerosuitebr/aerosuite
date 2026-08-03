@@ -1,0 +1,66 @@
+{
+  "at": "2026-06-03T12:58:10.261Z",
+  "info": {
+    "php": null,
+    "wp": null,
+    "snippet": "Pular para o conteúdo principal\nPular para a barra de ferramentas\n\n\nAssistente do Site\n\n\nPainel\nInício\nAtualizações 6\nInsights\n\n\nPosts\nTodos os posts\nAdicionar post\nCategorias\nTags\n\n\nMídia\nLibrary\nAdicionar arquivo de mídia\nOtimização em massa\nOther Media\n\n\nPáginas\nTodas as páginas\nAdicionar página\n\n\nComentários\nComplianz 1\nPainel 1\nAssistente\nBanner de consentimento\nIntegrações\nConfigurações\nFerramentas\nAtualizar para Premium\n\n\nEventos\nEventos\nAdicionar novo\nCalendários\nIngressos\nLocais\nPalestrantes\nRSVP\nConfigurações\nFerramentas\nComplementos\nAtualizar para a versão Pro\n\n\nWPForms\nTodos os formulários\nAdd New Form\nRegistros\nPagamentos NEW!\nModelos de formulário\nConfigurações\nFerramentas\nComplementos\nPrivacy Compliance\nSMTP\nSobre nós\nComunidade\nAtualizar para a versão Pro\n\n\nAparência\nTemas 3\nEditor\nFontes\n\n\nPlugins 3\nPlugins instalados\nAdicionar plugin\n\n\nUsuários\nTodos os usuários\nAdicionar usuário\nPerfil\nJetBackup\nJetBackup\nBackups\nBackup Jobs\nDestinations\nSchedules\nQueue\nDownloads\nAlerts\nSettings\nSystem Info\n\n\nFerramentas\nFerramentas disponíveis\nImportar\nExportar\nDiagnóstico 1\nExportar dados pessoais\nApagar dados pessoais\n\n\nConfigurações1\nGeral\nConectores\nEscrita\nLeitura\nDiscussão\nMídia\nLinks permanentes\nPrivacidade\nTranslatePress1\nImagify\nLazyLoad\n\n\nWP Mail SMTP\nConfigurações\nRegistro de e-mail\nRelatórios de e-mail\nFerramentas\nQuem somos\nAtualizar para a versão Pro\n\n\nSegurança2\n\n\nInsights\nSetup Checklist\n18\nReports\nSettings\nSite Notes\nPopular Posts\nTools\nAddons\nUserFeedback\n NEW\nAbout Us\nUpgrade to Pro\nRecolher menu\nSobre o WordPress\naerosuite.com.br\n6\n6 atualizações disponíveis\nCtrl+K\nAbrir paleta de comandos\n0\n0 comentário esperando moderação\nNovo\nTraduzir site2\nInsights\nWPForms\nImagify\nAgente de IA\nOlá, wlyra\nAjuda\nBem-vindo ao Imagify, a melhor maneira de otimizar suas imagens facilmente!\nDispensar este aviso\n\nCrie uma conta\n\nAinda não tem uma conta no Imagify? Otimize suas imagens criando uma conta em alguns segundos!\n\nREGISTRE-SE, É GRÁTIS!\n\nInforme sua chave API\n\nSalve a chave de API que você recebeu por email, ou você pode obtê-la na sua página de conta do Imagify.\n\nEU TENHO UMA CHAVE DE API\n\nConfigurar\n\nJá está quase pronto! Você só precisa configurar suas opções de otimização.\n\nVÁ EM CONFIGURAÇÕES\n\nDiagnóstico\nDeve ser melhorado\nStatus\nInformação\n\nPlease Setup Website Analytics to See Audience Insights\n\nMonsterInsights, the #1 WordPress Analytics Plugin, helps you easily connect your website to Google Analytics, so that you can see how people f"
+  },
+  "plugins": [
+    {
+      "name": "Complianz | Consentimento de cookies para GDPR/CCPA",
+      "plugin": "complianz-gdpr/complianz-gpdr",
+      "version": "7.4.6"
+    },
+    {
+      "name": "Extendify - Assistente de Onboarding e IA para WordPress",
+      "plugin": "extendify/extendify",
+      "version": "2.3.1"
+    },
+    {
+      "name": "Google Analytics for WordPress by MonsterInsights",
+      "plugin": "google-analytics-for-wordpress/googleanalytics",
+      "version": "10.2.2"
+    },
+    {
+      "name": "Imagify",
+      "plugin": "imagify/imagify",
+      "version": "2.2.8"
+    },
+    {
+      "name": "JetBackup",
+      "plugin": "backup/backup",
+      "version": "3.1.21.3"
+    },
+    {
+      "name": "Lazy Load - Optimize Images",
+      "plugin": "rocket-lazy-load/rocket-lazy-load",
+      "version": "2.4.0"
+    },
+    {
+      "name": "Really Simple Security",
+      "plugin": "really-simple-ssl/rlrsssl-really-simple-ssl",
+      "version": "9.5.11"
+    },
+    {
+      "name": "Sugar Calendar (Lite)",
+      "plugin": "sugar-calendar-lite/sugar-calendar-lite",
+      "version": "3.11.1"
+    },
+    {
+      "name": "TranslatePress - Multilingual",
+      "plugin": "translatepress-multilingual/index",
+      "version": "3.2.1"
+    },
+    {
+      "name": "WPForms Lite",
+      "plugin": "wpforms-lite/wpforms",
+      "version": "1.10.1"
+    },
+    {
+      "name": "WP Mail SMTP",
+      "plugin": "wp-mail-smtp/wp_mail_smtp",
+      "version": "4.8.0"
+    }
+  ],
+  "wpformsNote": "Pular para o conteúdo principal\nPular para a barra de ferramentas\n\n\nAssistente do Site\n\n\nPainel\nInício\nAtualizações 6\nInsights\n\n\nPosts\nTodos os posts\nAdicionar post\nCategorias\nTags\n\n\nMídia\nLibrary\nAdicionar arquivo de mídia\nOtimização em massa\nOther Media\n\n\nPáginas\nTodas as páginas\nAdicionar página\n\n\nComentários\nComplianz 1\nPainel 1\nAssistente\nBanner de consentimento\nIntegrações\nConfigurações\nFerramentas\nAtualizar para Premium\n\n\nEventos\nEventos\nAdicionar novo\nCalendários\nIngressos\nLocais\nPalestrantes\nRSVP\nConfigurações\nFerramentas\nComplementos\nAtualizar para a versão Pro\n\n\nWPForms\nTodos os formulários\nAdd New Form\nRegistros\nPagamentos NEW!\nModelos de formulário\nConfigurações\nFerramentas\nComplementos\nPrivacy Compliance\nSMTP\nSobre nós\nComunidade\nAtualizar para a versão Pro\n\n\nAparência\nTemas 3\nEditor\nFontes\n\n\nPlugins 3\nPlugins instalados\nAdicionar plugin\n\n\nUsuários\nTodos os usuários\nAdicionar usuário\nPerfil\nJetBackup\nJetBackup\nBackups\nBackup Jobs\nDestinations\nSchedules\nQueue\nDownloads\nAlerts\nSettings\nSystem Info\n\n\nFerramentas\nFerramentas disponíveis\nImportar\nExportar\nDiagnóstico 1\nExportar dados pessoais\nApagar dados pessoais\n\n\nConfigurações1\nGeral\nConectores\nEscrita\nLeitura\nDiscussão\nMídia\nLinks permanentes\nPrivacidade\nTranslatePress1\nImagify\nLazyLoad\n\n\nWP Mail SMTP\nConfigurações\nRegistro de e-mail\nRelatórios de e-mail\nFerramentas\nQuem somos\nAtualizar para a versão Pro\n\n\nSegurança2\n\n\nInsights\nSetup Checklist\n18\nReports\nSettings\nSite Notes\nPopular Posts\nTools\nAddons\nUserFeedback"
+}

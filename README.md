@@ -1,34 +1,70 @@
-# Aerosuite
+# Aero Suite — Fullstack
 
-Plataforma mãe do ecossistema: marca, site institucional e operações compartilhadas (Vultr, Cloudflare, deploy).
+Plataforma SaaS multi-tenant para gestão aeronáutica (MRO, OS, estoque, comercial, portal externo).
 
-| Item | Valor |
-|------|--------|
-| Produto | Aerosuite |
-| Site | https://aerosuite.com.br |
-| Dev | http://localhost:4300 |
-| Org | [Aerosuitebr](https://github.com/Aerosuitebr) |
+## Stack
 
-## Ecossistema
+- **Backend:** Quarkus 3, Java 21 (`com.aerosuite`)
+- **Frontend:** Angular 18 (`aerosuite-frontend`)
+- **Base de dados:** MySQL (`aerosuite`)
 
-| Repo | Papel | Domínio |
-|------|--------|---------|
-| [aerosuite](https://github.com/Aerosuitebr/aerosuite) | Marca + ops | aerosuite.com.br |
-| [mira](https://github.com/Aerosuitebr/mira) | Busca B2B | search.aerosuite.com.br |
-| [resolva-jato](https://github.com/Aerosuitebr/resolva-jato) | Hub de ferramentas | resolvajato.com.br |
+## Arranque rápido
 
-No VPS Vultr:
+```powershell
+# Variáveis: copiar .env.example → .env
+docker compose up -d api web
 
-- Resolva Jato → `127.0.0.1:3000` + tunnel `cloudflared-resolvajato`
-- Evolution WhatsApp Aerosuite → porta **18082** (RJ usa **18083**)
-
-## Como rodar
-
-```bash
+# Frontend em dev
+cd frontend
 npm install
-npm run dev
+npm start
 ```
 
-## Status
+Login plataforma (após seed): `admin@aerosuite.com` / tenant `default`.
 
-Repo recriado após perda do SSD. Código legado em `D:\Desenvolvimento\aerosuite` não estava neste ambiente.
+## Git (branches)
+
+| Branch | Uso |
+|--------|-----|
+| `master` | Linha estável; merges a partir de `desenv` quando uma entrega estiver pronta |
+| `desenv` | Desenvolvimento diário (commits e PRs partem daqui) |
+
+```powershell
+git checkout desenv          # trabalhar
+# ... commits ...
+git checkout master
+git merge desenv             # integrar entrega validada
+```
+
+## Testes e Sprint 1
+
+```powershell
+.\scripts\test\final-suite.ps1 -SkipDockerRebuild -SkipMaven
+.\scripts\test\sprint1-homologacao.ps1
+```
+
+Roadmap da branch `desenv`: [`docs/PROXIMOS-PASSOS-DESENV.md`](docs/PROXIMOS-PASSOS-DESENV.md)
+
+**Produto final (staging → produção):** [`docs/PRODUTO-FINAL-INDICE.md`](docs/PRODUTO-FINAL-INDICE.md)
+
+## Documentação
+
+- `docs/PRODUTO-FINAL-INDICE.md` — mapa de todos os documentos até go-live
+- `docs/PROXIMOS-PASSOS-DESENV.md` — fases A/B/C/D (desenvolvimento e deploy)
+- `docs/DEPLOY-PRODUCAO.md` — checklist deploy (Hetzner + Docker)
+- `docs/HOSPEDAGEM-PRODUCAO.md` — plano CPX31 e arquitetura
+- `docs/SPRINT1-ISOLAMENTO-TENANT.md` — multi-tenant e provisão de organizações
+- `.env.example` — configuração de API, MySQL e e-mail
+
+## Migração de nome (Bellows → Aero Suite)
+
+Se a BD local ainda se chama `bellows` e tens dados para preservar:
+
+```powershell
+cd db\scripts
+.\Clone-BellowsDatabaseToAerosuite.ps1 -Password root -DropTarget -UpdateEnvFile
+```
+
+Guia completo: `db/scripts/README-MIGRACAO-BD.md`
+
+Utilizadores com sessão antiga no browser devem voltar a fazer login (chaves `localStorage` renomeadas para `aerosuite_*`).

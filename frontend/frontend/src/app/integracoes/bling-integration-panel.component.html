@@ -1,0 +1,434 @@
+<section class="bling-fiscal-wizard" [class.bling-fiscal-wizard--embedded]="embedded">
+  <div class="bling-loading-wrap" *ngIf="loading">
+    <p-progressSpinner strokeWidth="4" [style]="{ width: '36px', height: '36px' }"></p-progressSpinner>
+    <p>{{ 'integrations.bling.wizard.loading' | translate }}</p>
+  </div>
+
+  <ng-container *ngIf="loaded && connection">
+    <div class="bling-status-grid">
+      <div class="bling-status-pill"
+        [class.bling-status-pill--ok]="integrationReady"
+        [class.bling-status-pill--warn]="!integrationReady">
+        <strong>{{ 'integrations.bling.wizard.pill.integration' | translate }}</strong>
+        <span>
+          <i class="pi" [ngClass]="integrationReady ? 'pi-check-circle' : 'pi-clock'" aria-hidden="true"></i>
+          {{ integrationReady ? ('integrations.bling.wizard.status.ok' | translate) : ('integrations.bling.wizard.status.pending' | translate) }}
+        </span>
+      </div>
+      <div class="bling-status-pill"
+        [class.bling-status-pill--ok]="connection.connected"
+        [class.bling-status-pill--warn]="!connection.connected && integrationReady"
+        [class.bling-status-pill--danger]="sessionExpired">
+        <strong>{{ 'integrations.bling.wizard.pill.account' | translate }}</strong>
+        <span>
+          <i class="pi" [ngClass]="connection.connected ? 'pi-check-circle' : (sessionExpired ? 'pi-times-circle' : 'pi-clock')" aria-hidden="true"></i>
+          <ng-container *ngIf="connection.connected">{{ 'integrations.bling.wizard.status.connected' | translate }}</ng-container>
+          <ng-container *ngIf="!connection.connected && sessionExpired">{{ 'integrations.bling.wizard.status.sessionExpired' | translate }}</ng-container>
+          <ng-container *ngIf="!connection.connected && !sessionExpired">{{ 'integrations.bling.wizard.status.notConnected' | translate }}</ng-container>
+        </span>
+      </div>
+      <div class="bling-status-pill"
+        [class.bling-status-pill--ok]="syncOk"
+        [class.bling-status-pill--warn]="connection.connected && !syncOk">
+        <strong>{{ 'integrations.bling.wizard.pill.sync' | translate }}</strong>
+        <span>
+          <i class="pi" [ngClass]="syncOk ? 'pi-check-circle' : 'pi-clock'" aria-hidden="true"></i>
+          {{ syncOk ? ('integrations.bling.wizard.status.active' | translate) : (connection.connected ? ('integrations.bling.wizard.status.pending' | translate) : '—') }}
+        </span>
+      </div>
+      <div class="bling-status-pill"
+        [class.bling-status-pill--ok]="fiscalConfig?.certificadoConfigurado"
+        [class.bling-status-pill--warn]="connection.connected && !fiscalConfig?.certificadoConfigurado">
+        <strong>{{ 'integrations.bling.wizard.pill.cert' | translate }}</strong>
+        <span>
+          <i class="pi" [ngClass]="fiscalConfig?.certificadoConfigurado ? 'pi-check-circle' : 'pi-clock'" aria-hidden="true"></i>
+          {{ fiscalConfig?.certificadoConfigurado ? ('integrations.bling.wizard.status.configured' | translate) : (connection.connected ? ('integrations.bling.wizard.status.pending' | translate) : '—') }}
+        </span>
+      </div>
+    </div>
+
+    <div class="bling-notice bling-notice--warn" *ngIf="needsScopeReconnect && !sessionExpired">
+      <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+      <div>
+        <strong>{{ 'integrations.bling.wizard.notice.scopeRenewTitle' | translate }}</strong>
+        <p>{{ 'integrations.bling.wizard.notice.scopeRenewBody' | translate }}</p>
+      </div>
+    </div>
+
+    <div class="bling-notice bling-notice--warn" *ngIf="sessionExpired">
+      <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+      <div>
+        <strong>{{ 'integrations.bling.wizard.notice.sessionExpiredTitle' | translate }}</strong>
+        <p>{{ connection.message || ('integrations.bling.wizard.notice.sessionExpiredBody' | translate) }}</p>
+      </div>
+    </div>
+
+    <div class="bling-notice" *ngIf="!integrationReady">
+      <i class="pi pi-info-circle" aria-hidden="true"></i>
+      <div>
+        <strong>{{ 'integrations.bling.wizard.notice.platformTitle' | translate }}</strong>
+        <p>{{ 'integrations.bling.platformDisabled' | translate }}</p>
+      </div>
+    </div>
+
+    <p-accordion
+      styleClass="bling-wizard-accordion"
+      [multiple]="true"
+      [(activeIndex)]="wizardAccordionOpen">
+
+      <!-- Step 1: Connection -->
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="bling-step-head bling-step-head--accordion"
+            [class.bling-step-card--done]="connection.connected && !needsOAuthReconnect"
+            [class.bling-step-card--active]="integrationReady && (!connection.connected || needsOAuthReconnect)">
+            <span class="bling-step-num"
+              [class.bling-step-num--ok]="connection.connected && !needsOAuthReconnect"
+              [class.bling-step-num--current]="integrationReady && (!connection.connected || needsOAuthReconnect)"
+              [class.bling-step-num--blocked]="!integrationReady">1</span>
+            <div class="bling-step-title">
+              <h3>{{ 'integrations.bling.wizard.step1.title' | translate }}</h3>
+              <p>{{ 'integrations.bling.wizard.step1.desc' | translate }}</p>
+            </div>
+            <span class="bling-step-badge"
+              [class.bling-step-badge--ok]="connection.connected && !needsOAuthReconnect"
+              [class.bling-step-badge--pending]="integrationReady && (!connection.connected || needsOAuthReconnect)"
+              [class.bling-step-badge--blocked]="!integrationReady">
+              <ng-container *ngIf="connection.connected && !needsOAuthReconnect">{{ 'integrations.bling.wizard.badge.done' | translate }}</ng-container>
+              <ng-container *ngIf="needsOAuthReconnect">{{ 'integrations.bling.wizard.badge.reconnect' | translate }}</ng-container>
+              <ng-container *ngIf="integrationReady && !connection.connected && !needsOAuthReconnect">{{ 'integrations.bling.wizard.badge.waiting' | translate }}</ng-container>
+              <ng-container *ngIf="!integrationReady">{{ 'integrations.bling.wizard.badge.unavailable' | translate }}</ng-container>
+            </span>
+          </div>
+        </ng-template>
+        <div class="bling-step-body">
+        <p class="hint success-hint" *ngIf="(connection.connected || connection.linked) && connection.connectedAt">
+          {{ 'integrations.bling.connectedAt' | translate : { date: (connection.connectedAt | date:'short') } }}
+          <ng-container *ngIf="connection.blingCompanyName"> · {{ connection.blingCompanyName }}</ng-container>
+        </p>
+        <p class="hint" *ngIf="connection.message && !connection.connected">{{ backendMessage(connection.message) }}</p>
+        <p class="hint" *ngIf="!connection.connected && connection.platformEnabled && !connection.oauthConfigured">
+          {{ 'integrations.bling.oauthNotConfigured' | translate }}
+        </p>
+        <p class="api-test text-sm" *ngIf="apiTestMessage">{{ apiTestMessage }}</p>
+
+        <ul class="friendly-checks" *ngIf="friendlyChecks.length">
+          <li *ngFor="let c of friendlyChecks" [class.check-fail]="!c.ok">
+            <i class="pi" [ngClass]="c.ok ? 'pi-check-circle' : 'pi-times-circle'" aria-hidden="true"></i>
+            <span>{{ c.label }}</span>
+          </li>
+        </ul>
+
+        <div class="bling-actions-row">
+          <button *ngIf="loadError" pButton type="button" class="p-button-outlined" icon="pi pi-refresh"
+            [label]="'integrations.bling.retryBtn' | translate" [loading]="loading" (click)="load()"></button>
+          <button pButton type="button" class="p-button-success" icon="pi pi-link"
+            [label]="connectButtonLabelKey | translate" [loading]="connecting"
+            [disabled]="!canConnect" (click)="connect()"></button>
+          <button pButton type="button" class="p-button-outlined p-button-secondary" icon="pi pi-refresh"
+            [label]="'integrations.bling.testBtn' | translate" [loading]="testing"
+            [disabled]="!connection.platformEnabled || (!connection.connected && !connection.linked && !connection.oauthConfigured)"
+            (click)="testConnection()"></button>
+          <button pButton type="button" class="p-button-outlined p-button-danger" icon="pi pi-times"
+            [label]="'integrations.bling.disconnectBtn' | translate" [loading]="disconnecting"
+            [disabled]="!connection.canManage || !(connection.connected || connection.linked)" (click)="confirmDisconnect()"></button>
+        </div>
+        <p class="bling-btn-hint" *ngIf="connectBlockedReasonKey">{{ connectBlockedReasonKey | translate }}</p>
+
+        <div class="bling-scopes-block" *ngIf="connection.canManage && (connection.connected || connection.linked)">
+          <h4>{{ 'integrations.bling.scopesTitle' | translate }}</h4>
+          <p class="hint text-sm text-color-secondary">{{ 'integrations.bling.wizard.scopes.intro' | translate }}</p>
+          <ul class="bling-permissions-checklist" *ngIf="scopesStatus?.requiredBlingAppPermissions?.length">
+            <li *ngFor="let perm of scopesStatus!.requiredBlingAppPermissions!">
+              <i class="pi pi-circle" aria-hidden="true"></i>
+              <span>{{ perm }}</span>
+            </li>
+          </ul>
+          <ul class="scope-checks text-sm" *ngIf="scopeChecks.length">
+            <li *ngFor="let c of scopeChecks" [class.scope-fail]="!c.ok">
+              <i [class]="c.ok ? 'pi pi-check text-green-500' : 'pi pi-times text-red-500'"></i>
+              {{ c.label }} — {{ backendMessage(c.message) }}
+            </li>
+          </ul>
+          <div class="bling-actions-row">
+            <button pButton type="button" class="p-button-outlined p-button-sm" icon="pi pi-shield"
+              [label]="'integrations.bling.wizard.scopes.recheckBtn' | translate"
+              [loading]="scopesLoading" (click)="loadScopes(true)"></button>
+          </div>
+          <p class="hint text-sm" *ngIf="scopesStatus?.reconnectHint">{{ backendMessage(scopesStatus?.reconnectHint) }}</p>
+        </div>
+        </div>
+      </p-accordionTab>
+
+      <!-- Step 2: Fiscal -->
+      <p-accordionTab *ngIf="connection.connected && fiscalConfig">
+        <ng-template pTemplate="header">
+          <div class="bling-step-head bling-step-head--accordion"
+            [class.bling-step-card--done]="fiscalConfig.certificadoConfigurado"
+            [class.bling-step-card--active]="!fiscalConfig.certificadoConfigurado">
+            <span class="bling-step-num"
+              [class.bling-step-num--ok]="fiscalConfig.certificadoConfigurado"
+              [class.bling-step-num--current]="!fiscalConfig.certificadoConfigurado">2</span>
+            <div class="bling-step-title">
+              <h3>{{ 'integrations.bling.wizard.step2.title' | translate }}</h3>
+              <p>{{ 'integrations.bling.wizard.step2.desc' | translate }}</p>
+            </div>
+            <span class="bling-step-badge"
+              [class.bling-step-badge--ok]="fiscalConfig.certificadoConfigurado"
+              [class.bling-step-badge--pending]="!fiscalConfig.certificadoConfigurado">
+              {{ fiscalConfig.certificadoConfigurado ? ('integrations.bling.wizard.badge.ready' | translate) : ('integrations.bling.wizard.badge.pending' | translate) }}
+            </span>
+          </div>
+        </ng-template>
+        <div class="bling-step-body">
+        <p class="hint text-sm text-color-secondary">{{ 'integrations.bling.fiscal.intro' | translate }}</p>
+
+        <div class="fiscal-grid" *ngIf="connection.canManage">
+          <div class="fiscal-field">
+            <label>{{ 'integrations.bling.fiscal.cfop' | translate }}</label>
+            <input pInputText [(ngModel)]="fiscalConfig.cfopPadrao" maxlength="10" />
+          </div>
+          <div class="fiscal-field">
+            <label>{{ 'integrations.bling.fiscal.serie' | translate }}</label>
+            <input pInputText [(ngModel)]="fiscalConfig.serieNfe" maxlength="5" />
+          </div>
+          <div class="fiscal-field full">
+            <label>{{ 'integrations.bling.fiscal.natureza' | translate }}</label>
+            <input pInputText [(ngModel)]="fiscalConfig.naturezaOperacao" maxlength="120" class="w-full" />
+          </div>
+          <div class="fiscal-field">
+            <label>{{ 'integrations.bling.fiscal.ncm' | translate }}</label>
+            <input pInputText [(ngModel)]="fiscalConfig.ncmPadrao" maxlength="10" />
+          </div>
+          <div class="fiscal-field">
+            <label>{{ 'integrations.bling.fiscal.icms' | translate }}</label>
+            <p-inputNumber [(ngModel)]="fiscalConfig.aliquotaIcms" [minFractionDigits]="2" [maxFractionDigits]="4" suffix="%" />
+          </div>
+          <div class="fiscal-field">
+            <label>{{ 'integrations.bling.fiscal.pis' | translate }}</label>
+            <p-inputNumber [(ngModel)]="fiscalConfig.aliquotaPis" [minFractionDigits]="2" [maxFractionDigits]="4" suffix="%" />
+          </div>
+          <div class="fiscal-field">
+            <label>{{ 'integrations.bling.fiscal.cofins' | translate }}</label>
+            <p-inputNumber [(ngModel)]="fiscalConfig.aliquotaCofins" [minFractionDigits]="2" [maxFractionDigits]="4" suffix="%" />
+          </div>
+          <div class="fiscal-field full fiscal-checks">
+            <div class="flex align-items-center gap-2 mb-2">
+              <p-checkbox [(ngModel)]="fiscalConfig.autoOsOnPedido" [binary]="true" inputId="autoOs" />
+              <label for="autoOs">{{ 'integrations.bling.fiscal.autoOs' | translate }}</label>
+            </div>
+            <div class="flex align-items-center gap-2">
+              <p-checkbox [(ngModel)]="fiscalConfig.autoEmitirNfe" [binary]="true" inputId="autoNfe" />
+              <label for="autoNfe">{{ 'integrations.bling.fiscal.autoNfe' | translate }}</label>
+            </div>
+          </div>
+          <div class="fiscal-actions full">
+            <button pButton type="button" icon="pi pi-save" class="p-button-outlined"
+              [label]="'integrations.bling.fiscal.saveBtn' | translate"
+              [loading]="savingFiscal" (click)="saveFiscalConfig()"></button>
+          </div>
+        </div>
+
+        <div class="cert-block" *ngIf="connection.canManage">
+          <h4>{{ 'integrations.bling.fiscal.certTitle' | translate }}</h4>
+          <p class="hint text-sm text-color-secondary">{{ 'integrations.bling.fiscal.certHint' | translate }}</p>
+          <p class="hint cert-ok text-sm" *ngIf="fiscalConfig.certificadoConfigurado">
+            {{ fiscalConfig.certificadoTipo }} — {{ fiscalConfig.certificadoNome }}
+            <span *ngIf="fiscalConfig.certificadoValidoAte">
+              ({{ 'integrations.bling.fiscal.certValidUntil' | translate : { date: fiscalConfig.certificadoValidoAte } }})
+            </span>
+          </p>
+          <div class="cert-upload-row">
+            <p-dropdown [options]="certTipoOptions" [(ngModel)]="certTipo" optionLabel="label" optionValue="value"
+              appendTo="body" panelStyleClass="bling-cert-tipo-panel"
+              [placeholder]="'integrations.bling.fiscal.certTipo' | translate"></p-dropdown>
+            <input pInputText type="password" [(ngModel)]="certPassword"
+              [placeholder]="'integrations.bling.fiscal.certPassword' | translate" />
+            <p-fileUpload mode="basic" chooseIcon="pi pi-upload" auto="false" customUpload="true"
+              [chooseLabel]="'integrations.bling.fiscal.certChoose' | translate"
+              accept=".pfx,.p12" (onSelect)="onCertFileSelect($event)"></p-fileUpload>
+            <button pButton type="button" icon="pi pi-lock" class="p-button-outlined"
+              [label]="'integrations.bling.fiscal.certUploadBtn' | translate"
+              [loading]="uploadingCert" (click)="uploadCertificado()"></button>
+            <button pButton type="button" icon="pi pi-trash" class="p-button-outlined p-button-danger"
+              *ngIf="fiscalConfig.certificadoConfigurado"
+              [label]="'integrations.bling.fiscal.certRemoveBtn' | translate"
+              (click)="confirmRemoveCertificado()"></button>
+          </div>
+        </div>
+
+        <p class="read-only-hint text-sm" *ngIf="!connection.canManage">
+          {{ 'integrations.bling.readOnly' | translate }}
+        </p>
+        </div>
+      </p-accordionTab>
+
+      <!-- NF-e readiness -->
+      <p-accordionTab *ngIf="connection.connected">
+        <ng-template pTemplate="header">
+          <div class="bling-step-head bling-step-head--accordion">
+            <span class="bling-step-num"
+              [class.bling-step-num--ok]="nfeOperationalReady"
+              [class.bling-step-num--current]="!nfeOperationalReady && !nfeReadinessLoading">✓</span>
+            <div class="bling-step-title">
+              <h3>{{ 'integrations.bling.wizard.readiness.title' | translate }}</h3>
+              <p>{{ 'integrations.bling.wizard.readiness.desc' | translate }}</p>
+            </div>
+            <span class="bling-step-badge"
+              [class.bling-step-badge--ok]="nfeOperationalReady"
+              [class.bling-step-badge--pending]="!nfeOperationalReady && !nfeReadinessLoading">
+              {{ nfeReadinessLoading ? ('integrations.bling.wizard.readiness.checking' | translate) : (nfeOperationalReady ? ('integrations.bling.wizard.badge.ready' | translate) : ('integrations.bling.wizard.readiness.pending' | translate)) }}
+            </span>
+          </div>
+        </ng-template>
+        <div class="bling-step-body">
+        <div class="bling-notice bling-notice--danger" *ngIf="missingProductsPermission">
+          <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+          <div>
+            <strong>{{ 'integrations.bling.wizard.readiness.productsTitle' | translate }}</strong>
+            <p>{{ 'integrations.bling.wizard.readiness.productsBody' | translate }}</p>
+          </div>
+        </div>
+        <p class="hint" *ngIf="nfeReadiness?.message">{{ backendMessage(nfeReadiness?.message) }}</p>
+        <ul class="friendly-checks" *ngIf="nfeReadiness?.checks?.length">
+          <li *ngFor="let c of nfeReadiness!.checks!" [class.check-fail]="!c.ok">
+            <i class="pi" [ngClass]="c.ok ? 'pi-check-circle' : 'pi-times-circle'" aria-hidden="true"></i>
+            <span>
+              <strong>{{ c.label }}</strong>
+              <ng-container *ngIf="!c.ok && c.fixHint"> — {{ backendMessage(c.fixHint) }}</ng-container>
+            </span>
+          </li>
+        </ul>
+        <div class="bling-notice bling-notice--warn" *ngIf="nfeReadiness?.warnings?.length">
+          <i class="pi pi-info-circle" aria-hidden="true"></i>
+          <div>
+            <strong>{{ 'integrations.bling.wizard.readiness.warningsTitle' | translate }}</strong>
+            <p *ngFor="let w of nfeReadiness!.warnings!">{{ backendMessage(w) }}</p>
+          </div>
+        </div>
+        <div class="bling-actions-row">
+          <button pButton type="button" class="p-button-outlined" icon="pi pi-check-square"
+            [label]="'integrations.bling.wizard.readiness.recheckBtn' | translate"
+            [loading]="nfeReadinessLoading" (click)="loadNfeReadiness(true)"></button>
+        </div>
+
+        <div class="bling-product-sync" *ngIf="connection.canManage && !missingProductsPermission">
+          <h4>{{ 'integrations.bling.wizard.productSync.title' | translate }}</h4>
+          <p class="hint text-sm text-color-secondary">{{ 'integrations.bling.wizard.productSync.desc' | translate }}</p>
+          <div class="bling-product-sync-row">
+            <input pInputText type="number" min="1" [(ngModel)]="syncProductId"
+              [placeholder]="'integrations.bling.wizard.productSync.placeholder' | translate" />
+            <button pButton type="button" class="p-button-outlined" icon="pi pi-box"
+              [label]="'integrations.bling.wizard.productSync.btn' | translate"
+              [loading]="syncingProduct" (click)="syncProductFiscal()"></button>
+          </div>
+        </div>
+        </div>
+      </p-accordionTab>
+
+      <!-- Step 3: Sync -->
+      <p-accordionTab *ngIf="connection.connected">
+        <ng-template pTemplate="header">
+          <div class="bling-step-head bling-step-head--accordion">
+            <span class="bling-step-num" [class.bling-step-num--ok]="syncOk">3</span>
+            <div class="bling-step-title">
+              <h3>{{ 'integrations.bling.wizard.step3.title' | translate }}</h3>
+              <p>{{ 'integrations.bling.wizard.step3.desc' | translate }}</p>
+            </div>
+            <span class="bling-step-badge"
+              [class.bling-step-badge--ok]="syncOk"
+              [class.bling-step-badge--pending]="!syncOk">
+              {{ syncOk ? ('integrations.bling.wizard.badge.upToDate' | translate) : ('integrations.bling.wizard.badge.verify' | translate) }}
+            </span>
+          </div>
+        </ng-template>
+        <div class="bling-step-body">
+        <ng-container *ngIf="syncStatus as sync">
+          <ul class="sync-stats friendly">
+            <li><i class="pi pi-users" aria-hidden="true"></i> {{ 'integrations.bling.syncMapped' | translate : { count: sync.mappedContacts + '' } }}</li>
+            <li *ngIf="sync.linkedPedidos != null && sync.linkedPedidos > 0">
+              <i class="pi pi-shopping-bag" aria-hidden="true"></i> {{ 'integrations.bling.syncPedidos' | translate : { count: sync.linkedPedidos + '' } }}
+            </li>
+            <li *ngIf="sync.nfeRegistros != null && sync.nfeRegistros > 0">
+              <i class="pi pi-file" aria-hidden="true"></i> {{ 'integrations.bling.syncNfe' | translate : { count: sync.nfeRegistros + '' } }}
+            </li>
+            <li *ngIf="sync.pendingJobs > 0">
+              <i class="pi pi-hourglass" aria-hidden="true"></i> {{ 'integrations.bling.syncPending' | translate : { count: sync.pendingJobs + '' } }}
+            </li>
+            <li *ngIf="sync.deadJobs > 0" class="sync-warn">
+              <i class="pi pi-exclamation-triangle" aria-hidden="true"></i> {{ 'integrations.bling.syncDead' | translate : { count: sync.deadJobs + '' } }}
+            </li>
+            <li *ngIf="sync.lastWebhookAt">
+              <i class="pi pi-sync" aria-hidden="true"></i> {{ 'integrations.bling.syncLastWebhook' | translate : { date: (sync.lastWebhookAt | date:'short') } }}
+            </li>
+          </ul>
+
+          <div class="dead-jobs-block" *ngIf="sync.deadJobs > 0">
+            <h4>{{ 'integrations.bling.deadJobs.title' | translate }}</h4>
+            <p class="hint text-sm text-color-secondary">{{ 'integrations.bling.deadJobs.intro' | translate }}</p>
+            <div *ngIf="loadingDeadJobs" class="flex justify-content-center py-2">
+              <p-progressSpinner strokeWidth="4" [style]="{ width: '28px', height: '28px' }"></p-progressSpinner>
+            </div>
+            <div class="dead-jobs-list" *ngIf="!loadingDeadJobs && deadJobs.length">
+              <article class="dead-job-card" *ngFor="let job of deadJobs">
+                <div class="dead-job-card__meta">
+                  <span class="dead-job-card__type">{{ job.jobType }}</span>
+                  <span class="dead-job-card__event" *ngIf="job.eventType">
+                    {{ 'integrations.bling.deadJobs.eventType' | translate : { type: job.eventType } }}
+                  </span>
+                  <span class="dead-job-card__attempts">
+                    {{ 'integrations.bling.deadJobs.attempts' | translate : { current: job.attempts + '', max: job.maxAttempts + '' } }}
+                  </span>
+                </div>
+                <p class="dead-job-card__error" *ngIf="job.lastError">{{ job.lastError }}</p>
+                <div class="dead-job-card__actions" *ngIf="connection.canManage">
+                  <button pButton type="button" class="p-button-outlined p-button-sm" icon="pi pi-replay"
+                    [label]="'integrations.bling.deadJobs.reprocessBtn' | translate"
+                    [loading]="deadJobActionId === job.id"
+                    [disabled]="deadJobActionId != null && deadJobActionId !== job.id"
+                    (click)="reprocessDeadJob(job.id)"></button>
+                  <button pButton type="button" class="p-button-outlined p-button-danger p-button-sm" icon="pi pi-trash"
+                    [label]="'integrations.bling.deadJobs.discardBtn' | translate"
+                    [loading]="deadJobActionId === job.id"
+                    [disabled]="deadJobActionId != null && deadJobActionId !== job.id"
+                    (click)="confirmDiscardDeadJob(job.id)"></button>
+                </div>
+              </article>
+            </div>
+            <div class="dead-jobs-bulk" *ngIf="connection.canManage && !loadingDeadJobs && deadJobs.length">
+              <button pButton type="button" class="p-button-outlined p-button-sm" icon="pi pi-replay"
+                [label]="'integrations.bling.deadJobs.reprocessAllBtn' | translate"
+                [loading]="reprocessingAllDead" [disabled]="discardingAllDead"
+                (click)="reprocessAllDeadJobs()"></button>
+              <button pButton type="button" class="p-button-outlined p-button-danger p-button-sm" icon="pi pi-trash"
+                [label]="'integrations.bling.deadJobs.discardAllBtn' | translate"
+                [loading]="discardingAllDead" [disabled]="reprocessingAllDead"
+                (click)="confirmDiscardAllDeadJobs()"></button>
+            </div>
+          </div>
+        </ng-container>
+
+        <p class="bling-help-note">{{ 'integrations.bling.webhookHint' | translate }}</p>
+
+        <div class="bling-actions-row">
+          <button pButton type="button" class="p-button-outlined" icon="pi pi-database"
+            [label]="'integrations.bling.bootstrapBtn' | translate" [loading]="bootstrapping"
+            [disabled]="!connection.canManage || !connection.connected" (click)="bootstrapHomologacao()"></button>
+          <button pButton type="button" class="p-button-outlined" icon="pi pi-cloud"
+            [label]="'integrations.bling.webhookHomologBtn' | translate" [loading]="webhookHomologating"
+            [disabled]="!connection.canManage || !connection.connected" (click)="testWebhookHomologacao()"></button>
+        </div>
+        </div>
+      </p-accordionTab>
+
+    </p-accordion>
+
+    <div class="bling-done-note" *ngIf="allReady">
+      <i class="pi pi-sparkles" aria-hidden="true"></i>
+      <div>
+        <strong>{{ 'integrations.bling.wizard.done.title' | translate }}</strong>
+        <p>{{ 'integrations.bling.wizard.done.body' | translate }}</p>
+      </div>
+    </div>
+  </ng-container>
+</section>

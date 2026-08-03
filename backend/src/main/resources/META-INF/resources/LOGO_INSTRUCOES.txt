@@ -1,0 +1,8 @@
+Coloque aqui o arquivo do logo redondo para e-mails e PDF gerados no backend:
+  - logo_redondo.png   (recomendado)
+  ou
+  - logo_redondo.jpg
+
+Copie o mesmo arquivo que está em frontend/src/assets/
+
+Se não existir, o sistema usa logo.png / logo-email.png como fallback.

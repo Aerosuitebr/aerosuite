@@ -1,0 +1,27 @@
+{
+  "schema": "aerosuite-directorio-email-direcao-v1",
+  "assinatura": {
+    "nome": "Wellem Lyra",
+    "cargo": "Diretor de TI",
+    "organizacao": "Aero Suite",
+    "email": "wellemlyra@aerosuite.com.br"
+  },
+  "destinatarios": {
+    "comercial": "timmaia@bellowscontrols.com.br",
+    "diretoria_ti": "wellemlyra@aerosuite.com.br",
+    "qualidade": "rafaellanottesconsultoria@gmail.com",
+    "marketing": "thiagolyra18@gmail.com"
+  },
+  "lista_to": [
+    "timmaia@bellowscontrols.com.br",
+    "wellemlyra@aerosuite.com.br",
+    "rafaellanottesconsultoria@gmail.com",
+    "thiagolyra18@gmail.com"
+  ],
+  "from_name": "Wellem Lyra — Diretor de TI · Aero Suite",
+  "logos": {
+    "hero": "frontend/src/assets/LOGO_AERO_WHITE.png",
+    "hero_text": "Aero Suite",
+    "hero_cid": "aerosuite-hero-logo"
+  }
+}

@@ -1,0 +1,106 @@
+<section class="player-page" *ngIf="video$ | async as video; else notFound">
+  <div class="player-page__glow" aria-hidden="true"></div>
+
+  <header class="player-top">
+    <a routerLink="/vitrine" class="player-back">
+      <i class="pi pi-arrow-left" aria-hidden="true"></i>
+      {{ 'vitrine.player.back' | translate }}
+    </a>
+    <span class="player-now">{{ 'vitrine.player.nowPlaying' | translate }}</span>
+  </header>
+
+  <div class="player-layout">
+    <div class="player-stage">
+      <div class="player-frame">
+        <video
+          #videoEl
+          controls
+          playsinline
+          preload="metadata"
+          [attr.webkit-playsinline]="true"
+          [attr.x-webkit-airplay]="'allow'"
+          [src]="mediaUrl(video.fileName)"
+          [poster]="mediaUrl(video.posterFileName)"
+          [attr.aria-label]="video.titleKey | translate">
+        </video>
+      </div>
+
+      <div class="player-toolbar">
+        <button
+          pButton
+          type="button"
+          class="p-button-outlined"
+          icon="pi pi-window-maximize"
+          [label]="'vitrine.player.fullscreen' | translate"
+          (click)="toggleFullscreen()"></button>
+        <button
+          pButton
+          type="button"
+          class="p-button-outlined"
+          icon="pi pi-clone"
+          [label]="'vitrine.player.pictureInPicture' | translate"
+          (click)="togglePictureInPicture()"></button>
+        <div class="player-speed" role="group" [attr.aria-label]="'vitrine.player.speed' | translate">
+          <span>{{ 'vitrine.player.speed' | translate }}</span>
+          <button
+            type="button"
+            *ngFor="let rate of [0.75, 1, 1.25, 1.5, 2]"
+            [class.is-active]="playbackRate === rate"
+            (click)="setSpeed(rate)">
+            {{ rate }}x
+          </button>
+        </div>
+      </div>
+
+      <p class="player-hint">{{ 'vitrine.player.nativeHint' | translate }}</p>
+    </div>
+
+    <aside class="player-side">
+      <span class="player-category">{{ video.categoryKey | translate }}</span>
+      <h1>{{ video.titleKey | translate }}</h1>
+      <p>{{ video.descriptionKey | translate }}</p>
+
+      <div class="player-meta">
+        <h2>{{ 'vitrine.player.details' | translate }}</h2>
+        <dl>
+          <div>
+            <dt>{{ 'vitrine.player.duration' | translate }}</dt>
+            <dd>{{ formatDuration(video.durationSeconds) }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'vitrine.player.fileSize' | translate }}</dt>
+            <dd>{{ formatSize(video.sizeBytes) }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'vitrine.player.resolution' | translate }}</dt>
+            <dd>{{ video.resolution }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'vitrine.player.format' | translate }}</dt>
+            <dd>MP4</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="player-download">
+        <p>{{ 'vitrine.player.downloadHint' | translate }}</p>
+        <a
+          pButton
+          class="p-button"
+          [href]="downloadUrl(video)"
+          [attr.download]="video.downloadName"
+          [label]="'vitrine.player.download' | translate"
+          icon="pi pi-download"></a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<ng-template #notFound>
+  <section class="player-missing">
+    <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+    <h1>{{ 'vitrine.player.notFound.title' | translate }}</h1>
+    <p>{{ 'vitrine.player.notFound.description' | translate }}</p>
+    <a routerLink="/vitrine" pButton [label]="'vitrine.player.notFound.action' | translate"></a>
+  </section>
+</ng-template>

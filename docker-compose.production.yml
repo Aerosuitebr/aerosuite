@@ -1,0 +1,47 @@
+# Produção Linux (VPS Hetzner CPX31, etc.) — sem mounts Windows.
+#
+# Pré-requisitos no servidor:
+#   sudo mkdir -p /var/aerosuite/{os,empresa-assets,biblioteca,manuals,vitrine-videos,backups,mysql}
+#   sudo chown -R $USER:$USER /var/aerosuite
+#
+# Variáveis: cp .env.example .env && cp .env.production.example .env.production
+# Validar: ./scripts/validate-production-env.ps1  (ou validate-env.ps1 no servidor)
+#
+# Subir (MySQL no mesmo Compose):
+#   docker compose -f docker-compose.yml -f docker-compose.local-mysql.yml -f docker-compose.production.yml up -d --build
+#
+# Subir (MySQL gerido externo — omitir local-mysql e JDBC em .env.production):
+#   docker compose -f docker-compose.yml -f docker-compose.production.yml up -d --build
+
+services:
+  api:
+    env_file:
+      - .env
+      - path: .env.production
+        required: false
+    ports: !override
+      - "127.0.0.1:8080:8080"
+    environment:
+      QUARKUS_PROFILE: prod
+      BACKUP_HOST_EXPLORER_FOLDER: /mnt/backups
+      AERO_SUITE_EMPRESA_ASSETS_DIR: /app/empresa-assets
+    volumes:
+      - ${AEROSUITE_DATA_ROOT:-/var/aerosuite}/os:/app/os:rw
+      - ${AEROSUITE_DATA_ROOT:-/var/aerosuite}/empresa-assets:/app/empresa-assets:rw
+      - ${AEROSUITE_DATA_ROOT:-/var/aerosuite}/biblioteca:/biblioteca:ro
+      - ${AEROSUITE_DATA_ROOT:-/var/aerosuite}/manuals:/app/manuals:ro
+      - ${AEROSUITE_DATA_ROOT:-/var/aerosuite}/vitrine-videos:/app/vitrine-videos:ro
+      - ${AEROSUITE_DATA_ROOT:-/var/aerosuite}/backups:/mnt/backups:rw
+
+  web:
+    ports: !override
+      - "127.0.0.1:8081:80"
+
+  mysql:
+    volumes: !override
+      - ${AEROSUITE_DATA_ROOT:-/var/aerosuite}/mysql:/var/lib/mysql
+      - ./backend/EstruturaBanco/aerosuite_funcionalidade.sql:/docker-entrypoint-initdb.d/01_funcionalidade.sql:ro
+      - ./backend/EstruturaBanco/aerosuite_funcionalidade_migration.sql:/docker-entrypoint-initdb.d/02_funcionalidade_migration.sql:ro
+      - ./backend/EstruturaBanco/aerosuite_perfil.sql:/docker-entrypoint-initdb.d/03_perfil.sql:ro
+      - ./backend/EstruturaBanco/aerosuite_funcionalidade_seed.sql:/docker-entrypoint-initdb.d/04_funcionalidade_seed.sql:ro
+      - ./docker/mysql/init/05_usuario.sql:/docker-entrypoint-initdb.d/05_usuario.sql:ro

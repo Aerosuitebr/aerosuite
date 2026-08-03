@@ -1,0 +1,104 @@
+{
+  "ok": true,
+  "homeLen": 42911,
+  "blogId": 197,
+  "postCount": 7,
+  "postResults": [
+    {
+      "slug": "radar-mro-anac-fiscalizacao-oficinas-2026",
+      "id": 503
+    },
+    {
+      "slug": "software-mro-ou-erp-oficina-aeronautica",
+      "id": 284
+    },
+    {
+      "slug": "checklist-digital-auditoria-interna-mro",
+      "id": 241
+    },
+    {
+      "slug": "proposta-comercial-alinhada-ordem-servico",
+      "id": 242
+    },
+    {
+      "slug": "portal-cliente-oficina-menos-ligacao",
+      "id": 243
+    },
+    {
+      "slug": "fifo-rastreio-pecas-rbac-145",
+      "id": 244
+    },
+    {
+      "slug": "substituir-planilhas-gestao-oficina-mro",
+      "id": 203
+    }
+  ],
+  "pillarResults": [
+    {
+      "slug": "software-gestao-oficina-aeronautica-mro",
+      "id": 198
+    },
+    {
+      "slug": "estoque-pecas-aeronauticas-rastreabilidade",
+      "id": 199
+    },
+    {
+      "slug": "ordem-servico-manutencao-aeronaves",
+      "id": 200
+    },
+    {
+      "slug": "portal-cliente-oficina-aviacao",
+      "id": 201
+    },
+    {
+      "slug": "propostas-comerciais-servicos-aeronauticos",
+      "id": 202
+    }
+  ],
+  "pageResults": [
+    {
+      "slug": "politica-de-privacidade",
+      "id": 933
+    },
+    {
+      "slug": "termos-de-uso",
+      "id": 247
+    },
+    {
+      "slug": "obrigado",
+      "id": 248
+    },
+    {
+      "slug": "aero-suite-vs-planilhas",
+      "id": 249
+    },
+    {
+      "slug": "conformidade-regulatoria",
+      "id": 534
+    },
+    {
+      "slug": "seguranca-e-dados",
+      "id": 263
+    },
+    {
+      "slug": "casos",
+      "id": 270
+    },
+    {
+      "slug": "bellows-servicos-aeronauticos",
+      "id": 271,
+      "parent": 270
+    },
+    {
+      "slug": "king-do-rio-pecas-aeronauticas",
+      "id": 303,
+      "parent": 270
+    }
+  ],
+  "hasConsent": true,
+  "hasSticky": true,
+  "hasFooterChrome": true,
+  "headerPatched": true,
+  "cachePurge": "deploy-only",
+  "noAmpAmp": true
+}

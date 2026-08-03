@@ -1,0 +1,35 @@
+﻿{
+    "schema":  "aerosuite-anac-ata-backup-restore-v1",
+    "reqId":  "REQ-022",
+    "roadmapItem":  "P-003",
+    "generatedAt":  "2026-06-10T11:31:37.0699048-03:00",
+    "durationSec":  25,
+    "responsavelTi":  "TI (preencher)",
+    "backupId":  "58cbc7cc-1430-49c6-a3f2-526171e1c9fd",
+    "rtoBackupSec":  12.6,
+    "rpoEstimadoHoras":  "conforme frequencia_backup do tenant",
+    "latestHistory":  {
+                          "id":  115,
+                          "backupDate":  "2026-06-10T11:31:24",
+                          "backupPath":  "D:/Backup/BD/backup_bellows_20260610_113124.sql.gz",
+                          "fileSize":  1435185,
+                          "status":  "success",
+                          "errorMessage":  null,
+                          "duration":  2
+                      },
+    "backupFileExists":  true,
+    "backupFileDetail":  "D:\\Desenvolvimento\\aerosuite\\backups\\backup_bellows_20260610_113124.sql.gz",
+    "restoreProcedure":  [
+                             "1. Parar API Aero Suite (janela de manutenÃ§Ã£o)",
+                             "2. Restaurar dump MySQL: mysql -u user -p database \u003c arquivo.sql.gz (descompactar se necessÃ¡rio)",
+                             "3. Restaurar pasta uploads conforme manual tÃ©cnico Â§backup",
+                             "4. Subir API e validar login + OS amostra",
+                             "5. Registrar RTO/RPO nesta ata"
+                         ],
+    "restoreTestStatus":  "ARQUIVO_VALIDADO",
+    "assinaturasPendentes":  [
+                                 "TI",
+                                 "RT"
+                             ],
+    "proximaAcao":  "Executar restore em ambiente de homologaÃ§Ã£o e anexar log mysql"
+}

@@ -1,0 +1,103 @@
+ parseInt(el.getAttribute('data-as-count'), 10) || 0;\r\n      var start = 0;\r\n      var duration = 1200;\r\n      var t0 = performance.now();\r\n\r\n      function frame(now) {\r\n        var p = Math.min((now - t0) / duration, 1);\r\n        var eased = 1 - Math.pow(1 - p, 3);\r\n        el.textContent = Math.round(start + (target - start) * eased);\r\n        if (p < 1) requestAnimationFrame(frame);\r\n      }\r\n      requestAnimationFrame(frame);\r\n    }\r\n\r\n    if (!('IntersectionObserver' in window)) {\r\n      items.forEach(animate);\r\n      return;\r\n    }\r\n\r\n    var io = new IntersectionObserver(\r\n      function (entries) {\r\n        entries.forEach(function (entry) {\r\n          if (entry.isIntersecting) {\r\n            animate(entry.target);\r\n            io.unobserve(entry.target);\r\n          }\r\n        });\r\n      },\r\n      { threshold: 0.5 }\r\n    );\r\n\r\n    items.forEach(function (el) {\r\n      io.observe(el);\r\n    });\r\n  }\r\n\r\n  var bootDone = false;\r\n\r\n  function boot() {\r\n    if (bootDone) return;\r\n    bootDone = true;\r\n    document.querySelectorAll('[data-as-hero-preview]').forEach(initHeroPreview);\r\n    initReveal();\r\n    initCounters();\r\n  }\r\n\r\n  function scheduleBoot() {\r\n    if (bootDone) return;\r\n    if (window.requestIdleCallback) {\r\n      window.requestIdleCallback(boot, { timeout: 2500 });\r\n    } else {\r\n      window.setTimeout(boot, 0);\r\n    }\r\n  }\r\n\r\n  if (document.readyState === 'complete') {\r\n    scheduleBoot();\r\n  } else {\r\n    window.addEventListener('load', scheduleBoot, { once: true });\r\n  }\r\n  new MutationObserver(function () {\r\n    if (!bootDone) scheduleBoot();\r\n  }).observe(document.body, { childList: true, subtree: true });\r\n})();\r\n"},{"id":"aerosuite-showcase-zoom","body":"/**\r\n * Zoom: hover no card + lightbox ao clicar nas capturas do showcase.\r\n */\r\n(function () {\r\n  'use strict';\r\n\r\n  function bind(img) {\r\n    if (!img || img.dataset.asZoomBound === '1') return;\r\n    img.dataset.asZoomBound = '1';\r\n    img.setAttribute('tabindex', '0');\r\n    img.style.cursor = 'zoom-in';\r\n\r\n    function open() {\r\n      const lb = document.createElement('div');\r\n      lb.className = 'as-shot-lightbox';\r\n      lb.setAttribute('role', 'dialog');\r\n      lb.setAttribute('aria-modal', 'true');\r\n      const full = document.createElement('img');\r\n      full.src = img.currentSrc || img.src;\r\n      full.alt = img.alt || '';\r\n      lb.appendChild(full);\r\n      function close() {\r\n        lb.remove();\r\n        document.removeEventListener('keydown', onKey);\r\n      }\r\n      function onKey(e) {\r\n        if (e.key === 'Escape') close();\r\n      }\r\n      lb.addEventListener('click', close);\r\n      document.addEventListener('keydown', onKey);\r\n      document.body.appendChild(lb);\r\n    }\r\n\r\n    img.addEventListener('click', open);\r\n    img.addEventListener('keydown', function (e) {\r\n      if (e.key === 'Enter' || e.key === ' ') {\r\n        e.preventDefault();\r\n        open();\r\n      }\r\n    });\r\n  }\r\n\r\n  function scan() {\r\n    document.querySelectorAll('.as-ui-shot img').forEach(bind);\r\n  }\r\n\r\n  if (document.readyState === 'loading') {\r\n    document.addEventListener('DOMContentLoaded', scan);\r\n  } else {\r\n    scan();\r\n  }\r\n  new MutationObserver(scan).observe(document.body, { childList: true, subtree: true });\r\n})();\r\n"},{"id":"aerosuite-phone-mask","body":"/**\r\n * Máscara telefone BR — WPForms (Aero Suite)\r\n * Campos: input com name*=\"telefone\" ou placeholder com (00)\r\n */\r\n(function () {\r\n  'use strict';\r\n\r\n  function digits(v) {\r\n    return String(v || '').replace(/\\D/g, '').slice(0, 11);\r\n  }\r\n\r\n  function formatBR(d) {\r\n    if (!d) return '';\r\n    if (d.length <= 2) return '(' + d;\r\n    if (d.length <= 6) return '(' + d.slice(0, 2) + ') ' + d.slice(2);\r\n    if (d.length <= 10) {\r\n      return '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6);\r\n    }\r\n    return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7, 11);\r\n  }\r\n\r\n  function bind(input) {\r\n    if (!input || input.dataset.asPhoneMask === '1') return;\r\n    input.dataset.asPhoneMask = '1';\r\n    input.setAttribute('inputmode', 'tel');\r\n    input.setAttribute('autocomplete', 'tel');\r\n\r\n    input.addEventListener('input', function () {\r\n      const d = digits(input.value);\r\n      const formatted = formatBR(d);\r\n      if (input.value !== formatted) input.value = formatted;\r\n    });\r\n\r\n    input.addEventListener('blur', function () {\r\n      const d = digits(input.value);\r\n      if (d.length > 0 && d.length < 10) {\r\n        input.setAttribute('aria-invalid', 'true');\r\n        input.dataset.asPhoneInvalid = '1';\r\n      } else {\r\n        input.removeAttribute('aria-invalid');\r\n        delete input.dataset.asPhoneInvalid;\r\n      }\r\n    });\r\n  }\r\n\r\n  function scan() {\r\n    document.querySelectorAll('.wpforms-form input[type=\"text\"], .wpforms-form input[type=\"tel\"]').forEach(function (el) {\r\n      const name = (el.getAttribute('name') || '').toLowerCase();\r\n      const label = (el.getAttribute('aria-label') || '').toLowerCase();\r\n      const ph = (el.getAttribute('placeholder') || '').toLowerCase();\r\n      const id = (el.id || '').toLowerCase();\r\n      if (\r\n        name.includes('telefone') ||\r\n        label.includes('telefone') ||\r\n        ph.includes('00000') ||\r\n        id.includes('telefone') ||\r\n        id.includes('field_7') ||\r\n        name.includes('fields][7]')\r\n      ) {\r\n        bind(el);\r\n      }\r\n    });\r\n  }\r\n\r\n  if (document.readyState === 'loading') {\r\n    document.addEventListener('DOMContentLoaded', scan);\r\n  } else {\r\n    scan();\r\n  }\r\n  document.addEventListener('wpformsReady', scan);\r\n  new MutationObserver(scan).observe(document.body, { childList: true, subtree: true });\r\n})();\r\n"},{"id":"aerosuite-wpforms-helper","body":"/**\r\n * WPForms #12 — honeypot, erros visíveis e falhas AJAX (Aero Suite)\r\n */\r\n(function () {\r\n  'use strict';\r\n\r\n  var FORM_SELECTOR = '#wpforms-form-12';\r\n\r\n  function clearHoneypot(form) {\r\n    if (!form) return;\r\n    var trap = form.querySelector('[data-field-id=\"3\"] input, #wpforms-12-field_3');\r\n    if (!trap) return;\r\n    trap.value = '';\r\n    trap.setAttribute('autocomplete', 'off');\r\n    trap.setAttribute('tabindex', '-1');\r\n    trap.setAttribute('aria-hidden', 'true');\r\n  }\r\n\r\n  function clearNativeValidity(form) {\r\n    if (!form) return;\r\n    form.querySelectorAll('input, textarea, select').forEach(function (el) {\r\n      if (typeof el.setCustomValidity === 'function') {\r\n        el.setCustomValidity('');\r\n      }\r\n    });\r\n  }\r\n\r\n  function scrollToFirstError(form) {\r\n    if (!form) return;\r\n    var target =\r\n      form.querySelector('.wpforms-error-container') ||\r\n      form.querySelector('.wpforms-field.wpforms-has-error') ||\r\n      form.querySelector('em.wpforms-error') ||\r\n      form.querySelector(':invalid');\r\n    if (target && target.scrollIntoView) {\r\n      target.scrollIntoView({ behavior: 'smooth', block: 'center' });\r\n    }\r\n  }\r\n\r\n  function showSubmitHint(form, message) {\r\n    if (!form) return;\r\n    var box = form.querySelector('.as-wpforms-submit-hint');\r\n    if (!box) {\r\n      box = document.createElement('p');\r\n      box.className = 'as-wpforms-submit-hint wpforms-error';\r\n      box.setAttribute('role', 'alert');\r\n      var container = form.querySelector('.wpforms-submit-container');\r\n      if (container) {\r\n        container.parentNode.insertBefore(box, container);\r\n      } else {\r\n        form.appendChild(box);\r\n      }\r\n    }\r\n    box.textContent = message;\r\n    box.style.display = 'block';\r\n    scrollToFirstError(form);\r\n  }\r\n\r\n  function attachForm(form) {\r\n    if (!form || form.getAttribute('data-as-wpforms-fix') === '1') return;\r\n    form.setAttribute('data-as-wpforms-fix', '1');\r\n    clearHoneypot(form);\r\n\r\n    form.addEventListener(\r\n      'submit',\r\n      function () {\r\n        clearHoneypot(form);\r\n        clearNativeValidity(form);\r\n      },\r\n      true\r\n    );\r\n\r\n    form.querySelectorAll('input, textarea').forEach(function (inp) {\r\n      inp.addEventListener('invalid', function () {\r\n        scrollToFirstError(form);\r\n      });\r\n    });\r\n  }\r\n\r\n  function scan() {\r\n    document.querySelectorAll(FORM_SELECTOR).forEach(attachForm);\r\n  }\r\n\r\n  function pickMessage(value) {\r\n    if (!value) return '';\r\n    if (typeof value === 'string') return value;\r\n    if (typeof value === 'object' && value.message) return String(value.message);\r\n    return '';\r\n  }\r\n\r\n  function onAjaxFailed(detail) {\r\n    var form = document.querySelector(FORM_SELECTOR);\r\n    var status = detail && detail.status;\r\n    var msg =\r\n      pickMessage(detail && detail.error) ||\r\n      pickMessage(detail && detail.data && detail.data.message) ||\r\n      (status >= 500\r\n        ? 'Erro no servidor ao enviar. Use Agendar demonstração (Calendly) ou WhatsApp enquanto corrigimos — ou atualize a página (F5) e tente de novo.'\r\n        : 'Não foi possível enviar. Atualize a página (F5) e tente de novo.');\r\n    if (form) {\r\n      showSubmitHint(form, msg);\r\n    }\r\n  }\r\n\r\n  if (document.readyState === 'loading') {\r\n    document.addEventListener('DOMContentLoaded', scan);\r\n  } else {\r\n    scan();\r\n  }\r\n  document.addEventListener('wpformsReady', scan);\r\n\r\n  document.addEventListener('wpformsAjaxSubmitFailed', function (ev) {\r\n    onAjaxFailed(ev.detail || {});\r\n  });\r\n\r\n  document.addEventListener('wpformsAjaxSubmitError', function (ev) {\r\n    onAjaxFailed(ev.detail || {});\r\n  });\r\n\r\n  if (typeof window.jQuery === 'function') {\r\n    window.jQuery(document).on('wpformsAjaxSubmitFailed', function (_ev, detail) {\r\n      onAjaxFailed(detail || {});\r\n    });\r\n    window.jQuery(document).on('wpformsAjaxSubmitError', function (_ev, detail) {\r\n      onAjaxFailed(detail || {});\r\n    });\r\n  }\r\n})();\r\n"}];
+  const legacyScriptIds=["aerosuite-phone-mask-js","aerosuite-showcase-zoom-js","aerosuite-hero-js"];
+
+  let footer=(await wp.apiFetch({path:'/wp/v2/template-parts/extendable//footer?context=edit'})).content.raw;
+  legacyScriptIds.forEach(function(legacyId){
+    const legacyRe=new RegExp('<script id="'+legacyId+'">[\\s\\S]*?<\\/script>\\n?','g');
+    footer=footer.replace(legacyRe,'');
+  });
+  footer=footer.replace(/<!-- wp:html -->[\s\S]*?<script id="aerosuite-site-config">[\s\S]*?<\/script>[\s\S]*?<!-- \/wp:html -->/g,'');
+  const cfgBlock='<!-- wp:html -->\n<script id="aerosuite-site-config">'+siteCfg+'</script>\n<!-- /wp:html -->\n';
+  footer=cfgBlock+footer;
+
+  const cssRe=/<style id="aerosuite-premium-css">[\s\S]*?<\/style>/;
+  if(cssRe.test(footer)) footer=footer.replace(cssRe,'<style id="aerosuite-premium-css">'+css+'</style>');
+  else footer='<!-- wp:html -->\n<style id="aerosuite-premium-css">'+css+'</style>\n<!-- /wp:html -->\n'+footer;
+
+  for(const j of jsParts){
+    const tag='<script id="'+j.id+'">';
+    const full=tag+j.body+'</script>';
+    const re=new RegExp('<script id="'+j.id+'">[\\s\\S]*?<\\/script>\\n?');
+    if(re.test(footer)) footer=footer.replace(re,full+'\n');
+    else footer=footer.replace(/(<script id="aerosuite-site-config">[\s\S]*?<\/script>)/, '$1\n'+full);
+  }
+
+  const footerChrome="<!-- wp:html -->\n<footer class=\"as-site-chrome\" role=\"contentinfo\" aria-label=\"Rodapé institucional\">\n  <div class=\"as-site-chrome__inner\">\n    <div class=\"as-site-chrome__brand\">\n      <a href=\"https://aerosuite.com.br/\"><img src=\"https://aerosuite.com.br/wp-content/uploads/2026/06/hero-logo-transparent-v2.png\" alt=\"Aero Suite\" width=\"160\" height=\"40\" loading=\"lazy\" decoding=\"async\"/></a>\n      <p>Gestão aeronáutica para oficinas MRO no Brasil.</p>\n    </div>\n    <nav class=\"as-site-chrome__nav\" aria-label=\"Links do site\">\n      <div class=\"as-site-chrome__col\">\n        <strong>Produto</strong>\n        <a href=\"https://aerosuite.com.br/solucoes/\">Soluções</a>\n        <a href=\"https://aerosuite.com.br/#recursos\">Módulos</a>\n        <a href=\"https://aerosuite.com.br/aero-suite-vs-planilhas/\">vs Planilhas</a>\n        <a href=\"https://aerosuite.com.br/contato/#agendar-demo\" class=\"as-track-demo\" data-as-event=\"cta_demo\" data-as-location=\"footer_nav\">Demonstração</a>\n      </div>\n      <div class=\"as-site-chrome__col\">\n        <strong>Conteúdo</strong>\n        <a href=\"https://aerosuite.com.br/blog/\">Blog</a>\n        <a href=\"https://aerosuite.com.br/casos/\">Casos</a>\n        <a href=\"https://aerosuite.com.br/casos/bellows-servicos-aeronauticos/\">Bellows</a>\n        <a href=\"https://aerosuite.com.br/casos/king-do-rio-pecas-aeronauticas/\">King do Rio</a>\n        <a href=\"https://aerosuite.com.br/sobre/\">Sobre</a>\n      </div>\n      <div class=\"as-site-chrome__col\">\n        <strong>Legal</strong>\n        <a href=\"https://aerosuite.com.br/politica-de-privacidade/\">Privacidade</a>\n        <a href=\"https://aerosuite.com.br/termos-de-uso/\">Termos de uso</a>\n        <a href=\"mailto:contato@aerosuite.com.br\">E-mail comercial</a>\n        <a href=\"https://aerosuite.com.br/seguranca-e-dados/\">Segurança e dados</a>\n      </div>\n    </nav>\n  </div>\n  <p class=\"as-site-chrome__copy\">© 2026 Aero Suite · Software SaaS para manutenção aeronáutica</p>\n</footer>\n<!-- /wp:html -->";
+  if(!footer.includes('as-site-chrome')) footer=footer+'\n'+footerChrome;
+
+  await wp.apiFetch({path:'/wp/v2/template-parts/extendable//footer?id=extendable//footer',method:'POST',data:{content:footer}});
+
+  let headerPatched=false;
+  try{
+    const headerPart=await wp.apiFetch({path:'/wp/v2/template-parts/extendable//header?context=edit'});
+    let header=headerPart.content.raw;
+    const faviconBlock="<!-- wp:html -->\n<link rel=\"icon\" id=\"as-favicon-aerosuite\" href=\"https://aerosuite.com.br/wp-content/uploads/2026/06/aerosuite-site-icon-512.png\" sizes=\"any\" type=\"image/png\"/>\n<link rel=\"apple-touch-icon\" href=\"https://aerosuite.com.br/wp-content/uploads/2026/06/aerosuite-site-icon-512.png\"/>\n<meta name=\"theme-color\" content=\"#051a3d\"/>\n<!-- /wp:html -->";
+    const headerPreloadBlock="<!-- wp:html -->\n<link rel=\"preconnect\" href=\"https://aerosuite.com.br\" crossorigin/>\n<link rel=\"dns-prefetch\" href=\"https://aerosuite.com.br\"/>\n<link rel=\"preload\" as=\"image\" href=\"https://aerosuite.com.br/wp-content/uploads/2026/06/hero-logo-transparent-v2.png\" fetchpriority=\"high\" id=\"as-preload-hero-logo\"/>\n<!-- /wp:html -->";
+    const supplementalNavBlock="<!-- wp:html -->\n<nav class=\"as-supplemental-nav\" aria-label=\"Navegação principal Aero Suite\">\n  <div class=\"as-supplemental-nav__inner\">\n    <a href=\"https://aerosuite.com.br/solucoes/\">Soluções</a>\n    <a href=\"https://aerosuite.com.br/casos/\">Casos</a>\n    <a href=\"https://aerosuite.com.br/blog/\">Blog</a>\n    <a href=\"https://aerosuite.com.br/aero-suite-vs-planilhas/\">vs Planilhas</a>\n    <a href=\"https://aerosuite.com.br/sobre/\">Sobre</a>\n    <a class=\"as-supplemental-nav__cta as-track-demo\" href=\"https://aerosuite.com.br/contato/#agendar-demo\" data-as-event=\"cta_demo\" data-as-location=\"top_nav\">Demonstração</a>\n  </div>\n</nav>\n<!-- /wp:html -->";
+    let headerChanged=false;
+    if(!header.includes('as-favicon-aerosuite')){ header=faviconBlock+'\n'+header; headerChanged=true; }
+    if(!header.includes('as-preload-hero-logo')){ header=headerPreloadBlock+'\n'+header; headerChanged=true; }
+    if(!header.includes('as-supplemental-nav')){ header=header+'\n'+supplementalNavBlock; headerChanged=true; }
+    if(headerChanged){
+      await wp.apiFetch({path:'/wp/v2/template-parts/extendable//header?id=extendable//header',method:'POST',data:{content:header}});
+      headerPatched=true;
+    } else headerPatched='already';
+  }catch(headerErr){
+    headerPatched='skip:'+String(headerErr.message||headerErr);
+  }
+
+  await wp.apiFetch({path:'/wp/v2/pages/21',method:'POST',data:{content:homeContent,title:"Aero Suite — Software de gestão para oficinas MRO e manutenção aeronáutica",excerpt:"Software SaaS para oficinas aeronáuticas e MRO no Brasil: ordem de serviço, estoque de peças com FIFO, propostas e portal do cliente. Agende uma demonstração gratuita.",status:'publish'}});
+  await wp.apiFetch({path:'/wp/v2/pages/20',method:'POST',data:{content:solucoesContent,title:"Soluções — Software MRO, OS, estoque e portal | Aero Suite",excerpt:"Módulos da Aero Suite para oficinas aeronáuticas: ordens de serviço, estoque FIFO, propostas comerciais, portal do cliente e painel operacional. Agende uma demonstração.",status:'publish'}});
+  await wp.apiFetch({path:'/wp/v2/pages/16',method:'POST',data:{content:sobreContent,title:"Sobre a Aero Suite — gestão aeronáutica SaaS no Brasil",excerpt:"Plataforma SaaS brasileira para oficinas MRO e manutenção aeronáutica: rastreabilidade, RBAC, nuvem e evolução contínua — sem a complexidade de ERP genérico.",status:'publish'}});
+
+  const blogPage=await upsertPage('blog',{content:blogContent,title:"Blog — Software e gestão para oficinas aeronáuticas | Aero Suite",excerpt:"Artigos sobre MRO, estoque de peças aeronáuticas, ordem de serviço e software para oficinas no Brasil."});
+
+  const postResults=[];
+  for(const post of posts){
+    const r=await upsertPost(post.slug,{content:post.content,title:post.title,excerpt:post.excerpt});
+    postResults.push({slug:post.slug,id:r.id});
+  }
+
+  const pageResults=[];
+  const parentIds={};
+  for(const p of extraPages){
+    if(p.parentSlug){
+      if(!parentIds[p.parentSlug]){
+        const par=await wp.apiFetch({path:'/wp/v2/pages?slug='+encodeURIComponent(p.parentSlug)+'&per_page=1'});
+        if(par&&par.length) parentIds[p.parentSlug]=par[0].id;
+      }
+      const parentId=parentIds[p.parentSlug]||0;
+      const found=await wp.apiFetch({path:'/wp/v2/pages?slug='+encodeURIComponent(p.slug)+'&parent='+parentId+'&per_page=1'});
+      const data={content:p.content,title:p.title,excerpt:p.excerpt,status:'publish',parent:parentId};
+      const r=found&&found.length
+        ? await wp.apiFetch({path:'/wp/v2/pages/'+found[0].id,method:'POST',data})
+        : await wp.apiFetch({path:'/wp/v2/pages',method:'POST',data:{...data,slug:p.slug}});
+      pageResults.push({slug:p.slug,id:r.id,parent:parentId});
+    } else {
+      const r=await upsertPage(p.slug,{content:p.content,title:p.title,excerpt:p.excerpt});
+      pageResults.push({slug:p.slug,id:r.id});
+      parentIds[p.slug]=r.id;
+    }
+  }
+
+  const pillarResults=[];
+  for(const p of pillars){
+    const r=await upsertPage(p.slug,{content:p.content,title:p.seo.title,excerpt:p.seo.description});
+    pillarResults.push({slug:p.slug,id:r.id});
+  }
+
+  return{
+    ok:true,
+    homeLen:homeContent.length,
+    blogId:blogPage.id,
+    postCount:postResults.length,
+    postResults,
+    pillarResults,
+    pageResults,
+    hasConsent:footer.includes('as-consent'),
+    hasSticky:footer.includes('as-sticky-cta'),
+    hasFooterChrome:footer.includes('as-site-chrome'),
+    headerPatched:headerPatched,
+    noAmpAmp:!footer.includes('&#038;&#038;')
+  };
+})()

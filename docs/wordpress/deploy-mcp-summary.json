@@ -1,0 +1,18 @@
+{
+  "viewId": "b5108e",
+  "cssFullRun": null,
+  "cssVerify": null,
+  "cssFinalize": null,
+  "encInit": null,
+  "enc0": null,
+  "enc1": null,
+  "enc2": null,
+  "enc3": null,
+  "encRun": null,
+  "errors": [
+    {
+      "step": 0,
+      "error": "timeout waiting for MCP result"
+    }
+  ]
+}

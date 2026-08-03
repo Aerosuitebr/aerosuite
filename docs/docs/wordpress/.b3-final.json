@@ -1,0 +1,1 @@
+{"viewId":"37aca3","method":"Runtime.evaluate","params":{"expression":"(async()=>{const e=atob((window.__ub||[]).join(''));window.__ub=null;let v=eval(e);if(v&&typeof v.then==='function')v=await v;return v;})()","awaitPromise":true,"returnByValue":true}}

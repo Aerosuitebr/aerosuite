@@ -1,0 +1,139 @@
+# Smoke HTTP contra API em execução (manual ou após deploy de staging).
+# Não corre no push por defeito — precisa de API + credenciais nos secrets do repositório.
+name: Integration smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      api_url:
+        description: 'Base URL da API'
+        required: false
+        default: 'http://localhost:8080'
+      web_url:
+        description: 'Base URL do frontend'
+        required: false
+        default: 'http://localhost:8081'
+
+jobs:
+  http-smoke:
+    name: API smoke (PowerShell)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: API smoke
+        shell: pwsh
+        env:
+          AEROSUITE_API_URL: ${{ inputs.api_url }}
+          AEROSUITE_WEB_URL: ${{ inputs.web_url }}
+          AEROSUITE_TEST_EMAIL: ${{ secrets.AEROSUITE_TEST_EMAIL }}
+          AEROSUITE_TEST_PASSWORD: ${{ secrets.AEROSUITE_TEST_PASSWORD }}
+          AEROSUITE_TEST_TENANT: ${{ secrets.AEROSUITE_TEST_TENANT }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:AEROSUITE_TEST_PASSWORD)) {
+            Write-Warning 'AEROSUITE_TEST_PASSWORD não configurado nos secrets — a ignorar job.'
+            exit 0
+          }
+          ./scripts/test/api-smoke.ps1
+
+  http-stress:
+    name: API stress (PowerShell)
+    runs-on: ubuntu-latest
+    needs: http-smoke
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: API stress
+        shell: pwsh
+        env:
+          AEROSUITE_API_URL: ${{ inputs.api_url }}
+          AEROSUITE_TEST_EMAIL: ${{ secrets.AEROSUITE_TEST_EMAIL }}
+          AEROSUITE_TEST_PASSWORD: ${{ secrets.AEROSUITE_TEST_PASSWORD }}
+          AEROSUITE_TEST_TENANT: ${{ secrets.AEROSUITE_TEST_TENANT }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:AEROSUITE_TEST_PASSWORD)) {
+            Write-Warning 'Secrets em falta — a ignorar stress.'
+            exit 0
+          }
+          ./scripts/test/api-stress.ps1 -Workers 10 -Rounds 20
+
+  menu-audit:
+    name: Menu i18n audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit keys
+        shell: pwsh
+        run: ./scripts/test/audit-menu-i18n.ps1 -SkipApi
+
+  rbac-smoke:
+    name: RBAC servidor
+    runs-on: ubuntu-latest
+    needs: http-smoke
+    steps:
+      - uses: actions/checkout@v4
+      - name: RBAC smoke
+        shell: pwsh
+        env:
+          AEROSUITE_API_URL: ${{ inputs.api_url }}
+          AEROSUITE_TEST_EMAIL: ${{ secrets.AEROSUITE_TEST_EMAIL }}
+          AEROSUITE_TEST_PASSWORD: ${{ secrets.AEROSUITE_TEST_PASSWORD }}
+          AEROSUITE_TEST_TENANT: ${{ secrets.AEROSUITE_TEST_TENANT }}
+          AEROSUITE_DEMO_EMAIL: ${{ secrets.AEROSUITE_DEMO_EMAIL }}
+          AEROSUITE_DEMO_PASSWORD: ${{ secrets.AEROSUITE_DEMO_PASSWORD }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:AEROSUITE_TEST_PASSWORD)) {
+            Write-Warning 'Secrets em falta - a ignorar RBAC.'
+            exit 0
+          }
+          ./scripts/test/api-rbac-smoke.ps1 -ProvisionDemoIfMissing
+
+  sprint1-organizacoes:
+    name: Centro de Organizacoes (API)
+    runs-on: ubuntu-latest
+    needs: http-smoke
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tenants API
+        shell: pwsh
+        env:
+          AEROSUITE_API_URL: ${{ inputs.api_url }}
+          AEROSUITE_TEST_EMAIL: ${{ secrets.AEROSUITE_TEST_EMAIL }}
+          AEROSUITE_TEST_PASSWORD: ${{ secrets.AEROSUITE_TEST_PASSWORD }}
+          AEROSUITE_TEST_TENANT: ${{ secrets.AEROSUITE_TEST_TENANT }}
+          AEROSUITE_DEMO_EMAIL: ${{ secrets.AEROSUITE_DEMO_EMAIL }}
+          AEROSUITE_DEMO_PASSWORD: ${{ secrets.AEROSUITE_DEMO_PASSWORD }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:AEROSUITE_TEST_PASSWORD)) {
+            Write-Warning 'Secrets em falta - a ignorar tenants API.'
+            exit 0
+          }
+          ./scripts/test/api-sprint1-organizacoes.ps1 -ProvisionDemoIfMissing
+
+  tenant-isolation:
+    name: Tenant isolation
+    runs-on: ubuntu-latest
+    needs: http-smoke
+    steps:
+      - uses: actions/checkout@v4
+      - name: Isolation (demo tenant)
+        shell: pwsh
+        env:
+          AEROSUITE_API_URL: ${{ inputs.api_url }}
+          AEROSUITE_TEST_EMAIL: ${{ secrets.AEROSUITE_TEST_EMAIL }}
+          AEROSUITE_TEST_PASSWORD: ${{ secrets.AEROSUITE_TEST_PASSWORD }}
+          AEROSUITE_TEST_TENANT: ${{ secrets.AEROSUITE_TEST_TENANT }}
+          AEROSUITE_DEMO_EMAIL: ${{ secrets.AEROSUITE_DEMO_EMAIL }}
+          AEROSUITE_DEMO_PASSWORD: ${{ secrets.AEROSUITE_DEMO_PASSWORD }}
+          AEROSUITE_TEST_MULTI_TENANT_EMAIL: ${{ secrets.AEROSUITE_TEST_MULTI_TENANT_EMAIL }}
+          AEROSUITE_TEST_MULTI_TENANT_PASSWORD: ${{ secrets.AEROSUITE_TEST_MULTI_TENANT_PASSWORD }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:AEROSUITE_TEST_PASSWORD)) {
+            Write-Warning 'Secrets em falta - a ignorar isolamento.'
+            exit 0
+          }
+          if ([string]::IsNullOrWhiteSpace($env:AEROSUITE_DEMO_PASSWORD)) {
+            ./scripts/test/api-tenant-isolation.ps1 -ProvisionDemoIfMissing
+          } else {
+            ./scripts/test/api-tenant-isolation.ps1
+          }

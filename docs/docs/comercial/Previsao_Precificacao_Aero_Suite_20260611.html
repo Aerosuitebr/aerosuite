@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Previsão de Precificação — Aero Suite</title>
+  <style>/* Aero Suite — Relatório Executivo UX (print/PDF A4) */
+@page {
+  size: A4;
+  margin: 16mm 14mm 20mm 14mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.5;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 40%, #0f172a 75%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22mm 18mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 150mm;
+}
+
+.cover-logo {
+  width: 68mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8mm;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.4));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  border: 1px solid rgba(148,163,184,.35);
+  border-radius: 999px;
+  padding: 2.5mm 5mm;
+  margin-bottom: 6mm;
+}
+
+.cover h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+}
+
+.cover-sub {
+  font-size: 11pt;
+  color: #cbd5e1;
+  margin: 0 0 6mm;
+  line-height: 1.45;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a227, transparent);
+  margin: 0 auto 6mm;
+}
+
+.cover-meta {
+  font-size: 9.5pt;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cover-meta strong {
+  color: #e2e8f0;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 12mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #64748b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 7mm;
+  width: auto;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+h2 {
+  font-size: 14pt;
+  color: #0f172a;
+  margin: 0 0 4mm;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 11pt;
+  color: #0369a1;
+  margin: 5mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+.lead {
+  font-size: 10.5pt;
+  color: #334155;
+  margin-bottom: 5mm;
+}
+
+/* Sumário */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+  padding: 2mm 0;
+  border-bottom: 1px dotted #e2e8f0;
+  font-size: 9.5pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: none;
+  padding-top: 4mm;
+  font-size: 10pt;
+}
+
+.toc-num {
+  font-weight: 700;
+  color: #64748b;
+  min-width: 10mm;
+}
+
+/* Score dashboard */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin: 5mm 0 6mm;
+}
+
+.score-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4mm;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.score-card--ok {
+  background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #86efac;
+}
+
+.score-val {
+  font-size: 18pt;
+  font-weight: 800;
+  color: #0369a1;
+  line-height: 1;
+}
+
+.score-card--ok .score-val {
+  color: #15803d;
+}
+
+.score-label {
+  font-size: 7.5pt;
+  color: #64748b;
+  margin-top: 1.5mm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin: 4mm 0;
+}
+
+th, td {
+  border: 1px solid #e2e8f0;
+  padding: 2.5mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Item cards */
+.section-intro {
+  background: #f8fafc;
+  border-left: 3px solid #0369a1;
+  padding: 3mm 4mm;
+  margin-bottom: 5mm;
+  font-size: 9pt;
+  color: #475569;
+}
+
+.item-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 4mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  padding: 2.5mm 4mm;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item-id {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.item-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 9.5pt;
+}
+
+.sev {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.sev--CRITICO { background: #fee2e2; color: #991b1b; }
+.sev--ALTO { background: #ffedd5; color: #9a3412; }
+.sev--MEDIO { background: #fef9c3; color: #854d0e; }
+.sev--INFO { background: #e0e7ff; color: #3730a3; }
+
+.item-body {
+  padding: 3mm 4mm 4mm;
+  font-size: 8.75pt;
+}
+
+.item-row {
+  margin-bottom: 2.5mm;
+}
+
+.item-row:last-child {
+  margin-bottom: 0;
+}
+
+.item-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.5mm;
+}
+
+.item-text {
+  color: #1e293b;
+}
+
+.status-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+/* Assinatura */
+.signature-block {
+  margin-top: 10mm;
+  padding: 6mm;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.signature-line {
+  width: 55mm;
+  border-top: 1px solid #334155;
+  margin: 12mm 0 2mm;
+}
+
+.signature-name {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.signature-role {
+  font-size: 9pt;
+  color: #64748b;
+}
+
+.signature-date {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  margin-top: 2mm;
+}
+
+.callout {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 4mm;
+  margin: 4mm 0;
+  font-size: 9pt;
+}
+
+.callout strong {
+  color: #1d4ed8;
+}
+
+.supplementary {
+  page-break-inside: avoid;
+  margin-bottom: 4mm;
+  padding: 3mm 4mm;
+  border-left: 3px solid #c9a227;
+  background: #fffbeb;
+}
+
+.supplementary h4 {
+  margin: 0 0 1.5mm;
+  font-size: 9.5pt;
+  color: #92400e;
+}
+
+.supplementary p {
+  margin: 0;
+  font-size: 8.75pt;
+  color: #78350f;
+}
+</style>
+  <style>
+    .price-highlight { font-size: 18pt; font-weight: 800; color: #0369a1; }
+    .plan-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 4mm 5mm; margin: 3mm 0; }
+    .plan-card--featured { border-color: #c9a227; background: #fffbeb; }
+    .tag-inc { display: inline-block; font-size: 7.5pt; font-weight: 700; text-transform: uppercase; padding: 1px 6px; border-radius: 4px; background: #dcfce7; color: #15803d; margin: 1px; }
+    .tag-addon { background: #dbeafe; color: #1d4ed8; }
+    .tag-opt { background: #f1f5f9; color: #64748b; }
+    .disclaimer { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 6px; padding: 4mm 5mm; font-size: 9pt; color: #78350f; }
+    .matrix td, .matrix th { font-size: 8.5pt; padding: 2mm 2.5mm; }
+    .matrix .yes { color: #15803d; font-weight: 700; text-align: center; }
+    .matrix .no { color: #94a3b8; text-align: center; }
+    .matrix .partial { color: #b45309; text-align: center; font-size: 7.5pt; }
+  </style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Comercial · Diretoria · Uso interno e propostas</div>
+    <h1>Previsão de precificação Aero Suite</h1>
+    <div class="cover-gold-line"></div>
+    <p class="cover-sub">Tabela de planos, módulos, setup, add-ons e serviços profissionais para organizações Part 145 / MRO que adotarem a suíte SaaS.</p>
+    <p class="cover-meta">
+      <strong>Data:</strong> 11 de junho de 2026<br />
+      <strong>Versão:</strong> 1.0 — previsão comercial<br />
+      <strong>Referência:</strong> PLANO-COMERCIALIZACAO-SUITE · ROADMAP-DIFERENCIACAO-MRO<br />
+      <strong>Destinatários:</strong> Comercial · Diretoria · Consultoria<br />
+      <strong>Classificação:</strong> Interno — base para propostas e contratos
+    </p>
+  </div>
+  <div class="cover-footer">Valores em BRL · Revisão trimestral ou por release major</div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Sumário executivo</span>
+  </div>
+  <h2>Objetivo e posicionamento</h2>
+  <p class="lead">
+    Este documento consolida a <strong>previsão de preços</strong> da Aero Suite para oficinas de manutenção aeronáutica
+    (RBAC 145 / MRO SME e médio porte), discriminando o que está incluído em cada plano, custos únicos de implantação,
+    add-ons e serviços opcionais. Valores alinhados ao plano de comercialização interno (jun/2026).
+  </p>
+  <div class="score-grid">
+    <div class="score-card score-card--ok">
+      <div class="score-val">R$ 1,49k</div>
+      <div class="score-lbl">Entrada (Starter)</div>
+    </div>
+    <div class="score-card score-card--ok">
+      <div class="score-val">R$ 4,49k</div>
+      <div class="score-lbl">Âncora (Professional)</div>
+    </div>
+    <div class="score-card score-card--ok">
+      <div class="score-val">R$ 200–300</div>
+      <div class="score-lbl">Custo infra/cliente</div>
+    </div>
+    <div class="score-card score-card--ok">
+      <div class="score-val">7 dias</div>
+      <div class="score-lbl">Trial self-service</div>
+    </div>
+  </div>
+  <div class="disclaimer">
+    <strong>Nota regulatória:</strong> a Aero Suite é <em>software de gestão</em>. Não substitui certificação da organização,
+    MOM/MCQ nem parecer de aeronavegabilidade. Conformidade documentada apoia auditorias; a responsabilidade regulatória
+    permanece com a OM cliente.
+  </div>
+  <div class="page-footer"><span>Aero Suite · Previsão de precificação</span><span>Sumário</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 1</span>
+  </div>
+  <h2>O que toda assinatura inclui (Plataforma Base)</h2>
+  <p class="lead">Componentes transversais vendidos em <strong>todos</strong> os planos pagos, independentemente do módulo vertical.</p>
+  <table class="data-table">
+    <thead><tr><th>Bloco</th><th>Capacidades incluídas</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Identidade e acesso</strong></td><td>Login JWT, perfis RBAC, delegação de funcionalidades, MFA (TOTP), recuperação de senha, multi-tenant isolado</td></tr>
+      <tr><td><strong>LGPD</strong></td><td>Consentimento no primeiro acesso, portal de privacidade, solicitações do titular (base legal documentada)</td></tr>
+      <tr><td><strong>White-label</strong></td><td>Logo, cores primárias, nome comercial e rodapé por organização (<code>sistema_empresa_config</code>)</td></tr>
+      <tr><td><strong>i18n</strong></td><td>Interface em PT-BR, EN-US, ES-ES, FR-FR</td></tr>
+      <tr><td><strong>Operação SaaS</strong></td><td>Backup automatizado, plano de contingência, atualizações de versão, TLS (HTTPS)</td></tr>
+      <tr><td><strong>Colaboração</strong></td><td>Chat interno, módulo de suporte (tickets), notificações</td></tr>
+      <tr><td><strong>Cadastros transversais</strong></td><td>Usuários, perfis, configurações da empresa, biblioteca de documentos (quando módulo ativo)</td></tr>
+      <tr><td><strong>API</strong></td><td>OpenAPI documentada; acesso ampliado conforme plano Enterprise+</td></tr>
+    </tbody>
+  </table>
+  <h3>Público-alvo por plano</h3>
+  <table class="data-table">
+    <thead><tr><th>Perfil da OM</th><th>Plano sugerido</th><th>Justificativa</th></tr></thead>
+    <tbody>
+      <tr><td>Oficina pequena (até 5 técnicos, 1 hangar)</td><td>MRO Starter</td><td>OS + estoque essencial, custo de entrada acessível</td></tr>
+      <tr><td>Part 145 SME com comercial ativo</td><td>MRO Professional</td><td>Proposta → OS, portal cliente, FCU, auditoria</td></tr>
+      <tr><td>Multi-unidade / holding / integrações</td><td>MRO Enterprise</td><td>API, SLA, usuários ilimitados, conformidade avançada</td></tr>
+      <tr><td>Cliente regulado / dados sensíveis / VPS exclusiva</td><td>MRO Dedicated</td><td>Isolamento de infra, DPA, suporte 24×7</td></tr>
+    </tbody>
+  </table>
+  <div class="page-footer"><span>Aero Suite · Previsão de precificação</span><span>Seção 1</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 2</span>
+  </div>
+  <h2>Módulos discriminados</h2>
+  <p class="lead">A suíte é comercializada por <strong>módulos habilitados no tenant</strong> (<code>modulos_habilitados</code>). Abaixo, o que cada módulo entrega ao cliente.</p>
+
+  <h3><span class="tag-inc">MRO</span> Manutenção aeronáutica</h3>
+  <table class="data-table">
+    <thead><tr><th>Funcionalidade</th><th>Descrição</th><th>Planos</th></tr></thead>
+    <tbody>
+      <tr><td>Ordens de serviço (OS)</td><td>Ciclo de vida, anexos, vínculo aeronave/FCU</td><td>Starter+</td></tr>
+      <tr><td>Hangar / Job card</td><td>Apontamentos, assinaturas, PWA offline</td><td>Professional+</td></tr>
+      <tr><td>CRS (liberação para serviço)</td><td>PDF, segregação RT/inspetor</td><td>Professional+</td></tr>
+      <tr><td>Auditoria OS</td><td>Trilha de alterações, OS encerrada</td><td>Professional+</td></tr>
+      <tr><td>FCU / diretrizes AD-SB</td><td>Cadastro técnico e alertas</td><td>Professional+</td></tr>
+      <tr><td>Dossiê de auditoria</td><td>Export PDF/ZIP para fiscalização</td><td>Enterprise+</td></tr>
+      <tr><td>Quadro capacidade / AOG</td><td>Fila por hangar, SLA portal</td><td>Enterprise ou add-on</td></tr>
+      <tr><td>Consulta trocas eventuais</td><td>Pendências entre OS e suprimentos</td><td>Professional+</td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="tag-inc">ESTOQUE</span> Peças e rastreabilidade</h3>
+  <table class="data-table">
+    <thead><tr><th>Funcionalidade</th><th>Descrição</th><th>Planos</th></tr></thead>
+    <tbody>
+      <tr><td>Estoque FIFO / lotes</td><td>Entrada, saída, quarentena</td><td>Starter+ (básico) · Pro+ (completo)</td></tr>
+      <tr><td>QR Code / movimentações</td><td>Rastreio operacional</td><td>Professional+</td></tr>
+      <tr><td>Certificados de peça</td><td>FAA 8130-3, EASA Form 1, ANAC</td><td>Professional+</td></tr>
+      <tr><td>Rastreio back-to-birth</td><td>Linha do tempo PN/SN, PDF auditoria</td><td>Professional+</td></tr>
+      <tr><td>Fornecedores / invoices</td><td>Cadastro e vínculo comercial</td><td>Professional+</td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="tag-inc">COMERCIAL</span> Vendas e propostas</h3>
+  <table class="data-table">
+    <thead><tr><th>Funcionalidade</th><th>Descrição</th><th>Planos</th></tr></thead>
+    <tbody>
+      <tr><td>Propostas comerciais</td><td>Itens, desconto, PDF, e-mail/WhatsApp</td><td>Professional+</td></tr>
+      <tr><td>Proposta → OS</td><td>Geração automática com vínculo bidirecional</td><td>Professional+</td></tr>
+      <tr><td>Templates e clientes</td><td>Cadastro comercial, autocomplete</td><td>Professional+</td></tr>
+      <tr><td>Portal externo</td><td>Cliente aprova proposta, consulta OS/documentos</td><td>Professional+</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer"><span>Aero Suite · Previsão de precificação</span><span>Seção 2 (1/2)</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 2 (cont.)</span>
+  </div>
+
+  <h3><span class="tag-addon">CONFORMIDADE</span> SGQ operacional (add-on ou Enterprise)</h3>
+  <table class="data-table">
+    <thead><tr><th>Funcionalidade</th><th>Descrição</th><th>Inclusão</th></tr></thead>
+    <tbody>
+      <tr><td>Documentos controlados</td><td>Revisão, anexo PDF, controle SGQ</td><td>Add-on ou Enterprise</td></tr>
+      <tr><td>Treinamentos / habilitações</td><td>RT, inspetor, mecânico; alertas</td><td>Add-on ou Enterprise</td></tr>
+      <tr><td>Calibração</td><td>Instrumentos e vencimentos</td><td>Add-on ou Enterprise</td></tr>
+      <tr><td>NC / CAPA</td><td>Não conformidades e ações</td><td>Add-on ou Enterprise</td></tr>
+      <tr><td>Subcontratação</td><td>Fornecedores aprovados Part 145</td><td>Add-on ou Enterprise</td></tr>
+      <tr><td>Painel SGQ + export ZIP</td><td>Indicadores e pacote para auditoria</td><td>Add-on ou Enterprise</td></tr>
+      <tr><td>Dossiê regulatório (apoio ANAC)</td><td>Evidências técnicas do fornecedor*</td><td>Enterprise / projeto</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:8.5pt;color:#64748b;">* Pacote documental para consulta ANAC é apoio do fornecedor; submissão e MOM/MCQ são da OM.</p>
+
+  <h3><span class="tag-addon">INTEGRAÇÕES</span> (add-ons)</h3>
+  <table class="data-table">
+    <thead><tr><th>Integração</th><th>Escopo</th><th>Preço previsto</th></tr></thead>
+    <tbody>
+      <tr><td>Bling (ERP fiscal)</td><td>Contatos, pedidos, webhook NF-e (emissão no Bling)</td><td>+ R$ 490/mês</td></tr>
+      <tr><td>WhatsApp Business API</td><td>Notificações proposta/OS (repasse Meta)</td><td>+ R$ 390/mês</td></tr>
+      <tr><td>Stripe / billing</td><td>Cobrança recorrente (quando ativo em prod.)</td><td>Incluso na assinatura</td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="tag-opt">MARCA+</span> Aero Studio (add-on)</h3>
+  <p>Templates promocionais PDF (cartão, proposta impressa, materiais de hangar) com identidade do tenant.</p>
+  <p><span class="price-highlight">+ R$ 290/mês</span> ou incluso no pacote anual Marca+</p>
+
+  <div class="page-footer"><span>Aero Suite · Previsão de precificação</span><span>Seção 2 (2/2)</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 3</span>
+  </div>
+  <h2>Planos recorrentes (mensalidade)</h2>
+  <p class="lead">Valores de referência para contrato <strong>mensal</strong>. Pagamento anual antecipado: <strong>10% de desconto</strong> (negociável em Enterprise).</p>
+
+  <div class="plan-card">
+    <h3>MRO Starter — <span class="price-highlight">R$ 1.490/mês</span></h3>
+    <p><strong>Setup único:</strong> R$ 4.900 · <strong>Usuários:</strong> até 5 · <strong>Unidades:</strong> 1</p>
+    <ul class="checklist">
+      <li>Plataforma base completa</li>
+      <li>Módulos: MRO (OS essencial) + Estoque básico</li>
+      <li>Sem propostas comerciais nem portal externo</li>
+      <li>Suporte: e-mail (SLA 48h úteis)</li>
+      <li>Armazenamento: 10 GB incluídos</li>
+    </ul>
+  </div>
+
+  <div class="plan-card plan-card--featured">
+    <h3>MRO Professional ⭐ — <span class="price-highlight">R$ 4.490/mês</span></h3>
+    <p><strong>Setup único:</strong> R$ 9.900 · <strong>Usuários:</strong> até 25 · <strong>Unidades:</strong> 1</p>
+    <ul class="checklist">
+      <li>Tudo do Starter</li>
+      <li>Módulos: MRO completo + Estoque + Comercial</li>
+      <li>FCU, hangar/job card, CRS, auditoria OS</li>
+      <li>Propostas, proposta→OS, portal do cliente</li>
+      <li>Rastreio de peça e certificados</li>
+      <li>Suporte: e-mail + chat (SLA 24h úteis)</li>
+      <li>Armazenamento: 50 GB incluídos</li>
+    </ul>
+  </div>
+
+  <div class="plan-card">
+    <h3>MRO Enterprise — <span class="price-highlight">R$ 8.900/mês</span></h3>
+    <p><strong>Setup único:</strong> R$ 19.900 · <strong>Usuários:</strong> ilimitados · <strong>Unidades:</strong> multi-unidade</p>
+    <ul class="checklist">
+      <li>Tudo do Professional</li>
+      <li>Módulo Conformidade SGQ completo incluído</li>
+      <li>Dossiê de auditoria, quadro AOG, API pública</li>
+      <li>SLA disponibilidade 99,5% · suporte telefone</li>
+      <li>Armazenamento: 200 GB incluídos</li>
+    </ul>
+  </div>
+
+  <div class="plan-card">
+    <h3>MRO Dedicated — <span class="price-highlight">R$ 14.900/mês</span></h3>
+    <p><strong>Setup único:</strong> R$ 39.900 · <strong>Infra:</strong> VPS dedicada exclusiva</p>
+    <ul class="checklist">
+      <li>Tudo do Enterprise</li>
+      <li>Ambiente isolado (single-tenant dedicado)</li>
+      <li>DPA (acordo de processamento de dados) assinado</li>
+      <li>Backup e janela de atualização customizados</li>
+      <li>Suporte 24×7 · gerente de conta</li>
+    </ul>
+  </div>
+
+  <div class="page-footer"><span>Aero Suite · Previsão de precificação</span><span>Seção 3</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 4</span>
+  </div>
+  <h2>Matriz plano × módulo</h2>
+  <table class="data-table matrix">
+    <thead>
+      <tr>
+        <th>Capacidade</th>
+        <th>Starter</th>
+        <th>Professional</th>
+        <th>Enterprise</th>
+        <th>Dedicated</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Plataforma base (auth, LGPD, white-label)</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+      <tr><td>OS / hangar / CRS</td><td class="partial">OS</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+      <tr><td>Estoque rastreável + certificados</td><td class="partial">Básico</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+      <tr><td>Comercial + portal cliente</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+      <tr><td>Conformidade SGQ</td><td class="no">—</td><td class="partial">Add-on</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+      <tr><td>Dossiê auditoria / AOG</td><td class="no">—</td><td class="partial">Add-on</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+      <tr><td>API integrações</td><td class="no">—</td><td class="partial">Leitura</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+      <tr><td>Usuários incluídos</td><td>5</td><td>25</td><td>Ilimitado</td><td>Ilimitado</td></tr>
+      <tr><td>Setup (único)</td><td>R$ 4.900</td><td>R$ 9.900</td><td>R$ 19.900</td><td>R$ 39.900</td></tr>
+      <tr><td>Mensalidade</td><td>R$ 1.490</td><td>R$ 4.490</td><td>R$ 8.900</td><td>R$ 14.900</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Trial e onboarding</h3>
+  <table class="data-table">
+    <thead><tr><th>Item</th><th>Condição</th><th>Valor</th></tr></thead>
+    <tbody>
+      <tr><td>Trial self-service</td><td>7 dias · módulos escolhidos no cadastro · sem cartão*</td><td>R$ 0</td></tr>
+      <tr><td>Kit go-live 30 dias</td><td>Checklist + CSV SGQ + migração assistida (Professional+)</td><td>Incluso no setup</td></tr>
+      <tr><td>Piloto regulatório (RT)</td><td>Homologação com dossiê ANAC — escopo OM</td><td>Projeto à parte</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:8.5pt;color:#64748b;">* Trial converte em assinatura paga; dados preservados mediante contrato em até 30 dias após expiração.</p>
+
+  <div class="page-footer"><span>Aero Suite · Previsão de precificação</span><span>Seção 4</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 5</span>
+  </div>
+  <h2>Add-ons e serviços profissionais</h2>
+
+  <h3>Add-ons recorrentes</h3>
+  <table class="data-table">
+    <thead><tr><th>Add-on</th><th>Preço/mês</th><th>O que inclui</th></tr></thead>
+    <tbody>
+      <tr><td>Módulo Aeronáutico Premium (AD/SB avançado, manuais)</td><td class="right">+ R$ 1.500</td><td>Alertas, publicações técnicas, painel diretrizes</td></tr>
+      <tr><td>Conformidade SGQ (fora Enterprise)</td><td class="right">+ R$ 990</td><td>Painel, NC, treinos, calibração, export ZIP</td></tr>
+      <tr><td>Integração Bling / NF-e</td><td class="right">+ R$ 490</td><td>Sincronização fiscal via ERP parceiro</td></tr>
+      <tr><td>WhatsApp Business API</td><td class="right">+ R$ 390</td><td>Notificações comerciais e portal</td></tr>
+      <tr><td>Aero Studio (Marca+)</td><td class="right">+ R$ 290</td><td>Templates PDF promocionais white-label</td></tr>
+      <tr><td>Usuário adicional (acima do plano)</td><td class="right">R$ 79/usuário</td><td>Qualquer plano com limite de usuários</td></tr>
+      <tr><td>Armazenamento extra (50 GB)</td><td class="right">+ R$ 149</td><td>Anexos, PDFs, fotos hangar</td></tr>
+      <tr><td>Unidade operacional adicional</td><td class="right">+ R$ 1.200</td><td>Segundo hangar/base no mesmo tenant</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Serviços pontuais (setup e consultoria)</h3>
+  <table class="data-table">
+    <thead><tr><th>Serviço</th><th>Preço</th><th>Entregável</th></tr></thead>
+    <tbody>
+      <tr><td>Consultoria de implantação</td><td>R$ 8.900 (40 h)</td><td>Planejamento, migração, validação go-live</td></tr>
+      <tr><td>Treinamento in loco</td><td>R$ 3.500/dia</td><td>Até 12 participantes + material</td></tr>
+      <tr><td>Treinamento remoto</td><td>R$ 1.800/sessão (4 h)</td><td>Hangar, estoque ou comercial</td></tr>
+      <tr><td>Customização sob demanda</td><td>R$ 280/h (mín. 20 h)</td><td>Relatórios, integrações, campos extras</td></tr>
+      <tr><td>Migração de dados legados</td><td>A partir de R$ 6.900</td><td>Escopo por volume (OS, estoque, clientes)</td></tr>
+      <tr><td>Projeto Dedicated / on-premise</td><td>Sob proposta</td><td>Setup R$ 80k+ · manutenção anual negociada</td></tr>
+    </tbody>
+  </table>
+
+  <h3>O que não está incluído (cobrança à parte ou responsabilidade do cliente)</h3>
+  <ul class="checklist">
+    <li>Certificado digital A1/A3 e emissão fiscal (permanece no ERP Bling ou equivalente)</li>
+    <li>Custos de mensagens WhatsApp/SMS (repasse operadora/Meta)</li>
+    <li>Hardware (tablets hangar, impressoras etiqueta, leitores QR)</li>
+    <li>Consultoria regulatória RT / atualização MOM-MCQ da OM</li>
+    <li>Auditoria WCAG externa ou certificação ISO (evidências técnicas disponíveis como diferencial)</li>
+    <li>Deslocamento e hospedagem em treinamento in loco</li>
+  </ul>
+
+  <div class="page-footer"><span>Aero Suite · Previsão de precificação</span><span>Seção 5</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 6</span>
+  </div>
+  <h2>Condições comerciais e exemplos</h2>
+
+  <h3>Condições gerais previstas</h3>
+  <table class="data-table">
+    <thead><tr><th>Tema</th><th>Política</th></tr></thead>
+    <tbody>
+      <tr><td>Faturamento</td><td>Mensal (boleto/PIX/cartão) ou anual antecipado (−10%)</td></tr>
+      <tr><td>Setup</td><td>50% na assinatura do contrato · 50% no go-live</td></tr>
+      <tr><td>Reajuste</td><td>IPCA anual ou 12 meses após contratação</td></tr>
+      <tr><td>Cancelamento</td><td>Aviso 60 dias · export de dados incluso</td></tr>
+      <tr><td>SLA</td><td>99,0% (Pro) · 99,5% (Enterprise/Dedicated) — crédito proporcional</td></tr>
+      <tr><td>Contrato mínimo</td><td>12 meses (Starter/Pro) · 24 meses (Enterprise/Dedicated)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Exemplo 1 — Oficina SME (plano âncora)</h3>
+  <table class="data-table">
+    <thead><tr><th>Item</th><th class="right">Valor</th></tr></thead>
+    <tbody>
+      <tr><td>MRO Professional (mensal)</td><td class="right">R$ 4.490</td></tr>
+      <tr><td>Setup (único)</td><td class="right">R$ 9.900</td></tr>
+      <tr><td>Integração Bling (add-on)</td><td class="right">R$ 490/mês</td></tr>
+      <tr><td>3 usuários extras (28 total → 3 × R$ 79)</td><td class="right">R$ 237/mês</td></tr>
+      <tr><td><strong>Total mensal recorrente</strong></td><td class="right"><strong>R$ 5.217</strong></td></tr>
+      <tr><td><strong>Investimento inicial (mês 1)</strong></td><td class="right"><strong>R$ 15.117</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Exemplo 2 — Holding com 2 unidades (Enterprise)</h3>
+  <table class="data-table">
+    <thead><tr><th>Item</th><th class="right">Valor</th></tr></thead>
+    <tbody>
+      <tr><td>MRO Enterprise (mensal)</td><td class="right">R$ 8.900</td></tr>
+      <tr><td>Setup (único)</td><td class="right">R$ 19.900</td></tr>
+      <tr><td>1 unidade adicional</td><td class="right">R$ 1.200/mês</td></tr>
+      <tr><td>Consultoria implantação (40 h)</td><td class="right">R$ 8.900 (único)</td></tr>
+      <tr><td><strong>Total mensal recorrente</strong></td><td class="right"><strong>R$ 10.100</strong></td></tr>
+      <tr><td><strong>Investimento inicial</strong></td><td class="right"><strong>R$ 38.800</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Benchmark resumido</h3>
+  <table class="data-table">
+    <thead><tr><th>Alternativa de mercado</th><th>Faixa de preço</th><th>Vs. Aero Suite</th></tr></thead>
+    <tbody>
+      <tr><td>CMMS internacional (SME)</td><td>R$ 1k–3,5k/mês</td><td>Sem vocabulário Part 145 nem portal BR</td></tr>
+      <tr><td>ERP + adaptação aeronáutica</td><td>R$ 6k+/mês + setup alto</td><td>Sem OS/hangar nativo</td></tr>
+      <tr><td>Planilha + papel</td><td>“Grátis” (~R$ 8k/mês oculto em horas)</td><td>Concorrência real na prospecção</td></tr>
+      <tr><td><strong>Aero Suite Professional</strong></td><td><strong>R$ 4,49k/mês</strong></td><td>Integrado · Part 145 · preço SME</td></tr>
+    </tbody>
+  </table>
+
+  <div class="signature-block">
+    <p class="lead" style="margin-bottom:6mm">
+      Documento de trabalho para alinhamento comercial. Valores sujeitos a proposta formal, impostos aplicáveis
+      e escopo assinado. Próxima revisão: após primeiros 5 contratos pagos ou set/2026.
+    </p>
+    <div class="signature-line"></div>
+    <div class="signature-name">Wellem Lyra</div>
+    <div class="signature-role">Diretor de TI · Aero Suite</div>
+    <div class="signature-date">11 de junho de 2026 · wellemlyra@aerosuite.com.br</div>
+  </div>
+  <div class="page-footer"><span>Aero Suite · Previsão de precificação</span><span>Seção 6</span></div>
+</section>
+
+</body>
+</html>

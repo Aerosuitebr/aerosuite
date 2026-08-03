@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Comunicado Executivo — Certificação ANAC · Aero Suite</title>
+  <style>/* Aero Suite — Relatório Executivo UX (print/PDF A4) */
+@page {
+  size: A4;
+  margin: 16mm 14mm 20mm 14mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.5;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 40%, #0f172a 75%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22mm 18mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 150mm;
+}
+
+.cover-logo {
+  width: 68mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8mm;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.4));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  border: 1px solid rgba(148,163,184,.35);
+  border-radius: 999px;
+  padding: 2.5mm 5mm;
+  margin-bottom: 6mm;
+}
+
+.cover h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+}
+
+.cover-sub {
+  font-size: 11pt;
+  color: #cbd5e1;
+  margin: 0 0 6mm;
+  line-height: 1.45;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a227, transparent);
+  margin: 0 auto 6mm;
+}
+
+.cover-meta {
+  font-size: 9.5pt;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cover-meta strong {
+  color: #e2e8f0;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 12mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #64748b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 7mm;
+  width: auto;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+h2 {
+  font-size: 14pt;
+  color: #0f172a;
+  margin: 0 0 4mm;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 11pt;
+  color: #0369a1;
+  margin: 5mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+.lead {
+  font-size: 10.5pt;
+  color: #334155;
+  margin-bottom: 5mm;
+}
+
+/* Sumário */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+  padding: 2mm 0;
+  border-bottom: 1px dotted #e2e8f0;
+  font-size: 9.5pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: none;
+  padding-top: 4mm;
+  font-size: 10pt;
+}
+
+.toc-num {
+  font-weight: 700;
+  color: #64748b;
+  min-width: 10mm;
+}
+
+/* Score dashboard */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin: 5mm 0 6mm;
+}
+
+.score-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4mm;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.score-card--ok {
+  background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #86efac;
+}
+
+.score-val {
+  font-size: 18pt;
+  font-weight: 800;
+  color: #0369a1;
+  line-height: 1;
+}
+
+.score-card--ok .score-val {
+  color: #15803d;
+}
+
+.score-label {
+  font-size: 7.5pt;
+  color: #64748b;
+  margin-top: 1.5mm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin: 4mm 0;
+}
+
+th, td {
+  border: 1px solid #e2e8f0;
+  padding: 2.5mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Item cards */
+.section-intro {
+  background: #f8fafc;
+  border-left: 3px solid #0369a1;
+  padding: 3mm 4mm;
+  margin-bottom: 5mm;
+  font-size: 9pt;
+  color: #475569;
+}
+
+.item-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 4mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  padding: 2.5mm 4mm;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item-id {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.item-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 9.5pt;
+}
+
+.sev {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.sev--CRITICO { background: #fee2e2; color: #991b1b; }
+.sev--ALTO { background: #ffedd5; color: #9a3412; }
+.sev--MEDIO { background: #fef9c3; color: #854d0e; }
+.sev--INFO { background: #e0e7ff; color: #3730a3; }
+
+.item-body {
+  padding: 3mm 4mm 4mm;
+  font-size: 8.75pt;
+}
+
+.item-row {
+  margin-bottom: 2.5mm;
+}
+
+.item-row:last-child {
+  margin-bottom: 0;
+}
+
+.item-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.5mm;
+}
+
+.item-text {
+  color: #1e293b;
+}
+
+.status-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+/* Assinatura */
+.signature-block {
+  margin-top: 10mm;
+  padding: 6mm;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.signature-line {
+  width: 55mm;
+  border-top: 1px solid #334155;
+  margin: 12mm 0 2mm;
+}
+
+.signature-name {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.signature-role {
+  font-size: 9pt;
+  color: #64748b;
+}
+
+.signature-date {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  margin-top: 2mm;
+}
+
+.callout {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 4mm;
+  margin: 4mm 0;
+  font-size: 9pt;
+}
+
+.callout strong {
+  color: #1d4ed8;
+}
+
+.supplementary {
+  page-break-inside: avoid;
+  margin-bottom: 4mm;
+  padding: 3mm 4mm;
+  border-left: 3px solid #c9a227;
+  background: #fffbeb;
+}
+
+.supplementary h4 {
+  margin: 0 0 1.5mm;
+  font-size: 9.5pt;
+  color: #92400e;
+}
+
+.supplementary p {
+  margin: 0;
+  font-size: 8.75pt;
+  color: #78350f;
+}
+
+.comunicado-dest { background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;padding:4mm 5mm;margin:4mm 0;font-size:9.5pt; }
+.phase-table td:first-child { font-weight:700;color:#0369a1;width:22mm; }
+.highlight-gold { color:#b45309;font-weight:700; }
+  </style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Comunicado executivo · Diretoria de TI</div>
+    <h1>Aplicação pronta para submissão ao processo de certificação ANAC</h1>
+    <div class="cover-gold-line"></div>
+    <p class="cover-sub">Informe ao time comercial e consultoria regulatória: o Aero Suite concluiu o ciclo técnico de conformidade para registros de manutenção aeronáutica (RBAC 145 / Nível 3–4).</p>
+    <p class="cover-meta">
+      <strong>Data:</strong> 10 de junho de 2026<br />
+      <strong>Versão validada:</strong> cce2e9e<br />
+      <strong>Destinatários:</strong> Comercial Bellows · Consultoria regulatória<br />
+      <strong>Remetente:</strong> Wellem Lyra — Diretor Técnico de TI
+    </p>
+  </div>
+  <div class="cover-footer">Documento confidencial · Uso interno e parceiros autorizados</div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Sumário executivo</span></div>
+  <h2>Veredicto técnico</h2>
+  <p class="lead">
+    Declaro, na qualidade de <strong>Diretor Técnico de TI</strong>, que o <strong>Aero Suite</strong> está
+    <strong>totalmente pronto</strong> para iniciar o processo formal de certificação / consulta junto à ANAC,
+    com dossiê técnico-regulatório completo e evidências automatizadas validadas em homologação.
+  </p>
+  <div class="score-grid">
+    <div class="score-card score-card--ok">
+      <div class="score-val">30/30</div>
+      <div class="score-lbl">Matriz ATENDE</div>
+    </div>
+    <div class="score-card score-card--ok">
+      <div class="score-val">11/11</div>
+      <div class="score-lbl">Suite evidências</div>
+    </div>
+    <div class="score-card score-card--ok">
+      <div class="score-val">100%</div>
+      <div class="score-lbl">Controles P-001…P-009</div>
+    </div>
+    <div class="score-card score-card--ok">
+      <div class="score-val">OK</div>
+      <div class="score-lbl">Backup validado</div>
+    </div>
+  </div>
+  <div class="comunicado-dest">
+    <strong>Para o Comercial:</strong> podemos posicionar o produto como <em>software de gestão MRO com trilha regulatória ANAC documentada</em>,
+    apto a demonstração técnica, piloto Part 145 e submissão de consulta formal — sem bloqueio de engenharia aberto.
+  </div>
+  <div class="page-footer"><span>Aero Suite · Comunicado Certificação ANAC</span><span>Sumário executivo</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Capítulo 1</span></div>
+  <h2>O que foi envolvido na adequação</h2>
+  <p class="lead">Consolidação do trabalho técnico-regulatório (ondas A–D + roadmap P-001 a P-009):</p>
+  <table class="data-table">
+    <thead><tr><th>Área</th><th>Entrega</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Matriz de requisitos</td><td>30 requisitos RBAC 145 / IS mapeados — 100% ATENDE</td><td><span class="status-ok">✓ Fechado</span></td></tr>
+      <tr><td>CRS e segregação</td><td>Emissão segregada RT/inspetor; bloqueio executor</td><td><span class="status-ok">✓ Fechado</span></td></tr>
+      <tr><td>Registros encerrados</td><td>Guard OS fechada + reabertura auditada (REQ-009)</td><td><span class="status-ok">✓ Fechado</span></td></tr>
+      <tr><td>Assinaturas job card</td><td>SHA-256 + integridade verificável (REQ-008)</td><td><span class="status-ok">✓ Fechado</span></td></tr>
+      <tr><td>MFA</td><td>TOTP backend + enrollment UI (REQ-023)</td><td><span class="status-ok">✓ Fechado</span></td></tr>
+      <tr><td>Backup / restore</td><td>Docker /app/backups, mysqldump, arquivo real ~1,4 MB</td><td><span class="status-ok">✓ Fechado</span></td></tr>
+      <tr><td>Contingência</td><td>Plano + simulação hangar offline + atas</td><td><span class="status-ok">✓ Fechado</span></td></tr>
+      <tr><td>SGQ / conformidade</td><td>Painel, NC, SMS, relatório ZIP, enforcement</td><td><span class="status-ok">✓ Fechado</span></td></tr>
+      <tr><td>Hangar offline</td><td>PWA, fila IndexedDB, sync — E2E validado</td><td><span class="status-ok">✓ Fechado</span></td></tr>
+      <tr><td>Dossiê ANAC</td><td>21 documentos + evidências + pacote ZIP homologação</td><td><span class="status-ok">✓ Fechado</span></td></tr>
+    </tbody>
+  </table>
+  <h3>Evidências automatizadas (última execução)</h3>
+  <p>Script <code>anac-conformidade-evidencias.ps1</code>: Maven unit/IT, Flyway V68, smokes RBAC/isolamento/enforcement/SGQ/hangar, atas contingência/backup, Playwright — <strong class="highlight-gold">11/11 PASS</strong>.</p>
+  <div class="page-footer"><span>Aero Suite · Comunicado Certificação ANAC</span><span>Capítulo 1 · Adequação</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Capítulo 2</span></div>
+  <h2>Passos para dar start no pedido ANAC</h2>
+  <p class="lead">Roteiro recomendado para o Comercial alinhar com RT da OM piloto e consultoria (Rafaela Nottes):</p>
+  <table class="data-table phase-table">
+    <thead><tr><th>Fase</th><th>Ação</th><th>Responsável</th><th>Prazo sugerido</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Alinhar OM piloto Part 145 e nomear RT interlocutor</td><td>Comercial + Cliente</td><td>Semana 1</td></tr>
+      <tr><td>2</td><td>Assinaturas reais: escopo regulatório, relatório validação, atas</td><td>RT + Qualidade OM</td><td>Semana 1–2</td></tr>
+      <tr><td>3</td><td>Atualizar MOM/MCQ da OM referenciando Aero Suite</td><td>Qualidade OM</td><td>Semana 2</td></tr>
+      <tr><td>4</td><td>Demonstração técnica (tenant demo sanitizado + OS completa)</td><td>Comercial + TI</td><td>Semana 2–3</td></tr>
+      <tr><td>5</td><td>Montar pacote ZIP dossiê (<code>pacote-dossie-anac-*.zip</code>)</td><td>TI / Fornecedor</td><td>Pronto</td></tr>
+      <tr><td>6</td><td>Submeter consulta formal ANAC (texto doc 18 + anexos)</td><td>RT + Consultoria</td><td>Semana 3–4</td></tr>
+      <tr><td>7</td><td>Piloto 30 dias + treinamento perfis Part 145</td><td>OM + Fornecedor</td><td>Semana 4–8</td></tr>
+      <tr><td>8</td><td>Resposta a eventuais complementações ANAC</td><td>RT + TI</td><td>Conforme ANAC</td></tr>
+    </tbody>
+  </table>
+  <h3>Materiais já disponíveis no repositório</h3>
+  <ul class="checklist">
+    <li><code>docs/anac-conformidade/</code> — dossiê completo (matriz, planos, manuais)</li>
+    <li><code>evidencias/ultima-execucao.json</code> — 11/11 PASS</li>
+    <li><code>evidencias/pacote-dossie-anac-*.zip</code> — pacote submissão</li>
+    <li><code>21-pendencias-acoes-certificacao.md</code> — guia de fechamento organizacional</li>
+  </ul>
+  <div class="page-footer"><span>Aero Suite · Comunicado Certificação ANAC</span><span>Capítulo 2 · Roteiro</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Capítulo 3</span></div>
+  <h2>Mensagem ao Comercial</h2>
+  <p class="lead">
+    O salto de qualidade não é apenas marketing: é <strong>engenharia comprovada</strong>. O Aero Suite passou por
+    matriz regulatória, testes automatizados, backup real, segregação CRS, auditoria e dossiê ANAC — o mesmo rigor
+    exigido de um sistema que a OM pretenda usar como registro oficial de manutenção.
+  </p>
+  <h3>Argumentos de venda autorizados</h3>
+  <ul class="checklist">
+    <li>Conformidade técnica documentada (30/30 requisitos ATENDE)</li>
+    <li>Demonstração auditável com scripts reproduzíveis</li>
+    <li>Hangar offline + sync para chão de oficina</li>
+    <li>CRS em PDF com segregação Part 145</li>
+    <li>Trilha pronta para consulta ANAC — diferencial competitivo em MRO Brasil</li>
+  </ul>
+  <h3>O que ainda depende da OM (não bloqueia start)</h3>
+  <ul class="checklist">
+    <li>Assinaturas físicas/ICP do RT e Qualidade da organização cliente</li>
+    <li>MOM/MCQ específicos da OM</li>
+    <li>Restore de backup no MySQL de produção da OM (VAL-19 operacional)</li>
+  </ul>
+  <div class="signature-block">
+    <p class="lead" style="margin-bottom:6mm">
+      Declaro, para os devidos fins, que as informações deste comunicado refletem o estado técnico verificado
+      do Aero Suite na data indicada, com base nas evidências do dossiê ANAC e na suite automatizada
+      <strong>anac-conformidade-evidencias.ps1</strong> (11/11 PASS, backup com arquivo validado).
+    </p>
+    <div class="signature-line"></div>
+    <div class="signature-name">Wellem Lyra</div>
+    <div class="signature-role">Diretor Técnico de TI</div>
+    <div class="signature-role">Aero Suite</div>
+    <div class="signature-date">10 de junho de 2026 · wellemlyra@gmail.com · aerosuite.com.br</div>
+  </div>
+  <div class="page-footer"><span>Aero Suite · Comunicado Certificação ANAC</span><span>Assinatura · Wellem Lyra</span></div>
+</section>
+
+</body>
+</html>

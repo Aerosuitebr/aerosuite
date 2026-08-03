@@ -1,0 +1,1 @@
+(async()=>{const code=window.__batchParts.join('');return await eval(code);})()

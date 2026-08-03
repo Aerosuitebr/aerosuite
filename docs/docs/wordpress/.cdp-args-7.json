@@ -1,0 +1,1 @@
+{"server":"cursor-ide-browser","toolName":"browser_cdp","arguments":{"viewId":"c11c39","method":"Runtime.evaluate","params":{"expression":"(async()=>{window.__homeb64='';return{ok:true};})()","awaitPromise":true,"returnByValue":true}},"viewId":"e488fa"}

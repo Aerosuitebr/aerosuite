@@ -1,0 +1,808 @@
+<div class="as-page backup-config-container">
+  <app-page-hero
+    variant="slate"
+    titleKey="backup.title"
+    subtitleKey="backup.subtitle"
+    titleIcon="pi-database"
+    [hasActions]="true">
+    <div actions class="header-actions">
+      <app-page-help></app-page-help>
+      <button
+        pButton
+        type="button"
+        [label]="'backup.btn.save' | translate"
+        icon="pi pi-save"
+        class="p-button-primary save-btn"
+        [loading]="saving"
+        (click)="saveConfiguration()"
+        [disabled]="loading">
+      </button>
+      <button
+        pButton
+        type="button"
+        [label]="'backup.btn.runNow' | translate"
+        icon="pi pi-play"
+        class="p-button-outlined execute-btn"
+        [loading]="executingBackup"
+        (click)="executeBackup()"
+        [disabled]="!currentConfig || loading">
+      </button>
+    </div>
+  </app-page-hero>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <p-progressSpinner></p-progressSpinner>
+    <p>{{ 'backup.loading' | translate }}</p>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!loading" class="config-content">
+    <!-- Tabs -->
+    <p-tabView class="config-tabs" [lazy]="true">
+      <!-- Tab 1: Conexão com Banco -->
+      <p-tabPanel [header]="'backup.tab.connection' | translate" leftIcon="pi pi-server">
+        <div class="tab-content">
+          <p-card class="config-card">
+            <ng-template pTemplate="header">
+              <div class="card-header">
+                <i class="pi pi-database"></i>
+                <span>{{ 'backup.card.connection' | translate }}</span>
+              </div>
+            </ng-template>
+            
+            <form [formGroup]="connectionForm" class="config-form">
+              <div class="form-grid">
+                <div class="form-row form-row--host-port">
+                  <div class="form-field form-field--host">
+                    <label for="host" class="field-label">
+                      <i class="pi pi-globe"></i>
+                      {{ 'backup.field.host' | translate }} *
+                    </label>
+                    <input 
+                      pInputText 
+                      id="host"
+                      formControlName="host"
+                      [placeholder]="'backup.placeholder.host' | translate"
+                      class="form-input"
+                      [class.p-invalid]="connectionForm.get('host')?.invalid && connectionForm.get('host')?.touched">
+                    <small 
+                      *ngIf="connectionForm.get('host')?.invalid && connectionForm.get('host')?.touched" 
+                      class="p-error">
+                      {{ 'backup.err.hostRequired' | translate }}
+                    </small>
+                  </div>
+
+                  <div class="form-field form-field--port">
+                    <label for="port" class="field-label">
+                      <i class="pi pi-sign-in"></i>
+                      {{ 'backup.field.port' | translate }} *
+                    </label>
+                    <p-inputNumber 
+                      id="port"
+                      formControlName="port"
+                      [min]="1"
+                      [max]="65535"
+                      [useGrouping]="false"
+                      [placeholder]="'backup.placeholder.port' | translate"
+                      class="form-input"
+                      [class.p-invalid]="connectionForm.get('port')?.invalid && connectionForm.get('port')?.touched">
+                    </p-inputNumber>
+                    <small 
+                      *ngIf="connectionForm.get('port')?.invalid && connectionForm.get('port')?.touched" 
+                      class="p-error">
+                      {{ 'backup.err.portInvalid' | translate }}
+                    </small>
+                  </div>
+                </div>
+
+                <div class="form-field full-width">
+                  <label for="database" class="field-label">
+                    <i class="pi pi-database"></i>
+                    {{ 'backup.field.database' | translate }} *
+                  </label>
+                  <input 
+                    pInputText 
+                    id="database"
+                    formControlName="database"
+                    [placeholder]="'backup.placeholder.database' | translate"
+                    class="form-input"
+                    [class.p-invalid]="connectionForm.get('database')?.invalid && connectionForm.get('database')?.touched">
+                  <small 
+                    *ngIf="connectionForm.get('database')?.invalid && connectionForm.get('database')?.touched" 
+                    class="p-error">
+                    {{ 'backup.err.databaseRequired' | translate }}
+                  </small>
+                </div>
+
+                <div class="form-field">
+                  <label for="username" class="field-label">
+                    <i class="pi pi-user"></i>
+                    {{ 'backup.field.user' | translate }} *
+                  </label>
+                  <input 
+                    pInputText 
+                    id="username"
+                    formControlName="username"
+                    [placeholder]="'backup.placeholder.user' | translate"
+                    class="form-input"
+                    [class.p-invalid]="connectionForm.get('username')?.invalid && connectionForm.get('username')?.touched">
+                  <small 
+                    *ngIf="connectionForm.get('username')?.invalid && connectionForm.get('username')?.touched" 
+                    class="p-error">
+                    {{ 'backup.err.usernameRequired' | translate }}
+                  </small>
+                </div>
+
+                <div class="form-field">
+                  <label for="password" class="field-label">
+                    <i class="pi pi-lock"></i>
+                    {{ 'backup.field.password' | translate }} *
+                  </label>
+                  <div class="password-input-wrap">
+                    <input 
+                      pInputText 
+                      [type]="showConnectionPassword ? 'text' : 'password'"
+                      id="password"
+                      formControlName="password"
+                      [placeholder]="'backup.placeholder.password' | translate"
+                      class="form-input"
+                      [class.p-invalid]="connectionForm.get('password')?.invalid && connectionForm.get('password')?.touched">
+                    <button
+                      type="button"
+                      class="password-toggle-btn"
+                      (click)="showConnectionPassword = !showConnectionPassword"
+                      [attr.aria-label]="(showConnectionPassword ? 'backup.password.hide' : 'backup.password.show') | translate"
+                      [attr.aria-pressed]="showConnectionPassword">
+                      <i class="pi" [ngClass]="showConnectionPassword ? 'pi-eye-slash' : 'pi-eye'"></i>
+                    </button>
+                  </div>
+                  <small 
+                    *ngIf="connectionForm.get('password')?.invalid && connectionForm.get('password')?.touched" 
+                    class="p-error">
+                    {{ 'backup.err.passwordRequired' | translate }}
+                  </small>
+                </div>
+
+                <div class="form-field full-width connection-form-actions">
+                  <div class="checkbox-field">
+                    <p-checkbox 
+                      formControlName="sslEnabled"
+                      inputId="sslEnabled"
+                      [binary]="true">
+                    </p-checkbox>
+                    <label for="sslEnabled" class="checkbox-label">
+                      <i class="pi pi-shield"></i>
+                      {{ 'backup.sslEnabled' | translate }}
+                    </label>
+                  </div>
+                  <button 
+                    pButton 
+                    type="button" 
+                    [label]="'backup.btn.testConnection' | translate" 
+                    icon="pi pi-check-circle"
+                    class="p-button-outlined test-btn"
+                    [loading]="testingConnection"
+                    (click)="testConnection()"
+                    [disabled]="connectionForm.invalid">
+                  </button>
+                </div>
+              </div>
+            </form>
+          </p-card>
+        </div>
+      </p-tabPanel>
+
+      <!-- Tab 2: Caminho de Backup -->
+      <p-tabPanel [header]="'backup.tab.path' | translate" leftIcon="pi pi-folder">
+        <div class="tab-content">
+          <p-card class="config-card">
+            <ng-template pTemplate="header">
+              <div class="card-header">
+                <i class="pi pi-folder-open"></i>
+                <span>{{ 'backup.card.pathLocation' | translate }}</span>
+              </div>
+            </ng-template>
+            
+            <form [formGroup]="pathForm" class="config-form">
+              <div class="form-field full-width">
+                <label for="backupPath" class="field-label">
+                  <i class="pi pi-map-marker"></i>
+                  {{ 'backup.field.backupPath' | translate }} *
+                </label>
+                <div class="path-input-group">
+                  <input 
+                    pInputText 
+                    id="backupPath"
+                    formControlName="backupPath"
+                    [placeholder]="'backup.placeholder.backupPath' | translate"
+                    class="form-input path-input"
+                    (input)="onPathChange()"
+                    [class.p-invalid]="pathForm.get('backupPath')?.invalid && pathForm.get('backupPath')?.touched">
+                  <div class="path-actions">
+                    <button 
+                      pButton 
+                      type="button" 
+                      icon="pi pi-folder-open" 
+                      class="p-button-primary path-btn"
+                      (click)="selectFolder()"
+                      [pTooltip]="'backup.tooltip.selectFolder' | translate"
+                      tooltipPosition="top">
+                    </button>
+                    <button 
+                      pButton 
+                      type="button" 
+                      icon="pi pi-plus" 
+                      class="p-button-primary path-btn"
+                      (click)="createFolder()"
+                      [pTooltip]="'backup.tooltip.createFolder' | translate"
+                      tooltipPosition="top">
+                    </button>
+                  </div>
+                </div>
+                <small 
+                  *ngIf="pathForm.get('backupPath')?.invalid && pathForm.get('backupPath')?.touched" 
+                  class="p-error">
+                  {{ 'backup.err.pathRequired' | translate }}
+                </small>
+                
+                <!-- Validação de caminho -->
+                <div *ngIf="pathValidating" class="validation-status">
+                  <i class="pi pi-spin pi-spinner"></i>
+                  <span>{{ 'backup.validatingPath' | translate }}</span>
+                </div>
+                <div *ngIf="pathValidationResult && !pathValidating" class="validation-status" 
+                     [ngClass]="pathValidationResult.valid ? 'valid' : 'invalid'">
+                  <i [class]="pathValidationResult.valid ? 'pi pi-check-circle' : 'pi pi-times-circle'"></i>
+                  <span>{{ pathValidationResult.message }}</span>
+                </div>
+              </div>
+
+              <div class="info-box">
+                <i class="pi pi-info-circle"></i>
+                <div>
+                  <strong>{{ 'backup.tips.title' | translate }}</strong>
+                  <ul>
+                    <li>{{ 'backup.tips.absolutePath' | translate }}</li>
+                    <li>{{ 'backup.tips.permissions' | translate }}</li>
+                    <li>{{ 'backup.tips.subdirs' | translate }}</li>
+                  </ul>
+                </div>
+              </div>
+            </form>
+          </p-card>
+        </div>
+      </p-tabPanel>
+
+      <!-- Tab 3: Agendamento -->
+      <p-tabPanel [header]="'backup.tab.schedule' | translate" leftIcon="pi pi-calendar">
+        <div class="tab-content">
+          <p-card class="config-card">
+            <ng-template pTemplate="header">
+              <div class="card-header">
+                <i class="pi pi-clock"></i>
+                <span>{{ 'backup.card.scheduleConfig' | translate }}</span>
+              </div>
+            </ng-template>
+            
+            <form [formGroup]="scheduleForm" class="config-form">
+              <!-- Preview do Agendamento -->
+              <div class="schedule-preview" [class.disabled]="!isScheduleEnabled">
+                <div class="preview-icon">
+                  <i class="pi pi-calendar-check"></i>
+                </div>
+                <div class="preview-content">
+                  <div class="preview-label">{{ 'backup.schedule.previewLabel' | translate }}</div>
+                  <div class="preview-value">{{ schedulePreview || ('backup.schedule.configurePreview' | translate) }}</div>
+                </div>
+              </div>
+
+              <!-- Habilitar/Desabilitar -->
+              <div class="form-field full-width">
+                <div class="toggle-field">
+                  <label class="toggle-label">
+                    <i class="pi pi-power-off"></i>
+                    {{ 'backup.field.enableSchedule' | translate }}
+                  </label>
+                  <p-toggleButton 
+                    formControlName="enabled"
+                    [onLabel]="'backup.toggle.on' | translate"
+                    [offLabel]="'backup.toggle.off' | translate"
+                    [onIcon]="'pi pi-check'"
+                    [offIcon]="'pi pi-times'">
+                  </p-toggleButton>
+                </div>
+              </div>
+
+              <div class="form-grid" [class.disabled]="!isScheduleEnabled">
+                <!-- Tipo de Agendamento -->
+                <div class="form-field">
+                  <label for="scheduleType" class="field-label">
+                    <i class="pi pi-calendar"></i>
+                    {{ 'backup.field.scheduleType' | translate }} *
+                  </label>
+                  <p-dropdown 
+                    id="scheduleType"
+                    formControlName="scheduleType"
+                    [options]="scheduleTypeOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                    [placeholder]="'backup.placeholder.scheduleType' | translate"
+                    class="form-input">
+                  </p-dropdown>
+                </div>
+
+                <!-- Horário -->
+                <div class="form-field">
+                  <label for="scheduledTime" class="field-label">
+                    <i class="pi pi-clock"></i>
+                    {{ 'backup.field.scheduledTime' | translate }} *
+                  </label>
+                  <input 
+                    pInputText 
+                    type="time"
+                    id="scheduledTime"
+                    formControlName="scheduledTime"
+                    class="form-input">
+                </div>
+
+                <!-- Data (para agendamento único) -->
+                <div class="form-field" *ngIf="scheduleType === 'once'">
+                  <label for="scheduledDate" class="field-label">
+                    <i class="pi pi-calendar-plus"></i>
+                    {{ 'backup.field.scheduledDate' | translate }} *
+                  </label>
+                  <p-calendar 
+                    id="scheduledDate"
+                    formControlName="scheduledDate"
+                    [minDate]="minDate"
+                    dateFormat="dd/mm/yy"
+                    [showIcon]="true"
+                    [placeholder]="'backup.placeholder.date' | translate"
+                    class="form-input">
+                  </p-calendar>
+                </div>
+
+                <!-- Dias da Semana (para agendamento semanal) -->
+                <div class="form-field full-width" *ngIf="scheduleType === 'weekly'">
+                  <label class="field-label">
+                    <i class="pi pi-calendar"></i>
+                    {{ 'backup.field.daysOfWeek' | translate }} *
+                  </label>
+                  <div class="days-checkbox-group">
+                    <div *ngFor="let day of daysOfWeekOptions" class="day-checkbox">
+                      <p-checkbox 
+                        [inputId]="'day-' + day.value"
+                        [value]="day.value"
+                        formControlName="daysOfWeek">
+                      </p-checkbox>
+                      <label [for]="'day-' + day.value">{{ day.label }}</label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Dia do Mês (para agendamento mensal) -->
+                <div class="form-field" *ngIf="scheduleType === 'monthly'">
+                  <label for="dayOfMonth" class="field-label">
+                    <i class="pi pi-calendar"></i>
+                    {{ 'backup.field.dayOfMonth' | translate }} *
+                  </label>
+                  <p-inputNumber 
+                    id="dayOfMonth"
+                    formControlName="dayOfMonth"
+                    [min]="1"
+                    [max]="31"
+                    [placeholder]="'backup.placeholder.dayOfMonth' | translate"
+                    class="form-input">
+                  </p-inputNumber>
+                </div>
+
+                <!-- Retenção -->
+                <div class="form-field">
+                  <label for="retentionDays" class="field-label">
+                    <i class="pi pi-trash"></i>
+                    {{ 'backup.field.retentionDays' | translate }} *
+                  </label>
+                  <p-inputNumber 
+                    id="retentionDays"
+                    formControlName="retentionDays"
+                    [min]="1"
+                    [placeholder]="'backup.placeholder.retention' | translate"
+                    class="form-input">
+                  </p-inputNumber>
+                  <small class="field-hint">{{ 'backup.hint.retention' | translate }}</small>
+                </div>
+
+                <!-- Compressão -->
+                <div class="form-field full-width">
+                  <div class="checkbox-field">
+                    <p-checkbox 
+                      formControlName="compressBackup"
+                      inputId="compressBackup"
+                      [binary]="true">
+                    </p-checkbox>
+                    <label for="compressBackup" class="checkbox-label">
+                      <i class="pi pi-file"></i>
+                      {{ 'backup.field.compressHint' | translate }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </p-card>
+        </div>
+      </p-tabPanel>
+
+      <!-- Tab 4: Notificações -->
+      <p-tabPanel [header]="'backup.tab.notifications' | translate" leftIcon="pi pi-bell">
+        <div class="tab-content">
+          <p-card class="config-card">
+            <ng-template pTemplate="header">
+              <div class="card-header">
+                <i class="pi pi-envelope"></i>
+                <span>{{ 'backup.card.notifications' | translate }}</span>
+              </div>
+            </ng-template>
+            
+            <form [formGroup]="notificationForm" class="config-form">
+              <div class="form-field full-width">
+                <div class="checkbox-field">
+                  <p-checkbox 
+                    formControlName="emailNotification"
+                    inputId="emailNotification"
+                    [binary]="true">
+                  </p-checkbox>
+                  <label for="emailNotification" class="checkbox-label">
+                    <i class="pi pi-envelope"></i>
+                    {{ 'backup.field.emailNotify' | translate }}
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-field full-width" *ngIf="notificationForm.get('emailNotification')?.value">
+                <label for="emailRecipients" class="field-label">
+                  <i class="pi pi-users"></i>
+                  {{ 'backup.field.emailRecipientsLabel' | translate }}
+                </label>
+                <textarea 
+                  pInputTextarea 
+                  id="emailRecipients"
+                  formControlName="emailRecipients"
+                  [placeholder]="'backup.placeholder.emails' | translate"
+                  rows="3"
+                  class="form-input">
+                </textarea>
+                <small class="field-hint">{{ 'backup.hint.emails' | translate }}</small>
+              </div>
+
+              <div class="info-box">
+                <i class="pi pi-info-circle"></i>
+                <div>
+                  <strong>{{ 'backup.notifications.sentTitle' | translate }}</strong>
+                  <ul>
+                    <li>{{ 'backup.notifications.onSuccess' | translate }}</li>
+                    <li>{{ 'backup.notifications.onFail' | translate }}</li>
+                    <li>{{ 'backup.notifications.onSkipped' | translate }}</li>
+                  </ul>
+                </div>
+              </div>
+            </form>
+          </p-card>
+        </div>
+      </p-tabPanel>
+
+      <!-- Tab 5: Histórico -->
+      <p-tabPanel [header]="'backup.tab.historyFull' | translate" leftIcon="pi pi-history">
+        <div class="tab-content">
+          <p-card class="config-card">
+            <ng-template pTemplate="header">
+              <div class="card-header">
+                <i class="pi pi-list"></i>
+                <span>{{ 'backup.card.historyList' | translate }}</span>
+              </div>
+            </ng-template>
+            
+            <div class="history-table-wrap list-with-refresh">
+              <div *ngIf="loadingHistory && backupHistory.length === 0" class="loading-table">
+                <p-progressSpinner></p-progressSpinner>
+              </div>
+              <app-list-refresh-overlay [loading]="loadingHistory && backupHistory.length > 0"></app-list-refresh-overlay>
+
+            <p-table 
+              *ngIf="!loadingHistory || backupHistory.length > 0"
+              [value]="backupHistory" 
+              [paginator]="true"
+              [rows]="listPageSize"
+              [rowsPerPageOptions]="listRowsPerPageOptions"
+              styleClass="p-datatable-sm history-table"
+              [emptyMessage]="'backup.history.empty' | translate">
+              
+              <ng-template pTemplate="paginatorLeft" let-state>
+                <span class="p-paginator-info">
+                  {{ 'backup.table.paginator' | translate:{ from: getFirstRecord(state), to: getLastRecord(state), total: backupHistory.length } }}
+                </span>
+              </ng-template>
+              
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>{{ 'backup.th.datetime' | translate }}</th>
+                  <th>{{ 'backup.th.path' | translate }}</th>
+                  <th>{{ 'backup.th.size' | translate }}</th>
+                  <th>{{ 'backup.th.status' | translate }}</th>
+                  <th>{{ 'backup.th.duration' | translate }}</th>
+                  <th style="width: 80px;">{{ 'backup.th.openFolder' | translate }}</th>
+                  <th style="width: 100px;">{{ 'backup.th.actions' | translate }}</th>
+                </tr>
+              </ng-template>
+              
+              <ng-template pTemplate="body" let-backup>
+                <tr>
+                  <td>
+                    <div class="date-cell">
+                      <i class="pi pi-calendar"></i>
+                      {{ formatDate(backup.backupDate) }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="path-cell">
+                      <i class="pi pi-folder"></i>
+                      <span [pTooltip]="backup.backupPath" tooltipPosition="top">{{ backup.backupPath }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="size-cell">
+                      <i class="pi pi-file"></i>
+                      {{ formatFileSize(backup.fileSize) }}
+                    </div>
+                  </td>
+                  <td>
+                    <p-tag 
+                      [value]="backup.status === 'success' ? ('backup.status.success' | translate) : ('backup.status.failed' | translate)"
+                      [severity]="getStatusSeverity(backup.status)">
+                    </p-tag>
+                    <div *ngIf="backup.errorMessage" class="error-message-cell">
+                      <i class="pi pi-exclamation-triangle" style="color: #ef4444; margin-right: 0.25rem;"></i>
+                      <span [pTooltip]="backup.errorMessage" tooltipPosition="top" style="color: #991b1b; font-size: 0.85rem; cursor: help;">
+                        {{ 'backup.btn.viewError' | translate }}
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <span *ngIf="backup.duration">{{ backup.duration }}s</span>
+                    <span *ngIf="!backup.duration">-</span>
+                  </td>
+                  <td>
+                    <button 
+                      pButton 
+                      type="button" 
+                      icon="pi pi-folder-open" 
+                      class="p-button-text p-button-primary p-button-sm"
+                      (click)="openBackupFolder(backup.backupPath)"
+                      [pTooltip]="'backup.tooltip.openBackupFolder' | translate"
+                      tooltipPosition="top">
+                    </button>
+                  </td>
+                  <td>
+                    <button 
+                      pButton 
+                      type="button" 
+                      icon="pi pi-trash" 
+                      class="p-button-text p-button-danger p-button-sm"
+                      (click)="deleteBackup(backup.id)"
+                      [pTooltip]="'backup.tooltip.deleteBackup' | translate"
+                      tooltipPosition="top">
+                    </button>
+                  </td>
+                </tr>
+              </ng-template>
+              
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="7" class="empty-message">
+                    <div class="empty-state">
+                      <i class="pi pi-inbox"></i>
+                      <p>{{ 'backup.history.empty' | translate }}</p>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            </div>
+          </p-card>
+        </div>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+</div>
+
+<!-- Toast Messages -->
+<p-toast></p-toast>
+
+<!-- Dialog de Selecionar Pasta (File Explorer) -->
+<p-dialog 
+  styleClass="as-hero-dialog" [(visible)]="showSelectFolderDialog" 
+  [modal]="true" 
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="true"
+  [style]="{width: '700px', height: '600px'}"
+  [header]="'backup.dialog.selectFolder.title' | translate"
+  (onHide)="cancelSelectFolder()">
+  
+  <div class="file-explorer-dialog">
+    <!-- Barra de navegação -->
+    <div class="explorer-navbar">
+      <button 
+        pButton 
+        type="button" 
+        icon="pi pi-arrow-left" 
+        class="p-button-text nav-btn"
+        [disabled]="explorerPathHistory.length === 0 && !currentExplorerPath"
+        (click)="navigateUp()"
+        [pTooltip]="'backup.tooltip.back' | translate"
+        tooltipPosition="top">
+      </button>
+      <div class="path-display">
+        <i class="pi pi-folder"></i>
+        <span class="path-text">{{ currentExplorerPath || ('backup.explorer.root' | translate) }}</span>
+      </div>
+      <button 
+        pButton 
+        type="button" 
+        icon="pi pi-refresh" 
+        class="p-button-text nav-btn"
+        (click)="loadExplorerDirectories()"
+        [pTooltip]="'backup.tooltip.refresh' | translate"
+        tooltipPosition="top">
+      </button>
+    </div>
+
+    <!-- Caminho selecionado -->
+    <div class="selected-path-display">
+      <label class="field-label">
+        <i class="pi pi-map-marker"></i>
+        {{ 'backup.explorer.selectedFolder' | translate }}
+      </label>
+      <input 
+        pInputText 
+        [(ngModel)]="selectedFolderPath"
+        [placeholder]="'backup.placeholder.noFolderSelected' | translate"
+        class="form-input path-input-readonly"
+        readonly>
+    </div>
+
+    <!-- Lista de diretórios -->
+    <div class="explorer-content">
+      <div *ngIf="loadingDirectories" class="loading-directories">
+        <p-progressSpinner [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
+        <p>{{ 'backup.dialog.selectFolder.loading' | translate }}</p>
+      </div>
+
+      <div *ngIf="!loadingDirectories && explorerDirectories.length === 0" class="empty-directories">
+        <i class="pi pi-folder-open"></i>
+        <p>{{ 'backup.dialog.selectFolder.empty' | translate }}</p>
+      </div>
+
+      <div *ngIf="!loadingDirectories && explorerDirectories.length > 0" class="directories-list">
+        <div 
+          *ngFor="let dir of explorerDirectories" 
+          class="directory-item"
+          (click)="navigateToDirectory(dir)"
+          (dblclick)="navigateToDirectory(dir)"
+          [class.selected]="selectedFolderPath === dir.path">
+          <div class="directory-icon">
+            <i class="pi pi-folder"></i>
+          </div>
+          <div class="directory-info">
+            <div class="directory-name">{{ dir.name }}</div>
+            <div class="directory-path">{{ dir.path }}</div>
+          </div>
+          <div class="directory-actions">
+            <i class="pi pi-chevron-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button 
+      pButton 
+      type="button" 
+      [label]="'backup.btn.cancel' | translate" 
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="cancelSelectFolder()">
+    </button>
+    <button 
+      pButton 
+      type="button" 
+      [label]="'backup.btn.selectCurrentFolder' | translate" 
+      icon="pi pi-check"
+      class="p-button-primary"
+      (click)="selectCurrentFolder()"
+      [disabled]="!currentExplorerPath">
+    </button>
+    <button 
+      pButton 
+      type="button" 
+      [label]="'backup.btn.confirm' | translate" 
+      icon="pi pi-check"
+      class="p-button-primary"
+      (click)="confirmSelectFolder()"
+      [disabled]="!selectedFolderPath || !selectedFolderPath.trim()">
+    </button>
+  </ng-template>
+</p-dialog>
+
+<!-- Dialog de Criar Pasta -->
+<p-dialog 
+  styleClass="as-hero-dialog" [(visible)]="showCreateFolderDialog" 
+  [modal]="true" 
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{width: '500px'}"
+  [header]="'backup.dialog.createFolder.title' | translate"
+  (onHide)="cancelCreateFolder()">
+  
+  <div class="create-folder-dialog">
+    <div class="form-field">
+      <label for="newFolderPath" class="field-label">
+        <i class="pi pi-folder"></i>
+        Caminho Base (opcional)
+      </label>
+      <input 
+        pInputText 
+        id="newFolderPath"
+        [(ngModel)]="newFolderPath"
+        [placeholder]="'backup.placeholder.folderPath' | translate"
+        class="form-input">
+      <small class="field-hint">{{ 'backup.hint.folderPathEmpty' | translate }}</small>
+    </div>
+
+    <div class="form-field">
+      <label for="newFolderName" class="field-label">
+        <i class="pi pi-folder-plus"></i>
+        Nome da Nova Pasta *
+      </label>
+      <input 
+        pInputText 
+        id="newFolderName"
+        [(ngModel)]="newFolderName"
+        [placeholder]="'backup.placeholder.folderName' | translate"
+        class="form-input"
+        (keyup.enter)="confirmCreateFolder()">
+      <small class="field-hint">{{ 'backup.hint.folderNameOnly' | translate }}</small>
+    </div>
+
+    <div class="info-box">
+      <i class="pi pi-info-circle"></i>
+      <div>
+        <strong>{{ 'backup.dialog.createFolder.noteTitle' | translate }}</strong>
+        <p>{{ 'backup.dialog.createFolder.noteBody' | translate }}</p>
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button 
+      pButton 
+      type="button" 
+      [label]="'backup.btn.cancel' | translate" 
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="cancelCreateFolder()">
+    </button>
+    <button 
+      pButton 
+      type="button" 
+      [label]="'backup.btn.create' | translate" 
+      icon="pi pi-check"
+      class="p-button-primary"
+      (click)="confirmCreateFolder()"
+      [disabled]="!newFolderName || !newFolderName.trim()">
+    </button>
+  </ng-template>
+</p-dialog>
+

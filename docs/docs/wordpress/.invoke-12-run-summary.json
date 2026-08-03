@@ -1,0 +1,65 @@
+{
+  "viewId": "bb8370",
+  "requestedViewId": "258c93",
+  "steps": {
+    "css-q1": {
+      "len": 8358,
+      "q": 1
+    },
+    "css-q2": {
+      "len": 17035,
+      "q": 2
+    },
+    "css-q3": {
+      "len": 25712,
+      "q": 3
+    },
+    "css-q4": {
+      "len": 34708,
+      "q": 4
+    },
+    "css-verify": {
+      "b64": 34708,
+      "dec": 26030,
+      "hasGrid": true
+    },
+    "css-finalize": {
+      "cssLen": 26030,
+      "footerLen": 38416,
+      "hasHeroV2": true,
+      "ok": true
+    },
+    "enc-init": {
+      "ok": true
+    },
+    "enc-0": {
+      "chunk": 0,
+      "len": 6000
+    },
+    "enc-1": {
+      "chunk": 1,
+      "len": 12000
+    },
+    "enc-2": {
+      "chunk": 2,
+      "len": 18000
+    },
+    "enc-3": {
+      "chunk": 3,
+      "len": 24000
+    },
+    "enc-4": {
+      "chunk": 4,
+      "len": 26780
+    },
+    "enc-run": {
+      "b64Len": 26780,
+      "hasHeroV2": true,
+      "homeLen": 19814,
+      "ok": true,
+      "sample": "demonstração",
+      "title": "Aero Suite — Gestão aeronáutica para oficinas MRO | Rastreabilidade e conformidade"
+    }
+  },
+  "errors": []
+}

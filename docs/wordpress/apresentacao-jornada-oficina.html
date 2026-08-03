@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aero Suite — Jornada da oficina</title>
+  <style>
+    :root {
+      --navy: #0f172a;
+      --navy-light: #1e293b;
+      --cyan: #0ea5e9;
+      --cyan-dark: #0284c7;
+      --gold: #e8c547;
+      --gold-dim: #c9a227;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --card: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--navy);
+      color: var(--text);
+    }
+    .deck {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .progress {
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+    .progress__bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--gold));
+      transition: width 0.35s ease;
+    }
+    .slide {
+      flex: 1;
+      display: none;
+      padding: clamp(1.5rem, 4vw, 3rem);
+      position: relative;
+      overflow: auto;
+    }
+    .slide.is-active { display: flex; flex-direction: column; }
+    .slide::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 10% 0%, rgba(14,165,233,0.15), transparent 60%),
+        radial-gradient(ellipse 50% 40% at 90% 100%, rgba(232,197,71,0.08), transparent 55%);
+      pointer-events: none;
+    }
+    .slide__inner {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .act-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      background: rgba(232,197,71,0.1);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+      width: fit-content;
+    }
+    .slide__title {
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .slide__headline {
+      font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+      color: var(--cyan);
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+    }
+    .slide__body {
+      font-size: clamp(1rem, 1.8vw, 1.15rem);
+      line-height: 1.65;
+      color: rgba(241,245,249,0.9);
+      max-width: 52ch;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .meta-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.15rem;
+    }
+    .meta-card__label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .meta-card__value {
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .meta-card__value code {
+      font-size: 0.85rem;
+      background: rgba(14,165,233,0.15);
+      color: #7dd3fc;
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      word-break: break-all;
+    }
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+    .flow__step {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .flow__step span {
+      width: 1.6rem;
+      height: 1.6rem;
+      border-radius: 50%;
+      background: var(--cyan-dark);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+    .flow__step.is-current span { background: var(--gold); color: var(--navy); }
+    .flow__arrow { color: var(--muted); opacity: 0.5; }
+    .cover-logo {
+      width: 72px;
+      height: 72px;
+      margin-bottom: 1.5rem;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--cyan-dark), var(--navy-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--gold);
+    }
+    .cta-box {
+      margin-top: 2rem;
+      padding: 1.25rem 1.5rem;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(14,165,233,0.2), rgba(232,197,71,0.12));
+      border: 1px solid rgba(14,165,233,0.35);
+    }
+    .cta-box a {
+      color: var(--gold);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .cta-box a:hover { text-decoration: underline; }
+    .toolbar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 1.25rem;
+      background: rgba(0,0,0,0.35);
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .toolbar button {
+      background: var(--cyan-dark);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.45rem 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .toolbar button:hover { background: var(--cyan); }
+    .toolbar button:disabled { opacity: 0.4; cursor: default; }
+    .toolbar__hint kbd {
+      background: rgba(255,255,255,0.1);
+      padding: 0.1em 0.45em;
+      border-radius: 4px;
+      font-size: 0.8em;
+    }
+    @media print {
+      .toolbar, .progress { display: none; }
+      .slide { display: block !important; page-break-after: always; min-height: 100vh; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+    <div class="progress"><div class="progress__bar" id="progress"></div></div>
+    <div id="slides"></div>
+    <footer class="toolbar">
+      <span id="counter">1 / 12</span>
+      <span class="toolbar__hint"><kbd>←</kbd> <kbd>→</kbd> navegar · <kbd>F</kbd> tela cheia</span>
+      <div>
+        <button type="button" id="prev" aria-label="Anterior">← Anterior</button>
+        <button type="button" id="next" aria-label="Próximo">Próximo →</button>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module">
+    const ACT_LABELS = {
+      1: 'Descoberta',
+      2: 'Cadastro',
+      3: 'Onboarding',
+      4: 'Operação',
+      5: 'Módulos MRO',
+      6: 'Continuidade',
+    };
+
+    const SLIDES = [
+      {
+        id: 'capa', act: 1,
+        title: 'Jornada da oficina na Aero Suite',
+        headline: 'Do primeiro contato ao hangar digital',
+        body: 'Como uma oficina MRO entra na plataforma, configura sua organização e passa a operar ordens de serviço, estoque e comercial integrados.',
+        onScreen: 'Apresentação / gravação demo',
+        clip: '3–5 s · fade in com logo',
+      },
+      {
+        id: 'descoberta', act: 1,
+        title: '1 · Primeiro contato',
+        headline: 'Site, demonstração ou trial de 7 dias',
+        body: 'A oficina conhece a Aero Suite pelo site aerosuite.com.br, agenda uma demonstração em /contato ou acessa diretamente o trial em app.aerosuite.com.br/cadastro-trial.',
+        onScreen: 'aerosuite.com.br/contato',
+        route: 'https://aerosuite.com.br/contato/',
+        clip: '5–8 s · CTA “Agendar demonstração”',
+      },
+      {
+        id: 'cadastro-trial', act: 2,
+        title: '2 · Cadastro da organização',
+        headline: 'Trial 7 dias — nome, admin e módulos',
+        body: 'Formulário em /cadastro-trial: nome da organização, e-mail e senha do administrador, seleção de módulos (MRO, Estoque, Comercial) e aceite dos termos legais.',
+        onScreen: 'app.aerosuite.com.br/cadastro-trial',
+        route: '/cadastro-trial',
+        clip: '12–18 s · destacar módulos MRO + Estoque + Comercial',
+      },
+      {
+        id: 'login', act: 2,
+        title: '3 · Primeiro acesso',
+        headline: 'Login isolado por tenant',
+        body: 'Administrador entra com e-mail, senha e código da organização. Cada oficina opera em ambiente isolado — dados não se misturam entre clientes.',
+        onScreen: 'app.aerosuite.com.br/login',
+        route: '/login',
+        clip: '8–10 s · submit até cockpit',
+      },
+      {
+        id: 'wizard-empresa', act: 3,
+        title: '4 · Configuração inicial',
+        headline: 'Assistente em 4 passos',
+        body: 'Marca (logo, tagline) → Contatos (suporte, telefone, site) → Empresa (razão social, CNPJ, endereço) → Revisão. White-label da oficina dentro da plataforma.',
+        onScreen: '/configuracao-empresa/inicial',
+        route: '/configuracao-empresa/inicial',
+        clip: '20–30 s · 4–6 s por passo (acelerar 1,5× no corte)',
+      },
+      {
+        id: 'home', act: 4,
+        title: '5 · Painel de comando',
+        headline: 'Home — cockpit do hangar',
+        body: 'Visão operacional com indicadores, atalhos e identidade visual da oficina. Primeira tela após concluir o onboarding.',
+        onScreen: '/home',
+        route: '/home',
+        clip: '8–12 s · pan no cockpit',
+      },
+      {
+        id: 'dashboard', act: 4,
+        title: '6 · Dashboard operacional',
+        headline: 'KPIs gerenciais',
+        body: 'Métricas de OS, estoque e pendências. Gestor acompanha o hangar sem planilha paralela.',
+        onScreen: '/dashboard',
+        route: '/dashboard',
+        clip: '8–10 s',
+      },
+      {
+        id: 'os', act: 5,
+        title: '7 · Ordens de serviço',
+        headline: 'Job card digital e auditável',
+        body: 'Lista de OS com filtros, apontamentos, peças e histórico. Pronta para auditoria RBAC 145 — rastreio completo do serviço.',
+        onScreen: '/os (+ detalhe de uma OS)',
+        route: '/os',
+        clip: '12–15 s · abrir 1ª OS',
+      },
+      {
+        id: 'estoque', act: 5,
+        title: '8 · Estoque rastreável',
+        headline: 'Peça, lote, certificado e FIFO',
+        body: 'Itens com rastreio por lote e certificado, vínculo com OS e política FIFO. Substitui planilha de peças com trilha auditável.',
+        onScreen: '/estoque/itens',
+        route: '/estoque/itens',
+        clip: '10–12 s · scroll na tabela',
+      },
+      {
+        id: 'propostas', act: 5,
+        title: '9 · Comercial integrado',
+        headline: 'Proposta → OS sem retrabalho',
+        body: 'Propostas comerciais alinhadas ao hangar. Escopo técnico conversa com a ordem de serviço antes da execução.',
+        onScreen: '/propostas-comerciais',
+        route: '/propostas-comerciais',
+        clip: '8–10 s',
+      },
+      {
+        id: 'suporte', act: 6,
+        title: '10 · Suporte e continuidade',
+        headline: 'Tickets e dicas contextuais',
+        body: 'Suporte via tickets, backup configurável e banners de onboarding em cada módulo. A oficina evolui com a plataforma.',
+        onScreen: '/suporte/tickets',
+        route: '/suporte/tickets',
+        clip: '5–8 s · opcional',
+      },
+      {
+        id: 'cta', act: 6,
+        title: 'Próximo passo',
+        headline: 'Demonstração com cenário real do seu hangar',
+        body: 'Agende 30 minutos para validar se o fluxo cobre sua operação — ou continue explorando o trial.',
+        onScreen: 'aerosuite.com.br/contato',
+        route: 'https://aerosuite.com.br/contato/?utm_source=presentation&utm_medium=slide&utm_campaign=jornada_oficina',
+        clip: '5 s · logo + URL + CTA',
+        isCta: true,
+      },
+    ];
+
+    const slidesEl = document.getElementById('slides');
+    let index = 0;
+
+    function renderSlide(s, i) {
+      const actLabel = ACT_LABELS[s.act] || '';
+      const routeDisplay = s.route?.startsWith('http') ? s.route : s.route ? `app.aerosuite.com.br${s.route}` : '—';
+      const flowHtml = SLIDES.map((x, j) => {
+        const cur = j === i ? ' is-current' : '';
+        return `<div class="flow__step${cur}"><span>${j + 1}</span>${x.title.split('·').pop().trim().slice(0, 18)}</div>${j < SLIDES.length - 1 ? '<span class="flow__arrow">→</span>' : ''}`;
+      }).join('');
+
+      return `
+        <section class="slide${i === index ? ' is-active' : ''}" data-index="${i}" aria-hidden="${i !== index}">
+          <div class="slide__inner">
+            ${i === 0 ? '<div class="cover-logo" aria-hidden="true">A</div>' : `<span class="act-badge">${actLabel}</span>`}
+            <h1 class="slide__title">${s.title}</h1>
+            <p class="slide__headline">${s.headline}</p>
+            <p class="slide__body">${s.body}</p>
+            <div class="meta-grid">
+              <div class="meta-card">
+                <div class="meta-card__label">Na tela</div>
+                <div class="meta-card__value"><code>${routeDisplay}</code></div>
+              </div>
+              <div class="meta-card">
+                <div class="meta-card__label">Corte promocional</div>
+                <div class="meta-card__value">${s.clip}</div>
+              </div>
+            </div>
+            ${s.isCta ? `<div class="cta-box"><a href="${s.route}" target="_blank" rel="noopener">Agendar demonstração → aerosuite.com.br/contato</a></div>` : ''}
+            ${i > 0 && i < SLIDES.length - 1 ? `<nav class="flow" aria-label="Fluxo">${flowHtml}</nav>` : ''}
+          </div>
+        </section>`;
+    }
+
+    function render() {
+      slidesEl.innerHTML = SLIDES.map(renderSlide).join('');
+      document.getElementById('progress').style.width = `${((index + 1) / SLIDES.length) * 100}%`;
+      document.getElementById('counter').textContent = `${index + 1} / ${SLIDES.length}`;
+      document.getElementById('prev').disabled = index === 0;
+      document.getElementById('next').disabled = index === SLIDES.length - 1;
+    }
+
+    function go(delta) {
+      index = Math.max(0, Math.min(SLIDES.length - 1, index + delta));
+      render();
+    }
+
+    document.getElementById('prev').addEventListener('click', () => go(-1));
+    document.getElementById('next').addEventListener('click', () => go(1));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
+      if (e.key === 'ArrowLeft') { go(-1); }
+      if (e.key === 'f' || e.key === 'F') {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+        else document.exitFullscreen();
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>

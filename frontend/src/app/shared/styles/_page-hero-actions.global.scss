@@ -1,0 +1,99 @@
+// Heroes: só label e ícone brancos; contorno outlined mantém o azul do app (#0369a1).
+// Importar DEPOIS de .p-button-outlined { color: #0369a1 } em styles.scss.
+
+$hero-outlined-border: #0369a1;
+$hero-outlined-border-hover: #0284c7;
+
+@mixin hero-button-label-white {
+  .p-button-label,
+  .p-button-icon,
+  .pi,
+  &::before {
+    color: #fff !important;
+  }
+}
+
+app-page-hero .as-page-hero .as-page-hero__actions,
+.as-page-hero .as-page-hero__actions {
+  .p-button.p-button-outlined:not(:disabled),
+  .p-button.p-button-secondary.p-button-outlined:not(:disabled),
+  .p-button.p-button-success.p-button-outlined:not(:disabled),
+  .p-button.p-button-danger.p-button-outlined:not(:disabled),
+  .p-button.p-button-warning.p-button-outlined:not(:disabled),
+  .p-button.p-button-info.p-button-outlined:not(:disabled) {
+    color: #fff !important;
+    border-color: $hero-outlined-border !important;
+    background: transparent !important;
+    @include hero-button-label-white;
+
+    &:enabled:hover,
+    &:not(:disabled):hover {
+      color: #fff !important;
+      border-color: $hero-outlined-border-hover !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      @include hero-button-label-white;
+    }
+  }
+
+  .p-button.p-button-text:not(:disabled),
+  .p-button.p-button-text.p-button-secondary:not(:disabled) {
+    color: #fff !important;
+    border-color: transparent !important;
+    background: transparent !important;
+    @include hero-button-label-white;
+
+    &:enabled:hover,
+    &:not(:disabled):hover {
+      color: #fff !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+      @include hero-button-label-white;
+    }
+  }
+
+  .p-button.p-button-primary:not(.p-button-outlined):not(:disabled),
+  .p-button.add-btn:not(:disabled),
+  app-page-help .p-button:not(:disabled) {
+    color: #fff !important;
+    @include hero-button-label-white;
+  }
+
+  .p-button.p-button-primary:not(.p-button-outlined):not(:disabled),
+  .p-button.add-btn:not(:disabled) {
+    background: rgba(255, 255, 255, 0.14) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    backdrop-filter: blur(4px);
+
+    &:enabled:hover,
+    &:not(:disabled):hover {
+      background: rgba(255, 255, 255, 0.24) !important;
+      @include hero-button-label-white;
+    }
+  }
+}
+
+.page-header .header-content .header-actions,
+.page-header .header-actions {
+  .p-button.p-button-outlined:not(:disabled) {
+    color: #fff !important;
+    border-color: $hero-outlined-border !important;
+    @include hero-button-label-white;
+
+    &:enabled:hover,
+    &:not(:disabled):hover {
+      color: #fff !important;
+      border-color: $hero-outlined-border-hover !important;
+      @include hero-button-label-white;
+    }
+  }
+
+  .p-button.p-button-text:not(:disabled) {
+    color: #fff !important;
+    @include hero-button-label-white;
+  }
+
+  .p-button.p-button-primary:not(.p-button-outlined):not(:disabled),
+  .p-button.add-btn:not(:disabled) {
+    color: #fff !important;
+    @include hero-button-label-white;
+  }
+}

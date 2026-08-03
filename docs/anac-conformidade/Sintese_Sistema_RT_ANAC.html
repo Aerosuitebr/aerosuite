@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Síntese Técnica — Aero Suite · RT e ANAC</title>
+  <link rel="stylesheet" href="../ux-relatorio-executivo/relatorio-styles.css" />
+  <style>
+    .scope-box { background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;padding:4mm 5mm;margin:4mm 0;font-size:9.5pt; }
+    .scope-box--warn { background:#fffbeb;border-color:#fcd34d; }
+    .module-tag { display:inline-block;font-size:7.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:1px 6px;border-radius:4px;margin-right:2mm; }
+    .module-tag--mro { background:#dbeafe;color:#1d4ed8; }
+    .module-tag--com { background:#dcfce7;color:#15803d; }
+    .module-tag--fis { background:#fef3c7;color:#b45309; }
+    .module-tag--sgq { background:#f3e8ff;color:#7e22ce; }
+    .module-tag--cli { background:#fce7f3;color:#be185d; }
+    .rt-checklist td:first-child { width:8mm;font-weight:700;color:#0369a1; }
+    code { font-size:8.5pt; }
+  </style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="../../frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Dossiê regulatório · Responsável Técnico</div>
+    <h1>Síntese técnica do sistema Aero Suite</h1>
+    <div class="cover-gold-line"></div>
+    <p class="cover-sub">Visão consolidada do produto, público-alvo, módulos operacionais e encaminhamentos junto à ANAC para organizações Part 145.</p>
+    <p class="cover-meta">
+      <strong>Data:</strong> 10 de junho de 2026<br />
+      <strong>Versão do dossiê:</strong> 1.0<br />
+      <strong>Destinatário:</strong> Responsável Técnico (RT) · Qualidade · Consultoria regulatória<br />
+      <strong>Classificação alvo:</strong> Nível 3 (operacional) com extensão Nível 4 (registros eletrônicos + CRS)<br />
+      <strong>Fornecedor:</strong> Aero Suite — wellemlyra@aerosuite.com.br
+    </p>
+  </div>
+  <div class="cover-footer">Documento técnico · Uso interno, RT e autoridade reguladora</div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="../../frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Sumário executivo</span>
+  </div>
+  <h2>Objetivo deste documento</h2>
+  <p class="lead">
+    Apresentar, de forma <strong>enxuta e técnica</strong>, o que é o <strong>Aero Suite</strong>, para quem foi concebido,
+    quais processos cobre (manutenção, comercial, fiscal, qualidade) e <strong>o que a organização Part 145 — por meio do RT —
+    deve conduzir junto à ANAC</strong> para adoção formal do sistema como ferramenta de gestão e, quando aplicável,
+    repositório de registros de manutenção.
+  </p>
+  <div class="score-grid">
+    <div class="score-card score-card--ok">
+      <div class="score-val">SaaS</div>
+      <div class="score-lbl">Multi-tenant</div>
+    </div>
+    <div class="score-card score-card--ok">
+      <div class="score-val">30/30</div>
+      <div class="score-lbl">Matriz ATENDE</div>
+    </div>
+    <div class="score-card score-card--ok">
+      <div class="score-val">Nível 3–4</div>
+      <div class="score-lbl">Enquadramento ANAC</div>
+    </div>
+    <div class="score-card score-card--ok">
+      <div class="score-val">11/11</div>
+      <div class="score-lbl">Evidências técnicas</div>
+    </div>
+  </div>
+  <div class="scope-box scope-box--warn">
+    <strong>Atenção regulatória:</strong> a ANAC <em>não certifica software</em>. Avalia o cumprimento no contexto da
+    <strong>organização de manutenção</strong>. O fornecedor entrega dossiê e evidências de que o sistema <strong>suporta</strong>
+    os requisitos; cabe ao RT definir quais registros serão oficiais, atualizar MOM/MCQ e submeter consulta formal.
+  </div>
+  <div class="page-footer"><span>Aero Suite · Síntese RT e ANAC</span><span>Sumário executivo</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="../../frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 1</span>
+  </div>
+  <h2>O que é o Aero Suite</h2>
+  <p class="lead">
+    Plataforma <strong>SaaS multi-tenant</strong> para gestão integrada de oficinas de manutenção aeronáutica
+    (<strong>MRO / Part 145</strong>), do fluxo comercial à execução no hangar, estoque rastreável, emissão de CRS e
+    exportação de dossiê para auditoria.
+  </p>
+  <h3>Stack tecnológica</h3>
+  <table class="data-table">
+    <thead><tr><th>Camada</th><th>Tecnologia</th><th>Implicação operacional</th></tr></thead>
+    <tbody>
+      <tr><td>Backend</td><td>Quarkus 3 · Java 21 · Hibernate</td><td>API REST, regras de negócio, PDF server-side</td></tr>
+      <tr><td>Frontend</td><td>Angular 18 · PWA</td><td>Portal interno + externo; hangar com modo offline</td></tr>
+      <tr><td>Banco</td><td>MySQL 8 · Flyway</td><td>Migrações versionadas; isolamento por <code>tenant_id</code></td></tr>
+      <tr><td>Segurança</td><td>JWT · RBAC por funcionalidades</td><td>Segregação Part 145 (RT, inspetor, mecânico)</td></tr>
+      <tr><td>Infra</td><td>Docker · nginx · Cloudflare Tunnel</td><td>TLS, backup automatizado, ambiente de homologação</td></tr>
+    </tbody>
+  </table>
+  <h3>Posicionamento na cadeia de manutenção</h3>
+  <ul class="checklist">
+    <li>Ferramenta de <strong>ordens de serviço (OS)</strong>, job card/hangar, inspeção e liberação (CRS).</li>
+    <li>Repositório de <strong>evidências auditáveis</strong> (trilhas, dossiê PDF/ZIP, retenção configurável).</li>
+    <li>Apoio ao <strong>SGQ operacional</strong> (documentos controlados, treinamentos, calibração, NC/CAPA).</li>
+    <li>Integração comercial e fiscal <strong>sem substituir</strong> o MOM/MCQ certificado da OM.</li>
+  </ul>
+  <div class="page-footer"><span>Aero Suite · Síntese RT e ANAC</span><span>Seção 1 · Produto</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="../../frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 2</span>
+  </div>
+  <h2>Público-alvo</h2>
+  <table class="data-table">
+    <thead><tr><th>Segmento</th><th>Perfil</th><th>Necessidade atendida</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Primário</strong></td>
+        <td>Oficinas de manutenção certificadas <strong>RBAC 145</strong> (SME e médio porte) no Brasil e LATAM</td>
+        <td>Digitalizar OS, hangar, estoque e auditoria sem ERP enterprise de longa implantação</td>
+      </tr>
+      <tr>
+        <td><strong>Secundário</strong></td>
+        <td>CAMO / operadores com manutenção terceirizada; holdings com várias OM no mesmo tenant</td>
+        <td>Portal do cliente, rastreio de peça, dossiê único para fiscalização</td>
+      </tr>
+      <tr>
+        <td><strong>Usuários internos</strong></td>
+        <td>RT, inspetor, mecânico, almoxarifado, qualidade, comercial, administrador</td>
+        <td>Perfis RBAC alinhados à segregação Part 145 (<code>P145_RT</code>, <code>P145_INSPETOR</code>, <code>P145_EXECUCAO</code>, etc.)</td>
+      </tr>
+      <tr>
+        <td><strong>Usuários externos</strong></td>
+        <td>Clientes da OM (proprietários, operadores, gestores de frota)</td>
+        <td>Consulta de OS, documentos, aprovação de propostas via portal <code>/externo/*</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Tese de produto</h3>
+  <p>
+    <em>Da cotação à peça na OS, com o cliente acompanhando no portal.</em> — Suite integrada
+    <strong>comercial → OS → estoque → cliente → marca</strong>, com onboarding em ~30 dias (kit go-live).
+  </p>
+  <div class="page-footer"><span>Aero Suite · Síntese RT e ANAC</span><span>Seção 2 · Público-alvo</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="../../frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 3</span>
+  </div>
+  <h2>Módulos e escopo funcional</h2>
+  <p class="lead">Síntese por domínio. Módulos comerciais/fiscais têm <strong>escopo operacional</strong>, não regulatório de manutenção.</p>
+
+  <h3><span class="module-tag module-tag--mro">MRO</span> Manutenção e execução</h3>
+  <table class="data-table">
+    <thead><tr><th>Módulo</th><th>Rota</th><th>Função</th></tr></thead>
+    <tbody>
+      <tr><td>Ordens de serviço</td><td><code>/os</code></td><td>Ciclo de vida da OS; vínculo aeronave, FCU, peças, anexos</td></tr>
+      <tr><td>Hangar / Job card</td><td><code>/hangar</code></td><td>Apontamentos, assinaturas, PWA offline + sincronização</td></tr>
+      <tr><td>CRS</td><td>Dialog na OS</td><td>Certificado de Liberação para Serviço em PDF; segregação RT/inspetor</td></tr>
+      <tr><td>Auditoria OS</td><td><code>/os-auditoria</code></td><td>Trilha de alterações; OS encerrada com bloqueio e reabertura auditada</td></tr>
+      <tr><td>Dossiê auditoria</td><td><code>/dossie-auditoria</code></td><td>Export PDF/ZIP para fiscalização (OS + anexos + trilhas)</td></tr>
+      <tr><td>AD/SB / diretrizes</td><td><code>/aero/diretrizes</code></td><td>Alertas e conformidade técnica da aeronave</td></tr>
+      <tr><td>Capacidade / AOG</td><td><code>/capacidade</code></td><td>Fila por hangar, prioridade AOG, SLA visível no portal</td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="module-tag module-tag--com">Comercial</span> Propostas e vendas</h3>
+  <table class="data-table">
+    <thead><tr><th>Módulo</th><th>Rota</th><th>Função</th></tr></thead>
+    <tbody>
+      <tr><td>Propostas comerciais</td><td><code>/comercial/proposta</code></td><td>Orçamento, itens, desconto, PDF, envio e-mail/WhatsApp</td></tr>
+      <tr><td>Proposta → OS</td><td>API <code>POST …/gerar-os</code></td><td>OS gerada a partir de proposta aprovada (vínculo bidirecional)</td></tr>
+      <tr><td>Templates e clientes</td><td><code>/templates-proposta</code></td><td>Cadastro comercial; autocomplete de clientes</td></tr>
+      <tr><td>Portal externo</td><td><code>/externo/propostas</code></td><td>Cliente aprova ou rejeita proposta online</td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="module-tag module-tag--fis">Fiscal</span> NF-e e ERP (integração Bling)</h3>
+  <table class="data-table">
+    <thead><tr><th>Capacidade</th><th>Status</th><th>Observação regulatória</th></tr></thead>
+    <tbody>
+      <tr><td>Validação de credenciais Bling</td><td>Implementado</td><td>Feature flag por tenant; não impacta registros de manutenção</td></tr>
+      <tr><td>Importação de contatos Bling</td><td>Implementado</td><td>Apoio comercial; mapeamento manual ao cadastro interno</td></tr>
+      <tr><td>Webhook pedido/NF-e</td><td>MVP</td><td>Idempotência por evento; emissão fiscal permanece no ERP Bling</td></tr>
+      <tr><td>Emissão NF-e nativa na suite</td><td>Fora de escopo</td><td>Certificado A1/A3 e contingência fiscal ficam no ERP externo</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer"><span>Aero Suite · Síntese RT e ANAC</span><span>Seção 3 · Módulos (1/2)</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="../../frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 3 (cont.)</span>
+  </div>
+
+  <h3><span class="module-tag module-tag--mro">Estoque</span> Peças e rastreabilidade</h3>
+  <table class="data-table">
+    <thead><tr><th>Módulo</th><th>Rota</th><th>Função</th></tr></thead>
+    <tbody>
+      <tr><td>Estoque / FIFO</td><td><code>/estoque/*</code></td><td>Itens, lotes, QR, quarentena, saída vinculada à OS</td></tr>
+      <tr><td>Certificados de peça</td><td>Ficha do item</td><td>Metadados FAA 8130-3, EASA Form 1, ANAC; bloqueio na saída</td></tr>
+      <tr><td>Rastreio / dossiê peça</td><td><code>/estoque/rastreio</code></td><td>Linha do tempo PN/SN/lote; PDF para auditoria</td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="module-tag module-tag--sgq">SGQ</span> Conformidade e qualidade</h3>
+  <table class="data-table">
+    <thead><tr><th>Módulo</th><th>Rota</th><th>Função</th></tr></thead>
+    <tbody>
+      <tr><td>Documentos controlados</td><td><code>/conformidade/documentos</code></td><td>Revisão, anexo PDF, controle SGQ</td></tr>
+      <tr><td>Treinamentos / habilitações</td><td><code>/conformidade/treinamentos</code></td><td>Competência RT, inspetor, mecânico; alertas de vencimento</td></tr>
+      <tr><td>Calibração</td><td><code>/conformidade/calibracao</code></td><td>Instrumentos e prazos</td></tr>
+      <tr><td>NC / CAPA</td><td><code>/conformidade/nao-conformidades</code></td><td>Não conformidades e ações corretivas</td></tr>
+      <tr><td>Subcontratação</td><td><code>/conformidade/subcontratacao</code></td><td>Fornecedores aprovados Part 145</td></tr>
+      <tr><td>Painel SGQ</td><td><code>/conformidade/painel</code></td><td>Indicadores; export ZIP <code>/api/conformidade/relatorios/sgq.zip</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="module-tag module-tag--cli">Plataforma</span> Transversal</h3>
+  <ul class="checklist">
+    <li><strong>Multi-tenant:</strong> isolamento de dados por organização; testes automatizados de isolamento.</li>
+    <li><strong>LGPD:</strong> consentimento no primeiro login; portal de privacidade; política de cookies no site.</li>
+    <li><strong>Go-live:</strong> checklist 30 dias e migração CSV (<code>/go-live-migracao</code>).</li>
+    <li><strong>Backup:</strong> rotina Docker/mysqldump; plano de contingência e simulação hangar offline.</li>
+    <li><strong>Acessibilidade:</strong> WCAG 2.2 AA em progresso (axe CI 52 rotas; auditoria externa pendente).</li>
+  </ul>
+  <div class="page-footer"><span>Aero Suite · Síntese RT e ANAC</span><span>Seção 3 · Módulos (2/2)</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="../../frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 4</span>
+  </div>
+  <h2>Enquadramento regulatório ANAC</h2>
+  <table class="data-table">
+    <thead><tr><th>Referencial</th><th>Aplicação no Aero Suite</th></tr></thead>
+    <tbody>
+      <tr><td><strong>RBAC 43</strong></td><td>Registros de manutenção, rastreabilidade, dados técnicos</td></tr>
+      <tr><td><strong>RBAC 145</strong></td><td>OS, CRS, segregação de funções, qualidade operacional</td></tr>
+      <tr><td><strong>IS 145-009E</strong></td><td>Integração ao MOM/MCQ pela OM; meios alternativos quando aplicável</td></tr>
+      <tr><td><strong>Registros eletrônicos ANAC</strong></td><td>Ateste/orientação quando registros digitais substituem papel</td></tr>
+      <tr><td><strong>LGPD</strong></td><td>Dados pessoais de usuários, clientes e portal externo</td></tr>
+    </tbody>
+  </table>
+  <h3>Classificação prática (guia ANAC)</h3>
+  <table class="data-table">
+    <thead><tr><th>Nível</th><th>Descrição</th><th>Aero Suite</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>CRM/comercial sem impacto em manutenção</td><td>Módulo propostas isolado</td></tr>
+      <tr><td>2</td><td>Apoio: cadastros, alertas, relatórios</td><td>FCU, AD/SB, painel qualidade</td></tr>
+      <tr><td><strong>3</strong></td><td><strong>OS, execução, inspeção, rastreabilidade</strong></td><td><strong>Escopo principal — ATENDE</strong></td></tr>
+      <tr><td><strong>4</strong></td><td><strong>Registros eletrônicos, assinatura, CRS, guarda</strong></td><td><strong>CRS + retenção + dossiê — conforme matriz</strong></td></tr>
+    </tbody>
+  </table>
+  <h3>Limitações declaradas (transparência ao RT)</h3>
+  <ul class="checklist">
+    <li>Não substitui <strong>MOM/MCQ</strong> certificado; a OM deve revisar procedimentos.</li>
+    <li>Assinaturas no hangar: captura gráfica vinculada a usuário autenticado — <strong>não</strong> ICP-Brasil qualificada (salvo integração futura).</li>
+    <li>Infraestrutura SaaS compartilhada; a OM deve manter <strong>exportações periódicas</strong> para inspeção offline.</li>
+    <li>NF-e: responsabilidade fiscal no ERP Bling; módulo comercial não é registro de manutenção.</li>
+  </ul>
+  <div class="page-footer"><span>Aero Suite · Síntese RT e ANAC</span><span>Seção 4 · Regulatório</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="../../frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 5</span>
+  </div>
+  <h2>O que o RT deve fazer junto à ANAC</h2>
+  <p class="lead">
+    Checklist de responsabilidades <strong>organizacionais</strong>. O fornecedor disponibiliza dossiê técnico e evidências;
+    a submissão e o ateste dependem da OM e do RT.
+  </p>
+  <table class="data-table rt-checklist">
+    <thead><tr><th>#</th><th>Ação</th><th>Entregável / referência</th><th>Prazo sugerido</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Definir quais registros do sistema serão <strong>oficiais</strong> (OS, CRS, job card, estoque)</td><td><code>02-declaracao-escopo-regulatorio.md</code> — assinar PDF</td><td>Semana 1</td></tr>
+      <tr><td>2</td><td>Atualizar <strong>MOM e MCQ</strong> referenciando o Aero Suite e perfis de acesso</td><td>Procedimentos internos da OM</td><td>Semana 1–2</td></tr>
+      <tr><td>3</td><td>Confirmar segregação: perfis RBAC = funções reais (mecânico ≠ inspetor ≠ RT)</td><td><code>14-perfis-acesso-rbac.md</code></td><td>Semana 1</td></tr>
+      <tr><td>4</td><td>Assinar relatório de validação e atas (backup, contingência)</td><td><code>evidencias/</code> — PDFs assinados</td><td>Semana 1–2</td></tr>
+      <tr><td>5</td><td>Executar <strong>restore de backup</strong> em homologação (VAL-19) e arquivar log</td><td>Ata + log MySQL</td><td>Semana 2</td></tr>
+      <tr><td>6</td><td>Conduzir treinamento piloto (RT, inspetor, mecânico, almoxarifado)</td><td><code>10-plano-treinamento.md</code> + listas de presença</td><td>Semana 2–3</td></tr>
+      <tr><td>7</td><td>Montar pacote de submissão (escopo + matriz + manual + amostra ZIP dossiê)</td><td><code>12-checklist-pre-submissao.md</code></td><td>Semana 3</td></tr>
+      <tr><td>8</td><td>Submeter <strong>consulta formal</strong> à ANAC (Programa Transformação Digital / Registros de Manutenção)</td><td><code>18-formulacao-consulta-anac.md</code></td><td>Semana 3–4</td></tr>
+      <tr><td>9</td><td>Piloto operacional 30 dias; amostra de registros para auditoria interna</td><td><code>09-plano-migracao.md</code></td><td>Semana 4–8</td></tr>
+      <tr><td>10</td><td>Responder complementações da ANAC, se solicitadas</td><td>Pasta <code>evidencias/</code></td><td>Conforme ANAC</td></tr>
+    </tbody>
+  </table>
+  <div class="scope-box">
+    <strong>Texto sugerido para consulta (resumo):</strong> solicitar orientação sobre enquadramento do software como ferramenta de
+    gestão e armazenamento de registros de manutenção; procedimento aplicável aos RBAC 43/145; evidências para ateste de
+    registros eletrônicos; e concordância prévia nos termos da IS 145-009E, quando integrado ao MOM/MCQ.
+  </div>
+  <div class="page-footer"><span>Aero Suite · Síntese RT e ANAC</span><span>Seção 5 · RT</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="../../frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 6</span>
+  </div>
+  <h2>O que o fornecedor já entrega</h2>
+  <p class="lead">Pacote técnico pronto para apoiar a submissão. Estado verificado em homologação (jun/2026).</p>
+  <table class="data-table">
+    <thead><tr><th>Entrega</th><th>Conteúdo</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Dossiê ANAC</td><td>21+ documentos em <code>docs/anac-conformidade/</code></td><td><span class="status-ok">✓ Completo</span></td></tr>
+      <tr><td>Matriz de requisitos</td><td>30 requisitos × funcionalidade × teste × evidência</td><td><span class="status-ok">✓ 30/30 ATENDE</span></td></tr>
+      <tr><td>Suite automatizada</td><td><code>anac-conformidade-evidencias.ps1</code></td><td><span class="status-ok">✓ 11/11 PASS</span></td></tr>
+      <tr><td>Manual do usuário</td><td><code>Manual_Aero_Suite.html</code> / PDF homologação</td><td><span class="status-ok">✓ Disponível</span></td></tr>
+      <tr><td>Manual técnico</td><td>Backup, contingência, RBAC, APIs</td><td><span class="status-ok">✓ Disponível</span></td></tr>
+      <tr><td>Pacote ZIP submissão</td><td><code>evidencias/pacote-dossie-anac-*.zip</code></td><td><span class="status-ok">✓ Gerável</span></td></tr>
+      <tr><td>Ambiente demo</td><td>Tenant sanitizado + OS completa para demonstração</td><td><span class="status-ok">✓ Disponível</span></td></tr>
+    </tbody>
+  </table>
+  <h3>APIs críticas para demonstração ao RT</h3>
+  <pre style="font-size:8pt;background:#f8fafc;border:1px solid #e2e8f0;padding:3mm;border-radius:4px;overflow-x:auto;">GET  /api/dossie-auditoria/numero/{n}/pdf
+GET  /api/dossie-auditoria/pacote/zip
+POST /api/os/{id}/crs/emitir
+GET  /api/os/{id}/crs/pdf
+GET  /api/os-auditoria/os/{id}
+GET  /api/conformidade/painel
+GET  /api/conformidade/relatorios/sgq.zip</pre>
+  <h3>Documentação de apoio no repositório</h3>
+  <ul class="checklist">
+    <li><code>00-INDICE-DOSSIE.md</code> — índice mestre do dossiê</li>
+    <li><code>13-roteiro-contato-anac.md</code> — fases 1 a 7 (diagnóstico → manutenção contínua)</li>
+    <li><code>21-pendencias-acoes-certificacao.md</code> — fechamento organizacional</li>
+    <li>Link oficial ANAC: Registros de Manutenção — Programa de Transformação Digital</li>
+  </ul>
+  <div class="signature-block">
+    <p class="lead" style="margin-bottom:6mm">
+      Este documento consolida informações técnicas do Aero Suite para orientar o RT na condução junto à ANAC.
+      Dúvidas sobre evidências ou demonstração: <strong>wellemlyra@aerosuite.com.br</strong> · aerosuite.com.br
+    </p>
+    <div class="signature-line"></div>
+    <div class="signature-name">Wellem Lyra</div>
+    <div class="signature-role">Diretor de TI · Aero Suite</div>
+    <div class="signature-date">10 de junho de 2026</div>
+  </div>
+  <div class="page-footer"><span>Aero Suite · Síntese RT e ANAC</span><span>Seção 6 · Fornecedor</span></div>
+</section>
+
+</body>
+</html>

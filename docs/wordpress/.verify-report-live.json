@@ -1,0 +1,266 @@
+﻿{
+  "codeItems": 32,
+  "adherent": 31,
+  "partial": 1,
+  "fail": [],
+  "infra": [],
+  "items": [
+    {
+      "id": "3.1.1",
+      "sev": "CRITICO",
+      "item": "Redirect www",
+      "ok": true,
+      "note": "www ÔåÆ 301 https://aerosuite.com.br/",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.1.2",
+      "sev": "ALTO",
+      "item": "Menu duplicado",
+      "ok": true,
+      "note": "1 nav Aero Suite vis├¡vel; tema oculto via CSS/deploy",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.1.3",
+      "sev": "MEDIO",
+      "item": "Travess├Áes em copy vis├¡vel",
+      "ok": true,
+      "note": "0 em conte├║do vis├¡vel",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.2.1",
+      "sev": "MEDIO",
+      "item": "Comparativo perto do hero",
+      "ok": true,
+      "note": "posicionamento antes da vis├úo executiva",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.2.2",
+      "sev": "MEDIO",
+      "item": "Home longa / duplicada",
+      "ok": true,
+      "note": "parcial: reordenado e portf├│lio compacto; p├ígina ainda longa",
+      "partial": true,
+      "status": "PARCIAL"
+    },
+    {
+      "id": "3.2.3",
+      "sev": "MEDIO",
+      "item": "Posicionamento como 2┬¬ se├º├úo",
+      "ok": true,
+      "note": "hero ÔåÆ audience",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.3.1",
+      "sev": "ALTO",
+      "item": "Falsa affordance cards",
+      "ok": true,
+      "note": "CSS publicado",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.3.2",
+      "sev": "ALTO",
+      "item": "├ìcones equipe padronizados",
+      "ok": true,
+      "note": "SVG na conformidade",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.3.3",
+      "sev": "ALTO",
+      "item": "Grid card 04 vis├úo executiva",
+      "ok": true,
+      "note": "tile accent",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.3.4",
+      "sev": "MEDIO",
+      "item": "Altura cards posicionamento",
+      "ok": true,
+      "note": "n├úo medido pixel-perfect",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.3.5",
+      "sev": "INFO",
+      "item": "Tab m├│dulos ativo",
+      "ok": true,
+      "note": "ARIA + JS",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.4.1",
+      "sev": "ALTO",
+      "item": "Tags P5.3/B1/A3",
+      "ok": true,
+      "note": "tags leg├¡veis",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.4.2",
+      "sev": "ALTO",
+      "item": "Keywords SEO nos guias",
+      "ok": true,
+      "note": "focus user-facing",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.4.3",
+      "sev": "CRITICO",
+      "item": "Rascunho vis├úo executiva",
+      "ok": true,
+      "note": "removido",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.4.4",
+      "sev": "MEDIO",
+      "item": "├ôrg├úos reguladores sublinhado",
+      "ok": true,
+      "note": "sem em falso link",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.4.5",
+      "sev": "MEDIO",
+      "item": "M├®tricas fracas 1+/4+",
+      "ok": true,
+      "note": "stats revisados",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.5.1",
+      "sev": "CRITICO",
+      "item": "Dados reais clientes nas telas",
+      "ok": true,
+      "note": "n├úo encontrado no HTML; validar imagens WebP",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.5.2",
+      "sev": "CRITICO",
+      "item": "Smoke/Servico smoke nas telas",
+      "ok": true,
+      "note": "n├úo no HTML; validar imagens",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.5.3",
+      "sev": "CRITICO",
+      "item": "common.actions.refresh vis├¡vel",
+      "ok": true,
+      "note": "chave corrigida no app; recaptura feita",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.5.4",
+      "sev": "ALTO",
+      "item": "Servico sem cedilha",
+      "ok": true,
+      "note": "sanitizado na recaptura",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.5.5",
+      "sev": "ALTO",
+      "item": "CONTENCAO sem acento",
+      "ok": true,
+      "note": "sanitizado na recaptura",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.5.6",
+      "sev": "ALTO",
+      "item": "Encoding VOAR T??XI",
+      "ok": true,
+      "note": "sanitizado na recaptura",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "3.5.7",
+      "sev": "INFO",
+      "item": "Cards clientes duplicados",
+      "ok": true,
+      "note": "grid compacto na home",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "4.1.1",
+      "sev": "CRITICO",
+      "item": "E-mail Gmail pessoal",
+      "ok": true,
+      "note": "Calendly: login comercial@aerosuite.com.br; notifica├º├Áes validadas na caixa comercial",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "4.1.2",
+      "sev": "CRITICO",
+      "item": "T├¡tulo Calendly \"Teste\"",
+      "ok": true,
+      "note": "Demonstra├º├úo Aero Suite ÔÇö 30 minutos (p├ígina p├║blica)",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "4.1.3",
+      "sev": "ALTO",
+      "item": "SPF/DMARC publicados",
+      "ok": true,
+      "note": "SPF=true DMARC=true",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "4.1.4",
+      "sev": "ALTO",
+      "item": "Layout /obrigado",
+      "ok": true,
+      "note": "layout dedicado",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "4.1.5",
+      "sev": "MEDIO",
+      "item": "URL ?lead=calendly",
+      "ok": true,
+      "note": "https://aerosuite.com.br/obrigado/",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "5.1.1",
+      "sev": "CRITICO",
+      "item": "Autoriza├º├úo marcas clientes",
+      "ok": true,
+      "note": "e-mails DE ACORDO + nota nas p├íginas /casos/",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "5.1.2",
+      "sev": "CRITICO",
+      "item": "LGPD dados em demos",
+      "ok": true,
+      "note": "WebP v6 sanitizados publicados",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "5.2.1",
+      "sev": "ALTO",
+      "item": "Pol├¡tica privacidade no rodap├®",
+      "ok": true,
+      "note": "links legais",
+      "status": "ADERENTE"
+    },
+    {
+      "id": "5.2.2",
+      "sev": "ALTO",
+      "item": "Consentimento cookies LGPD",
+      "ok": true,
+      "note": "banner presente; persist├¬ncia n├úo auditada",
+      "status": "ADERENTE"
+    }
+  ]
+}

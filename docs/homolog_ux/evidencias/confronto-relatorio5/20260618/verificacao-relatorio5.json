@@ -1,0 +1,101 @@
+{
+  "base": "https://app.aerosuite.com.br",
+  "stamp": "20260618",
+  "reteste": "pos-deploy",
+  "total": 13,
+  "passed": 13,
+  "failed": [],
+  "results": [
+    {
+      "id": "R-10",
+      "passed": true,
+      "severity": "CRITICO",
+      "detail": "POST API: 5/5 módulos Conformidade Técnica salvaram (AD/SB, Calibração, Documentos SGQ, Habilitações, NC) — status 201, sem erro inesperado",
+      "method": "api"
+    },
+    {
+      "id": "R-13",
+      "passed": true,
+      "severity": "CRITICO",
+      "detail": "API tenant default: checklist 0/15 concluídos; PUT save status=200. UI go-live: salvar progresso OK, sem 100% inflado para tenant ativo",
+      "method": "api+ui"
+    },
+    {
+      "id": "R-06",
+      "passed": true,
+      "severity": "ALTO",
+      "detail": "Modal preview relatórios exibe botão 'Fechar' traduzido; chave common.actions.close não exposta",
+      "method": "ui"
+    },
+    {
+      "id": "R-08",
+      "passed": true,
+      "severity": "ALTO",
+      "detail": "Preview por tipo: Produtos 835, OS 2102, Fabricantes 21, FCUs 666 — conteúdo distinto por relatório",
+      "method": "ui"
+    },
+    {
+      "id": "R-02",
+      "passed": true,
+      "severity": "MEDIO",
+      "detail": "API resumo filtrado (tipo=os, dataInicio=17/06/2026) OK; osPorMes vazio com filtro 2030 retorna value=0. chartEmptyMessage contextual implementado no frontend",
+      "method": "api+code"
+    },
+    {
+      "id": "R-05",
+      "passed": true,
+      "severity": "MEDIO",
+      "detail": "Menu lateral com seção 'Conformidade Técnica' (10 itens): AD/SB, Calibração, Documentos, Habilitações, NC, etc.",
+      "method": "api+ui"
+    },
+    {
+      "id": "R-03",
+      "passed": true,
+      "severity": "BAIXO",
+      "detail": "Home exibe KPIs (Catálogo, Parceiros, Oficina, Equipe, SGQ) com dados; layout align-content:start deployado",
+      "method": "ui"
+    },
+    {
+      "id": "R-04",
+      "passed": true,
+      "severity": "BAIXO",
+      "detail": "Tabela relatórios com classe cell-truncate e tooltip no DOM",
+      "method": "ui"
+    },
+    {
+      "id": "R-07",
+      "passed": true,
+      "severity": "BAIXO",
+      "detail": "Botão 'Ver gráficos' ausente na página de relatórios",
+      "method": "ui"
+    },
+    {
+      "id": "R-09",
+      "passed": true,
+      "severity": "BAIXO",
+      "detail": "Formulário AD/SB: label 'Número de peça (P/N)' em pt-BR",
+      "method": "ui"
+    },
+    {
+      "id": "R-11",
+      "passed": true,
+      "severity": "BAIXO",
+      "detail": "Bloco 'Para que serve' com microcopy AD/SB em pt-BR na listagem",
+      "method": "ui+code"
+    },
+    {
+      "id": "R-12",
+      "passed": true,
+      "severity": "BAIXO",
+      "detail": "Callout 'Salve o documento antes de anexar o PDF (máx. 25 MB).' no diálogo de novo documento SGQ",
+      "method": "ui"
+    },
+    {
+      "id": "R-14",
+      "passed": true,
+      "severity": "BAIXO",
+      "detail": "Autocomplete OS em NC exibe 'Nenhum resultado encontrado' (sem chave primeng crua)",
+      "method": "ui"
+    }
+  ]
+}

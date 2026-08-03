@@ -1,0 +1,33 @@
+# Arquivos de configuração com dados sensíveis
+config/backend.env
+config/nginx-path.txt
+
+# Logs
+logs/
+*.log
+
+# Backend compilado (pode ser grande)
+backend/*.jar
+backend/*.war
+backend/lib/
+backend/quarkus-app/
+
+# Frontend buildado (será gerado pelo script)
+frontend/
+
+# Arquivos temporários
+*.tmp
+*.bak
+*.swp
+*~
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+

@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Guia de Operação Git — Ambiente Remoto</title>
+  <style>/* Aero Suite — Relatório Executivo UX (print/PDF A4) */
+@page {
+  size: A4;
+  margin: 16mm 14mm 20mm 14mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.5;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 40%, #0f172a 75%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22mm 18mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 150mm;
+}
+
+.cover-logo {
+  width: 68mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8mm;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.4));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  border: 1px solid rgba(148,163,184,.35);
+  border-radius: 999px;
+  padding: 2.5mm 5mm;
+  margin-bottom: 6mm;
+}
+
+.cover h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+}
+
+.cover-sub {
+  font-size: 11pt;
+  color: #cbd5e1;
+  margin: 0 0 6mm;
+  line-height: 1.45;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a227, transparent);
+  margin: 0 auto 6mm;
+}
+
+.cover-meta {
+  font-size: 9.5pt;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cover-meta strong {
+  color: #e2e8f0;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 12mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #64748b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 7mm;
+  width: auto;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+h2 {
+  font-size: 14pt;
+  color: #0f172a;
+  margin: 0 0 4mm;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 11pt;
+  color: #0369a1;
+  margin: 5mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+.lead {
+  font-size: 10.5pt;
+  color: #334155;
+  margin-bottom: 5mm;
+}
+
+/* Sumário */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+  padding: 2mm 0;
+  border-bottom: 1px dotted #e2e8f0;
+  font-size: 9.5pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: none;
+  padding-top: 4mm;
+  font-size: 10pt;
+}
+
+.toc-num {
+  font-weight: 700;
+  color: #64748b;
+  min-width: 10mm;
+}
+
+/* Score dashboard */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin: 5mm 0 6mm;
+}
+
+.score-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4mm;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.score-card--ok {
+  background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #86efac;
+}
+
+.score-val {
+  font-size: 18pt;
+  font-weight: 800;
+  color: #0369a1;
+  line-height: 1;
+}
+
+.score-card--ok .score-val {
+  color: #15803d;
+}
+
+.score-label {
+  font-size: 7.5pt;
+  color: #64748b;
+  margin-top: 1.5mm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin: 4mm 0;
+}
+
+th, td {
+  border: 1px solid #e2e8f0;
+  padding: 2.5mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Item cards */
+.section-intro {
+  background: #f8fafc;
+  border-left: 3px solid #0369a1;
+  padding: 3mm 4mm;
+  margin-bottom: 5mm;
+  font-size: 9pt;
+  color: #475569;
+}
+
+.item-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 4mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  padding: 2.5mm 4mm;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item-id {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.item-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 9.5pt;
+}
+
+.sev {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.sev--CRITICO { background: #fee2e2; color: #991b1b; }
+.sev--ALTO { background: #ffedd5; color: #9a3412; }
+.sev--MEDIO { background: #fef9c3; color: #854d0e; }
+.sev--INFO { background: #e0e7ff; color: #3730a3; }
+
+.item-body {
+  padding: 3mm 4mm 4mm;
+  font-size: 8.75pt;
+}
+
+.item-row {
+  margin-bottom: 2.5mm;
+}
+
+.item-row:last-child {
+  margin-bottom: 0;
+}
+
+.item-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.5mm;
+}
+
+.item-text {
+  color: #1e293b;
+}
+
+.status-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+/* Assinatura */
+.signature-block {
+  margin-top: 10mm;
+  padding: 6mm;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.signature-line {
+  width: 55mm;
+  border-top: 1px solid #334155;
+  margin: 12mm 0 2mm;
+}
+
+.signature-name {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.signature-role {
+  font-size: 9pt;
+  color: #64748b;
+}
+
+.signature-date {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  margin-top: 2mm;
+}
+
+.callout {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 4mm;
+  margin: 4mm 0;
+  font-size: 9pt;
+}
+
+.callout strong {
+  color: #1d4ed8;
+}
+
+.supplementary {
+  page-break-inside: avoid;
+  margin-bottom: 4mm;
+  padding: 3mm 4mm;
+  border-left: 3px solid #c9a227;
+  background: #fffbeb;
+}
+
+.supplementary h4 {
+  margin: 0 0 1.5mm;
+  font-size: 9.5pt;
+  color: #92400e;
+}
+
+.supplementary p {
+  margin: 0;
+  font-size: 8.75pt;
+  color: #78350f;
+}
+
+.bullet-list, .step-list { font-size: 9.5pt; line-height: 1.55; color: #334155; margin: 0 0 4mm 5mm; }
+.step-list li { margin-bottom: 2.5mm; list-style: none; position: relative; padding-left: 7mm; }
+.step-num { position: absolute; left: 0; color: #0ea5e9; font-weight: 700; }
+.code-block { background: #0f172a; color: #e2e8f0; padding: 4mm 5mm; border-radius: 4px; font-size: 8.5pt; line-height: 1.45; overflow-x: auto; white-space: pre-wrap; margin: 0 0 5mm 0; }
+.flow-diagram { background: linear-gradient(90deg,#f0f9ff,#ecfeff); border: 1px solid #7dd3fc; border-radius: 8px; padding: 5mm 6mm; font-family: Consolas, monospace; font-size: 10pt; color: #0369a1; text-align: center; margin: 4mm 0 6mm 0; font-weight: 600; }
+.callout { border-radius: 8px; padding: 4mm 5mm; margin: 4mm 0 6mm 0; font-size: 9pt; line-height: 1.5; }
+.callout-warn { background: #fffbeb; border-left: 4px solid #f59e0b; color: #92400e; }
+.callout-info { background: #eff6ff; border-left: 4px solid #3b82f6; color: #1e40af; }
+.faq-item { margin-bottom: 4mm; border-bottom: 1px solid #e2e8f0; padding-bottom: 3mm; }
+.faq-q { font-weight: 700; font-size: 9.5pt; color: #0f172a; margin-bottom: 1.5mm; }
+.faq-a { font-size: 9pt; color: #475569; line-height: 1.5; }
+.checklist li { margin-bottom: 2mm; }
+.metric-table td { font-size: 9pt; vertical-align: top; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Operações · Git &amp; CI/CD · Interno · Equipe de desenvolvimento</div>
+    <h1>Guia de Operação Git — Ambiente Remoto</h1>
+    <p class="cover-sub">Procedimentos para manutenção do código, CI/CD e releases<br/>aerosuite-br/aerosuite · Organização GitHub</p>
+    <div class="cover-gold-line"></div>
+    <p class="cover-meta">
+      <strong>Versão 1.0</strong> · 18 de junho de 2026<br />
+      Repositório: <strong>https://github.com/aerosuite-br/aerosuite</strong>
+    </p>
+  </div>
+  <div class="cover-footer">Aero Suite — Gestão aeronáutica</div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Sumário executivo</span>
+  </div>
+  <h2>Sumário executivo</h2>
+  <p class="lead">
+    Este guia formaliza os procedimentos de interação com o ambiente Git remoto do projeto Aero Suite,
+    após a criação da organização <strong>aerosuite-br</strong> e do repositório privado
+    <strong>aerosuite</strong>. O documento cobre autenticação, fluxo de branches,
+  integração contínua, secrets, releases e resolução de incidentes comuns.
+  </p>
+
+  <div class="score-grid">
+    <div class="score-card score-card--ok"><div class="score-val">master</div><div class="score-label">Produção</div></div>
+    <div class="score-card"><div class="score-val">desenv</div><div class="score-label">Desenvolvimento</div></div>
+    <div class="score-card score-card--ok"><div class="score-val">CI</div><div class="score-label">Verde (Backend, Frontend, Menu i18n)</div></div>
+    <div class="score-card"><div class="score-val">2</div><div class="score-label">Ambientes GH</div></div>
+  </div>
+
+  <h3>Checklist rápido — novo membro</h3>
+  <ul class="bullet-list checklist"><li>Conta GitHub na organização aerosuite-br</li><li>gh auth login com escopo workflow</li><li>Repositório clonado; branch desenv ativa</li><li>git pull antes de cada sessão de trabalho</li><li>Commits sem secrets nem artefatos de build</li><li>Push para desenv; PR para master</li><li>CI verde antes de merge</li><li>Tag semântica após release em master</li></ul>
+
+  <div class="page-footer"><span>Aero Suite · Guia Git</span><span>Sumário</span></div>
+</section>
+
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 01</span>
+  </div>
+  <h2>Visão geral e acessos</h2>
+  <p class="section-intro">O código oficial do Aero Suite está centralizado na organização GitHub aerosuite-br. Este capítulo define quem acessa o quê e quais ferramentas instalar no posto de trabalho.</p>
+  <h3>Recursos principais</h3><table class="metric-table"><tbody><tr><td><strong>Organização</strong></td><td>@aerosuite-br</td></tr><tr><td><strong>Repositório</strong></td><td>aerosuite (privado)</td></tr><tr><td><strong>URL</strong></td><td>https://github.com/aerosuite-br/aerosuite</td></tr><tr><td><strong>Branch produção</strong></td><td>master</td></tr><tr><td><strong>Branch desenvolvimento</strong></td><td>desenv</td></tr><tr><td><strong>CI</strong></td><td>GitHub Actions — workflow CI</td></tr><tr><td><strong>Ambientes</strong></td><td>staging (desenv) · production (master)</td></tr></tbody></table>
+<h3>Pré-requisitos no computador</h3><ul class="bullet-list"><li>Git for Windows (ou Git no Linux/macOS) — https://git-scm.com</li><li>GitHub CLI (gh) — https://cli.github.com — recomendado para autenticação e PRs</li><li>Node.js 20+ e Java 21 — alinhados ao CI</li><li>Conta GitHub convidada na organização aerosuite-br (aceitar convite por e-mail)</li></ul>
+<div class="callout callout-warn">Nunca envie senhas, tokens PAT ou códigos de dispositivo por chat ou e-mail. A autenticação é feita apenas no seu terminal com gh auth login.</div>
+  <div class="page-footer">
+    <span>Aero Suite · Guia Git Remoto</span>
+    <span>Cap. 01</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 02</span>
+  </div>
+  <h2>Autenticação GitHub CLI</h2>
+  <p class="section-intro">Antes de push, pull ou criação de PR, o gh deve estar autenticado com escopos repo e workflow (obrigatório para enviar arquivos .github/workflows/).</p>
+  <h3>Primeiro login</h3><ol class="step-list"><li><span class="step-num">1</span> Abra PowerShell e execute: gh auth login</li><li><span class="step-num">2</span> Escolha: GitHub.com → HTTPS → Login with a web browser</li><li><span class="step-num">3</span> Copie o código exibido e autorize em https://github.com/login/device</li><li><span class="step-num">4</span> Na tela “Authorize GitHub CLI”, confirme acesso à organização aerosuite-br</li><li><span class="step-num">5</span> Se o push falhar por workflow, execute: gh auth refresh -h github.com -s workflow,repo,read:org,gist</li><li><span class="step-num">6</span> Valide: gh auth status (deve listar workflow entre os escopos)</li><li><span class="step-num">7</span> Configure Git para usar credenciais do gh: gh auth setup-git</li></ol>
+<h3>Verificação rápida</h3><pre class="code-block">gh auth status
+git remote -v
+git branch -a</pre>
+  <div class="page-footer">
+    <span>Aero Suite · Guia Git Remoto</span>
+    <span>Cap. 02</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 03</span>
+  </div>
+  <h2>Clonar e configurar o repositório local</h2>
+  <p class="section-intro">Desenvolvedores que ainda não possuem cópia local devem clonar a branch desenv e configurar identidade Git.</p>
+  <h3>Clone inicial (HTTPS)</h3><pre class="code-block">cd D:\Desenvolvimento
+git clone https://github.com/aerosuite-br/aerosuite.git
+cd aerosuite
+git checkout desenv
+git pull origin desenv</pre>
+<h3>Remote já existente (atualizar URL)</h3><pre class="code-block">git remote set-url origin https://github.com/aerosuite-br/aerosuite.git
+git fetch origin
+git branch -u origin/desenv desenv</pre>
+<h3>Configuração de identidade (uma vez por máquina)</h3><ul class="bullet-list"><li>git config user.name &quot;Seu Nome&quot;</li><li>git config user.email &quot;seu.email@aerosuite.com.br&quot;</li><li>Use o e-mail corporativo associado à conta GitHub</li></ul>
+  <div class="page-footer">
+    <span>Aero Suite · Guia Git Remoto</span>
+    <span>Cap. 03</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 04</span>
+  </div>
+  <h2>Estratégia de branches e fluxo diário</h2>
+  <p class="section-intro">O trabalho cotidiano ocorre em desenv. Releases e deploy em produção partem de master, sempre via Pull Request após CI verde.</p>
+  <div class="flow-diagram">desenv ──(PR + CI verde)──► master ──(tag v*)──► deploy produção</div>
+<h3>Papéis das branches</h3><table class="metric-table"><tbody><tr><td><strong>desenv</strong></td><td>Integração contínua, homologação UX, correções do dia a dia</td></tr><tr><td><strong>master</strong></td><td>Linha de produção — somente merge revisado</td></tr><tr><td><strong>saas/**</strong></td><td>Features SaaS isoladas (CI monitora)</td></tr><tr><td><strong>tags v*</strong></td><td>Marcos de release (ex.: v1.0.0)</td></tr></tbody></table>
+<h3>Rotina diária (desenv)</h3><ol class="step-list"><li><span class="step-num">1</span> git checkout desenv</li><li><span class="step-num">2</span> git pull origin desenv</li><li><span class="step-num">3</span> Implementar alterações e testar localmente</li><li><span class="step-num">4</span> git status — revisar arquivos (não commitar target/, node_modules/, .env)</li><li><span class="step-num">5</span> git add &lt;arquivos relevantes&gt;</li><li><span class="step-num">6</span> git commit -m &quot;tipo(escopo): descrição clara&quot;</li><li><span class="step-num">7</span> git push origin desenv</li><li><span class="step-num">8</span> Aguardar CI verde em GitHub → Actions</li></ol>
+<div class="callout callout-info">No plano GitHub Free com repositório privado, branch protection automática exige upgrade. Até lá: disciplina de PR + CODEOWNERS + revisão humana em master.</div>
+  <div class="page-footer">
+    <span>Aero Suite · Guia Git Remoto</span>
+    <span>Cap. 04</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 05</span>
+  </div>
+  <h2>Pull Requests e revisão</h2>
+  <p class="section-intro">Toda entrada em master deve passar por Pull Request. O repositório inclui template de PR e CODEOWNERS para orientar revisão.</p>
+  <h3>Abrir PR desenv → master</h3><ol class="step-list"><li><span class="step-num">1</span> Com desenv atualizado e push feito, acesse o repositório no GitHub</li><li><span class="step-num">2</span> Clique em “Compare &amp; pull request” ou: gh pr create --base master --head desenv</li><li><span class="step-num">3</span> Preencha o template: resumo, checklist CI, tipo de mudança</li><li><span class="step-num">4</span> Aguarde jobs: Backend (Maven), Frontend (npm), Menu i18n audit</li><li><span class="step-num">5</span> Após aprovação, use “Squash and merge” ou “Merge commit” conforme política da equipe</li><li><span class="step-num">6</span> Delete branch temporária se aplicável</li></ol>
+<h3>Boas práticas de commit</h3><ul class="bullet-list"><li>Prefixos: fix, feat, chore, docs, test, refactor</li><li>Mensagem no imperativo: “corrigir validação PN” não “corrigido…”</li><li>Um commit = uma intenção lógica; evite commits gigantes</li><li>Não incluir artefatos de build (backend/target, .tmp-*)</li><li>UI nova: chaves i18n em pt-BR, en-US, es-ES, fr-FR</li></ul>
+  <div class="page-footer">
+    <span>Aero Suite · Guia Git Remoto</span>
+    <span>Cap. 05</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 06</span>
+  </div>
+  <h2>CI/CD e qualidade</h2>
+  <p class="section-intro">O pipeline CI dispara em push e PR para master, desenv, develop e saas/**. E2E Playwright roda em PR manual/dispatch.</p>
+  <h3>Workflows</h3><table class="metric-table"><tbody><tr><td><strong>ci.yml</strong></td><td>Push/PR — Maven verify, npm build, testes unitários, a11y smoke</td></tr><tr><td><strong>integration-smoke.yml</strong></td><td>Manual — smoke HTTP contra API</td></tr><tr><td><strong>covered-suite.yml</strong></td><td>Manual — stack Docker + suite coberta</td></tr></tbody></table>
+<h3>Jobs obrigatórios (CI padrão)</h3><table class="metric-table"><tbody><tr><td><strong>Backend (Maven)</strong></td><td>mvn verify — testes + JaCoCo mínimo 18%</td></tr><tr><td><strong>Frontend (npm)</strong></td><td>npm ci, build, Vitest, a11y axe e fluxos F1–F12</td></tr><tr><td><strong>Menu i18n audit</strong></td><td>Cobertura menu.func.* / menu.section.*</td></tr></tbody></table>
+<h3>Validar localmente antes do push</h3><pre class="code-block">cd backend &amp;&amp; mvn -B verify
+cd frontend &amp;&amp; npm ci &amp;&amp; npm run build &amp;&amp; npm run test:unit
+powershell -File scripts/test/audit-menu-i18n.ps1 -SkipApi</pre>
+  <div class="page-footer">
+    <span>Aero Suite · Guia Git Remoto</span>
+    <span>Cap. 06</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 07</span>
+  </div>
+  <h2>Secrets, variáveis e ambientes</h2>
+  <p class="section-intro">Secrets de teste e URLs de homologação estão em Settings → Secrets and variables → Actions. Ambientes staging e production restringem deploy por branch.</p>
+  <h3>Secrets configurados (repo)</h3><table class="metric-table"><tbody><tr><td><strong>AEROSUITE_TEST_EMAIL</strong></td><td>Login plataforma (tenant default)</td></tr><tr><td><strong>AEROSUITE_TEST_PASSWORD</strong></td><td>Senha de teste — não expor</td></tr><tr><td><strong>AEROSUITE_TEST_TENANT</strong></td><td>default</td></tr><tr><td><strong>AEROSUITE_DEMO_* / MULTI_TENANT_*</strong></td><td>Cenários demo e isolamento</td></tr></tbody></table>
+<h3>Variables</h3><table class="metric-table"><tbody><tr><td><strong>AEROSUITE_WEB_URL</strong></td><td>https://app.aerosuite.com.br</td></tr><tr><td><strong>AEROSUITE_API_URL</strong></td><td>https://app.aerosuite.com.br/api</td></tr></tbody></table>
+<h3>Environments</h3><table class="metric-table"><tbody><tr><td><strong>staging</strong></td><td>Deploy permitido a partir da branch desenv</td></tr><tr><td><strong>production</strong></td><td>Deploy permitido a partir da branch master</td></tr></tbody></table>
+<div class="callout callout-warn">Nunca commitar .env, credenciais SMTP, chaves Stripe ou JWT. Use .env.example como referência.</div>
+  <div class="page-footer">
+    <span>Aero Suite · Guia Git Remoto</span>
+    <span>Cap. 07</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 08</span>
+  </div>
+  <h2>Release e deploy produção</h2>
+  <p class="section-intro">Após merge em master, marque a release com tag semântica e siga o checklist de deploy no servidor Hetzner.</p>
+  <h3>Release versionada</h3><ol class="step-list"><li><span class="step-num">1</span> git checkout master &amp;&amp; git pull origin master</li><li><span class="step-num">2</span> git tag -a v1.0.0 -m &quot;Release 1.0.0 — descrição&quot;</li><li><span class="step-num">3</span> git push origin v1.0.0</li><li><span class="step-num">4</span> Opcional: criar GitHub Release com notas a partir da tag</li></ol>
+<h3>Deploy servidor (/opt/aerosuite)</h3><ol class="step-list"><li><span class="step-num">1</span> SSH no VPS Ubuntu 24.04 (Hetzner)</li><li><span class="step-num">2</span> git clone ou git pull em /opt/aerosuite (branch master ou tag)</li><li><span class="step-num">3</span> Configurar .env.production (ver docs/DEPLOY-PRODUCAO.md)</li><li><span class="step-num">4</span> docker compose -f docker-compose.yml -f docker-compose.production.yml up -d --build</li><li><span class="step-num">5</span> Executar smoke pós-deploy (scripts/deploy/pre-deploy-check.ps1)</li></ol>
+  <div class="page-footer">
+    <span>Aero Suite · Guia Git Remoto</span>
+    <span>Cap. 08</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 09</span>
+  </div>
+  <h2>Solução de problemas</h2>
+  <p class="section-intro">Erros frequentes e resolução objetiva.</p>
+  <div class="faq-item"><div class="faq-q">Push rejeitado: OAuth App cannot update workflow without workflow scope</div><div class="faq-a">Execute gh auth refresh -h github.com -s workflow,repo,read:org,gist e autorize no navegador.</div></div><div class="faq-item"><div class="faq-q">setup-node: unable to cache dependencies</div><div class="faq-a">Garanta que frontend/package-lock.json está commitado. Use npm ci no frontend.</div></div><div class="faq-item"><div class="faq-q">CI falha em Menu i18n audit</div><div class="faq-a">Adicione chaves menu.func.* faltantes em menu-i18n.ts nas 4 línguas. Rode audit-menu-i18n.ps1 -SkipApi.</div></div><div class="faq-item"><div class="faq-q">Conflito ao fazer pull</div><div class="faq-a">git stash → git pull → git stash pop. Resolva conflitos, teste, commit e push.</div></div><div class="faq-item"><div class="faq-q">Remote incorreto (404)</div><div class="faq-a">git remote set-url origin https://github.com/aerosuite-br/aerosuite.git</div></div>
+  <div class="page-footer">
+    <span>Aero Suite · Guia Git Remoto</span>
+    <span>Cap. 09</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 10</span>
+  </div>
+  <h2>Referências e contatos</h2>
+  <p class="section-intro">Documentação complementar no repositório.</p>
+  <h3>Documentos no repo</h3><ul class="bullet-list"><li>docs/GITHUB-PRODUCAO-SETUP.md — bootstrap e checklist</li><li>docs/CI-SECRETS.md — secrets Actions</li><li>docs/DEPLOY-PRODUCAO.md — deploy Hetzner</li><li>docs/COMANDOS_RAPIDOS_GITHUB.md — cola de comandos</li><li>.github/pull_request_template.md — template de PR</li></ul>
+<h3>Suporte</h3><table class="metric-table"><tbody><tr><td><strong>Diretor de TI</strong></td><td>Wellem Lyra — wellemlyra@aerosuite.com.br</td></tr><tr><td><strong>Organização GitHub</strong></td><td>https://github.com/aerosuite-br</td></tr><tr><td><strong>Actions / CI</strong></td><td>https://github.com/aerosuite-br/aerosuite/actions</td></tr></tbody></table>
+  <div class="page-footer">
+    <span>Aero Suite · Guia Git Remoto</span>
+    <span>Cap. 10</span>
+  </div>
+</section>
+
+</body>
+</html>

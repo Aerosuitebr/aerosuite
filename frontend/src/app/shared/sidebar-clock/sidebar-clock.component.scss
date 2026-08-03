@@ -1,0 +1,80 @@
+.sidebar-clock--compact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin: 0 auto;
+  padding: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #bae6fd;
+  cursor: default;
+  box-shadow: none;
+  backdrop-filter: none;
+
+  .pi {
+    font-size: 1.1rem;
+  }
+}
+
+.sidebar-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.9rem 0.75rem;
+  border-radius: 14px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(14px);
+  box-sizing: border-box;
+}
+
+.sidebar-clock__time {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-family: 'DSEG7 Modern', 'Share Tech Mono', ui-monospace, monospace;
+  font-size: clamp(1.35rem, 4.2vw, 1.85rem);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.sidebar-clock__date {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.25;
+  color: #ffffff;
+  white-space: nowrap;
+  opacity: 0.95;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-clock {
+    backdrop-filter: none;
+  }
+}

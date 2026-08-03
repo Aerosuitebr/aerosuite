@@ -1,0 +1,37 @@
+services:
+  control-plane:
+    build:
+      context: ../..
+      dockerfile: deploy/control-plane/Dockerfile
+    restart: unless-stopped
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8080
+      AEROSUPPORT_DB_PATH: /data/control-plane.db
+      AEROSUPPORT_OPERATOR_TOKEN: ${AEROSUPPORT_OPERATOR_TOKEN:?configure AEROSUPPORT_OPERATOR_TOKEN}
+    ports:
+      - "127.0.0.1:8080:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - control-plane-data:/data
+
+  turn:
+    image: coturn/coturn:4.11.0-r0
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./turnserver.conf:/etc/coturn/turnserver.conf:ro
+    command: ["-c", "/etc/coturn/turnserver.conf"]
+    read_only: true
+    tmpfs:
+      - /var/lib/coturn
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  control-plane-data:

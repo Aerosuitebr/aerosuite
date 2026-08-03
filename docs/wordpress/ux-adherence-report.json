@@ -1,0 +1,194 @@
+{
+  "at": "2026-06-09T19:46:11.890Z",
+  "origin": "https://aerosuite.com.br",
+  "automated": {
+    "pass": 20,
+    "total": 20,
+    "pct": 100
+  },
+  "pendingAutomated": [],
+  "checks": [
+    {
+      "id": "C01",
+      "sev": "CRITICO",
+      "item": "Texto rascunho Visão Executiva",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "copy profissional presente"
+    },
+    {
+      "id": "C02",
+      "sev": "CRITICO",
+      "item": "Tags internas P5.3/B1/A3 visíveis",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "tags SMS/CRS/etc"
+    },
+    {
+      "id": "C03",
+      "sev": "CRITICO",
+      "item": "Home HTTPS sem loop",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "HTTP 200"
+    },
+    {
+      "id": "C04",
+      "sev": "CRITICO",
+      "item": "Redirect www → apex",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "301 → https://aerosuite.com.br/"
+    },
+    {
+      "id": "C05",
+      "sev": "CRITICO",
+      "item": "Screenshots marketing recentes",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "URLs WebP versionadas (v5/v6) no HTML"
+    },
+    {
+      "id": "A01",
+      "sev": "ALTO",
+      "item": "Sem ?lead= na URL obrigado",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "página ok; redirect via sessionStorage"
+    },
+    {
+      "id": "A02",
+      "sev": "ALTO",
+      "item": "Layout /obrigado",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "bloco dedicado"
+    },
+    {
+      "id": "A03",
+      "sev": "ALTO",
+      "item": "Guias sem keywords SEO cruas",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "focus user-facing"
+    },
+    {
+      "id": "A04",
+      "sev": "ALTO",
+      "item": "CSS anti-hover cards estáticos",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "regra no CSS publicado"
+    },
+    {
+      "id": "A05",
+      "sev": "ALTO",
+      "item": "Menu tema oculto",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "CSS hide nav Extendable"
+    },
+    {
+      "id": "A06",
+      "sev": "ALTO",
+      "item": "Grid comando card 04",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "tile 04 presente"
+    },
+    {
+      "id": "A07",
+      "sev": "ALTO",
+      "item": "Ícones SVG benefícios equipe",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "SVG padronizado"
+    },
+    {
+      "id": "M01",
+      "sev": "MEDIO",
+      "item": "Sem travessões na home",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "0 em conteúdo visível"
+    },
+    {
+      "id": "M02",
+      "sev": "MEDIO",
+      "item": "Sem sublinhado falso órgãos reguladores",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "strong sem em"
+    },
+    {
+      "id": "M03",
+      "sev": "MEDIO",
+      "item": "Stats não fracos",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "métricas revisadas"
+    },
+    {
+      "id": "M04",
+      "sev": "MEDIO",
+      "item": "Hierarquia: posicionamento antes conformidade",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "ordem seções"
+    },
+    {
+      "id": "I01",
+      "sev": "INFO",
+      "item": "Tabs módulos estado ativo",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "ARIA tabs"
+    },
+    {
+      "id": "I02",
+      "sev": "INFO",
+      "item": "Cards ferramentas padrão adequação",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "premium card + gradiente"
+    },
+    {
+      "id": "I03",
+      "sev": "INFO",
+      "item": "Calendly corporativo",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "embed ok"
+    },
+    {
+      "id": "I04",
+      "sev": "INFO",
+      "item": "Portfólio home compacto",
+      "ok": true,
+      "status": "ADERENTE",
+      "note": "sem showcase duplicado"
+    }
+  ],
+  "infraManual": [
+    {
+      "id": "I05",
+      "item": "E-mail transacional corporativo (não Gmail pessoal)",
+      "note": "Requer validação SMTP/DKIM no servidor"
+    },
+    {
+      "id": "I06",
+      "item": "Título evento Calendly sem \"Teste\"",
+      "note": "OK — Demonstração Aero Suite — 30 minutos (renomeado no painel)"
+    },
+    {
+      "id": "I07",
+      "item": "Autorização formal marcas clientes",
+      "note": "Ver PORTFOLIO-AUTORIZACAO-EMAILS.md"
+    },
+    {
+      "id": "I08",
+      "item": "LGPD consentimento persistente",
+      "note": "Validar aerosuite-consent.js em produção"
+    }
+  ]
+}

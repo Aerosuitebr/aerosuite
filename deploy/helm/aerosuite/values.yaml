@@ -1,0 +1,57 @@
+# Valores padrão — ajustar por ambiente (staging/prod).
+# MySQL externo gerido (RDS/Cloud SQL) recomendado; não incluir BD no chart na v1.
+
+global:
+  imagePullPolicy: IfNotPresent
+
+api:
+  replicaCount: 1
+  image:
+    repository: aerosuite-backend
+    tag: "0.2.0"
+  service:
+    port: 8080
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+  env:
+    QUARKUS_PROFILE: prod
+    AERO_SUITE_OTEL_ENABLED: "false"
+    AERO_SUITE_PUBLIC_API_RATE_LIMIT_ENABLED: "true"
+    AERO_SUITE_PUBLIC_API_RATE_LIMIT_RPM: "120"
+  # Definir via Secret (não commitar):
+  # QUARKUS_DATASOURCE_JDBC_URL, QUARKUS_DATASOURCE_USERNAME, QUARKUS_DATASOURCE_PASSWORD
+  # AERO_SUITE_JWT_SECRET
+
+web:
+  replicaCount: 1
+  image:
+    repository: aerosuite-frontend
+    tag: "0.2.0"
+  service:
+    port: 80
+
+ingress:
+  enabled: false
+  className: nginx
+  host: app.example.com
+  tls: false
+  annotations: {}
+
+# Prometheus Operator (kube-prometheus-stack / similar)
+metrics:
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+    scrapeTimeout: 10s
+    # Labels para o Prometheus Operator descobrir o ServiceMonitor (ex.: release: kube-prometheus-stack)
+    additionalLabels: {}
+  # Fallback quando ServiceMonitor desligado (scraping por anotações)
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/q/metrics"
+    prometheus.io/port: "8080"

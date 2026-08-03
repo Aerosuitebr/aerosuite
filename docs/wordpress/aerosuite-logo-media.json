@@ -1,0 +1,48 @@
+{
+  "generatedAt": "2026-06-12T22:27:04.692Z",
+  "ok": true,
+  "hero": "https://aerosuite.com.br/wp-content/uploads/2026/06/aero-colorido-logo.png",
+  "upload": {
+    "url": "https://aerosuite.com.br/wp-content/uploads/2026/06/aero-colorido-logo.png",
+    "id": 741,
+    "reused": false
+  },
+  "pages": {
+    "16": {
+      "updated": true,
+      "len": 11894
+    },
+    "18": {
+      "updated": false,
+      "len": 9157
+    },
+    "20": {
+      "updated": false,
+      "len": 27630
+    },
+    "21": {
+      "updated": true,
+      "len": 38438
+    }
+  },
+  "templateParts": {
+    "extendable//header": {
+      "updated": true,
+      "len": 9123
+    },
+    "extendable//footer": {
+      "updated": true,
+      "len": 159470
+    }
+  },
+  "purge": {
+    "ok": false,
+    "err": "Nenhuma rota foi encontrada que corresponde com o URL e o método de requisição."
+  },
+  "logoLight": "https://aerosuite.com.br/wp-content/uploads/2026/06/aero-claro-logo.png",
+  "logoLightUpload": {
+    "url": "https://aerosuite.com.br/wp-content/uploads/2026/06/aero-claro-logo.png",
+    "id": 785,
+    "reused": false
+  }
+}

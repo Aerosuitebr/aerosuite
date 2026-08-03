@@ -1,0 +1,108 @@
+<section class="vitrine-page">
+  <div class="vitrine-page__glow vitrine-page__glow--one" aria-hidden="true"></div>
+  <div class="vitrine-page__glow vitrine-page__glow--two" aria-hidden="true"></div>
+
+  <header class="vitrine-hero">
+    <div class="vitrine-hero__copy">
+      <span class="vitrine-eyebrow">
+        <i class="pi pi-sparkles" aria-hidden="true"></i>
+        {{ 'vitrine.eyebrow' | translate }}
+      </span>
+      <h1>{{ 'vitrine.title' | translate }}</h1>
+      <p>{{ 'vitrine.subtitle' | translate }}</p>
+      <div class="vitrine-count">
+        <span class="vitrine-count__dot" aria-hidden="true"></span>
+        {{ 'vitrine.count' | translate: { count: videos.length } }}
+      </div>
+    </div>
+
+    <div class="vitrine-hero__mark" aria-hidden="true">
+      <div class="vitrine-hero__mark-ring"></div>
+      <i class="pi pi-play"></i>
+    </div>
+  </header>
+
+  <div class="vitrine-toolbar">
+    <label class="vitrine-search" for="vitrine-search-input">
+      <span class="sr-only">{{ 'vitrine.search.label' | translate }}</span>
+      <i class="pi pi-search" aria-hidden="true"></i>
+      <input
+        id="vitrine-search-input"
+        type="search"
+        [(ngModel)]="searchQuery"
+        [placeholder]="'vitrine.search.placeholder' | translate"
+        autocomplete="off" />
+      <button
+        *ngIf="searchQuery"
+        type="button"
+        class="vitrine-search__clear"
+        (click)="clearSearch()"
+        [attr.aria-label]="'vitrine.search.clear' | translate">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </label>
+  </div>
+
+  <div class="video-grid" *ngIf="filteredVideos.length; else emptyState">
+    <article
+      class="video-card"
+      *ngFor="let video of filteredVideos; trackBy: trackByVideoId">
+      <a
+        class="video-card__link"
+        [routerLink]="['/vitrine', video.id]"
+        [attr.aria-label]="('vitrine.card.watch' | translate) + ': ' + (video.titleKey | translate)">
+        <div class="video-card__media">
+          <img
+            [src]="mediaUrl(video.posterFileName)"
+            [alt]="video.titleKey | translate"
+            loading="lazy" />
+          <div class="video-card__shade" aria-hidden="true"></div>
+          <span class="video-card__category">{{ video.categoryKey | translate }}</span>
+          <span class="video-card__duration">
+            <i class="pi pi-clock" aria-hidden="true"></i>
+            {{ formatDuration(video.durationSeconds) }}
+          </span>
+          <span class="video-card__play" aria-hidden="true">
+            <i class="pi pi-play"></i>
+          </span>
+        </div>
+
+        <div class="video-card__content">
+          <h2>{{ video.titleKey | translate }}</h2>
+          <p>{{ video.descriptionKey | translate }}</p>
+
+          <div class="video-card__footer">
+            <div class="video-card__specs">
+              <span>
+                <small>{{ 'vitrine.card.duration' | translate }}</small>
+                {{ formatDuration(video.durationSeconds) }}
+              </span>
+              <span>
+                <small>{{ 'vitrine.card.quality' | translate }}</small>
+                {{ video.resolution }}
+              </span>
+            </div>
+            <span class="video-card__cta">
+              {{ 'vitrine.card.watch' | translate }}
+              <i class="pi pi-arrow-right" aria-hidden="true"></i>
+            </span>
+          </div>
+        </div>
+      </a>
+    </article>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="vitrine-empty">
+      <span class="vitrine-empty__icon" aria-hidden="true">
+        <i class="pi pi-video"></i>
+      </span>
+      <h2>{{ 'vitrine.empty.title' | translate }}</h2>
+      <p>{{ 'vitrine.empty.description' | translate }}</p>
+      <button type="button" (click)="clearSearch()">
+        <i class="pi pi-refresh" aria-hidden="true"></i>
+        {{ 'vitrine.empty.action' | translate }}
+      </button>
+    </div>
+  </ng-template>
+</section>

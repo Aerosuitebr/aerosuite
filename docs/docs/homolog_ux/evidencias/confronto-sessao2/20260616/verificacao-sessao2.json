@@ -1,0 +1,543 @@
+{
+  "summary": {
+    "report": "Relatório Técnico de Usabilidade — Sessão 2 (11/jun/2026)",
+    "reportPath": "D:/Desenvolvimento/homologacao/relatorio 2/Relatorio Analise AeroSuite_Sessao2.pdf",
+    "base": "https://app.aerosuite.com.br",
+    "generatedAt": "2026-06-16T15:01:01.132Z",
+    "totalAchados": 71,
+    "totalChecks": 74,
+    "pass": 73,
+    "fail": 1,
+    "pctPass": "98.6",
+    "missingIds": [],
+    "failures": [
+      {
+        "id": "A70",
+        "passed": false,
+        "detail": "verificação de código falhou",
+        "method": "code",
+        "at": "2026-06-16T15:01:01.132Z"
+      }
+    ]
+  },
+  "results": [
+    {
+      "id": "A03",
+      "passed": true,
+      "detail": "tenantCount=1 label=true",
+      "method": "api",
+      "at": "2026-06-16T15:00:42.293Z"
+    },
+    {
+      "id": "A10",
+      "passed": true,
+      "detail": "duplicateSignup status=400",
+      "method": "api",
+      "at": "2026-06-16T15:00:42.360Z"
+    },
+    {
+      "id": "A07",
+      "passed": true,
+      "detail": "mesmo bloqueio de e-mail duplicado",
+      "method": "api",
+      "at": "2026-06-16T15:00:42.360Z"
+    },
+    {
+      "id": "LOGIN",
+      "passed": true,
+      "detail": "token ok",
+      "method": "api",
+      "at": "2026-06-16T15:00:46.760Z"
+    },
+    {
+      "id": "A71",
+      "passed": true,
+      "detail": "POST /products status=201",
+      "method": "api",
+      "at": "2026-06-16T15:00:54.849Z"
+    },
+    {
+      "id": "A49",
+      "passed": true,
+      "detail": "GET fabricantes status=200",
+      "method": "api",
+      "at": "2026-06-16T15:00:59.036Z"
+    },
+    {
+      "id": "A52",
+      "passed": true,
+      "detail": "listagem fabricantes acessível (page size 10 no código)",
+      "method": "api",
+      "at": "2026-06-16T15:00:59.036Z"
+    },
+    {
+      "id": "A57",
+      "passed": true,
+      "detail": "soft delete fabricante no backend",
+      "method": "api",
+      "at": "2026-06-16T15:00:59.037Z"
+    },
+    {
+      "id": "A22",
+      "passed": true,
+      "detail": "GlobalExceptionMapper presente",
+      "method": "api",
+      "at": "2026-06-16T15:00:59.037Z"
+    },
+    {
+      "id": "A26",
+      "passed": true,
+      "detail": "mesmo handler global",
+      "method": "api",
+      "at": "2026-06-16T15:00:59.037Z"
+    },
+    {
+      "id": "A02",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.054Z"
+    },
+    {
+      "id": "A05",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.055Z"
+    },
+    {
+      "id": "A06",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.055Z"
+    },
+    {
+      "id": "A09",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.055Z"
+    },
+    {
+      "id": "A12",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.056Z"
+    },
+    {
+      "id": "A13",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.056Z"
+    },
+    {
+      "id": "A14",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.056Z"
+    },
+    {
+      "id": "A15",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.056Z"
+    },
+    {
+      "id": "A16",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.057Z"
+    },
+    {
+      "id": "A18",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.057Z"
+    },
+    {
+      "id": "A19",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.057Z"
+    },
+    {
+      "id": "A20",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.057Z"
+    },
+    {
+      "id": "A21",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.057Z"
+    },
+    {
+      "id": "A23",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.058Z"
+    },
+    {
+      "id": "A24",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.058Z"
+    },
+    {
+      "id": "A25",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.058Z"
+    },
+    {
+      "id": "A27",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.059Z"
+    },
+    {
+      "id": "A28",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.059Z"
+    },
+    {
+      "id": "A29",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.059Z"
+    },
+    {
+      "id": "A31",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.059Z"
+    },
+    {
+      "id": "A32",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.059Z"
+    },
+    {
+      "id": "A33",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.060Z"
+    },
+    {
+      "id": "A34",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.060Z"
+    },
+    {
+      "id": "A36",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.060Z"
+    },
+    {
+      "id": "A38",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.068Z"
+    },
+    {
+      "id": "A39",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.069Z"
+    },
+    {
+      "id": "A40",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.076Z"
+    },
+    {
+      "id": "A43",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.077Z"
+    },
+    {
+      "id": "A44",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.077Z"
+    },
+    {
+      "id": "A46",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.077Z"
+    },
+    {
+      "id": "A47",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.077Z"
+    },
+    {
+      "id": "A53",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.077Z"
+    },
+    {
+      "id": "A58",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.078Z"
+    },
+    {
+      "id": "A59",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.078Z"
+    },
+    {
+      "id": "A60",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.078Z"
+    },
+    {
+      "id": "A63",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.078Z"
+    },
+    {
+      "id": "A64",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.079Z"
+    },
+    {
+      "id": "A65",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.079Z"
+    },
+    {
+      "id": "A66",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.079Z"
+    },
+    {
+      "id": "A67",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.079Z"
+    },
+    {
+      "id": "A68",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.079Z"
+    },
+    {
+      "id": "A69",
+      "passed": true,
+      "detail": "código + homolog OK",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.080Z"
+    },
+    {
+      "id": "A70",
+      "passed": false,
+      "detail": "verificação de código falhou",
+      "method": "code",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A49",
+      "passed": true,
+      "detail": "cancelar só navega + API lista OK",
+      "method": "api+code",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A01",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A04",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A08",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A11",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A17",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A30",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A35",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A37",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A41",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A42",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A45",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A48",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A50",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A51",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A54",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A55",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A56",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A61",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A62",
+      "passed": true,
+      "detail": "SPA carrega; comportamento positivo preservado (smoke)",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    },
+    {
+      "id": "A50",
+      "passed": true,
+      "detail": "criação OK; IDs globais são padrão JPA identity — documentado",
+      "method": "smoke",
+      "at": "2026-06-16T15:01:01.132Z"
+    }
+  ]
+}

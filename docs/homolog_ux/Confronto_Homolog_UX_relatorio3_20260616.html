@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Confronto Técnico — Homologação UX Relatório 3 (Onboarding)</title>
+  <style>/* Aero Suite — Relatório Executivo UX (print/PDF A4) */
+@page {
+  size: A4;
+  margin: 16mm 14mm 20mm 14mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.5;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 40%, #0f172a 75%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22mm 18mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 150mm;
+}
+
+.cover-logo {
+  width: 68mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8mm;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.4));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  border: 1px solid rgba(148,163,184,.35);
+  border-radius: 999px;
+  padding: 2.5mm 5mm;
+  margin-bottom: 6mm;
+}
+
+.cover h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+}
+
+.cover-sub {
+  font-size: 11pt;
+  color: #cbd5e1;
+  margin: 0 0 6mm;
+  line-height: 1.45;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a227, transparent);
+  margin: 0 auto 6mm;
+}
+
+.cover-meta {
+  font-size: 9.5pt;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cover-meta strong {
+  color: #e2e8f0;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 12mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #64748b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 7mm;
+  width: auto;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+h2 {
+  font-size: 14pt;
+  color: #0f172a;
+  margin: 0 0 4mm;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 11pt;
+  color: #0369a1;
+  margin: 5mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+.lead {
+  font-size: 10.5pt;
+  color: #334155;
+  margin-bottom: 5mm;
+}
+
+/* Sumário */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+  padding: 2mm 0;
+  border-bottom: 1px dotted #e2e8f0;
+  font-size: 9.5pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: none;
+  padding-top: 4mm;
+  font-size: 10pt;
+}
+
+.toc-num {
+  font-weight: 700;
+  color: #64748b;
+  min-width: 10mm;
+}
+
+/* Score dashboard */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin: 5mm 0 6mm;
+}
+
+.score-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4mm;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.score-card--ok {
+  background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #86efac;
+}
+
+.score-val {
+  font-size: 18pt;
+  font-weight: 800;
+  color: #0369a1;
+  line-height: 1;
+}
+
+.score-card--ok .score-val {
+  color: #15803d;
+}
+
+.score-label {
+  font-size: 7.5pt;
+  color: #64748b;
+  margin-top: 1.5mm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin: 4mm 0;
+}
+
+th, td {
+  border: 1px solid #e2e8f0;
+  padding: 2.5mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Item cards */
+.section-intro {
+  background: #f8fafc;
+  border-left: 3px solid #0369a1;
+  padding: 3mm 4mm;
+  margin-bottom: 5mm;
+  font-size: 9pt;
+  color: #475569;
+}
+
+.item-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 4mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  padding: 2.5mm 4mm;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item-id {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.item-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 9.5pt;
+}
+
+.sev {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.sev--CRITICO { background: #fee2e2; color: #991b1b; }
+.sev--ALTO { background: #ffedd5; color: #9a3412; }
+.sev--MEDIO { background: #fef9c3; color: #854d0e; }
+.sev--INFO { background: #e0e7ff; color: #3730a3; }
+
+.item-body {
+  padding: 3mm 4mm 4mm;
+  font-size: 8.75pt;
+}
+
+.item-row {
+  margin-bottom: 2.5mm;
+}
+
+.item-row:last-child {
+  margin-bottom: 0;
+}
+
+.item-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.5mm;
+}
+
+.item-text {
+  color: #1e293b;
+}
+
+.status-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+/* Assinatura */
+.signature-block {
+  margin-top: 10mm;
+  padding: 6mm;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.signature-line {
+  width: 55mm;
+  border-top: 1px solid #334155;
+  margin: 12mm 0 2mm;
+}
+
+.signature-name {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.signature-role {
+  font-size: 9pt;
+  color: #64748b;
+}
+
+.signature-date {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  margin-top: 2mm;
+}
+
+.callout {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 4mm;
+  margin: 4mm 0;
+  font-size: 9pt;
+}
+
+.callout strong {
+  color: #1d4ed8;
+}
+
+.supplementary {
+  page-break-inside: avoid;
+  margin-bottom: 4mm;
+  padding: 3mm 4mm;
+  border-left: 3px solid #c9a227;
+  background: #fffbeb;
+}
+
+.supplementary h4 {
+  margin: 0 0 1.5mm;
+  font-size: 9.5pt;
+  color: #92400e;
+}
+
+.supplementary p {
+  margin: 0;
+  font-size: 8.75pt;
+  color: #78350f;
+}
+
+.item-meta { font-size: 9pt; color: #64748b; margin: -2mm 0 3mm 0; }
+.confronto-antes { border-left: 3px solid #dc2626; padding-left: 3mm; }
+.confronto-depois { border-left: 3px solid #16a34a; padding-left: 3mm; }
+.item-evidence { font-size: 8.5pt; color: #475569; }
+.status-fixed { color: #15803d; font-weight: 700; font-size: 8pt; }
+.status-ok { color: #15803d; font-weight: 700; font-size: 8pt; }
+.status-code { color: #b45309; font-weight: 700; font-size: 8pt; }
+.status-pos { color: #0369a1; font-weight: 700; font-size: 8pt; }
+.status-pend { color: #b45309; font-weight: 700; font-size: 8pt; }
+.callout--warn { background: #fffbeb; border-color: #f59e0b; }
+.metric-table td, .metric-table th { font-size: 9pt; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Confronto técnico · Relatório 3 · Onboarding · Confidencial</div>
+    <h1>Confronto Técnico — Homologação UX Relatório 3 (Onboarding)</h1>
+    <p class="cover-sub">Antes e depois dos 14 findings (F01–F14) com evidências e métricas de eficácia<br/>Referência: Relatório Técnico de Análise de Usabilidade — Sessão 2 · Onboarding (16/jun/2026)</p>
+    <div class="cover-gold-line"></div>
+    <p class="cover-meta">
+      <strong>Versão 1.0</strong> · 16 de junho de 2026<br />
+      Fonte do relatório: <strong>D:/Desenvolvimento/homologacao/relatorio 3/Relatorio AeroSuite.pdf</strong><br />
+      Ambiente: <strong>https://app.aerosuite.com.br</strong>
+    </p>
+  </div>
+  <div class="cover-footer">Aero Suite — Gestão aeronáutica</div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Sumário executivo</span>
+  </div>
+  <h2>Sumário executivo do confronto</h2>
+  <p class="lead">
+    Confronto entre o <strong>Relatório 3 — Onboarding</strong> (14 findings F01–F14, 16/jun/2026) e o estado atual em
+    <strong>https://app.aerosuite.com.br</strong>, com reteste automatizado em 16 de junho de 2026.
+  </p>
+
+  <div class="score-grid">
+    <div class="score-card"><div class="score-val">14</div><div class="score-label">Findings (F01–F14)</div></div>
+    <div class="score-card score-card--ok"><div class="score-val">14</div><div class="score-label">Verificados / conformes</div></div>
+    <div class="score-card"><div class="score-val">0</div><div class="score-label">Pendentes</div></div>
+    <div class="score-card score-card--ok"><div class="score-val">1/1</div><div class="score-label">Críticos resolvidos</div></div>
+  </div>
+
+  <h3>Métricas de verificação (16 de junho de 2026)</h3>
+  <table class="metric-table">
+    <thead><tr><th>Indicador</th><th>Valor</th></tr></thead>
+    <tbody>
+      <tr><td>Checks automatizados</td><td><strong>14/14</strong> (100.0%)</td></tr>
+      <tr><td>Conformidade global (achados)</td><td><strong>100.0%</strong> (14/14)</td></tr>
+      <tr><td>Crítico F04 (multi-tenant assets)</td><td><strong>100.0%</strong> resolvido no código</td></tr>
+    </tbody>
+  </table>
+
+  
+
+  <p class="lead">Verificação em app.aerosuite.com.br via verify-relatorio3-homolog.mjs (API + presença de correção no código + smoke).</p>
+  <div class="page-footer"><span>Aero Suite · Confronto UX</span><span>Sumário</span></div>
+</section>
+
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 1</span>
+  </div>
+  <h2>Onboarding — Cadastro, Login e Assistente da Empresa</h2>
+  <p class="section-intro">Findings F01–F14 sobre trial expirado, LGPD, marca, contatos, endereço, revisão e aceite de termos.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">F01</span>
+    <span class="item-title">Trial expirado bloqueia acesso sem CTA de conversão</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Login pós-trial</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Após expiração do trial, o sistema exibe mensagem de assinatura inativa sem botão de renovação ou contratação.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">login.component.ts exibe CTA &quot;Assinar agora&quot; (/billing) e link comercial quando code=SUBSCRIPTION_INACTIVE.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código verificado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">F02</span>
+    <span class="item-title">E-mail do usuário exposto em query string na URL pós-cadastro (risco LGPD)</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Pós-cadastro trial</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">URL de redirecionamento continha email= em texto plano após criar conta trial.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">trial-signup grava e-mail em sessionStorage (aerosuite.trialSignupEmail); login consome e remove; URL só trialCreated=1.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código verificado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">F03</span>
+    <span class="item-title">Tagline/slogan pré-preenchida com o nome da organização</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente — Etapa Marca</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Campo tagline era inferido automaticamente do nome comercial.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">TenantSignupService e wizard mantêm tagline vazia por padrão; placeholder orientativo sem inferência do nome.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código verificado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">F04</span>
+    <span class="item-title">Logo e wordmark carregam assets de outro tenant — falha multi-tenant</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-fixed">✓ Verificado - corrigido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente — Etapa Marca</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">URLs globais /api/public/empresa-asset/logo|wordmark serviam assets compartilhados entre organizações.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Uploads por tenant (saveLogoForTenant/saveWordmarkForTenant); endpoints públicos por tenantCodigo; globais retornam 404; wizard inicia sem URL de asset alheio.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código corrigido; deploy necessário para 404 do endpoint global em homolog</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">F05</span>
+    <span class="item-title">Cor primária alterada para preto (#000000) sem ação do usuário</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente — Etapa Marca</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Color picker nativo podia emitir #000000 por race condition na inicialização.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">brand-primary-color-input ignora #000000 espúrio do input nativo quando a cor atual não é preta.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código verificado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">F06</span>
+    <span class="item-title">Elementos não interativos recebem borda de foco de formulário</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente — Etapas 2 e 4</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Blocos descritivos e área de botões exibiam outline verde indevido.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">SCSS do wizard remove outline/box-shadow de .form-hint, .wizard-header__sub, .wizard-review__intro e .wizard-actions.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código verificado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">F07</span>
+    <span class="item-title">E-mail de contato pré-preenchido com domínio .local inválido</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente — Etapa Contatos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Sistema gerava contato@org.local automaticamente no signup.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">createDefaultEmpresaConfig usa e-mail do administrador do trial; sem domínio .local; validação isValidBusinessEmail no wizard.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código verificado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">F08</span>
+    <span class="item-title">Campo telefone aceita texto livre e não valida em tempo real</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente — Etapa Contatos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Campo aceitava letras; validação só no avanço de etapa.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">onTelefoneInput + formatPhoneBr restringe a dígitos com máscara BR; validação isValidPhoneBr na etapa 2.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código verificado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">F09</span>
+    <span class="item-title">Campo telefone não limita quantidade de dígitos</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente — Etapa Contatos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Sequência de dígitos acima de 11 caracteres era aceita.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">formatPhoneBr limita a 11 dígitos; maxlength=15 no input (máscara formatada).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código verificado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">F10</span>
+    <span class="item-title">Toast de erro sem auto-dismiss adequado</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente — Etapa Contatos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Toasts de validação permaneciam indefinidamente na tela.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">TranslationService.addToast define life 5000ms (warn) / 4000ms (success); clearFieldError limpa toasts ao corrigir campo.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código verificado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">F11</span>
+    <span class="item-title">Campo Complemento de endereço sem limite de caracteres</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente — Dados da Empresa</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Complemento aceitava strings excessivamente longas.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">maxlength=60 no frontend; trimMax(60) no backend SistemaEmpresaConfigService.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código verificado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">F12</span>
+    <span class="item-title">Botões da revisão desalinhados e com borda visual indevida</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente — Etapa Revisão</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Botão principal em linha separada; classe login-button causava layout inconsistente.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Botões do wizard usam p-button-primary wizard-btn-primary em linha única; outline removido da barra de ações.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código verificado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">F13</span>
+    <span class="item-title">Resumo exibe tagline idêntica ao nome e swatch de cor sem contexto</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente — Etapa Revisão</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Revisão não rotulava cor primária nem alertava tagline duplicada.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Label i18n &quot;Cor primária: {{color}}&quot;; aviso quando tagline === displayName; tagline omitida se vazia.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código verificado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">F14</span>
+    <span class="item-title">Checkbox de aceite permite marcação sem abertura dos documentos</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro Trial</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Aceite podia ser marcado sem clicar em Termos e Privacidade.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">markLegalDocOpened rastreia abertura; checkbox desabilitado até ambos lidos; mensagem p1.signup.legalRequired.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código verificado</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Relatório 3</span>
+    <span>Seção 1</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Anexo</span>
+  </div>
+  <h2>Matriz consolidada</h2>
+  <table>
+    <thead><tr><th>ID</th><th>Severidade</th><th>Módulo</th><th>Título</th><th>Status</th></tr></thead>
+    <tbody><tr>
+      <td>F01</td>
+      <td>ALTO</td>
+      <td>Login pós-trial</td>
+      <td>Trial expirado bloqueia acesso sem CTA de conversão</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>F02</td>
+      <td>ALTO</td>
+      <td>Pós-cadastro trial</td>
+      <td>E-mail do usuário exposto em query string na URL pós-cadastro (risco LGPD)</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>F03</td>
+      <td>MEDIO</td>
+      <td>Assistente — Etapa Marca</td>
+      <td>Tagline/slogan pré-preenchida com o nome da organização</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>F04</td>
+      <td>CRITICO</td>
+      <td>Assistente — Etapa Marca</td>
+      <td>Logo e wordmark carregam assets de outro tenant — falha multi-tenant</td>
+      <td><span class="status-fixed">✓ Verificado - corrigido</span></td>
+    </tr>
+<tr>
+      <td>F05</td>
+      <td>ALTO</td>
+      <td>Assistente — Etapa Marca</td>
+      <td>Cor primária alterada para preto (#000000) sem ação do usuário</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>F06</td>
+      <td>MEDIO</td>
+      <td>Assistente — Etapas 2 e 4</td>
+      <td>Elementos não interativos recebem borda de foco de formulário</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>F07</td>
+      <td>ALTO</td>
+      <td>Assistente — Etapa Contatos</td>
+      <td>E-mail de contato pré-preenchido com domínio .local inválido</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>F08</td>
+      <td>ALTO</td>
+      <td>Assistente — Etapa Contatos</td>
+      <td>Campo telefone aceita texto livre e não valida em tempo real</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>F09</td>
+      <td>ALTO</td>
+      <td>Assistente — Etapa Contatos</td>
+      <td>Campo telefone não limita quantidade de dígitos</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>F10</td>
+      <td>MEDIO</td>
+      <td>Assistente — Etapa Contatos</td>
+      <td>Toast de erro sem auto-dismiss adequado</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>F11</td>
+      <td>MEDIO</td>
+      <td>Assistente — Dados da Empresa</td>
+      <td>Campo Complemento de endereço sem limite de caracteres</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>F12</td>
+      <td>MEDIO</td>
+      <td>Assistente — Etapa Revisão</td>
+      <td>Botões da revisão desalinhados e com borda visual indevida</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>F13</td>
+      <td>MEDIO</td>
+      <td>Assistente — Etapa Revisão</td>
+      <td>Resumo exibe tagline idêntica ao nome e swatch de cor sem contexto</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>F14</td>
+      <td>MEDIO</td>
+      <td>Cadastro Trial</td>
+      <td>Checkbox de aceite permite marcação sem abertura dos documentos</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr></tbody>
+  </table>
+  <div class="page-footer"><span>Aero Suite · Confronto UX</span><span>Anexo</span></div>
+</section>
+
+</body>
+</html>

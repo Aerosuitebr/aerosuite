@@ -1,0 +1,118 @@
+import { TranslationDictionary } from '../translation.service';
+
+/** Traduções ES/FR do portal externo (home + perfil); PT/EN vêm de resolver-pendencias-i18n. */
+export const EXTERNO_PORTAL_ES_ES: TranslationDictionary = {
+  'externo.layout.collapseSidebar': 'Contraer menú lateral',
+  'externo.layout.expandSidebar': 'Expandir menú lateral',
+  'externo.layout.closeMenu': 'Cerrar menú',
+  'externo.home.stat.osLabel': 'Órdenes de servicio',
+  'externo.home.stat.osBtn': 'Ver mis OS',
+  'externo.home.stat.docsLabel': 'Documentos disponibles',
+  'externo.home.stat.docsBtn': 'Ver documentos',
+  'externo.home.stat.propostasLabel': 'Propuestas comerciales',
+  'externo.home.stat.propostasBtn': 'Ver mis propuestas',
+  'externo.home.services.title': 'Nuestros servicios',
+  'externo.home.service.revisao.t': 'Revisión general',
+  'externo.home.service.revisao.d':
+    'Revisión completa de componentes aeronáuticos con certificación y garantía de calidad.',
+  'externo.home.service.reparo.t': 'Reparación',
+  'externo.home.service.reparo.d':
+    'Servicios especializados de reparación en FCU y otros componentes críticos de aeronaves.',
+  'externo.home.service.inspecao.t': 'Inspección',
+  'externo.home.service.inspecao.d':
+    'Inspección visual y técnica detallada según normas aeronáuticas internacionales.',
+  'externo.home.service.teste.t': 'Prueba',
+  'externo.home.service.teste.d': 'Pruebas funcionales y de rendimiento con equipos de última generación.',
+  'externo.home.service.garantia.t': 'Garantía',
+  'externo.home.service.garantia.d':
+    'Servicios de garantía con seguimiento completo y soporte técnico especializado.',
+  'externo.home.service.preventiva.t': 'Mantenimiento preventivo',
+  'externo.home.service.preventiva.d':
+    'Programas de mantenimiento preventivo para maximizar la vida útil de los componentes.',
+  'externo.home.gallery.title': 'Nuestra estructura',
+  'externo.home.gallery.fcucap': 'FCU — Fuel Control Unit',
+  'externo.home.gallery.compCap': 'Componentes aeronáuticos',
+  'externo.home.gallery.teamCap': 'Equipo especializado',
+  'externo.home.recent.title': 'Órdenes de servicio recientes',
+  'externo.home.recent.statusAberta': 'Abierta',
+  'externo.home.recent.serviceFallback': 'Servicio',
+  'externo.home.recent.tooltipDetail': 'Ver detalles',
+  'externo.home.recent.seeAll': 'Ver todas las órdenes de servicio →',
+  'externo.home.recentPropostas.title': 'Propuestas pendientes de su decisión',
+  'externo.home.recentPropostas.seeAll': 'Ver todas las propuestas →',
+  'externo.perfil.pageTitle': 'Mi perfil',
+  'externo.perfil.pageSub': 'Consulte y edite sus datos',
+  'externo.perfil.clienteFallback': 'Cliente',
+  'externo.perfil.secPessoais': 'Información personal',
+  'externo.perfil.label.nomeCompleto': 'Nombre completo',
+  'externo.perfil.label.email': 'Correo electrónico',
+  'externo.perfil.label.empresa': 'Empresa',
+  'externo.perfil.label.cargo': 'Cargo',
+  'externo.perfil.label.telefone': 'Teléfono',
+  'externo.perfil.label.membro': 'Miembro desde',
+  'externo.perfil.secAcesso': 'Información de acceso',
+  'externo.perfil.label.lastAccess': 'Último acceso',
+  'externo.perfil.label.status': 'Estado',
+  'externo.perfil.statusAtivo': 'Activo',
+  'externo.perfil.statusInativo': 'Inactivo',
+  'externo.perfil.notice':
+    'Para cambiar sus datos de registro, contacte al equipo AEROSUITE por correo electrónico'
+};
+
+export const EXTERNO_PORTAL_FR_FR: TranslationDictionary = {
+  'externo.layout.collapseSidebar': 'Réduire le menu latéral',
+  'externo.layout.expandSidebar': 'Développer le menu latéral',
+  'externo.layout.closeMenu': 'Fermer le menu',
+  'externo.home.stat.osLabel': 'Ordres de service',
+  'externo.home.stat.osBtn': 'Voir mes OS',
+  'externo.home.stat.docsLabel': 'Documents disponibles',
+  'externo.home.stat.docsBtn': 'Voir les documents',
+  'externo.home.stat.propostasLabel': 'Propositions commerciales',
+  'externo.home.stat.propostasBtn': 'Voir mes propositions',
+  'externo.home.services.title': 'Nos services',
+  'externo.home.service.revisao.t': 'Révision générale',
+  'externo.home.service.revisao.d':
+    'Révision complète de composants aéronautiques avec certification et assurance qualité.',
+  'externo.home.service.reparo.t': 'Réparation',
+  'externo.home.service.reparo.d':
+    'Services de réparation spécialisés pour FCU et autres composants critiques d\'aéronefs.',
+  'externo.home.service.inspecao.t': 'Inspection',
+  'externo.home.service.inspecao.d':
+    'Inspection visuelle et technique détaillée selon les normes aéronautiques internationales.',
+  'externo.home.service.teste.t': 'Essai',
+  'externo.home.service.teste.d': 'Essais fonctionnels et de performance avec équipements de pointe.',
+  'externo.home.service.garantia.t': 'Garantie',
+  'externo.home.service.garantia.d':
+    'Services de garantie avec suivi complet et support technique spécialisé.',
+  'externo.home.service.preventiva.t': 'Maintenance préventive',
+  'externo.home.service.preventiva.d':
+    'Programmes de maintenance préventive pour maximiser la durée de vie des composants.',
+  'externo.home.gallery.title': 'Nos installations',
+  'externo.home.gallery.fcucap': 'FCU — Fuel Control Unit',
+  'externo.home.gallery.compCap': 'Composants aéronautiques',
+  'externo.home.gallery.teamCap': 'Équipe spécialisée',
+  'externo.home.recent.title': 'Ordres de service récents',
+  'externo.home.recent.statusAberta': 'Ouverte',
+  'externo.home.recent.serviceFallback': 'Service',
+  'externo.home.recent.tooltipDetail': 'Voir les détails',
+  'externo.home.recent.seeAll': 'Voir tous les ordres de service →',
+  'externo.home.recentPropostas.title': 'Propositions en attente de votre décision',
+  'externo.home.recentPropostas.seeAll': 'Voir toutes les propositions →',
+  'externo.perfil.pageTitle': 'Mon profil',
+  'externo.perfil.pageSub': 'Consultez et modifiez vos informations',
+  'externo.perfil.clienteFallback': 'Client',
+  'externo.perfil.secPessoais': 'Informations personnelles',
+  'externo.perfil.label.nomeCompleto': 'Nom complet',
+  'externo.perfil.label.email': 'E-mail',
+  'externo.perfil.label.empresa': 'Entreprise',
+  'externo.perfil.label.cargo': 'Fonction',
+  'externo.perfil.label.telefone': 'Téléphone',
+  'externo.perfil.label.membro': 'Membre depuis',
+  'externo.perfil.secAcesso': 'Informations d\'accès',
+  'externo.perfil.label.lastAccess': 'Dernier accès',
+  'externo.perfil.label.status': 'Statut',
+  'externo.perfil.statusAtivo': 'Actif',
+  'externo.perfil.statusInativo': 'Inactif',
+  'externo.perfil.notice':
+    'Pour modifier vos données d\'enregistrement, contactez l\'équipe AEROSUITE par e-mail'
+};

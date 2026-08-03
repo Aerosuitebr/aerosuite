@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estoque Mínimo e Ideal – Manual do Usuário</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.5;
+      color: #1e293b;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: #fff;
+    }
+    h1 {
+      font-size: 1.75rem;
+      color: #0f172a;
+      border-bottom: 3px solid #f59e0b;
+      padding-bottom: 0.5rem;
+      margin-top: 0;
+    }
+    h2 {
+      font-size: 1.25rem;
+      color: #1e40af;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+    h3 { font-size: 1.05rem; color: #334155; margin-top: 1.25rem; }
+    p { margin: 0.5rem 0 1rem; }
+    ul, ol { margin: 0.5rem 0 1rem; padding-left: 1.5rem; }
+    li { margin: 0.25rem 0; }
+    .intro { background: #f8fafc; padding: 1rem; border-left: 4px solid #f59e0b; margin: 1rem 0; }
+    .tip { background: #ecfdf5; padding: 0.75rem 1rem; border-radius: 6px; margin: 1rem 0; font-size: 0.95rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    th, td { border: 1px solid #cbd5e1; padding: 0.5rem 0.75rem; text-align: left; }
+    th { background: #f1f5f9; font-weight: 600; color: #475569; }
+    tr:nth-child(even) { background: #f8fafc; }
+    pre, .code {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      font-family: 'Consolas', 'Monaco', monospace;
+    }
+    .code.inline { display: inline; padding: 0.2rem 0.4rem; font-size: 0.9rem; }
+    .label-col { font-weight: 600; color: #475569; }
+    .page-break { page-break-before: always; }
+    .toc { background: #f1f5f9; padding: 1rem 1.5rem; border-radius: 8px; margin: 1rem 0; }
+    .toc ul { list-style: none; padding-left: 0; }
+    .toc li { margin: 0.35rem 0; }
+    .toc a { color: #1e40af; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+    @media print {
+      body { padding: 1rem; }
+      .page-break { page-break-before: always; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Estoque Mínimo e Ideal – Manual do Usuário</h1>
+  <p><strong>Sistema de Gestão de Estoque</strong> · Aero Suite Controls</p>
+
+  <div class="intro">
+    Este documento descreve as formas de atualizar o <strong>estoque mínimo</strong> e o <strong>estoque ideal</strong> no sistema, incluindo a atualização <strong>por item</strong> e a <strong>importação em lote</strong> a partir de planilha, com o layout esperado e exemplos.
+  </div>
+
+  <nav class="toc">
+    <strong>Conteúdo</strong>
+    <ul>
+      <li><a href="#visao-geral">1. Visão geral e indicadores visuais</a></li>
+      <li><a href="#por-item">2. Atualização por item (tela de detalhes)</a></li>
+      <li><a href="#importacao-lote">3. Importação em lote (planilha)</a></li>
+      <li><a href="#layout">4. Layout esperado pela planilha</a></li>
+      <li><a href="#exemplos">5. Exemplos: delimitado e por colunas</a></li>
+    </ul>
+  </nav>
+
+  <!-- ========== 1. VISÃO GERAL ========== -->
+  <h2 id="visao-geral">1. Visão geral e indicadores visuais</h2>
+  <p>O sistema permite definir, para cada item (ou Part Number), dois parâmetros opcionais:</p>
+  <ul>
+    <li><strong>Estoque mínimo</strong> – quantidade abaixo da qual o item é sinalizado em vermelho.</li>
+    <li><strong>Estoque ideal</strong> – quantidade desejada; acima dela o item é sinalizado em verde.</li>
+  </ul>
+  <p>Na listagem de itens, as linhas são coloridas automaticamente:</p>
+  <table>
+    <thead>
+      <tr><th>Cor</th><th>Significado</th></tr>
+    </thead>
+    <tbody>
+      <tr><td style="background:#dcfce7; color:#166534;">Verde</td><td>Quantidade &ge; estoque ideal</td></tr>
+      <tr><td style="background:#fef9c3; color:#a16207;">Amarelo</td><td>Quantidade entre mínimo e ideal</td></tr>
+      <tr><td style="background:#fee2e2; color:#b91c1c;">Vermelho</td><td>Quantidade &le; estoque mínimo</td></tr>
+    </tbody>
+  </table>
+  <p>Há <strong>duas formas</strong> de atualizar esses valores: por item (na tela de detalhes) e em lote (importação por planilha).</p>
+
+  <!-- ========== 2. ATUALIZAÇÃO POR ITEM ========== -->
+  <h2 id="por-item">2. Atualização por item (tela de detalhes)</h2>
+  <p>Na tela <strong>Estoque &rarr; Itens</strong>, ao clicar em <strong>Ver detalhes</strong> de um item, abre-se um diálogo com todas as informações. No final do diálogo há a seção <strong>Editar estoque mínimo / ideal</strong>:</p>
+  <ul>
+    <li>Preencha <strong>Est. Mín.</strong> e/ou <strong>Est. Ideal</strong> com números (ex.: 2 e 5).</li>
+    <li>Clique em <strong>Salvar</strong> para gravar apenas esses campos naquele item.</li>
+  </ul>
+  <p>Use esta forma quando precisar ajustar poucos itens ou valores específicos de um único registro.</p>
+
+  <!-- ========== 3. IMPORTAÇÃO EM LOTE ========== -->
+  <h2 id="importacao-lote">3. Importação em lote (planilha)</h2>
+  <p>Na tela <strong>Estoque &rarr; Estoque Mín. (Lote)</strong> é possível atualizar estoque mínimo e ideal de <strong>muitos Part Numbers de uma vez</strong>, usando um arquivo ou o conteúdo colado de uma planilha.</p>
+  <ol>
+    <li>Baixe o <strong>modelo CSV</strong> (botão na tela) para ver o formato esperado.</li>
+    <li>Preencha a planilha com os Part Numbers cadastrados no sistema e os valores desejados.</li>
+    <li>Envie o arquivo CSV ou <strong>cole o conteúdo</strong> no campo de texto.</li>
+    <li>Clique em <strong>Interpretar e visualizar</strong> para conferir os dados.</li>
+    <li>Clique em <strong>Atualizar em lote</strong> para aplicar as alterações.</li>
+  </ol>
+  <p><strong>Regra importante:</strong> para cada linha da planilha, o sistema atualiza <em>todos</em> os itens de estoque que tenham aquele Part Number. Assim, uma única linha na planilha pode atualizar vários registros (múltiplas entradas com o mesmo P/N).</p>
+
+  <div class="page-break"></div>
+
+  <!-- ========== 4. LAYOUT ESPERADO ========== -->
+  <h2 id="layout">4. Layout esperado pela planilha</h2>
+  <p>O sistema espera <strong>três colunas</strong>, nesta ordem:</p>
+  <table>
+    <thead>
+      <tr><th>Coluna</th><th>Obrigatório?</th><th>Descrição</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Part Number</strong></td>
+        <td>Sim</td>
+        <td>Código do componente (P/N) exatamente como cadastrado no estoque. Identifica quais itens serão atualizados.</td>
+      </tr>
+      <tr>
+        <td><strong>Est. Mínimo</strong></td>
+        <td>Não</td>
+        <td>Quantidade mínima desejada. Pode ser número inteiro ou decimal (ex.: 2 ou 2,5).</td>
+      </tr>
+      <tr>
+        <td><strong>Est. Ideal</strong></td>
+        <td>Não</td>
+        <td>Quantidade ideal desejada. Pode ser número inteiro ou decimal.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>Formato do arquivo:</strong></p>
+  <ul>
+    <li><strong>Encoding:</strong> UTF-8 (recomendado para acentuação).</li>
+    <li><strong>Separador:</strong> ponto e vírgula <span class="code inline">;</span> (Excel em português) ou vírgula <span class="code inline">,</span>.</li>
+    <li><strong>Primeira linha:</strong> pode ser cabeçalho (ex.: &quot;Part Number;Est. Mínimo;Est. Ideal&quot;). Se contiver a palavra &quot;Part&quot; ou &quot;part_number&quot;, será ignorada como título.</li>
+  </ul>
+
+  <!-- ========== 5. EXEMPLOS ========== -->
+  <h2 id="exemplos">5. Exemplos: delimitado e por colunas</h2>
+
+  <h3>5.1 Formato delimitado (CSV)</h3>
+  <p>Arquivo de texto em que cada coluna é separada por <strong>ponto e vírgula</strong> ou <strong>vírgula</strong>. Cada linha é um registro.</p>
+  <p><strong>Exemplo com ponto e vírgula (;):</strong></p>
+  <pre>Part Number;Est. Mínimo;Est. Ideal
+MS21919WDG4;2;5
+NAS1149F0363P;1;3
+ASNA1250-4;0;2</pre>
+  <p><strong>Exemplo com vírgula (,):</strong></p>
+  <pre>Part Number,Est. Mínimo,Est. Ideal
+MS21919WDG4,2,5
+NAS1149F0363P,1,3
+ASNA1250-4,0,2</pre>
+  <p>No segundo caso, use vírgula decimal no padrão brasileiro com cuidado: o sistema aceita tanto <span class="code inline">2.5</span> quanto <span class="code inline">2,5</span> para números decimais.</p>
+
+  <h3>5.2 Formato por colunas (tabela)</h3>
+  <p>Quando você monta a planilha no Excel ou similar, visualize como uma tabela de três colunas. Ao exportar para CSV ou copiar e colar, o resultado deve seguir o mesmo layout:</p>
+  <table>
+    <thead>
+      <tr><th>Part Number</th><th>Est. Mínimo</th><th>Est. Ideal</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>MS21919WDG4</td><td>2</td><td>5</td></tr>
+      <tr><td>NAS1149F0363P</td><td>1</td><td>3</td></tr>
+      <tr><td>ASNA1250-4</td><td>0</td><td>2</td></tr>
+      <tr><td>AN960-416</td><td>5</td><td>10</td></tr>
+    </tbody>
+  </table>
+  <p>Ao <strong>copiar e colar</strong> essa tabela no sistema (por exemplo, a partir do Excel), as colunas são mantidas e o sistema interpreta o separador (tab ou vírgula/ponto e vírgula, conforme a origem). Use <strong>Interpretar e visualizar</strong> para conferir antes de atualizar em lote.</p>
+
+  <h3>5.3 Linhas com valores opcionais</h3>
+  <p>É possível informar apenas o Part Number e o estoque mínimo, deixando o ideal em branco (e vice-versa). O sistema atualiza somente os campos preenchidos.</p>
+  <pre>Part Number;Est. Mínimo;Est. Ideal
+PN-001;2;
+PN-002;;5
+PN-003;1;4</pre>
+  <p>Na primeira linha só o mínimo é atualizado; na segunda, só o ideal; na terceira, ambos.</p>
+
+  <div class="tip">
+    <strong>Dica:</strong> Use sempre Part Numbers idênticos aos cadastrados no estoque. Part Numbers que não existirem no sistema aparecerão no resultado como &quot;não encontrados&quot; e não geram erro na importação.
+  </div>
+
+  <hr style="margin: 2rem 0; border: none; border-top: 1px solid #e2e8f0;">
+  <p style="font-size: 0.9rem; color: #64748b;">Documento gerado para o Sistema de Gestão de Estoque · Aero Suite Controls · Uso interno.</p>
+
+</body>
+</html>

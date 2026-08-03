@@ -1,0 +1,93 @@
+// Listagens: scroll no main-content; paginador sempre visível no fluxo natural da página.
+// Evita flex trap (overflow:hidden + height:100%) que cortava tabela e paginação.
+
+.main-content:has(.as-page.list-container),
+.main-content:has(.list-container) {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.as-page.list-container,
+.list-container.as-page {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  flex: 1 0 auto !important;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.as-page.list-container:not(:has(.as-page-body)) {
+  overflow: visible !important;
+}
+
+.as-page.list-container > app-page-hero,
+.as-page.list-container > .filters-section,
+.as-page.list-container > .page-header {
+  flex-shrink: 0;
+}
+
+.as-page.list-container > .table-section,
+.as-page.list-container .table-card,
+.as-page.list-container .table-container,
+.as-page.list-container .data-card,
+.as-page.list-container app-list-data-states,
+.as-page.list-container .list-data-states,
+.as-page.list-container .list-data-states-host {
+  flex: none !important;
+  min-height: unset !important;
+  overflow: visible !important;
+  display: block;
+}
+
+.as-page.list-container .p-datatable,
+.as-page.list-container .p-datatable-flex-scrollable {
+  display: block !important;
+  height: auto !important;
+  max-height: none !important;
+  flex: none !important;
+}
+
+.as-page.list-container .list-data-states > p-table,
+.as-page.list-container .list-data-states-host > .list-data-states > p-table {
+  display: block !important;
+  height: auto !important;
+  max-height: none !important;
+  flex: none !important;
+}
+
+.as-page.list-container .p-datatable-wrapper,
+.as-page.list-container .p-datatable-table-container,
+.as-page.list-container .p-datatable-scrollable-body,
+.as-page.list-container .p-datatable-scrollable-table-container,
+.as-page.list-container .p-scroller,
+.as-page.list-container .p-scroller-viewport {
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  max-height: none !important;
+  height: auto !important;
+  flex: none !important;
+  min-height: unset !important;
+}
+
+.as-page.list-container .p-paginator {
+  flex-shrink: 0 !important;
+  position: relative !important;
+  z-index: 5;
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  min-height: 3rem !important;
+  overflow: visible !important;
+}
+
+.app-main > app-footer {
+  flex-shrink: 0;
+}
+

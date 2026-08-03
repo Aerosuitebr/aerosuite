@@ -1,0 +1,39 @@
+{
+  "at": "2026-06-09T19:46:12.583Z",
+  "origin": "https://aerosuite.com.br",
+  "checks": [
+    {
+      "id": "script",
+      "ok": true,
+      "note": "aerosuite-consent carregado"
+    },
+    {
+      "id": "banner_first_visit",
+      "ok": true,
+      "note": "banner visível sem consent"
+    },
+    {
+      "id": "save_all",
+      "ok": true,
+      "note": "level=all"
+    },
+    {
+      "id": "html_attr",
+      "ok": true,
+      "note": "data-as-consent=all"
+    },
+    {
+      "id": "banner_after_accept",
+      "ok": true,
+      "note": "banner oculto após aceitar"
+    },
+    {
+      "id": "persist_reload",
+      "ok": true,
+      "note": "reload ok level=all"
+    }
+  ],
+  "pass": 6,
+  "total": 6,
+  "ok": true
+}

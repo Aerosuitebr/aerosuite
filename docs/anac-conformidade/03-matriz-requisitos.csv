@@ -1,0 +1,31 @@
+ID;Fonte;Requisito;Funcionalidade Aero Suite;Teste;Evidencia;Status
+REQ-001;RBAC 145 / registros;Conservar registros de manutenção disponíveis para inspeção;Dossiê PDF + pacote ZIP multi-OS + retenção/arquivo morto;Criar OS encerrar exportar PDF e ZIP;GET /api/dossie-auditoria/pacote/zip + PDF gerado;ATENDE
+REQ-002;MOM/MCQ;Segregação executante vs inspetor/aprovador;Perfis P145_* + CRS_EMITIR + Part145CrsSegregation;Tentar emitir CRS com usuário executor;Part145CrsSegregationEmitTest + log bloqueio;ATENDE
+REQ-003;Registros eletrônicos;Rastreabilidade de alterações;Tabela os_auditoria + UI Auditoria OS;Alterar campo OS e consultar histórico;GET /api/os-auditoria + export no dossiê;ATENDE
+REQ-004;Continuidade;Plano indisponibilidade e reconciliação;Hangar offline PWA + backup + checklist reconciliação UI;Simular offline sync + checklist reconciliação;api-hangar-offline-sync-smoke.ps1 + GET /api/conformidade/contingencia;ATENDE
+REQ-005;RBAC 145;Liberação para serviço (CRS) controlada;OsCrsService checklist PDF habilitação RT;Emitir CRS com checklist completo;POST /api/os/{id}/crs/emitir + crs.pdf no pacote;ATENDE
+REQ-006;RBAC 43/145;Cadastro aeronave componente P/N S/N;FCU fabricante matrícula TSN TSO;Cadastrar FCU vincular OS;Telas FCU + campos OSDto;ATENDE
+REQ-007;Dados técnicos;Vincular manuais boletins AD/SB;os_tarefa_dado_tecnico + UI vínculos na OS;Salvar tarefa com AD/SB ou manual;OsTarefaDadoTecnicoServiceTest;ATENDE
+REQ-008;Assinatura;Identificar executante inspetor aprovador;Job card assinatura PNG + SHA-256 + verificação integridade + timestamp server;Assinar execução e inspeção no hangar;JobCardAssinaturaIntegrityTest + JobCardAssinaturaIntegrityIT;ATENDE
+REQ-009;Integridade;Controle alteração registro encerrado;OsRegistroEncerradoGuard + POST /reabrir + REABERTURA auditoria;PUT OS fechada retorna 400;OsRegistroEncerradoGuardTest;ATENDE
+REQ-010;RBAC;Controle de acesso por função;RequiresFuncionalidades + perfis tenant;Acesso sem permissão retorna 403;ConformidadeApiAuthIT + api-rbac-smoke.ps1;ATENDE
+REQ-011;Autenticidade;Usuário individual identificável;JWT usuário por login sem contas genéricas;Login individual auditoria acesso_auditoria;acesso_auditoria no dossiê;ATENDE
+REQ-012;Confidencialidade;Isolamento multi-tenant;TenantId Hibernate + guards;Tentar acesso cross-tenant;api-tenant-isolation.ps1;ATENDE
+REQ-013;Registros;Retenção e exportação;retencao_registros_anos + export ZIP arquivo morto;Configurar retenção exportar período;GET /api/conformidade/retencao/export/zip;ATENDE
+REQ-014;Estoque;Certificado de peça na saída;cert_tipo anexo bloqueio saída;Saída sem certificado completo;CertificadoPecaUtilTest + flag tenant;ATENDE
+REQ-015;Estoque;Rastreio peça linha do tempo;Item rastreio PDF API;Consultar código rastreio exportar PDF;GET /api/estoque/rastreio/{codigo}/linha-tempo/pdf;ATENDE
+REQ-016;SGQ;Documentos controlados revisão;sgq_documento_controlado + histórico;Nova revisão obsoletar anterior;ConformidadeOndaDFunctionalIT;ATENDE
+REQ-017;SGQ;Treinamento e habilitação técnica;conformidade_treinamento + usuario_habilitacao_tecnica;CRS bloqueado sem habilitação;ConformidadeEnforcementP1IT;ATENDE
+REQ-018;SGQ;Calibração ferramentas;conformidade_calibracao_ferramenta + enforcement;Bloqueio saída/hangar calibração vencida;api-conformidade-enforcement-smoke.ps1;ATENDE
+REQ-019;SGQ;NC e CAPA;conformidade_nao_conformidade workflow;NC sem eficácia não fecha;ConformidadeOndaDFunctionalIT;ATENDE
+REQ-020;Fornecedores;ASL na entrada;Campos ASL fornecedor + enforcement entrada;Entrada com fornecedor sem ASL;ConformidadeEnforcementP1IT;ATENDE
+REQ-021;Subcontratação;Controle Part 145 subcontratados;conformidade_subcontratacao + bloqueio OS;OS com subcontratação vencida;ConformidadeEnforcementP1IT;ATENDE
+REQ-022;Disponibilidade;Backup restauração;BackupConfigResource agendamento histórico;Executar backup testar restauração;anac-backup-restore-evidencia.ps1 + ata JSON;ATENDE
+REQ-023;Segurança;MFA perfis críticos;TOTP backend + autenticacao_dupla tenant;Login MFA perfis P145_RT/INSPETOR/ADMIN;TotpServiceTest + POST /api/auth/mfa/*;ATENDE
+REQ-024;LGPD;Consentimento titular;solicitacao LGPD consentimento;Aceite no primeiro login;PublicLgpdResource;ATENDE
+REQ-025;Auditoria;Pacote evidências SGQ;sgq/resumo.csv snapshot.json no ZIP;Export pacote auditoria;api-conformidade-relatorios-smoke.ps1;ATENDE
+REQ-026;Contingência;Operação manual documentada;Plano contingência + formulários ANAC;Simulação indisponibilidade;08-plano-contingencia.md + anac-contingencia-simulacao.ps1;ATENDE
+REQ-027;Validação;Evidências testáveis automatizadas;Suite JUnit + Playwright + smokes;Executar anac-conformidade-evidencias.ps1;ultima-execucao.json;ATENDE
+REQ-028;Mudanças;Controle versão impacto;Flyway + aceite release checklist UI;Registrar aceite release com checklist;POST /api/conformidade/releases + verify-flyway.ps1;ATENDE
+REQ-029;Treinamento;Registro participação;módulo treinamentos SGQ + lista presença PDF;Registrar turma e exportar lista presença;GET /api/conformidade/treinamentos/lista-presenca/pdf;ATENDE
+REQ-030;Demonstração;Ambiente cenário completo;Tenant demo sanitize script;OS completa CRS anexos logs;16-ambiente-demonstracao.md;ATENDE

@@ -1,0 +1,163 @@
+/* Aero Suite — Guia de Produção Vídeo Promocional (print/PDF A4) */
+@import url('../ux-relatorio-executivo/relatorio-styles.css');
+
+.prompt-block {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 5px;
+  padding: 3.5mm 4mm;
+  margin: 3mm 0;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 7.75pt;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  page-break-inside: avoid;
+}
+
+.prompt-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+  margin-bottom: 1.5mm;
+}
+
+.timeline-table td:first-child {
+  font-weight: 700;
+  color: #0369a1;
+  white-space: nowrap;
+  width: 8mm;
+}
+
+.timeline-table td:nth-child(2) {
+  font-family: 'Consolas', monospace;
+  font-size: 8pt;
+  white-space: nowrap;
+  width: 14mm;
+}
+
+.timeline-table .col-caption {
+  font-style: italic;
+  color: #475569;
+}
+
+.timeline-table .col-narration {
+  color: #1e293b;
+  font-size: 8pt;
+}
+
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 3mm 0;
+}
+
+.checklist li {
+  padding: 1.5mm 0 1.5mm 6mm;
+  position: relative;
+  font-size: 9pt;
+}
+
+.checklist li::before {
+  content: '☐';
+  position: absolute;
+  left: 0;
+  color: #0369a1;
+  font-weight: 700;
+}
+
+.workflow-step {
+  display: flex;
+  gap: 3mm;
+  margin-bottom: 3mm;
+  page-break-inside: avoid;
+}
+
+.workflow-num {
+  flex-shrink: 0;
+  width: 8mm;
+  height: 8mm;
+  border-radius: 50%;
+  background: #0369a1;
+  color: #fff;
+  font-weight: 800;
+  font-size: 9pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.workflow-body {
+  flex: 1;
+  font-size: 9pt;
+}
+
+.workflow-body strong {
+  display: block;
+  margin-bottom: 0.5mm;
+  color: #0f172a;
+}
+
+.tag-do {
+  display: inline-block;
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.5mm 2mm;
+  border-radius: 3px;
+  background: #dcfce7;
+  color: #15803d;
+  margin-right: 1.5mm;
+}
+
+.tag-dont {
+  display: inline-block;
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.5mm 2mm;
+  border-radius: 3px;
+  background: #fee2e2;
+  color: #991b1b;
+  margin-right: 1.5mm;
+}
+
+.scene-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 3mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.scene-head {
+  background: #f1f5f9;
+  padding: 2mm 3mm;
+  font-size: 8.5pt;
+  font-weight: 600;
+  display: flex;
+  gap: 3mm;
+  flex-wrap: wrap;
+}
+
+.scene-time {
+  font-family: 'Consolas', monospace;
+  color: #0369a1;
+}
+
+.scene-body {
+  padding: 2.5mm 3mm;
+  font-size: 8.5pt;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3mm;
+  margin: 3mm 0;
+}
+
+@media print {
+  .two-col { grid-template-columns: 1fr 1fr; }
+}

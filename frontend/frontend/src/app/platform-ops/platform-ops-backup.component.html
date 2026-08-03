@@ -1,0 +1,188 @@
+<p-toast></p-toast>
+
+<section class="ops-page-canvas ops-page">
+  <header class="ops-page-header">
+    <h2>{{ 'platformOps.backup.title' | translate }}</h2>
+    <p>{{ 'platformOps.backup.subtitle' | translate }}</p>
+  </header>
+
+  <div *ngIf="loading" class="ops-loading">{{ 'platformOps.common.loading' | translate }}</div>
+
+  <ng-container *ngIf="!loading && panel as p">
+    <div class="ops-backup-status-kpis">
+      <article class="ops-backup-status-kpi">
+        <span class="ops-backup-status-kpi-label">{{ 'platformOps.backup.status.lastSuccess' | translate }}</span>
+        <strong class="ops-backup-status-kpi-value">
+          {{ p.lastSuccessAt ? (p.lastSuccessAt | date:'dd MMM yyyy, HH:mm') : '—' }}
+        </strong>
+      </article>
+      <article class="ops-backup-status-kpi">
+        <span class="ops-backup-status-kpi-label">{{ 'platformOps.backup.status.nextRun' | translate }}</span>
+        <strong class="ops-backup-status-kpi-value ops-backup-status-kpi-value--accent">
+          {{ p.nextScheduledAt ? (p.nextScheduledAt | date:'dd MMM yyyy, HH:mm') : '—' }}
+        </strong>
+      </article>
+    </div>
+
+    <div class="ops-list-frame">
+      <section class="ops-backup-form-shell">
+        <h3>{{ 'platformOps.backup.schedule.title' | translate }}</h3>
+        <div class="ops-backup-form-grid">
+          <div class="ops-backup-field">
+            <label for="ops-backup-cron">{{ 'platformOps.backup.field.cron' | translate }}</label>
+            <p-dropdown
+              inputId="ops-backup-cron"
+              [options]="cronOptions"
+              optionLabel="labelKey"
+              optionValue="value"
+              [(ngModel)]="cronPreset"
+              styleClass="ops-dark-field-dropdown"
+              panelStyleClass="ops-dark-dropdown-panel"
+              [appendTo]="'body'">
+              <ng-template pTemplate="selectedItem" let-opt>
+                {{ opt?.labelKey | translate }}
+              </ng-template>
+              <ng-template pTemplate="item" let-opt>
+                {{ opt.labelKey | translate }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="ops-backup-field">
+            <label for="ops-backup-type">{{ 'platformOps.backup.field.type' | translate }}</label>
+            <p-dropdown
+              inputId="ops-backup-type"
+              [options]="backupTypeOptions"
+              optionLabel="labelKey"
+              optionValue="value"
+              [(ngModel)]="backupType"
+              styleClass="ops-dark-field-dropdown"
+              panelStyleClass="ops-dark-dropdown-panel"
+              [appendTo]="'body'">
+              <ng-template pTemplate="selectedItem" let-opt>
+                {{ opt?.labelKey | translate }}
+              </ng-template>
+              <ng-template pTemplate="item" let-opt>
+                {{ opt.labelKey | translate }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="ops-backup-field">
+            <label for="ops-backup-storage">{{ 'platformOps.backup.field.storage' | translate }}</label>
+            <p-dropdown
+              inputId="ops-backup-storage"
+              [options]="storageOptions"
+              optionLabel="labelKey"
+              optionValue="value"
+              [(ngModel)]="storageTarget"
+              styleClass="ops-dark-field-dropdown"
+              panelStyleClass="ops-dark-dropdown-panel"
+              [appendTo]="'body'">
+              <ng-template pTemplate="selectedItem" let-opt>
+                {{ opt?.labelKey | translate }}
+              </ng-template>
+              <ng-template pTemplate="item" let-opt>
+                {{ opt.labelKey | translate }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="ops-backup-field">
+            <label for="ops-backup-time">{{ 'platformOps.backup.field.time' | translate }}</label>
+            <input pInputText id="ops-backup-time" type="time" class="ops-dark-input" [(ngModel)]="scheduledTime" />
+          </div>
+          <div class="ops-backup-field">
+            <label for="ops-backup-retention">{{ 'platformOps.backup.field.retention' | translate }}</label>
+            <p-inputNumber
+              inputId="ops-backup-retention"
+              [(ngModel)]="retentionDays"
+              [min]="1"
+              [max]="365"
+              styleClass="ops-dark-input-number">
+            </p-inputNumber>
+          </div>
+        </div>
+        <div class="ops-backup-form-actions">
+          <button
+            pButton
+            type="button"
+            class="ops-primary-btn"
+            icon="pi pi-save"
+            [label]="'platformOps.backup.saveSchedule' | translate"
+            [loading]="saving"
+            (click)="saveSchedule()">
+          </button>
+        </div>
+      </section>
+
+      <div class="ops-backup-table-shell">
+        <p-table
+          [value]="historyRows()"
+          styleClass="ops-table ops-backup-table p-datatable-sm"
+          [rowHover]="true">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>{{ 'platformOps.backup.col.date' | translate }}</th>
+              <th>{{ 'platformOps.backup.col.size' | translate }}</th>
+              <th>{{ 'platformOps.backup.col.hash' | translate }}</th>
+              <th>{{ 'platformOps.backup.col.retention' | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td><time class="ops-mono-ts" [dateTime]="row.backupDate">{{ row.backupDate | date:'dd MMM yyyy, HH:mm' }}</time></td>
+              <td class="ops-cell-primary">{{ row.fileSizeLabel }}</td>
+              <td><code class="ops-hash">{{ row.contentHash }}</code></td>
+              <td>
+                <span class="ops-retention-badge ops-retention-badge--stored" *ngIf="row.retentionStatus === 'stored'">
+                  {{ retentionLabel(row) | translate }}
+                </span>
+                <span class="ops-retention-muted" *ngIf="row.retentionStatus !== 'stored'">
+                  {{ retentionLabel(row) | translate }}
+                </span>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4" class="ops-empty-cell">{{ 'platformOps.backup.empty' | translate }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+        <footer class="ops-table-footer" *ngIf="totalCount() > 0">
+          <div class="ops-footer-page-size">
+            <span class="ops-footer-page-size-label">{{ 'platformOps.billing.footer.pageSizePrefix' | translate }}</span>
+            <p-dropdown
+              [options]="pageSizeOptions"
+              optionLabel="label"
+              optionValue="value"
+              [(ngModel)]="pageSize"
+              (onChange)="onPageSizeChange()"
+              styleClass="ops-footer-page-size-dropdown"
+              panelStyleClass="ops-dark-dropdown-panel"
+              [appendTo]="'body'">
+            </p-dropdown>
+            <span class="ops-footer-page-size-label">{{ 'platformOps.billing.footer.pageSizeSuffix' | translate }}</span>
+          </div>
+          <nav class="ops-footer-pagination">
+            <button type="button" class="ops-page-btn ops-page-btn--nav" [disabled]="currentPage <= 1" (click)="goToPage(currentPage - 1)">&lt;</button>
+            <ng-container *ngFor="let slot of paginationSlots()">
+              <span *ngIf="slot === 'ellipsis'" class="ops-page-ellipsis">…</span>
+              <button
+                *ngIf="slot !== 'ellipsis'"
+                type="button"
+                class="ops-page-btn"
+                [class.ops-page-btn--active]="slot === currentPage"
+                (click)="goToPage(slot)">
+                {{ slot }}
+              </button>
+            </ng-container>
+            <button type="button" class="ops-page-btn ops-page-btn--nav" [disabled]="currentPage >= totalPages()" (click)="goToPage(currentPage + 1)">&gt;</button>
+          </nav>
+          <div class="ops-footer-meta">
+            <span class="ops-footer-range">{{ footerRangeText() }}</span>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </ng-container>
+</section>

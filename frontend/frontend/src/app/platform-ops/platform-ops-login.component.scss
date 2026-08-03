@@ -1,0 +1,109 @@
+.ops-login-page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: #060a12;
+  background-image:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(245, 158, 11, 0.1), transparent 60%),
+    linear-gradient(180deg, #0c1220 0%, #060a12 100%);
+}
+
+.ops-login-card {
+  width: min(440px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  background: #0f172a;
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  border-radius: 16px;
+  padding: 1.5rem;
+  color: #e2e8f0;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.ops-login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.ops-login-brand {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.ops-login-brand i {
+  font-size: 2rem;
+  color: #f59e0b;
+}
+
+.ops-login-brand h1 {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 1.25rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.ops-login-brand p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+label {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+}
+
+.back-app-link {
+  margin-top: 0.5rem;
+  text-align: center;
+  color: #fbbf24;
+  font-size: 0.82rem;
+  text-decoration: none;
+}
+
+.ops-mfa-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.5rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  color: #fcd34d;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.ops-mfa-hint {
+  margin: 0.15rem 0 0.35rem;
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+.ops-stepup-user {
+  margin-bottom: 0.35rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 8px;
+  background: rgba(148, 163, 184, 0.08);
+  font-size: 0.82rem;
+}
+
+.ops-stepup-label {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  margin-bottom: 0.15rem;
+}
+
+.ops-stepup-user strong {
+  color: #e2e8f0;
+}
+
+:host ::ng-deep .ops-login-card .p-password,
+:host ::ng-deep .ops-login-card .p-inputtext {
+  width: 100%;
+}

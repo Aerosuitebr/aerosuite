@@ -1,0 +1,10 @@
+import fs from 'fs';
+import { execSync } from 'child_process';
+const n = Number(process.argv[2]);
+const live = process.argv[3] || '3fdf38';
+const out = execSync(`node .cdp-exec-invoke-step.mjs ${n} d15c6f`, { encoding: 'utf8' }).trim();
+const args = JSON.parse(out);
+args.viewId = live;
+fs.writeFileSync('.cdp-current-mcp-args.json', JSON.stringify(args));
+fs.writeFileSync(`.cdp-step-${n}-live-args.json`, JSON.stringify(args));
+console.log(JSON.stringify({ step: n, exprLen: args.params?.expression?.length ?? 0 }));

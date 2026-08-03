@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="refresh" content="30" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Aero Suite — Manutenção</title>
+  <style>
+    :root {
+      --as-brand-800: #0f172a;
+      --as-accent-sky: #38bdf8;
+      --as-accent-sky-deep: #0284c7;
+      --as-accent-gold: #c9a227;
+      --as-font-sans: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: var(--as-font-sans);
+      color: #f8fafc;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 48%, #0e7490 100%);
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.25rem;
+    }
+
+    .panel {
+      width: min(100%, 28rem);
+      text-align: center;
+      padding: 2.5rem 2rem 2rem;
+      border-radius: 1.25rem;
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      box-shadow: 0 24px 64px rgba(2, 6, 23, 0.45);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .brand__logo {
+      width: 4.5rem;
+      height: auto;
+      filter: drop-shadow(0 8px 24px rgba(56, 189, 248, 0.25));
+    }
+
+    .brand__wordmark {
+      width: min(100%, 11rem);
+      height: auto;
+      opacity: 0.95;
+    }
+
+    .status-dot {
+      width: 0.65rem;
+      height: 0.65rem;
+      border-radius: 50%;
+      background: var(--as-accent-gold);
+      display: inline-block;
+      margin-right: 0.45rem;
+      animation: pulse 1.8s ease-in-out infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.45; transform: scale(0.92); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(1.85rem, 5vw, 2.35rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .subtitle {
+      margin: 0 0 1.25rem;
+      font-size: 1.05rem;
+      line-height: 1.55;
+      color: #cbd5e1;
+    }
+
+    .hint {
+      margin: 0;
+      font-size: 0.875rem;
+      color: #94a3b8;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #e2e8f0;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+    }
+  </style>
+</head>
+<body>
+  <main class="panel" role="main" aria-live="polite">
+    <div class="brand">
+      <img class="brand__logo" src="assets/logo_side.png" width="72" height="72" alt="" />
+      <img class="brand__wordmark" src="assets/LOGO_LETRA_LIGHT.png" width="176" height="32" alt="Aero Suite" />
+    </div>
+
+    <p class="badge"><span class="status-dot" aria-hidden="true"></span><span id="badge">Manutenção</span></p>
+    <h1 id="title">Opa!</h1>
+    <p class="subtitle" id="subtitle">Estamos atualizando o sistema. Voltaremos em seguida.</p>
+    <p class="hint" id="hint">Esta página atualiza automaticamente a cada 30 segundos.</p>
+  </main>
+
+  <script>
+    (function () {
+      var copy = {
+        pt: {
+          badge: 'Manutenção',
+          title: 'Opa!',
+          subtitle: 'Estamos atualizando o sistema. Voltaremos em seguida.',
+          hint: 'Esta página atualiza automaticamente a cada 30 segundos.'
+        },
+        en: {
+          badge: 'Maintenance',
+          title: 'Oops!',
+          subtitle: 'We are updating the system. We will be back shortly.',
+          hint: 'This page refreshes automatically every 30 seconds.'
+        },
+        es: {
+          badge: 'Mantenimiento',
+          title: '¡Ups!',
+          subtitle: 'Estamos actualizando el sistema. Volveremos en breve.',
+          hint: 'Esta página se actualiza automáticamente cada 30 segundos.'
+        },
+        fr: {
+          badge: 'Maintenance',
+          title: 'Oups !',
+          subtitle: 'Nous mettons le système à jour. Nous revenons dans un instant.',
+          hint: 'Cette page se rafraîchit automatiquement toutes les 30 secondes.'
+        }
+      };
+
+      var lang = (navigator.language || 'pt-BR').toLowerCase();
+      var key = lang.indexOf('pt') === 0 ? 'pt'
+        : lang.indexOf('es') === 0 ? 'es'
+        : lang.indexOf('fr') === 0 ? 'fr'
+        : 'en';
+      var t = copy[key] || copy.pt;
+
+      document.documentElement.lang = key === 'pt' ? 'pt-BR' : key === 'en' ? 'en-US' : key === 'es' ? 'es-ES' : 'fr-FR';
+      document.title = 'Aero Suite — ' + t.badge;
+      document.getElementById('badge').textContent = t.badge;
+      document.getElementById('title').textContent = t.title;
+      document.getElementById('subtitle').textContent = t.subtitle;
+      document.getElementById('hint').textContent = t.hint;
+    })();
+  </script>
+</body>
+</html>

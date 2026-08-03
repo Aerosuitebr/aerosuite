@@ -1,0 +1,86 @@
+# Deploy automático — Vultr produção (prod.aerosuite.com.br)
+#
+# Secrets (Settings → Secrets → Actions):
+#   VULTR_SSH_PRIVATE_KEY — chave privada SSH (aerosuite_ed25519)
+#
+# Variables:
+#   VULTR_HOST — IP do servidor (ex.: 216.238.102.195)
+#   VULTR_SSH_USER — opcional (default: root)
+#
+# Disparo: push em desenv (job deploy-vultr no CI) ou manual (workflow_dispatch).
+# Nota: workflow_run exige este ficheiro na branch default (master) para funcionar.
+
+name: Deploy Vultr production
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [desenv]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vultr-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to Vultr
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'desenv')
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.sha || github.event.workflow_run.head_sha }}
+
+      - name: Bundle repository
+        run: |
+          tar -czf /tmp/aerosuite-repo.tgz \
+            --exclude=./node_modules \
+            --exclude=./frontend/node_modules \
+            --exclude=./backend/target \
+            --exclude=./.git \
+            --exclude=./.cursor \
+            --exclude=./dist \
+            --exclude=./frontend/dist \
+            --exclude=./.env \
+            --exclude=./.env.production \
+            --exclude=./tmp \
+            .
+
+      - name: Prepare SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.VULTR_SSH_PRIVATE_KEY }}
+        run: |
+          if [ -z "${SSH_PRIVATE_KEY}" ]; then
+            echo "ERRO: configure o secret VULTR_SSH_PRIVATE_KEY no repositório."
+            exit 1
+          fi
+          mkdir -p ~/.ssh
+          printf '%s\n' "${SSH_PRIVATE_KEY}" > ~/.ssh/vultr_deploy
+          chmod 600 ~/.ssh/vultr_deploy
+
+      - name: Upload and deploy
+        env:
+          VULTR_HOST: ${{ vars.VULTR_HOST }}
+          VULTR_SSH_USER: ${{ vars.VULTR_SSH_USER || 'root' }}
+        run: |
+          if [ -z "${VULTR_HOST}" ]; then
+            echo "ERRO: configure a variable VULTR_HOST (IP do Vultr)."
+            exit 1
+          fi
+          SSH_OPTS="-i ~/.ssh/vultr_deploy -o StrictHostKeyChecking=accept-new -o BatchMode=yes"
+          scp ${SSH_OPTS} /tmp/aerosuite-repo.tgz "${VULTR_SSH_USER}@${VULTR_HOST}:/tmp/aerosuite-repo.tgz"
+          scp ${SSH_OPTS} scripts/deploy/vultr-deploy.sh "${VULTR_SSH_USER}@${VULTR_HOST}:/tmp/vultr-deploy.sh"
+          ssh ${SSH_OPTS} "${VULTR_SSH_USER}@${VULTR_HOST}" "chmod +x /tmp/vultr-deploy.sh && INSTALL_DIR=/opt/aerosuite TARBALL=/tmp/aerosuite-repo.tgz bash /tmp/vultr-deploy.sh"
+
+      - name: Smoke public URL
+        env:
+          VULTR_PUBLIC_URL: ${{ vars.VULTR_PUBLIC_URL || 'https://prod.aerosuite.com.br' }}
+        run: |
+          curl -sfI "${VULTR_PUBLIC_URL}/" | head -3
+          curl -sf "${VULTR_PUBLIC_URL}/api/public/deployment" | head -c 200

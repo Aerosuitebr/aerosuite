@@ -1,0 +1,378 @@
+{
+  "base": "https://app.aerosuite.com.br",
+  "stamp": "20260621",
+  "s4Achados": {
+    "total": 28,
+    "passed": 28,
+    "open": []
+  },
+  "total": 36,
+  "passed": 28,
+  "staticFailed": [],
+  "apiFailed": [
+    {
+      "id": "S4-24-api",
+      "passed": false,
+      "detail": "GET /public/health status=404 (deploy pendente?)",
+      "method": "api",
+      "at": "2026-06-21T18:30:45.513Z"
+    },
+    {
+      "id": "S4-34-api",
+      "passed": false,
+      "detail": "GET branding status=404 (deploy pendente?)",
+      "method": "api",
+      "at": "2026-06-21T18:30:45.548Z"
+    }
+  ],
+  "uiFailed": [
+    {
+      "id": "S4-08-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    },
+    {
+      "id": "S4-06-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    },
+    {
+      "id": "S4-25-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    },
+    {
+      "id": "S4-24-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    },
+    {
+      "id": "S4-34-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    }
+  ],
+  "deployRequired": true,
+  "failed": [
+    {
+      "id": "AUTH",
+      "passed": false,
+      "detail": "Login falhou status=401",
+      "method": "api",
+      "at": "2026-06-21T18:30:45.469Z"
+    },
+    {
+      "id": "S4-24-api",
+      "passed": false,
+      "detail": "GET /public/health status=404 (deploy pendente?)",
+      "method": "api",
+      "at": "2026-06-21T18:30:45.513Z"
+    },
+    {
+      "id": "S4-34-api",
+      "passed": false,
+      "detail": "GET branding status=404 (deploy pendente?)",
+      "method": "api",
+      "at": "2026-06-21T18:30:45.548Z"
+    },
+    {
+      "id": "S4-08-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    },
+    {
+      "id": "S4-06-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    },
+    {
+      "id": "S4-25-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    },
+    {
+      "id": "S4-24-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    },
+    {
+      "id": "S4-34-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    }
+  ],
+  "results": [
+    {
+      "id": "S4-01",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-02",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-03",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-04",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-05",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-06",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-07",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-08",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-09",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-11",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-12",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-13",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-14",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-15",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-16",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-17",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-18",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-20",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-22",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-24",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-25",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-26",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-27",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-29",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-33",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-34",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-35",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "S4-36",
+      "passed": true,
+      "detail": "Verificação estática OK",
+      "method": "code",
+      "at": "2026-06-21T18:30:45.295Z"
+    },
+    {
+      "id": "AUTH",
+      "passed": false,
+      "detail": "Login falhou status=401",
+      "method": "api",
+      "at": "2026-06-21T18:30:45.469Z"
+    },
+    {
+      "id": "S4-24-api",
+      "passed": false,
+      "detail": "GET /public/health status=404 (deploy pendente?)",
+      "method": "api",
+      "at": "2026-06-21T18:30:45.513Z"
+    },
+    {
+      "id": "S4-34-api",
+      "passed": false,
+      "detail": "GET branding status=404 (deploy pendente?)",
+      "method": "api",
+      "at": "2026-06-21T18:30:45.548Z"
+    },
+    {
+      "id": "S4-08-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    },
+    {
+      "id": "S4-06-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    },
+    {
+      "id": "S4-25-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    },
+    {
+      "id": "S4-24-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    },
+    {
+      "id": "S4-34-ui",
+      "passed": false,
+      "detail": "Ausente no bundle (deploy pendente?)",
+      "method": "ui-bundle",
+      "at": "2026-06-21T18:30:45.635Z"
+    }
+  ]
+}

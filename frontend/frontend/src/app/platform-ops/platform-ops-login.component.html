@@ -1,0 +1,79 @@
+<p-toast></p-toast>
+<div class="ops-login-page">
+  <div class="ops-login-card">
+    <app-platform-ops-mfa-enroll
+      *ngIf="enrollmentMode && mfaSetupToken"
+      [setupToken]="mfaSetupToken"
+      (completed)="onEnrollmentCompleted()"
+      (cancelled)="onEnrollmentCancelled()">
+    </app-platform-ops-mfa-enroll>
+
+    <form *ngIf="!enrollmentMode" (ngSubmit)="submit()" (keydown.enter)="onFormEnter($event)">
+      <div class="ops-login-brand">
+        <i class="pi pi-shield"></i>
+        <h1>{{ 'platformOps.login.title' | translate }}</h1>
+        <p *ngIf="!stepUpMode">{{ 'platformOps.login.subtitle' | translate }}</p>
+        <p *ngIf="stepUpMode">{{ 'platformOps.login.stepUpSubtitle' | translate }}</p>
+      </div>
+
+      <p class="ops-mfa-banner" *ngIf="mfaRequired">
+        <i class="pi pi-lock"></i>
+        {{ 'platformOps.login.mfaBanner' | translate }}
+      </p>
+
+      <ng-container *ngIf="!stepUpMode">
+        <label for="ops-email">{{ 'platformOps.login.email' | translate }}</label>
+        <input
+          pInputText
+          id="ops-email"
+          type="email"
+          autocomplete="username"
+          [(ngModel)]="email"
+          name="email"
+          required
+          class="w-full" />
+      </ng-container>
+
+      <div *ngIf="stepUpMode" class="ops-stepup-user">
+        <span class="ops-stepup-label">{{ 'platformOps.login.stepUpAs' | translate }}</span>
+        <strong>{{ email }}</strong>
+      </div>
+
+      <label for="ops-password">{{ 'platformOps.login.password' | translate }}</label>
+      <p-password
+        inputId="ops-password"
+        [(ngModel)]="password"
+        name="password"
+        [feedback]="false"
+        [toggleMask]="true"
+        autocomplete="current-password"
+        styleClass="w-full"
+        inputStyleClass="w-full">
+      </p-password>
+
+      <label for="ops-totp">{{ 'platformOps.login.totp' | translate }}</label>
+      <input
+        pInputText
+        id="ops-totp"
+        [(ngModel)]="totpCode"
+        name="totpCode"
+        autocomplete="one-time-code"
+        inputmode="numeric"
+        maxlength="6"
+        pattern="[0-9]*"
+        [required]="mfaRequired"
+        class="w-full" />
+      <p class="ops-mfa-hint">{{ 'platformOps.login.mfaHint' | translate }}</p>
+
+      <button
+        pButton
+        type="submit"
+        class="p-button-primary w-full"
+        [label]="(stepUpMode ? 'platformOps.login.stepUpSubmit' : 'platformOps.login.submit') | translate"
+        [loading]="loading">
+      </button>
+
+      <a routerLink="/login" class="back-app-link">{{ 'audit.back' | translate }}</a>
+    </form>
+  </div>
+</div>

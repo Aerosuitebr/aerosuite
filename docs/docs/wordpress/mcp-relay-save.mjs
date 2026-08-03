@@ -1,0 +1,11 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
+const dir = path.dirname(fileURLToPath(import.meta.url));
+const idx = process.argv[2];
+const resultPath = process.argv[3];
+execSync(`node "${path.join(dir, 'run-prepared-mcp-sequence.mjs')}" record ${idx} "${resultPath}"`, { stdio: 'inherit' });
+const raw = JSON.parse(fs.readFileSync(resultPath, 'utf8'));
+const value = raw?.result?.value ?? raw?.value;
+console.log(JSON.stringify({ index: Number(idx), value }));

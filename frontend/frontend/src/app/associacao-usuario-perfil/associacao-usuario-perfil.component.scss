@@ -1,0 +1,485 @@
+// ========================================
+// ASSOCIAÇÃO USUÁRIO-PERFIL COMPONENT STYLES
+// ========================================
+
+.associacao-container {
+  padding: 2rem;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+// ========================================
+// PAGE HEADER
+// ========================================
+
+.page-header {
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem;
+    min-height: 120px;
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+
+      .header-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        i {
+          font-size: 2rem;
+          color: white;
+        }
+      }
+
+      .header-text {
+        h1 {
+          font-size: 2.2rem;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin: 0 0 0.5rem 0;
+          line-height: 1.2;
+        }
+
+        p {
+          font-size: 1rem;
+          color: #666;
+          margin: 0;
+          font-weight: 400;
+        }
+      }
+    }
+
+    .header-actions {
+      .p-button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+      }
+    }
+  }
+}
+
+// ========================================
+// FILTERS SECTION
+// ========================================
+
+.filters-section {
+  margin-bottom: 2rem;
+
+  .filter-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr auto;
+      gap: 1.5rem;
+      align-items: end;
+
+      .filter-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        label {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: #374151;
+        }
+
+        :host ::ng-deep {
+          .p-inputtext,
+          .p-dropdown {
+            width: 100%;
+          }
+
+          .p-button {
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+}
+
+// ========================================
+// TABLE SECTION
+// ========================================
+
+.table-section {
+  .table-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin: 0 0 1.5rem 0;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+
+        i {
+          font-size: 1.25rem;
+        }
+      }
+
+      .user-details {
+        strong {
+          color: #1a1a1a;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .perfil-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+
+      &.perfil-1 {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      &.perfil-2 {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      &.perfil-3 {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      &.perfil-sem-perfil {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+
+      &.status-ativo {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      i {
+        font-size: 0.875rem;
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+
+      .p-button {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        i {
+          font-size: 0.875rem;
+        }
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #6b7280;
+
+      p {
+        margin: 1rem 0 0 0;
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+// ========================================
+// DIALOG STYLES
+// ========================================
+
+:host ::ng-deep {
+  .p-dialog {
+    .p-dialog-header {
+      background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+      color: white;
+      border-radius: 12px 12px 0 0;
+
+      .p-dialog-title {
+        font-weight: 600;
+      }
+
+      .p-dialog-header-icon {
+        color: white;
+      }
+    }
+
+    .p-dialog-content {
+      padding: 2rem;
+    }
+
+    .p-dialog-footer {
+      padding: 1rem 2rem;
+      border-top: 1px solid #e2e8f0;
+      background: #f8fafc;
+      border-radius: 0 0 12px 12px;
+    }
+  }
+
+  .dialog-content {
+    .form-group {
+      margin-bottom: 1.5rem;
+
+      label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        margin: 0;
+        padding: 0.75rem;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        color: #6b7280;
+      }
+
+      :host ::ng-deep {
+        .p-dropdown {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+// ========================================
+// RESPONSIVE DESIGN
+// ========================================
+
+@media (max-width: 768px) {
+  .associacao-container {
+    padding: 1rem;
+  }
+
+  .page-header {
+    .header-content {
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+      padding: 1.5rem;
+
+      .header-left {
+        flex-direction: column;
+        gap: 1rem;
+
+        .header-icon {
+          width: 50px;
+          height: 50px;
+
+          i {
+            font-size: 1.5rem;
+          }
+        }
+
+        .header-text {
+          h1 {
+            font-size: 1.8rem;
+          }
+
+          p {
+            font-size: 0.9rem;
+          }
+        }
+      }
+
+      .header-actions {
+        width: 100%;
+
+        .p-button {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .filters-section {
+    .filter-card {
+      .filter-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+  }
+
+  .table-section {
+    .table-card {
+      padding: 1rem;
+      overflow-x: auto;
+
+      .user-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+
+        .user-avatar {
+          width: 32px;
+          height: 32px;
+
+          i {
+            font-size: 1rem;
+          }
+        }
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .p-button {
+          width: 32px;
+          height: 32px;
+        }
+      }
+    }
+  }
+
+  :host ::ng-deep {
+    .p-dialog {
+      .p-dialog-content {
+        padding: 1.5rem;
+      }
+
+      .p-dialog-footer {
+        padding: 1rem 1.5rem;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        .p-button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+// ========================================
+// ANIMATIONS
+// ========================================
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.table-card {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+// ========================================
+// TABLE STYLES
+// ========================================
+
+:host ::ng-deep {
+  .p-datatable {
+    .p-datatable-header {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .p-datatable-thead > tr > th {
+      background: #f1f5f9;
+      color: #374151;
+      font-weight: 600;
+      border-color: #e2e8f0;
+    }
+
+    .p-datatable-tbody > tr {
+      transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+
+      &:hover {
+        background: #f8fafc;
+      }
+    }
+
+    .p-datatable-tbody > tr > td {
+      border-color: #e2e8f0;
+      padding: 1rem;
+    }
+
+    .p-paginator {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0 0 8px 8px;
+    }
+  }
+}

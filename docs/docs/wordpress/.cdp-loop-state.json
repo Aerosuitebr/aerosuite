@@ -1,0 +1,16 @@
+{
+  "next": 2,
+  "results": {
+    "0": {
+      "batch": 0,
+      "from": 0,
+      "to": 4
+    },
+    "1": {
+      "batch": 1,
+      "from": 5,
+      "to": 9
+    }
+  },
+  "errors": []
+}

@@ -1,0 +1,46 @@
+{
+  "viewId": "a9930e",
+  "activeViewId": "4a20d1",
+  "cssFullRun": {
+    "len": 34708,
+    "ok": true
+  },
+  "cssVerify": {
+    "b64": 34708,
+    "dec": 26030,
+    "hasGrid": true
+  },
+  "cssFinalize": {
+    "cssLen": 26030,
+    "footerLen": 38416,
+    "hasHeroV2": true,
+    "ok": true
+  },
+  "encInit": {
+    "ok": true
+  },
+  "enc0": {
+    "chunk": 0,
+    "len": 6000
+  },
+  "enc1": {
+    "chunk": 1,
+    "len": 12060
+  },
+  "enc2": {
+    "chunk": 2,
+    "len": 17988
+  },
+  "enc3": {
+    "chunk": 3,
+    "len": 19376
+  },
+  "encRun": {
+    "ok": true,
+    "homeLen": 14390,
+    "sample": "demonstração",
+    "hasHeroV2": true,
+    "title": "Aero Suite — Gestão MRO | OS, Estoque FIFO e Portal do Cliente"
+  },
+  "errors": []
+}

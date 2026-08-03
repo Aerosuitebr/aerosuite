@@ -1,0 +1,13 @@
+import fs from 'fs';
+const n = Number(process.argv[2]);
+const raw = process.argv[3] || fs.readFileSync(0, 'utf8');
+const data = JSON.parse(raw);
+const value = data?.result?.result?.value ?? data?.result?.value ?? data?.value ?? null;
+const err = data?.error || data?.result?.exceptionDetails || null;
+const out = { step: n, value, error: err };
+const statePath = '.cdp-mcp-steps-state.json';
+const state = fs.existsSync(statePath) ? JSON.parse(fs.readFileSync(statePath, 'utf8')) : { steps: {}, errors: [] };
+state.steps[n] = value;
+if (err) state.errors.push({ step: n, error: err });
+fs.writeFileSync(statePath, JSON.stringify(state, null, 2));
+console.log(JSON.stringify(out));

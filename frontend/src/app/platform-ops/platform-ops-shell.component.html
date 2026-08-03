@@ -1,0 +1,87 @@
+<div class="ops-shell">
+  <aside class="ops-sidebar" aria-label="Platform Ops navigation">
+    <div class="ops-sidebar__top">
+      <div class="ops-brand">
+        <div class="ops-brand-mark" aria-hidden="true">
+          <i class="pi pi-eye"></i>
+        </div>
+        <div class="ops-brand-copy">
+          <strong>{{ 'platformOps.shell.title' | translate }}</strong>
+          <small>{{ 'platformOps.shell.subtitle' | translate }}</small>
+          <span class="ops-session-badge">
+            <i class="pi pi-circle-fill"></i>
+            {{ 'platformOps.shell.sessionActive' | translate }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ops-nav-groups">
+      <section class="ops-nav-group" *ngFor="let group of navGroups">
+        <h3 class="ops-nav-group-title">{{ group | translate }}</h3>
+        <nav class="ops-nav">
+          <a
+            *ngFor="let item of itemsForGroup(group)"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: item.route.endsWith('/console') }">
+            <i [class]="item.icon"></i>
+            <span>{{ item.labelKey | translate }}</span>
+          </a>
+        </nav>
+      </section>
+    </div>
+
+    <div class="ops-sidebar__bottom">
+      <div class="ops-sidebar-brand">
+        <app-brand-stack surface="dark" size="sidebar" [showLogo]="true" [showWordmark]="false" />
+      </div>
+
+      <div class="ops-sidebar-footer">
+        <div class="ops-user-card" *ngIf="sessionEmail">
+          <span class="ops-user-avatar" aria-hidden="true">{{ userInitials }}</span>
+          <div class="ops-user-meta">
+            <span class="ops-user-label">{{ 'platformOps.shell.sessionOperator' | translate }}</span>
+            <span class="ops-user-email" [title]="sessionEmail">{{ sessionEmail }}</span>
+          </div>
+        </div>
+        <button
+          pButton
+          type="button"
+          class="p-button-outlined ops-logout"
+          icon="pi pi-sign-out"
+          [label]="'platformOps.shell.logout' | translate"
+          (click)="logout()">
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="ops-main-wrap">
+    <main class="ops-main">
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer class="ops-app-footer">
+      <div class="ops-app-footer__glow" aria-hidden="true"></div>
+      <div class="ops-app-footer__inner">
+        <div class="ops-app-footer__lead">
+          <span class="ops-app-footer__icon" aria-hidden="true"><i class="pi pi-shield"></i></span>
+          <div>
+            <strong class="ops-app-footer__title">{{ 'platformOps.shell.footer.title' | translate }}</strong>
+            <p class="ops-app-footer__tagline">{{ 'platformOps.shell.footer.tagline' | translate }}</p>
+          </div>
+        </div>
+        <div class="ops-app-footer__meta">
+          <span class="ops-app-footer__badge">
+            <i class="pi pi-lock" aria-hidden="true"></i>
+            {{ 'platformOps.shell.footer.secured' | translate }}
+          </span>
+          <span class="ops-app-footer__copy">{{ 'platformOps.shell.footer.copyright' | translate:{ year: footerYear } }}</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <app-platform-ops-revalidate></app-platform-ops-revalidate>
+</div>

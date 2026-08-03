@@ -1,0 +1,648 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100dvh - var(--footer-height, 8rem) - 5mm);
+  max-height: calc(100dvh - var(--footer-height, 8rem) - 5mm);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.controle-acesso-container {
+  padding: 0;
+  background: #ffffff;
+  min-height: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+:host ::ng-deep app-page-hero {
+  flex-shrink: 0;
+}
+
+// Banner Header moderno e limpo
+.banner-header {
+  background: white;
+  border-radius: 12px;
+  margin: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  
+  .banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem;
+    min-height: 120px;
+    
+    .banner-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      
+      .banner-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        i {
+          font-size: 2rem;
+          color: #1976d2;
+        }
+      }
+      
+      .banner-text {
+        h1 {
+          font-size: 2.2rem;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin: 0 0 0.5rem 0;
+          line-height: 1.2;
+        }
+        
+        p {
+          font-size: 1rem;
+          color: #666;
+          margin: 0;
+          font-weight: 400;
+        }
+      }
+    }
+    
+    .banner-right {
+      .btn-novo {
+        background: #1976d2;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+        box-shadow: 0 2px 4px rgba(25, 118, 210, 0.3);
+        
+        &:hover {
+          background: #1565c0;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(25, 118, 210, 0.4);
+        }
+        
+        &:active {
+          transform: translateY(0);
+        }
+        
+        i {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
+.main-content {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: 1fr 300px 1fr;
+  gap: 2rem;
+  min-height: 0;
+  padding: 2rem 2rem 0;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.funcionalidades-section,
+.perfis-section,
+.perfil-funcionalidades-section {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+
+  ::ng-deep p-card {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+}
+
+::ng-deep .funcionalidades-card,
+::ng-deep .perfis-card,
+::ng-deep .perfil-funcionalidades-card {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .p-card-header {
+    flex-shrink: 0;
+  }
+
+  .p-card-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .p-card-content {
+    flex: 1;
+    min-height: 0;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+}
+
+::ng-deep .funcionalidades-card .p-card-content,
+::ng-deep .perfis-card .p-card-content {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+::ng-deep .perfil-funcionalidades-card .p-card-content {
+  overflow: hidden;
+}
+
+.funcionalidades-list,
+.perfis-list,
+.funcionalidades-do-perfil {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.funcionalidade-item,
+.perfil-item,
+.funcionalidade-perfil-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+
+  &:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+  }
+}
+
+.funcionalidade-item.selected {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.funcionalidade-info,
+.perfil-info {
+  flex: 1;
+  min-width: 0;
+
+  .funcionalidade-header,
+  .perfil-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+
+    .funcionalidade-icon {
+      color: #3b82f6;
+      font-size: 1rem;
+    }
+
+    .funcionalidade-nome,
+    .perfil-nome {
+      font-weight: 600;
+      color: #1e293b;
+    }
+  }
+
+  .funcionalidade-detalhes,
+  .perfil-detalhes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .codigo {
+      background: #f1f5f9;
+      color: #475569;
+      padding: 0.125rem 0.375rem;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Consolas', monospace;
+      font-size: 0.75rem;
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .descricao {
+      color: #64748b;
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.perfil-stats {
+  .funcionalidades-count {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+}
+
+.funcionalidade-actions,
+.perfil-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+:host ::ng-deep .btn-assign-feature.p-button-outlined {
+  border-color: #0369a1 !important;
+  color: #0369a1 !important;
+  background: #fff !important;
+  font-weight: 500;
+
+  &:enabled:hover,
+  &:enabled:focus-visible {
+    background: #f0f7ff !important;
+    border-color: #0284c7 !important;
+    color: #0056b3 !important;
+    box-shadow: none !important;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.no-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 0;
+  color: #64748b;
+  text-align: center;
+
+  i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.perfil-funcionalidades-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.perfil-funcionalidades-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+
+  .total-funcionalidades {
+    color: #64748b;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+}
+
+.funcionalidades-do-perfil {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.no-funcionalidades {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #64748b;
+  text-align: center;
+
+  i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+}
+
+// Novos estilos para o template atualizado
+.funcionalidade-item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+  margin-bottom: 0.5rem;
+
+  &:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+  }
+
+  &.selected {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+  }
+
+  .funcionalidade-info {
+    flex: 1;
+    
+    .funcionalidade-nome {
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 0.25rem;
+    }
+    
+    .funcionalidade-descricao {
+      color: #64748b;
+      font-size: 0.875rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    .funcionalidade-secao {
+      background: #f1f5f9;
+      color: #475569;
+      padding: 0.125rem 0.375rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      display: inline-block;
+    }
+  }
+}
+
+.perfil-item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  border-left: 4px solid transparent;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+  margin-bottom: 0.5rem;
+
+  &:hover {
+    background: #f8fafc;
+    border-color: #3b82f6;
+  }
+
+  &.selected {
+    background: #f0f7ff;
+    border-color: #e2e8f0;
+    border-left-color: #0056b3;
+    box-shadow: 0 2px 6px rgba(0, 86, 179, 0.12);
+  }
+
+  .perfil-info {
+    flex: 1;
+    
+    .perfil-nome {
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 0.25rem;
+    }
+    
+    .perfil-descricao {
+      color: #64748b;
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.funcionalidade-perfil-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  
+  i {
+    color: #10b981;
+    font-size: 1rem;
+  }
+  
+  span {
+    color: #1e293b;
+    font-weight: 500;
+  }
+}
+
+.perfil-selecionado-info {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  
+  h3 {
+    margin: 0 0 0.5rem 0;
+    color: #1e293b;
+    font-size: 1.25rem;
+  }
+  
+  p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.875rem;
+  }
+}
+
+.no-perfil-selected {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #64748b;
+  text-align: center;
+  
+  i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+  
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #64748b;
+  text-align: center;
+  
+  p {
+    margin: 1rem 0 0 0;
+    font-size: 0.875rem;
+  }
+}
+
+.actions {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+// Responsividade
+@media (max-width: 1200px) {
+  .main-content {
+    grid-template-columns: 1fr 250px 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-header {
+    margin: 1rem;
+    
+    .banner-content {
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      text-align: center;
+      
+      .banner-left {
+        flex-direction: column;
+        gap: 1rem;
+        
+        .banner-icon {
+          width: 50px;
+          height: 50px;
+          
+          i {
+            font-size: 1.5rem;
+          }
+        }
+        
+        .banner-text {
+          h1 {
+            font-size: 1.8rem;
+          }
+          
+          p {
+            font-size: 0.9rem;
+          }
+        }
+      }
+      
+      .banner-right {
+        .btn-novo {
+          padding: 0.6rem 1.2rem;
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+
+  .main-content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .funcionalidades-section,
+  .perfis-section,
+  .perfil-funcionalidades-section {
+    min-height: 0;
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-header {
+    margin: 0.5rem;
+    
+    .banner-content {
+      padding: 1rem;
+      
+      .banner-left {
+        .banner-icon {
+          width: 45px;
+          height: 45px;
+          
+          i {
+            font-size: 1.2rem;
+          }
+        }
+        
+        .banner-text {
+          h1 {
+            font-size: 1.5rem;
+          }
+          
+          p {
+            font-size: 0.8rem;
+          }
+        }
+      }
+      
+      .banner-right {
+        .btn-novo {
+          padding: 0.5rem 1rem;
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}

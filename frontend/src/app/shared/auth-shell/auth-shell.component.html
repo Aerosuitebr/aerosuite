@@ -1,0 +1,29 @@
+<div class="auth-shell">
+  <div class="auth-shell__backdrop" aria-hidden="true">
+    <div class="auth-shell__gradient"></div>
+    <div class="auth-shell__grid"></div>
+    <div class="auth-shell__orb auth-shell__orb--a"></div>
+    <div class="auth-shell__orb auth-shell__orb--b"></div>
+    <div class="auth-shell__orb auth-shell__orb--c"></div>
+    <div class="auth-shell__shine"></div>
+  </div>
+
+  <div class="auth-shell__viewport">
+    <div
+      class="auth-shell__content"
+      [class.auth-shell__content--wide]="cardWide"
+      [style.--auth-card-max]="cardMaxWidth + 'px'">
+      <div class="auth-shell__card">
+        <div class="auth-shell__lang" *ngIf="showLanguageSwitcher">
+          <app-language-switcher variant="panel"></app-language-switcher>
+        </div>
+        <ng-content select="[authHeader]"></ng-content>
+        <div class="auth-shell__body">
+          <ng-content></ng-content>
+        </div>
+        <ng-content select="[authFooter]"></ng-content>
+      </div>
+    </div>
+    <ng-content select="[authBelow]"></ng-content>
+  </div>
+</div>

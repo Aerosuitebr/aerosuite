@@ -1,0 +1,360 @@
+@import '../../../styles.scss';
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 25%, #1e293b 50%, #334155 75%, #475569 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.3;
+  }
+}
+
+.login-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+}
+
+.login-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 450px;
+  padding: 2rem;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
+  padding: 3rem 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: slideInUp 0.8s ease-out;
+}
+
+.login-lang-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  
+  .logo-container {
+    .login-logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 4px 12px rgba(14, 165, 233, 0.3));
+      animation: logoFloat 3s ease-in-out infinite;
+    }
+    
+    .login-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 0 0 0.5rem 0;
+      letter-spacing: 2px;
+    }
+    
+    .login-subtitle {
+      font-size: 1.1rem;
+      color: #64748b;
+      margin: 0;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+.form-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-color-secondary, #94a3b8);
+}
+
+.w-full {
+  width: 100%;
+}
+
+.login-form {
+  .form-group {
+    margin-bottom: 1.5rem;
+    
+    .password-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.5px;
+    }
+    
+    .forgot-password-link {
+      font-size: 0.875rem;
+      color: #0ea5e9;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+      
+      &:hover {
+        color: #0284c7;
+        text-decoration: underline;
+      }
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+      background: rgba(255, 255, 255, 0.8);
+      color: #1e293b !important;
+      
+      &:focus {
+        outline: none;
+        border-color: #0ea5e9;
+        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        background: white;
+        color: #1e293b !important;
+      }
+      
+      &.error {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        color: #1e293b !important;
+      }
+      
+      &::placeholder {
+        color: #9ca3af;
+      }
+    }
+    
+    // Garantir que inputs do PrimeNG também tenham cor de texto visível
+    :host ::ng-deep input.p-inputtext,
+    :host ::ng-deep input[type="email"],
+    :host ::ng-deep input[type="text"] {
+      color: #1e293b !important;
+      
+      &:focus {
+        color: #1e293b !important;
+      }
+    }
+    
+    :host ::ng-deep .form-password {
+      width: 100%;
+      
+      .p-password-input {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+        background: rgba(255, 255, 255, 0.8);
+        color: #1e293b !important;
+        
+        &:focus {
+          outline: none;
+          border-color: #0ea5e9;
+          box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+          background: white;
+          color: #1e293b !important;
+        }
+        
+        &.error {
+          border-color: #ef4444;
+          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+          color: #1e293b !important;
+        }
+      }
+      
+      input {
+        color: #1e293b !important;
+      }
+      
+      .p-password-toggle {
+        color: #64748b;
+        transition: color 0.3s ease;
+        
+        &:hover {
+          color: #0ea5e9;
+        }
+      }
+    }
+  }
+  
+  .form-actions {
+    margin-top: 2rem;
+    
+    .login-button {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      border: none;
+      color: white;
+      transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+      
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(14, 165, 233, 0.4);
+      }
+      
+      &:active:not(:disabled) {
+        transform: translateY(0);
+      }
+      
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+  
+  .error-message {
+    margin-top: 1rem;
+    
+    :host ::ng-deep .p-message {
+      border-radius: 8px;
+      border: none;
+      background: rgba(239, 68, 68, 0.1);
+      color: #dc2626;
+    }
+  }
+}
+
+.trial-link-wrap {
+  margin-top: 1.25rem;
+  text-align: center;
+}
+
+.trial-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary-color, #2563eb);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.login-footer {
+  margin-top: 2rem;
+  text-align: center;
+  
+  .copyright {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+// Animações
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .login-content {
+    padding: 1rem;
+  }
+  
+  .login-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .login-header .logo-container {
+    .login-logo {
+      width: 60px;
+      height: 60px;
+    }
+    
+    .login-title {
+      font-size: 2rem;
+    }
+    
+    .login-subtitle {
+      font-size: 1rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 1.5rem 1rem;
+  }
+  
+  .login-header .logo-container {
+    .login-title {
+      font-size: 1.8rem;
+    }
+  }
+}

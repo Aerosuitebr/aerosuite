@@ -1,0 +1,57 @@
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.page {
+  padding: 0 8px 2rem;
+}
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-search {
+  width: 280px;
+  max-width: 100%;
+  flex-shrink: 0;
+}
+
+.row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .row-action-btn.p-button {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  justify-content: center;
+}
+
+:host ::ng-deep .row-action-btn--delete.p-button-text:enabled:hover,
+:host ::ng-deep .row-action-btn--delete.p-button-text:enabled:focus-visible {
+  color: #dc2626 !important;
+  background: #fef2f2 !important;
+}
+
+/* Spinners nativos do type="number" */
+:host ::ng-deep input.trein-obrig-validade[type='number'] {
+  -moz-appearance: auto;
+  appearance: auto;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: inner-spin-button;
+    opacity: 1;
+    height: auto;
+  }
+}

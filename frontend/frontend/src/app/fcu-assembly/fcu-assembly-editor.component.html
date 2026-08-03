@@ -1,0 +1,828 @@
+<div class="as-page list-container">
+  <p-toast 
+    position="top-right" 
+    [style]="{ 'z-index': '12000' }"
+    styleClass="custom-toast">
+  </p-toast>
+
+  <app-page-hero
+    variant="navy"
+    titleKey="assembly.editor.title"
+    subtitleKey="assembly.subtitle"
+    titleIcon="pi-file-edit"
+    [hasActions]="true">
+    <div actions class="fcu-hero-actions">
+      <button
+        pButton
+        type="button"
+        [label]="'assembly.btn.back' | translate"
+        icon="pi pi-arrow-left"
+        class="p-button-text p-button-sm"
+        (click)="goBack()"
+      ></button>
+      <p-dropdown
+        inputId="assembly-saved-document"
+        [options]="savedDocuments"
+        optionLabel="title"
+        optionValue="id"
+        [placeholder]="'assembly.placeholder.noManuals' | translate"
+        [attr.aria-label]="'assembly.placeholder.noManuals' | translate"
+        [showClear]="true"
+        (onChange)="loadDocument($event.value)"
+        styleClass="document-dropdown fcu-doc-dropdown"
+        [appendTo]="'body'">
+        <ng-template pTemplate="selectedItem" let-selectedOption>
+          <span *ngIf="selectedOption">{{ selectedOption.title }}</span>
+          <span *ngIf="!selectedOption" class="placeholder-text">{{ 'assembly.placeholder.noManuals' | translate }}</span>
+        </ng-template>
+      </p-dropdown>
+    </div>
+  </app-page-hero>
+
+  <!-- 🔹 Conteúdo (EDIÇÃO) -->
+  <form class="content-wrapper" [formGroup]="form" *ngIf="!preview()">
+    <!-- 🔸 Menu lateral -->
+    <aside class="toc">
+      <!-- Seções Accordion -->
+      <p-accordion [multiple]="false" [activeIndex]="0" class="modern-accordion">
+        <p-accordionTab>
+          <ng-template pTemplate="header">
+            <div class="accordion-header">
+              <div class="header-icon">
+                <i class="pi pi-list"></i>
+              </div>
+              <div class="header-content">
+                <h3 class="header-title">{{ 'assembly.sections.title' | translate }}</h3>
+                <p class="header-subtitle">{{ 'assembly.sections.subtitle' | translate:{ count: sections().length } }}</p>
+              </div>
+            </div>
+          </ng-template>
+          
+          <div class="accordion-content">
+            <div class="sections-list">
+              <div
+                *ngFor="let sec of sections().controls; let i = index; trackBy: trackBySection"
+                class="section-item"
+                [class.active]="i === activeSectionIndex"
+                (click)="activeSectionIndex = i; _currentSectionSteps = null; cdr.markForCheck()"
+              >
+                <div class="section-indicator">
+                  <div class="section-number">{{ i + 1 }}</div>
+                </div>
+                <div class="section-info">
+                  <h4 class="section-title">{{ sec.value?.title || ('assembly.section.fallback' | translate:{ n: i + 1 }) }}</h4>
+                  <p class="section-steps">{{ 'assembly.section.steps' | translate:{ count: (sec.get('steps')?.value?.length || 0) } }}</p>
+                </div>
+                <div class="section-actions">
+                  <i class="pi pi-chevron-right section-arrow"></i>
+                </div>
+              </div>
+            </div>
+            
+            <button
+              pButton
+              type="button"
+              [label]="'assembly.btn.addSection' | translate"
+              icon="pi pi-plus"
+              class="add-section-btn"
+              (click)="addSection()"
+            ></button>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
+
+      <!-- Ações do Editor Accordion -->
+      <p-accordion [multiple]="false" [activeIndex]="0" class="modern-accordion actions-accordion">
+        <p-accordionTab>
+          <ng-template pTemplate="header">
+            <div class="accordion-header">
+              <div class="header-icon">
+                <i class="pi pi-cog"></i>
+              </div>
+              <div class="header-content">
+                <h3 class="header-title">{{ 'assembly.panel.actions' | translate }}</h3>
+                <p class="header-subtitle">{{ 'assembly.panel.actionsSubtitle' | translate }}</p>
+              </div>
+            </div>
+          </ng-template>
+          
+          <div class="accordion-content">
+            <div class="actions-grid">
+              <button class="action-btn" (click)="importWord()" 
+                      [pTooltip]="'assembly.tooltip.importWord' | translate" 
+                      [attr.aria-label]="'assembly.tooltip.importWord' | translate"
+                      tooltipPosition="top" 
+                      [showDelay]="300">
+                <i class="pi pi-cloud-upload"></i>
+              </button>
+
+              <button class="action-btn" (click)="togglePreview()" 
+                      [pTooltip]="'assembly.tooltip.togglePreview' | translate" 
+                      [attr.aria-label]="'assembly.tooltip.togglePreview' | translate"
+                      tooltipPosition="top" 
+                      [showDelay]="300">
+                <i class="pi pi-eye"></i>
+              </button>
+
+              <button class="action-btn" (click)="showLanguageDialog = true" 
+                      [pTooltip]="'assembly.tooltip.translate' | translate" 
+                      [attr.aria-label]="'assembly.tooltip.translate' | translate"
+                      tooltipPosition="top" 
+                      [showDelay]="300">
+                <i class="pi pi-language"></i>
+              </button>
+
+              <button class="action-btn" (click)="exportPdf()" 
+                      [pTooltip]="'assembly.tooltip.exportPdf' | translate" 
+                      [attr.aria-label]="'assembly.tooltip.exportPdf' | translate"
+                      tooltipPosition="top" 
+                      [showDelay]="300">
+                <i class="pi pi-file-pdf"></i>
+              </button>
+
+              <button class="action-btn" (click)="save()" 
+                      [pTooltip]="'assembly.tooltip.saveServer' | translate" 
+                      [attr.aria-label]="'assembly.tooltip.saveServer' | translate"
+                      tooltipPosition="top" 
+                      [showDelay]="300">
+                <i class="pi pi-save"></i>
+              </button>
+            </div>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
+    </aside>
+
+    <!-- 🔸 Corpo principal -->
+    <section class="table-card body">
+      <!-- 🔹 Metadados -->
+      <p-card class="meta-card">
+        <div class="grid meta-grid">
+          <div class="col-12 md:col-6 lg:col-4">
+            <label for="assembly-company">{{ 'assembly.field.company' | translate }}</label>
+            <input id="assembly-company" pInputText formControlName="company" />
+          </div>
+          <div class="col-12 md:col-6 lg:col-4">
+            <label for="assembly-certificate">{{ 'assembly.field.certificate' | translate }}</label>
+            <input id="assembly-certificate" pInputText formControlName="certificate" />
+          </div>
+          <div class="col-12 md:col-6 lg:col-4">
+            <label for="assembly-title">{{ 'assembly.field.title' | translate }}</label>
+            <input id="assembly-title" pInputText formControlName="title" />
+          </div>
+
+          <div class="col-6 md:col-3"><label for="assembly-pn">{{ 'assembly.field.pn' | translate }}</label><input id="assembly-pn" pInputText formControlName="pn" /></div>
+          <div class="col-6 md:col-3"><label for="assembly-sn">{{ 'assembly.field.sn' | translate }}</label><input id="assembly-sn" pInputText formControlName="sn" /></div>
+          <div class="col-6 md:col-3"><label for="assembly-model">{{ 'assembly.field.model' | translate }}</label><input id="assembly-model" pInputText formControlName="model" /></div>
+          <div class="col-6 md:col-3"><label for="assembly-date">{{ 'assembly.field.date' | translate }}</label><input id="assembly-date" pInputText formControlName="date" /></div>
+
+          <div class="col-6 md:col-3"><label for="assembly-os">{{ 'assembly.field.os' | translate }}</label><input id="assembly-os" pInputText formControlName="os" /></div>
+          <div class="col-6 md:col-3"><label for="assembly-client">{{ 'assembly.field.client' | translate }}</label><input id="assembly-client" pInputText formControlName="client" /></div>
+          <div class="col-6 md:col-3"><label for="assembly-manual">{{ 'assembly.field.manual' | translate }}</label><input id="assembly-manual" pInputText formControlName="manual" /></div>
+          <div class="col-6 md:col-3"><label for="assembly-revision">{{ 'assembly.field.revision' | translate }}</label><input id="assembly-revision" pInputText formControlName="revision" /></div>
+
+          <div class="col-6 md:col-3">
+            <label for="assembly-revision-date">{{ 'assembly.field.revisionDate' | translate }}</label>
+            <input id="assembly-revision-date" pInputText formControlName="revisionDate" />
+          </div>
+          <div class="col-6 md:col-3"><label for="assembly-ata">{{ 'assembly.field.ata' | translate }}</label><input id="assembly-ata" pInputText formControlName="ata" /></div>
+          <div class="col-6 md:col-3">
+            <label for="assembly-pages">{{ 'assembly.field.pages' | translate }}</label>
+            <input id="assembly-pages" pInputText type="number" formControlName="pages" />
+          </div>
+        </div>
+      </p-card>
+
+      <!-- 🔹 Seção ativa -->
+      <ng-container *ngIf="sectionsLength > 0">
+        <p-card class="section-card">
+          <div class="section-header" [formGroup]="sections().controls[activeSectionIndex]" *ngIf="sections().controls[activeSectionIndex]">
+            <input pInputText class="section-title" formControlName="title" [attr.aria-label]="'assembly.field.title' | translate" />
+            <span class="section-id">#{{ sections().controls[activeSectionIndex]?.value?.id }}</span>
+          </div>
+
+          <div class="steps">
+            <p-accordion [multiple]="true">
+              <p-accordionTab
+                      *ngFor="let st of currentSectionSteps?.controls || []; let si = index; trackBy: trackByStep"
+                      [header]="stepHeader(st.value, si)"
+              >
+                <!-- Cada passo como FormGroup -->
+                <div class="step-line" [formGroup]="st">
+                  <div class="row">
+                    <div class="col-12 md:col-3">
+                      <label>{{ 'assembly.field.kind' | translate }}</label>
+                      <p-dropdown
+                              [options]="kindOptions"
+                              optionLabel="label"
+                              optionValue="value"
+                              formControlName="kind"
+                              styleClass="w-full"
+                      ></p-dropdown>
+                    </div>
+
+                    <div class="col-6 md:col-2">
+                      <label>{{ 'assembly.field.code' | translate }}</label>
+                      <input pInputText formControlName="code" />
+                    </div>
+
+                    <div class="col-12 md:col-7">
+                      <label>{{ 'assembly.field.title' | translate }}</label>
+                      <input pInputText formControlName="title" />
+                    </div>
+
+                    <!-- Texto -->
+                    <ng-container *ngIf="st.get('kind')?.value !== 'figure'">
+                      <div class="col-12">
+                        <label>{{ 'assembly.field.text' | translate }}</label>
+                        <textarea pInputTextarea rows="5" formControlName="text" (click)="openStepTextEditor(st.get('text'))" readonly
+                                  [pTooltip]="'assembly.tooltip.openTextEditor' | translate" 
+                                  tooltipPosition="top" 
+                                  [showDelay]="500"></textarea>
+                      </div>
+                    </ng-container>
+
+                    <!-- Figura -->
+                    <ng-container *ngIf="st.get('kind')?.value === 'figure'">
+                      <div class="col-12">
+                        <label>{{ 'assembly.field.figure' | translate }}</label>
+                        <div class="figure-preview" *ngIf="st.value?.imageData; else noImage">
+                          <img
+                                  [src]="'data:' + (st.value?.imageType || 'image/png') + ';base64,' + (st.value?.imageData || '')"
+                                  style="max-width:100%; border:1px solid #e5e7eb; border-radius:8px;"
+                          />
+                        </div>
+                        <ng-template #noImage><small>{{ 'assembly.noImage' | translate }}</small></ng-template>
+                      </div>
+                    </ng-container>
+
+                    <div class="col-12">
+                      <label>{{ 'assembly.field.refs' | translate }}</label>
+                      <p-chips formControlName="refs"></p-chips>
+                    </div>
+                  </div>
+
+                  <div class="step-actions">
+                    <button pButton type="button" icon="pi pi-arrow-up" class="p-button-text" (click)="moveStepUp(si)" [attr.aria-label]="'assembly.tooltip.moveStepUp' | translate"></button>
+                    <button pButton type="button" icon="pi pi-arrow-down" class="p-button-text" (click)="moveStepDown(si)" [attr.aria-label]="'assembly.tooltip.moveStepDown' | translate"></button>
+                    <button pButton type="button" icon="pi pi-trash" class="p-button-text p-button-danger" (click)="removeStep(si)" [attr.aria-label]="'assembly.tooltip.removeStep' | translate"></button>
+                  </div>
+                </div>
+              </p-accordionTab>
+            </p-accordion>
+
+            <div class="steps-toolbar">
+              <button
+                      pButton
+                      type="button"
+                      icon="pi pi-plus"
+                      [label]="'assembly.btn.addStep' | translate"
+                      class="p-button-primary"
+                      (click)="addStep()"
+              ></button>
+            </div>
+          </div>
+        </p-card>
+      </ng-container>
+
+      <!-- 🔹 Observações -->
+      <p-card class="obs-card">
+        <label for="assembly-observations">{{ 'assembly.field.observations' | translate }}</label>
+        <textarea id="assembly-observations" pInputTextarea rows="5" formControlName="observations" (click)="openObservationsEditor()" readonly
+                  [pTooltip]="'assembly.tooltip.openTextEditor' | translate" 
+                  tooltipPosition="top" 
+                  [showDelay]="500"></textarea>
+        <div class="obs-actions">
+          <button pButton type="button" [label]="'assembly.btn.save' | translate" icon="pi pi-save" class="p-button-primary" (click)="save()"></button>
+        </div>
+      </p-card>
+    </section>
+  </form>
+
+  <!-- ============ PRÉ-VISUALIZAÇÃO (sem microsintaxe else) ============ -->
+  <div class="content-wrapper" *ngIf="preview()">
+    <section class="table-card body">
+      <!-- Cabeçalho do preview -->
+      <p-card class="meta-card">
+        <div class="meta-preview">
+          <h3>{{ form.value?.title }}</h3>
+          <div class="meta-row">
+            <span><b>{{ 'assembly.preview.company' | translate }}</b> {{ form.value?.company }}</span>
+            <span><b>{{ 'assembly.preview.certificate' | translate }}</b> {{ form.value?.certificate }}</span>
+          </div>
+          <div class="meta-row">
+            <span><b>{{ 'assembly.field.pn' | translate }}:</b> {{ form.value?.pn }}</span>
+            <span><b>{{ 'assembly.field.sn' | translate }}:</b> {{ form.value?.sn }}</span>
+            <span><b>{{ 'assembly.field.model' | translate }}:</b> {{ form.value?.model }}</span>
+            <span><b>{{ 'assembly.field.ata' | translate }}:</b> {{ form.value?.ata }}</span>
+          </div>
+          <div class="meta-row">
+            <span><b>{{ 'assembly.preview.manual' | translate }}</b> {{ form.value?.manual }}</span>
+            <span><b>{{ 'assembly.preview.revision' | translate }}</b> {{ form.value?.revision }}</span>
+            <span><b>{{ 'assembly.preview.revisionDate' | translate }}</b> {{ form.value?.revisionDate }}</span>
+            <span><b>{{ 'assembly.preview.client' | translate }}</b> {{ form.value?.client }}</span>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Seções e passos (somente leitura) -->
+      <p-card class="section-card" *ngFor="let sec of sections().controls; let i = index; trackBy: trackBySection">
+        <div class="section-header">
+          <h4 class="section-title">{{ sec.get('title')?.value || ('assembly.section.fallback' | translate:{ n: i + 1 }) }}</h4>
+          <span class="section-id">#{{ sec.get('id')?.value }}</span>
+        </div>
+
+        <div class="steps">
+          <div
+                  class="preview-step"
+                  *ngFor="let st of (sec.get('steps')?.['controls'] || []); let si = index; trackBy: trackByStep"
+          >
+            <h5 class="step-title">{{ stepHeader(st.value, si) }}</h5>
+
+            <ng-container [ngSwitch]="st.get('kind')?.value">
+              <p *ngSwitchCase="'figure'">
+                <img
+                        *ngIf="st.value?.imageData"
+                        [src]="'data:' + (st.value?.imageType || 'image/png') + ';base64,' + (st.value?.imageData || '')"
+                        style="max-width:100%; border:1px solid #e5e7eb; border-radius:8px;"
+                />
+                <span *ngIf="!st.value?.imageData">{{ 'assembly.field.figure' | translate }}</span>
+              </p>
+
+              <pre *ngSwitchCase="'table'" class="table-text">{{ st.get('text')?.value }}</pre>
+
+              <p *ngSwitchDefault class="step-text">{{ st.get('text')?.value }}</p>
+            </ng-container>
+
+            <ul class="step-refs" *ngIf="(st.get('refs')?.value?.length || 0) > 0">
+              <li *ngFor="let r of st.get('refs')?.value">{{ r }}</li>
+            </ul>
+          </div>
+        </div>
+      </p-card>
+
+      <p-card class="obs-card">
+        <h4>{{ 'assembly.field.observations' | translate }}</h4>
+        <p class="step-text">{{ form.value?.observations }}</p>
+      </p-card>
+    </section>
+  </div>
+
+  <!-- ✅ DIÁLOGO: escolher idioma -->
+  <p-dialog styleClass="as-hero-dialog translate-dialog modern-theme animated-modal" [(visible)]="showLanguageDialog"
+            [modal]="true"
+            [blockScroll]="true"
+            [dismissableMask]="true"
+            [closable]="false"
+            [draggable]="false"
+            [resizable]="false"
+            [appendTo]="'body'"
+            [baseZIndex]="20000"
+            [breakpoints]="{'1200px':'85vw','960px':'90vw','640px':'95vw'}"
+            [style]="{ width:'720px', maxWidth:'96vw' }"
+           
+            [transitionOptions]="'300ms cubic-bezier(0.25, 0.8, 0.25, 1)'">
+
+    <ng-template pTemplate="header">
+      <div class="td-header">
+        <div class="td-header-content">
+          <div class="td-icon-container">
+            <i class="pi pi-language td-icon"></i>
+          </div>
+          <div class="td-title-section">
+            <h3 class="td-title">{{ 'assembly.translate.title' | translate }}</h3>
+            <p class="td-subtitle">{{ 'assembly.translate.subtitle' | translate }}</p>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- Botão de fechar na extremidade superior direita da modal -->
+    <button pButton type="button"
+            class="p-button-rounded p-button-text td-close-extreme"
+            icon="pi pi-times"
+            [attr.aria-label]="'assembly.btn.cancel' | translate"
+            (click)="showLanguageDialog = false">
+    </button>
+
+    <div class="td-body">
+      <div class="td-content-grid">
+        <!-- Seção de seleção de idioma -->
+        <div class="td-language-section">
+          <div class="td-section-header">
+            <i class="pi pi-globe section-icon"></i>
+            <h4 class="section-title">{{ 'assembly.translate.targetLanguage' | translate }}</h4>
+          </div>
+          
+          <div class="td-dropdown-container">
+            <label for="lang" class="td-label">{{ 'assembly.translate.selectLanguage' | translate }}</label>
+            <p-dropdown
+                    inputId="lang"
+                    [options]="languageOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                    [placeholder]="'assembly.placeholder.chooseLanguage' | translate"
+                    [(ngModel)]="selectedLanguage"
+                    [appendTo]="'body'"
+                    [showClear]="true"
+                    styleClass="translate-dropdown w-full"
+                    [panelStyleClass]="'translate-dropdown-panel'">
+            </p-dropdown>
+          </div>
+        </div>
+
+        <!-- Seção de informações -->
+        <div class="td-info-section">
+          <div class="td-section-header">
+            <i class="pi pi-info-circle section-icon"></i>
+            <h4 class="section-title">{{ 'assembly.translate.info' | translate }}</h4>
+          </div>
+          
+          <div class="td-info-content">
+            <div class="info-item">
+              <i class="pi pi-check-circle info-icon"></i>
+              <span class="info-text">{{ 'assembly.translate.infoAuto' | translate }}</span>
+            </div>
+            <div class="info-item">
+              <i class="pi pi-clock info-icon"></i>
+              <span class="info-text">{{ 'assembly.translate.infoTime' | translate }}</span>
+            </div>
+            <div class="info-item">
+              <i class="pi pi-shield info-icon"></i>
+              <span class="info-text">{{ 'assembly.translate.infoSecure' | translate }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview do idioma selecionado -->
+      <div class="td-preview-section" *ngIf="selectedLanguage">
+        <div class="td-preview-content">
+          <i class="pi pi-eye preview-icon"></i>
+          <div class="preview-text">
+            <strong>{{ 'assembly.translate.preview' | translate }}</strong> {{ 'assembly.translate.previewText' | translate }}
+            <span class="language-highlight">{{ getLanguageName(selectedLanguage) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="td-footer">
+        <div class="td-footer-info">
+          <i class="pi pi-lightbulb footer-icon"></i>
+          <span class="footer-text">{{ 'assembly.translate.tip' | translate }}</span>
+        </div>
+        
+        <div class="td-footer-actions">
+          <button pButton type="button" 
+                  [label]="'assembly.btn.cancel' | translate"
+                  icon="pi pi-times"
+                  class="p-button-text td-cancel"
+                  (click)="showLanguageDialog = false">
+          </button>
+
+          <button pButton type="button" 
+                  [label]="'assembly.btn.translateDoc' | translate"
+                  icon="pi pi-play"
+                  class="p-button-primary td-cta"
+                  [disabled]="!selectedLanguage || translating"
+                  (click)="showLanguageDialog = false; translateAll()">
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Modal de Alerta: Nenhum Conteúdo para Traduzir -->
+  <p-dialog 
+    styleClass="as-hero-dialog no-content-dialog" [(visible)]="showNoContentDialog"
+    [modal]="true"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{ width: '520px', maxWidth: '90vw' }"
+   
+    [dismissableMask]="true"
+    (onHide)="showNoContentDialog = false">
+    
+    <ng-template pTemplate="header">
+      <div class="dialog-header-custom">
+        <div class="header-icon-wrapper warning">
+          <i class="pi pi-exclamation-triangle"></i>
+        </div>
+        <div class="header-text">
+          <h3 class="dialog-title">{{ 'assembly.empty.title' | translate }}</h3>
+          <p class="dialog-subtitle">{{ 'assembly.empty.subtitle' | translate }}</p>
+        </div>
+      </div>
+    </ng-template>
+
+    <div class="dialog-content-custom">
+      <div class="content-icon">
+        <i class="pi pi-file-edit"></i>
+      </div>
+      
+      <div class="content-message">
+        <p class="main-message">
+          {{ 'assembly.empty.mainMessage' | translate }}
+        </p>
+        
+        <ul class="content-checklist">
+          <li>
+            <i class="pi pi-check-circle"></i>
+            <span>{{ 'assembly.empty.checklist.titleDoc' | translate }}</span>
+          </li>
+          <li>
+            <i class="pi pi-check-circle"></i>
+            <span>{{ 'assembly.empty.checklist.obsDesc' | translate }}</span>
+          </li>
+          <li>
+            <i class="pi pi-check-circle"></i>
+            <span>{{ 'assembly.empty.checklist.sectionsTitles' | translate }}</span>
+          </li>
+          <li>
+            <i class="pi pi-check-circle"></i>
+            <span>{{ 'assembly.empty.checklist.stepsDetail' | translate }}</span>
+          </li>
+        </ul>
+
+        <div class="help-text">
+          <i class="pi pi-info-circle"></i>
+          <span>{{ 'assembly.empty.hintAfter' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="dialog-footer-custom">
+        <button
+          pButton
+          type="button"
+          [label]="'assembly.btn.understood' | translate"
+          icon="pi pi-check"
+          class="p-button-primary confirm-button"
+          (click)="showNoContentDialog = false">
+        </button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+
+
+  <!-- ✅ OVERLAY: progresso da tradução -->
+  <div class="translate-overlay" *ngIf="translating" [@fadeInOut]>
+    <div class="translate-container">
+      <div class="translate-box">
+        <!-- Spinner Principal -->
+        <!-- Header com Progresso -->
+        <div class="translation-header">
+          <div class="translation-icon">
+            <i class="pi pi-language"></i>
+          </div>
+          <div class="translation-info">
+            <h3 class="translation-title">{{ 'assembly.translate.progress' | translate }}</h3>
+            <p class="translation-subtitle">{{ 'assembly.translate.convertingTo' | translate:{ language: getLanguageName(selectedLanguage) } }}</p>
+          </div>
+          <div class="translation-progress">
+            <span class="progress-percentage">{{ translationProgress }}%</span>
+          </div>
+          <button 
+            type="button"
+            class="cancel-translation-btn"
+            (click)="cancelTranslation()"
+            [attr.aria-label]="'assembly.translate.cancelAria' | translate">
+            <i class="pi pi-times"></i>
+          </button>
+        </div>
+
+        <!-- Novo Estilo de Progresso -->
+        <div class="modern-progress-container">
+          <div class="progress-steps-indicator">
+            <div class="step-dots">
+              <div 
+                *ngFor="let step of translationSteps; let i = index" 
+                class="dot"
+                [class.completed]="step.completed"
+                [class.active]="step.active">
+              </div>
+            </div>
+            <div class="step-counter">
+              <span class="current">{{ currentTranslationStep }}</span>
+              <span>/ {{ translationSteps.length }}</span>
+            </div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" [style.width.%]="translationProgress"></div>
+          </div>
+        </div>
+
+        <!-- Lista de Passos -->
+        <div class="translation-steps">
+          <div class="steps-container">
+            <div 
+              *ngFor="let step of translationSteps; let i = index" 
+              class="step-item"
+              [class.completed]="step.completed"
+              [class.active]="step.active"
+              [class.pending]="!step.completed && !step.active">
+              
+              <div class="step-indicator">
+                <div class="step-icon" *ngIf="!step.completed && !step.active">
+                  <i [class]="step.icon"></i>
+                </div>
+                <div class="step-icon completed" *ngIf="step.completed">
+                  <i class="pi pi-check"></i>
+                </div>
+                <div class="step-icon active" *ngIf="step.active">
+                  <div class="pulse-ring"></div>
+                  <i [class]="step.icon"></i>
+                </div>
+              </div>
+              
+              <div class="step-content">
+                <h4 class="step-name">{{ step.name }}</h4>
+                <p class="step-description">{{ step.description }}</p>
+              </div>
+              
+              <div class="step-status" *ngIf="step.active">
+                <div class="loading-dots">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔹 Rodapé -->
+  <div class="footer-bar">
+    <span>{{ 'assembly.footer.lastUpdate' | translate }}: {{ lastSavedAt || '-' }}</span>
+  </div>
+</div>
+
+<!-- ============ EDITOR DE TEXTO MODAL ============ -->
+<p-dialog 
+  styleClass="as-hero-dialog text-editor-dialog" header="{{ editorTitle }}"
+  [(visible)]="showTextEditor"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="true"
+  [style]="{ width: '90vw', height: '80vh' }"
+ 
+  [transitionOptions]="'300ms'">
+  
+  <div class="text-editor-container">
+    <!-- Toolbar do Editor -->
+    <div class="editor-toolbar">
+      <div class="toolbar-group">
+        <button type="button" 
+                class="toolbar-btn"
+                [pTooltip]="'assembly.tooltip.bold' | translate" 
+                [attr.aria-label]="'assembly.tooltip.bold' | translate"
+                tooltipPosition="top" 
+                [showDelay]="300"
+                (click)="formatText('bold')">
+          <span class="format-icon bold-icon">B</span>
+        </button>
+        <button type="button" 
+                class="toolbar-btn"
+                [pTooltip]="'assembly.tooltip.italic' | translate" 
+                [attr.aria-label]="'assembly.tooltip.italic' | translate"
+                tooltipPosition="top" 
+                [showDelay]="300"
+                (click)="formatText('italic')">
+          <span class="format-icon italic-icon">I</span>
+        </button>
+        <button type="button" 
+                class="toolbar-btn"
+                [pTooltip]="'assembly.tooltip.underline' | translate" 
+                [attr.aria-label]="'assembly.tooltip.underline' | translate"
+                tooltipPosition="top" 
+                [showDelay]="300"
+                (click)="formatText('underline')">
+          <span class="format-icon underline-icon">U</span>
+        </button>
+      </div>
+      
+      <div class="toolbar-separator"></div>
+      
+      <div class="toolbar-group">
+        <button type="button" 
+                class="toolbar-btn"
+                [pTooltip]="'assembly.tooltip.bulletList' | translate" 
+                [attr.aria-label]="'assembly.tooltip.bulletList' | translate"
+                tooltipPosition="top" 
+                [showDelay]="300"
+                (click)="formatText('insertUnorderedList')">
+          <i class="pi pi-list"></i>
+        </button>
+        <button type="button" 
+                class="toolbar-btn"
+                [pTooltip]="'assembly.tooltip.numberedList' | translate" 
+                [attr.aria-label]="'assembly.tooltip.numberedList' | translate"
+                tooltipPosition="top" 
+                [showDelay]="300"
+                (click)="formatText('insertOrderedList')">
+          <i class="pi pi-sort-numeric-down"></i>
+        </button>
+      </div>
+      
+      <div class="toolbar-separator"></div>
+      
+      <div class="toolbar-group">
+        <button type="button" 
+                class="toolbar-btn"
+                [pTooltip]="'assembly.tooltip.alignLeft' | translate" 
+                [attr.aria-label]="'assembly.tooltip.alignLeft' | translate"
+                tooltipPosition="top" 
+                [showDelay]="300"
+                (click)="formatText('justifyLeft')">
+          <i class="pi pi-align-left"></i>
+        </button>
+        <button type="button" 
+                class="toolbar-btn"
+                [pTooltip]="'assembly.tooltip.alignCenter' | translate" 
+                [attr.aria-label]="'assembly.tooltip.alignCenter' | translate"
+                tooltipPosition="top" 
+                [showDelay]="300"
+                (click)="formatText('justifyCenter')">
+          <i class="pi pi-align-center"></i>
+        </button>
+        <button type="button" 
+                class="toolbar-btn"
+                [pTooltip]="'assembly.tooltip.alignRight' | translate" 
+                [attr.aria-label]="'assembly.tooltip.alignRight' | translate"
+                tooltipPosition="top" 
+                [showDelay]="300"
+                (click)="formatText('justifyRight')">
+          <i class="pi pi-align-right"></i>
+        </button>
+      </div>
+      
+      <div class="toolbar-separator"></div>
+      
+      <div class="toolbar-group">
+        <button type="button" 
+                class="toolbar-btn"
+                [pTooltip]="'assembly.tooltip.undo' | translate" 
+                [attr.aria-label]="'assembly.tooltip.undo' | translate"
+                tooltipPosition="top" 
+                [showDelay]="300"
+                (click)="formatText('undo')">
+          <i class="pi pi-undo"></i>
+        </button>
+        <button type="button" 
+                class="toolbar-btn"
+                [pTooltip]="'assembly.tooltip.redo' | translate" 
+                [attr.aria-label]="'assembly.tooltip.redo' | translate"
+                tooltipPosition="top" 
+                [showDelay]="300"
+                (click)="formatText('redo')">
+          <i class="pi pi-refresh"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Área de Edição -->
+    <div class="editor-content">
+      <div 
+        #textEditor
+        class="rich-text-editor"
+        contenteditable="true"
+        [attr.aria-label]="editorTitle || ('assembly.editor.stepText' | translate)"
+        (input)="onEditorInput($event)"
+        (paste)="onEditorPaste($event)">
+      </div>
+    </div>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <div class="editor-footer">
+      <div class="footer-info">
+        <span class="char-count">{{ 'assembly.editor.charCount' | translate:{ count: getCharacterCount() } }}</span>
+      </div>
+      
+      <div class="footer-actions">
+        <button pButton type="button" 
+                [label]="'assembly.btn.cancel' | translate"
+                icon="pi pi-times"
+                class="p-button-text editor-cancel"
+                (click)="closeTextEditor()">
+        </button>
+        
+        <button pButton type="button" 
+                [label]="'assembly.btn.ok' | translate"
+                icon="pi pi-check"
+                class="p-button-primary editor-save"
+                (click)="saveTextEditor()">
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

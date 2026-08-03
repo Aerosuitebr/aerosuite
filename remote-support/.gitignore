@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Electron and installer outputs
+dist/
+dist-agent/
+release/
+
+# .NET build outputs
+**/bin/
+**/obj/
+
+# Local runtime data
+tmp/
+data/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Environment files and local secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Logs and coverage
+*.log
+coverage/
+.nyc_output/
+
+# IDE and operating system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini

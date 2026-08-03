@@ -1,0 +1,1 @@
+{"expression":"(async()=>{window.__expr+='(async()=>{window.__homeb64=\\'\\';return{ok:true};})()';return{step:'enc-init',len:window.__expr.length}})()","awaitPromise":true,"returnByValue":true}

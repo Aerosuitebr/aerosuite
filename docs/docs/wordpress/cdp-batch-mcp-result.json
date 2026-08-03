@@ -1,0 +1,62 @@
+{
+  "viewId": "7b8d4e",
+  "source": "cdp-batch-invoke.json (6 steps executed individually via browser_cdp; single 27KB Runtime.evaluate not sent as one MCP payload)",
+  "preFlight": { "wp": true, "homeLen": 0, "cssLen": 4 },
+  "postSteps": { "cssLen": 12434, "homeLen": 0 },
+  "result": {
+    "type": "object",
+    "value": [
+      {
+        "name": "deploy-css-step-4.js",
+        "ok": true,
+        "value": { "chunk": 3, "len": 7002 }
+      },
+      {
+        "name": "deploy-css-step-5.js",
+        "ok": true,
+        "value": { "chunk": 4, "len": 12434 }
+      },
+      {
+        "name": "deploy-upload-hero.js",
+        "ok": false,
+        "error": "Sem permissão para enviar esse tipo de arquivo.",
+        "mcp": {
+          "code": "rest_upload_unknown_error",
+          "message": "Sem permissão para enviar esse tipo de arquivo.",
+          "data": { "status": 500 }
+        }
+      },
+      {
+        "name": "deploy-upload-phone.js",
+        "ok": false,
+        "error": "Sem permissão para enviar esse tipo de arquivo.",
+        "mcp": {
+          "code": "rest_upload_unknown_error",
+          "message": "Sem permissão para enviar esse tipo de arquivo.",
+          "data": { "status": 500 }
+        }
+      },
+      {
+        "name": "deploy-upload-zoom.js",
+        "ok": false,
+        "error": "Sem permissão para enviar esse tipo de arquivo.",
+        "mcp": {
+          "code": "rest_upload_unknown_error",
+          "message": "Sem permissão para enviar esse tipo de arquivo.",
+          "data": { "status": 500 }
+        }
+      },
+      {
+        "name": "deploy-finalize-v2.js",
+        "ok": false,
+        "error": "buffers missing home=false css=true"
+      }
+    ]
+  },
+  "notes": [
+    "CSS steps 4–5 succeeded; __cssb64 grew from 4 to 12434 chars.",
+    "window.__homebuf was empty (0) — finalize requires deploy steps 0–3 in the same session.",
+    "JS media uploads blocked by WordPress: rest_upload_unknown_error (enable .js uploads or use alternate deploy path).",
+    "Local payload server on :9876 already in use; browser fetch to localhost blocked anyway."
+  ]
+}

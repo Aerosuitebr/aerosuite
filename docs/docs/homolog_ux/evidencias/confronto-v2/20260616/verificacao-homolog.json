@@ -1,0 +1,31 @@
+{
+  "generatedAt": "2026-06-16T12:28:34.568Z",
+  "base": "https://app.aerosuite.com.br",
+  "email": "rafaellanottesconsultoria@gmail.com",
+  "api": {
+    "endpoint": "/api/auth/login-tenants",
+    "status": 200,
+    "tenantCount": 1,
+    "tenants": [
+      {
+        "id": 16,
+        "codigo": "rafaella-nottes-consultoria",
+        "nome": "Rafaella Nottes Consultoria",
+        "label": "Rafaella Nottes Consultoria · rafaella-nottes-consultoria · 09/06/2026 · #16",
+        "criadoEm": "09/06/2026"
+      }
+    ],
+    "backendHasLabelField": true,
+    "backendHasCriadoEm": true,
+    "a2Status": "OK_DADOS"
+  },
+  "screenshots": {
+    "uiHomolog": "D:\\Desenvolvimento\\aerosuite\\docs\\homolog_ux\\evidencias\\confronto-v2\\20260616\\homolog-atual-login-tenant-dropdown.png"
+  },
+  "findings": {
+    "A2": {
+      "homolog": "OK",
+      "cause": "Resolvido"
+    }
+  }
+}

@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia do Suprimento — Equalização do Estoque | Aero Suite Controls</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy-900: #0f172a;
+      --navy-800: #1e293b;
+      --navy-700: #1e3a5f;
+      --slate-500: #64748b;
+      --slate-300: #cbd5e1;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --slate-50:  #f8fafc;
+      --amber-700: #b45309;
+      --amber-600: #d97706;
+      --amber-500: #f59e0b;
+      --amber-200: #fde68a;
+      --amber-100: #fef3c7;
+      --green-700: #15803d;
+      --green-600: #16a34a;
+      --green-500: #22c55e;
+      --green-100: #dcfce7;
+      --red-700:   #b91c1c;
+      --red-600:   #dc2626;
+      --red-100:   #fee2e2;
+      --blue-700:  #1d4ed8;
+      --blue-600:  #2563eb;
+      --blue-100:  #dbeafe;
+      --indigo-100:#e0e7ff;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      color: var(--navy-800);
+      background: var(--slate-100);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 220mm;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    /* ==== CAPA ==== */
+    .cover {
+      min-height: 297mm;
+      background:
+        radial-gradient(1200px 600px at 110% -10%, rgba(245,158,11,0.18) 0%, transparent 60%),
+        radial-gradient(900px 500px at -10% 110%, rgba(59,130,246,0.16) 0%, transparent 55%),
+        linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 55%, var(--navy-900) 100%);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 70px 60px;
+    }
+    .cover::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .cover > * { position: relative; z-index: 1; }
+    .cover-top { display: flex; justify-content: space-between; align-items: center; }
+    .cover-brand {
+      display: flex; align-items: center; gap: 14px;
+      color: #fff; font-weight: 700; letter-spacing: 2.5px;
+      font-size: 13px; text-transform: uppercase;
+    }
+    .cover-brand .dot {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--amber-500), var(--amber-600));
+      display: grid; place-items: center;
+      box-shadow: 0 10px 24px rgba(245,158,11,0.35);
+    }
+    .cover-brand .dot svg { width: 22px; height: 22px; fill: #fff; }
+    .cover-version {
+      font-size: 12px; letter-spacing: 1.5px;
+      padding: 8px 16px; border: 1px solid rgba(245,158,11,0.5);
+      border-radius: 999px; color: var(--amber-500); text-transform: uppercase;
+    }
+    .cover-main { margin-top: auto; margin-bottom: auto; }
+    .cover-eyebrow {
+      display: inline-block;
+      background: rgba(245,158,11,0.16);
+      border: 1px solid rgba(245,158,11,0.45);
+      color: var(--amber-500);
+      padding: 8px 18px; border-radius: 999px;
+      font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .cover-title {
+      font-size: 56px; font-weight: 800; line-height: 1.05;
+      letter-spacing: -1.5px; max-width: 880px;
+    }
+    .cover-title span { color: var(--amber-500); }
+    .cover-subtitle {
+      font-size: 18px; color: #cbd5e1; margin-top: 22px; max-width: 720px;
+      font-weight: 400;
+    }
+    .cover-meta {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      margin-top: 60px; max-width: 720px;
+    }
+    .cover-meta .item .label {
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #94a3b8;
+    }
+    .cover-meta .item .value {
+      font-size: 18px; color: #fff; font-weight: 600; margin-top: 6px;
+    }
+    .cover-bottom {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      color: #94a3b8; font-size: 12px;
+    }
+    .cover-bottom strong { color: var(--amber-500); letter-spacing: 2px; }
+
+    /* ==== SUMÁRIO ==== */
+    .toc {
+      padding: 60px 60px 70px;
+      background: linear-gradient(180deg, #fff 0%, var(--slate-50) 100%);
+    }
+    .toc h2 {
+      font-size: 14px; letter-spacing: 3px; color: var(--amber-600);
+      text-transform: uppercase; font-weight: 700; margin-bottom: 8px;
+    }
+    .toc h3 {
+      font-size: 32px; font-weight: 700; color: var(--navy-900);
+      margin-bottom: 32px; letter-spacing: -0.5px;
+    }
+    .toc-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px; }
+    .toc-list li {
+      display: flex; align-items: center; gap: 16px;
+      padding: 12px 16px; border-radius: 10px;
+      transition: background .15s ease;
+    }
+    .toc-list li:hover { background: var(--slate-100); }
+    .toc-list .num {
+      width: 34px; height: 34px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--amber-500), var(--amber-600));
+      color: #fff; font-weight: 700; font-size: 14px;
+      display: grid; place-items: center; flex-shrink: 0;
+    }
+    .toc-list a {
+      color: var(--navy-800); text-decoration: none; font-weight: 500; font-size: 15px;
+    }
+    .toc-list a:hover { color: var(--amber-700); }
+
+    /* ==== SEÇÕES ==== */
+    section.chapter { padding: 60px 60px; border-top: 1px solid var(--slate-200); }
+    .chap-header { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 28px; }
+    .chap-number {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--amber-500), var(--amber-600));
+      color: #fff; font-weight: 700; font-size: 18px;
+      display: grid; place-items: center; flex-shrink: 0;
+      box-shadow: 0 8px 20px rgba(245,158,11,0.3);
+    }
+    .chap-title h2 {
+      font-size: 28px; font-weight: 700; color: var(--navy-900);
+      letter-spacing: -0.5px; line-height: 1.2;
+    }
+    .chap-title .eyebrow {
+      font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--amber-700); font-weight: 600; margin-bottom: 4px;
+    }
+    p { margin-bottom: 14px; color: var(--navy-800); font-size: 15.5px; }
+    p strong { color: var(--navy-900); }
+    h3 { font-size: 19px; font-weight: 600; color: var(--navy-900); margin: 26px 0 12px; }
+    h4 { font-size: 15px; font-weight: 600; color: var(--navy-900); margin: 18px 0 10px; text-transform: uppercase; letter-spacing: 1px; }
+    ul, ol { padding-left: 22px; margin-bottom: 14px; }
+    ul li, ol li { margin-bottom: 6px; color: var(--navy-800); font-size: 15.5px; }
+    code, kbd {
+      font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+      background: var(--slate-100); padding: 2px 8px;
+      border-radius: 6px; font-size: 13.5px; color: var(--navy-900);
+      border: 1px solid var(--slate-200);
+    }
+    kbd { box-shadow: 0 1px 0 var(--slate-300); font-weight: 600; }
+    .file {
+      display: inline-block; background: var(--navy-900); color: #e2e8f0;
+      padding: 8px 14px; border-radius: 8px; font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; margin: 4px 0;
+    }
+
+    /* ==== CARDS DE CONCEITO ==== */
+    .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0; }
+    .concept {
+      background: var(--slate-50); border-radius: 14px; padding: 22px 22px 20px;
+      border-left: 4px solid var(--amber-500);
+    }
+    .concept .tag {
+      display: inline-block; font-size: 11px; letter-spacing: 1.6px;
+      text-transform: uppercase; font-weight: 700; color: var(--amber-700);
+      margin-bottom: 8px;
+    }
+    .concept h4 { margin: 0 0 8px 0; font-size: 18px; text-transform: none; letter-spacing: 0; }
+    .concept p { font-size: 14.5px; color: var(--slate-500); margin-bottom: 8px; }
+    .concept.blue { border-left-color: var(--blue-600); }
+    .concept.blue .tag { color: var(--blue-700); }
+    .concept.green { border-left-color: var(--green-600); }
+    .concept.green .tag { color: var(--green-700); }
+    .concept.red { border-left-color: var(--red-600); }
+    .concept.red .tag { color: var(--red-700); }
+
+    /* ==== CALLOUTS ==== */
+    .callout {
+      display: flex; gap: 14px; align-items: flex-start;
+      border-radius: 12px; padding: 16px 20px; margin: 20px 0;
+      border: 1px solid;
+      font-size: 14.5px;
+    }
+    .callout.warn  { background: var(--amber-100); border-color: var(--amber-200); color: var(--amber-700); }
+    .callout.info  { background: var(--blue-100);  border-color: #bfdbfe;          color: var(--blue-700);  }
+    .callout.danger{ background: var(--red-100);   border-color: #fecaca;          color: var(--red-700);   }
+    .callout.tip   { background: var(--green-100); border-color: #bbf7d0;          color: var(--green-700); }
+    .callout .ico {
+      width: 28px; height: 28px; flex-shrink: 0; display: grid; place-items: center;
+      border-radius: 50%; font-weight: 800; font-size: 16px;
+    }
+    .callout.warn   .ico { background: var(--amber-500); color: #fff; }
+    .callout.info   .ico { background: var(--blue-600);  color: #fff; }
+    .callout.danger .ico { background: var(--red-600);   color: #fff; }
+    .callout.tip    .ico { background: var(--green-600); color: #fff; }
+    .callout strong { display: block; margin-bottom: 4px; color: inherit; }
+    .callout p { color: inherit; margin: 0; font-size: 14.5px; }
+
+    /* ==== TABELAS ==== */
+    table {
+      width: 100%; border-collapse: collapse; margin: 16px 0 22px;
+      background: #fff; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 1px 0 var(--slate-200), 0 0 0 1px var(--slate-200);
+      font-size: 14px;
+    }
+    thead th {
+      background: var(--navy-900); color: #fff; text-align: left;
+      padding: 12px 16px; font-weight: 600; font-size: 13px;
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    tbody td {
+      padding: 12px 16px; border-top: 1px solid var(--slate-200);
+      color: var(--navy-800); vertical-align: top;
+    }
+    tbody tr:nth-child(even) { background: var(--slate-50); }
+    .num-col { text-align: right; font-variant-numeric: tabular-nums; }
+
+    /* ==== BADGES DE CLASSIFICAÇÃO ==== */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px; border-radius: 999px;
+      font-size: 11.5px; font-weight: 700; letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+    .badge.sem-entrada { background: var(--red-100);   color: var(--red-700);   }
+    .badge.cat-maior   { background: var(--amber-100); color: var(--amber-700); }
+    .badge.est-maior   { background: var(--blue-100);  color: var(--blue-700);  }
+
+    /* ==== PASSO A PASSO ==== */
+    .steps { counter-reset: step; padding: 0; margin: 22px 0; list-style: none; }
+    .steps > li {
+      display: flex; gap: 18px; padding: 18px;
+      background: var(--slate-50); border-radius: 14px; margin-bottom: 12px;
+      border: 1px solid var(--slate-200);
+    }
+    .steps > li::before {
+      counter-increment: step;
+      content: counter(step);
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--navy-900); color: var(--amber-500);
+      display: grid; place-items: center; font-weight: 800;
+      font-size: 16px; flex-shrink: 0;
+      box-shadow: inset 0 0 0 2px var(--amber-500);
+    }
+    .steps > li > div { flex: 1; }
+    .steps > li h4 { margin: 4px 0 8px; font-size: 16px; text-transform: none; letter-spacing: 0; color: var(--navy-900); }
+    .steps > li p, .steps > li li { font-size: 14.5px; }
+    .steps > li ul { margin-top: 6px; }
+
+    /* ==== TIMELINE ==== */
+    .timeline { margin: 20px 0; }
+    .timeline .tl-item {
+      display: grid; grid-template-columns: 70px 1fr; gap: 16px;
+      padding: 14px 0; border-bottom: 1px dashed var(--slate-200);
+    }
+    .timeline .tl-item:last-child { border-bottom: none; }
+    .timeline .tl-key {
+      font-weight: 700; font-size: 13px; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--amber-700);
+    }
+    .timeline .tl-val { font-size: 14.5px; color: var(--navy-800); }
+
+    /* ==== HERO STATS ==== */
+    .hero-stats {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 16px;
+      margin: 28px 0 8px;
+    }
+    .hero-stat {
+      background: linear-gradient(135deg, var(--navy-900), var(--navy-700));
+      color: #fff; border-radius: 14px; padding: 22px;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.18);
+    }
+    .hero-stat .label {
+      font-size: 11.5px; letter-spacing: 2px; text-transform: uppercase;
+      color: #94a3b8;
+    }
+    .hero-stat .value {
+      font-size: 38px; font-weight: 800; color: var(--amber-500); margin: 6px 0 2px;
+      letter-spacing: -1px;
+    }
+    .hero-stat .sub { font-size: 13px; color: #cbd5e1; }
+
+    /* ==== FOOTER ==== */
+    footer {
+      padding: 30px 60px; background: var(--navy-900); color: #94a3b8;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px;
+    }
+    footer strong { color: var(--amber-500); letter-spacing: 2px; }
+
+    /* ==== IMPRESSÃO ==== */
+    @media print {
+      body { background: #fff; }
+      .page { box-shadow: none; max-width: 100%; }
+      .cover { min-height: 100vh; }
+      section.chapter { page-break-inside: avoid; }
+      .toc { page-break-after: always; }
+      h2, h3, h4 { page-break-after: avoid; }
+      table { page-break-inside: avoid; }
+      .callout, .steps > li { page-break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+
+    @media (max-width: 900px) {
+      .cover-title { font-size: 38px; }
+      .concept-grid, .hero-stats, .toc-list, .cover-meta { grid-template-columns: 1fr; }
+      .chap-header { flex-wrap: wrap; }
+      section.chapter, .toc, footer, .cover { padding-left: 28px; padding-right: 28px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- =================== CAPA =================== -->
+  <header class="cover">
+    <div class="cover-top">
+      <div class="cover-brand">
+        <span class="dot">
+          <svg viewBox="0 0 24 24"><path d="M12 2l9 4.5v11L12 22 3 17.5v-11L12 2zm0 2.236L5 7.618v8.764l7 3.382 7-3.382V7.618L12 4.236zM7 9.5l5 2.5 5-2.5v5L12 17l-5-2.5v-5z"/></svg>
+        </span>
+        <span>Aero Suite Controls · Suprimento</span>
+      </div>
+      <div class="cover-version">v1.0 · Mai/2026</div>
+    </div>
+
+    <div class="cover-main">
+      <span class="cover-eyebrow">Guia Operacional</span>
+      <h1 class="cover-title">Equalização do <span>Estoque</span> Físico com o Sistema</h1>
+      <p class="cover-subtitle">
+        Passo a passo simples e direto para que a lista de produtos do sistema passe a refletir, com 100% de fidelidade, o que está nas prateleiras do almoxarifado.
+      </p>
+
+      <div class="cover-meta">
+        <div class="item">
+          <div class="label">Para</div>
+          <div class="value">Equipe de Suprimento</div>
+        </div>
+        <div class="item">
+          <div class="label">Linhas a corrigir</div>
+          <div class="value">159 produtos</div>
+        </div>
+        <div class="item">
+          <div class="label">Esforço estimado</div>
+          <div class="value">4 a 5 dias úteis</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-bottom">
+      <span>Documento gerado pela TI · Distribuição interna</span>
+      <span><strong>AEROSUITE</strong> · controles aeronáuticos</span>
+    </div>
+  </header>
+
+  <!-- =================== SUMÁRIO =================== -->
+  <section class="toc">
+    <h2>Sumário</h2>
+    <h3>O que você vai encontrar neste guia</h3>
+    <ol class="toc-list">
+      <li><span class="num">1</span><a href="#cap1">O que está acontecendo</a></li>
+      <li><span class="num">2</span><a href="#cap2">Antes de começar — a planilha</a></li>
+      <li><span class="num">3</span><a href="#cap3">Confira o Fornecedor</a></li>
+      <li><span class="num">4</span><a href="#cap4">Passo a passo da Entrada</a></li>
+      <li><span class="num">5</span><a href="#cap5">Marcando o que já foi feito</a></li>
+      <li><span class="num">6</span><a href="#cap6">Caso especial: duplicados</a></li>
+      <li><span class="num">7</span><a href="#cap7">Como saber se deu certo</a></li>
+      <li><span class="num">8</span><a href="#cap8">Dicionário rápido</a></li>
+      <li><span class="num">9</span><a href="#cap9">Quando pedir ajuda</a></li>
+      <li><span class="num">10</span><a href="#cap10">Cronograma sugerido</a></li>
+    </ol>
+  </section>
+
+  <!-- =================== CAPÍTULO 1 =================== -->
+  <section class="chapter" id="cap1">
+    <div class="chap-header">
+      <div class="chap-number">1</div>
+      <div class="chap-title">
+        <div class="eyebrow">Entenda o problema</div>
+        <h2>O que está acontecendo</h2>
+      </div>
+    </div>
+
+    <p>Hoje, no sistema, existem <strong>dois lugares</strong> onde a quantidade do produto aparece. E eles não conversam entre si.</p>
+
+    <div class="concept-grid">
+      <div class="concept blue">
+        <span class="tag">Lugar 1</span>
+        <h4>Lista de Produtos (catálogo)</h4>
+        <p>É o número antigo, que aparece na coluna <em>"Quantidade"</em> da Lista de Produtos.</p>
+        <p>Esse número <strong>não é controlado</strong> pelo sistema — alguém digitou ali um dia e ficou parado.</p>
+      </div>
+      <div class="concept green">
+        <span class="tag">Lugar 2</span>
+        <h4>Itens de Estoque (módulo novo)</h4>
+        <p>Aqui cada peça tem nota fiscal, lote, valor, certificado e código de rastreio (QR Code).</p>
+        <p><strong>É daqui</strong> que o sistema baixa quando uma OS é aberta com FCU.</p>
+      </div>
+    </div>
+
+    <div class="callout danger">
+      <div class="ico">!</div>
+      <div>
+        <strong>Por que isso causa problema</strong>
+        <p>Quando o mecânico abre uma OS, o sistema olha <strong>SÓ os Itens de Estoque</strong>. Se a peça está apenas na Lista de Produtos antiga, o sistema considera que <em>não tem estoque</em> e exibe <strong>"OS aberta com déficit no kit FCU"</strong> — mesmo quando a peça está fisicamente na prateleira.</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="ico">✓</div>
+      <div>
+        <strong>A solução é simples</strong>
+        <p>Dar entrada das peças no módulo Estoque novo, do mesmo jeito que se faz quando chega uma nota fiscal nova. Assim os dois mundos ficam iguais e o sistema para de reclamar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== CAPÍTULO 2 =================== -->
+  <section class="chapter" id="cap2">
+    <div class="chap-header">
+      <div class="chap-number">2</div>
+      <div class="chap-title">
+        <div class="eyebrow">Preparação</div>
+        <h2>Antes de começar — a planilha</h2>
+      </div>
+    </div>
+
+    <h3>2.1 Onde está a planilha com os produtos para corrigir</h3>
+    <p>A TI gerou <strong>duas planilhas</strong> para vocês. Elas ficam aqui no servidor:</p>
+    <p><span class="file">D:\aerosuite-fullstack-pro\docs\produtos-discrepancia-estoque.csv</span></p>
+    <p><span class="file">D:\aerosuite-fullstack-pro\docs\produtos-duplicados-catalogo.csv</span></p>
+    <p>Clique duas vezes no primeiro arquivo. Vai abrir no Excel.</p>
+
+    <h3>2.2 O que cada coluna significa</h3>
+    <table>
+      <thead>
+        <tr><th>Coluna</th><th>O que significa</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>id_produto</code></td><td>Número interno do produto (não precisa preocupar com ele)</td></tr>
+        <tr><td><code>pn</code></td><td>Part Number — a "matrícula" da peça</td></tr>
+        <tr><td><code>nome</code></td><td>Nome da peça (PIN, PACKING, BEARING…)</td></tr>
+        <tr><td><code>local_catalogo</code></td><td>Prateleira anotada no cadastro antigo</td></tr>
+        <tr><td><code>qty_catalogo</code></td><td>Quantidade que aparece <strong>HOJE</strong> na Lista de Produtos</td></tr>
+        <tr><td><code>qty_estoque_disponivel</code></td><td>Quantidade que o sistema <strong>realmente conhece</strong> (quase sempre zero)</td></tr>
+        <tr><td><code>diferenca</code></td><td><code>qty_catalogo</code> − <code>qty_estoque_disponivel</code>. É a quantidade que falta dar entrada</td></tr>
+        <tr><td><code>cadastros_no_catalogo</code></td><td>Quantas vezes o P/N foi cadastrado</td></tr>
+        <tr><td><code>ids_duplicados</code></td><td>Se há mais de um cadastro, esses são os IDs duplicados</td></tr>
+        <tr><td><code>classificacao</code></td><td>Tipo do problema (ver tabela 2.3)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>2.3 Os três tipos de problema</h3>
+    <table>
+      <thead>
+        <tr><th>Classificação</th><th>O que significa</th><th>O que fazer</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge sem-entrada">Sem entrada</span></td>
+          <td>Tem no catálogo, mas <strong>nunca</strong> foi dado entrada no módulo Estoque</td>
+          <td><strong>Dar entrada</strong> (a maioria dos casos)</td>
+        </tr>
+        <tr>
+          <td><span class="badge cat-maior">Catálogo &gt; Estoque</span></td>
+          <td>Tem entrada no módulo Estoque, mas o catálogo mostra um número maior</td>
+          <td>Conferir fisicamente. Se a quantidade do estoque está certa, <strong>zerar a quantidade do catálogo</strong>. Se faltou dar entrada de uma NF, fazer a entrada que falta</td>
+        </tr>
+        <tr>
+          <td><span class="badge est-maior">Estoque &gt; Catálogo</span></td>
+          <td>O módulo Estoque tem mais que o catálogo (raro)</td>
+          <td>Pode ignorar — só o catálogo está desatualizado e isso não afeta a OS</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn">
+      <div class="ico">!</div>
+      <div>
+        <strong>Comece pelos mais simples e mais comuns</strong>
+        <p>Os 138 produtos com classificação <span class="badge sem-entrada">Sem entrada</span> são a esmagadora maioria e o caminho é o mais direto. Não comece pelos mais complicados.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== CAPÍTULO 3 =================== -->
+  <section class="chapter" id="cap3">
+    <div class="chap-header">
+      <div class="chap-number">3</div>
+      <div class="chap-title">
+        <div class="eyebrow">Pré-requisito</div>
+        <h2>Antes de dar entrada — confira o Fornecedor</h2>
+      </div>
+    </div>
+
+    <p>O sistema <strong>exige um fornecedor cadastrado</strong> em toda entrada de produto. Faça isso antes de começar a rodada:</p>
+
+    <ol class="steps">
+      <li><div>
+        <h4>Abra o menu Fornecedores</h4>
+        <p>No menu lateral azul (<strong>Estoque</strong>), clique em <strong>Fornecedores</strong>.</p>
+      </div></li>
+      <li><div>
+        <h4>Veja se já existe</h4>
+        <p>Procure pelo fornecedor da peça na lista. Se já estiver lá, pode pular para o capítulo 4.</p>
+      </div></li>
+      <li><div>
+        <h4>Se não existir, cadastre</h4>
+        <p>Clique em <strong>+ Novo Fornecedor</strong> e preencha:</p>
+        <ul>
+          <li><strong>Razão Social</strong> (obrigatório) — nome da empresa</li>
+          <li><strong>País de Origem</strong> (obrigatório) — selecione na lista</li>
+          <li>As outras informações pode deixar em branco se não souber</li>
+        </ul>
+        <p>Clique em <strong>Salvar Fornecedor</strong>.</p>
+      </div></li>
+    </ol>
+
+    <div class="callout tip">
+      <div class="ico">💡</div>
+      <div>
+        <strong>Dica para peças antigas sem NF</strong>
+        <p>Quando você não sabe o fornecedor original (ex.: peça que está no almoxarifado há anos), cadastre um fornecedor chamado <strong>"INVENTÁRIO INICIAL"</strong>, País: <em>Brasil</em>. Use ele só para "carimbar" todas as entradas antigas. <strong>Combine com o supervisor antes de criar.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== CAPÍTULO 4 =================== -->
+  <section class="chapter" id="cap4">
+    <div class="chap-header">
+      <div class="chap-number">4</div>
+      <div class="chap-title">
+        <div class="eyebrow">Operação principal</div>
+        <h2>Como dar entrada de uma peça (passo a passo)</h2>
+      </div>
+    </div>
+
+    <p>Vamos usar como exemplo o <strong>primeiro produto da planilha</strong>:</p>
+    <ul>
+      <li>P/N: <code>118554</code></li>
+      <li>Nome: PIN</li>
+      <li>Quantidade no catálogo: 1952</li>
+    </ul>
+
+    <ol class="steps">
+      <li><div>
+        <h4>Abrir a tela de Entrada</h4>
+        <ul>
+          <li>No menu azul à esquerda, clique em <strong>Entrada</strong> (ícone de seta entrando).</li>
+          <li>Vai abrir a tela <strong>"Entrada de Mercadoria"</strong>.</li>
+          <li>No topo aparecem três etapas: <strong>Origem → Produto → Localização</strong>.</li>
+        </ul>
+      </div></li>
+
+      <li><div>
+        <h4>Etapa 1 — Origem da Mercadoria</h4>
+        <ul>
+          <li>Em <strong>Fornecedor</strong>, selecione o fornecedor (use "INVENTÁRIO INICIAL" se for o caso).</li>
+          <li><strong>Invoice (opcional)</strong>: pode deixar vazio se não tiver nota.</li>
+          <li>Clique no botão <strong>Próximo →</strong>.</li>
+        </ul>
+      </div></li>
+
+      <li><div>
+        <h4>Etapa 2 — Dados do Produto</h4>
+        <ul>
+          <li>No campo <strong>"Buscar no cadastro de produtos"</strong>, digite o P/N: <code>118554</code>. Clique no produto que aparecer — o P/N, descrição e nome são preenchidos sozinhos.</li>
+          <li><strong>Quantidade:</strong> digite o que está fisicamente na prateleira (use o valor da planilha apenas como referência).</li>
+          <li><strong>Unidade:</strong> selecione (geralmente <code>UN</code> para unidade).</li>
+          <li><strong>Valor unitário (USD/BRL):</strong> se souber, preencha. Se não souber, deixe vazio.</li>
+          <li>Clique em <strong>Próximo →</strong>.</li>
+        </ul>
+        <div class="callout danger">
+          <div class="ico">!</div>
+          <div>
+            <strong>Atenção crítica</strong>
+            <p>Se ao contar fisicamente tiver <strong>MENOS</strong> do que está na planilha (<code>qty_catalogo</code>), digite o número <strong>QUE VOCÊ CONTOU</strong>. A planilha é só referência do que o sistema antigo dizia. <strong>Nunca confiar cegamente no número da planilha.</strong></p>
+          </div>
+        </div>
+      </div></li>
+
+      <li><div>
+        <h4>Etapa 3 — Localização e Certificação</h4>
+        <ul>
+          <li><strong>Localização no Estoque:</strong> use o valor da coluna <code>local_catalogo</code> da planilha (ex.: <code>C3</code>).</li>
+          <li><strong>Prateleira</strong> e <strong>Gaveta:</strong> preencha se souber.</li>
+          <li><strong>Certificado de Conformidade:</strong> se houver. Pode deixar vazio.</li>
+          <li><strong>Data de Fabricação / Validade:</strong> se souber.</li>
+          <li>Marque <strong>"Criar novo lote automaticamente"</strong> (já vem marcado).</li>
+          <li>Clique no botão verde <strong>Registrar Entrada</strong>.</li>
+        </ul>
+      </div></li>
+
+      <li><div>
+        <h4>Conferência</h4>
+        <p>Vai aparecer uma janela verde <strong>"Entrada Registrada!"</strong> com:</p>
+        <ul>
+          <li>Código de Rastreio (<code>BLW-...</code>)</li>
+          <li>Part Number</li>
+          <li>Lote</li>
+          <li>QR Code</li>
+        </ul>
+        <p>Pronto. A peça já está no módulo Estoque novo e o sistema <strong>vai conseguir baixar dela</strong> quando uma OS for aberta. Imprima a etiqueta se desejar. Clique em <strong>Nova Entrada</strong> para fazer o próximo produto da planilha.</p>
+      </div></li>
+    </ol>
+  </section>
+
+  <!-- =================== CAPÍTULO 5 =================== -->
+  <section class="chapter" id="cap5">
+    <div class="chap-header">
+      <div class="chap-number">5</div>
+      <div class="chap-title">
+        <div class="eyebrow">Controle do trabalho</div>
+        <h2>Marcando o que já foi feito</h2>
+      </div>
+    </div>
+
+    <p>Para não se perder, recomenda-se:</p>
+    <ol>
+      <li>Abra a planilha <code>produtos-discrepancia-estoque.csv</code> no Excel.</li>
+      <li>Adicione uma coluna nova chamada <strong>FEITO</strong> no final.</li>
+      <li>A cada produto que terminar, escreva <strong>"OK"</strong> e a data nessa coluna.</li>
+      <li>Salve o arquivo a cada lote concluído — não perca o trabalho.</li>
+    </ol>
+
+    <h3>Exemplo</h3>
+    <table>
+      <thead>
+        <tr><th>id_produto</th><th>pn</th><th>nome</th><th class="num-col">qty_catalogo</th><th>classificacao</th><th>FEITO</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>21</td><td><code>118554</code></td><td>PIN</td><td class="num-col">1952</td><td><span class="badge sem-entrada">Sem entrada</span></td><td><strong>OK 11/05</strong></td></tr>
+        <tr><td>99</td><td><code>379-S-17</code></td><td>PACKING</td><td class="num-col">774</td><td><span class="badge sem-entrada">Sem entrada</span></td><td><strong>OK 11/05</strong></td></tr>
+        <tr><td>113</td><td><code>901211-K1</code></td><td>PIN</td><td class="num-col">377</td><td><span class="badge sem-entrada">Sem entrada</span></td><td>—</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- =================== CAPÍTULO 6 =================== -->
+  <section class="chapter" id="cap6">
+    <div class="chap-header">
+      <div class="chap-number">6</div>
+      <div class="chap-title">
+        <div class="eyebrow">Cuidado especial</div>
+        <h2>Produtos duplicados no catálogo</h2>
+      </div>
+    </div>
+
+    <p>Abra a outra planilha: <code>produtos-duplicados-catalogo.csv</code>. Lá aparecem P/Ns que <strong>foram cadastrados duas vezes</strong> no catálogo. Exemplo:</p>
+
+    <table>
+      <thead>
+        <tr><th>pn</th><th class="num-col">cadastros</th><th>ids</th><th>quantidades</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>118554</code></td><td class="num-col">2</td><td>21, 598</td><td>1952</td></tr>
+        <tr><td><code>M25988-1-916</code></td><td class="num-col">2</td><td>228, 533</td><td>74, 138</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout danger">
+      <div class="ico">!</div>
+      <div>
+        <strong>Importante</strong>
+        <p>Quando for dar entrada de um P/N duplicado, faça <strong>UMA VEZ APENAS</strong>. Não duplicar a entrada só porque tem dois cadastros — é a mesma peça no físico. Depois, a TI ou o supervisor unifica os duplicados em uma operação separada.</p>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <div class="ico">!</div>
+      <div>
+        <strong>Atenção especial ao M25988-1-916</strong>
+        <p>O cadastro <code>228</code> diz que tem <strong>74</strong>. O <code>533</code> diz que tem <strong>138</strong>. <strong>Conte fisicamente UMA vez</strong> e dê entrada da quantidade real contada.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== CAPÍTULO 7 =================== -->
+  <section class="chapter" id="cap7">
+    <div class="chap-header">
+      <div class="chap-number">7</div>
+      <div class="chap-title">
+        <div class="eyebrow">Verificação</div>
+        <h2>Como saber se deu certo</h2>
+      </div>
+    </div>
+
+    <p>Em qualquer momento, conferir o resultado de duas formas:</p>
+
+    <div class="concept-grid">
+      <div class="concept green">
+        <span class="tag">Forma 1</span>
+        <h4>Pela tela "Itens"</h4>
+        <p>No menu de Estoque, clique em <strong>Itens</strong>. Use a busca para procurar o P/N que acabou de entrar. Deve aparecer pelo menos uma linha com <strong>status DISPONIVEL</strong> e a quantidade digitada.</p>
+      </div>
+      <div class="concept blue">
+        <span class="tag">Forma 2</span>
+        <h4>Abrindo uma OS de teste</h4>
+        <p>Peça pra alguém abrir uma OS com o FCU que tem esse P/N no kit. Se <strong>não aparecer o aviso de déficit</strong> para esse P/N específico, está correto.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== CAPÍTULO 8 =================== -->
+  <section class="chapter" id="cap8">
+    <div class="chap-header">
+      <div class="chap-number">8</div>
+      <div class="chap-title">
+        <div class="eyebrow">Glossário</div>
+        <h2>Dicionário rápido</h2>
+      </div>
+    </div>
+
+    <table>
+      <thead><tr><th style="width:25%">Termo</th><th>O que é</th></tr></thead>
+      <tbody>
+        <tr><td><strong>P/N</strong> ou <strong>Part Number</strong></td><td>"Matrícula" da peça (ex.: <code>118554</code>, <code>MS9058-04</code>)</td></tr>
+        <tr><td><strong>S/N</strong> ou <strong>Serial Number</strong></td><td>Número de série — cada peça tem um único (opcional)</td></tr>
+        <tr><td><strong>OS</strong></td><td>Ordem de Serviço</td></tr>
+        <tr><td><strong>FCU</strong></td><td>Conjunto / equipamento de aviação que entra para revisão</td></tr>
+        <tr><td><strong>Kit FCU</strong></td><td>Lista de peças que sempre saem para revisar um FCU</td></tr>
+        <tr><td><strong>Catálogo / Produto</strong></td><td>Cadastro com informações gerais da peça (nome, P/N, foto). Não tem nota fiscal nem lote</td></tr>
+        <tr><td><strong>Itens de Estoque</strong></td><td>Cadastro físico/fiscal de cada peça com NF, lote, valor e certificado</td></tr>
+        <tr><td><strong>Lote</strong></td><td>Conjunto de peças que entraram na mesma NF, mesmo dia, mesmo fornecedor</td></tr>
+        <tr><td><strong>Invoice</strong></td><td>Nota fiscal de importação</td></tr>
+        <tr><td><strong>Déficit</strong></td><td>"Falta" — o sistema diz que precisa de mais do que tem</td></tr>
+        <tr><td><strong>DISPONIVEL</strong></td><td>Status da peça quando está pronta para uso</td></tr>
+        <tr><td><strong>CONSUMIDO</strong></td><td>Status quando a peça já foi usada em uma OS</td></tr>
+        <tr><td><strong>DESCARTADO</strong></td><td>Status quando a peça foi inutilizada (refugada)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- =================== CAPÍTULO 9 =================== -->
+  <section class="chapter" id="cap9">
+    <div class="chap-header">
+      <div class="chap-number">9</div>
+      <div class="chap-title">
+        <div class="eyebrow">Suporte</div>
+        <h2>Quando pedir ajuda</h2>
+      </div>
+    </div>
+
+    <p>Você pode mandar mensagem para a TI quando:</p>
+    <ul>
+      <li>Aparecer <strong>mensagem de erro vermelha</strong> na tela.</li>
+      <li>O P/N que está procurando <strong>não existe</strong> no cadastro de produtos (precisa cadastrar antes — converse com o supervisor).</li>
+      <li>O sistema <strong>não deixar salvar</strong> a entrada mesmo preenchendo tudo certo.</li>
+      <li>Tiver dúvida sobre que <strong>fornecedor</strong> usar para uma peça antiga.</li>
+      <li>Encontrar <strong>muitos produtos duplicados</strong> além dos 10 da planilha.</li>
+    </ul>
+  </section>
+
+  <!-- =================== CAPÍTULO 10 =================== -->
+  <section class="chapter" id="cap10">
+    <div class="chap-header">
+      <div class="chap-number">10</div>
+      <div class="chap-title">
+        <div class="eyebrow">Planejamento</div>
+        <h2>Cronograma sugerido</h2>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="label">Total</div>
+        <div class="value">159</div>
+        <div class="sub">produtos para regularizar</div>
+      </div>
+      <div class="hero-stat">
+        <div class="label">Casos principais</div>
+        <div class="value">138</div>
+        <div class="sub">classificação "Sem entrada"</div>
+      </div>
+      <div class="hero-stat">
+        <div class="label">Duplicados</div>
+        <div class="value">10</div>
+        <div class="sub">para mesclagem com supervisor</div>
+      </div>
+    </div>
+
+    <h3>Estimativas de tempo</h3>
+    <table>
+      <thead><tr><th>Cenário</th><th>Ritmo</th><th>Tempo total</th></tr></thead>
+      <tbody>
+        <tr><td>1 pessoa em dedicação parcial</td><td>10 a 15 entradas / dia</td><td>2 a 3 semanas</td></tr>
+        <tr><td>1 pessoa em dedicação total</td><td>30 a 40 entradas / dia</td><td>4 a 5 dias úteis</td></tr>
+        <tr><td>2 pessoas em revezamento</td><td>40 a 50 entradas / dia</td><td>3 a 4 dias úteis</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout info">
+      <div class="ico">i</div>
+      <div>
+        <strong>Prioridade</strong>
+        <p>Comece pelas linhas do <strong>topo</strong> da planilha — elas estão ordenadas pela maior diferença, ou seja, são as peças que mais "quebram" o cálculo do kit FCU quando uma OS é aberta.</p>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-key">Dia 1</div>
+        <div class="tl-val">Conferir/cadastrar fornecedores. Resolver os 5 produtos com maior diferença (118554 × 2, 379-S-17, 901211-K1, 951397).</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-key">Dias 2–3</div>
+        <div class="tl-val">Atacar os demais produtos "Sem entrada" (~130 linhas), preferencialmente em blocos por prateleira para otimizar a contagem física.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-key">Dia 4</div>
+        <div class="tl-val">Casos "Catálogo &gt; Estoque" (15 linhas) e "Estoque &gt; Catálogo" (6 linhas). Conferência final com o supervisor.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-key">Dia 5</div>
+        <div class="tl-val">Revisão geral + abertura de OS de teste com a TI para validar que nenhum déficit aparece nos itens equalizados.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== FOOTER =================== -->
+  <footer>
+    <span>Documento gerado pela TI · Em caso de dúvida, mostre este guia ao supervisor antes de mexer no sistema.</span>
+    <span><strong>AEROSUITE</strong> · 2026</span>
+  </footer>
+
+</div>
+</body>
+</html>

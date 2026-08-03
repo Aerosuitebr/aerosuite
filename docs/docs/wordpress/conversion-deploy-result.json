@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "solucoesLen": 11511,
+  "sobreLen": 5727,
+  "hasFormTracking": true,
+  "hasCalendlyScheduled": true,
+  "scripts": [
+    "aerosuite-hero",
+    "aerosuite-showcase-zoom",
+    "aerosuite-phone-mask",
+    "aerosuite-analytics"
+  ],
+  "noAmpAmp": true
+}

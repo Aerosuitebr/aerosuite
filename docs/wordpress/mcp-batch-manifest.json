@@ -1,0 +1,522 @@
+{
+  "viewId": "4efe11",
+  "generatedAt": "2026-06-02T21:21:04.755Z",
+  "totalInvokes": 103,
+  "items": [
+    {
+      "step": 2,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-02-part-01.json"
+    },
+    {
+      "step": 2,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-02-part-02.json"
+    },
+    {
+      "step": 2,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-02-part-03.json"
+    },
+    {
+      "step": 2,
+      "partIdx": 4,
+      "invokeFile": ".mcp-b64-invokes\\step-02-part-04.json"
+    },
+    {
+      "step": 2,
+      "partIdx": 5,
+      "invokeFile": ".mcp-b64-invokes\\step-02-part-05.json"
+    },
+    {
+      "step": 2,
+      "partIdx": 6,
+      "invokeFile": ".mcp-b64-invokes\\step-02-part-06.json"
+    },
+    {
+      "step": 2,
+      "partIdx": 7,
+      "invokeFile": ".mcp-b64-invokes\\step-02-part-07.json"
+    },
+    {
+      "step": 2,
+      "partIdx": 8,
+      "invokeFile": ".mcp-b64-invokes\\step-02-part-08.json"
+    },
+    {
+      "step": 2,
+      "partIdx": 9,
+      "invokeFile": ".mcp-b64-invokes\\step-02-part-09.json"
+    },
+    {
+      "step": 2,
+      "partIdx": 10,
+      "invokeFile": ".mcp-b64-invokes\\step-02-part-10.json"
+    },
+    {
+      "step": 2,
+      "partIdx": 11,
+      "invokeFile": ".mcp-b64-invokes\\step-02-part-11.json"
+    },
+    {
+      "step": 3,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-03-part-00.json"
+    },
+    {
+      "step": 3,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-03-part-01.json"
+    },
+    {
+      "step": 3,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-03-part-02.json"
+    },
+    {
+      "step": 3,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-03-part-03.json"
+    },
+    {
+      "step": 3,
+      "partIdx": 4,
+      "invokeFile": ".mcp-b64-invokes\\step-03-part-04.json"
+    },
+    {
+      "step": 3,
+      "partIdx": 5,
+      "invokeFile": ".mcp-b64-invokes\\step-03-part-05.json"
+    },
+    {
+      "step": 3,
+      "partIdx": 6,
+      "invokeFile": ".mcp-b64-invokes\\step-03-part-06.json"
+    },
+    {
+      "step": 3,
+      "partIdx": 7,
+      "invokeFile": ".mcp-b64-invokes\\step-03-part-07.json"
+    },
+    {
+      "step": 3,
+      "partIdx": 8,
+      "invokeFile": ".mcp-b64-invokes\\step-03-part-08.json"
+    },
+    {
+      "step": 3,
+      "partIdx": 9,
+      "invokeFile": ".mcp-b64-invokes\\step-03-part-09.json"
+    },
+    {
+      "step": 4,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-04-part-00.json"
+    },
+    {
+      "step": 4,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-04-part-01.json"
+    },
+    {
+      "step": 5,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-05-part-00.json"
+    },
+    {
+      "step": 5,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-05-part-01.json"
+    },
+    {
+      "step": 6,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-06-part-00.json"
+    },
+    {
+      "step": 6,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-06-part-01.json"
+    },
+    {
+      "step": 6,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-06-part-02.json"
+    },
+    {
+      "step": 7,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-07-part-00.json"
+    },
+    {
+      "step": 7,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-07-part-01.json"
+    },
+    {
+      "step": 8,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-08-part-00.json"
+    },
+    {
+      "step": 8,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-08-part-01.json"
+    },
+    {
+      "step": 8,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-08-part-02.json"
+    },
+    {
+      "step": 8,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-08-part-03.json"
+    },
+    {
+      "step": 9,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-09-part-00.json"
+    },
+    {
+      "step": 9,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-09-part-01.json"
+    },
+    {
+      "step": 9,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-09-part-02.json"
+    },
+    {
+      "step": 9,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-09-part-03.json"
+    },
+    {
+      "step": 10,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-10-part-00.json"
+    },
+    {
+      "step": 10,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-10-part-01.json"
+    },
+    {
+      "step": 10,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-10-part-02.json"
+    },
+    {
+      "step": 10,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-10-part-03.json"
+    },
+    {
+      "step": 11,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-11-part-00.json"
+    },
+    {
+      "step": 11,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-11-part-01.json"
+    },
+    {
+      "step": 11,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-11-part-02.json"
+    },
+    {
+      "step": 11,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-11-part-03.json"
+    },
+    {
+      "step": 12,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-12-part-00.json"
+    },
+    {
+      "step": 12,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-12-part-01.json"
+    },
+    {
+      "step": 12,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-12-part-02.json"
+    },
+    {
+      "step": 13,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-13-part-00.json"
+    },
+    {
+      "step": 13,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-13-part-01.json"
+    },
+    {
+      "step": 14,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-14-part-00.json"
+    },
+    {
+      "step": 14,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-14-part-01.json"
+    },
+    {
+      "step": 14,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-14-part-02.json"
+    },
+    {
+      "step": 14,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-14-part-03.json"
+    },
+    {
+      "step": 15,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-15-part-00.json"
+    },
+    {
+      "step": 15,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-15-part-01.json"
+    },
+    {
+      "step": 15,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-15-part-02.json"
+    },
+    {
+      "step": 15,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-15-part-03.json"
+    },
+    {
+      "step": 16,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-16-part-00.json"
+    },
+    {
+      "step": 16,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-16-part-01.json"
+    },
+    {
+      "step": 16,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-16-part-02.json"
+    },
+    {
+      "step": 16,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-16-part-03.json"
+    },
+    {
+      "step": 17,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-17-part-00.json"
+    },
+    {
+      "step": 17,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-17-part-01.json"
+    },
+    {
+      "step": 17,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-17-part-02.json"
+    },
+    {
+      "step": 17,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-17-part-03.json"
+    },
+    {
+      "step": 18,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-18-part-00.json"
+    },
+    {
+      "step": 18,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-18-part-01.json"
+    },
+    {
+      "step": 18,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-18-part-02.json"
+    },
+    {
+      "step": 19,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-19-part-00.json"
+    },
+    {
+      "step": 19,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-19-part-01.json"
+    },
+    {
+      "step": 20,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-20-part-00.json"
+    },
+    {
+      "step": 20,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-20-part-01.json"
+    },
+    {
+      "step": 20,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-20-part-02.json"
+    },
+    {
+      "step": 20,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-20-part-03.json"
+    },
+    {
+      "step": 21,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-21-part-00.json"
+    },
+    {
+      "step": 21,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-21-part-01.json"
+    },
+    {
+      "step": 21,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-21-part-02.json"
+    },
+    {
+      "step": 21,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-21-part-03.json"
+    },
+    {
+      "step": 22,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-22-part-00.json"
+    },
+    {
+      "step": 22,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-22-part-01.json"
+    },
+    {
+      "step": 22,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-22-part-02.json"
+    },
+    {
+      "step": 22,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-22-part-03.json"
+    },
+    {
+      "step": 23,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-23-part-00.json"
+    },
+    {
+      "step": 23,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-23-part-01.json"
+    },
+    {
+      "step": 23,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-23-part-02.json"
+    },
+    {
+      "step": 23,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-23-part-03.json"
+    },
+    {
+      "step": 24,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-24-part-00.json"
+    },
+    {
+      "step": 24,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-24-part-01.json"
+    },
+    {
+      "step": 24,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-24-part-02.json"
+    },
+    {
+      "step": 25,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-25-part-00.json"
+    },
+    {
+      "step": 25,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-25-part-01.json"
+    },
+    {
+      "step": 26,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-26-part-00.json"
+    },
+    {
+      "step": 26,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-26-part-01.json"
+    },
+    {
+      "step": 26,
+      "partIdx": 2,
+      "invokeFile": ".mcp-b64-invokes\\step-26-part-02.json"
+    },
+    {
+      "step": 26,
+      "partIdx": 3,
+      "invokeFile": ".mcp-b64-invokes\\step-26-part-03.json"
+    },
+    {
+      "step": 27,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-27-part-00.json"
+    },
+    {
+      "step": 27,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-27-part-01.json"
+    },
+    {
+      "step": 28,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-28-part-00.json"
+    },
+    {
+      "step": 28,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-28-part-01.json"
+    },
+    {
+      "step": 29,
+      "partIdx": 0,
+      "invokeFile": ".mcp-b64-invokes\\step-29-part-00.json"
+    },
+    {
+      "step": 29,
+      "partIdx": 1,
+      "invokeFile": ".mcp-b64-invokes\\step-29-part-01.json"
+    }
+  ]
+}

@@ -1,0 +1,335 @@
+:host ::ng-deep .footer-health-dialog.p-dialog {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow:
+    0 32px 64px rgba(15, 23, 42, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+
+  .p-dialog-content {
+    padding: 0;
+    background: #f8fafc;
+  }
+}
+
+.footer-health-dialog__shell {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.footer-health-dialog__hero {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1.25rem 1.35rem 1rem;
+  background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 48%, #0ea5e9 100%);
+  color: #fff;
+  position: relative;
+}
+
+.footer-health-dialog__hero-icon {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 1.35rem;
+    height: 1.35rem;
+    color: #fef3c7;
+  }
+}
+
+.footer-health-dialog__hero-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.footer-health-dialog__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.footer-health-dialog__subtitle {
+  margin: 0.35rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.footer-health-dialog__hero-close {
+  appearance: none;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+}
+
+.footer-health-dialog__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  padding: 1rem 1.35rem 0.85rem;
+}
+
+.footer-health-dialog__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.65rem 0.5rem;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.footer-health-dialog__stat--ok .footer-health-dialog__stat-value {
+  color: #047857;
+}
+
+.footer-health-dialog__stat--bad .footer-health-dialog__stat-value {
+  color: #b91c1c;
+}
+
+.footer-health-dialog__stat-value {
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: #0f172a;
+}
+
+.footer-health-dialog__stat-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #64748b;
+  text-align: center;
+  line-height: 1.25;
+}
+
+.footer-health-dialog__table-wrap {
+  margin: 0 1.35rem;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  box-shadow:
+    0 4px 16px rgba(15, 23, 42, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.8) inset;
+}
+
+.footer-health-dialog__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.footer-health-dialog__table thead {
+  background: linear-gradient(180deg, #f1f5f9 0%, #e8eef4 100%);
+}
+
+.footer-health-dialog__table th {
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.footer-health-dialog__table td {
+  padding: 0.7rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  line-height: 1.4;
+}
+
+.footer-health-dialog__row:last-child td {
+  border-bottom: none;
+}
+
+.footer-health-dialog__row:hover td {
+  background: #f8fafc;
+}
+
+.footer-health-dialog__cell-service {
+  font-weight: 600;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-health-dialog__service-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #34d399;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.2);
+}
+
+.footer-health-dialog__service-dot--down {
+  background: #f87171;
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.22);
+}
+
+.footer-health-dialog__cell-muted {
+  color: #64748b;
+  font-size: 0.75rem;
+}
+
+.footer-health-dialog__cell-impact {
+  color: #475569;
+  font-size: 0.75rem;
+  max-width: 11rem;
+}
+
+.footer-health-dialog__badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.footer-health-dialog__badge--up {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.footer-health-dialog__badge--down {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.footer-health-dialog__badge--unknown {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.footer-health-dialog__meta {
+  margin: 0.75rem 1.35rem 0;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.footer-health-dialog__foot {
+  padding: 0.85rem 1.35rem 1.15rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.footer-health-dialog__support {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.45;
+  flex: 1;
+  min-width: 0;
+}
+
+.footer-health-dialog__support-link {
+  margin-left: 0.35rem;
+  color: #0369a1;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.footer-health-dialog__autoclose {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #0369a1;
+  white-space: nowrap;
+}
+
+.footer-health-dialog__close {
+  appearance: none;
+  border: none;
+  border-radius: 10px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #0369a1;
+  background: #e0f2fe;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: #bae6fd;
+  }
+}
+
+.footer-health-dialog__progress {
+  height: 3px;
+  background: #e2e8f0;
+}
+
+.footer-health-dialog__progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+  transition: width 0.05s linear;
+}
+
+@media (max-width: 520px) {
+  .footer-health-dialog__table-wrap {
+    margin-inline: 0.85rem;
+  }
+
+  .footer-health-dialog__table th:nth-child(2),
+  .footer-health-dialog__table td:nth-child(2) {
+    display: none;
+  }
+
+  .footer-health-dialog__stats {
+    padding-inline: 0.85rem;
+  }
+
+  .footer-health-dialog__hero {
+    padding-inline: 0.85rem;
+  }
+
+  .footer-health-dialog__foot {
+    padding-inline: 0.85rem;
+  }
+}

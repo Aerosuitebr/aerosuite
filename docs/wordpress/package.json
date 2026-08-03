@@ -1,0 +1,13 @@
+{
+  "name": "wordpress",
+  "version": "1.0.0",
+  "description": "Artefatos para o site institucional [aerosuite.com.br](https://aerosuite.com.br/).",
+  "main": "aerosuite-phone-mask.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

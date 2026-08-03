@@ -1,0 +1,199 @@
+<section class="ops-page audit-page">
+  <header class="ops-page-header audit-page-header">
+    <div class="audit-page-header-copy">
+      <h2>{{ 'audit.title' | translate }}</h2>
+      <p>{{ 'audit.subtitle' | translate }}</p>
+    </div>
+    <div class="audit-page-header-actions">
+      <a routerLink="/plataforma" class="audit-back-link">
+        <i class="pi pi-arrow-left" aria-hidden="true"></i>
+        {{ 'audit.back' | translate }}
+      </a>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-refresh"
+        class="p-button-outlined audit-refresh-btn"
+        [label]="'audit.refresh' | translate"
+        (click)="load()"
+        [loading]="loading">
+      </button>
+    </div>
+  </header>
+
+  <div class="ops-list-frame">
+  <section class="audit-toolbar">
+    <div class="audit-filter-field">
+      <label for="audit-filter-event">{{ 'audit.filter.evento' | translate }}</label>
+      <p-dropdown
+        inputId="audit-filter-event"
+        [options]="eventoOptions"
+        [(ngModel)]="evento"
+        optionLabel="label"
+        optionValue="value"
+        [showClear]="true"
+        [placeholder]="'audit.filter.allEvents' | translate"
+        styleClass="audit-filter-dropdown"
+        panelStyleClass="ops-dark-dropdown-panel"
+        [appendTo]="'body'"
+        (onChange)="onEventoChange()">
+        <ng-template pTemplate="selectedItem" let-opt>
+          {{ opt?.label ?? ('audit.filter.allEvents' | translate) }}
+        </ng-template>
+      </p-dropdown>
+    </div>
+    <div class="audit-filter-field audit-filter-field--grow">
+      <label for="audit-filter-email">{{ 'audit.filter.email' | translate }}</label>
+      <input
+        pInputText
+        id="audit-filter-email"
+        class="audit-filter-input"
+        [(ngModel)]="email"
+        (keyup.enter)="search()"
+        [attr.aria-label]="'audit.filter.email' | translate" />
+    </div>
+    <div class="audit-filter-field audit-filter-field--narrow">
+      <label for="audit-filter-tenant">{{ 'audit.filter.tenantId' | translate }}</label>
+      <input
+        pInputText
+        id="audit-filter-tenant"
+        type="number"
+        class="audit-filter-input"
+        [(ngModel)]="tenantId"
+        (keyup.enter)="search()"
+        [attr.aria-label]="'audit.filter.tenantId' | translate" />
+    </div>
+    <div class="audit-filter-actions">
+      <button
+        pButton
+        type="button"
+        class="audit-search-btn"
+        [label]="'audit.search' | translate"
+        icon="pi pi-search"
+        (click)="search()">
+      </button>
+    </div>
+  </section>
+
+  <div class="audit-table-shell">
+    <app-list-data-states
+      [loading]="loading"
+      [itemCount]="items.length"
+      [skeletonRows]="8"
+      [skeletonCols]="8"
+      emptyTitleKey="audit.empty"
+      emptyDescriptionKey="ui.empty.description">
+      <p-table
+        appListScroll
+        [value]="items"
+        [loading]="loading"
+        [tableStyle]="{ 'min-width': '72rem' }"
+        styleClass="ops-table audit-table p-datatable-sm"
+        [rowHover]="true">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="col-when">{{ 'audit.col.when' | translate }}</th>
+            <th class="col-event">{{ 'audit.col.evento' | translate }}</th>
+            <th class="col-ok">{{ 'audit.col.ok' | translate }}</th>
+            <th class="col-email">{{ 'audit.col.email' | translate }}</th>
+            <th class="col-tenant">{{ 'audit.col.tenant' | translate }}</th>
+            <th class="col-detalhe">{{ 'audit.col.detalhe' | translate }}</th>
+            <th class="col-ip">{{ 'audit.col.ip' | translate }}</th>
+            <th class="col-recurso">{{ 'audit.col.recurso' | translate }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td class="col-when">{{ row.createdAt | date:'dd MMM yyyy, HH:mm' }}</td>
+            <td class="col-event"><code class="audit-event-code">{{ row.evento }}</code></td>
+            <td class="col-ok">
+              <span
+                class="audit-ok-badge"
+                [class.audit-ok-badge--success]="row.sucesso"
+                [class.audit-ok-badge--fail]="!row.sucesso">
+                {{ (row.sucesso ? 'audit.ok.yes' : 'audit.ok.no') | translate }}
+              </span>
+            </td>
+            <td class="col-email">{{ row.email || '—' }}</td>
+            <td class="col-tenant">{{ row.tenantId ?? '—' }}</td>
+            <td class="col-detalhe">
+              <span
+                class="audit-detalhe-text"
+                [pTooltip]="detalheTooltip(row)"
+                tooltipPosition="top">{{ formatDetalhe(row.detalhe) }}</span>
+            </td>
+            <td class="col-ip">
+              <span class="audit-ip">{{ row.ip || '—' }}</span>
+            </td>
+            <td class="col-recurso">
+              <span class="audit-recurso-text" [pTooltip]="row.recurso || undefined" tooltipPosition="top">{{
+                row.recurso || '—'
+              }}</span>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8" class="audit-empty-cell">{{ 'audit.empty' | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </app-list-data-states>
+
+    <footer class="ops-table-footer audit-table-footer" *ngIf="!loading && total > 0">
+      <div class="ops-footer-page-size">
+        <span class="ops-footer-page-size-label">{{ 'audit.footer.pageSizePrefix' | translate }}</span>
+        <p-dropdown
+          [options]="pageSizeOptions"
+          optionLabel="label"
+          optionValue="value"
+          [(ngModel)]="pageSize"
+          (onChange)="onPageSizeChange()"
+          styleClass="ops-footer-page-size-dropdown"
+          panelStyleClass="ops-dark-dropdown-panel"
+          [appendTo]="'body'">
+        </p-dropdown>
+        <span class="ops-footer-page-size-label">{{ 'audit.footer.pageSizeSuffix' | translate }}</span>
+      </div>
+
+      <nav class="ops-footer-pagination" [attr.aria-label]="'audit.footer.nextPage' | translate">
+        <button
+          type="button"
+          class="ops-page-btn ops-page-btn--nav"
+          [disabled]="currentPage() <= 1"
+          [attr.aria-label]="'audit.footer.prevPage' | translate"
+          (click)="goToPage(currentPage() - 1)">
+          &lt;
+        </button>
+        <ng-container *ngFor="let slot of paginationSlots()">
+          <span *ngIf="slot === 'ellipsis'" class="ops-page-ellipsis" aria-hidden="true">…</span>
+          <button
+            *ngIf="slot !== 'ellipsis'"
+            type="button"
+            class="ops-page-btn"
+            [class.ops-page-btn--active]="slot === currentPage()"
+            (click)="goToPage(slot)">
+            {{ slot }}
+          </button>
+        </ng-container>
+        <button
+          type="button"
+          class="ops-page-btn ops-page-btn--nav"
+          [disabled]="currentPage() >= totalPages()"
+          [attr.aria-label]="'audit.footer.nextPage' | translate"
+          (click)="goToPage(currentPage() + 1)">
+          &gt;
+        </button>
+      </nav>
+
+      <div class="audit-footer-meta">
+        <span class="audit-footer-range">{{ footerRangeText() }}</span>
+        <span class="audit-footer-live">
+          <span class="audit-sync-led" aria-hidden="true"></span>
+          {{ 'audit.footer.live' | translate }}
+        </span>
+      </div>
+    </footer>
+  </div>
+  </div>
+</section>

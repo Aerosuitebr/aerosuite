@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Aero Suite — software MRO Part 145. Estime a economia operacional e o payback da suite para sua oficina." />
+  <title>Aero Suite — Calculadora de ROI</title>
+  <style>
+    :root {
+      --navy: #0f172a;
+      --navy-mid: #1e293b;
+      --sky: #38bdf8;
+      --gold: #c9a227;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --ok: #059669;
+      --surface: #f8fafc;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+      background: var(--surface);
+    }
+    .hero {
+      background: linear-gradient(145deg, #020617 0%, #0c1929 40%, #0f172a 100%);
+      color: #f8fafc;
+      padding: 3rem 1.5rem 4rem;
+      text-align: center;
+    }
+    .hero h1 { margin: 0 0 0.5rem; font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; }
+    .hero p { margin: 0 auto; max-width: 42rem; color: #cbd5e1; font-size: 1.05rem; }
+    .badge {
+      display: inline-block;
+      margin-bottom: 1rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--sky);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    main {
+      max-width: 960px;
+      margin: -2rem auto 3rem;
+      padding: 0 1rem;
+      display: grid;
+      gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+      main { grid-template-columns: 1fr 1fr; align-items: start; }
+      .full { grid-column: 1 / -1; }
+    }
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+    }
+    .card h2 { margin: 0 0 1rem; font-size: 1.1rem; color: var(--navy); }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--navy-mid);
+    }
+    .field { margin-bottom: 0.85rem; }
+    input[type="number"] {
+      width: 100%;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    input:focus { outline: 2px solid rgba(56, 189, 248, 0.45); border-color: var(--sky); }
+    .hint { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+    .results { display: grid; gap: 0.75rem; }
+    .kpi {
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .kpi .val {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .kpi.positive .val { color: var(--ok); }
+    .kpi .lbl { font-size: 0.8rem; color: var(--muted); }
+    .bar-wrap {
+      margin-top: 1rem;
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+    }
+    .bar-lic { background: #94a3b8; }
+    .bar-save { background: var(--ok); }
+    ul.value-list { margin: 0; padding-left: 1.2rem; color: var(--navy-mid); font-size: 0.95rem; }
+    ul.value-list li { margin-bottom: 0.5rem; }
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary { background: var(--sky); color: var(--navy); }
+    .btn-primary:hover { filter: brightness(1.05); }
+    .btn-outline {
+      background: transparent;
+      color: var(--navy);
+      border: 1px solid var(--border);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    .case-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-top: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <span class="badge">MRO · Part 145 · SGQ integrado</span>
+    <h1>Aero Suite</h1>
+    <p>Estime a economia mensal e o payback da suite para sua oficina — propostas, OS, estoque, hangar e conformidade no mesmo fluxo.</p>
+  </header>
+
+  <main>
+    <section class="card" aria-labelledby="calc-title">
+      <h2 id="calc-title">Parâmetros do prospect</h2>
+      <div class="field">
+        <label for="horas_admin_mes">Horas/mês em administração (OS, e-mail, planilhas)</label>
+        <input type="number" id="horas_admin_mes" min="0" step="1" value="40" />
+      </div>
+      <div class="field">
+        <label for="custo_hora">Custo hora carregado (R$)</label>
+        <input type="number" id="custo_hora" min="0" step="1" value="80" />
+      </div>
+      <div class="field">
+        <label for="erros_mes">Horas/mês de retrabalho evitável</label>
+        <input type="number" id="erros_mes" min="0" step="1" value="8" />
+      </div>
+      <div class="field">
+        <label for="multa_risco">Risco mensal evitado — multas/atrasos (R$)</label>
+        <input type="number" id="multa_risco" min="0" step="100" value="0" />
+        <p class="hint">Use 0 na conversa inicial se não houver dado do cliente.</p>
+      </div>
+      <div class="field">
+        <label for="licenca_mes">Licença mensal proposta (R$)</label>
+        <input type="number" id="licenca_mes" min="0" step="50" value="2500" />
+      </div>
+      <div class="field">
+        <label for="investimento_inicial">Investimento inicial — setup + migração (R$)</label>
+        <input type="number" id="investimento_inicial" min="0" step="500" value="15000" />
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="result-title">
+      <h2 id="result-title">Resultado estimado</h2>
+      <div class="results">
+        <div class="kpi positive">
+          <div class="val" id="out_economia">—</div>
+          <div class="lbl">Economia operacional / mês</div>
+        </div>
+        <div class="kpi">
+          <div class="val" id="out_liquido">—</div>
+          <div class="lbl">Ganho líquido / mês (após licença)</div>
+        </div>
+        <div class="kpi">
+          <div class="val" id="out_payback">—</div>
+          <div class="lbl">Payback do investimento inicial</div>
+        </div>
+        <div class="kpi">
+          <div class="val" id="out_ano1">—</div>
+          <div class="lbl">Economia acumulada — Ano 1</div>
+        </div>
+      </div>
+      <div class="bar-wrap" id="bar_chart" title="Licença vs economia bruta">
+        <div class="bar-lic" id="bar_lic" style="width:50%"></div>
+        <div class="bar-save" id="bar_save" style="width:50%"></div>
+      </div>
+      <p class="case-note">Case ilustrativo com premissas editáveis — ajuste na reunião comercial.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="mailto:comercial@aerosuite.com.br?subject=Demo%20Aero%20Suite">Agendar demonstração</a>
+        <a class="btn btn-outline" href="../../IMPLEMENTACAO-PLANO-SAAS.md">Documentação técnica</a>
+      </div>
+    </section>
+
+    <section class="card full">
+      <h2>Por que a oficina economiza</h2>
+      <ul class="value-list">
+        <li>Menos e-mail com PDF solto: proposta com rastreio e histórico na suite.</li>
+        <li>Permissões por perfil Part 145 reduzem erro operacional e segregação CRS.</li>
+        <li>Estoque e OS no mesmo fluxo — menos ida e volta entre setores.</li>
+        <li>Painel SGQ, NC/CAPA, calibração e dossiê de auditoria integrados.</li>
+        <li>OpenAPI (<code>/q/openapi</code>) para Bling, BI e integrações futuras.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    Aero Suite · Material comercial (fora do monólito) · <a href="../CALCULADORA-ROI-MODELO.md">Modelo ROI</a>
+  </footer>
+
+  <script>
+    const fmt = (n) =>
+      n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
+
+    function read(id) {
+      const v = parseFloat(document.getElementById(id).value);
+      return Number.isFinite(v) && v >= 0 ? v : 0;
+    }
+
+    function recalc() {
+      const horasAdmin = read('horas_admin_mes');
+      const custoHora = read('custo_hora');
+      const errosMes = read('erros_mes');
+      const multaRisco = read('multa_risco');
+      const licencaMes = read('licenca_mes');
+      const investimento = read('investimento_inicial');
+
+      const economiaMes = horasAdmin * custoHora + errosMes * custoHora + multaRisco;
+      const liquidoMes = economiaMes - licencaMes;
+      let payback = '—';
+      if (investimento > 0 && liquidoMes > 0) {
+        const meses = investimento / liquidoMes;
+        payback = meses < 120 ? meses.toFixed(1) + ' meses' : '> 10 anos';
+      } else if (investimento <= 0 && liquidoMes > 0) {
+        payback = 'Imediato';
+      } else if (liquidoMes <= 0) {
+        payback = 'Revise premissas';
+      }
+
+      const ano1 = liquidoMes * 12 - (investimento > 0 ? investimento : 0);
+
+      document.getElementById('out_economia').textContent = fmt(economiaMes);
+      document.getElementById('out_liquido').textContent = fmt(liquidoMes);
+      document.getElementById('out_payback').textContent = payback;
+      document.getElementById('out_ano1').textContent = fmt(ano1);
+
+      const total = economiaMes + licencaMes || 1;
+      document.getElementById('bar_lic').style.width = Math.min(100, (licencaMes / total) * 100) + '%';
+      document.getElementById('bar_save').style.width = Math.min(100, (economiaMes / total) * 100) + '%';
+    }
+
+    ['horas_admin_mes', 'custo_hora', 'erros_mes', 'multa_risco', 'licenca_mes', 'investimento_inicial'].forEach(
+      (id) => document.getElementById(id).addEventListener('input', recalc)
+    );
+    recalc();
+  </script>
+</body>
+</html>

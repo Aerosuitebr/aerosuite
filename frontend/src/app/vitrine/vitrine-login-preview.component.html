@@ -1,0 +1,145 @@
+<section class="login-preview" aria-labelledby="login-preview-title">
+  <header class="login-preview__header">
+    <span class="login-preview__eyebrow">
+      <i class="pi pi-video" aria-hidden="true"></i>
+      {{ 'vitrine.preview.eyebrow' | translate }}
+    </span>
+    <h2 id="login-preview-title">{{ 'vitrine.preview.title' | translate }}</h2>
+    <p>{{ 'vitrine.preview.subtitle' | translate }}</p>
+  </header>
+
+  <div class="login-preview__grid">
+    <article
+      class="login-preview__card"
+      *ngFor="let video of videos; trackBy: trackByVideoId">
+      <button
+        type="button"
+        class="login-preview__card-btn"
+        (click)="openPlayer(video)"
+        [attr.aria-label]="('vitrine.card.watch' | translate) + ': ' + (video.titleKey | translate)">
+        <div class="login-preview__media">
+          <img
+            [src]="mediaUrl(video.posterFileName)"
+            [alt]="video.titleKey | translate"
+            loading="lazy" />
+          <div class="login-preview__shade" aria-hidden="true"></div>
+          <span class="login-preview__category">{{ video.categoryKey | translate }}</span>
+          <span class="login-preview__duration">
+            <i class="pi pi-clock" aria-hidden="true"></i>
+            {{ formatDuration(video.durationSeconds) }}
+          </span>
+          <span class="login-preview__play" aria-hidden="true">
+            <i class="pi pi-play"></i>
+          </span>
+        </div>
+
+        <div class="login-preview__content">
+          <h3>{{ video.titleKey | translate }}</h3>
+          <p>{{ video.descriptionKey | translate }}</p>
+          <span class="login-preview__cta">
+            {{ 'vitrine.card.watch' | translate }}
+            <i class="pi pi-arrow-right" aria-hidden="true"></i>
+          </span>
+        </div>
+      </button>
+    </article>
+  </div>
+
+  <p class="login-preview__hint">{{ 'vitrine.preview.hint' | translate }}</p>
+</section>
+
+<div
+  class="login-preview-modal"
+  *ngIf="selectedVideo as video"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="video.titleKey | translate">
+  <button
+    type="button"
+    class="login-preview-modal__backdrop"
+    (click)="closePlayer()"
+    [attr.aria-label]="'vitrine.preview.close' | translate"></button>
+
+  <div class="login-preview-modal__panel">
+    <header class="login-preview-modal__top">
+      <span class="login-preview-modal__now">{{ 'vitrine.player.nowPlaying' | translate }}</span>
+      <button
+        type="button"
+        class="login-preview-modal__close"
+        (click)="closePlayer()"
+        [attr.aria-label]="'vitrine.preview.close' | translate">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="login-preview-modal__layout">
+      <div class="login-preview-modal__stage">
+        <div class="login-preview-modal__frame">
+          <video
+            #videoEl
+            controls
+            playsinline
+            preload="metadata"
+            [attr.webkit-playsinline]="true"
+            [attr.x-webkit-airplay]="'allow'"
+            [src]="mediaUrl(video.fileName)"
+            [poster]="mediaUrl(video.posterFileName)"
+            [attr.aria-label]="video.titleKey | translate">
+          </video>
+        </div>
+
+        <div class="login-preview-modal__toolbar">
+          <button
+            pButton
+            type="button"
+            class="p-button-outlined"
+            icon="pi pi-window-maximize"
+            [label]="'vitrine.player.fullscreen' | translate"
+            (click)="toggleFullscreen()"></button>
+          <button
+            pButton
+            type="button"
+            class="p-button-outlined"
+            icon="pi pi-clone"
+            [label]="'vitrine.player.pictureInPicture' | translate"
+            (click)="togglePictureInPicture()"></button>
+          <div class="login-preview-modal__speed" role="group" [attr.aria-label]="'vitrine.player.speed' | translate">
+            <span>{{ 'vitrine.player.speed' | translate }}</span>
+            <button
+              type="button"
+              *ngFor="let rate of [0.75, 1, 1.25, 1.5, 2]"
+              [class.is-active]="playbackRate === rate"
+              (click)="setSpeed(rate)">
+              {{ rate }}x
+            </button>
+          </div>
+        </div>
+
+        <p class="login-preview-modal__native-hint">{{ 'vitrine.player.nativeHint' | translate }}</p>
+      </div>
+
+      <aside class="login-preview-modal__side">
+        <span class="login-preview-modal__category">{{ video.categoryKey | translate }}</span>
+        <h3>{{ video.titleKey | translate }}</h3>
+        <p>{{ video.descriptionKey | translate }}</p>
+
+        <dl class="login-preview-modal__meta">
+          <div>
+            <dt>{{ 'vitrine.player.duration' | translate }}</dt>
+            <dd>{{ formatDuration(video.durationSeconds) }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'vitrine.player.resolution' | translate }}</dt>
+            <dd>{{ video.resolution }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'vitrine.player.format' | translate }}</dt>
+            <dd>MP4</dd>
+          </div>
+        </dl>
+
+        <p class="login-preview-modal__after-login">{{ 'vitrine.preview.afterLogin' | translate }}</p>
+      </aside>
+    </div>
+  </div>
+</div>

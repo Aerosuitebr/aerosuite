@@ -1,0 +1,6 @@
+{
+  "ok": false,
+  "skipped": true,
+  "reason": "CLOUDFLARE_API_TOKEN ausente",
+  "manual": "Cloudflare → aerosuite.com.br → Rules → Redirect Rules → Create: If hostname equals www.aerosuite.com.br → Dynamic → https://aerosuite.com.br${http.request.uri.path} (301)"
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "index": 3,
+    "invokePath": "d:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\steps-estoque\\_invoke-step-3.json",
+    "awaitPromise": false,
+    "exprLen": 18070
+  },
+  {
+    "index": 4,
+    "invokePath": "d:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\steps-estoque\\_invoke-step-4.json",
+    "awaitPromise": false,
+    "exprLen": 18070
+  },
+  {
+    "index": 5,
+    "invokePath": "d:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\steps-estoque\\_invoke-step-5.json",
+    "awaitPromise": false,
+    "exprLen": 18070
+  },
+  {
+    "index": 6,
+    "invokePath": "d:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\steps-estoque\\_invoke-step-6.json",
+    "awaitPromise": false,
+    "exprLen": 18070
+  },
+  {
+    "index": 7,
+    "invokePath": "d:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\steps-estoque\\_invoke-step-7.json",
+    "awaitPromise": false,
+    "exprLen": 18070
+  },
+  {
+    "index": 8,
+    "invokePath": "d:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\steps-estoque\\_invoke-step-8.json",
+    "awaitPromise": false,
+    "exprLen": 18070
+  },
+  {
+    "index": 9,
+    "invokePath": "d:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\steps-estoque\\_invoke-step-9.json",
+    "awaitPromise": false,
+    "exprLen": 18070
+  },
+  {
+    "index": 10,
+    "invokePath": "d:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\steps-estoque\\_invoke-step-10.json",
+    "awaitPromise": false,
+    "exprLen": 18070
+  },
+  {
+    "index": 11,
+    "invokePath": "d:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\steps-estoque\\_invoke-step-11.json",
+    "awaitPromise": false,
+    "exprLen": 18070
+  },
+  {
+    "index": 12,
+    "invokePath": "d:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\steps-estoque\\_invoke-step-12.json",
+    "awaitPromise": false,
+    "exprLen": 18070
+  },
+  {
+    "index": 13,
+    "invokePath": "d:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\steps-estoque\\_invoke-step-13.json",
+    "awaitPromise": false,
+    "exprLen": 9490
+  },
+  {
+    "index": 14,
+    "invokePath": "d:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\steps-estoque\\_invoke-step-14.json",
+    "awaitPromise": true,
+    "exprLen": 1003
+  }
+]

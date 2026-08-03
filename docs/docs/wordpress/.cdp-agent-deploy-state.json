@@ -1,0 +1,194 @@
+{
+  "results": {
+    "0": {
+      "batch": 0,
+      "from": 0,
+      "to": 4
+    },
+    "1": {
+      "batch": 1,
+      "from": 5,
+      "to": 9
+    },
+    "2": {
+      "batch": 2,
+      "from": 10,
+      "to": 14
+    },
+    "3": {
+      "batch": 3,
+      "from": 15,
+      "to": 19
+    },
+    "4": {
+      "len": 34708,
+      "ok": true
+    },
+    "5": {
+      "b64": 34708,
+      "dec": 26030,
+      "hasGrid": true
+    },
+    "6": {
+      "cssLen": 26030,
+      "footerLen": 38416,
+      "hasHeroV2": true,
+      "ok": true
+    },
+    "7": {
+      "ok": true
+    },
+    "8": {
+      "i": 0,
+      "step": "enc-0",
+      "total": 5
+    },
+    "9": {
+      "i": 1,
+      "step": "enc-0",
+      "total": 5
+    },
+    "10": {
+      "i": 2,
+      "step": "enc-0",
+      "total": 5
+    },
+    "11": {
+      "i": 3,
+      "step": "enc-0",
+      "total": 5
+    },
+    "12": {
+      "i": 4,
+      "step": "enc-0",
+      "total": 5
+    },
+    "13": {
+      "chunk": 0,
+      "len": 6000
+    },
+    "14": {
+      "i": 0,
+      "step": "enc-1",
+      "total": 5
+    },
+    "15": {
+      "i": 1,
+      "step": "enc-1",
+      "total": 5
+    },
+    "16": {
+      "i": 2,
+      "step": "enc-1",
+      "total": 5
+    },
+    "17": {
+      "i": 3,
+      "step": "enc-1",
+      "total": 5
+    },
+    "18": {
+      "i": 4,
+      "step": "enc-1",
+      "total": 5
+    },
+    "19": {
+      "chunk": 1,
+      "len": 12000
+    },
+    "20": {
+      "i": 0,
+      "step": "enc-2",
+      "total": 5
+    },
+    "21": {
+      "i": 1,
+      "step": "enc-2",
+      "total": 5
+    },
+    "22": {
+      "i": 2,
+      "step": "enc-2",
+      "total": 5
+    },
+    "23": {
+      "i": 3,
+      "step": "enc-2",
+      "total": 5
+    },
+    "24": {
+      "i": 4,
+      "step": "enc-2",
+      "total": 5
+    },
+    "25": {
+      "chunk": 2,
+      "len": 18000
+    },
+    "26": {
+      "i": 0,
+      "step": "enc-3",
+      "total": 2
+    },
+    "27": {
+      "i": 1,
+      "step": "enc-3",
+      "total": 2
+    },
+    "28": {
+      "chunk": 3,
+      "len": 19388
+    },
+    "29": {
+      "hasHeroV2": true,
+      "homeLen": 14398,
+      "ok": true,
+      "sample": "demonstração",
+      "title": "Aero Suite — Gestão MRO | OS, Estoque FIFO e Portal do Cliente"
+    }
+  },
+  "summary": {
+    "cssFullRun": {
+      "len": 34708,
+      "ok": true
+    },
+    "cssVerify": {
+      "b64": 34708,
+      "dec": 26030,
+      "hasGrid": true
+    },
+    "cssFinalize": {
+      "cssLen": 26030,
+      "footerLen": 38416,
+      "hasHeroV2": true,
+      "ok": true
+    },
+    "encInit": {
+      "ok": true
+    },
+    "enc0": {
+      "chunk": 0,
+      "len": 6000
+    },
+    "enc1": {
+      "chunk": 1,
+      "len": 12000
+    },
+    "enc2": {
+      "chunk": 2,
+      "len": 18000
+    },
+    "enc3": {
+      "chunk": 3,
+      "len": 19388
+    },
+    "encRun": {
+      "hasHeroV2": true,
+      "homeLen": 14398,
+      "ok": true,
+      "sample": "demonstração",
+      "title": "Aero Suite — Gestão MRO | OS, Estoque FIFO e Portal do Cliente"
+    }
+  },
+  "errors": []
+}

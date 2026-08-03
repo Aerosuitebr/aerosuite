@@ -1,0 +1,1 @@
+{"viewId":"bba9a4","method":"Runtime.evaluate","params":{"expression":"(async()=>{const r=await fetch('http://127.0.0.1:18765/step/0');const j=await r.json();const inner=(j.arguments?.params??j.params).expression;return await eval(inner);})()","awaitPromise":true,"returnByValue":true}}

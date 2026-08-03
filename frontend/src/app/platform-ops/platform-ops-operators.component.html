@@ -1,0 +1,250 @@
+<p-toast></p-toast>
+<p-confirmDialog
+  styleClass="ops-confirm-dialog"
+  maskStyleClass="ops-confirm-dialog-mask">
+</p-confirmDialog>
+<p-menu
+  #rowMenu
+  [model]="rowMenuItems"
+  [popup]="true"
+  appendTo="body"
+  [style]="menuPanelStyle"
+  styleClass="ops-row-action-menu"
+  (onShow)="onRowMenuShow()">
+</p-menu>
+
+<section class="ops-page">
+  <header class="ops-page-header ops-operators-header">
+    <div>
+      <h2>{{ 'platformOps.operators.title' | translate }}</h2>
+      <p>{{ 'platformOps.operators.subtitle' | translate }}</p>
+      <p class="ops-operators-hint">
+        <i class="pi pi-info-circle" aria-hidden="true"></i>
+        {{ 'platformOps.operators.hint.mfa' | translate }}
+      </p>
+    </div>
+    <button
+      pButton
+      type="button"
+      class="p-button-outlined ops-refresh-btn"
+      icon="pi pi-refresh"
+      [label]="'audit.refresh' | translate"
+      (click)="reload()"
+      [loading]="loading">
+    </button>
+  </header>
+
+  <div class="ops-operators-kpis" *ngIf="data">
+    <button
+      type="button"
+      class="ops-operators-kpi"
+      [class.ops-operators-kpi--selected]="isKpiSelected('effective')"
+      [attr.aria-pressed]="isKpiSelected('effective')"
+      (click)="toggleKpiFilter('effective')">
+      <span class="ops-operators-kpi-label-row">
+        <span class="ops-operators-kpi-led ops-operators-kpi-led--effective" aria-hidden="true"></span>
+        <span class="ops-operators-kpi-label">{{ 'platformOps.operators.kpi.effective' | translate }}</span>
+      </span>
+      <strong class="ops-operators-kpi-value">{{ data.totalEffective }}</strong>
+    </button>
+    <button
+      type="button"
+      class="ops-operators-kpi"
+      [class.ops-operators-kpi--selected]="isKpiSelected('config')"
+      [attr.aria-pressed]="isKpiSelected('config')"
+      (click)="toggleKpiFilter('config')">
+      <span class="ops-operators-kpi-label-row">
+        <span class="ops-operators-kpi-led ops-operators-kpi-led--config" aria-hidden="true"></span>
+        <span class="ops-operators-kpi-label">{{ 'platformOps.operators.kpi.config' | translate }}</span>
+      </span>
+      <strong class="ops-operators-kpi-value">{{ data.totalFromConfig }}</strong>
+    </button>
+    <button
+      type="button"
+      class="ops-operators-kpi ops-operators-kpi--accent"
+      [class.ops-operators-kpi--selected]="isKpiSelected('grant')"
+      [attr.aria-pressed]="isKpiSelected('grant')"
+      (click)="toggleKpiFilter('grant')">
+      <span class="ops-operators-kpi-label-row">
+        <span class="ops-operators-kpi-led ops-operators-kpi-led--grant" aria-hidden="true"></span>
+        <span class="ops-operators-kpi-label">{{ 'platformOps.operators.kpi.grant' | translate }}</span>
+      </span>
+      <strong class="ops-operators-kpi-value">{{ data.totalFromGrant }}</strong>
+    </button>
+  </div>
+
+  <div class="ops-list-frame">
+  <div class="ops-operators-toolbar" *ngIf="data">
+    <label class="ops-operators-search" for="ops-operators-search">
+      <i class="pi pi-search" aria-hidden="true"></i>
+      <input
+        pInputText
+        id="ops-operators-search"
+        type="search"
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchChange($event)"
+        [placeholder]="'platformOps.operators.search.placeholder' | translate"
+        [attr.aria-label]="'platformOps.operators.search.placeholder' | translate"
+        autocomplete="off" />
+    </label>
+  </div>
+
+  <div class="ops-operators-filter-bar" *ngIf="hasActiveFilters()">
+    <div class="ops-operators-filter-summary">
+      <span class="ops-filter-count">
+        {{ 'platformOps.operators.filter.count' | translate:{ count: totalCount() } }}
+      </span>
+      <span class="ops-filter-chip" *ngIf="kpiFilterLabelKey() as labelKey">
+        {{ labelKey | translate }}
+      </span>
+      <span class="ops-filter-query" *ngIf="activeSearchTerm()">
+        «{{ activeSearchTerm() }}»
+      </span>
+    </div>
+    <button type="button" class="ops-operators-filter-clear" (click)="clearFilters()">
+      {{ 'platformOps.billing.filter.clear' | translate }}
+    </button>
+  </div>
+
+  <div class="ops-operators-table-shell">
+    <p-table
+      [value]="paginatedItems()"
+      [loading]="loading"
+      styleClass="ops-table ops-operators-table p-datatable-sm"
+      [rowHover]="true">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{ 'platformOps.operators.col.name' | translate }}</th>
+          <th>{{ 'platformOps.operators.col.email' | translate }}</th>
+          <th>{{ 'platformOps.operators.col.profile' | translate }}</th>
+          <th>{{ 'platformOps.operators.col.userStatus' | translate }}</th>
+          <th>{{ 'platformOps.operators.col.access' | translate }}</th>
+          <th>{{ 'platformOps.operators.col.source' | translate }}</th>
+          <th class="ops-col-actions">{{ 'platformOps.operators.col.actions' | translate }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>
+            <span class="ops-user-name">{{ row.nome | displayText }}</span>
+          </td>
+          <td>
+            <span class="ops-user-email">{{ row.email }}</span>
+          </td>
+          <td>
+            <span class="ops-perfil-badge" [ngClass]="perfilBadgeClass(row)" *ngIf="perfilLabel(row) as perfil; else noPerfil">
+              {{ perfil }}
+            </span>
+            <ng-template #noPerfil><span class="ops-muted-dash">—</span></ng-template>
+          </td>
+          <td>
+            <span
+              class="ops-user-status"
+              [class.ops-user-status--active]="row.usuarioAtivo"
+              [class.ops-user-status--inactive]="!row.usuarioAtivo">
+              {{ row.usuarioAtivo ? ('platformOps.operators.status.active' | translate) : ('platformOps.operators.status.inactive' | translate) }}
+            </span>
+          </td>
+          <td>
+            <span class="ops-access-badge ops-access-badge--on" *ngIf="hasOpsAccess(row); else noAccess">
+              {{ 'platformOps.operators.access.on' | translate }}
+            </span>
+            <ng-template #noAccess>
+              <span class="ops-muted-dash" aria-hidden="true">—</span>
+            </ng-template>
+          </td>
+          <td>
+            <span
+              class="ops-source-badge"
+              [ngClass]="sourceBadgeClass(row)"
+              *ngIf="sourceLabelKey(row) as sourceKey; else noSource">
+              {{ sourceKey | translate }}
+            </span>
+            <ng-template #noSource>
+              <span class="ops-muted-dash" aria-hidden="true">—</span>
+            </ng-template>
+          </td>
+          <td class="ops-col-actions">
+            <button
+              *ngIf="hasRowActions(row)"
+              pButton
+              type="button"
+              class="p-button-text p-button-rounded ops-row-menu-btn"
+              icon="pi pi-cog"
+              [disabled]="isRowBusy(row)"
+              [attr.aria-label]="'platformOps.operators.col.actions' | translate"
+              (click)="openRowMenu($event, row)">
+            </button>
+            <span
+              *ngIf="!hasRowActions(row) && isConfigProtected(row)"
+              class="ops-config-protected"
+              [pTooltip]="'platformOps.operators.configProtected' | translate"
+              tooltipPosition="top">
+              <i class="pi pi-lock" aria-hidden="true"></i>
+            </span>
+            <span *ngIf="!hasRowActions(row) && !isConfigProtected(row)" class="ops-muted-dash">—</span>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="ops-empty-cell">
+            {{ (hasActiveFilters() ? 'platformOps.operators.emptyFiltered' : 'platformOps.operators.empty') | translate }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <footer class="ops-table-footer" *ngIf="!loading && totalCount() > 0">
+      <div class="ops-footer-page-size">
+        <span class="ops-footer-page-size-label">{{ 'platformOps.billing.footer.pageSizePrefix' | translate }}</span>
+        <p-dropdown
+          [options]="pageSizeOptions"
+          optionLabel="label"
+          optionValue="value"
+          [(ngModel)]="pageSize"
+          (onChange)="onPageSizeChange()"
+          styleClass="ops-footer-page-size-dropdown"
+          panelStyleClass="ops-dark-dropdown-panel"
+          [appendTo]="'body'">
+        </p-dropdown>
+        <span class="ops-footer-page-size-label">{{ 'platformOps.billing.footer.pageSizeSuffix' | translate }}</span>
+      </div>
+
+      <nav class="ops-footer-pagination" [attr.aria-label]="'platformOps.billing.footer.nextPage' | translate">
+        <button
+          type="button"
+          class="ops-page-btn ops-page-btn--nav"
+          [disabled]="currentPage <= 1"
+          [attr.aria-label]="'platformOps.billing.footer.prevPage' | translate"
+          (click)="goToPage(currentPage - 1)">
+          &lt;
+        </button>
+        <ng-container *ngFor="let slot of paginationSlots()">
+          <span *ngIf="slot === 'ellipsis'" class="ops-page-ellipsis" aria-hidden="true">…</span>
+          <button
+            *ngIf="slot !== 'ellipsis'"
+            type="button"
+            class="ops-page-btn"
+            [class.ops-page-btn--active]="slot === currentPage"
+            (click)="goToPage(slot)">
+            {{ slot }}
+          </button>
+        </ng-container>
+        <button
+          type="button"
+          class="ops-page-btn ops-page-btn--nav"
+          [disabled]="currentPage >= totalPages()"
+          [attr.aria-label]="'platformOps.billing.footer.nextPage' | translate"
+          (click)="goToPage(currentPage + 1)">
+          &gt;
+        </button>
+      </nav>
+
+      <div class="ops-footer-meta">
+        <span class="ops-footer-range">{{ footerRangeText() }}</span>
+      </div>
+    </footer>
+  </div>
+  </div>
+</section>

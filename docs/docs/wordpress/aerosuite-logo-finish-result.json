@@ -1,0 +1,387 @@
+{
+  "ok": true,
+  "hero": "https://aerosuite.com.br/wp-content/uploads/2026/06/aero-colorido-logo.png",
+  "customLogo": 741,
+  "pages": {
+    "2": {
+      "slug": "pagina-exemplo",
+      "replaced": 0
+    },
+    "14": {
+      "slug": "recibo-de-ingresso",
+      "replaced": 0
+    },
+    "15": {
+      "slug": "detalhes-do-ingresso",
+      "replaced": 0
+    },
+    "16": {
+      "slug": "sobre",
+      "replaced": 0
+    },
+    "18": {
+      "slug": "contato",
+      "replaced": 0
+    },
+    "20": {
+      "slug": "solucoes",
+      "replaced": 0
+    },
+    "21": {
+      "slug": "pagina-inicial",
+      "replaced": 0
+    },
+    "81": {
+      "slug": "servicos",
+      "replaced": 0
+    },
+    "197": {
+      "slug": "blog",
+      "replaced": 0
+    },
+    "198": {
+      "slug": "software-gestao-oficina-aeronautica-mro",
+      "replaced": 0
+    },
+    "199": {
+      "slug": "estoque-pecas-aeronauticas-rastreabilidade",
+      "replaced": 0
+    },
+    "200": {
+      "slug": "ordem-servico-manutencao-aeronaves",
+      "replaced": 0
+    },
+    "201": {
+      "slug": "portal-cliente-oficina-aviacao",
+      "replaced": 0
+    },
+    "202": {
+      "slug": "propostas-comerciais-servicos-aeronauticos",
+      "replaced": 0
+    },
+    "246": {
+      "slug": "politica-de-privacidade-2",
+      "replaced": 1
+    },
+    "247": {
+      "slug": "termos-de-uso",
+      "replaced": 0
+    },
+    "248": {
+      "slug": "obrigado",
+      "replaced": 0
+    },
+    "249": {
+      "slug": "aero-suite-vs-planilhas",
+      "replaced": 0
+    },
+    "259": {
+      "slug": "politica-de-privacidade-3",
+      "replaced": 1
+    },
+    "263": {
+      "slug": "seguranca-e-dados",
+      "replaced": 0
+    },
+    "268": {
+      "slug": "politica-de-privacidade-4",
+      "replaced": 1
+    },
+    "270": {
+      "slug": "casos",
+      "replaced": 0
+    },
+    "271": {
+      "slug": "bellows-servicos-aeronauticos",
+      "replaced": 0
+    },
+    "276": {
+      "slug": "politica-de-privacidade-5",
+      "replaced": 1
+    },
+    "279": {
+      "slug": "politica-de-privacidade-6",
+      "replaced": 1
+    },
+    "285": {
+      "slug": "politica-de-privacidade-7",
+      "replaced": 1
+    },
+    "295": {
+      "slug": "politica-de-privacidade-8",
+      "replaced": 1
+    },
+    "299": {
+      "slug": "politica-de-privacidade-9",
+      "replaced": 1
+    },
+    "303": {
+      "slug": "king-do-rio-pecas-aeronauticas",
+      "replaced": 0
+    },
+    "311": {
+      "slug": "politica-de-privacidade-10",
+      "replaced": 1
+    },
+    "317": {
+      "slug": "politica-de-privacidade-11",
+      "replaced": 1
+    },
+    "319": {
+      "slug": "politica-de-privacidade-12",
+      "replaced": 1
+    },
+    "353": {
+      "slug": "politica-de-privacidade-13",
+      "replaced": 1
+    },
+    "359": {
+      "slug": "politica-de-privacidade-14",
+      "replaced": 1
+    },
+    "362": {
+      "slug": "politica-de-privacidade-15",
+      "replaced": 1
+    },
+    "373": {
+      "slug": "politica-de-privacidade-16",
+      "replaced": 1
+    },
+    "377": {
+      "slug": "politica-de-privacidade-17",
+      "replaced": 1
+    },
+    "380": {
+      "slug": "politica-de-privacidade-18",
+      "replaced": 1
+    },
+    "384": {
+      "slug": "politica-de-privacidade-19",
+      "replaced": 1
+    },
+    "388": {
+      "slug": "politica-de-privacidade-20",
+      "replaced": 1
+    },
+    "390": {
+      "slug": "politica-de-privacidade-21",
+      "replaced": 1
+    },
+    "392": {
+      "slug": "politica-de-privacidade-22",
+      "replaced": 1
+    },
+    "394": {
+      "slug": "politica-de-privacidade-23",
+      "replaced": 1
+    },
+    "397": {
+      "slug": "politica-de-privacidade-24",
+      "replaced": 1
+    },
+    "401": {
+      "slug": "politica-de-privacidade-25",
+      "replaced": 1
+    },
+    "404": {
+      "slug": "politica-de-privacidade-26",
+      "replaced": 1
+    },
+    "417": {
+      "slug": "politica-de-privacidade-27",
+      "replaced": 0
+    },
+    "434": {
+      "slug": "politica-de-privacidade-28",
+      "replaced": 0
+    },
+    "445": {
+      "slug": "politica-de-privacidade-29",
+      "replaced": 0
+    },
+    "448": {
+      "slug": "politica-de-privacidade-30",
+      "replaced": 0
+    },
+    "452": {
+      "slug": "politica-de-privacidade-31",
+      "replaced": 0
+    },
+    "456": {
+      "slug": "politica-de-privacidade-32",
+      "replaced": 0
+    },
+    "459": {
+      "slug": "politica-de-privacidade-33",
+      "replaced": 0
+    },
+    "463": {
+      "slug": "politica-de-privacidade-34",
+      "replaced": 0
+    },
+    "465": {
+      "slug": "politica-de-privacidade-35",
+      "replaced": 0
+    },
+    "469": {
+      "slug": "politica-de-privacidade-36",
+      "replaced": 0
+    },
+    "472": {
+      "slug": "politica-de-privacidade-37",
+      "replaced": 0
+    },
+    "476": {
+      "slug": "politica-de-privacidade-38",
+      "replaced": 0
+    },
+    "480": {
+      "slug": "politica-de-privacidade-39",
+      "replaced": 0
+    },
+    "482": {
+      "slug": "politica-de-privacidade-40",
+      "replaced": 0
+    },
+    "484": {
+      "slug": "politica-de-privacidade-41",
+      "replaced": 0
+    },
+    "487": {
+      "slug": "politica-de-privacidade-42",
+      "replaced": 0
+    },
+    "489": {
+      "slug": "politica-de-privacidade-43",
+      "replaced": 0
+    },
+    "491": {
+      "slug": "politica-de-privacidade-44",
+      "replaced": 0
+    },
+    "494": {
+      "slug": "politica-de-privacidade-45",
+      "replaced": 0
+    },
+    "497": {
+      "slug": "politica-de-privacidade-46",
+      "replaced": 0
+    },
+    "499": {
+      "slug": "politica-de-privacidade-47",
+      "replaced": 0
+    },
+    "501": {
+      "slug": "politica-de-privacidade-48",
+      "replaced": 0
+    },
+    "504": {
+      "slug": "politica-de-privacidade-49",
+      "replaced": 0
+    },
+    "530": {
+      "slug": "politica-de-privacidade-50",
+      "replaced": 0
+    },
+    "534": {
+      "slug": "conformidade-regulatoria",
+      "replaced": 0
+    },
+    "552": {
+      "slug": "politica-de-privacidade-51",
+      "replaced": 0
+    },
+    "567": {
+      "slug": "politica-de-privacidade-52",
+      "replaced": 0
+    },
+    "581": {
+      "slug": "politica-de-privacidade-53",
+      "replaced": 0
+    },
+    "595": {
+      "slug": "politica-de-privacidade-54",
+      "replaced": 0
+    },
+    "601": {
+      "slug": "politica-de-privacidade-55",
+      "replaced": 0
+    },
+    "603": {
+      "slug": "politica-de-privacidade-56",
+      "replaced": 0
+    },
+    "606": {
+      "slug": "politica-de-privacidade-57",
+      "replaced": 0
+    },
+    "608": {
+      "slug": "politica-de-privacidade-58",
+      "replaced": 0
+    },
+    "611": {
+      "slug": "politica-de-privacidade-59",
+      "replaced": 0
+    },
+    "614": {
+      "slug": "politica-de-privacidade-60",
+      "replaced": 0
+    },
+    "619": {
+      "slug": "politica-de-privacidade-61",
+      "replaced": 0
+    },
+    "631": {
+      "slug": "politica-de-privacidade-62",
+      "replaced": 0
+    },
+    "637": {
+      "slug": "politica-de-privacidade-63",
+      "replaced": 0
+    },
+    "638": {
+      "slug": "politica-de-privacidade-64",
+      "replaced": 0
+    },
+    "653": {
+      "slug": "politica-de-privacidade-65",
+      "replaced": 0
+    },
+    "669": {
+      "slug": "politica-de-privacidade-66",
+      "replaced": 0
+    },
+    "685": {
+      "slug": "politica-de-privacidade-67",
+      "replaced": 0
+    },
+    "702": {
+      "slug": "politica-de-privacidade-68",
+      "replaced": 0
+    },
+    "705": {
+      "slug": "politica-de-privacidade-69",
+      "replaced": 0
+    },
+    "719": {
+      "slug": "politica-de-privacidade-70",
+      "replaced": 0
+    },
+    "729": {
+      "slug": "politica-de-privacidade-71",
+      "replaced": 0
+    },
+    "732": {
+      "slug": "politica-de-privacidade-72",
+      "replaced": 0
+    }
+  },
+  "templateParts": {
+    "extendable//header": {
+      "replaced": 0
+    },
+    "extendable//footer": {
+      "replaced": 0
+    }
+  }
+}

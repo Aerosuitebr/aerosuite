@@ -1,0 +1,37 @@
+# Stack opcional de observabilidade (P2) — Prometheus + Grafana.
+# Uso (com API no host ou Docker na porta 8080):
+#   docker compose -f docker-compose.observability.yml up -d
+# Métricas: http://localhost:8080/q/metrics (API)
+# Prometheus: http://localhost:9090
+# Grafana: http://localhost:3000 (admin / ver GRAFANA_ADMIN_PASSWORD no .env)
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    container_name: aerosuite-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./deploy/observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana:11.2.2
+    container_name: aerosuite-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./deploy/observability/grafana/provisioning:/etc/grafana/provisioning:ro
+
+volumes:
+  prometheus-data:
+  grafana-data:

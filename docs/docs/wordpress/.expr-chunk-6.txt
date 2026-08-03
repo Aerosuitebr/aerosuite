@@ -1,0 +1,1 @@
+(async()=>{const code=atob(window.__batchB64);return await eval(code);})()

@@ -1,0 +1,1 @@
+(async()=>{window.__homeb64='';return{ok:true};})()

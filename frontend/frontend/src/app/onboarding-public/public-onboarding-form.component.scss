@@ -1,0 +1,36 @@
+.onboarding-public-loading {
+  text-align: center;
+  color: #64748b;
+  padding: 1rem 0;
+}
+
+.onboarding-public-intro {
+  margin: 0 0 0.75rem;
+  color: #334155;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.onboarding-public-hint {
+  margin: 0 0 1rem;
+  padding: 0.65rem 0.75rem;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  color: #0369a1;
+  font-size: 0.82rem;
+}
+
+.onboarding-public-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #475569;
+}

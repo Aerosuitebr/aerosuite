@@ -1,0 +1,61 @@
+{
+  "at": "2026-06-04T02:20:29.950Z",
+  "steps": {
+    "cloudflare": {
+      "ok": false,
+      "skipped": true,
+      "reason": "Defina CLOUDFLARE_API_TOKEN e CLOUDFLARE_ZONE_ID para purge automático"
+    },
+    "wp": {
+      "portfolioEmails": {
+        "at": "2026-06-04T02:20:55+00:00",
+        "sent": [
+          {
+            "to": "comercial@bellowscontrols.com.br",
+            "ok": true
+          },
+          {
+            "to": "contato@kingdorio.com.br",
+            "ok": true
+          }
+        ]
+      },
+      "ga4Live": {
+        "ga4": "G-GLP0ELSN4V",
+        "gtag": "undefined",
+        "match": true
+      },
+      "formOk": true
+    },
+    "dns": {
+      "spf": "v=spf1 include:_spf.locaweb.com.br -all (confirmado)",
+      "dmarc": "v=DMARC1; p=none (confirmado)",
+      "locawebAction": "Central Locaweb → E-mail → SMTP → Domínio de Remetente → validar aerosuite.com.br"
+    },
+    "gsc": {
+      "sitemapUrl": "https://aerosuite.com.br/wp-sitemap.xml",
+      "sitemapOk": true,
+      "submitAt": "https://search.google.com/search-console → Sitemaps → wp-sitemap.xml"
+    },
+    "ga4": {
+      "measurementId": "G-GLP0ELSN4V",
+      "markConversions": [
+        "cta_demo",
+        "cta_whatsapp",
+        "form_submit",
+        "calendly_event_scheduled",
+        "generate_lead",
+        "thank_you_view"
+      ],
+      "adminEvents": "https://analytics.google.com/analytics/web/#/a/p0/admin/events",
+      "debugView": "https://analytics.google.com/analytics/web/#/a/debugview/"
+    },
+    "audit": {
+      "wpformsOk": true,
+      "sitemapOk": true,
+      "calendlyOk": true,
+      "schemaOk": true,
+      "obrigadoOk": true
+    }
+  }
+}

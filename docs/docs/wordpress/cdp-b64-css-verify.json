@@ -1,0 +1,1 @@
+{"expression":"(async()=>{const expr=atob('KGFzeW5jKCk9Pntjb25zdCBjc3M9YXRvYih3aW5kb3cuX19jc3NiNjQpO3JldHVybntiNjQ6d2luZG93Ll9fY3NzYjY0Lmxlbmd0aCxkZWM6Y3NzLmxlbmd0aCxoYXNHcmlkOmNzcy5pbmNsdWRlcygnYXMtaGVyby12Ml9fZ3JpZCcpfX0pKCk=');let v=eval(expr);if(v&&typeof v.then==='function')v=await v;return v})()","awaitPromise":true,"returnByValue":true}

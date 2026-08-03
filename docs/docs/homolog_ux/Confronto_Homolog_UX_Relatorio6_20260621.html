@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Confronto Técnico — Homologação UX Relatório 6</title>
+  <style>/* Aero Suite — Relatório Executivo UX (print/PDF A4) */
+@page {
+  size: A4;
+  margin: 16mm 14mm 20mm 14mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.5;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 40%, #0f172a 75%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22mm 18mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 150mm;
+}
+
+.cover-logo {
+  width: 68mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8mm;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.4));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  border: 1px solid rgba(148,163,184,.35);
+  border-radius: 999px;
+  padding: 2.5mm 5mm;
+  margin-bottom: 6mm;
+}
+
+.cover h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+}
+
+.cover-sub {
+  font-size: 11pt;
+  color: #cbd5e1;
+  margin: 0 0 6mm;
+  line-height: 1.45;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a227, transparent);
+  margin: 0 auto 6mm;
+}
+
+.cover-meta {
+  font-size: 9.5pt;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cover-meta strong {
+  color: #e2e8f0;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 12mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #64748b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 7mm;
+  width: auto;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+h2 {
+  font-size: 14pt;
+  color: #0f172a;
+  margin: 0 0 4mm;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 11pt;
+  color: #0369a1;
+  margin: 5mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+.lead {
+  font-size: 10.5pt;
+  color: #334155;
+  margin-bottom: 5mm;
+}
+
+/* Sumário */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+  padding: 2mm 0;
+  border-bottom: 1px dotted #e2e8f0;
+  font-size: 9.5pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: none;
+  padding-top: 4mm;
+  font-size: 10pt;
+}
+
+.toc-num {
+  font-weight: 700;
+  color: #64748b;
+  min-width: 10mm;
+}
+
+/* Score dashboard */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin: 5mm 0 6mm;
+}
+
+.score-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4mm;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.score-card--ok {
+  background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #86efac;
+}
+
+.score-val {
+  font-size: 18pt;
+  font-weight: 800;
+  color: #0369a1;
+  line-height: 1;
+}
+
+.score-card--ok .score-val {
+  color: #15803d;
+}
+
+.score-label {
+  font-size: 7.5pt;
+  color: #64748b;
+  margin-top: 1.5mm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin: 4mm 0;
+}
+
+th, td {
+  border: 1px solid #e2e8f0;
+  padding: 2.5mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Item cards */
+.section-intro {
+  background: #f8fafc;
+  border-left: 3px solid #0369a1;
+  padding: 3mm 4mm;
+  margin-bottom: 5mm;
+  font-size: 9pt;
+  color: #475569;
+}
+
+.item-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 4mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  padding: 2.5mm 4mm;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item-id {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.item-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 9.5pt;
+}
+
+.sev {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.sev--CRITICO { background: #fee2e2; color: #991b1b; }
+.sev--ALTO { background: #ffedd5; color: #9a3412; }
+.sev--MEDIO { background: #fef9c3; color: #854d0e; }
+.sev--INFO { background: #e0e7ff; color: #3730a3; }
+
+.item-body {
+  padding: 3mm 4mm 4mm;
+  font-size: 8.75pt;
+}
+
+.item-row {
+  margin-bottom: 2.5mm;
+}
+
+.item-row:last-child {
+  margin-bottom: 0;
+}
+
+.item-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.5mm;
+}
+
+.item-text {
+  color: #1e293b;
+}
+
+.status-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+/* Assinatura */
+.signature-block {
+  margin-top: 10mm;
+  padding: 6mm;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.signature-line {
+  width: 55mm;
+  border-top: 1px solid #334155;
+  margin: 12mm 0 2mm;
+}
+
+.signature-name {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.signature-role {
+  font-size: 9pt;
+  color: #64748b;
+}
+
+.signature-date {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  margin-top: 2mm;
+}
+
+.callout {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 4mm;
+  margin: 4mm 0;
+  font-size: 9pt;
+}
+
+.callout strong {
+  color: #1d4ed8;
+}
+
+.supplementary {
+  page-break-inside: avoid;
+  margin-bottom: 4mm;
+  padding: 3mm 4mm;
+  border-left: 3px solid #c9a227;
+  background: #fffbeb;
+}
+
+.supplementary h4 {
+  margin: 0 0 1.5mm;
+  font-size: 9.5pt;
+  color: #92400e;
+}
+
+.supplementary p {
+  margin: 0;
+  font-size: 8.75pt;
+  color: #78350f;
+}
+
+.item-meta { font-size: 9pt; color: #64748b; margin: -2mm 0 3mm 0; }
+.confronto-antes { border-left: 3px solid #dc2626; padding-left: 3mm; }
+.confronto-depois { border-left: 3px solid #16a34a; padding-left: 3mm; }
+.item-evidence { font-size: 8.5pt; color: #475569; }
+.status-fixed { color: #15803d; font-weight: 700; font-size: 8pt; }
+.status-ok { color: #15803d; font-weight: 700; font-size: 8pt; }
+.status-pend { color: #b45309; font-weight: 700; font-size: 8pt; }
+.metric-table td, .metric-table th { font-size: 9pt; }
+.callout-warn { background: #fffbeb; border-left: 3px solid #f59e0b; padding: 3mm 4mm; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Confronto técnico · Relatório 6 · Confidencial</div>
+    <h1>Confronto Técnico — Homologação UX Relatório 6</h1>
+    <p class="cover-sub">Antes e depois dos 28 achados da Sessão 4 com evidências de código e roteiro de validação pós-deploy<br/>Referência: Relatório Técnico de Homologação UX — Sessão 4 · Rafaella Nottes Consultoria (19/jun/2026)</p>
+    <div class="cover-gold-line"></div>
+    <p class="cover-meta">
+      <strong>Versão 1.0</strong> · 21 de junho de 2026<br />
+      Ambiente: <strong>https://app.aerosuite.com.br</strong>
+    </p>
+  </div>
+  <div class="cover-footer">Aero Suite — Gestão aeronáutica</div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Sumário executivo</span>
+  </div>
+  <h2>Sumário executivo do confronto</h2>
+  <p class="lead">
+  O Relatório 6 (Sessão 4, 19/jun/2026) catalogou <strong>28 achados</strong> (S4-01 a S4-36) em Produtos, Fabricantes,
+  Relatórios, Usuários Externos, Ordens de Serviço e Conformidade Técnica, incluindo
+  <strong>4 críticos</strong> e <strong>2 altos</strong>.
+  Este documento confronta cada achado com a ação corretiva aplicada e a evidência de verificação no código-fonte.
+  </p>
+
+  <h3>Reincidências tratadas</h3>
+  <ul class="lead"><li>S4-34 (F04)</li><li>S4-36 (R-10)</li><li>S4-08 (R-04 parcial)</li></ul>
+
+  <div class="score-grid">
+    <div class="score-card"><div class="score-val">28</div><div class="score-label">Achados totais</div></div>
+    <div class="score-card score-card--ok"><div class="score-val">28</div><div class="score-label">Corrigidos (código)</div></div>
+    <div class="score-card"><div class="score-val">0</div><div class="score-label">Pendentes código</div></div>
+    <div class="score-card score-card--ok"><div class="score-val">4/4</div><div class="score-label">Críticos resolvidos</div></div>
+  </div>
+
+  <h3>Métricas (21 de junho de 2026)</h3>
+  <table class="metric-table">
+    <thead><tr><th>Indicador</th><th>Valor</th></tr></thead>
+    <tbody>
+      <tr><td>Verificação estática (verify-relatorio6)</td><td><strong>28/28</strong></td></tr>
+      <tr><td>Conformidade no código</td><td><strong>100.0%</strong> (28/28)</td></tr>
+      <tr><td>Críticos (S4-07, S4-24, S4-34, S4-36)</td><td><strong>100.0%</strong></td></tr>
+      <tr><td>Altos (S4-06, S4-22)</td><td><strong>100.0%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p class="lead">Verificação via verify-relatorio6-homolog.mjs: 28/28 achados validados no código (branch desenv). Reteste API/UI em app.aerosuite.com.br após deploy das migrations V74–V77 e endpoints públicos.</p>
+  <p class="lead callout-warn"><strong>Próximo passo operacional:</strong> as correções estão integradas na branch <strong>desenv</strong> (commits 416a11d–417265c). A validação API/UI final em <strong>https://app.aerosuite.com.br</strong> depende do deploy das migrations V74–V77 e do frontend atualizado. Após deploy, executar <code>node scripts/verify-relatorio6-homolog.mjs</code>.</p>
+  <p class="lead">Evidências versionadas em <strong>docs/homolog_ux/evidencias/confronto-relatorio6/20260621</strong>.</p>
+  <div class="page-footer"><span>Aero Suite · Confronto UX</span><span>Sumário</span></div>
+</section>
+
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 1</span>
+  </div>
+  <h2>Achados críticos (S4-07, S4-24, S4-34, S4-36)</h2>
+  <p class="section-intro">Contrato de dados, health check, isolamento multi-tenant e AD/SB — inclui reincidências F04 e R-10.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-07</span>
+    <span class="item-title">Falha ao salvar produto com nome de 255 caracteres (limite do frontend)</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Novo Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Frontend anunciava limite de 255 caracteres no contador, mas o backend falhava com erro genérico ao persistir.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Migration V77: product.name VARCHAR(255); Product.java @Column(length=255); mensagens de erro descritivas via API i18n.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK · Validação API/UI em produção após deploy (commits 416a11d–417265c na branch desenv).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">POST /products com name 255 chars — status 201 após deploy (verify-relatorio6 S4-07-api).</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-24</span>
+    <span class="item-title">Degradação sistêmica com indicador SISTEMA ONLINE verde</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Infraestrutura / indicador de status</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Múltiplos endpoints falharam enquanto o rodapé permanecia verde — health check apenas de conectividade.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">PublicHealthResource GET /api/public/health (ping DB); AppHealthService no footer com estado degradado e i18n footer.statusDegraded.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK · Validação API/UI em produção após deploy (commits 416a11d–417265c na branch desenv).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">GET /public/health retorna ok/database; footer exibe estado degradado quando API falha.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-34</span>
+    <span class="item-title">Reincidência F04 — identidade visual de outro tenant ao duplicar aba</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Autenticação / branding multi-tenant</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Nova aba na tela de login exibiu branding completo do tenant BELLOWS (vetor diferente do F04 original).</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">BrandingService: allowSessionTenant explícito; login público sem hidratar tenant de sessão; SistemaEmpresaConfigService.publicBranding() sem inferir tenant de JWT/sessão.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK · Validação API/UI em produção após deploy (commits 416a11d–417265c na branch desenv).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">GET /public/sistema-empresa/branding sem tenant → configured=false; reteste manual duplicar aba pós-deploy.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-36</span>
+    <span class="item-title">Reincidência R-10 — erro inesperado ao salvar Nova AD/SB</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Conformidade Técnica — AD/SB</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Formulário AD/SB retornava &quot;ocorreu um erro inesperado&quot; com campos obrigatórios preenchidos.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">AeroDiretrizService: entityManager.flush() após persist; validação fcuId e mensagens domain aero.diretriz.error.*.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK · Validação API/UI em produção após deploy (commits 416a11d–417265c na branch desenv).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">POST /aero/diretrizes — status 201 sem erro inesperado (verify-relatorio6 S4-36-api).</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Relatório 6</span>
+    <span>Seção 1</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 2</span>
+  </div>
+  <h2>Achados de severidade alta (S4-06, S4-22)</h2>
+  <p class="section-intro">Feedback de formulário de produto e paginação FCU na associação aeronáutica.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-06</span>
+    <span class="item-title">Botão Salvar desabilitado sem indicação de campo inválido</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Novo Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Formulário longo travava salvamento silenciosamente sem highlight nos campos bloqueantes.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Botão salvar sempre clicável; formAttempted + fieldInvalid() destaca campos em vermelho; toast descritivo.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — tentar salvar incompleto exibe bordas p-invalid nos campos obrigatórios.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-22</span>
+    <span class="item-title">Erro 502 ao carregar FCUs com size=1000</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Associação FCU</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">GET /api/fcu?isActive=true&amp;size=1000 causava timeout/sobrecarga; tela inutilizável.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">associacao-fcu.component.ts: paginação size=200; FcuService MAX_PAGE_SIZE=200 no backend.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK · Validação API/UI em produção após deploy (commits 416a11d–417265c na branch desenv).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">GET /fcu?size=200 status 200; tela associação carrega sem erro.</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Relatório 6</span>
+    <span>Seção 2</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 3</span>
+  </div>
+  <h2>Achados de severidade média (S4-17, S4-20, S4-25, S4-27, S4-29)</h2>
+  <p class="section-intro">Segurança de e-mail, encoding UTF-8, i18n de OS e validação visual.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-17</span>
+    <span class="item-title">Senha temporária exposta em texto claro no e-mail</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> E-mail transacional — usuário externo</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Senha temporária visível no corpo e preview do e-mail de boas-vindas.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">TransactionalEmailMessages.passwordSetupInvite: senha só quando setupUrl ausente; com link seguro, corpo sem credencial.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">Template e-mail externo — link de definição de senha; sem senha em claro quando há setupUrl.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-20</span>
+    <span class="item-title">Encoding corrompido nos cards de funcionalidades (Servi??o, P?gina)</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Administração — Permissões portal externo</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Caracteres acentuados substituídos por interrogações nos cards de permissões.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Migration V77: UPDATE funcionalidade_externa com textos UTF-8 corretos (Minhas Ordens de Serviço, Página inicial promocional).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK · Validação API/UI em produção após deploy (commits 416a11d–417265c na branch desenv).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">GET /funcionalidades-externas — sem ?? nos nomes/descrições.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-25</span>
+    <span class="item-title">Labels e placeholders em inglês no formulário de OS</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Nova OS</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">TIME SINCE NEW, SERIAL NUMBER, Part Number etc. em locale pt-BR.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">os-form-i18n.ts OS_FORM_PT_BR completo; auditoria anti-inglês no verify-relatorio6; ph.engineSn separado.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI pt-BR — Tempo desde novo (TSN), Número de série, P/N do manual; script auditOsFormPtBr OK.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-27</span>
+    <span class="item-title">Título de seção &quot;Serviço&quot; sem cedilha</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Nova OS</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Accordion exibia &quot;Serviço&quot; corrompido — mesmo padrão de encoding do S4-20.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Chave os.form.accordion.service = &quot;Serviço&quot; em UTF-8 no dicionário pt-BR.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — seção Serviço com cedilha correta.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-29</span>
+    <span class="item-title">Campo obrigatório com borda verde em erro de validação</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Nova OS</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Dropdown Produto Aeronáutico com borda verde e mensagem vermelha — contradição semântica.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">styles.scss global: .p-dropdown.p-invalid com borda vermelha e focus ring vermelho.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — tentar salvar OS sem FCU exibe borda vermelha no dropdown.</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Relatório 6</span>
+    <span>Seção 3</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 4</span>
+  </div>
+  <h2>Achados de severidade baixa (demais S4-xx)</h2>
+  <p class="section-intro">Produtos, relatórios, usuários externos e alertas operacionais.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-01</span>
+    <span class="item-title">Nome de fabricante sem limite — overflow em cascata</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Fabricante / Novo Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Nome longo no seletor invadia área do seletor de moeda.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">FABRICANTE_NAME_MAX=100; FabricanteService validação; contador no dialog; truncamento fabricante-label-truncate.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — nome fabricante truncado com tooltip; máximo 100 caracteres.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-02</span>
+    <span class="item-title">Troca de moeda não intencional por colisão com overflow</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Novo Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Derivado do S4-01 — clique involuntário na moeda.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Correção do truncamento S4-01 elimina colisão de área clicável.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — dropdown fabricante não sobrepõe seletor de moeda.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-03</span>
+    <span class="item-title">Preço zero exige interação desnecessária</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Novo Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Campo Preço com 0,00 parecia inválido até o usuário interagir.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">formularioValido aceita preco &gt;= 0 sem precoTouched; InputNumber sem estado de erro inicial.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — salvar produto novo com preço 0,00 sem tocar no campo.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-04</span>
+    <span class="item-title">Observações sem contador de caracteres</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Novo Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Inconsistência com campo Descrição que exibe contador.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">PRODUCT_NOTES_MAX=2000; contador observacoes.length/productNotesMax no template.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — contador visível no campo Observações.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-05</span>
+    <span class="item-title">Campos numéricos e textuais sem validação de limites</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Especificações Técnicas</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Valores absurdos (999.999 kg) aceitos sem aviso.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">PRODUCT_WEIGHT_MAX, PRODUCT_SPEC_TEXT_MAX; max nos InputNumber e maxlength em Material/Cor.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — limites nos campos de peso, dimensões, material e cor.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-08</span>
+    <span class="item-title">Ausência de truncamento na coluna Nome (reincidência R-04)</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Listagem Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Nomes longos desequilibravam a tabela — correção só em Relatórios.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">cell-truncate + pTooltip na listagem de produtos; classe global em styles.scss.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — nomes longos com reticências e tooltip na grid de produtos.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-09</span>
+    <span class="item-title">Coluna Status ausente</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Listagem Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Status só visível via filtro, não na grid.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Coluna Status com badge Ativo/Inativo; chaves listings-ui-i18n nas 4 línguas.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — coluna Status visível na listagem de produtos.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-11</span>
+    <span class="item-title">Coluna Fabricante ausente</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Listagem Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Fabricante obrigatório no cadastro mas ausente na grid.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">ProductDto.fabricanteNome; coluna Fabricante na product-list com truncamento.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — coluna Fabricante após Nome na listagem.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-12</span>
+    <span class="item-title">Duplo clique não abre edição</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Listagem Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Usuário precisava rolar até coluna Ações.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">(dblclick)=&quot;initRowEdit(row)&quot; na linha da tabela.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — duplo clique na linha abre edição do produto.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-13</span>
+    <span class="item-title">Cabeçalho &quot;data&quot; ambíguo no CSV</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Relatórios — exportação CSV</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Coluna data sem especificar tipo (cadastro vs atualização).</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Cabeçalhos i18n descritivos: ID, Nome, Fabricante, Status, Data de cadastro (reports.csv.col.*).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">Export CSV — cabeçalho &quot;Data de cadastro&quot; em pt-BR.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-14</span>
+    <span class="item-title">Preview esparso — apenas contagem única</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Relatórios — modal preview</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Modal com uma linha não agregava valor para decidir download.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">buildViewStats enriquecido: produtos ativos/inativos, fabricantes distintos; métricas por tipo.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — preview de produtos com múltiplas métricas.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-15</span>
+    <span class="item-title">Máscara de telefone exclusivamente brasileira</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Administração — Usuário Externo</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Placeholder (00) 00000-0000 impedia formatos internacionais.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Campo texto livre; placeholder internacional (+55… ou +1…) em forms-misc-i18n nas 4 línguas.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — cadastro externo aceita telefone internacional.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-16</span>
+    <span class="item-title">Último Acesso sem distinguir convite enviado vs pendente</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Administração — Usuários Externos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Traço para todos sem acesso — admin não sabia se e-mail foi enviado.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Coluna convite_enviado_em; formatLastAccess: &quot;Convite enviado em …&quot; / &quot;Convite pendente&quot;.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — listagem distingue convite enviado de nunca acessou.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-18</span>
+    <span class="item-title">Rodapé do e-mail sem link de portal ou suporte</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> E-mail transacional</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Rodapé apenas &quot;E-mail automático&quot; sem caminhos para o usuário.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">portalSupportFooter() com links para portal e suporte em TransactionalEmailMessages.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">E-mail externo — rodapé com portal e contato.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-26</span>
+    <span class="item-title">Número da OS exibe traço sem explicação</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro — Nova OS</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Usuário não sabia se número era manual ou automático.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Placeholder os.form.numberGeneratedOnSave = &quot;Será gerado ao salvar&quot;.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — campo Número da OS com texto explicativo antes de salvar.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-33</span>
+    <span class="item-title">Itens de estoque insuficiente sem quebra de linha</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Nova OS — alerta disponibilidade</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Múltiplos produtos em linha corrida ilegível no confirm.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">styles.scss: .p-confirm-dialog-message { white-space: pre-line }; join com \n no os-list.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — alerta de disponibilidade com um produto por linha.</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">S4-35</span>
+    <span class="item-title">Borda verde em erro (escopo sistêmico — mesma causa S4-29)</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Formulários — validação PrimeNG</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Recomendação do relatório para padronizar borda vermelha em todos os formulários.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Mesma correção global S4-29 em styles.scss para p-dropdown.p-invalid.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência de verificação</div>
+      <div class="item-text item-evidence">Verificação estática OK</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Como reproduzir</div>
+      <div class="item-text">UI — dropdowns inválidos com borda vermelha em OS e demais telas.</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Relatório 6</span>
+    <span>Seção 4</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Anexo</span>
+  </div>
+  <h2>Matriz consolidada</h2>
+  <table>
+    <thead><tr><th>ID</th><th>Severidade</th><th>Módulo</th><th>Título</th><th>Status</th></tr></thead>
+    <tbody><tr>
+      <td>S4-07</td>
+      <td>CRITICO</td>
+      <td>Cadastro — Novo Produto</td>
+      <td>Falha ao salvar produto com nome de 255 caracteres (limite do frontend)</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-24</td>
+      <td>CRITICO</td>
+      <td>Infraestrutura / indicador de status</td>
+      <td>Degradação sistêmica com indicador SISTEMA ONLINE verde</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-34</td>
+      <td>CRITICO</td>
+      <td>Autenticação / branding multi-tenant</td>
+      <td>Reincidência F04 — identidade visual de outro tenant ao duplicar aba</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-36</td>
+      <td>CRITICO</td>
+      <td>Conformidade Técnica — AD/SB</td>
+      <td>Reincidência R-10 — erro inesperado ao salvar Nova AD/SB</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-06</td>
+      <td>ALTO</td>
+      <td>Cadastro — Novo Produto</td>
+      <td>Botão Salvar desabilitado sem indicação de campo inválido</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-22</td>
+      <td>ALTO</td>
+      <td>Cadastro — Associação FCU</td>
+      <td>Erro 502 ao carregar FCUs com size=1000</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-17</td>
+      <td>MEDIO</td>
+      <td>E-mail transacional — usuário externo</td>
+      <td>Senha temporária exposta em texto claro no e-mail</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-20</td>
+      <td>MEDIO</td>
+      <td>Administração — Permissões portal externo</td>
+      <td>Encoding corrompido nos cards de funcionalidades (Servi??o, P?gina)</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-25</td>
+      <td>MEDIO</td>
+      <td>Cadastro — Nova OS</td>
+      <td>Labels e placeholders em inglês no formulário de OS</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-27</td>
+      <td>MEDIO</td>
+      <td>Cadastro — Nova OS</td>
+      <td>Título de seção &quot;Serviço&quot; sem cedilha</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-29</td>
+      <td>MEDIO</td>
+      <td>Cadastro — Nova OS</td>
+      <td>Campo obrigatório com borda verde em erro de validação</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-01</td>
+      <td>BAIXO</td>
+      <td>Cadastro — Fabricante / Novo Produto</td>
+      <td>Nome de fabricante sem limite — overflow em cascata</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-02</td>
+      <td>BAIXO</td>
+      <td>Cadastro — Novo Produto</td>
+      <td>Troca de moeda não intencional por colisão com overflow</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-03</td>
+      <td>BAIXO</td>
+      <td>Cadastro — Novo Produto</td>
+      <td>Preço zero exige interação desnecessária</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-04</td>
+      <td>BAIXO</td>
+      <td>Cadastro — Novo Produto</td>
+      <td>Observações sem contador de caracteres</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-05</td>
+      <td>BAIXO</td>
+      <td>Cadastro — Especificações Técnicas</td>
+      <td>Campos numéricos e textuais sem validação de limites</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-08</td>
+      <td>BAIXO</td>
+      <td>Cadastro — Listagem Produtos</td>
+      <td>Ausência de truncamento na coluna Nome (reincidência R-04)</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-09</td>
+      <td>BAIXO</td>
+      <td>Cadastro — Listagem Produtos</td>
+      <td>Coluna Status ausente</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-11</td>
+      <td>BAIXO</td>
+      <td>Cadastro — Listagem Produtos</td>
+      <td>Coluna Fabricante ausente</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-12</td>
+      <td>BAIXO</td>
+      <td>Cadastro — Listagem Produtos</td>
+      <td>Duplo clique não abre edição</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-13</td>
+      <td>BAIXO</td>
+      <td>Relatórios — exportação CSV</td>
+      <td>Cabeçalho &quot;data&quot; ambíguo no CSV</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-14</td>
+      <td>BAIXO</td>
+      <td>Relatórios — modal preview</td>
+      <td>Preview esparso — apenas contagem única</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-15</td>
+      <td>BAIXO</td>
+      <td>Administração — Usuário Externo</td>
+      <td>Máscara de telefone exclusivamente brasileira</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-16</td>
+      <td>BAIXO</td>
+      <td>Administração — Usuários Externos</td>
+      <td>Último Acesso sem distinguir convite enviado vs pendente</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-18</td>
+      <td>BAIXO</td>
+      <td>E-mail transacional</td>
+      <td>Rodapé do e-mail sem link de portal ou suporte</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-26</td>
+      <td>BAIXO</td>
+      <td>Cadastro — Nova OS</td>
+      <td>Número da OS exibe traço sem explicação</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-33</td>
+      <td>BAIXO</td>
+      <td>Nova OS — alerta disponibilidade</td>
+      <td>Itens de estoque insuficiente sem quebra de linha</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>S4-35</td>
+      <td>BAIXO</td>
+      <td>Formulários — validação PrimeNG</td>
+      <td>Borda verde em erro (escopo sistêmico — mesma causa S4-29)</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr></tbody>
+  </table>
+  <div class="page-footer"><span>Aero Suite · Confronto UX</span><span>Anexo</span></div>
+</section>
+
+</body>
+</html>

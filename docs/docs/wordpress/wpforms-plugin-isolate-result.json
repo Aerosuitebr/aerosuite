@@ -1,0 +1,71 @@
+{
+  "at": "2026-06-03T18:20:58.781Z",
+  "baseline": {
+    "status": 500,
+    "ok": false
+  },
+  "tests": [
+    {
+      "pluginFile": "sugar-calendar-lite/sugar-calendar-lite.php",
+      "deactivated": {
+        "pluginFile": "sugar-calendar-lite/sugar-calendar-lite.php",
+        "active": false
+      },
+      "submit": {
+        "status": 500,
+        "ok": false
+      }
+    },
+    {
+      "pluginFile": "google-analytics-for-wordpress/googleanalytics.php",
+      "deactivated": {
+        "pluginFile": "google-analytics-for-wordpress/googleanalytics.php",
+        "active": false
+      },
+      "submit": {
+        "status": 500,
+        "ok": false
+      }
+    },
+    {
+      "pluginFile": "complianz-gdpr/complianz-gpdr.php",
+      "deactivated": {
+        "pluginFile": "complianz-gdpr/complianz-gpdr.php",
+        "active": false
+      },
+      "submit": {
+        "status": 500,
+        "ok": false
+      }
+    },
+    {
+      "pluginFile": "translatepress-multilingual/index.php",
+      "deactivated": {
+        "pluginFile": "translatepress-multilingual/index.php",
+        "active": false
+      },
+      "submit": {
+        "status": 500,
+        "ok": false
+      }
+    },
+    {
+      "pluginFile": "wp-mail-smtp/wp_mail_smtp.php",
+      "deactivated": {
+        "pluginFile": "wp-mail-smtp/wp_mail_smtp.php",
+        "active": false
+      },
+      "submit": {
+        "status": 500,
+        "ok": false
+      }
+    }
+  ],
+  "reactivated": [
+    "sugar-calendar-lite/sugar-calendar-lite.php",
+    "google-analytics-for-wordpress/googleanalytics.php",
+    "complianz-gdpr/complianz-gpdr.php",
+    "translatepress-multilingual/index.php",
+    "wp-mail-smtp/wp_mail_smtp.php"
+  ]
+}

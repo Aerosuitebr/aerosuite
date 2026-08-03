@@ -1,0 +1,279 @@
+<div class="tpl-wizard">
+  <div class="tpl-wizard__form">
+    <section class="tpl-wizard__section">
+      <label class="tpl-wizard__label" for="tpl-name">{{ 'platformOps.onboarding.field.templateName' | translate }}</label>
+      <input
+        id="tpl-name"
+        pInputText
+        class="tpl-wizard__input"
+        [ngModel]="nameLabel"
+        (ngModelChange)="onNameChange($event)" />
+    </section>
+
+    <section class="tpl-wizard__section">
+      <label class="tpl-wizard__label" for="tpl-subject">{{ 'platformOps.onboarding.field.subject' | translate }}</label>
+      <input
+        id="tpl-subject"
+        pInputText
+        class="tpl-wizard__input"
+        [ngModel]="subjectTemplate"
+        (ngModelChange)="onSubjectChange($event)" />
+    </section>
+
+    <section class="tpl-wizard__section tpl-wizard__hero-panel" *ngIf="!plainText">
+      <div class="tpl-wizard__hero-toggle-row">
+        <div>
+          <span class="tpl-wizard__label">{{ 'platformOps.onboarding.wizard.heroEnable' | translate }}</span>
+          <p class="tpl-wizard__hero-hint">{{ 'platformOps.onboarding.wizard.heroEnableHint' | translate }}</p>
+        </div>
+        <p-inputSwitch
+          [ngModel]="hero.enabled"
+          (ngModelChange)="onHeroToggle($event)"
+          [attr.aria-label]="'platformOps.onboarding.wizard.heroEnable' | translate">
+        </p-inputSwitch>
+      </div>
+
+      <ng-container *ngIf="hero.enabled">
+        <div class="tpl-wizard__hero-layout">
+          <span class="tpl-wizard__label">{{ 'platformOps.onboarding.wizard.heroLayout' | translate }}</span>
+          <div class="tpl-wizard__hero-layout-btns">
+            <button
+              type="button"
+              class="tpl-wizard__layout-btn"
+              [class.tpl-wizard__layout-btn--active]="hero.layout === 'classic'"
+              (click)="onHeroLayoutChange('classic')">
+              {{ 'platformOps.onboarding.wizard.heroLayoutClassic' | translate }}
+            </button>
+            <button
+              type="button"
+              class="tpl-wizard__layout-btn"
+              [class.tpl-wizard__layout-btn--active]="hero.layout === 'overlay'"
+              (click)="onHeroLayoutChange('overlay')">
+              {{ 'platformOps.onboarding.wizard.heroLayoutOverlay' | translate }}
+            </button>
+          </div>
+        </div>
+
+        <div class="tpl-wizard__hero-upload">
+          <span class="tpl-wizard__label">{{ 'platformOps.onboarding.wizard.heroBanner' | translate }}</span>
+          <p class="tpl-wizard__hero-hint">{{ 'platformOps.onboarding.wizard.heroBannerHint' | translate:{ w: '' + heroTargetWidth, h: '' + heroTargetHeight } }}</p>
+          <div
+            class="tpl-wizard__dropzone"
+            [class.tpl-wizard__dropzone--active]="heroDragOver"
+            [class.tpl-wizard__dropzone--busy]="heroUploading"
+            (click)="onDropzoneClick($event)"
+            (dragover)="onHeroDragOver($event)"
+            (dragleave)="onHeroDragLeave($event)"
+            (drop)="onHeroDrop($event)"
+            role="button"
+            tabindex="0"
+            (keydown.enter)="onDropzoneClick($event)"
+            [attr.aria-label]="'platformOps.onboarding.wizard.heroBanner' | translate">
+            <ng-container *ngIf="hero.sourceImageDataUrl; else heroDropPlaceholder">
+              <div
+                class="tpl-wizard__dropzone-frame tpl-wizard__hero-pan"
+                [class.tpl-wizard__hero-pan--active]="heroPanning"
+                (pointerdown)="onHeroPanStart($event)"
+                (pointermove)="onHeroPanMove($event)"
+                (pointerup)="onHeroPanEnd($event)"
+                (pointercancel)="onHeroPanEnd($event)"
+                [attr.aria-label]="'platformOps.onboarding.wizard.heroPanHint' | translate">
+                <img
+                  [src]="hero.sourceImageDataUrl"
+                  alt=""
+                  class="tpl-wizard__hero-pan-img"
+                  [ngStyle]="heroPanImageStyle()"
+                  draggable="false" />
+              </div>
+              <p class="tpl-wizard__hero-pan-hint">{{ 'platformOps.onboarding.wizard.heroPanHint' | translate }}</p>
+              <div class="tpl-wizard__dropzone-actions">
+                <button type="button" class="tpl-wizard__dropzone-change" (click)="openHeroFilePicker(); $event.stopPropagation()">
+                  {{ 'platformOps.onboarding.wizard.heroChangeImage' | translate }}
+                </button>
+                <button type="button" class="tpl-wizard__dropzone-remove" (click)="removeHeroImage(); $event.stopPropagation()">
+                  {{ 'platformOps.onboarding.wizard.heroRemoveImage' | translate }}
+                </button>
+              </div>
+            </ng-container>
+            <ng-template #heroDropPlaceholder>
+              <i class="pi pi-image" aria-hidden="true"></i>
+              <span>{{ 'platformOps.onboarding.wizard.heroDropHint' | translate }}</span>
+            </ng-template>
+          </div>
+          <input #heroFileInput type="file" accept="image/*" class="tpl-wizard__file-input" (change)="onHeroFileSelected($event)" />
+          <p class="tpl-wizard__hero-error" *ngIf="heroUploadError">{{ heroUploadError }}</p>
+
+          <div class="tpl-wizard__hero-crop" *ngIf="hero.sourceImageDataUrl">
+            <p class="tpl-wizard__hero-hint">{{ 'platformOps.onboarding.wizard.heroCropHint' | translate }}</p>
+
+            <label class="tpl-wizard__crop-row">
+              <span>{{ 'platformOps.onboarding.wizard.heroCropZoom' | translate }} · {{ heroCropZoomLabel() }}</span>
+              <input
+                type="range"
+                class="tpl-wizard__crop-slider"
+                [min]="heroCropZoomMin"
+                [max]="heroCropZoomMax"
+                step="0.05"
+                [(ngModel)]="hero.cropZoom"
+                (ngModelChange)="onHeroCropChange()" />
+            </label>
+
+            <label class="tpl-wizard__crop-row">
+              <span>{{ 'platformOps.onboarding.wizard.heroCropFocusX' | translate }}</span>
+              <input
+                type="range"
+                class="tpl-wizard__crop-slider"
+                min="0"
+                max="100"
+                step="1"
+                [(ngModel)]="hero.cropFocusX"
+                (ngModelChange)="onHeroCropChange()" />
+            </label>
+
+            <label class="tpl-wizard__crop-row">
+              <span>{{ 'platformOps.onboarding.wizard.heroCropFocusY' | translate }}</span>
+              <input
+                type="range"
+                class="tpl-wizard__crop-slider"
+                min="0"
+                max="100"
+                step="1"
+                [(ngModel)]="hero.cropFocusY"
+                (ngModelChange)="onHeroCropChange()" />
+            </label>
+          </div>
+        </div>
+
+        <div class="tpl-wizard__section">
+          <label class="tpl-wizard__label" for="tpl-hero-headline">{{ 'platformOps.onboarding.wizard.heroHeadline' | translate }}</label>
+          <input
+            id="tpl-hero-headline"
+            pInputText
+            class="tpl-wizard__input"
+            [(ngModel)]="hero.headline"
+            (ngModelChange)="onHeroHeadlineChange()"
+            (focus)="setActiveField('headline')"
+            [placeholder]="'platformOps.onboarding.wizard.heroHeadlinePlaceholder' | translate" />
+        </div>
+      </ng-container>
+    </section>
+
+    <section class="tpl-wizard__section">
+      <div class="tpl-wizard__section-head">
+        <span class="tpl-wizard__label">{{ 'platformOps.onboarding.wizard.content' | translate }}</span>
+        <div class="tpl-wizard__section-actions">
+          <button pButton type="button" class="p-button-text p-button-sm" icon="pi pi-plus" [label]="'platformOps.onboarding.wizard.addParagraph' | translate" (click)="addParagraph()"></button>
+          <button *ngIf="!plainText" pButton type="button" class="p-button-text p-button-sm" icon="pi pi-list" [label]="'platformOps.onboarding.wizard.addList' | translate" (click)="addBulletList()"></button>
+        </div>
+      </div>
+
+      <div class="tpl-wizard__var-row">
+        <span class="tpl-wizard__var-hint">{{ 'platformOps.onboarding.editor.insertVariable' | translate }}</span>
+        <div class="tpl-wizard__var-chips">
+          <button
+            type="button"
+            class="tpl-wizard__var-chip"
+            *ngFor="let key of variableKeys"
+            (click)="injectVariable(key)">
+            {{ variableLabel(key) }}
+          </button>
+        </div>
+      </div>
+
+      <div class="tpl-wizard__blocks">
+        <article
+          class="tpl-wizard__block"
+          *ngFor="let block of blocks; let bi = index; trackBy: trackBlock"
+          [class.tpl-wizard__block--active]="activeBlockIndex === bi"
+          (focusin)="setActiveBlock(bi)">
+          <header class="tpl-wizard__block-head">
+            <span>{{ (block.type === 'bullets' ? 'platformOps.onboarding.wizard.blockList' : 'platformOps.onboarding.wizard.blockParagraph') | translate:{ n: bi + 1 } }}</span>
+            <button type="button" class="tpl-wizard__block-remove" (click)="removeBlock(bi)" [attr.aria-label]="'platformOps.onboarding.wizard.removeBlock' | translate">
+              <i class="pi pi-times" aria-hidden="true"></i>
+            </button>
+          </header>
+
+          <ng-container *ngIf="block.type === 'paragraph'; else bulletBlock">
+            <input
+              pInputText
+              class="tpl-wizard__input"
+              [(ngModel)]="block.text"
+              (ngModelChange)="onBlockChange()"
+              [placeholder]="'platformOps.onboarding.wizard.paragraphPlaceholder' | translate" />
+          </ng-container>
+
+          <ng-template #bulletBlock>
+            <div class="tpl-wizard__bullet-list">
+              <div class="tpl-wizard__bullet-item" *ngFor="let item of block.items; let ii = index; trackBy: trackItem">
+                <input
+                  pInputText
+                  class="tpl-wizard__input"
+                  [(ngModel)]="block.items![ii]"
+                  (ngModelChange)="onBlockChange()"
+                  [placeholder]="'platformOps.onboarding.wizard.listItemPlaceholder' | translate" />
+                <button type="button" class="tpl-wizard__bullet-remove" (click)="removeBulletItem(bi, ii)" [attr.aria-label]="'platformOps.onboarding.wizard.removeItem' | translate">
+                  <i class="pi pi-minus" aria-hidden="true"></i>
+                </button>
+              </div>
+              <button type="button" class="tpl-wizard__add-item" (click)="addBulletItem(bi)">
+                {{ 'platformOps.onboarding.wizard.addListItem' | translate }}
+              </button>
+            </div>
+          </ng-template>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <div class="tpl-wizard__preview">
+    <div class="tpl-wizard__preview-head">
+      <span class="tpl-wizard__preview-title">{{ 'platformOps.onboarding.wizard.livePreview' | translate }}</span>
+      <span class="tpl-wizard__preview-badge">{{ (plainText ? 'platformOps.onboarding.channel.whatsapp' : 'platformOps.onboarding.channel.email') | translate }}</span>
+    </div>
+
+    <div class="tpl-wizard__sandbox" [class.tpl-wizard__sandbox--plain]="plainText">
+      <ng-container *ngIf="!plainText; else whatsappPreview">
+        <div class="email-preview">
+          <div class="email-preview__chrome">
+            <div class="email-preview__chrome-row">
+              <span class="email-preview__chrome-label">{{ 'platformOps.onboarding.wizard.previewFrom' | translate }}</span>
+              <span class="email-preview__chrome-value">Aero Suite &lt;noreply&#64;aerosuite.com.br&gt;</span>
+            </div>
+            <div class="email-preview__chrome-row">
+              <span class="email-preview__chrome-label">{{ 'platformOps.onboarding.field.subject' | translate }}</span>
+              <span class="email-preview__chrome-value email-preview__chrome-value--subject">{{ previewSubject() || '—' }}</span>
+            </div>
+          </div>
+
+          <div class="email-preview__canvas">
+            <header class="email-preview__brand">
+              <img [src]="brandLogoUrl" alt="Aero Suite" class="email-preview__logo" />
+            </header>
+            <div
+              class="email-preview__hero-wrap"
+              *ngIf="hero.enabled && canHeroPan()"
+              (pointerdown)="onHeroPanStart($event)"
+              (pointermove)="onHeroPanMove($event)"
+              (pointerup)="onHeroPanEnd($event)"
+              (pointercancel)="onHeroPanEnd($event)"
+              [class.email-preview__hero-wrap--panning]="heroPanning"
+              [attr.aria-label]="'platformOps.onboarding.wizard.heroPanHint' | translate">
+              <div class="email-preview__hero" [innerHTML]="previewHeroSafeHtml()"></div>
+            </div>
+            <div class="email-preview__hero" *ngIf="hero.enabled && !canHeroPan()" [innerHTML]="previewHeroSafeHtml()"></div>
+            <div class="email-preview__body" [innerHTML]="previewBodySafeHtml()"></div>
+            <footer class="email-preview__footer">
+              {{ 'platformOps.onboarding.wizard.previewFooter' | translate }}
+            </footer>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #whatsappPreview>
+        <div class="wa-preview">
+          <div class="wa-preview__bubble">{{ previewPlainText() || ('platformOps.onboarding.wizard.previewEmpty' | translate) }}</div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Manual Aero Suite — Homologação</title>
+  <style>/* Aero Suite — Manual de Homologação (print/PDF) */
+@page {
+  size: A4;
+  margin: 18mm 16mm 22mm 16mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10.5pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.55;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 35%, #0f172a 70%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24mm 20mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(56, 189, 248, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(201, 162, 39, 0.12) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background-image:
+    linear-gradient(rgba(255,255,255,.8) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.8) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 140mm;
+}
+
+.cover-logo {
+  width: 72mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10mm;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,.35));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  background: rgba(56, 189, 248, 0.08);
+  padding: 4px 14px;
+  border-radius: 999px;
+  margin-bottom: 8mm;
+}
+
+.cover h1 {
+  font-size: 28pt;
+  font-weight: 700;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.cover-sub {
+  font-size: 13pt;
+  color: #94a3b8;
+  margin: 0 0 12mm;
+  font-weight: 400;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #c9a227, #e8c547, #c9a227, transparent);
+  margin: 0 auto 10mm;
+  border-radius: 2px;
+}
+
+.cover-meta {
+  font-size: 9pt;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.cover-meta strong {
+  color: #cbd5e1;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 14mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #475569;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 8mm;
+  object-fit: contain;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #0369a1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+h2.chapter-title {
+  font-size: 18pt;
+  color: #0c1929;
+  margin: 0 0 2mm;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h2.chapter-title::before {
+  content: '';
+  display: block;
+  width: 12mm;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #38bdf8);
+  border-radius: 2px;
+  margin-bottom: 3mm;
+}
+
+.chapter-lead {
+  font-size: 11pt;
+  color: #64748b;
+  margin: 0 0 6mm;
+  max-width: 95%;
+}
+
+h3 {
+  font-size: 12pt;
+  color: #0f172a;
+  margin: 6mm 0 3mm;
+  font-weight: 650;
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+}
+
+h3 .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 6mm;
+  height: 6mm;
+  background: #0369a1;
+  color: #fff;
+  font-size: 8pt;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 0 2mm;
+}
+
+h4 {
+  font-size: 10.5pt;
+  color: #334155;
+  margin: 4mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+ul, ol {
+  margin: 0 0 4mm;
+  padding-left: 5mm;
+}
+
+li {
+  margin-bottom: 1.5mm;
+}
+
+li::marker {
+  color: #0284c7;
+}
+
+/* Sumário */
+.toc {
+  page-break-after: always;
+}
+
+.toc h2 {
+  font-size: 16pt;
+  margin-bottom: 6mm;
+  color: #0c1929;
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.5mm 0;
+  border-bottom: 1px dotted #cbd5e1;
+  font-size: 10pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  margin-top: 4mm;
+  border-bottom: none;
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.toc-num {
+  color: #64748b;
+  min-width: 8mm;
+  font-weight: 600;
+}
+
+.toc-title {
+  flex: 1;
+}
+
+/* Componentes didáticos */
+.steps {
+  counter-reset: step;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 5mm;
+}
+
+.steps > li {
+  counter-increment: step;
+  position: relative;
+  padding: 3mm 3mm 3mm 10mm;
+  margin-bottom: 2mm;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #0284c7;
+  border-radius: 0 6px 6px 0;
+}
+
+.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 2.5mm;
+  top: 3mm;
+  width: 5.5mm;
+  height: 5.5mm;
+  background: #0369a1;
+  color: #fff;
+  font-size: 8pt;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 5.5mm;
+  text-align: center;
+}
+
+.callout {
+  padding: 3mm 4mm;
+  border-radius: 6px;
+  margin: 4mm 0;
+  font-size: 9.5pt;
+}
+
+.callout-tip {
+  background: #e6f2fa;
+  border-left: 3px solid #1a5f8a;
+  color: #0c4a6e;
+}
+
+.callout-warn {
+  background: #fff8e6;
+  border-left: 3px solid #9a7209;
+  color: #713f12;
+}
+
+.callout-important {
+  background: #e4f5ec;
+  border-left: 3px solid #0f6b45;
+  color: #064e3b;
+}
+
+.callout strong {
+  display: block;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.route-tag {
+  display: inline-block;
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-size: 8.5pt;
+  background: #f1f5f9;
+  color: #0369a1;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3mm;
+  margin: 4mm 0;
+}
+
+.feature-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 3mm;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.feature-card h4 {
+  margin-top: 0;
+  color: #0369a1;
+  font-size: 10pt;
+}
+
+.feature-card p {
+  font-size: 9pt;
+  color: #64748b;
+  margin: 0;
+}
+
+table.field-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9pt;
+  margin: 3mm 0 5mm;
+}
+
+table.field-table th {
+  background: #0f172a;
+  color: #f8fafc;
+  text-align: left;
+  padding: 2mm 3mm;
+  font-weight: 600;
+}
+
+table.field-table td {
+  border: 1px solid #e2e8f0;
+  padding: 2mm 3mm;
+  vertical-align: top;
+}
+
+table.field-table tr:nth-child(even) td {
+  background: #f8fafc;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+.two-col {
+  columns: 2;
+  column-gap: 6mm;
+}
+
+.avoid-break {
+  break-inside: avoid;
+}
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Manual oficial · Homologação</div>
+    <h1>Manual do Usuário</h1>
+    <p class="cover-sub">Guia completo para operação, configuração e homologação da plataforma de gestão aeronáutica</p>
+    <div class="cover-gold-line"></div>
+    <p class="cover-meta">
+      <strong>Versão 3.0</strong> · 2026<br />
+      MRO · Estoque · Comercial · SGQ Part 145 · Certificação ANAC
+    </p>
+  </div>
+  <div class="cover-footer">Aero Suite — Gestão aeronáutica integrada</div>
+</section>
+
+<section class="page toc">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Sumário</span>
+  </div>
+  <h2>Conteúdo do manual</h2>
+  <ul class="toc-list">
+    <li class="part">Parte I — Primeiros passos</li>
+    <li><span class="toc-num">1</span><span class="toc-title">Cadastro trial e criação da organização</span></li>
+    <li><span class="toc-num">2</span><span class="toc-title">Primeiro login e aceite LGPD</span></li>
+    <li><span class="toc-num">3</span><span class="toc-title">Assistente de configuração da empresa (4 etapas)</span></li>
+    <li><span class="toc-num">4</span><span class="toc-title">Configurações essenciais do sistema</span></li>
+    <li class="part">Parte II — Navegação e cadastros base</li>
+    <li><span class="toc-num">5</span><span class="toc-title">Dashboard e menu lateral</span></li>
+    <li><span class="toc-num">6</span><span class="toc-title">Produtos, fabricantes e tipos de serviço</span></li>
+    <li><span class="toc-num">7</span><span class="toc-title">Produto aeronáutico (FCU) e associações</span></li>
+    <li><span class="toc-num">8</span><span class="toc-title">Usuários internos e perfis</span></li>
+    <li class="part">Parte III — MRO e operação</li>
+    <li><span class="toc-num">9</span><span class="toc-title">Ordens de serviço (OS)</span></li>
+    <li><span class="toc-num">10</span><span class="toc-title">Quadro de capacidade e hangar (job card)</span></li>
+    <li><span class="toc-num">11</span><span class="toc-title">AD/SB, habilitações e auditoria de OS</span></li>
+    <li class="part">Parte IV — Estoque</li>
+    <li><span class="toc-num">12</span><span class="toc-title">Visão geral e fluxo do módulo estoque</span></li>
+    <li><span class="toc-num">13</span><span class="toc-title">Entrada, itens, saídas e rastreabilidade</span></li>
+    <li class="part">Parte V — Comercial</li>
+    <li><span class="toc-num">14</span><span class="toc-title">Propostas comerciais e templates</span></li>
+    <li><span class="toc-num">15</span><span class="toc-title">Portal do cliente e usuários externos</span></li>
+    <li class="part">Parte VI — Governança e suporte</li>
+    <li><span class="toc-num">16</span><span class="toc-title">Controle de acesso e permissões</span></li>
+    <li><span class="toc-num">17</span><span class="toc-title">Backup, relatórios, biblioteca e go-live</span></li>
+    <li><span class="toc-num">18</span><span class="toc-title">Suporte, chat e portal externo</span></li>
+    <li class="part">Parte VII — Certificação ANAC</li>
+    <li><span class="toc-num">19</span><span class="toc-title">Certificação ANAC — habilitação do produto</span></li>
+    <li><span class="toc-num">A</span><span class="toc-title">Apêndice — Checklist homologação (Fases 1–7)</span></li>
+    <li><span class="toc-num">B</span><span class="toc-title">Apêndice — Checklist certificação ANAC (Fase 8)</span></li>
+  </ul>
+  <div class="page-footer"><span>Aero Suite · Manual de Homologação</span><span>Versão 3.0</span></div>
+</section>
+
+<!-- Capítulos 1–4: Primeiros passos -->
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 1</span>
+  </div>
+  <h2 class="chapter-title">Cadastro trial e criação da organização</h2>
+  <p class="chapter-lead">O trial de 7 dias permite experimentar o Aero Suite com sua própria organização, escolhendo os módulos que deseja homologar.</p>
+
+  <h3><span class="num">1</span> Como acessar o cadastro trial</h3>
+  <ol class="steps">
+    <li>Abra o endereço da plataforma no navegador (URL fornecida pela equipe de homologação).</li>
+    <li>Na tela de login, localize o link <strong>“Criar conta trial”</strong> ou acesse diretamente a rota <span class="route-tag">/cadastro-trial</span>.</li>
+    <li>Você verá o formulário dentro do painel de autenticação, com a identidade visual Aero Suite.</li>
+  </ol>
+
+  <h3><span class="num">2</span> Preenchimento do formulário</h3>
+  <table class="field-table">
+    <thead><tr><th>Campo</th><th>Obrigatório</th><th>O que informar</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Nome da organização</strong></td><td>Sim</td><td>Razão social ou nome comercial que identificará sua oficina/empresa no sistema.</td></tr>
+      <tr><td><strong>E-mail do administrador</strong></td><td>Sim</td><td>E-mail válido do responsável pelo trial. Será usado no login e nas notificações.</td></tr>
+      <tr><td><strong>Nome do administrador</strong></td><td>Não</td><td>Nome completo do usuário principal (recomendado).</td></tr>
+      <tr><td><strong>Senha</strong></td><td>Sim</td><td>Mínimo 8 caracteres. Use indicador de força exibido na tela.</td></tr>
+      <tr><td><strong>Módulos</strong></td><td>Sim*</td><td>Marque os módulos a homologar: <em>MRO / Ordens de serviço</em>, <em>Estoque</em> e/ou <em>Comercial</em>.</td></tr>
+      <tr><td><strong>Aceite legal</strong></td><td>Sim</td><td>Leia Termos de Uso e Política de Privacidade (links na tela) e marque a caixa de aceite.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-tip"><strong>Dica</strong>Selecione apenas os módulos que pretende homologar nesta fase. É possível evoluir o contrato depois do trial.</div>
+
+  <h3><span class="num">3</span> Finalizar cadastro</h3>
+  <ol class="steps">
+    <li>Revise todos os campos.</li>
+    <li>Clique em <strong>“Criar conta trial”</strong>.</li>
+    <li>Aguarde a mensagem de sucesso: <em>“Organização criada. Faça login com o e-mail e a senha do administrador.”</em></li>
+    <li>Clique em <strong>“Já tenho conta — entrar”</strong> para ir ao login.</li>
+  </ol>
+
+  <div class="page-footer"><span>Capítulo 1 · Cadastro trial</span><span>Aero Suite</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 2</span>
+  </div>
+  <h2 class="chapter-title">Primeiro login e aceite LGPD</h2>
+  <p class="chapter-lead">Após criar a organização, o administrador acessa o sistema e conclui requisitos iniciais de segurança e conformidade.</p>
+
+  <h3><span class="num">1</span> Entrar no sistema</h3>
+  <ol class="steps">
+    <li>Acesse <span class="route-tag">/login</span>.</li>
+    <li>Informe o <strong>e-mail</strong> e a <strong>senha</strong> definidos no cadastro trial.</li>
+    <li>Se solicitado, informe o <strong>código da organização</strong> (quando aplicável ao ambiente).</li>
+    <li>Clique em <strong>Entrar</strong>.</li>
+  </ol>
+
+  <h3><span class="num">2</span> Primeiro acesso — senha e LGPD</h3>
+  <p>Dependendo da configuração, o sistema pode solicitar:</p>
+  <ul>
+    <li><strong>Alteração de senha no primeiro login</strong> — defina uma senha definitiva seguindo os critérios exibidos.</li>
+    <li><strong>Diálogo de aceite LGPD</strong> — leia o texto e confirme o aceite para continuar usando a plataforma.</li>
+  </ul>
+
+  <div class="callout callout-important"><strong>Importante</strong>Usuários que não são administradores podem acessar o sistema normalmente, mas o assistente de configuração da empresa é exclusivo do perfil administrador.</div>
+
+  <h3><span class="num">3</span> Redirecionamento automático</h3>
+  <p>Se você é administrador e a configuração inicial da empresa ainda não foi concluída, o sistema redireciona automaticamente para <span class="route-tag">/configuracao-empresa-inicial</span>. Conclua o assistente antes de operar os módulos de produção.</p>
+
+  <div class="page-footer"><span>Capítulo 2 · Primeiro login</span><span>Aero Suite</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 3</span>
+  </div>
+  <h2 class="chapter-title">Assistente de configuração da empresa</h2>
+  <p class="chapter-lead">Wizard em 4 etapas que personaliza marca, contatos, dados fiscais e endereço — base para documentos, e-mails e portal do cliente.</p>
+
+  <h3><span class="num">1</span> Etapa 0 — Marca e identidade</h3>
+  <table class="field-table">
+    <thead><tr><th>Campo</th><th>Descrição</th></tr></thead>
+    <tbody>
+      <tr><td>Nome de exibição</td><td>Nome que aparece no sistema e documentos (obrigatório).</td></tr>
+      <tr><td>Slogan / tagline</td><td>Frase curta da empresa (obrigatório).</td></tr>
+      <tr><td>Sufixo de e-mail</td><td>Texto adicionado ao assunto dos e-mails transacionais.</td></tr>
+      <tr><td>Sufixo do título do navegador</td><td>Aparece na aba do browser.</td></tr>
+      <tr><td>Logo e wordmark</td><td>Envie arquivos ou informe URL. Recomendado PNG/SVG com fundo transparente.</td></tr>
+      <tr><td>Entidade de copyright</td><td>Razão social ou nome para rodapé de documentos.</td></tr>
+    </tbody>
+  </table>
+  <p>Use <strong>Salvar rascunho</strong> a qualquer momento. Clique em <strong>Continuar</strong> quando a etapa estiver válida.</p>
+
+  <h3><span class="num">2</span> Etapa 1 — Contatos</h3>
+  <ol class="steps">
+    <li>Informe <strong>e-mail de suporte</strong> (válido — usado em comunicações ao cliente).</li>
+    <li>Informe <strong>telefone</strong> no formato solicitado.</li>
+    <li>Informe <strong>site</strong> (URL completa, ex.: https://suaempresa.com.br).</li>
+    <li>Clique em <strong>Continuar</strong>.</li>
+  </ol>
+
+  <h3><span class="num">3</span> Etapa 2 — Dados da empresa</h3>
+  <p>Preencha razão social, CNPJ (14 dígitos), inscrições estadual/municipal (se houver), e-mail NF-e e endereço completo (logradouro, número, complemento, bairro, cidade, UF, CEP).</p>
+
+  <h3><span class="num">4</span> Etapa 3 — Revisão e conclusão</h3>
+  <ol class="steps">
+    <li>Revise o resumo de marca, contato, dados fiscais e endereço.</li>
+    <li>Marque a caixa de confirmação final.</li>
+    <li>Clique em <strong>Concluir configuração</strong>.</li>
+    <li>O sistema recarrega a identidade visual e redireciona ao dashboard.</li>
+  </ol>
+
+  <div class="callout callout-warn"><strong>Atenção</strong>Após concluir, ajustes finos permanecem disponíveis em Configurações → Empresa.</div>
+
+  <div class="page-footer"><span>Capítulo 3 · Configuração da empresa</span><span>Aero Suite</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 4</span>
+  </div>
+  <h2 class="chapter-title">Configurações essenciais do sistema</h2>
+  <p class="chapter-lead">Rota <span class="route-tag">/configuracoes</span> — personalize aparência, idioma, integrações e parâmetros operacionais.</p>
+
+  <div class="feature-grid">
+    <div class="feature-card"><h4>Aparência</h4><p>Tema claro/escuro, densidade da interface e tamanho da fonte.</p></div>
+    <div class="feature-card"><h4>Idioma</h4><p>pt-BR, en-US, es-ES ou fr-FR — interface e mensagens adaptadas.</p></div>
+    <div class="feature-card"><h4>Empresa</h4><p>Painel completo: identidade, contatos, fiscal e textos LGPD customizados.</p></div>
+    <div class="feature-card"><h4>Integração Bling</h4><p>Conexão fiscal/comercial quando módulo comercial estiver ativo.</p></div>
+    <div class="feature-card"><h4>E-mail SMTP</h4><p>Teste de envio em Configurações (admin) para validar notificações.</p></div>
+    <div class="feature-card"><h4>Atualizações</h4><p>Verificação de novas versões da plataforma.</p></div>
+  </div>
+
+  <h3>Passos recomendados na homologação</h3>
+  <ol class="steps">
+    <li>Defina idioma e tema preferidos da equipe.</li>
+    <li>Revise dados da empresa publicados no portal externo.</li>
+    <li>Execute teste de e-mail com endereço real do administrador.</li>
+    <li>Se usar Comercial + Bling, configure credenciais e valide conexão.</li>
+    <li>Clique em <strong>Salvar Todas</strong> ao terminar cada bloco de alterações.</li>
+  </ol>
+
+  <div class="page-footer"><span>Capítulo 4 · Configurações</span><span>Aero Suite</span></div>
+</section>
+
+<!-- Capítulos 5–8 -->
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 5</span>
+  </div>
+  <h2 class="chapter-title">Dashboard e menu lateral</h2>
+  <p class="chapter-lead">O dashboard (<span class="route-tag">/</span>) é o “flight deck” — visão executiva e atalhos para módulos habilitados.</p>
+
+  <h3>Navegação principal</h3>
+  <ul>
+    <li><strong>Menu lateral</strong> — agrupa funcionalidades por seção (Principal, Cadastro, Operacional, Comercial, Estoque, etc.).</li>
+    <li><strong>Itens visíveis</strong> dependem do perfil do usuário e dos módulos contratados no trial.</li>
+    <li><strong>Relógio e perfil</strong> — canto superior: idioma, notificações e dados do usuário.</li>
+    <li><strong>Ajuda contextual</strong> — ícone (? ) em várias telas abre guia rápido da funcionalidade.</li>
+  </ul>
+
+  <h3>Atalhos do dashboard</h3>
+  <p>Cards e links rápidos levam a estoque, suporte, biblioteca, propostas, FCU e configurações — use-os para validar permissões durante a homologação.</p>
+  <ul>
+    <li><strong>Alertas SGQ</strong> — card na home com atalho para o painel qualidade (<span class="route-tag">/conformidade/painel</span>) quando o módulo de conformidade está habilitado.</li>
+    <li><strong>Menu Conformidade</strong> — agrupa painel, documentos, treinos, calibração, NC, subcontratação, habilitações e dossiê.</li>
+  </ul>
+
+  <div class="page-footer"><span>Capítulo 5 · Dashboard</span><span>Aero Suite</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 6</span>
+  </div>
+  <h2 class="chapter-title">Produtos, fabricantes e tipos de serviço</h2>
+  <p class="chapter-lead">Cadastros fundamentais antes de OS, estoque e propostas comerciais.</p>
+
+  <h3>6.1 Produtos <span class="route-tag">/products</span></h3>
+  <ol class="steps">
+    <li>Clique em <strong>Novo Produto</strong>.</li>
+    <li>Preencha campos obrigatórios (P/N, descrição, fabricante, etc.).</li>
+    <li>Adicione foto se disponível.</li>
+    <li>Salve e confirme na listagem.</li>
+    <li>Use busca e filtros para localizar itens; edite ou inative conforme necessário.</li>
+  </ol>
+
+  <h3>6.2 Fabricantes <span class="route-tag">/fabricantes</span></h3>
+  <ol class="steps">
+    <li>Clique em <strong>Novo Fabricante</strong>.</li>
+    <li>Informe nome (obrigatório) e dados complementares.</li>
+    <li>Salve — fabricantes alimentam o cadastro de produtos.</li>
+  </ol>
+
+  <h3>6.3 Tipos de serviço <span class="route-tag">/tipos-servico</span></h3>
+  <ol class="steps">
+    <li>Cadastre cada tipo de serviço oferecido pela oficina (inspeção, reparo, overhaul, etc.).</li>
+    <li>Associe arquivos modelo em <span class="route-tag">/tpfiles</span> quando necessário.</li>
+    <li>Tipos de serviço aparecem na OS e nas propostas.</li>
+  </ol>
+
+  <div class="callout callout-tip"><strong>Ordem sugerida</strong>Fabricantes → Produtos → Tipos de serviço → FCU.</div>
+
+  <div class="page-footer"><span>Capítulo 6 · Cadastros base</span><span>Aero Suite</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 7</span>
+  </div>
+  <h2 class="chapter-title">Produto aeronáutico (FCU) e associações</h2>
+  <p class="chapter-lead">O FCU representa o produto aeronáutico principal vinculado a serviços, documentos e estoque.</p>
+
+  <h3>Cadastro de FCU <span class="route-tag">/fcu</span></h3>
+  <ol class="steps">
+    <li>Clique em <strong>Novo FCU</strong>.</li>
+    <li>Preencha código, modelo e descrição (obrigatórios).</li>
+    <li>Adicione dados técnicos disponíveis.</li>
+    <li>Salve o registro.</li>
+  </ol>
+
+  <h3>Associação FCU ↔ Produtos <span class="route-tag">/associacao-fcu</span></h3>
+  <ol class="steps">
+    <li>Selecione o FCU desejado.</li>
+    <li>Busque produtos disponíveis no painel lateral.</li>
+    <li>Associe peças/componentes que compõem o kit ou BOM do FCU.</li>
+    <li>Confirme — associações alimentam montagem, estoque e propostas.</li>
+  </ol>
+
+  <h3>Editor de documentos de montagem <span class="route-tag">/fcu-assembly</span></h3>
+  <ol class="steps">
+    <li>Crie novo documento ou abra existente.</li>
+    <li>Organize seções e passos numerados.</li>
+    <li>Use aba de tradução para idiomas adicionais.</li>
+    <li>Visualize e exporte PDF quando concluído.</li>
+  </ol>
+
+  <div class="page-footer"><span>Capítulo 7 · FCU</span><span>Aero Suite</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 8</span>
+  </div>
+  <h2 class="chapter-title">Usuários internos e perfis</h2>
+  <p class="chapter-lead">Gerencie quem acessa o sistema e o que cada perfil pode fazer.</p>
+
+  <h3>Usuários <span class="route-tag">/usuarios</span></h3>
+  <ol class="steps">
+    <li>Clique em <strong>Novo Usuário</strong>.</li>
+    <li>Preencha nome, e-mail, perfil e status.</li>
+    <li>O sistema envia e-mail de configuração de senha (primeiro acesso).</li>
+    <li>Usuário define senha via link recebido.</li>
+  </ol>
+
+  <h3>Perfis <span class="route-tag">/perfis</span></h3>
+  <ol class="steps">
+    <li>Crie perfis alinhados às funções (ex.: Técnico, Comercial, Admin).</li>
+    <li>Associe funcionalidades permitidas.</li>
+    <li>Vincule usuários em <span class="route-tag">/associacao-usuario-perfil</span>.</li>
+    <li>Para homologação Part 145, valide perfis regulados (<code>P145_RT</code>, <code>P145_INSPETOR</code>, <code>P145_EXECUCAO</code>, <code>P145_ALMOX</code>, <code>P145_COMERCIAL</code>) e a funcionalidade <strong>CRS_EMITIR</strong> apenas onde aplicável.</li>
+  </ol>
+
+  <div class="page-footer"><span>Capítulo 8 · Usuários</span><span>Aero Suite</span></div>
+</section>
+
+<!-- Capítulos 9–11 MRO -->
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 9</span>
+  </div>
+  <h2 class="chapter-title">Ordens de serviço (OS)</h2>
+  <p class="chapter-lead">Núcleo do módulo MRO — documenta serviços em componentes aeronáuticos.</p>
+
+  <h3>Criar nova OS <span class="route-tag">/os</span></h3>
+  <ol class="steps">
+    <li>Clique em <strong>Nova OS</strong>.</li>
+    <li>Informe número (se automático, confirme sequência), data de abertura e cliente.</li>
+    <li>Selecione produto e FCU relacionados.</li>
+    <li>Descreva o artigo recebido e serviços a executar.</li>
+    <li>Preencha referências de serviço e dados complementares.</li>
+    <li>Anexe arquivos (certificados, fotos) na aba de documentos.</li>
+    <li>Revise e clique em <strong>Salvar</strong>.</li>
+    <li>Use <strong>Imprimir</strong> ou exportação para gerar documento formal.</li>
+  </ol>
+
+  <h3>Consultas complementares</h3>
+  <ul>
+    <li><span class="route-tag">/os/consulta-trocas-eventuais</span> — OS com solicitação de troca eventual (somente leitura).</li>
+    <li><span class="route-tag">/os/pendentes-pagamento-trocas</span> — OS com trocas aguardando pagamento.</li>
+    <li><span class="route-tag">/os-auditoria</span> — trilha de alterações da OS.</li>
+  </ul>
+
+  <h3>CRS — liberação para serviço</h3>
+  <ol class="steps">
+    <li>Na edição da OS, abra o fluxo <strong>Emitir CRS</strong> após conclusão dos serviços.</li>
+    <li>Preencha o checklist de liberação (peças, AD/SB aplicáveis, treinos, etc.).</li>
+    <li>Gere o PDF do CRS e confirme registro na OS.</li>
+    <li>Valide <strong>segregação de papéis</strong>: quem executou/alterou a OS na trilha de auditoria não deve emitir CRS (exceto perfis autorizados RT/inspetor).</li>
+  </ol>
+
+  <h3>AD/SB aplicáveis na OS</h3>
+  <p>Na ficha da OS, consulte diretrizes (AD/SB) aplicáveis ao produto — alertas aparecem antes da emissão do CRS quando configurado.</p>
+
+  <h3>Alertas de conformidade na OS</h3>
+  <p>A OS exibe alertas de SGQ (NC aberta, treino obrigatório, calibração) quando relevantes — útil na homologação integrada MRO + qualidade.</p>
+
+  <div class="callout callout-important"><strong>Homologação</strong>Valide ciclo completo: abertura → edição → anexos → impressão → consulta em capacidade/hangar.</div>
+
+  <div class="page-footer"><span>Capítulo 9 · Ordens de serviço</span><span>Aero Suite</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 10</span>
+  </div>
+  <h2 class="chapter-title">Quadro de capacidade e hangar</h2>
+  <p class="chapter-lead">Visualize fila de produção e execute job cards no chão de fábrica.</p>
+
+  <h3>Quadro de capacidade <span class="route-tag">/capacidade</span></h3>
+  <ol class="steps">
+    <li>Acesse o quadro — OS organizadas por estágio (ex.: recebimento, em serviço, aguardando peça, concluída).</li>
+    <li>Arraste cards entre colunas para atualizar estágio (conforme permissão).</li>
+    <li>Observe indicadores AOG/SLA quando configurados.</li>
+    <li>Clique em uma OS para abrir detalhes ou hangar.</li>
+  </ol>
+
+  <h3>Capacidade por hangar <span class="route-tag">/capacidade/hangares</span></h3>
+  <p>Visão por hangar/box — útil quando há múltiplas linhas de manutenção.</p>
+
+  <h3>Hangar — Job card <span class="route-tag">/hangar/:osId</span></h3>
+  <ol class="steps">
+    <li>Abra job card da OS selecionada (menu hangar ou link no quadro).</li>
+    <li>Execute checklist de etapas no chão de fábrica.</li>
+    <li>Registre apontamentos (data, horas, descrição e <strong>identificador da ferramenta</strong> calibrada).</li>
+    <li>Observe alertas SGQ traduzidos (calibração, treino, subcontratação) e banner de segregação CRS quando aplicável.</li>
+    <li>Salve progresso — reflete no quadro de capacidade.</li>
+    <li>Em produção, o hangar funciona offline: apontamentos ficam na fila (localStorage) e sincronizam ao voltar online (PWA + service worker).</li>
+  </ol>
+
+  <div class="callout callout-important"><strong>Homologação SGQ</strong>Com as flags de enforcement ligadas no painel qualidade, apontamentos podem ser bloqueados por calibração vencida, treino obrigatório ou subcontratação com certificado vencido — valide na <strong>Fase 7</strong> do checklist.</div>
+
+  <div class="page-footer"><span>Capítulo 10 · Capacidade e hangar</span><span>Aero Suite</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 11</span>
+  </div>
+  <h2 class="chapter-title">Conformidade regulatória e SGQ operacional</h2>
+  <p class="chapter-lead">Evidências integradas para auditorias Part 145 / MRO. O Aero Suite <strong>não substitui</strong> o SGQ certificado da organização (MOE/POP físicos).</p>
+
+  <h3>AD/SB e alertas <span class="route-tag">/aero/diretrizes</span></h3>
+  <ol class="steps">
+    <li>Cadastre diretrizes aplicáveis (AD, SB, alertas).</li>
+    <li>Vincule a produtos/FCU quando pertinente.</li>
+    <li>Acompanhe prazos e status de conformidade.</li>
+  </ol>
+
+  <h3>Habilitações técnicas <span class="route-tag">/conformidade/habilitacoes</span></h3>
+  <p>Registre certificações e habilitações dos técnicos — exigência comum em auditorias MRO. A emissão de CRS pode exigir habilitação RT ou inspetor válida.</p>
+
+  <h3>Painel qualidade <span class="route-tag">/conformidade/painel</span></h3>
+  <ol class="steps">
+    <li>Revise cards consolidados (NC abertas, calibrações, treinos, documentos, ASL) — cada card é clicável e leva ao módulo correspondente.</li>
+    <li>Ajuste a janela de alertas (dias) conforme necessidade da oficina.</li>
+    <li>Configure os três bloqueios operacionais (enforcement): calibração vencida, treino obrigatório e subcontratação com certificado vencido.</li>
+    <li>Revise a lista de alertas detalhados abaixo dos cards.</li>
+    <li>Salve a política de enforcement após alterar os toggles.</li>
+  </ol>
+
+  <h3>Indicadores SMS <span class="route-tag">/conformidade/painel</span></h3>
+  <p>No mesmo painel, a seção <strong>Indicadores SMS</strong> apresenta KPIs derivados de NC/CAPA:</p>
+  <ul>
+    <li>Score de risco, taxa de fechamento no período, média de dias abertas.</li>
+    <li>Críticas sem ação, NC abertas/fechadas no período.</li>
+    <li>Distribuição por severidade e fase CAPA (NC abertas).</li>
+    <li>Tabela de tendência mensal (últimos 6 meses).</li>
+  </ul>
+  <p>Ajuste a janela (dias) no topo do painel e clique em <strong>Atualizar</strong> para recarregar os indicadores.</p>
+
+  <h3>Relatório SGQ exportável</h3>
+  <ol class="steps">
+    <li>No painel qualidade, clique em <strong>Exportar relatório SGQ (ZIP)</strong>.</li>
+    <li>O arquivo contém CSVs por módulo (NC, documentos, treinos, calibração, subcontratação, ASL), <code>resumo.csv</code>, <code>snapshot.json</code> e <code>README.txt</code>.</li>
+    <li>Use este export standalone para auditorias internas — complementar ao pacote multi-OS do dossiê.</li>
+  </ol>
+
+  <h3>Documentos controlados <span class="route-tag">/conformidade/documentos</span></h3>
+  <ol class="steps">
+    <li>Cadastre MOE/POP/procedimentos com código, revisão, vigência e status.</li>
+    <li>Anexe PDF quando aplicável (upload na ficha do documento).</li>
+    <li>Registre nova revisão e obsoletar a anterior quando houver mudança.</li>
+  </ol>
+
+  <h3>Treinamentos <span class="route-tag">/conformidade/treinamentos</span></h3>
+  <p>Registre cursos concluídos por usuário e validade. Em <span class="route-tag">/conformidade/treinamentos-obrigatorios</span> defina cursos exigidos por função/perfil.</p>
+
+  <h3>Calibração de ferramentas <span class="route-tag">/conformidade/calibracao</span></h3>
+  <p>Cadastre instrumentos com identificador único e data da próxima calibração. Use o identificador nos apontamentos do hangar quando o enforcement estiver ativo.</p>
+
+  <h3>Não conformidades e CAPA <span class="route-tag">/conformidade/nao-conformidades</span></h3>
+  <ol class="steps">
+    <li>Abra ocorrência com severidade, descrição e OS vinculada (se houver).</li>
+    <li>No diálogo, avance o fluxo CAPA por fases (REGISTRO → CONTENÇÃO → CAUSA → AÇÃO → VERIFICAÇÃO → FECHADA) usando o stepper.</li>
+    <li>Preencha causa raiz, contenção, ação corretiva e verificação de eficácia.</li>
+    <li>Confirme eficácia antes de fechar — o sistema bloqueia fechamento sem verificação quando aplicável.</li>
+    <li>Na listagem, a coluna CAPA exibe a fase atual com tag visual.</li>
+  </ol>
+
+  <h3>Subcontratação Part 145 <span class="route-tag">/conformidade/subcontratacao</span></h3>
+  <p>Registre subcontratados, certificado Part 145, validade, escopo e OS vinculada. Com enforcement ligado, apontamentos no hangar e operações na OS podem ser bloqueados se o certificado estiver vencido.</p>
+
+  <h3>ASL — fornecedores aprovados</h3>
+  <p>Em <span class="route-tag">/estoque/fornecedores</span>, preencha status ASL, validade e escopo. Fornecedores não aprovados ou com ASL vencido aparecem no painel qualidade e podem bloquear entrada de material quando configurado.</p>
+
+  <h3>CRS / liberação para serviço</h3>
+  <p>Na edição da OS, use <strong>Emitir CRS</strong> após checklist (ver capítulo 9). Valide segregação (quem executou não emite CRS, salvo perfis autorizados).</p>
+
+  <h3>Auditoria de OS <span class="route-tag">/os-auditoria</span></h3>
+  <p>Trilha de alterações e eventos das ordens de serviço — use para homologar rastreabilidade.</p>
+
+  <h3>Dossiê e pacote auditoria <span class="route-tag">/dossie-auditoria</span></h3>
+  <ol class="steps">
+    <li>Gere PDF por OS ou pacote ZIP multi-OS (dossiê, CRS quando emitido, anexos binários).</li>
+    <li>Confirme a pasta <code>sgq/</code> no ZIP do pacote (<code>resumo.csv</code> + <code>snapshot.json</code>).</li>
+    <li>Configure anos de retenção de registros e exporte <strong>arquivo morto</strong> (ZIP por data de fechamento) na mesma tela, se aplicável.</li>
+  </ol>
+
+  <h3>Kit go-live 30 dias <span class="route-tag">/go-live-migracao</span></h3>
+  <p>Checklist persistido de migração assistida — marque itens concluídos durante a homologação e use como evidência de readiness antes da produção.</p>
+
+  <h3>Contingência operacional <span class="route-tag">/conformidade/contingencia</span></h3>
+  <p>Checklist de reconciliação pós-contingência (papel/offline): registre ações manuais e evidências de sync do hangar.</p>
+
+  <h3>Aceites de release <span class="route-tag">/conformidade/releases</span></h3>
+  <p>Controle de mudanças de versão com aceite formal por release — suporte ao dossiê ANAC (REQ-028).</p>
+
+  <div class="callout callout-tip"><strong>Checklist</strong>Use a <strong>Fase 7</strong> do Apêndice A para SGQ e a <strong>Fase 8</strong> (Apêndice B) para certificação ANAC.</div>
+
+  <div class="page-footer"><span>Capítulo 11 · Conformidade e SGQ</span><span>Aero Suite</span></div>
+</section>
+
+<!-- Capítulos 12–13 Estoque -->
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 12</span>
+  </div>
+  <h2 class="chapter-title">Visão geral do módulo estoque</h2>
+  <p class="chapter-lead">Acesso via menu <strong>Estoque</strong> ou rota <span class="route-tag">/estoque</span> — layout dedicado com submódulos.</p>
+
+  <div class="feature-grid">
+    <div class="feature-card"><h4>Dashboard</h4><p>KPIs e indicadores — /estoque/dashboard</p></div>
+    <div class="feature-card"><h4>Entrada</h4><p>Recebimento de mercadoria — /estoque/entrada</p></div>
+    <div class="feature-card"><h4>Itens</h4><p>Peças em estoque — /estoque/itens</p></div>
+    <div class="feature-card"><h4>Saídas</h4><p>Baixa/consumo — /estoque/saidas</p></div>
+    <div class="feature-card"><h4>QR Code</h4><p>Consulta rápida (F2) — /estoque/consulta-qr</p></div>
+    <div class="feature-card"><h4>Rastreio</h4><p>Histórico da peça — /estoque/rastreio</p></div>
+    <div class="feature-card"><h4>Quarentena</h4><p>Itens retidos — /estoque/quarentena</p></div>
+    <div class="feature-card"><h4>Invoices</h4><p>Importação de faturas — /estoque/invoices</p></div>
+    <div class="feature-card"><h4>Fornecedores</h4><p>Cadastro — /estoque/fornecedores</p></div>
+    <div class="feature-card"><h4>Lotes</h4><p>Controle por lote — /estoque/lotes</p></div>
+  </div>
+
+  <div class="callout callout-tip"><strong>Atalho</strong>Tecla <strong>F2</strong> abre consulta por QR Code em qualquer tela do módulo estoque.</div>
+
+  <div class="page-footer"><span>Capítulo 12 · Estoque visão geral</span><span>Aero Suite</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 13</span>
+  </div>
+  <h2 class="chapter-title">Fluxos operacionais de estoque</h2>
+
+  <h3>Entrada de mercadoria</h3>
+  <ol class="steps">
+    <li>Acesse <span class="route-tag">/estoque/entrada</span>.</li>
+    <li>Informe fornecedor (com ASL válido quando enforcement ativo), nota/documento e itens recebidos.</li>
+    <li>Preencha P/N, quantidade, lote, certificado e localização.</li>
+    <li>Confirme entrada — itens ficam disponíveis em <strong>Itens em estoque</strong>.</li>
+  </ol>
+
+  <h3>Quarentena de material <span class="route-tag">/estoque/quarentena</span></h3>
+  <ol class="steps">
+    <li>Envie item suspeito para quarentena a partir da lista de itens (ação escudo).</li>
+    <li>Registre motivo e responsável.</li>
+    <li>Resolva: liberar para estoque, descartar ou devolver ao fornecedor.</li>
+    <li>Valide que saída/consumo em OS é bloqueado para itens em quarentena.</li>
+  </ol>
+
+  <h3>Certificado de peça</h3>
+  <ol class="steps">
+    <li>Na ficha do item, preencha metadados do certificado (tipo FAA 8130-3, EASA Form 1, ANAC, etc.).</li>
+    <li>Anexe PDF ou imagem do certificado quando disponível.</li>
+    <li>Na saída de estoque, confirme bloqueio quando certificado estruturado estiver incompleto (se regra tenant ativa).</li>
+  </ol>
+
+  <h3>Consulta e rastreabilidade</h3>
+  <ol class="steps">
+    <li>Em <strong>Itens</strong>, busque por P/N, S/N ou filtros.</li>
+    <li>Use QR Code para consulta instantânea no hangar.</li>
+    <li>Em <strong>Rastreio</strong> (<span class="route-tag">/estoque/rastreio</span>), acompanhe linha do tempo da peça (movimentações, OS, certificados).</li>
+    <li>Exporte PDF da linha do tempo quando necessário para auditoria.</li>
+  </ol>
+
+  <h3>Fornecedores e ASL <span class="route-tag">/estoque/fornecedores</span></h3>
+  <p>Cadastre fornecedores com campos ASL (status, validade, escopo). Status reflete alertas no painel qualidade e pode bloquear entrada direta de material.</p>
+
+  <h3>Saída e integração com OS</h3>
+  <ol class="steps">
+    <li>Registre saída em <span class="route-tag">/estoque/saidas</span>.</li>
+    <li>Vincule à OS quando aplicável — valida consumo de kit FCU.</li>
+    <li>Consulte <span class="route-tag">/estoque/rastreio-saidas-automaticas</span> para saídas automáticas de kit.</li>
+  </ol>
+
+  <div class="page-footer"><span>Capítulo 13 · Fluxos estoque</span><span>Aero Suite</span></div>
+</section>
+
+<!-- Capítulos 14–15 Comercial -->
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 14</span>
+  </div>
+  <h2 class="chapter-title">Propostas comerciais e templates</h2>
+  <p class="chapter-lead">Módulo comercial — cotações formais com geração de PDF e portal do cliente.</p>
+
+  <h3>Templates <span class="route-tag">/templates-proposta</span></h3>
+  <ol class="steps">
+    <li>Crie template com layout e cláusulas padrão.</li>
+    <li>Reutilize em novas propostas para agilizar homologação.</li>
+  </ol>
+
+  <h3>Nova proposta <span class="route-tag">/propostas-comerciais/new</span></h3>
+  <ol class="steps">
+    <li><strong>Seção Produto</strong> — nome, P/N, S/N, manual aplicável.</li>
+    <li><strong>Seção Cliente</strong> — dados de contato, e-mail, idioma preferido.</li>
+    <li><strong>Seção Proposta</strong> — serviços, valores, prazos, condições.</li>
+    <li>Revise preview do documento gerado automaticamente.</li>
+    <li>Salve como rascunho ou marque como enviada.</li>
+    <li>Exporte PDF ou envie por e-mail/WhatsApp (conforme configuração).</li>
+    <li>Proposta aprovada pode gerar OS automaticamente (bridge comercial → MRO).</li>
+  </ol>
+
+  <h3>Aero Studio <span class="route-tag">/studio</span></h3>
+  <p>Editor de materiais de marca e papel timbrado para documentos comerciais.</p>
+
+  <div class="page-footer"><span>Capítulo 14 · Comercial</span><span>Aero Suite</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 15</span>
+  </div>
+  <h2 class="chapter-title">Portal do cliente e usuários externos</h2>
+
+  <h3>Usuários externos <span class="route-tag">/usuarios-externos</span></h3>
+  <ol class="steps">
+    <li>Cadastre usuário com e-mail do cliente.</li>
+    <li>Defina permissões em <span class="route-tag">/usuarios-externos/:id/permissoes</span>.</li>
+    <li>Sistema envia e-mail de primeiro acesso ao portal.</li>
+  </ol>
+
+  <h3>Portal externo <span class="route-tag">/externo</span></h3>
+  <p>Cliente acessa com credenciais próprias:</p>
+  <ul>
+    <li><strong>Home</strong> — resumo, propostas pendentes recentes e atalhos.</li>
+    <li><strong>OS</strong> — acompanhamento de ordens de serviço com timeline e link à proposta de origem (quando aplicável).</li>
+    <li><strong>Propostas</strong> — listagem, detalhe, aditivos/anexos, aprovar ou rejeitar.</li>
+    <li><strong>Capacidade</strong> — fila de serviço (quando liberado).</li>
+    <li><strong>Documentos</strong> — arquivos compartilhados.</li>
+  </ul>
+
+  <div class="callout callout-important"><strong>Homologação</strong>Publique proposta no portal e valide e-mail de notificação no idioma do cliente.</div>
+
+  <div class="page-footer"><span>Capítulo 15 · Portal externo</span><span>Aero Suite</span></div>
+</section>
+
+<!-- Capítulos 16–18 + Apêndice -->
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 16</span>
+  </div>
+  <h2 class="chapter-title">Controle de acesso e permissões</h2>
+
+  <h3>Funcionalidades <span class="route-tag">/funcionalidades</span></h3>
+  <p>Catálogo de telas e ações do sistema — base para perfis.</p>
+
+  <h3>Controle de acesso <span class="route-tag">/controle-acesso</span></h3>
+  <ol class="steps">
+    <li>Selecione o perfil a configurar.</li>
+    <li>Marque funcionalidades permitidas (incl. módulos Conformidade/SGQ quando homologando Part 145).</li>
+    <li>Salve permissões.</li>
+    <li>Valide com usuário de teste em <span class="route-tag">/consulta-funcionalidades-usuario</span>.</li>
+    <li>Teste perfis Part 145: execução sem CRS; RT/inspetor com emissão de CRS.</li>
+  </ol>
+
+  <div class="page-footer"><span>Capítulo 16 · Permissões</span><span>Aero Suite</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 17</span>
+  </div>
+  <h2 class="chapter-title">Backup, relatórios, biblioteca e go-live</h2>
+
+  <h3>Backup <span class="route-tag">/settings/backup</span></h3>
+  <ol class="steps">
+    <li>Configure agendamento, retenção e destinatários de e-mail.</li>
+    <li><strong>Docker:</strong> use caminho <code>/app/backups</code> (volume do projeto). <strong>Windows nativo:</strong> pasta local (ex. <code>D:\Backup\BD</code>). <strong>Linux produção:</strong> <code>/mnt/backups</code>.</li>
+    <li>Execute backup manual e confirme arquivo <code>.sql.gz</code> gerado.</li>
+    <li>Confirme recebimento de e-mail pós-backup (se habilitado).</li>
+  </ol>
+
+  <h3>Relatórios <span class="route-tag">/relatorios</span></h3>
+  <p>Relatórios operacionais e gerenciais conforme perfil.</p>
+
+  <h3>Biblioteca <span class="route-tag">/biblioteca</span></h3>
+  <p>Repositório central de arquivos técnicos e administrativos.</p>
+
+  <h3>Kit Go-live <span class="route-tag">/go-live-migracao</span></h3>
+  <p>Checklist de 30 dias para migração assistida — use na transição trial → produção.</p>
+
+  <h3>Dossiê de auditoria <span class="route-tag">/dossie-auditoria</span></h3>
+  <p>Exportação consolidada para auditorias regulatórias: PDF por OS, pacote ZIP multi-OS (anexos, CRS) e evidências SGQ na pasta <code>sgq/</code>. Detalhes no capítulo 11.</p>
+
+  <div class="page-footer"><span>Capítulo 17 · Sistema</span><span>Aero Suite</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 18</span>
+  </div>
+  <h2 class="chapter-title">Suporte, chat e comunicação</h2>
+
+  <h3>Central de suporte <span class="route-tag">/suporte</span></h3>
+  <ol class="steps">
+    <li><strong>Novo chamado</strong> — descreva problema, anexe evidências.</li>
+    <li>Acompanhe status em <strong>Meus chamados</strong>.</li>
+    <li>Equipe responde via <strong>Atendimento</strong> (perfil agente).</li>
+    <li>Notificações por e-mail conforme idioma do usuário.</li>
+  </ol>
+
+  <h3>Chat interno <span class="route-tag">/chat</span></h3>
+  <p>Mensagens entre usuários internos — busca de usuários, conversas e anexos.</p>
+
+  <h3>Publicações técnicas</h3>
+  <ul>
+    <li><span class="route-tag">/publicacoes-tecnicas/cadastro</span> — registro de publicações.</li>
+    <li><span class="route-tag">/publicacoes-tecnicas/associar-pn</span> — vínculo P/N ↔ publicação.</li>
+  </ul>
+
+  <div class="page-footer"><span>Capítulo 18 · Suporte</span><span>Aero Suite</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Apêndice A</span>
+  </div>
+  <h2 class="chapter-title">Checklist de homologação</h2>
+  <p class="chapter-lead">Use este roteiro para validar o sistema ponta a ponta antes do go-live. Atualizado com SGQ P5.3/P5.4, portal propostas 2.0 e enforcement operacional.</p>
+
+  <h3>Fase 1 — Conta e configuração</h3>
+  <ul>
+    <li>☐ Cadastro trial concluído com módulos corretos</li>
+    <li>☐ Login administrador OK</li>
+    <li>☐ Assistente empresa (4 etapas) finalizado</li>
+    <li>☐ Logo e identidade visíveis no sistema e e-mails</li>
+    <li>☐ Teste SMTP bem-sucedido</li>
+    <li>☐ Idioma e tema definidos</li>
+  </ul>
+
+  <h3>Fase 2 — Cadastros</h3>
+  <ul>
+    <li>☐ Fabricantes, produtos e tipos de serviço</li>
+    <li>☐ FCU cadastrado e associado a produtos</li>
+    <li>☐ Usuários internos com perfis distintos</li>
+    <li>☐ Permissões validadas (acesso negado/permitido)</li>
+  </ul>
+
+  <h3>Fase 3 — MRO</h3>
+  <ul>
+    <li>☐ OS criada, editada, anexos e impressão</li>
+    <li>☐ AD/SB aplicáveis visíveis na OS</li>
+    <li>☐ CRS emitido com checklist e PDF — segregação de papéis validada</li>
+    <li>☐ Movimentação no quadro de capacidade (drag entre estágios)</li>
+    <li>☐ Capacidade por hangar (<span class="route-tag">/capacidade/hangares</span>)</li>
+    <li>☐ Job card hangar: apontamento com identificador de ferramenta</li>
+    <li>☐ Hangar offline: fila local sincronizada ao voltar online</li>
+    <li>☐ Auditoria de OS consultada (<span class="route-tag">/os-auditoria</span>)</li>
+  </ul>
+
+  <h3>Fase 4 — Estoque (se habilitado)</h3>
+  <ul>
+    <li>☐ Entrada de mercadoria (fornecedor com ASL quando aplicável)</li>
+    <li>☐ Consulta QR e rastreio com linha do tempo / PDF</li>
+    <li>☐ Quarentena: enviar, resolver e bloqueio de saída</li>
+    <li>☐ Certificado de peça estruturado + anexo na saída</li>
+    <li>☐ Saída vinculada à OS</li>
+    <li>☐ Invoice: detalhe, inativar/restaurar (se módulo invoices habilitado)</li>
+  </ul>
+
+  <h3>Fase 5 — Comercial (se habilitado)</h3>
+  <ul>
+    <li>☐ Proposta com PDF e envio por e-mail</li>
+    <li>☐ Portal externo: login cliente, propostas, aditivos/anexos</li>
+    <li>☐ Aprovação/rejeição de proposta no portal</li>
+    <li>☐ Bridge proposta → OS (<strong>Gerar OS</strong>)</li>
+    <li>☐ Portal externo: timeline da OS e link à proposta origem</li>
+    <li>☐ Aero Studio — material de marca (opcional)</li>
+  </ul>
+
+  <h3>Fase 6 — Governança</h3>
+  <ul>
+    <li>☐ Backup manual + e-mail</li>
+    <li>☐ Dossiê auditoria: PDF por OS + pacote ZIP multi-OS</li>
+    <li>☐ Retenção de registros e exportação arquivo morto (dossiê)</li>
+    <li>☐ Chamado de suporte aberto e respondido</li>
+    <li>☐ Chat interno entre dois usuários</li>
+    <li>☐ Centro de organizações (se perfil plataforma) — <span class="route-tag">/organizacoes</span></li>
+  </ul>
+
+  <h3>Fase 7 — SGQ / conformidade regulatória</h3>
+  <p class="chapter-lead" style="margin-top:0">Valide evidências operacionais Part 145. Ver capítulo 11 para roteiro detalhado.</p>
+  <ul>
+    <li>☐ Home: card atalho alertas SGQ → painel qualidade</li>
+    <li>☐ Painel qualidade: cards, janela (dias), lista de alertas</li>
+    <li>☐ Painel: toggles de enforcement salvos (calibração, treino, subcontratação)</li>
+    <li>☐ Indicadores SMS: KPIs, severidade, fases CAPA, tendência 6 meses</li>
+    <li>☐ Exportar relatório SGQ (ZIP standalone) — CSVs + snapshot</li>
+    <li>☐ Documento controlado: cadastro, revisão, obsoletar anterior, PDF anexo</li>
+    <li>☐ Treinamento registrado + curso obrigatório por função/perfil</li>
+    <li>☐ Ferramenta de calibração com identificador usado no hangar</li>
+    <li>☐ NC aberta, stepper CAPA por fase, coluna CAPA na grid, fechamento com eficácia</li>
+    <li>☐ Subcontratação vinculada à OS (certificado e validade)</li>
+    <li>☐ Fornecedor ASL (aprovado/vencido) — painel + entrada de material</li>
+    <li>☐ Quarentena e certificado de peça na saída (se estoque habilitado)</li>
+    <li>☐ Habilitações técnicas (RT/inspetor) quando CRS exigir</li>
+    <li>☐ CRS emitido com segregação de papéis respeitada</li>
+    <li>☐ Hangar: apontamento online e fila offline sincronizada</li>
+    <li>☐ Enforcement ON: bloqueio por calibração/treino/subcontratação testado</li>
+    <li>☐ Dossiê: pacote ZIP com pasta <code>sgq/</code> (<code>resumo.csv</code> + <code>snapshot.json</code>)</li>
+    <li>☐ Kit go-live checklist persistido (<span class="route-tag">/go-live-migracao</span>)</li>
+  </ul>
+
+  <div class="callout callout-tip"><strong>Próximo passo</strong>Após homologação (incluindo Fase 7), utilize o Kit Go-live (<span class="route-tag">/go-live-migracao</span>) para planejar a entrada em produção.</div>
+
+  <div class="callout callout-important"><strong>Disclaimer</strong>O software apoia evidências operacionais; não substitui SGQ certificado nem constitui homologação ANAC do produto.</div>
+
+  <div class="page-footer"><span>Apêndice A · Checklist</span><span>Aero Suite · 2026</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Capítulo 19</span>
+  </div>
+  <h2 class="chapter-title">Certificação ANAC — habilitação do produto</h2>
+  <p class="chapter-lead">Este capítulo consolida as funcionalidades e rotinas introduzidas na <strong>fase de habilitação à certificação ANAC</strong> (Part 145 / software de manutenção). Complementa o capítulo 11 e os Apêndices A e B.</p>
+
+  <h3>Escopo regulatório</h3>
+  <p>O Aero Suite foi preparado para apoiar evidências operacionais exigidas em auditorias e submissão à OM ANAC. A matriz de requisitos (<code>docs/anac-conformidade/</code>) cobre 30 itens; a suite automatizada <code>anac-conformidade-evidencias.ps1</code> valida 11 blocos de evidência (API, backup, MFA, integridade, etc.).</p>
+
+  <h3>Autenticação e MFA (REQ-023)</h3>
+  <ol class="steps">
+    <li>Login padrão com JWT e RBAC por funcionalidades.</li>
+    <li><strong>MFA TOTP</strong> — enrollment em <span class="route-tag">/settings/seguranca</span>; segundo fator no login quando habilitado.</li>
+    <li>Perfis Part 145: <code>P145_RT</code>, <code>P145_INSPETOR</code>, <code>P145_EXECUCAO</code>, <code>P145_ALMOX</code> — segregação CRS (execução não emite CRS).</li>
+  </ol>
+
+  <h3>Ordem de serviço e integridade</h3>
+  <ul>
+    <li><strong>OS encerrada:</strong> bloqueio de edição; reabertura auditada com motivo.</li>
+    <li><strong>Job card / hangar:</strong> apontamentos com assinatura PNG vinculada ao usuário; <strong>integridade SHA-256</strong> do payload assinado (job <code>signature-integrity-audit</code>).</li>
+    <li><strong>CRS:</strong> emissão segregada — apenas RT/inspetor; PDF e trilha em <span class="route-tag">/os-auditoria</span>.</li>
+    <li><strong>Vínculo tarefa ↔ dado técnico:</strong> referência cruzada entre tarefa de manutenção e publicação/AD aplicável.</li>
+  </ul>
+
+  <h3>Hangar offline e contingência (REQ-002 / REQ-003)</h3>
+  <ol class="steps">
+    <li>PWA hangar: fila local de apontamentos; sincronização ao reconectar.</li>
+    <li>Painel <span class="route-tag">/conformidade/contingencia</span> — checklist de reconciliação pós-falha ou operação em papel.</li>
+    <li>Script de evidência: <code>anac-contingencia-offline-evidencia.ps1</code> (simulação documentada).</li>
+  </ol>
+
+  <h3>Backup e restauração (DOC-02)</h3>
+  <ul>
+    <li>Agendamento, retenção e notificação por e-mail em <span class="route-tag">/settings/backup</span>.</li>
+    <li>Docker: volume <code>./backups:/app/backups</code>; arquivos <code>.sql.gz</code> verificáveis no host.</li>
+    <li>Guia de restore homologação: <code>anac-restore-homologacao-guia.ps1</code>.</li>
+  </ul>
+
+  <h3>Dossiê, retenção e releases</h3>
+  <ul>
+    <li><span class="route-tag">/dossie-auditoria</span> — PDF por OS, ZIP multi-OS com pasta <code>sgq/</code>.</li>
+    <li>Retenção / arquivo morto: export ZIP regulatório.</li>
+    <li><span class="route-tag">/conformidade/releases</span> — aceites de versão para rastreabilidade de mudanças (REQ-028).</li>
+  </ul>
+
+  <h3>Empacotamento para submissão</h3>
+  <ol class="steps">
+    <li>Execute <code>.\scripts\test\anac-conformidade-evidencias.ps1</code> — meta: <strong>11/11 PASS</strong>.</li>
+    <li>Exporte documentos: <code>anac-exportar-documentos-certificacao.ps1</code>.</li>
+    <li>Gere dossiê ZIP: <code>anac-empacotar-dossie-anac.ps1</code>.</li>
+    <li>Pendências organizacionais (MOM/MCQ OM, ICP físico): ver <code>21-pendencias-acoes-certificacao.md</code>.</li>
+  </ol>
+
+  <div class="callout callout-important"><strong>Limitação</strong>O produto está apto no eixo técnico-evidência; a homologação formal ANAC depende ainda de documentos da OM, assinaturas ICP onde exigido e teste de restore no ambiente da organização.</div>
+
+  <div class="page-footer"><span>Capítulo 19 · Certificação ANAC</span><span>Aero Suite</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Apêndice B</span>
+  </div>
+  <h2 class="chapter-title">Checklist — Fase 8 Certificação ANAC</h2>
+  <p class="chapter-lead">Valide após as Fases 1–7 (Apêndice A). Use em homologação piloto com RT designado (<code>20-escopo-implantacao-piloto-rt.md</code>).</p>
+
+  <h3>Fase 8 — Evidências e submissão</h3>
+  <ul>
+    <li>☐ Suite <code>anac-conformidade-evidencias.ps1</code> — 11/11 PASS (<code>readyForAnacSubmission: true</code>)</li>
+    <li>☐ MFA TOTP: enrollment e login com segundo fator</li>
+    <li>☐ Perfis Part 145: execução sem CRS; RT/inspetor com CRS</li>
+    <li>☐ OS encerrada: bloqueio; reabertura auditada testada</li>
+    <li>☐ Job card: assinatura + verificação integridade SHA-256</li>
+    <li>☐ Hangar offline: fila sync após reconexão</li>
+    <li>☐ Contingência: checklist em <span class="route-tag">/conformidade/contingencia</span></li>
+    <li>☐ Backup manual: arquivo em <code>/app/backups</code> (Docker) ou path configurado</li>
+    <li>☐ Restore documentado (homologação ou ambiente piloto)</li>
+    <li>☐ Dossiê ZIP com <code>sgq/resumo.csv</code> e <code>snapshot.json</code></li>
+    <li>☐ Release aceite registrado em <span class="route-tag">/conformidade/releases</span></li>
+    <li>☐ Matriz ANAC 30/30 ATENDE revisada com Qualidade</li>
+    <li>☐ Pacote dossiê ANAC gerado (<code>anac-empacotar-dossie-anac.ps1</code>)</li>
+    <li>☐ Pendências organizacionais (MOM, MCQ, ICP) rastreadas com prazo</li>
+  </ul>
+
+  <div class="callout callout-tip"><strong>Referência</strong>Documentação completa em <code>docs/anac-conformidade/</code> e comunicado comercial em <code>docs/comercial/</code>.</div>
+
+  <div class="page-footer"><span>Apêndice B · Certificação ANAC</span><span>Aero Suite · 2026</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Nota editorial</span>
+  </div>
+  <h2 class="chapter-title">Versão 3.0 — homologação e certificação</h2>
+  <p class="chapter-lead">Manual atualizado em 2026 para refletir a fase de habilitação à certificação ANAC, integrando SGQ Part 145, evidências automatizadas e rotinas de backup/contingência validadas em Docker.</p>
+  <p style="margin-top:32px;font-size:11pt;color:#334155"><strong>Wellem Lyra</strong><br/>Diretor de TI<br/>Aero Suite<br/>wellemlyra@aerosuite.com.br</p>
+
+  <div class="page-footer"><span>Manual de Homologação v3.0</span><span>Aero Suite · 2026</span></div>
+</section>
+
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+{
+  "at": "2026-06-09T15:53:56.968Z",
+  "origin": "https://aerosuite.com.br",
+  "summary": {
+    "wpformsOk": true,
+    "sitemapOk": true,
+    "calendlyOk": true,
+    "schemaOk": true,
+    "homeSeoOk": true,
+    "solucoesSeoOk": true,
+    "contatoSeoOk": true,
+    "obrigadoOk": true
+  },
+  "robots": {
+    "url": "https://aerosuite.com.br/robots.txt",
+    "status": 200,
+    "ok": true,
+    "bodyPreview": "# As a condition of accessing this website, you agree to abide by the following\n# content signals:\n\n# (a)  If a Content-Signal = yes, you may collect content for the corresponding\n#      use.\n# (b)  If a Content-Signal = no, you may not collect content for the\n#      corresponding use.\n# (c)  If the website operator does not include a Content-Signal for a\n#      corresponding use, the website operator neither grants nor restricts\n#      permission via Content-Signal with respect to the correspon"
+  },
+  "sitemap": {
+    "wp": {
+      "url": "https://aerosuite.com.br/wp-sitemap.xml",
+      "status": 200,
+      "ok": true,
+      "bodyPreview": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"https://aerosuite.com.br/wp-sitemap-index.xsl\" ?>\n<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"><sitemap><loc>https://aerosuite.com.br/wp-sitemap-posts-post-1.xml</loc></sitemap><sitemap><loc>https://aerosuite.com.br/wp-sitemap-posts-page-1.xml</loc></sitemap><sitemap><loc>https://aerosuite.com.br/wp-sitemap-taxonomies-category-1.xml</loc></sitemap></sitemapindex>\n"
+    },
+    "yoast": {
+      "url": "https://aerosuite.com.br/sitemap_index.xml",
+      "status": 404,
+      "ok": false,
+      "bodyPreview": "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n\t<meta charset=\"UTF-8\" />\n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n<meta name='robots' content='max-image-preview:large' />\n<title>Página não encontrada</title>\n<link rel=\"alternate\" type=\"application/rss+xml\" title=\"Feed para  &raquo;\" href=\"https://aerosuite.com.br/feed/\" />\n<link rel=\"alternate\" type=\"application/rss+xml\" title=\"Feed de comentários para  &raquo;\" href=\"https://aerosuite.com.br/comments/feed/\" />\n<meta i"
+    },
+    "recommendedUrl": "https://aerosuite.com.br/wp-sitemap.xml"
+  },
+  "wpforms": {
+    "status": 200,
+    "ok": true,
+    "bodyPreview": "{\"success\":true,\"data\":{\"confirmation\":\"<div class=\\\"wpforms-confirmation-container wpforms-confirmation-scroll\\\" id=\\\"wpforms-confirmation-12\\\"><p>Obrigado por nos contatar! Entraremos em contato em breve.<\\/p>\\n<\\/div>\"}}",
+    "isCriticalError": false
+  },
+  "calendly": {
+    "iframeCount": 1,
+    "iframeSrc": "https://calendly.com/comercial-aerosuite/30min?embed_domain=aerosuite.com.br&embed_type=Inline",
+    "ok": true
+  },
+  "schema": {
+    "types": [
+      "Organization",
+      "SoftwareApplication",
+      "WebSite",
+      "WebPage",
+      "ItemList",
+      "FAQPage"
+    ],
+    "orgLogoUrl": "https://aerosuite.com.br/wp-content/uploads/2026/06/aerosuite-site-icon-512.png",
+    "logoOk": true,
+    "hasSiteSections": true,
+    "ok": true
+  },
+  "homeSeo": {
+    "descLen": 324,
+    "hasDesc": true,
+    "keywordOk": true,
+    "canonical": "https://aerosuite.com.br/",
+    "ogImageOk": false,
+    "exploreLinks": 9,
+    "exploreOk": true,
+    "ok": true
+  },
+  "solucoesSeo": {
+    "descLen": 288,
+    "hasDesc": true,
+    "keywordOk": true,
+    "canonical": "https://aerosuite.com.br/solucoes/",
+    "ogImageOk": false,
+    "exploreLinks": 8,
+    "exploreOk": true,
+    "ok": true
+  },
+  "contatoSeo": {
+    "descLen": 253,
+    "hasDesc": true,
+    "keywordOk": true,
+    "canonical": "https://aerosuite.com.br/contato/",
+    "ogImageOk": false,
+    "exploreLinks": 7,
+    "exploreOk": true,
+    "ok": true
+  },
+  "pages": {
+    "home": 200,
+    "obrigado": 200
+  },
+  "nextSteps": [
+    "P1: Marcar conversões GA4 — docs/wordpress/GA4-CONVERSOES.md",
+    "P1: Search Console — docs/GSC-OPERACIONAL.md",
+    "P1: Autorização Bellows/King — docs/wordpress/PORTFOLIO-AUTORIZACAO-EMAILS.md"
+  ]
+}

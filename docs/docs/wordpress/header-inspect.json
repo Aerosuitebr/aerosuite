@@ -1,0 +1,25 @@
+{
+  "media": {
+    "src": "https://aerosuite.com.br/wp-content/uploads/2026/06/aero-colorido-logo.png",
+    "w": 1254,
+    "h": 1254,
+    "sizes": [
+      "medium",
+      "large",
+      "thumbnail",
+      "medium_large",
+      "full"
+    ]
+  },
+  "logoBlockCount": 1,
+  "blocks": [
+    "<!-- wp:html -->\n<style id=\"aerosuite-critical-css\">:root{--as-navy:#051a3d;--as-blue:#0a2f6b;--as-blue-mid:#0b3d91;--as-gold:#c9a227;--as-gold-bright:#e8c547;--as-surface:#f4f6fa;--as-card:#ffffff;--as-text:#161b22;--as",
+    "<!-- wp:html -->\n<link rel=\"icon\" id=\"as-favicon-aerosuite\" href=\"https://aerosuite.com.br/wp-content/uploads/2026/06/aerosuite-site-icon-512.png\" sizes=\"any\" type=\"image/png\"/>\n<link rel=\"apple-touch-icon\" href=\"https:/",
+    "<!-- wp:html -->\n<link rel=\"preconnect\" href=\"https://aerosuite.com.br\" crossorigin/>\n<link rel=\"dns-prefetch\" href=\"https://aerosuite.com.br\"/>\n<link rel=\"preload\" as=\"image\" href=\"https://aerosuite.com.br/wp-content/up",
+    "<!-- wp:group {\"align\":\"full\",\"className\":\"is-style-ext-preset\\u002d\\u002dgroup\\u002d\\u002dnatural-1\\u002d\\u002dheader-1\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"clamp(1.5rem, 5vw, 2rem)\",\"right\":\"clamp(1.5rem, 5vw, 2rem)\"",
+    "<!-- wp:group {\"style\":{\"spacing\":{\"blockGap\":\"var:preset|spacing|30\"}},\"layout\":{\"type\":\"flex\",\"flexWrap\":\"wrap\",\"justifyContent\":\"space-between\"}} -->\n<div class=\"wp-block-group\">",
+    "<!-- wp:group {\"className\":\"ext-animate\\u002d\\u002don\",\"style\":{\"spacing\":{\"blockGap\":\"1rem\"}},\"layout\":{\"type\":\"flex\",\"flexWrap\":\"nowrap\"}} -->\n<div class=\"wp-block-group ext-animate--on\">",
+    "<!-- wp:group {\"className\":\"ext-animate\\u002d\\u002don\",\"layout\":{\"type\":\"flex\",\"flexWrap\":\"nowrap\"}} -->\n<div class=\"wp-block-group ext-animate--on\">",
+    "<!-- wp:html -->\n<nav class=\"as-supplemental-nav as-supplemental-nav--v4\" aria-label=\"Navegação principal Aero Suite\">\n  <div class=\"as-supplemental-nav__inner\">\n    <a href=\"https://aerosuite.com.br/conformidade-regulat"
+  ]
+}

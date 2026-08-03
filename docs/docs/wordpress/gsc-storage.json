@@ -1,0 +1,75 @@
+{
+  "cookies": [
+    {
+      "name": "_gid",
+      "value": "GA1.3.71733693.1780578370",
+      "domain": ".search.google.com",
+      "path": "/",
+      "expires": 1780664798,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "OTZ",
+      "value": "8637906_68_64_73560_68_416340",
+      "domain": "search.google.com",
+      "path": "/",
+      "expires": 1783170370,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__Host-GAPS",
+      "value": "1:3mQETzKZnxYVGiXQ-HONUXhp2Ysu3g:xt84XgQeaptwOZF3",
+      "domain": "accounts.google.com",
+      "path": "/",
+      "expires": 1815138372.73137,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "OTZ",
+      "value": "8637906_68_64_73560_68_416340",
+      "domain": "accounts.google.com",
+      "path": "/",
+      "expires": 1783170374,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_QX2LK1FZEG",
+      "value": "GS2.1.s1780578369$o1$g1$t1780578398$j31$l0$h0",
+      "domain": ".search.google.com",
+      "path": "/",
+      "expires": 1815138398.309967,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga",
+      "value": "GA1.3.992979792.1780578370",
+      "domain": ".search.google.com",
+      "path": "/",
+      "expires": 1815138398.325579,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "NID",
+      "value": "532=x6IYIxPsw2OQzUkQxZBlM9eyFc6FVqZ2FxAjOGTENxlrEFlz9V6fYxuDqXDFR3iF-GpNnZy026qQZLPzCHO8xubUqjZ8dFd42Azuk8FMB-MCOpdyt00Ky4j8Pc0udkKMLztDROV6Wl8gKR6O2TZB73tfVpibpUxSCpEPgTBcMEw7fvVEMTqEuqpM7pBNOXMEWCCfHQ",
+      "domain": ".google.com",
+      "path": "/",
+      "expires": 1796389568.030826,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": []
+}

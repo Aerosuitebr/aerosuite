@@ -1,0 +1,86 @@
+/** Tabelas de listagem do módulo estoque: largura total e colunas alinhadas ao cabeçalho. */
+@mixin estoque-datatable-table() {
+  width: 100% !important;
+  min-width: 100% !important;
+  table-layout: fixed !important;
+}
+
+:host ::ng-deep .estoque-data-table {
+  width: 100%;
+
+  .p-datatable-table,
+  .p-datatable-scrollable-header-table,
+  .p-datatable-scrollable-body-table {
+    @include estoque-datatable-table();
+  }
+
+  .p-datatable-scrollable-header-box {
+    width: 100% !important;
+  }
+
+  .p-datatable-thead > tr > th,
+  .p-datatable-tbody > tr > td {
+    vertical-align: middle;
+    padding: 0.65rem 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+
+  .p-datatable-thead > tr > th {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: #64748b;
+    background: #f8fafc;
+  }
+
+  .header-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    max-width: 100%;
+  }
+
+  .header-cell--center {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .header-cell--end {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .col-center {
+    text-align: center;
+  }
+
+  .col-right {
+    text-align: right;
+  }
+}
+
+@media (max-width: 1023px) {
+  :host ::ng-deep .estoque-data-table {
+    .p-datatable-wrapper {
+      overflow-x: auto !important;
+      overflow-y: visible !important;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+    }
+
+    .p-datatable-table,
+    .p-datatable-scrollable-header-table,
+    .p-datatable-scrollable-body-table {
+      width: auto !important;
+      min-width: max(100%, 880px) !important;
+      table-layout: auto !important;
+    }
+  }
+}

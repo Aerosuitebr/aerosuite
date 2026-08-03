@@ -1,0 +1,78 @@
+{
+    "schema":  "aerosuite-anac-fechamento-v1",
+    "generatedAt":  "2026-06-10T10:52:13.4308433-03:00",
+    "gitTag":  "f35a4e1",
+    "todasPendenciasCriticas":  "FECHADAS_HOMOLOGACAO",
+    "itens":  [
+                  {
+                      "status":  "Concluido",
+                      "id":  "DOC-A1",
+                      "evidencia":  "evidencias/escopo-assinado-20260610.md"
+                  },
+                  {
+                      "status":  "Concluido",
+                      "id":  "DOC-A2",
+                      "evidencia":  "evidencias/escopo-piloto-assinado-20260610.md"
+                  },
+                  {
+                      "status":  "Concluido",
+                      "id":  "DOC-A3",
+                      "evidencia":  "evidencias/relatorio-validacao-20260610-assinado.md"
+                  },
+                  {
+                      "status":  "Concluido",
+                      "id":  "DOC-A4",
+                      "evidencia":  "evidencias/ata-*-assinado.md"
+                  },
+                  {
+                      "status":  "Concluido",
+                      "id":  "VAL-M2",
+                      "evidencia":  "evidencias/restore-homolog-*/mysql-restore.log"
+                  },
+                  {
+                      "status":  "Concluido",
+                      "id":  "INF-1",
+                      "evidencia":  "backend/Dockerfile + rebuild"
+                  },
+                  {
+                      "status":  "Concluido",
+                      "id":  "INF-2",
+                      "evidencia":  "evidencias/ultima-execucao.json"
+                  },
+                  {
+                      "status":  "Concluido",
+                      "id":  "ORG-1",
+                      "evidencia":  "evidencias/organizacao/mom-mcq-anexo-aerosuite.md"
+                  },
+                  {
+                      "status":  "Concluido",
+                      "id":  "ORG-2",
+                      "evidencia":  "evidencias/organizacao/treinamento-piloto-lista-presenca.md"
+                  },
+                  {
+                      "status":  "Concluido",
+                      "id":  "ORG-3",
+                      "evidencia":  "evidencias/organizacao/aceite-migracao.md"
+                  },
+                  {
+                      "status":  "Concluido",
+                      "id":  "ORG-4",
+                      "evidencia":  "evidencias/organizacao/rt-interlocutor-regulatorio.md"
+                  },
+                  {
+                      "status":  "Concluido",
+                      "id":  "SUB-1",
+                      "evidencia":  "evidencias/submissao/consulta-anac-pronta.md"
+                  },
+                  {
+                      "status":  "Concluido",
+                      "id":  "SUB-2",
+                      "evidencia":  "evidencias/submissao/roteiro-fases-revisado.md"
+                  },
+                  {
+                      "status":  "Concluido",
+                      "id":  "SUB-4",
+                      "evidencia":  "evidencias/pacote-dossie-anac-20260610.zip"
+                  }
+              ]
+}

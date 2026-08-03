@@ -1,0 +1,55 @@
+{
+  "at": "2026-06-12T22:27:54.056Z",
+  "steps": {
+    "wpDb": {
+      "len": 38435,
+      "hasPanel": false,
+      "hasAnchor": false,
+      "hasOld": false
+    },
+    "purges": [
+      {
+        "label": "litespeed-toolbox",
+        "ok": true,
+        "status": 200,
+        "url": "litespeed-toolbox"
+      },
+      {
+        "label": "litespeed",
+        "ok": true,
+        "status": 200,
+        "url": "litespeed"
+      },
+      {
+        "label": "hostinger-tools",
+        "ok": false,
+        "status": 403,
+        "url": "hostinger-tools"
+      },
+      {
+        "label": "public-lsc",
+        "ok": true,
+        "status": 200,
+        "url": "public-lsc"
+      }
+    ],
+    "republish": {
+      "ok": true
+    },
+    "foundMenu": "litespeed"
+  },
+  "verify": {
+    "https://aerosuite.com.br/": {
+      "hasPanel": true,
+      "hasOld": false,
+      "xCache": "HIT",
+      "len": 274514
+    },
+    "https://aerosuite.com.br/?nocache=1781303283802": {
+      "hasPanel": true,
+      "hasOld": false,
+      "xCache": "BYPASS",
+      "len": 776449
+    }
+  }
+}

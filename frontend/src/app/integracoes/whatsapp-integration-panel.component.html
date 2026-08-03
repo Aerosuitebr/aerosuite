@@ -1,0 +1,143 @@
+<section class="wa-integration" [class.wa-integration--embedded]="embedded">
+  <div class="wa-loading-wrap" *ngIf="loading">
+    <p-progressSpinner strokeWidth="4" [style]="{ width: '36px', height: '36px' }"></p-progressSpinner>
+    <p>{{ 'integrations.whatsapp.wizard.loading' | translate }}</p>
+  </div>
+
+  <ng-container *ngIf="loaded && connection">
+    <div class="wa-status-grid">
+      <div
+        class="wa-status-pill"
+        [class.wa-status-pill--ok]="platformReady"
+        [class.wa-status-pill--warn]="!platformReady">
+        <strong>{{ 'integrations.whatsapp.wizard.pill.platform' | translate }}</strong>
+        <span>
+          <i class="pi" [ngClass]="platformReady ? 'pi-check-circle' : 'pi-clock'" aria-hidden="true"></i>
+          {{
+            platformReady
+              ? ('integrations.whatsapp.wizard.status.ok' | translate)
+              : ('integrations.whatsapp.wizard.status.pending' | translate)
+          }}
+        </span>
+      </div>
+
+      <div
+        class="wa-status-pill"
+        [class.wa-status-pill--ok]="isConnected"
+        [class.wa-status-pill--warn]="isConnecting"
+        [class.wa-status-pill--danger]="isLinked && !isConnected && !isConnecting">
+        <strong>{{ 'integrations.whatsapp.wizard.pill.connection' | translate }}</strong>
+        <span>
+          <i
+            class="pi"
+            [ngClass]="
+              isConnected
+                ? 'pi-check-circle'
+                : isConnecting
+                  ? 'pi-spin pi-spinner'
+                  : isLinked
+                    ? 'pi-times-circle'
+                    : 'pi-clock'
+            "
+            aria-hidden="true"></i>
+          <ng-container *ngIf="isConnected">{{ 'integrations.whatsapp.wizard.status.connected' | translate }}</ng-container>
+          <ng-container *ngIf="!isConnected && isConnecting">{{
+            'integrations.whatsapp.wizard.status.connecting' | translate
+          }}</ng-container>
+          <ng-container *ngIf="!isConnected && !isConnecting && isLinked">{{
+            'integrations.whatsapp.wizard.status.disconnected' | translate
+          }}</ng-container>
+          <ng-container *ngIf="!isLinked">{{
+            'integrations.whatsapp.wizard.status.notActivated' | translate
+          }}</ng-container>
+        </span>
+      </div>
+    </div>
+
+    <div class="wa-notice" *ngIf="!platformReady">
+      <i class="pi pi-info-circle" aria-hidden="true"></i>
+      <div>
+        <strong>{{ 'integrations.whatsapp.notice.platformTitle' | translate }}</strong>
+        <p>{{ backendMessage(connection.message) }}</p>
+      </div>
+    </div>
+
+    <div class="wa-notice wa-notice--warn" *ngIf="platformReady && isLinked && !isConnected && !isConnecting">
+      <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+      <div>
+        <strong>{{ 'integrations.whatsapp.notice.disconnectedTitle' | translate }}</strong>
+        <p>{{ 'integrations.whatsapp.notice.disconnectedBody' | translate }}</p>
+      </div>
+    </div>
+
+    <p class="wa-hint" *ngIf="connection.instanceName">
+      {{ 'integrations.whatsapp.instanceName' | translate : { name: connection.instanceName } }}
+    </p>
+    <p class="wa-hint success-hint" *ngIf="isConnected && connection.connectedAt">
+      {{ 'integrations.whatsapp.connectedAt' | translate : { date: (connection.connectedAt | date : 'short') } }}
+    </p>
+    <p class="wa-hint" *ngIf="connection.message && !isConnected">{{ backendMessage(connection.message) }}</p>
+
+    <div class="wa-qr-block" *ngIf="canShowQr || isConnecting">
+      <h3>{{ 'integrations.whatsapp.qrcodeTitle' | translate }}</h3>
+      <p class="wa-hint">{{ 'integrations.whatsapp.qrcodeHint' | translate }}</p>
+      <p class="wa-hint" *ngIf="isConnecting">{{ 'integrations.whatsapp.notice.connectingHint' | translate }}</p>
+
+      <div class="wa-qr-loading" *ngIf="loadingQr">
+        <p-progressSpinner strokeWidth="4" [style]="{ width: '32px', height: '32px' }"></p-progressSpinner>
+      </div>
+
+      <figure class="wa-qr-figure" *ngIf="qrImageSrc && !loadingQr">
+        <img [src]="qrImageSrc" [alt]="'integrations.whatsapp.qrcodeTitle' | translate" width="280" height="280" />
+      </figure>
+
+      <p class="wa-pairing" *ngIf="qrCode?.pairingCode">
+        {{ 'integrations.whatsapp.pairingCode' | translate : { code: qrCode!.pairingCode! } }}
+      </p>
+    </div>
+
+    <div class="wa-actions-row">
+      <button
+        *ngIf="loadError"
+        pButton
+        type="button"
+        class="p-button-outlined"
+        icon="pi pi-refresh"
+        [label]="'integrations.whatsapp.retryBtn' | translate"
+        [loading]="loading"
+        (click)="load()"></button>
+
+      <button
+        *ngIf="canActivate"
+        pButton
+        type="button"
+        class="p-button-success"
+        icon="pi pi-whatsapp"
+        [label]="'integrations.whatsapp.activateBtn' | translate"
+        [loading]="activating"
+        (click)="activate()"></button>
+
+      <button
+        *ngIf="canShowQr || isConnecting"
+        pButton
+        type="button"
+        class="p-button-outlined"
+        icon="pi pi-qrcode"
+        [label]="'integrations.whatsapp.page.qrcodeBtn' | translate"
+        [loading]="loadingQr"
+        (click)="fetchQrCode()"></button>
+
+      <button
+        *ngIf="canDisconnect"
+        pButton
+        type="button"
+        class="p-button-outlined p-button-danger"
+        icon="pi pi-times"
+        [label]="'integrations.whatsapp.disconnectBtn' | translate"
+        [loading]="disconnecting"
+        (click)="confirmDisconnect()"></button>
+    </div>
+
+    <p class="wa-readonly" *ngIf="!connection.canManage">{{ 'integrations.whatsapp.readOnly' | translate }}</p>
+  </ng-container>
+</section>

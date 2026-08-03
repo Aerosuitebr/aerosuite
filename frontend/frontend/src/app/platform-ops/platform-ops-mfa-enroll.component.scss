@@ -1,0 +1,84 @@
+.ops-enroll-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  color: #f8fafc;
+  text-align: center;
+}
+
+.ops-enroll-header p {
+  margin: 0 0 1rem;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  text-align: center;
+  line-height: 1.45;
+}
+
+.ops-enroll-loading {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.ops-enroll-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.85rem;
+}
+
+.ops-enroll-qr img {
+  border-radius: 10px;
+  background: #f8fafc;
+  padding: 0.35rem;
+}
+
+.ops-enroll-qr p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.ops-enroll-secret {
+  margin-bottom: 0.75rem;
+}
+
+.ops-enroll-secret-label {
+  display: block;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  margin-bottom: 0.25rem;
+}
+
+.ops-enroll-secret code {
+  display: block;
+  word-break: break-all;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  background: rgba(148, 163, 184, 0.1);
+  color: #e2e8f0;
+  font-size: 0.78rem;
+}
+
+label {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+}
+
+.ops-enroll-error {
+  color: #fca5a5;
+  font-size: 0.8rem;
+  margin: 0.35rem 0;
+}
+
+.ops-enroll-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+:host ::ng-deep .p-inputtext {
+  width: 100%;
+}

@@ -1,0 +1,58 @@
+{
+  "generatedAt": "2026-06-10T18:27:17.882Z",
+  "commit": "586cb45",
+  "track": "codigo",
+  "codePercent": null,
+  "pass": true,
+  "steps": [
+    {
+      "name": "build",
+      "ok": true,
+      "exitCode": 0,
+      "durationMs": 20823,
+      "stderr": "[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`\n- Generating browser application bundles (phase: setup)...\n√ Browser application bundle generation complete.\n√ Browser application bundle generation complete.\n- Copying assets...\n√ Copying assets complete.\n- Generating index html...\n√ Index html generation complete.\n\nWarning: D:/Desenvolvimento/aerosuite/frontend/src/app/auth/tenant-feature.guard.ts is part of the TypeScript compilation but it's unused.\nAdd only entry points to the 'files' or 'include' properties in your tsconfig.\n\nWarning: D:/Desenvolvimento/aerosuite/frontend/src/app/core/backup-notification.service.ts is part of the TypeScript compilation but it's unused.\nAdd only entry points to the 'files' or 'include' properties in your tsconfig.\n\nWarning: D:/Desenvolvimento/aerosuite/frontend/src/app/core/brand-colors.util.spec.ts is part of the TypeScript compilation but it's unused.\nAdd only entry points to the 'files' or 'include' properties in your tsconfig.\n\nWarning: D:/Desenvolvimento/aerosuite/frontend/src/app/core/list-ui.service.ts is part of the TypeScript compilation but it's unused.\nAdd only entry points to the 'files' or 'include' properties in your tsconfig.\n\nWarning: D:/Desenvolvimento/aerosuite/frontend/src/app/core/tenant-feature.util.ts is part of the TypeScript compilation but it's unused.\nAdd only entry points to the 'files' or 'include' properties in your tsconfig.\n\nWarning: D:/Desenvolvimento/aerosuite/frontend/src/app/externo/externo.routes.ts is part of the TypeScript compilation but it's unused.\nAdd only entry points to the 'files' or 'include' properties in your tsconfig.\n\nWarning: D:/Desenvolvimento/aerosuite/frontend/src/app/os/os-auditoria/os-auditoria.component.ts is part of the TypeScript compilation but it's unused.\nAdd only entry points to the 'files' or 'include' properties in your tsconfig.\n\nWarning: D:/Desenv",
+      "stdout": "mponent           |  12.07 kB |                 3.63 kB\n4023.8c805f073e468dad.js          | estoque-dashboard-estoque-dashboard-component                                 |  11.61 kB |                 3.05 kB\n1394.ddb766a3693b40cd.js          | externo-externo-layout-externo-layout-component                               |  11.52 kB |                 3.37 kB\n1345.1253d4ad2af7e0b1.js          | externo-externo-propostas-externo-propostas-list-component                    |  10.20 kB |                 3.02 kB\n6233.4fd0b8492d56d3d8.js          | estoque-itens-item-estoque-list-component                                     |  10.00 kB |                 2.66 kB\n6099.2a3aeeff418edc4b.js          | comercial-template-list-component                                             |   8.71 kB |                 2.78 kB\n2602.c8535c9b7d82c80b.js          | p1-billing-page-component                                                     |   7.66 kB |                 2.34 kB\n9478.85214f3599bab12e.js          | p1-privacidade-portal-component                                               |   6.70 kB |                 2.21 kB\n2239.159de3d15aae87e8.js          | p1-public-legal-component                                                     |   2.77 kB |                 1.25 kB\n3279.587e90a8542f8044.js          | auth-redirect-handler-redirect-handler-component                              |   1.54 kB |               690 bytes\n\nBuild at: 2026-06-10T18:24:17.418Z - Hash: b2d08485567dd52b - Time: 17796ms"
+    },
+    {
+      "name": "test:unit",
+      "ok": true,
+      "exitCode": 0,
+      "durationMs": 1815,
+      "stderr": "\u001b[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.\u001b[39m",
+      "stdout": "> aerosuite-frontend@0.2.0 test:unit\n> vitest run\n\n\n RUN  v3.2.6 D:/Desenvolvimento/aerosuite/frontend\n\n ✓ src/app/core/brand-colors.util.spec.ts (6 tests) 4ms\n\n Test Files  1 passed (1)\n      Tests  6 passed (6)\n   Start at  15:24:18\n   Duration  401ms (transform 47ms, setup 0ms, collect 32ms, tests 4ms, environment 0ms, prepare 126ms)"
+    },
+    {
+      "name": "a11y:axe",
+      "ok": true,
+      "exitCode": 0,
+      "durationMs": 127581,
+      "stderr": "",
+      "stdout": "or(es), 26 regras passaram.\naxe OK [auth /conformidade/documentos] — 0 menor(es), 27 regras passaram.\naxe OK [auth /conformidade/treinamentos] — 0 menor(es), 25 regras passaram.\naxe OK [auth /conformidade/calibracao] — 0 menor(es), 25 regras passaram.\naxe OK [auth /conformidade/nao-conformidades] — 0 menor(es), 27 regras passaram.\naxe OK [auth /conformidade/subcontratacao] — 0 menor(es), 25 regras passaram.\naxe OK [auth /conformidade/contingencia] — 0 menor(es), 27 regras passaram.\naxe OK [auth /conformidade/releases] — 0 menor(es), 25 regras passaram.\naxe OK [auth /conformidade/treinamentos-obrigatorios] — 0 menor(es), 25 regras passaram.\naxe OK [auth /conformidade/habilitacoes] — 0 menor(es), 27 regras passaram.\naxe OK [auth /dossie-auditoria] — 0 menor(es), 26 regras passaram.\naxe OK [auth /go-live-migracao] — 0 menor(es), 27 regras passaram.\naxe OK [auth /os-auditoria] — 0 menor(es), 26 regras passaram.\naxe OK [auth /settings/backup] — 0 menor(es), 28 regras passaram.\naxe OK [/externo/login] — 0 menor(es), 23 regras passaram.\naxe OK [externo auth /externo] — 0 menor(es), 22 regras passaram.\naxe OK [externo auth /externo/os] — 0 menor(es), 22 regras passaram.\naxe OK [externo auth /externo/documentos] — 0 menor(es), 22 regras passaram.\naxe OK [externo auth /externo/propostas] — 0 menor(es), 22 regras passaram.\naxe: 52 rotas analisadas — 0 violação(ões) critical/serious.\nwcag: relatório gravado em D:\\Desenvolvimento\\aerosuite\\docs\\wcag-evidencias\\axe-baseline-2026-06-10.json"
+    },
+    {
+      "name": "a11y:flow-p0",
+      "ok": true,
+      "exitCode": 0,
+      "durationMs": 12740,
+      "stderr": "",
+      "stdout": "> aerosuite-frontend@0.2.0 a11y:flow-p0\n> node scripts/a11y-flow-p0-smoke.mjs\n\nflow OK [F1] — modal OS abre com labels; Esc fecha\nflow OK [F4] — TabView 5 abas; brand CSS var; totais anunciados\nflow OK [F6] — confirm dialog com título e botões i18n; Esc fecha\nF12 console: Failed to decode downloaded font: http://127.0.0.1:4174/assets/themes/lara-light-indigo/fonts/Inter-roman.var.woff2?v=3.19\nF12 console: OTS parsing error: Failed to convert WOFF 2.0 font to SFNT\nF12 console: Access to XMLHttpRequest at 'https://api.frankfurter.app/latest?from=USD&to=EUR' from origin 'http://127.0.0.1:4174' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\nF12 requestfailed: https://api.frankfurter.app/latest?from=USD&to=EUR — net::ERR_FAILED\nF12 console: Failed to load resource: net::ERR_FAILED\nF12 console: [DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o\nF12 console: Failed to load resource: the server responded with a status of 401 (Unauthorized)\nF12 console: AuthService: erro no login: JSHandle@object\nflow OK [F12] — erro API mapeado no login: \"Usuário não encontrado ou credenciais inválidas.\"\nflow-p0: 4/4 fluxos estruturais OK (complementar com NVDA — docs/WCAG-100-PASSO-A-PASSO.md §B)"
+    },
+    {
+      "name": "a11y:flow-full",
+      "ok": true,
+      "exitCode": 0,
+      "durationMs": 28633,
+      "stderr": "",
+      "stdout": "ais anunciados\nflow OK [F5] — imprimir com rótulo: \"Imprimir / PDF\"\nflow OK [F6] — confirm dialog com título e botões i18n; Esc fecha\nflow OK [F7] — 12 dropdown(s); foco em combobox testável\nflow OK [F8] — 14 cabeçalhos; paginador presente\nflow OK [F9] — input file com nome acessível no modal OS\nflow OK [F10] — 8 labels; checkbox legal presente\nflow OK [F11] — lang=\"pt-BR\"; grupo idioma: \"Selecionar idioma da interface\"\nF12 console: Failed to decode downloaded font: http://127.0.0.1:4174/assets/themes/lara-light-indigo/fonts/Inter-roman.var.woff2?v=3.19\nF12 console: OTS parsing error: Failed to convert WOFF 2.0 font to SFNT\nF12 console: Access to XMLHttpRequest at 'https://api.frankfurter.app/latest?from=USD&to=EUR' from origin 'http://127.0.0.1:4174' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\nF12 requestfailed: https://api.frankfurter.app/latest?from=USD&to=EUR — net::ERR_FAILED\nF12 console: Failed to load resource: net::ERR_FAILED\nF12 console: [DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o\nF12 console: Failed to load resource: the server responded with a status of 401 (Unauthorized)\nF12 console: AuthService: erro no login: JSHandle@object\nflow OK [F12] — erro API mapeado no login: \"Usuário não encontrado ou credenciais inválidas.\"\nflow-full: 12/12 fluxos estruturais OK (complementar com NVDA — docs/WCAG-100-PASSO-A-PASSO.md §B)"
+    },
+    {
+      "name": "perf:lcp",
+      "ok": true,
+      "exitCode": 0,
+      "durationMs": 9484,
+      "stderr": "",
+      "stdout": "> aerosuite-frontend@0.2.0 perf:lcp\n> node scripts/lcp-smoke.mjs\n\nLCP OK [/os] — 2228 ms (budget 3000 ms)\nLCP OK [/estoque/itens] — 443 ms (budget 2500 ms)\nLCP OK [/estoque/invoices] — 214 ms (budget 2500 ms)"
+    }
+  ],
+  "nextHuman": "docs/WCAG-100-PASSO-A-PASSO.md — §B Trilha HUMANO"
+}

@@ -1,8 +1,205 @@
-node_modules/
-.next/
-dist/
-out/
-*.log
+# Backend (Java/Maven)
+backend/target/
+backend/.mvn/wrapper/
+backend/mvnw
+backend/mvnw.cmd
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/*.iml
+backend/.idea/
+backend/.quarkus/
+
+# Frontend (Angular/Node)
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.vscode/
+frontend/.idea/
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/yarn.lock
+
+# Arquivos de ambiente (manter exemplos versionados)
 .env
 .env.local
-.env*.local
+.env.*.local
+.env.production
+.env.development
+.env.staging
+!.env.example
+!.env.staging.example
+!.env.production.example
+
+# Artefactos grandes / legado (nao versionar)
+backend/updates/
+github/
+backend/src_old/
+backend-log.txt
+backend/backups/
+
+# Relatorios E2E locais
+e2e/test-results/
+e2e/playwright-report/
+e2e/blob-report/
+
+# Uploads e arquivos gerados
+empresa-assets/
+uploads/
+backend/uploads/
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
+logs/
+backend/logs/
+frontend/logs/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Backups locais (dumps MySQL — não versionar)
+backups/*
+!backups/.gitkeep
+
+# Banco de dados
+*.db
+*.sqlite
+*.sqlite3
+*.h2.db
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.bak
+*.backup
+*.cache
+
+# Arquivos ZIP e grandes
+*.zip
+*.rar
+*.7z
+*.tar.gz
+aerosuite-fullstack-pro.zip
+
+# Build artifacts
+build/
+out/
+bin/
+
+# Coverage reports
+coverage/
+*.lcov
+.nyc_output/
+
+# Test results
+test-results/
+*.test.js.snap
+
+# Misc
+*.pid
+*.seed
+*.pid.lock
+
+node_modules/
+e2e/node_modules/
+
+# Referências locais (Bellows/King) — não versionar
+.ref-bellows/
+.ref-bellows-tmp/
+.ref-king/
+
+# Cursor: regras do projeto sim; cache local nao
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
+
+# WordPress marketing — IDs GA4 / Calendly
+docs/wordpress/aerosuite-site-secrets.local.mjs
+docs/wordpress/wp-storage.json
+docs/wordpress/demo-recordings/
+docs/wordpress/.deploy-chunk-*.txt
+docs/wordpress/.deploy-chunks-meta.json
+docs/wordpress/.mcp-gaps-deploy/
+docs/wordpress/_zip-check/
+docs/wordpress/.test-*.mjs
+docs/wordpress/.bling-logo-b64.txt
+docs/wordpress/.bling-upload-expr.txt
+docs/wordpress/.fetch-form-post.mjs
+docs/wordpress/.inspect-wpforms-fields.mjs
+docs/wordpress/*-result.json
+docs/wordpress/node_modules/
+docs/wordpress/.wp-browser-profile/
+docs/wordpress/.cdp-*
+docs/wordpress/.mcp-*.log
+docs/wordpress/*.zip
+docs/wordpress/gsc-storage.json
+docs/wordpress/wp-storage.json
+/query
+
+# Vitrine — mídia grande fora do Git (copiar no servidor; ver vitrine-videos/README.md)
+vitrine-videos/*.mp4
+vitrine-videos/*.jpg
+vitrine-videos/*.webm
+
+# Artefatos locais de debug / sessao (nao versionar)
+.tmp-*
+.tmp-video-frames/
+.tmp-video-frames2/
+.tmp-video-frames3/
+login_resp.json
+e2e/debug-login.png
+docs/homolog_ux/.extract/
+scripts/.verify-system-ux-report.json
+.codex-work/
+.pnpm-store/
+tmp/
+
+# Comercial — vídeos locais e listas de contatos (PII / artefatos de envio)
+docs/comercial/videos/
+docs/comercial/emails/*contatos*.json
+docs/comercial/emails/lista-envio-*.json
+docs/comercial/emails/relatorio-envio-*.json
+
+# WordPress — mídia grande (hospedar no WP/CDN; ver scripts de upload)
+docs/wordpress/static/*.mp4
+
+# secrets / local
+.env
+.env.*
+!.env.example
+!.env.*.example
+node_modules/
+**/node_modules/
+**/target/
+**/dist/
+**/.angular/
+
+# recovered artifacts / secrets
+backend/updates/
+**/updates/pending/
+**/*SENDGRID*
+**/*REFRESH_TOKEN*
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.*.example

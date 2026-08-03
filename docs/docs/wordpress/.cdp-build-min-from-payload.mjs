@@ -1,0 +1,11 @@
+import fs from 'fs';
+const n = Number(process.argv[2]);
+const viewId = process.argv[3] || '7eacd5';
+const p = `.cdp-mcp-payload-${n}.json`;
+const alt = `.cdp-args-${n}.json`;
+const path = fs.existsSync(p) ? p : alt;
+const src = JSON.parse(fs.readFileSync(path, 'utf8'));
+const a = src.arguments || src;
+const out = { method: a.method || 'Runtime.evaluate', params: a.params, viewId };
+fs.writeFileSync('.cdp-mcp-call-min.json', JSON.stringify(out));
+console.log(JSON.stringify({ step: n, exprLen: out.params?.expression?.length ?? 0, viewId }));

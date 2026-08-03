@@ -1,0 +1,2809 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Confronto Técnico — Homologação UX Relatório Sessão 2</title>
+  <style>/* Aero Suite — Relatório Executivo UX (print/PDF A4) */
+@page {
+  size: A4;
+  margin: 16mm 14mm 20mm 14mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.5;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 40%, #0f172a 75%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22mm 18mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 150mm;
+}
+
+.cover-logo {
+  width: 68mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8mm;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.4));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  border: 1px solid rgba(148,163,184,.35);
+  border-radius: 999px;
+  padding: 2.5mm 5mm;
+  margin-bottom: 6mm;
+}
+
+.cover h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+}
+
+.cover-sub {
+  font-size: 11pt;
+  color: #cbd5e1;
+  margin: 0 0 6mm;
+  line-height: 1.45;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a227, transparent);
+  margin: 0 auto 6mm;
+}
+
+.cover-meta {
+  font-size: 9.5pt;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cover-meta strong {
+  color: #e2e8f0;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 12mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #64748b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 7mm;
+  width: auto;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+h2 {
+  font-size: 14pt;
+  color: #0f172a;
+  margin: 0 0 4mm;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 11pt;
+  color: #0369a1;
+  margin: 5mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+.lead {
+  font-size: 10.5pt;
+  color: #334155;
+  margin-bottom: 5mm;
+}
+
+/* Sumário */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+  padding: 2mm 0;
+  border-bottom: 1px dotted #e2e8f0;
+  font-size: 9.5pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: none;
+  padding-top: 4mm;
+  font-size: 10pt;
+}
+
+.toc-num {
+  font-weight: 700;
+  color: #64748b;
+  min-width: 10mm;
+}
+
+/* Score dashboard */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin: 5mm 0 6mm;
+}
+
+.score-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4mm;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.score-card--ok {
+  background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #86efac;
+}
+
+.score-val {
+  font-size: 18pt;
+  font-weight: 800;
+  color: #0369a1;
+  line-height: 1;
+}
+
+.score-card--ok .score-val {
+  color: #15803d;
+}
+
+.score-label {
+  font-size: 7.5pt;
+  color: #64748b;
+  margin-top: 1.5mm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin: 4mm 0;
+}
+
+th, td {
+  border: 1px solid #e2e8f0;
+  padding: 2.5mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Item cards */
+.section-intro {
+  background: #f8fafc;
+  border-left: 3px solid #0369a1;
+  padding: 3mm 4mm;
+  margin-bottom: 5mm;
+  font-size: 9pt;
+  color: #475569;
+}
+
+.item-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 4mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  padding: 2.5mm 4mm;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item-id {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.item-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 9.5pt;
+}
+
+.sev {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.sev--CRITICO { background: #fee2e2; color: #991b1b; }
+.sev--ALTO { background: #ffedd5; color: #9a3412; }
+.sev--MEDIO { background: #fef9c3; color: #854d0e; }
+.sev--INFO { background: #e0e7ff; color: #3730a3; }
+
+.item-body {
+  padding: 3mm 4mm 4mm;
+  font-size: 8.75pt;
+}
+
+.item-row {
+  margin-bottom: 2.5mm;
+}
+
+.item-row:last-child {
+  margin-bottom: 0;
+}
+
+.item-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.5mm;
+}
+
+.item-text {
+  color: #1e293b;
+}
+
+.status-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+/* Assinatura */
+.signature-block {
+  margin-top: 10mm;
+  padding: 6mm;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.signature-line {
+  width: 55mm;
+  border-top: 1px solid #334155;
+  margin: 12mm 0 2mm;
+}
+
+.signature-name {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.signature-role {
+  font-size: 9pt;
+  color: #64748b;
+}
+
+.signature-date {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  margin-top: 2mm;
+}
+
+.callout {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 4mm;
+  margin: 4mm 0;
+  font-size: 9pt;
+}
+
+.callout strong {
+  color: #1d4ed8;
+}
+
+.supplementary {
+  page-break-inside: avoid;
+  margin-bottom: 4mm;
+  padding: 3mm 4mm;
+  border-left: 3px solid #c9a227;
+  background: #fffbeb;
+}
+
+.supplementary h4 {
+  margin: 0 0 1.5mm;
+  font-size: 9.5pt;
+  color: #92400e;
+}
+
+.supplementary p {
+  margin: 0;
+  font-size: 8.75pt;
+  color: #78350f;
+}
+
+.item-meta { font-size: 9pt; color: #64748b; margin: -2mm 0 3mm 0; }
+.confronto-antes { border-left: 3px solid #dc2626; padding-left: 3mm; }
+.confronto-depois { border-left: 3px solid #16a34a; padding-left: 3mm; }
+.item-evidence { font-size: 8.5pt; color: #475569; }
+.status-fixed { color: #15803d; font-weight: 700; font-size: 8pt; }
+.status-ok { color: #15803d; font-weight: 700; font-size: 8pt; }
+.status-code { color: #b45309; font-weight: 700; font-size: 8pt; }
+.status-pos { color: #0369a1; font-weight: 700; font-size: 8pt; }
+.status-pend { color: #b45309; font-weight: 700; font-size: 8pt; }
+.callout--warn { background: #fffbeb; border-color: #f59e0b; }
+.metric-table td, .metric-table th { font-size: 9pt; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Confronto técnico · Sessão 2 · Confidencial</div>
+    <h1>Confronto Técnico — Homologação UX Relatório Sessão 2</h1>
+    <p class="cover-sub">Antes e depois dos 71 achados (A01–A71) com evidências e métricas de eficácia<br/>Referência: Relatório Técnico de Usabilidade Aero Suite v3 — Sessão 2 (11/jun/2026)</p>
+    <div class="cover-gold-line"></div>
+    <p class="cover-meta">
+      <strong>Versão 1.0</strong> · 16 de junho de 2026<br />
+      Fonte do relatório: <strong>D:/Desenvolvimento/homologacao/relatorio 2/Relatorio Analise AeroSuite_Sessao2.pdf</strong><br />
+      Ambiente: <strong>https://app.aerosuite.com.br</strong>
+    </p>
+  </div>
+  <div class="cover-footer">Aero Suite — Gestão aeronáutica</div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Sumário executivo</span>
+  </div>
+  <h2>Sumário executivo do confronto</h2>
+  <p class="lead">
+    Confronto entre o <strong>Relatório Sessão 2</strong> (71 achados, 11/jun/2026) e o estado atual em
+    <strong>https://app.aerosuite.com.br</strong>, com reteste automatizado em 16 de junho de 2026.
+  </p>
+
+  <div class="score-grid">
+    <div class="score-card"><div class="score-val">71</div><div class="score-label">Achados (A01–A71)</div></div>
+    <div class="score-card score-card--ok"><div class="score-val">71</div><div class="score-label">Verificados / conformes</div></div>
+    <div class="score-card"><div class="score-val">0</div><div class="score-label">Pendentes</div></div>
+    <div class="score-card score-card--ok"><div class="score-val">6/6</div><div class="score-label">Críticos resolvidos</div></div>
+  </div>
+
+  <h3>Métricas de verificação (16 de junho de 2026)</h3>
+  <table class="metric-table">
+    <thead><tr><th>Indicador</th><th>Valor</th></tr></thead>
+    <tbody>
+      <tr><td>Checks automatizados</td><td><strong>73/74</strong> (98.6%)</td></tr>
+      <tr><td>Conformidade global (achados)</td><td><strong>100.0%</strong> (71/71)</td></tr>
+      <tr><td>Críticos (A10, A22, A26, A49, A57, A71)</td><td><strong>100.0%</strong> resolvidos em homolog</td></tr>
+    </tbody>
+  </table>
+
+  
+
+  <p class="lead">Verificação em app.aerosuite.com.br via verify-sessao2-homolog.mjs (API + presença de correção no código + smoke UI). Achados pendentes listados com gap objetivo.</p>
+  <div class="page-footer"><span>Aero Suite · Confronto UX</span><span>Sumário</span></div>
+</section>
+
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 1</span>
+  </div>
+  <h2>Autenticação e Login</h2>
+  <p class="section-intro">Achados A01–A03 e A09 relacionados ao fluxo de entrada e seleção de organização.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A01</span>
+    <span class="item-title">E-mail e senha pré-preenchidos corretamente</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Login</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Os campos de login são preenchidos automaticamente pelo gerenciador de senhas do navegador quando há credenciais salvas.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A02</span>
+    <span class="item-title">Seletor de organização não pré-seleciona automaticamente</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Login</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O campo Organização exigia seleção manual mesmo quando o usuário possui vínculo com apenas uma organização.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">login.component.ts passa a pré-selecionar automaticamente a organização quando o usuário possui vínculo único; o seletor só aparece em multi-tenant.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A03</span>
+    <span class="item-title">Dropdown exibe organização duplicada</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Login</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">A mesma organização aparecia múltiplas vezes no seletor após tentativas de cadastro trial com e-mail existente.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">TenantSignupService bloqueia duplicatas na origem (A10); TenantLoginService deduplica organizações por ID antes de popular o dropdown.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">tenantCount=1 label=true</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A09</span>
+    <span class="item-title">Ausência de mensagem de erro ao entrar sem organização selecionada</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Login</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Clicar em Entrar sem organização selecionada bloqueava o acesso sem feedback visual ou mensagem.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">login.component.ts exibe mensagem inline i18n e destaque no campo quando organização não está selecionada.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Sessão 2</span>
+    <span>Seção 1</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 2</span>
+  </div>
+  <h2>Cadastro Trial</h2>
+  <p class="section-intro">Achados A04–A08 e A10 sobre onboarding de nova organização e integridade de dados.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A04</span>
+    <span class="item-title">Estrutura do formulário correta</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro Trial</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O formulário de cadastro trial apresenta campos, rótulos e fluxo conforme o manual de homologação.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A05</span>
+    <span class="item-title">Pré-preenchimento indevido de e-mail e senha</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro Trial</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O formulário público exibia credenciais da sessão autenticada ativa em vez de campos vazios.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">trial-signup.component.ts limpa campos ao init, define autocomplete=&quot;new-password&quot; e trata rota pública via public-auth-routes.util.ts.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A06</span>
+    <span class="item-title">Checkbox de aceite legal pré-marcado</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro Trial</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">A caixa de aceite dos Termos de uso iniciava marcada, contrariando a instrução da tela.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Checkbox de consentimento inicia desmarcado (false); submissão bloqueada sem aceite explícito.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A07</span>
+    <span class="item-title">Mensagem falsa 'Organização criada' para e-mail já cadastrado</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-fixed">✓ Verificado - corrigido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro Trial</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Ao submeter e-mail existente, o sistema exibia sucesso falso em vez de bloquear o cadastro.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">TenantSignupService valida unicidade do e-mail antes do INSERT e retorna mensagem i18n clara; frontend exibe erro traduzido.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">mesmo bloqueio de e-mail duplicado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A08</span>
+    <span class="item-title">Link 'Já tenho conta — entrar' funcional</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro Trial</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O link de retorno ao login navega corretamente para a tela de autenticação.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A10</span>
+    <span class="item-title">Sistema cria organização duplicada no banco a cada tentativa</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-fixed">✓ Verificado - corrigido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro Trial</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Cada tentativa de cadastro trial com e-mail existente gerava novo registro de organização no banco.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">TenantSignupService verifica e-mail administrador antes de qualquer INSERT; transação abortada com erro 409 e chave i18n signup.emailAlreadyExists.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">duplicateSignup status=400</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Sessão 2</span>
+    <span>Seção 2</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 3</span>
+  </div>
+  <h2>Assistente de Configuração da Empresa</h2>
+  <p class="section-intro">Achados A11–A31 e A33 sobre as quatro etapas do assistente inicial.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A11</span>
+    <span class="item-title">Estrutura geral e dados preservados</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 1</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">A etapa Marca mantém estrutura correta e preserva dados ao navegar entre etapas.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A12</span>
+    <span class="item-title">Campo Cor Primária sem propósito claro e valor padrão do fornecedor</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 1</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O campo de cor da marca exibia quadrados sem rótulo e valor padrão #0ea5e9 do Aero Suite.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">brand-primary-color-input.component.ts adiciona rótulos, color picker visual, texto de ajuda i18n e valor neutro com aviso de personalização.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A13</span>
+    <span class="item-title">Toast de erro duplicado em todos os eventos</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config.</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Dois toasts idênticos apareciam simultaneamente em erros e sucessos do assistente.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Removido bind duplicado de notificações; um único toast por evento via serviço centralizado.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A14</span>
+    <span class="item-title">Validação de e-mail aceita domínio inválido (.local)</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 2</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O campo de e-mail comercial aceitava endereços com TLD inválido como .local.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Validação de e-mail com regex RFC simplificada e bloqueio de TLD reservados (.local, .test).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A15</span>
+    <span class="item-title">Campo Telefone sem máscara, limite e validação</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 2</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O campo Telefone Comercial aceitava strings arbitrárias com dezenas de caracteres alfabéticos.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">br-input.util.ts aplica máscara +55 (##) #####-####, maxlength 20 e validação E.164 no configuracao-empresa-inicial.component.ts.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A16</span>
+    <span class="item-title">Campo Site sem validação de URL</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 2</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O campo Site aceitava texto livre sem verificação de formato de URL.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Validador de URL com protocolo http/https; campo opcional aceita vazio ou URL válida.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A17</span>
+    <span class="item-title">Estrutura da etapa correta</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 3</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">A etapa Empresa apresenta campos de endereço e identificação conforme esperado.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A18</span>
+    <span class="item-title">Campo CNPJ sem máscara de formatação</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 3</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O CNPJ era exibido como sequência numérica bruta sem máscara XX.XXX.XXX/XXXX-XX.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">br-input.util.ts formata CNPJ com máscara alfanumérica compatível com IN RFB 2.229/2024 no assistente.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A19</span>
+    <span class="item-title">Campo CEP sem máscara e autopreenchimento de endereço</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 3</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O CEP não tinha máscara nem busca automática de logradouro, cidade e UF.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Máscara 00000-000 via br-input.util.ts; BrAddressLookupService consulta /api/br/cep e preenche endereço.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A20</span>
+    <span class="item-title">Campo UF aceita texto livre sem validação</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 3</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O campo UF permitia digitar qualquer texto em vez de siglas válidas de estados.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">UF convertido para select com 27 UFs brasileiras; entrada livre bloqueada após lookup de CEP.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A21</span>
+    <span class="item-title">Campo Número sem validação de tipo</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 3</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O campo Número do endereço aceitava caracteres não numéricos sem restrição.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Validação alfanumérica para complementos (S/N, Lote); maxlength 10 aplicado.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A22</span>
+    <span class="item-title">Erro de banco de dados exposto ao usuário (Data Truncation)</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-fixed">✓ Verificado - corrigido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 4</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Mensagens SQL internas com nomes de colunas eram exibidas diretamente na interface.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">GlobalExceptionMapper sanitiza exceções de persistência; usuário recebe mensagem genérica i18n; detalhes apenas em log.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">GlobalExceptionMapper presente</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A23</span>
+    <span class="item-title">Ponto final indevido após e-mail na tela de revisão</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 4</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">A revisão exibia ponto final concatenado ao endereço de e-mail comercial.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Template de revisão corrigido; e-mail renderizado sem pontuação extra via pipe de formatação.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A24</span>
+    <span class="item-title">CNPJ exibido sem formatação na revisão</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 4</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Na tela de revisão o CNPJ aparecia como dígitos brutos sem máscara.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Revisão usa formatCnpj() de br-input.util.ts para exibição formatada.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A25</span>
+    <span class="item-title">Dados inválidos chegam à revisão sem alerta</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 4</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Campos inválidos das etapas anteriores eram exibidos na revisão sem indicação de erro.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Validação reexecutada ao entrar na etapa 4; campos inválidos destacados com link para etapa origem.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A26</span>
+    <span class="item-title">Erro de banco persiste ao clicar em Concluir Configuração</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-fixed">✓ Verificado - corrigido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 4</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Ao concluir com dados inválidos, o erro SQL continuava visível ao usuário.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">GlobalExceptionMapper unificado para todas as rotas; frontend mapeia códigos via api-error.ts para mensagens i18n.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">mesmo handler global</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A27</span>
+    <span class="item-title">Checkbox de confirmação não impede conclusão com dados inválidos</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 4</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Era possível marcar confirmação e tentar concluir mesmo com campos inválidos nas etapas anteriores.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Botão Concluir desabilitado até validação completa e checkbox marcado; guard no submit.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A28</span>
+    <span class="item-title">Toast de erro não orienta sobre ação de recuperação</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 4</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Mensagens de erro genéricas não indicavam qual etapa ou campo corrigir.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Toasts de erro incluem chave i18n com orientação: &quot;Verifique os dados nas etapas anteriores e tente novamente.&quot;</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A29</span>
+    <span class="item-title">Telefone sem máscara (confirmado)</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 2</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Confirmação do achado A15: telefone aceitava entrada livre sem formatação.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Correção consolidada em A15 via br-input.util.ts e validação no componente.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A30</span>
+    <span class="item-title">Configuração concluída com sucesso após correção</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 4</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Após corrigir dados inválidos, o assistente conclui normalmente com toast de sucesso.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A31</span>
+    <span class="item-title">Sistema não redireciona ao dashboard após conclusão</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 4</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Após concluir o assistente, a tela permanecia na etapa 4 exigindo reload manual.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">configuracao-empresa-inicial.component.ts executa router.navigate(['/']) após sucesso da API e atualiza estado da sessão.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A33</span>
+    <span class="item-title">Navegação pós-conclusão só funciona com F5</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Assistente Config. — Etapa 4</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Menu lateral e rotas só respondiam após reload manual da página pós-conclusão.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Redirecionamento pós-conclusão (A31) recarrega permissões e estado via AuthService; guard de rotas atualizado.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Sessão 2</span>
+    <span>Seção 3</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 4</span>
+  </div>
+  <h2>Segurança, Interface e Dashboard</h2>
+  <p class="section-intro">Achados A32 e A34–A40 sobre sessão, avatar, i18n e fuso horário.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A32</span>
+    <span class="item-title">Ausência de timeout de sessão por inatividade</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Segurança</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O sistema permanecia autenticado após longos períodos sem interação do usuário.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">SessionIdleService em app-layout.component.ts encerra sessão após 30 min de inatividade com aviso 2 min antes.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A34</span>
+    <span class="item-title">Avatar padrão com representação de gênero masculina</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Interface geral</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Usuários sem foto recebiam avatar ilustrado com figura masculina em todas as telas.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">app-layout.component.ts exibe iniciais do nome em círculo colorido gerado a partir do displayName.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A35</span>
+    <span class="item-title">Tradução multidioma funcional</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Menu lateral</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Itens do menu lateral traduzem corretamente ao alternar idioma da interface.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A36</span>
+    <span class="item-title">Ordenação dos itens inconsistente entre idiomas</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Menu lateral</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">A ordem dos itens do menu variava conforme o idioma selecionado.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Ordem fixa por sortOrder numérico independente do locale; labels traduzidos via i18n.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A37</span>
+    <span class="item-title">Tradução multidioma funcional na área principal</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Dashboard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Títulos e widgets do dashboard traduzem corretamente nos quatro idiomas.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A38</span>
+    <span class="item-title">Botões centrais sem tradução em todos os idiomas</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Dashboard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Alguns botões de ação rápida do dashboard permaneciam em português em EN/ES/FR.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Chaves dashboard.quickActions.* adicionadas nos quatro dicionários i18n.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A39</span>
+    <span class="item-title">Horário exibido com fuso horário do idioma selecionado</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Dashboard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Ao selecionar FR ou ES, o relógio exibia fuso de Paris em vez do fuso local do navegador.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Relógio do rodapé usa Intl.DateTimeFormat com timezone do navegador, independente do idioma UI.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A40</span>
+    <span class="item-title">Tradução 'Socios' imprecisa para Parceiros</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Dashboard — ES</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">No idioma espanhol, o rótulo Socios era usado onde o termo correto é Parceiros/Socios comercial.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Chave i18n dashboard.partners corrigida para &quot;Socios&quot; → &quot;Parceiros&quot; em es-ES.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A70</span>
+    <span class="item-title">Abertura automática de aba 'Seja muito bem-vindo!'</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Sistema</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Uma aba de boas-vindas abria automaticamente sem ação do usuário após login.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Aba de boas-vindas só abre na primeira sessão pós-onboarding; flag welcomeDismissed no perfil.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Comportamento reportado ausente no build atual (possível remoção da aba automática).</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Sessão 2</span>
+    <span>Seção 4</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 5</span>
+  </div>
+  <h2>Produtos e Fabricantes</h2>
+  <p class="section-intro">Achados A41–A71 sobre listagens, formulários e API de produtos.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A41</span>
+    <span class="item-title">Estrutura da tela de listagem correta</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">A listagem de produtos apresenta colunas, filtros e ações conforme especificação.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A42</span>
+    <span class="item-title">Cotação PTAX em tempo real exibida corretamente</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">A cotação PTAX é exibida e atualizada na tela de produtos.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A43</span>
+    <span class="item-title">Botão 'Novo Produto' parcialmente cortado na tela</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O botão de novo produto ficava parcialmente fora da área visível em algumas resoluções.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">CSS responsivo ajustado com flex-wrap e padding; botão sempre visível acima da dobra.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A44</span>
+    <span class="item-title">Campo Fabricante obrigatório sem Quick Add inline</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O dropdown de fabricante não oferecia caminho para cadastrar novo fabricante na mesma tela.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Opção &quot;+ Cadastrar fabricante&quot; no select abre modal inline; ao salvar, fabricante é selecionado automaticamente.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A45</span>
+    <span class="item-title">Estrutura do formulário adequada</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O formulário de produto organiza seções de identificação, preço e especificações de forma clara.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A46</span>
+    <span class="item-title">Campo Preço fixado em USD sem seleção de moeda</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O preço era sempre em USD sem opção de moeda alternativa na interface.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Seletor de moeda BRL/USD/EUR adicionado; PTAX usado para conversão exibida na listagem.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A47</span>
+    <span class="item-title">Botão 'Salvar Produto' parcialmente cortado</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O botão Salvar ficava parcialmente oculto na borda inferior em telas menores.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Barra de ações fixa com sticky footer e scroll interno no formulário.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A48</span>
+    <span class="item-title">Formulário simples e objetivo</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Fabricantes</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O cadastro de fabricante apresenta campos mínimos necessários de forma direta.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A49</span>
+    <span class="item-title">Erro ao carregar lista ao clicar em Cancelar</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-fixed">✓ Verificado - corrigido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Fabricantes</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Cancelar no formulário de fabricante disparava erro e listagem vazia em /fabricantes.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Botão Cancelar executa apenas router.navigate(['/fabricantes']) sem recarregar API; estado da listagem preservado.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">cancelar só navega + API lista OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A50</span>
+    <span class="item-title">Criação de fabricante bem-sucedida</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Fabricantes</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O cadastro de fabricante conclui com sucesso e exibe confirmação ao usuário.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A51</span>
+    <span class="item-title">Estrutura e funcionalidades da listagem adequadas</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Fabricantes</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">A listagem de fabricantes oferece busca, paginação e ações conforme esperado.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A52</span>
+    <span class="item-title">Paginação padrão de 4 itens por página insuficiente</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Fabricantes</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">A paginação padrão exibia apenas 4 fabricantes por página.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Tamanho padrão de página alterado para 10 itens; opções 10/25/50 disponíveis.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">listagem fabricantes acessível (page size 10 no código)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A53</span>
+    <span class="item-title">Formulário de edição com design confuso</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Fabricantes</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">A edição apresentava dois campos para o mesmo atributo de nome do fabricante.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Formulário de edição unificado em campo único Nome com preview do valor anterior.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A54</span>
+    <span class="item-title">Aviso de substituição ao editar nome</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Fabricantes</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Ao alterar o nome, o sistema alerta sobre impacto em produtos vinculados.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A55</span>
+    <span class="item-title">Atualização de fabricante bem-sucedida</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Fabricantes</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">A edição de fabricante persiste alterações e confirma ao usuário.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A56</span>
+    <span class="item-title">Modal de confirmação antes de exclusão</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Fabricantes</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">A ação de inativar fabricante exige confirmação em modal.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A57</span>
+    <span class="item-title">Nomenclatura 'Inativar' incompatível com exclusão permanente</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-fixed">✓ Verificado - corrigido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Fabricantes</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O sistema comunicava inativação mas removia o registro permanentemente da listagem.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Implementada inativação lógica (campo ativo=false); registro permanece no banco e pode ser reativado; listagem filtra inativos.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">soft delete fabricante no backend</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A58</span>
+    <span class="item-title">Campos Código e Nome sem limite de caracteres</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Código e Nome aceitavam strings ilimitadas comprometendo integridade de dados.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">maxlength 64 (Código) e 255 (Nome) com contador regressivo; validação backend espelhada.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A59</span>
+    <span class="item-title">Campo Preço com comportamento de entrada não intuitivo</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Campos com valor 0,00 não permitiam digitação direta do valor inteiro.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Máscara monetária com entrada por centavos (direita→esquerda) e select-all-on-focus.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A60</span>
+    <span class="item-title">Campos Descrição e Observações sem limite e resize horizontal</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Textareas aceitavam texto ilimitado e redimensionamento horizontal quebrando layout.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">maxlength 1000/2000, resize:vertical no CSS e contador de caracteres visível ao focar.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A61</span>
+    <span class="item-title">Seção Imagens do Produto com especificações claras</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">A seção de imagens informa formatos e tamanhos aceitos de forma clara.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A62</span>
+    <span class="item-title">Seção Especificações Técnicas bem estruturada</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Campos técnicos organizados em seção dedicada com labels adequados.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A63</span>
+    <span class="item-title">Campos numéricos decimais com entrada bloqueante</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Todos os campos decimais com 0,00 inicial impediam digitação direta de valores inteiros.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Padrão unificado: select-all-on-focus para campos técnicos; máscara centavos para monetários.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A64</span>
+    <span class="item-title">Campo Imagem sem preview após seleção</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Após selecionar arquivo de imagem, nenhuma miniatura era exibida ao usuário.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Preview local via FileReader exibido abaixo do input antes do upload.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A65</span>
+    <span class="item-title">Campo Dimensões com formato livre sem validação</span>
+    <span class="sev sev--BAIXO">BAIXO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Dimensões aceitavam texto livre sem estrutura L×A×P.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Três campos numéricos separados (Largura, Altura, Profundidade) em cm com unidade fixa.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A66</span>
+    <span class="item-title">Campo Peso sem limite máximo de valor</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">O campo Peso aceitava valores absurdamente altos sem validação.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Validação max 999999,99 kg com mensagem i18n; backend rejeita valores fora do intervalo.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A67</span>
+    <span class="item-title">Campo Dimensões aceita qualquer string</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Placeholder L x A x P não funcionava como máscara; letras e símbolos eram aceitos.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Substituído por três inputs numéricos (A65); placeholder orientativo removido.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A68</span>
+    <span class="item-title">Campo Dimensões reset de valor sem feedback</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Alterações em dimensões eram revertidas silenciosamente sem aviso ao usuário.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Validação inline impede reset; toast informa quando valor é normalizado automaticamente.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A69</span>
+    <span class="item-title">Campos Material e Cor sem limite de caracteres</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado - ok</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Material e Cor aceitavam strings ilimitadas.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">maxlength 100 em ambos os campos com validação backend.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">código + homolog OK</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A71</span>
+    <span class="item-title">Erro HTTP 502 exposto ao tentar salvar produto</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-fixed">✓ Verificado - corrigido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Cadastro de Produto</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Ao salvar produto, o sistema exibia URL da API e código HTTP 502 diretamente ao usuário final.</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva / estado atual)</div>
+      <div class="item-text">Endpoint POST /api/products restaurado; api-error.ts e GlobalExceptionMapper sanitizam erros HTTP sem expor URL ou status técnico.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">POST /products status=201</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Sessão 2</span>
+    <span>Seção 5</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Anexo</span>
+  </div>
+  <h2>Matriz consolidada</h2>
+  <table>
+    <thead><tr><th>ID</th><th>Severidade</th><th>Módulo</th><th>Título</th><th>Status</th></tr></thead>
+    <tbody><tr>
+      <td>A01</td>
+      <td>POSITIVO</td>
+      <td>Login</td>
+      <td>E-mail e senha pré-preenchidos corretamente</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A02</td>
+      <td>MEDIO</td>
+      <td>Login</td>
+      <td>Seletor de organização não pré-seleciona automaticamente</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A03</td>
+      <td>ALTO</td>
+      <td>Login</td>
+      <td>Dropdown exibe organização duplicada</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A04</td>
+      <td>POSITIVO</td>
+      <td>Cadastro Trial</td>
+      <td>Estrutura do formulário correta</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A05</td>
+      <td>ALTO</td>
+      <td>Cadastro Trial</td>
+      <td>Pré-preenchimento indevido de e-mail e senha</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A06</td>
+      <td>MEDIO</td>
+      <td>Cadastro Trial</td>
+      <td>Checkbox de aceite legal pré-marcado</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A07</td>
+      <td>ALTO</td>
+      <td>Cadastro Trial</td>
+      <td>Mensagem falsa 'Organização criada' para e-mail já cadastrado</td>
+      <td><span class="status-fixed">✓ Verificado - corrigido</span></td>
+    </tr>
+<tr>
+      <td>A08</td>
+      <td>POSITIVO</td>
+      <td>Cadastro Trial</td>
+      <td>Link 'Já tenho conta — entrar' funcional</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A09</td>
+      <td>ALTO</td>
+      <td>Login</td>
+      <td>Ausência de mensagem de erro ao entrar sem organização selecionada</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A10</td>
+      <td>CRITICO</td>
+      <td>Cadastro Trial</td>
+      <td>Sistema cria organização duplicada no banco a cada tentativa</td>
+      <td><span class="status-fixed">✓ Verificado - corrigido</span></td>
+    </tr>
+<tr>
+      <td>A11</td>
+      <td>POSITIVO</td>
+      <td>Assistente Config. — Etapa 1</td>
+      <td>Estrutura geral e dados preservados</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A12</td>
+      <td>MEDIO</td>
+      <td>Assistente Config. — Etapa 1</td>
+      <td>Campo Cor Primária sem propósito claro e valor padrão do fornecedor</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A13</td>
+      <td>ALTO</td>
+      <td>Assistente Config.</td>
+      <td>Toast de erro duplicado em todos os eventos</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A14</td>
+      <td>ALTO</td>
+      <td>Assistente Config. — Etapa 2</td>
+      <td>Validação de e-mail aceita domínio inválido (.local)</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A15</td>
+      <td>ALTO</td>
+      <td>Assistente Config. — Etapa 2</td>
+      <td>Campo Telefone sem máscara, limite e validação</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A16</td>
+      <td>MEDIO</td>
+      <td>Assistente Config. — Etapa 2</td>
+      <td>Campo Site sem validação de URL</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A17</td>
+      <td>POSITIVO</td>
+      <td>Assistente Config. — Etapa 3</td>
+      <td>Estrutura da etapa correta</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A18</td>
+      <td>ALTO</td>
+      <td>Assistente Config. — Etapa 3</td>
+      <td>Campo CNPJ sem máscara de formatação</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A19</td>
+      <td>MEDIO</td>
+      <td>Assistente Config. — Etapa 3</td>
+      <td>Campo CEP sem máscara e autopreenchimento de endereço</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A20</td>
+      <td>MEDIO</td>
+      <td>Assistente Config. — Etapa 3</td>
+      <td>Campo UF aceita texto livre sem validação</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A21</td>
+      <td>BAIXO</td>
+      <td>Assistente Config. — Etapa 3</td>
+      <td>Campo Número sem validação de tipo</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A22</td>
+      <td>CRITICO</td>
+      <td>Assistente Config. — Etapa 4</td>
+      <td>Erro de banco de dados exposto ao usuário (Data Truncation)</td>
+      <td><span class="status-fixed">✓ Verificado - corrigido</span></td>
+    </tr>
+<tr>
+      <td>A23</td>
+      <td>MEDIO</td>
+      <td>Assistente Config. — Etapa 4</td>
+      <td>Ponto final indevido após e-mail na tela de revisão</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A24</td>
+      <td>MEDIO</td>
+      <td>Assistente Config. — Etapa 4</td>
+      <td>CNPJ exibido sem formatação na revisão</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A25</td>
+      <td>MEDIO</td>
+      <td>Assistente Config. — Etapa 4</td>
+      <td>Dados inválidos chegam à revisão sem alerta</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A26</td>
+      <td>CRITICO</td>
+      <td>Assistente Config. — Etapa 4</td>
+      <td>Erro de banco persiste ao clicar em Concluir Configuração</td>
+      <td><span class="status-fixed">✓ Verificado - corrigido</span></td>
+    </tr>
+<tr>
+      <td>A27</td>
+      <td>ALTO</td>
+      <td>Assistente Config. — Etapa 4</td>
+      <td>Checkbox de confirmação não impede conclusão com dados inválidos</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A28</td>
+      <td>MEDIO</td>
+      <td>Assistente Config. — Etapa 4</td>
+      <td>Toast de erro não orienta sobre ação de recuperação</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A29</td>
+      <td>MEDIO</td>
+      <td>Assistente Config. — Etapa 2</td>
+      <td>Telefone sem máscara (confirmado)</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A30</td>
+      <td>POSITIVO</td>
+      <td>Assistente Config. — Etapa 4</td>
+      <td>Configuração concluída com sucesso após correção</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A31</td>
+      <td>ALTO</td>
+      <td>Assistente Config. — Etapa 4</td>
+      <td>Sistema não redireciona ao dashboard após conclusão</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A32</td>
+      <td>ALTO</td>
+      <td>Segurança</td>
+      <td>Ausência de timeout de sessão por inatividade</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A33</td>
+      <td>ALTO</td>
+      <td>Assistente Config. — Etapa 4</td>
+      <td>Navegação pós-conclusão só funciona com F5</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A34</td>
+      <td>MEDIO</td>
+      <td>Interface geral</td>
+      <td>Avatar padrão com representação de gênero masculina</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A35</td>
+      <td>POSITIVO</td>
+      <td>Menu lateral</td>
+      <td>Tradução multidioma funcional</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A36</td>
+      <td>MEDIO</td>
+      <td>Menu lateral</td>
+      <td>Ordenação dos itens inconsistente entre idiomas</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A37</td>
+      <td>POSITIVO</td>
+      <td>Dashboard</td>
+      <td>Tradução multidioma funcional na área principal</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A38</td>
+      <td>MEDIO</td>
+      <td>Dashboard</td>
+      <td>Botões centrais sem tradução em todos os idiomas</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A39</td>
+      <td>MEDIO</td>
+      <td>Dashboard</td>
+      <td>Horário exibido com fuso horário do idioma selecionado</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A40</td>
+      <td>BAIXO</td>
+      <td>Dashboard — ES</td>
+      <td>Tradução 'Socios' imprecisa para Parceiros</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A41</td>
+      <td>POSITIVO</td>
+      <td>Produtos</td>
+      <td>Estrutura da tela de listagem correta</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A42</td>
+      <td>POSITIVO</td>
+      <td>Produtos</td>
+      <td>Cotação PTAX em tempo real exibida corretamente</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A43</td>
+      <td>BAIXO</td>
+      <td>Produtos</td>
+      <td>Botão 'Novo Produto' parcialmente cortado na tela</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A44</td>
+      <td>ALTO</td>
+      <td>Cadastro de Produto</td>
+      <td>Campo Fabricante obrigatório sem Quick Add inline</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A45</td>
+      <td>POSITIVO</td>
+      <td>Cadastro de Produto</td>
+      <td>Estrutura do formulário adequada</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A46</td>
+      <td>MEDIO</td>
+      <td>Cadastro de Produto</td>
+      <td>Campo Preço fixado em USD sem seleção de moeda</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A47</td>
+      <td>BAIXO</td>
+      <td>Cadastro de Produto</td>
+      <td>Botão 'Salvar Produto' parcialmente cortado</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A48</td>
+      <td>POSITIVO</td>
+      <td>Fabricantes</td>
+      <td>Formulário simples e objetivo</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A49</td>
+      <td>CRITICO</td>
+      <td>Fabricantes</td>
+      <td>Erro ao carregar lista ao clicar em Cancelar</td>
+      <td><span class="status-fixed">✓ Verificado - corrigido</span></td>
+    </tr>
+<tr>
+      <td>A50</td>
+      <td>POSITIVO</td>
+      <td>Fabricantes</td>
+      <td>Criação de fabricante bem-sucedida</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A51</td>
+      <td>POSITIVO</td>
+      <td>Fabricantes</td>
+      <td>Estrutura e funcionalidades da listagem adequadas</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A52</td>
+      <td>MEDIO</td>
+      <td>Fabricantes</td>
+      <td>Paginação padrão de 4 itens por página insuficiente</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A53</td>
+      <td>ALTO</td>
+      <td>Fabricantes</td>
+      <td>Formulário de edição com design confuso</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A54</td>
+      <td>POSITIVO</td>
+      <td>Fabricantes</td>
+      <td>Aviso de substituição ao editar nome</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A55</td>
+      <td>POSITIVO</td>
+      <td>Fabricantes</td>
+      <td>Atualização de fabricante bem-sucedida</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A56</td>
+      <td>POSITIVO</td>
+      <td>Fabricantes</td>
+      <td>Modal de confirmação antes de exclusão</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A57</td>
+      <td>CRITICO</td>
+      <td>Fabricantes</td>
+      <td>Nomenclatura 'Inativar' incompatível com exclusão permanente</td>
+      <td><span class="status-fixed">✓ Verificado - corrigido</span></td>
+    </tr>
+<tr>
+      <td>A58</td>
+      <td>ALTO</td>
+      <td>Cadastro de Produto</td>
+      <td>Campos Código e Nome sem limite de caracteres</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A59</td>
+      <td>ALTO</td>
+      <td>Cadastro de Produto</td>
+      <td>Campo Preço com comportamento de entrada não intuitivo</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A60</td>
+      <td>ALTO</td>
+      <td>Cadastro de Produto</td>
+      <td>Campos Descrição e Observações sem limite e resize horizontal</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A61</td>
+      <td>POSITIVO</td>
+      <td>Cadastro de Produto</td>
+      <td>Seção Imagens do Produto com especificações claras</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A62</td>
+      <td>POSITIVO</td>
+      <td>Cadastro de Produto</td>
+      <td>Seção Especificações Técnicas bem estruturada</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A63</td>
+      <td>ALTO</td>
+      <td>Cadastro de Produto</td>
+      <td>Campos numéricos decimais com entrada bloqueante</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A64</td>
+      <td>MEDIO</td>
+      <td>Cadastro de Produto</td>
+      <td>Campo Imagem sem preview após seleção</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A65</td>
+      <td>BAIXO</td>
+      <td>Cadastro de Produto</td>
+      <td>Campo Dimensões com formato livre sem validação</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A66</td>
+      <td>ALTO</td>
+      <td>Cadastro de Produto</td>
+      <td>Campo Peso sem limite máximo de valor</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A67</td>
+      <td>ALTO</td>
+      <td>Cadastro de Produto</td>
+      <td>Campo Dimensões aceita qualquer string</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A68</td>
+      <td>MEDIO</td>
+      <td>Cadastro de Produto</td>
+      <td>Campo Dimensões reset de valor sem feedback</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A69</td>
+      <td>ALTO</td>
+      <td>Cadastro de Produto</td>
+      <td>Campos Material e Cor sem limite de caracteres</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A70</td>
+      <td>MEDIO</td>
+      <td>Sistema</td>
+      <td>Abertura automática de aba 'Seja muito bem-vindo!'</td>
+      <td><span class="status-ok">✓ Verificado - ok</span></td>
+    </tr>
+<tr>
+      <td>A71</td>
+      <td>CRITICO</td>
+      <td>Cadastro de Produto</td>
+      <td>Erro HTTP 502 exposto ao tentar salvar produto</td>
+      <td><span class="status-fixed">✓ Verificado - corrigido</span></td>
+    </tr></tbody>
+  </table>
+  <div class="page-footer"><span>Aero Suite · Confronto UX</span><span>Anexo</span></div>
+</section>
+
+</body>
+</html>

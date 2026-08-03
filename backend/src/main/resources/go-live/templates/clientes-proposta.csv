@@ -1,0 +1,2 @@
+nome;cnpj_cpf;email;telefone;contato;endereco;cidade;estado;cep;observacao
+Cliente Exemplo Ltda;12.345.678/0001-90;cliente@exemplo.com;(11) 3000-0000;João Silva;Rua Exemplo 100;São Paulo;SP;01000-000;Importado via kit go-live

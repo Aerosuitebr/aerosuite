@@ -1,0 +1,283 @@
+<app-auth-shell *ngIf="!blocked && !completed" [cardWide]="true" [cardMaxWidth]="920">
+  <header authHeader class="wizard-header">
+    <app-auth-brand-header />
+    <h1 class="wizard-header__title">{{ 'empresaWizard.title' | translate }}</h1>
+    <p class="wizard-header__sub">{{ 'empresaWizard.subtitle' | translate }}</p>
+  </header>
+
+  <nav class="wizard-steps" [attr.aria-label]="'empresaWizard.steps.aria' | translate">
+    <div class="wizard-step" [class.wizard-step--active]="step === 0" [class.wizard-step--done]="step > 0">{{ 'empresaWizard.step.brand' | translate }}</div>
+    <div class="wizard-step" [class.wizard-step--active]="step === 1" [class.wizard-step--done]="step > 1">{{ 'empresaWizard.step.contacts' | translate }}</div>
+    <div class="wizard-step" [class.wizard-step--active]="step === 2" [class.wizard-step--done]="step > 2">{{ 'empresaWizard.step.company' | translate }}</div>
+    <div class="wizard-step" [class.wizard-step--active]="step === 3">{{ 'empresaWizard.step.review' | translate }}</div>
+  </nav>
+
+  <ng-container [ngSwitch]="step">
+    <div *ngSwitchCase="0" class="wizard-grid">
+      <div class="wizard-field wizard-field--full" [class.wizard-field--error]="fieldErrors.displayName">
+        <label for="wizard-displayName">
+          {{ 'empresaWizard.field.displayName' | translate }}
+          <span class="req-mark" [attr.aria-label]="'empresaWizard.required' | translate">*</span>
+        </label>
+        <input
+          id="wizard-displayName"
+          pInputText
+          class="form-input"
+          [(ngModel)]="draft.displayName"
+          [placeholder]="'empresaWizard.field.displayName.ph' | translate"
+          (input)="clearFieldError('displayName')"
+          [attr.aria-invalid]="fieldErrors.displayName" />
+        <span class="error-text" *ngIf="fieldErrors.displayName">{{ 'empresaWizard.validation.displayName' | translate }}</span>
+      </div>
+      <div class="wizard-field wizard-field--full" [class.wizard-field--error]="fieldErrors.tagline">
+        <label for="wizard-tagline">
+          {{ 'empresaWizard.field.tagline' | translate }}
+          <span class="req-mark" [attr.aria-label]="'empresaWizard.required' | translate">*</span>
+        </label>
+        <input
+          id="wizard-tagline"
+          pInputText
+          class="form-input"
+          [(ngModel)]="draft.tagline"
+          [placeholder]="'empresaWizard.field.tagline.ph' | translate"
+          (input)="clearFieldError('tagline')"
+          [attr.aria-invalid]="fieldErrors.tagline" />
+        <span class="error-text" *ngIf="fieldErrors.tagline">{{ 'empresaWizard.validation.tagline' | translate }}</span>
+        <p class="wizard-review__warn" *ngIf="taglineDuplicatesName">{{ 'empresaWizard.review.taglineWarn' | translate }}</p>
+      </div>
+      <div class="wizard-field">
+        <label for="wizard-emailSuffix">{{ 'empresaWizard.field.emailSubjectSuffix' | translate }}</label>
+        <input id="wizard-emailSuffix" pInputText class="form-input" [(ngModel)]="draft.emailSubjectSuffix" [placeholder]="'empresaWizard.field.emailSubjectSuffix.ph' | translate" />
+      </div>
+      <div class="wizard-field">
+        <label for="wizard-browserTitle">{{ 'empresaWizard.field.browserTitleSuffix' | translate }}</label>
+        <input id="wizard-browserTitle" pInputText class="form-input" [(ngModel)]="draft.browserTitleSuffix" [placeholder]="'empresaWizard.field.browserTitleSuffix.ph' | translate" />
+      </div>
+      <div class="wizard-field">
+        <label for="wizard-logoUrl">{{ 'empresaWizard.field.logo' | translate }}</label>
+        <input id="wizard-logoUrl" pInputText class="form-input" [(ngModel)]="draft.logoUrl" [placeholder]="'empresaWizard.field.logo.ph' | translate" />
+        <div class="wizard-upload">
+          <input #fileLogo type="file" accept="image/*" hidden (change)="onLogoFile($event)" />
+          <button pButton type="button" [label]="'empresaWizard.btn.uploadLogo' | translate" class="p-button-outlined p-button-sm" (click)="fileLogo.click()"></button>
+          <img *ngIf="draft.logoUrl" [src]="previewLogo" [attr.alt]="'empresaWizard.preview.logo' | translate" class="wizard-upload__preview" />
+        </div>
+      </div>
+      <div class="wizard-field">
+        <label for="wizard-wordmarkUrl">{{ 'empresaWizard.field.wordmark' | translate }}</label>
+        <input id="wizard-wordmarkUrl" pInputText class="form-input" [(ngModel)]="draft.wordmarkUrl" [placeholder]="'empresaWizard.field.wordmark.ph' | translate" />
+        <div class="wizard-upload">
+          <input #fileWm type="file" accept="image/*" hidden (change)="onWordmarkFile($event)" />
+          <button pButton type="button" [label]="'empresaWizard.btn.uploadWordmark' | translate" class="p-button-outlined p-button-sm" (click)="fileWm.click()"></button>
+          <img *ngIf="draft.wordmarkUrl" [src]="previewWordmark" [attr.alt]="'empresaWizard.preview.wordmark' | translate" class="wizard-upload__preview" />
+        </div>
+      </div>
+      <div class="wizard-field wizard-field--full">
+        <label for="wizard-primaryColor">{{ 'empresaWizard.field.primaryColor' | translate }}</label>
+        <p class="form-hint">{{ 'empresaWizard.field.primaryColor.hint' | translate }}</p>
+        <app-brand-primary-color-input
+          nativeInputId="wizard-primaryColor"
+          hexInputId="wizard-primaryColorHex"
+          [ariaLabel]="'empresaWizard.field.primaryColor' | translate"
+          [placeholder]="'empresaWizard.field.primaryColor.ph' | translate"
+          [(ngModel)]="draft.primaryColor">
+        </app-brand-primary-color-input>
+      </div>
+      <div class="wizard-field wizard-field--full">
+        <label for="wizard-copyright">{{ 'empresaWizard.field.copyrightEntity' | translate }}</label>
+        <input id="wizard-copyright" pInputText class="form-input" [(ngModel)]="draft.copyrightEntity" [placeholder]="'empresaWizard.field.copyrightEntity.ph' | translate" />
+      </div>
+    </div>
+
+    <div *ngSwitchCase="1" class="wizard-grid">
+      <div class="wizard-field wizard-field--full" [class.wizard-field--error]="fieldErrors.supportEmail">
+        <label for="wizard-supportEmail">
+          {{ 'tenants.field.supportEmail' | translate }}
+          <span class="req-mark" [attr.aria-label]="'empresaWizard.required' | translate">*</span>
+        </label>
+        <p class="form-hint">{{ 'tenants.field.supportEmail.hint' | translate }}</p>
+        <input id="wizard-supportEmail" pInputText class="form-input" type="email" [(ngModel)]="draft.supportEmail" [placeholder]="'tenants.field.supportEmail.ph' | translate" (input)="clearFieldError('supportEmail')" [attr.aria-invalid]="fieldErrors.supportEmail" />
+        <span class="error-text" *ngIf="fieldErrors.supportEmail">{{ 'empresaWizard.validation.supportEmail' | translate }}</span>
+      </div>
+      <div class="wizard-field" [class.wizard-field--error]="fieldErrors.telefone">
+        <label for="wizard-telefone">
+          {{ 'empresaWizard.field.phone' | translate }}
+          <span class="req-mark" [attr.aria-label]="'empresaWizard.required' | translate">*</span>
+        </label>
+        <input id="wizard-telefone" pInputText class="form-input" [(ngModel)]="draft.telefone" [placeholder]="'empresaWizard.field.phone.ph' | translate" inputmode="tel" autocomplete="tel" maxlength="15" (input)="onTelefoneInput()" [attr.aria-invalid]="fieldErrors.telefone" />
+        <p class="form-hint">{{ 'empresaWizard.field.phone.hint' | translate }}</p>
+        <span class="error-text" *ngIf="fieldErrors.telefone">{{ (telefoneFormatError ? 'empresaWizard.validation.telefoneFormat' : 'empresaWizard.validation.telefone') | translate }}</span>
+      </div>
+      <div class="wizard-field">
+        <label for="wizard-siteUrl">{{ 'empresaWizard.field.website' | translate }}</label>
+        <input id="wizard-siteUrl" pInputText class="form-input" [(ngModel)]="draft.siteUrl" [placeholder]="'empresaWizard.field.website.ph' | translate" />
+      </div>
+    </div>
+
+    <div *ngSwitchCase="2" class="wizard-grid">
+      <h3 class="wizard-section-title wizard-field--full">{{ 'empresaWizard.section.company' | translate }}</h3>
+      <div class="wizard-field" [class.wizard-field--error]="fieldErrors.cnpj">
+        <label for="wizard-cnpj">
+          {{ 'empresaWizard.field.cnpj' | translate }}
+          <span class="req-mark" [attr.aria-label]="'empresaWizard.required' | translate">*</span>
+        </label>
+        <p class="form-hint">{{ 'empresaWizard.field.cnpj.hint' | translate }}</p>
+        <div class="wizard-lookup-row">
+          <input
+            id="wizard-cnpj"
+            pInputText
+            class="form-input"
+            [(ngModel)]="draft.cnpj"
+            inputmode="numeric"
+            [placeholder]="'empresaWizard.field.cnpj.ph' | translate"
+            (input)="onCnpjInput()"
+            (blur)="lookupCnpj()"
+            [attr.aria-busy]="cnpjLookupLoading"
+            [attr.aria-invalid]="fieldErrors.cnpj" />
+          <span class="wizard-lookup-status" *ngIf="cnpjLookupLoading" aria-live="polite">
+            <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+            {{ 'empresaWizard.lookup.loading' | translate }}
+          </span>
+        </div>
+        <span class="error-text" *ngIf="fieldErrors.cnpj">{{ 'empresaWizard.validation.cnpj' | translate }}</span>
+      </div>
+      <div class="wizard-field wizard-field--full" [class.wizard-field--error]="fieldErrors.razaoSocial">
+        <label for="wizard-razaoSocial">
+          {{ 'empresaWizard.field.legalName' | translate }}
+          <span class="req-mark" [attr.aria-label]="'empresaWizard.required' | translate">*</span>
+        </label>
+        <input id="wizard-razaoSocial" pInputText class="form-input" [(ngModel)]="draft.razaoSocial" (input)="clearFieldError('razaoSocial')" [attr.aria-invalid]="fieldErrors.razaoSocial" />
+        <span class="error-text" *ngIf="fieldErrors.razaoSocial">{{ 'empresaWizard.validation.razaoSocial' | translate }}</span>
+      </div>
+      <div class="wizard-field">
+        <label for="wizard-ie">{{ 'empresaWizard.field.stateRegistration' | translate }}</label>
+        <input id="wizard-ie" pInputText class="form-input" [(ngModel)]="draft.inscricaoEstadual" />
+      </div>
+      <div class="wizard-field">
+        <label for="wizard-im">{{ 'empresaWizard.field.cityRegistration' | translate }}</label>
+        <input id="wizard-im" pInputText class="form-input" [(ngModel)]="draft.inscricaoMunicipal" />
+      </div>
+      <div class="wizard-field wizard-field--full">
+        <label for="wizard-nfeEmail">{{ 'empresaWizard.field.nfeEmail' | translate }}</label>
+        <p class="form-hint">{{ 'empresaWizard.field.nfeEmail.hint' | translate }}</p>
+        <input id="wizard-nfeEmail" pInputText class="form-input" type="email" [(ngModel)]="draft.emailNfe" [placeholder]="'empresaWizard.field.nfeEmail.ph' | translate" />
+      </div>
+
+      <h3 class="wizard-section-title wizard-field--full">{{ 'empresaWizard.section.address' | translate }}</h3>
+      <p class="form-hint wizard-field--full wizard-section-lead">{{ 'empresaWizard.section.address.lead' | translate }}</p>
+      <div class="wizard-field" [class.wizard-field--error]="fieldErrors.address">
+        <label for="wizard-cep">
+          {{ 'empresaWizard.field.zip' | translate }}
+          <span class="req-mark" [attr.aria-label]="'empresaWizard.required' | translate">*</span>
+        </label>
+        <p class="form-hint">{{ 'empresaWizard.field.zip.hint' | translate }}</p>
+        <div class="wizard-lookup-row">
+          <input
+            id="wizard-cep"
+            pInputText
+            class="form-input"
+            [(ngModel)]="draft.cep"
+            inputmode="numeric"
+            autocomplete="postal-code"
+            [placeholder]="'empresaWizard.field.zip.ph' | translate"
+            (input)="onCepInput()"
+            (blur)="lookupCep()"
+            [attr.aria-busy]="cepLookupLoading"
+            [attr.aria-invalid]="fieldErrors.address" />
+          <span class="wizard-lookup-status" *ngIf="cepLookupLoading" aria-live="polite">
+            <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+            {{ 'empresaWizard.lookup.loading' | translate }}
+          </span>
+        </div>
+      </div>
+      <div class="wizard-field wizard-field--full" [class.wizard-field--error]="fieldErrors.address">
+        <label for="wizard-logradouro">
+          {{ 'empresaWizard.field.street' | translate }}
+          <span class="req-mark" [attr.aria-label]="'empresaWizard.required' | translate">*</span>
+        </label>
+        <input id="wizard-logradouro" pInputText class="form-input" [(ngModel)]="draft.enderecoLogradouro" (input)="clearFieldError('address')" autocomplete="address-line1" />
+      </div>
+      <div class="wizard-field">
+        <label for="wizard-numero">{{ 'empresaWizard.field.number' | translate }}</label>
+        <input #numeroInput id="wizard-numero" pInputText class="form-input" [(ngModel)]="draft.enderecoNumero" [placeholder]="'empresaWizard.field.number.ph' | translate" autocomplete="address-line2" />
+      </div>
+      <div class="wizard-field">
+        <label for="wizard-complemento">{{ 'empresaWizard.field.complement' | translate }}</label>
+        <input id="wizard-complemento" pInputText class="form-input" [(ngModel)]="draft.enderecoComplemento" autocomplete="address-line3" maxlength="60" />
+      </div>
+      <div class="wizard-field">
+        <label for="wizard-bairro">{{ 'empresaWizard.field.district' | translate }}</label>
+        <input id="wizard-bairro" pInputText class="form-input" [(ngModel)]="draft.enderecoBairro" (input)="clearFieldError('address')" />
+      </div>
+      <div class="wizard-field" [class.wizard-field--error]="fieldErrors.address">
+        <label for="wizard-cidade">
+          {{ 'empresaWizard.field.city' | translate }}
+          <span class="req-mark" [attr.aria-label]="'empresaWizard.required' | translate">*</span>
+        </label>
+        <input id="wizard-cidade" pInputText class="form-input" [(ngModel)]="draft.cidade" (input)="clearFieldError('address')" autocomplete="address-level2" />
+      </div>
+      <div class="wizard-field" [class.wizard-field--error]="fieldErrors.address">
+        <label for="wizard-uf">
+          {{ 'empresaWizard.field.state' | translate }}
+          <span class="req-mark" [attr.aria-label]="'empresaWizard.required' | translate">*</span>
+        </label>
+        <input id="wizard-uf" pInputText class="form-input" [(ngModel)]="draft.uf" maxlength="2" [placeholder]="'empresaWizard.field.state.ph' | translate" style="text-transform: uppercase" (input)="onUfInput()" autocomplete="address-level1" />
+        <span class="error-text" *ngIf="fieldErrors.address">{{ 'empresaWizard.validation.address' | translate }}</span>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="3" class="wizard-review">
+      <p class="wizard-review__intro">{{ 'empresaWizard.review.intro' | translate }}</p>
+      <p class="wizard-review__warn" *ngIf="taglineDuplicatesName">{{ 'empresaWizard.review.taglineWarn' | translate }}</p>
+      <dl class="wizard-review__list">
+        <dt>{{ 'empresaWizard.review.brand' | translate }}</dt>
+        <dd>
+          {{ draft.displayName }}<ng-container *ngIf="draft.tagline.trim()"> — {{ draft.tagline }}</ng-container>
+          <span class="wizard-review__color-wrap">
+            <span class="wizard-review__color" [style.background]="previewPrimaryColor" [attr.aria-hidden]="true"></span>
+            <span class="wizard-review__color-label">{{ 'empresaWizard.review.primaryColor' | translate:{ color: draft.primaryColor } }}</span>
+          </span>
+        </dd>
+        <dt>{{ 'empresaWizard.review.contact' | translate }}</dt>
+        <dd>{{ draft.supportEmail }} · {{ draft.telefone }}</dd>
+        <dt>{{ 'empresaWizard.review.company' | translate }}</dt>
+        <dd>{{ displayRazaoSocial }} · CNPJ {{ draft.cnpj }}</dd>
+        <dt *ngIf="draft.inscricaoMunicipal?.trim() || draft.emailNfe?.trim()">{{ 'empresaWizard.review.taxExtras' | translate }}</dt>
+        <dd *ngIf="draft.inscricaoMunicipal?.trim() || draft.emailNfe?.trim()">
+          <span *ngIf="draft.inscricaoMunicipal?.trim()">{{ 'empresaWizard.review.municipalInscr' | translate:{ value: draft.inscricaoMunicipal } }}</span>
+          <span *ngIf="draft.inscricaoMunicipal?.trim() && draft.emailNfe?.trim()"> · </span>
+          <span *ngIf="draft.emailNfe?.trim()">{{ 'empresaWizard.review.nfeEmail' | translate:{ value: draft.emailNfe } }}</span>
+        </dd>
+        <dt>{{ 'empresaWizard.review.address' | translate }}</dt>
+        <dd>{{ displayAddressLine }}</dd>
+      </dl>
+      <label class="wizard-confirm">
+        <p-checkbox [(ngModel)]="confirmFinal" [binary]="true" inputId="confirm"></p-checkbox>
+        <span>{{ 'empresaWizard.confirm.label' | translate }}</span>
+      </label>
+    </div>
+  </ng-container>
+
+  <div class="wizard-actions">
+    <button *ngIf="step === 0" pButton type="button" [label]="'empresaWizard.btn.backToLogin' | translate" class="p-button-text wizard-btn-ghost" (click)="backToLogin()"></button>
+    <button *ngIf="step > 0" pButton type="button" [label]="'empresaWizard.btn.back' | translate" class="p-button-text wizard-btn-ghost" (click)="prev()"></button>
+    <button pButton type="button" [label]="'empresaWizard.btn.saveDraft' | translate" class="p-button-outlined" [loading]="saving" (click)="saveDraft()"></button>
+    <button *ngIf="step < 3" pButton type="button" [label]="'empresaWizard.btn.continue' | translate" icon="pi pi-arrow-right" iconPos="right" class="p-button-primary wizard-btn-primary" (click)="next()"></button>
+    <button *ngIf="step === 3" pButton type="button" [label]="'empresaWizard.btn.finish' | translate" icon="pi pi-check" class="p-button-primary wizard-btn-primary" [disabled]="!confirmFinal" [loading]="saving" (click)="saveComplete()"></button>
+  </div>
+</app-auth-shell>
+
+<app-auth-shell *ngIf="completed" [cardMaxWidth]="520">
+  <div class="wizard-completed">
+    <h2>{{ 'empresaWizard.completed.title' | translate }}</h2>
+    <p>{{ 'empresaWizard.completed.body' | translate }}</p>
+    <button pButton type="button" [label]="'empresaWizard.btn.accessSystem' | translate" icon="pi pi-home" class="p-button-primary wizard-btn-primary" (click)="enterSystem()"></button>
+  </div>
+</app-auth-shell>
+
+<app-auth-shell *ngIf="blocked" [cardMaxWidth]="520">
+  <div class="wizard-blocked">
+    <h2>{{ 'empresaWizard.blocked.title' | translate }}</h2>
+    <p>{{ 'empresaWizard.blocked.body' | translate }}</p>
+    <button pButton type="button" [label]="'empresaWizard.btn.goHome' | translate" class="p-button-outlined" (click)="goHome()"></button>
+  </div>
+</app-auth-shell>

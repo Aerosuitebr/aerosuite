@@ -1,0 +1,387 @@
+<p-toast></p-toast>
+
+<p-dialog styleClass="as-hero-dialog" [(visible)]="showMotivoDialog" [header]="'estoque.invoices.dialog.inativar.title' | translate" [modal]="true"
+          [style]="{ width: '520px' }" [closable]="!acaoProcessando">
+  <p class="dialog-intro" *ngIf="invoice">
+    {{ 'estoque.invoices.dialog.inativar.intro' | translate:{ numero: invoice.numeroInvoice } }}
+  </p>
+  <app-dialog-note-field
+    [(ngModel)]="motivoAcao"
+    labelKey="estoque.invoices.dialog.motivoLabel"
+    placeholderKey="estoque.invoices.dialog.motivoPh"
+    [rows]="5">
+  </app-dialog-note-field>
+  <p class="orientacao-hint" *ngIf="validacaoInativacao?.orientacao">{{ validacaoInativacao.orientacao | translate }}</p>
+  <ng-template pTemplate="footer">
+    <button pButton [label]="'common.dialog.cancel' | translate" class="p-button-text" (click)="fecharDialogsAcao()" [disabled]="acaoProcessando"></button>
+    <button pButton [label]="'estoque.invoices.dialog.inativar.confirm' | translate" icon="pi pi-trash" class="p-button-danger"
+            (click)="confirmarInativacao()" [loading]="acaoProcessando"
+            [disabled]="!motivoAcao || motivoAcao.trim().length < 5"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog styleClass="as-hero-dialog" [(visible)]="showBloqueioDialog" [header]="'estoque.invoices.dialog.bloqueio.title' | translate" [modal]="true" [style]="{ width: '560px' }">
+  <div class="bloqueio-box" *ngIf="validacaoInativacao">
+    <ul>
+      <li *ngFor="let b of validacaoInativacao.bloqueios">{{ b | translate }}</li>
+    </ul>
+    <p class="orientacao-hint">{{ validacaoInativacao.orientacaoCancelamento | translate }}</p>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton [label]="'common.dialog.cancel' | translate" class="p-button-text" (click)="fecharDialogsAcao()"></button>
+    <button pButton [label]="'estoque.invoices.dialog.cancelar.btn' | translate" icon="pi pi-ban" class="p-button-warning"
+            *ngIf="validacaoInativacao?.podeCancelar" (click)="abrirCancelamentoDesdeBloqueio()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog styleClass="as-hero-dialog" [(visible)]="showCancelarDialog" [header]="'estoque.invoices.dialog.cancelar.title' | translate" [modal]="true"
+          [style]="{ width: '520px' }" [closable]="!acaoProcessando">
+  <app-dialog-note-field
+    [(ngModel)]="motivoAcao"
+    labelKey="estoque.invoices.dialog.cancelar.motivoLabel"
+    [rows]="5">
+  </app-dialog-note-field>
+  <ng-template pTemplate="footer">
+    <button pButton [label]="'common.dialog.cancel' | translate" class="p-button-text" (click)="fecharDialogsAcao()" [disabled]="acaoProcessando"></button>
+    <button pButton [label]="'estoque.invoices.dialog.cancelar.confirm' | translate" icon="pi pi-ban" class="p-button-warning"
+            (click)="confirmarCancelamento()" [loading]="acaoProcessando"
+            [disabled]="!motivoAcao || motivoAcao.trim().length < 5"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog styleClass="as-hero-dialog" [(visible)]="showRestaurarDialog" [header]="'estoque.invoices.dialog.restaurar.title' | translate" [modal]="true"
+          [style]="{ width: '520px' }" [closable]="!acaoProcessando">
+  <p class="dialog-intro" *ngIf="invoice">
+    {{ 'estoque.invoices.dialog.restaurar.intro' | translate:{ numero: invoice.numeroInvoice } }}
+  </p>
+  <app-dialog-note-field
+    [(ngModel)]="motivoAcao"
+    labelKey="estoque.invoices.dialog.motivoLabel"
+    placeholderKey="estoque.invoices.dialog.motivoPh"
+    [rows]="5">
+  </app-dialog-note-field>
+  <ng-template pTemplate="footer">
+    <button pButton [label]="'common.dialog.cancel' | translate" class="p-button-text" (click)="fecharDialogsAcao()" [disabled]="acaoProcessando"></button>
+    <button pButton [label]="'estoque.invoices.dialog.restaurar.confirm' | translate" icon="pi pi-refresh" class="p-button-success"
+            (click)="confirmarRestauracao()" [loading]="acaoProcessando"
+            [disabled]="!motivoAcao || motivoAcao.trim().length < 5"></button>
+  </ng-template>
+</p-dialog>
+
+<div class="invoice-detail-page">
+  <ng-container *ngIf="loading">
+    <div class="detail-skeleton">
+      <p-skeleton width="40%" height="2rem" styleClass="mb-3"></p-skeleton>
+      <p-skeleton width="100%" height="140px" borderRadius="16px" styleClass="mb-4"></p-skeleton>
+      <div class="kpi-skeleton">
+        <p-skeleton *ngFor="let s of [1,2,3,4]" height="88px" borderRadius="12px"></p-skeleton>
+      </div>
+      <p-skeleton width="100%" height="320px" borderRadius="12px"></p-skeleton>
+    </div>
+  </ng-container>
+
+  <div class="detail-error" *ngIf="!loading && loadError">
+    <i class="pi pi-exclamation-circle"></i>
+    <h2>{{ 'estoque.invoices.detail.errorTitle' | translate }}</h2>
+    <p>{{ loadError }}</p>
+    <button pButton [label]="'estoque.invoices.detail.backList' | translate" icon="pi pi-arrow-left" (click)="voltarLista()"></button>
+  </div>
+
+  <ng-container *ngIf="!loading && !loadError && invoice as inv">
+    <nav class="detail-breadcrumb" [attr.aria-label]="'estoque.invoices.detail.breadcrumbAria' | translate">
+      <button type="button" class="crumb-link" (click)="voltarLista()">
+        <i class="pi pi-file-import"></i> {{ 'estoque.invoices.detail.breadcrumbList' | translate }}
+      </button>
+      <i class="pi pi-angle-right crumb-sep"></i>
+      <span class="crumb-current">{{ inv.numeroInvoice }}</span>
+    </nav>
+
+    <app-page-hero
+      variant="sky"
+      kickerKey="estoque.invoices.detail.pageKicker"
+      [title]="inv.numeroInvoice"
+      [subtitle]="getHeroSubtitle(inv)"
+      titleIcon="pi-file-import"
+      [hasActions]="true">
+      <div class="invoice-hero-actions" actions>
+        <p-tag [value]="getStatusLabel(inv.status)" [severity]="getStatusSeverity(inv.status)"></p-tag>
+        <button type="button" class="icon-btn" [pTooltip]="'estoque.invoices.detail.copyNumber' | translate" (click)="copiarNumero()">
+          <i class="pi pi-copy"></i>
+        </button>
+        <button pButton [label]="'estoque.invoices.detail.btnNewEntry' | translate" icon="pi pi-sign-in" class="p-button-primary hero-cta"
+                *ngIf="podeNovaEntrada"
+                (click)="novaEntrada()" [pTooltip]="'estoque.invoices.detail.btnNewEntryTip' | translate"></button>
+        <button pButton [label]="'estoque.invoices.detail.btnStockItems' | translate" icon="pi pi-list" class="p-button-outlined"
+                (click)="verItensEstoque()"></button>
+        <button pButton [label]="'common.list.tooltip.edit' | translate" icon="pi pi-pencil" class="p-button-outlined p-button-secondary"
+                (click)="editarInvoice()"></button>
+        <button pButton [label]="'estoque.invoices.detail.btnRestaurar' | translate" icon="pi pi-refresh"
+                class="p-button-outlined p-button-success" *ngIf="podeRestaurar" (click)="iniciarRestauracao()"
+                [pTooltip]="'estoque.invoices.detail.btnRestaurarTip' | translate"></button>
+        <button pButton [label]="'estoque.invoices.detail.btnInativar' | translate" icon="pi pi-trash"
+                class="p-button-outlined p-button-danger" *ngIf="podeInativar" (click)="iniciarInativacao()"
+                [pTooltip]="'estoque.invoices.detail.btnInativarTip' | translate"></button>
+        <button pButton icon="pi pi-arrow-left" class="p-button-text" [pTooltip]="'estoque.invoices.detail.back' | translate"
+                (click)="voltarLista()"></button>
+      </div>
+    </app-page-hero>
+
+    <div class="hero-dates detail-meta-bar">
+      <span><i class="pi pi-calendar"></i> {{ 'estoque.invoices.detail.issueDate' | translate }} {{ inv.dataEmissao | isoLocalDate }}</span>
+      <span *ngIf="inv.dataRecebimento">
+        <i class="pi pi-inbox"></i> {{ 'estoque.invoices.detail.receiptDate' | translate }} {{ inv.dataRecebimento | isoLocalDate }}
+      </span>
+      <span *ngIf="inv.createdAt" class="muted">
+        {{ 'estoque.invoices.detail.registeredAt' | translate }} {{ inv.createdAt | date:'dd/MM/yyyy HH:mm' }}
+      </span>
+    </div>
+
+    <div class="detail-warn-banner detail-warn-banner--danger" *ngIf="inv.status === 'CANCELADA'" role="status">
+      <i class="pi pi-ban"></i>
+      <div>
+        <strong>{{ 'estoque.invoices.detail.warn.cancelada' | translate }}</strong>
+        <p>{{ 'estoque.invoices.detail.warn.canceladaLead' | translate }}</p>
+      </div>
+    </div>
+    <div class="detail-warn-banner detail-warn-banner--muted" *ngIf="inv.isActive === false && inv.status !== 'CANCELADA'" role="status">
+      <i class="pi pi-eye-slash"></i>
+      <div>
+        <strong>{{ 'estoque.invoices.detail.warn.inativa' | translate }}</strong>
+        <p>{{ 'estoque.invoices.detail.warn.inativaLead' | translate }}</p>
+      </div>
+    </div>
+
+    <section class="kpi-grid" [attr.aria-label]="'estoque.invoices.detail.kpiAria' | translate">
+      <article class="kpi-card kpi-total">
+        <span class="kpi-label">{{ 'estoque.invoices.detail.kpi.total' | translate }}</span>
+        <span class="kpi-value">{{ inv.valorTotal | localeMoney:moeda:detailMoneyOpts }}</span>
+        <span class="kpi-hint" *ngIf="valorItensInvoice > 0">
+          {{ 'estoque.invoices.detail.kpi.linesSum' | translate }} {{ valorItensInvoice | localeMoney:moeda:detailMoneyOpts }}
+        </span>
+      </article>
+      <article class="kpi-card">
+        <span class="kpi-label">{{ 'estoque.invoices.detail.kpi.freight' | translate }}</span>
+        <span class="kpi-value">{{ inv.valorFrete | localeMoney:moeda:detailMoneyOpts }}</span>
+      </article>
+      <article class="kpi-card">
+        <span class="kpi-label">{{ 'estoque.invoices.detail.kpi.receipt' | translate }}</span>
+        <span class="kpi-value">{{ recebimentoPercent }}%</span>
+        <p-progressBar [value]="recebimentoPercent" [showValue]="false" styleClass="kpi-progress"></p-progressBar>
+        <span class="kpi-hint">{{ 'estoque.invoices.detail.kpi.receiptHint' | translate:{ n: qtdItensInvoice } }}</span>
+      </article>
+      <article class="kpi-card">
+        <span class="kpi-label">{{ 'estoque.invoices.detail.kpi.inStock' | translate }}</span>
+        <span class="kpi-value">{{ itensEstoque.length }}</span>
+        <span class="kpi-hint">{{ 'estoque.invoices.detail.kpi.inStockHint' | translate:{ qty: qtdEstoqueTotal } }}</span>
+      </article>
+    </section>
+
+    <p-tabView [(activeIndex)]="activeTab" styleClass="detail-tabs">
+      <p-tabPanel [header]="'estoque.invoices.detail.tab.overview' | translate">
+        <div class="overview-grid">
+          <div class="info-panel">
+            <h3><i class="pi pi-info-circle"></i> {{ 'estoque.invoices.detail.panel.document' | translate }}</h3>
+            <dl class="info-dl">
+              <div><dt>{{ 'estoque.invoices.detail.field.currency' | translate }}</dt><dd>{{ inv.moeda || 'USD' }}</dd></div>
+              <div><dt>{{ 'estoque.invoices.detail.field.fx' | translate }}</dt><dd>{{ inv.taxaCambio ?? '—' }}</dd></div>
+              <div><dt>{{ 'estoque.invoices.detail.field.insurance' | translate }}</dt><dd>{{ inv.valorSeguro | localeMoney:moeda:detailMoneyOpts }}</dd></div>
+              <div><dt>{{ 'estoque.invoices.detail.field.taxesBrl' | translate }}</dt><dd>{{ inv.valorImpostos | localeMoney:'BRL':detailMoneyOpts }}</dd></div>
+              <div><dt>{{ 'estoque.invoices.detail.field.di' | translate }}</dt><dd>{{ inv.numeroDi || '—' }}</dd></div>
+              <div><dt>{{ 'estoque.invoices.detail.field.awb' | translate }}</dt><dd>{{ inv.numeroConhecimento || '—' }}</dd></div>
+            </dl>
+          </div>
+          <div class="info-panel transport-panel">
+            <h3><i [class]="getModalIcon(inv.modalTransporte)"></i> {{ 'estoque.invoices.detail.panel.transport' | translate }}</h3>
+            <p class="transport-mode">{{ getModalLabel(inv.modalTransporte) }}</p>
+            <p class="transport-note" *ngIf="inv.paisOrigem">
+              {{ 'estoque.invoices.detail.origin' | translate }} <strong>{{ inv.paisOrigem }}</strong>
+            </p>
+          </div>
+          <div class="info-panel full-width" *ngIf="inv.observacoes">
+            <h3><i class="pi pi-comment"></i> {{ 'estoque.invoices.dialog.section.notes' | translate }}</h3>
+            <p class="obs-text">{{ inv.observacoes }}</p>
+          </div>
+        </div>
+      </p-tabPanel>
+
+      <p-tabPanel [header]="tabHeaderItems">
+        <div class="tab-toolbar">
+          <span class="tab-hint">{{ 'estoque.invoices.detail.hint.items' | translate }}</span>
+          <button pButton [label]="'estoque.invoices.detail.btnReceive' | translate" icon="pi pi-plus" class="p-button-sm"
+                  *ngIf="podeNovaEntrada" (click)="novaEntrada()"></button>
+        </div>
+        <p-table [value]="inv.itens || []" styleClass="p-datatable-sm premium-table" dataKey="id"
+                 [paginator]="(inv.itens?.length || 0) > listPageSize" [rows]="listPageSize">
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width:48px">#</th>
+              <th>{{ 'estoque.invoices.detail.col.pn' | translate }}</th>
+              <th>{{ 'estoque.invoices.detail.col.description' | translate }}</th>
+              <th class="num">{{ 'estoque.invoices.detail.col.qty' | translate }}</th>
+              <th class="num">{{ 'estoque.invoices.detail.col.received' | translate }}</th>
+              <th class="num">{{ 'estoque.invoices.detail.col.pending' | translate }}</th>
+              <th class="num">{{ 'estoque.invoices.detail.col.unitValue' | translate }}</th>
+              <th class="num">{{ 'estoque.invoices.detail.col.totalValue' | translate }}</th>
+              <th>{{ 'common.list.col.status' | translate }}</th>
+              <th style="width:120px">{{ 'estoque.invoices.detail.col.progress' | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-item>
+            <tr>
+              <td>{{ item.linha ?? '—' }}</td>
+              <td><code class="pn">{{ item.partNumber }}</code></td>
+              <td class="desc-cell">{{ item.descricao || '—' }}</td>
+              <td class="num">{{ item.quantidade | number:'1.0-3' }}</td>
+              <td class="num">{{ item.quantidadeRecebida | number:'1.0-3' }}</td>
+              <td class="num">{{ item.quantidadePendente | number:'1.0-3' }}</td>
+              <td class="num">{{ item.valorUnitario | localeMoney:moeda:detailMoneyOpts }}</td>
+              <td class="num strong">{{ item.valorTotal | localeMoney:moeda:detailMoneyOpts }}</td>
+              <td>
+                <p-tag [value]="getItemStatusLabel(item.status)" [severity]="getItemStatusSeverity(item.status)"></p-tag>
+              </td>
+              <td>
+                <p-progressBar [value]="itemRecebimentoPercent(item)" [showValue]="true" styleClass="line-progress"></p-progressBar>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr><td colspan="10" class="empty-tab">{{ 'estoque.invoices.detail.empty.items' | translate }}</td></tr>
+          </ng-template>
+        </p-table>
+      </p-tabPanel>
+
+      <p-tabPanel [header]="tabHeaderStock">
+        <div class="tab-toolbar">
+          <span class="tab-hint">{{ 'estoque.invoices.detail.hint.stock' | translate }}</span>
+          <button pButton [label]="'estoque.invoices.detail.btnViewAll' | translate" icon="pi pi-external-link" class="p-button-sm p-button-outlined"
+                  (click)="verItensEstoque()"></button>
+        </div>
+        <p-table [value]="itensEstoque" styleClass="p-datatable-sm premium-table" dataKey="id"
+                 [paginator]="itensEstoque.length > listPageSize" [rows]="listPageSize">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>{{ 'estoque.invoices.detail.col.traceCode' | translate }}</th>
+              <th>{{ 'estoque.invoices.detail.col.pn' | translate }}</th>
+              <th>{{ 'estoque.invoices.detail.col.serial' | translate }}</th>
+              <th class="num">{{ 'estoque.invoices.detail.col.qty' | translate }}</th>
+              <th>{{ 'estoque.invoices.detail.col.location' | translate }}</th>
+              <th>{{ 'estoque.invoices.detail.col.lot' | translate }}</th>
+              <th>{{ 'common.list.col.status' | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-item>
+            <tr>
+              <td><span class="rastreio">{{ item.codigoRastreio }}</span></td>
+              <td><code class="pn">{{ item.partNumber }}</code></td>
+              <td>{{ item.serialNumber || '—' }}</td>
+              <td class="num">{{ item.quantidade | number:'1.0-3' }}</td>
+              <td>{{ item.localizacao || '—' }}</td>
+              <td>{{ item.loteCodigo || '—' }}</td>
+              <td>
+                <p-tag [value]="getItemEstoqueStatusLabel(item.status)" [severity]="getItemEstoqueStatusSeverity(item.status)"></p-tag>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="7" class="empty-tab">
+                {{ 'estoque.invoices.detail.empty.stock' | translate }}
+                <button pButton [label]="'estoque.invoices.detail.btnRegisterEntry' | translate" icon="pi pi-sign-in" class="p-button-link"
+                        *ngIf="podeNovaEntrada" (click)="novaEntrada()"></button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabPanel>
+
+      <p-tabPanel [header]="tabHeaderLots">
+        <div class="tab-toolbar">
+          <span class="tab-hint">{{ 'estoque.invoices.detail.hint.lots' | translate }}</span>
+        </div>
+        <p-table [value]="lotes" styleClass="p-datatable-sm premium-table"
+                 [paginator]="lotes.length > listPageSize" [rows]="listPageSize">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>{{ 'estoque.invoices.detail.col.lotCode' | translate }}</th>
+              <th>{{ 'estoque.invoices.detail.col.entryDate' | translate }}</th>
+              <th class="num">{{ 'estoque.invoices.detail.col.lotTotal' | translate }}</th>
+              <th class="num">{{ 'estoque.invoices.detail.col.lotAvailable' | translate }}</th>
+              <th>{{ 'estoque.invoices.detail.col.location' | translate }}</th>
+              <th>{{ 'common.list.col.status' | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-lote>
+            <tr>
+              <td><span class="lote-badge">{{ lote.codigoLote }}</span></td>
+              <td>{{ lote.dataEntrada | isoLocalDate }}</td>
+              <td class="num">{{ lote.quantidadeTotal }}</td>
+              <td class="num" [class.negativo]="(lote.quantidadeDisponivel ?? 0) < 0">
+                {{ lote.quantidadeDisponivel }}
+              </td>
+              <td>{{ lote.localizacao || '—' }}</td>
+              <td>
+                <p-tag [value]="getLoteStatusLabel(lote.status)" [severity]="getLoteStatusSeverity(lote.status)"></p-tag>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr><td colspan="6" class="empty-tab">{{ 'estoque.invoices.detail.empty.lots' | translate }}</td></tr>
+          </ng-template>
+        </p-table>
+      </p-tabPanel>
+
+      <p-tabPanel [header]="tabHeaderAuditoria">
+        <div class="tab-toolbar">
+          <span class="tab-hint">{{ 'estoque.invoices.detail.auditoria.hint' | translate }}</span>
+          <button pButton icon="pi pi-refresh" class="p-button-sm p-button-text"
+                  [attr.aria-label]="'estoque.invoices.detail.auditoria.refresh' | translate"
+                  (click)="carregarAuditoria()" [loading]="loadingAuditoria"></button>
+        </div>
+        <p-table [value]="auditorias" styleClass="p-datatable-sm premium-table" dataKey="id">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>{{ 'estoque.invoices.auditoria.col.datetime' | translate }}</th>
+              <th>{{ 'estoque.invoices.auditoria.col.action' | translate }}</th>
+              <th>{{ 'estoque.invoices.auditoria.col.user' | translate }}</th>
+              <th>{{ 'estoque.invoices.auditoria.col.reason' | translate }}</th>
+              <th>{{ 'common.list.col.status' | translate }}</th>
+              <th>{{ 'estoque.invoices.auditoria.col.active' | translate }}</th>
+              <th>{{ 'estoque.invoices.auditoria.col.stockLots' | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-a>
+            <tr>
+              <td>{{ a.dataHora | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+              <td>
+                <p-tag [value]="getAcaoAuditoriaLabel(a.acao)" [severity]="getAcaoAuditoriaSeverity(a.acao)"></p-tag>
+              </td>
+              <td>
+                <strong>{{ a.usuarioNome || ('estoque.invoices.auditoria.system' | translate) }}</strong>
+                <small *ngIf="a.usuarioEmail" class="audit-email">{{ a.usuarioEmail }}</small>
+              </td>
+              <td class="motivo-cell">
+                {{ a.motivo }}
+                <small *ngIf="a.detalheBloqueio" class="bloqueio-detalhe">{{ a.detalheBloqueio }}</small>
+              </td>
+              <td>
+                <span *ngIf="a.statusAnterior">{{ getStatusLabel(a.statusAnterior) }}</span>
+                <span *ngIf="a.statusNovo && a.statusNovo !== a.statusAnterior"> → {{ getStatusLabel(a.statusNovo) }}</span>
+              </td>
+              <td>
+                <span *ngIf="a.isActiveAnterior !== undefined || a.isActiveNovo !== undefined">
+                  {{ auditActiveLabel(a.isActiveAnterior) }}
+                  <span *ngIf="a.isActiveNovo !== a.isActiveAnterior"> → {{ auditActiveLabel(a.isActiveNovo) }}</span>
+                </span>
+                <span *ngIf="a.isActiveAnterior === undefined && a.isActiveNovo === undefined">—</span>
+              </td>
+              <td>{{ a.qtdItensEstoque ?? 0 }} / {{ a.qtdLotes ?? 0 }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr><td colspan="7" class="empty-tab">{{ 'estoque.invoices.detail.auditoria.empty' | translate }}</td></tr>
+          </ng-template>
+        </p-table>
+      </p-tabPanel>
+    </p-tabView>
+  </ng-container>
+</div>

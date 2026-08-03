@@ -1,0 +1,35 @@
+.as-empty-state {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  background: var(--as-bg-elevated, #fff);
+  border: 1px dashed var(--as-border-strong, #cbd5e1);
+  border-radius: var(--as-radius-lg, 14px);
+}
+
+.as-empty-state__icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: var(--as-primary-light, #e8eef8);
+  color: var(--as-info, #1a5f8a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.as-empty-state__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--as-text, #0f172a);
+}
+
+.as-empty-state__desc {
+  margin: 0 auto 1rem;
+  max-width: 420px;
+  font-size: 0.9rem;
+  color: var(--as-text-muted, #475569);
+  line-height: 1.5;
+}

@@ -1,0 +1,10 @@
+# Aero Suite — https://aerosuite.com.br/robots.txt
+# Publique na raiz do WordPress (ou via plugin SEO / Reading settings).
+
+User-agent: *
+Allow: /
+
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+
+Sitemap: https://aerosuite.com.br/wp-sitemap.xml

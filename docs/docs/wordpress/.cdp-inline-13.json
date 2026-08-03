@@ -1,0 +1,1 @@
+{"method":"Runtime.evaluate","viewId":"bb8370","params":{"expression":"(async()=>{const e=await(await fetch('http://127.0.0.1:18780/expr')).text();let v=eval(e);if(v&&typeof v.then==='function')v=await v;return v;})()","awaitPromise":true,"returnByValue":true}}

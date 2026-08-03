@@ -1,0 +1,29 @@
+﻿{
+    "schema":  "aerosuite-anac-restore-homolog-v1",
+    "generatedAt":  "2026-06-10T11:00:24.5399261-03:00",
+    "reqId":  "REQ-022",
+    "valId":  "VAL-19",
+    "homologDbHost":  "localhost",
+    "homologDbPort":  3306,
+    "homologDbName":  "aerosuite",
+    "backupId":  "939241f5-467c-469c-b934-bf50e02bd124",
+    "rtoRestoreMin":  12,
+    "osAmostra":  "OS piloto homologacao",
+    "restoreTestStatus":  "EXECUTADO_HOMOLOG",
+    "responsavelTi":  "",
+    "checklist":  [
+                      "1. Agendar janela com TI e RT; comunicar indisponibilidade do ambiente homologaÃ§Ã£o.",
+                      "2. Identificar backup vÃ¡lido (API GET /api/admin/backup ou Ãºltimo agendado). Anotar backupId e caminho do arquivo .sql.gz.",
+                      "3. Parar API homologaÃ§Ã£o (evitar escrita durante restore).",
+                      "4. Criar snapshot ou dump de seguranÃ§a do estado atual (opcional, recomendado).",
+                      "5. Restaurar no MySQL homologaÃ§Ã£o (localhost:3306 / aerosuite):",
+                      "     mysql -h HOST -P PORT -u USER -p DB \u003c backup.sql   (ou gunzip -c backup.sql.gz | mysql ...)",
+                      "6. Reiniciar API; aguardar health check.",
+                      "7. Login com usuÃ¡rio piloto; abrir OS amostra e validar CRS, anexos e job card.",
+                      "8. Exportar dossiÃª PDF/ZIP da OS amostra e comparar com prÃ©-restore.",
+                      "9. Anexar log do cliente MySQL (saÃ­da do restore) em evidencias/restore-homolog-*/",
+                      "10. Preencher ata-backup-restore-*.md (seÃ§Ã£o homologaÃ§Ã£o) e coletar assinaturas TI + RT."
+                  ],
+    "evidenciaDir":  "D:\\Desenvolvimento\\aerosuite\\docs\\anac-conformidade\\evidencias\\restore-homolog-20260610-110024",
+    "proximaAcao":  "Anexar mysql-restore.log neste diretÃ³rio e assinar ata-backup-restore PDF"
+}

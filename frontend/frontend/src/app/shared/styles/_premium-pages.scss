@@ -1,0 +1,222 @@
+// Shell de página premium — PageHero fixo + corpo com scroll (rodapé do app-layout fica abaixo)
+
+.as-page {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--as-bg-page, #f1f5f9);
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
+
+  // Páginas sem .as-page-body: scroll no main-content (listagens incluídas)
+  &:not(:has(.as-page-body)):not(.list-container) {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  &.list-container:not(:has(.as-page-body)) {
+    overflow: visible;
+    height: auto;
+    flex: 1 0 auto;
+  }
+
+  > app-page-hero {
+    display: block;
+    flex-shrink: 0;
+    width: 100%;
+  }
+}
+
+.as-page-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 1.5rem 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.as-panel {
+  background: var(--as-bg-elevated, #fff);
+  border: 1px solid var(--as-border, #e2e8f0);
+  border-radius: var(--as-radius-lg, 14px);
+  padding: 1rem 1.15rem;
+  box-shadow: var(--as-shadow-sm);
+  margin-bottom: 1rem;
+}
+
+.as-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  background: var(--as-bg-elevated, #fff);
+  border: 1px solid var(--as-border, #e2e8f0);
+  border-radius: var(--as-radius-lg, 14px);
+  box-shadow: var(--as-shadow-xs);
+}
+
+.as-table-card {
+  background: var(--as-bg-elevated, #fff);
+  border: 1px solid var(--as-border, #e2e8f0);
+  border-radius: var(--as-radius-lg, 14px);
+  overflow: hidden;
+  box-shadow: var(--as-shadow-sm);
+}
+
+// Skeleton loaders
+.as-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--as-bg-muted, #f1f5f9) 0%,
+    var(--as-border, #e2e8f0) 50%,
+    var(--as-bg-muted, #f1f5f9) 100%
+  );
+  background-size: 200% 100%;
+  animation: as-skeleton-shimmer 1.2s ease-in-out infinite;
+  border-radius: var(--as-radius-sm, 6px);
+}
+
+@keyframes as-skeleton-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+[data-reduce-motion='true'] .as-skeleton {
+  animation: none;
+  background: var(--as-bg-muted, #f1f5f9);
+}
+
+.as-skeleton-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--as-border, #e2e8f0);
+}
+
+.as-skeleton-cell {
+  height: 14px;
+}
+
+.as-skeleton-cell.wide {
+  grid-column: span 2;
+}
+
+// Contraste badges (WCAG AA em fundos claros)
+.badge,
+.p-tag {
+  &.p-tag-success,
+  &.badge-alta {
+    color: #065f46 !important;
+    background: #d1fae5 !important;
+  }
+
+  &.p-tag-warning,
+  &.badge-media {
+    color: #78350f !important;
+    background: #fef3c7 !important;
+  }
+
+  &.p-tag-danger {
+    color: #7f1d1d !important;
+    background: #fee2e2 !important;
+  }
+
+  &.p-tag-info {
+    color: #1e3a8a !important;
+    background: #dbeafe !important;
+  }
+}
+
+[data-theme='dark'] {
+  .as-page {
+    background: var(--as-bg-page);
+  }
+
+  .as-panel,
+  .as-filter-bar,
+  .as-table-card,
+  .as-empty-state {
+    background: var(--as-bg-elevated);
+    border-color: var(--as-border);
+    color: var(--as-text);
+  }
+}
+
+// Listagens legado — harmonizar dentro de .as-page
+.as-page .page-header {
+  display: none;
+}
+
+.as-page .filter-bar,
+.as-page .filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  background: var(--as-bg-elevated, #fff);
+  border: 1px solid var(--as-border, #e2e8f0);
+  border-radius: var(--as-radius-lg, 14px);
+  box-shadow: var(--as-shadow-xs);
+}
+
+.as-page .table-container {
+  background: var(--as-bg-elevated, #fff);
+  border: 1px solid var(--as-border, #e2e8f0);
+  border-radius: var(--as-radius-lg, 14px);
+  overflow: hidden;
+  box-shadow: var(--as-shadow-sm);
+}
+
+@media (max-width: 1023px) {
+  .as-page:not(:has(.as-page-body)) {
+    overflow-x: clip;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .as-page-body {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    overflow-x: clip;
+  }
+
+  .as-table-card,
+  .as-page .table-container,
+  .as-page .table-section,
+  .as-page .table-card,
+  .as-page .data-card {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  .as-page .p-datatable:not(.p-datatable-responsive-stack) .p-datatable-wrapper {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "at": "2026-06-09T16:29:11.424Z",
+  "channel": "wordpress-wp-mail-smtp",
+  "from": "contato@aerosuite.com.br",
+  "targets": {
+    "to": "rafaellanottesconsultoria@gmail.com",
+    "cc": "timmaia@bellowscontrols.com.br, wellemlyra@gmail.com"
+  },
+  "subject": "[Aero Suite] Relatório Executivo UX — 100% aderente (32/32 itens resolvidos)",
+  "sent": {
+    "at": "2026-06-09T16:29:51+00:00",
+    "sent": [
+      {
+        "to": "rafaellanottesconsultoria@gmail.com",
+        "cc": "timmaia@bellowscontrols.com.br, wellemlyra@gmail.com",
+        "ok": true,
+        "pdf": true,
+        "html": true
+      }
+    ]
+  }
+}

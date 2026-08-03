@@ -1,0 +1,150 @@
+.update-notification-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10000;
+  max-width: 450px;
+  min-width: 350px;
+}
+
+.update-notification-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  border-left: 4px solid #0ea5e9;
+  
+  &.available {
+    border-left-color: #0ea5e9;
+  }
+  
+  &.countdown {
+    border-left-color: #f59e0b;
+    
+    &.warning {
+      border-left-color: #ef4444;
+      animation: pulse 1s infinite;
+    }
+  }
+  
+  &.in-progress {
+    border-left-color: #6366f1;
+  }
+  
+  &.completed {
+    border-left-color: #10b981;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.update-notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.update-title-section {
+  flex: 1;
+}
+
+.update-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  i {
+    font-size: 20px;
+  }
+}
+
+.update-message {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.close-btn {
+  margin-left: 10px;
+  color: #94a3b8;
+  
+  &:hover {
+    color: #64748b;
+  }
+}
+
+.update-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  justify-content: flex-end;
+}
+
+.countdown-display {
+  margin-top: 15px;
+}
+
+.countdown-time {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 10px;
+  
+  .time-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #f59e0b;
+    font-variant-numeric: tabular-nums;
+  }
+  
+  .time-label {
+    font-size: 14px;
+    color: #64748b;
+  }
+}
+
+.update-warning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background-color: #fef2f2;
+  border-radius: 8px;
+  margin-top: 15px;
+  border: 1px solid #fecaca;
+  
+  i {
+    color: #ef4444;
+    font-size: 20px;
+  }
+  
+  span {
+    color: #991b1b;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .update-notification-container {
+    right: 10px;
+    left: 10px;
+    max-width: none;
+    min-width: auto;
+  }
+}
+

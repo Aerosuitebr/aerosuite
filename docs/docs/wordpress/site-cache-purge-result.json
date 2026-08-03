@@ -1,0 +1,25 @@
+{
+  "at": "2026-06-04T22:19:57.697Z",
+  "steps": {
+    "api": {
+      "litespeedRest": {
+        "ok": false,
+        "error": "Nenhuma rota foi encontrada que corresponde com o URL e o método de requisição."
+      }
+    },
+    "ui-https://aerosuite.com.br/wp-admin/admin.php?page=litespeed-toolbox&LSCWP_CTRL=PURGE_ALL": {
+      "ok": true,
+      "via": "link"
+    },
+    "adminBar": {
+      "ok": true
+    }
+  },
+  "verify": {
+    "hasPanel": true,
+    "hasAnchor": true,
+    "hasOld": false,
+    "xCache": "BYPASS",
+    "cfCache": "DYNAMIC"
+  }
+}

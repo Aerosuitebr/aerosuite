@@ -1,0 +1,476 @@
+{
+  "generatedAt": "2026-06-10T18:26:26.952Z",
+  "totalRoutes": 52,
+  "blockingTotal": 0,
+  "pass": true,
+  "routes": [
+    {
+      "group": "public",
+      "route": "/",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 22
+    },
+    {
+      "group": "public",
+      "route": "/login",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 22
+    },
+    {
+      "group": "public",
+      "route": "/forgot-password",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 21
+    },
+    {
+      "group": "public",
+      "route": "/cadastro-trial",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 23
+    },
+    {
+      "group": "public",
+      "route": "/termos",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 18
+    },
+    {
+      "group": "public",
+      "route": "/privacidade",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 18
+    },
+    {
+      "group": "auth",
+      "route": "/",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 24
+    },
+    {
+      "group": "auth",
+      "route": "/os",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/estoque/itens",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 24
+    },
+    {
+      "group": "auth",
+      "route": "/configuracoes",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 28
+    },
+    {
+      "group": "auth",
+      "route": "/propostas-comerciais",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 27
+    },
+    {
+      "group": "auth",
+      "route": "/chat",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 17
+    },
+    {
+      "group": "auth",
+      "route": "/biblioteca",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/fcu-assembly",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 28
+    },
+    {
+      "group": "auth",
+      "route": "/associacao-fcu",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 27
+    },
+    {
+      "group": "auth",
+      "route": "/relatorios",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 32
+    },
+    {
+      "group": "auth",
+      "route": "/usuarios",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/products",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/organizacoes",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 26
+    },
+    {
+      "group": "auth",
+      "route": "/auditoria-acesso",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 27
+    },
+    {
+      "group": "auth",
+      "route": "/capacidade",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/controle-acesso",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/fabricantes",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/perfis",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/funcionalidades",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/suporte",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 23
+    },
+    {
+      "group": "auth",
+      "route": "/templates-proposta",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 27
+    },
+    {
+      "group": "auth",
+      "route": "/aero/diretrizes",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 27
+    },
+    {
+      "group": "auth",
+      "route": "/publicacoes-tecnicas/associar-pn",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 27
+    },
+    {
+      "group": "auth",
+      "route": "/estoque/invoices",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/estoque/lotes",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 24
+    },
+    {
+      "group": "auth",
+      "route": "/capacidade/hangares",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/hangar",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/conformidade/painel",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 26
+    },
+    {
+      "group": "auth",
+      "route": "/conformidade/documentos",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 27
+    },
+    {
+      "group": "auth",
+      "route": "/conformidade/treinamentos",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/conformidade/calibracao",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/conformidade/nao-conformidades",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 27
+    },
+    {
+      "group": "auth",
+      "route": "/conformidade/subcontratacao",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/conformidade/contingencia",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 27
+    },
+    {
+      "group": "auth",
+      "route": "/conformidade/releases",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/conformidade/treinamentos-obrigatorios",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 25
+    },
+    {
+      "group": "auth",
+      "route": "/conformidade/habilitacoes",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 27
+    },
+    {
+      "group": "auth",
+      "route": "/dossie-auditoria",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 26
+    },
+    {
+      "group": "auth",
+      "route": "/go-live-migracao",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 27
+    },
+    {
+      "group": "auth",
+      "route": "/os-auditoria",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 26
+    },
+    {
+      "group": "auth",
+      "route": "/settings/backup",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 28
+    },
+    {
+      "group": "externo-public",
+      "route": "/externo/login",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 23
+    },
+    {
+      "group": "externo-auth",
+      "route": "/externo",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 22
+    },
+    {
+      "group": "externo-auth",
+      "route": "/externo/os",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 22
+    },
+    {
+      "group": "externo-auth",
+      "route": "/externo/documentos",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 22
+    },
+    {
+      "group": "externo-auth",
+      "route": "/externo/propostas",
+      "pass": true,
+      "blockingCount": 0,
+      "violations": [],
+      "minorCount": 0,
+      "passes": 22
+    }
+  ]
+}

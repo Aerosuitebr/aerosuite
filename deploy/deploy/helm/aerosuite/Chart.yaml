@@ -1,0 +1,12 @@
+apiVersion: v2
+name: aerosuite
+description: Aero Suite — API + Web (Helm skeleton P2)
+type: application
+version: 0.1.0
+appVersion: "0.2.0"
+keywords:
+  - aerosuite
+  - mro
+  - saas
+maintainers:
+  - name: Aero Suite

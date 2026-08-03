@@ -1,0 +1,1 @@
+{"method":"Runtime.evaluate","viewId":"7b8d4e","params":{"expression":"(async()=>{const code=atob(window.__batchB64);return await eval(code);})()","awaitPromise":true,"returnByValue":true}}

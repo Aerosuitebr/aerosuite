@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": false,
+    "module": "ES2022",
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
+    "declaration": false,
+    "sourceMap": false,
+    "outDir": "./dist/out-tsc",
+    "moduleResolution": "bundler",
+
+    // ✅ Incluímos os tipos globais aqui
+    "typeRoots": [
+      "node_modules/@types",
+      "src/types"
+    ],
+    "types": [],
+
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": false,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
+  }
+}

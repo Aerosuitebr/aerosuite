@@ -1,0 +1,14 @@
+{
+  "summary": {},
+  "errors": [
+    {
+      "file": ".mcp-cssfull-batch-3.json",
+      "error": "Error: ENOENT: no such file or directory, open 'D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-mcp-result.json'"
+    },
+    {
+      "file": ".mcp-cssfull-batch-3.json",
+      "error": "Error: ENOENT: no such file or directory, open 'D:\\Desenvolvimento\\aerosuite\\docs\\wordpress\\.cdp-mcp-result.json'"
+    }
+  ],
+  "done": []
+}

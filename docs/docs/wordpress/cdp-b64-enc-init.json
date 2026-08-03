@@ -1,0 +1,1 @@
+{"expression":"(async()=>{const expr=atob('KGFzeW5jKCk9Pnt3aW5kb3cuX19ob21lYjY0PScnO3JldHVybntvazp0cnVlfTt9KSgp');let v=eval(expr);if(v&&typeof v.then==='function')v=await v;return v})()","awaitPromise":true,"returnByValue":true}

@@ -1,0 +1,11 @@
+{
+  "commercialName": "Aero Suite",
+  "commercialTagline": "Plataforma de gestão para oficinas MRO",
+  "primaryColor": "#0ea5e9",
+  "logoUrl": "assets/LOGO_AERO.png",
+  "wordmarkUrl": "assets/LOGO_LETRA.png",
+  "wordmarkLightUrl": "assets/LOGO_LETRA_LIGHT.png",
+  "browserTitleSuffix": "Gestão MRO",
+  "copyrightEntity": "Aero Suite",
+  "supportEmail": "contato@aerosuite.com.br"
+}

@@ -1,0 +1,61 @@
+<section class="ops-enroll">
+  <header class="ops-enroll-header">
+    <h2>{{ 'platformOps.enroll.title' | translate }}</h2>
+    <p>{{ 'platformOps.enroll.subtitle' | translate }}</p>
+  </header>
+
+  <div *ngIf="loadingSetup" class="ops-enroll-loading">{{ 'platformOps.common.loading' | translate }}</div>
+
+  <ng-container *ngIf="!loadingSetup && setupSecret">
+    <div class="ops-enroll-qr" *ngIf="qrDataUrl">
+      <img [src]="qrDataUrl" width="200" height="200" [alt]="'platformOps.enroll.qrAlt' | translate" />
+      <p>{{ 'platformOps.enroll.scanHint' | translate }}</p>
+    </div>
+
+    <div class="ops-enroll-secret">
+      <span class="ops-enroll-secret-label">{{ 'mfaSetup.secretLabel' | translate }}</span>
+      <code>{{ setupSecret }}</code>
+    </div>
+
+    <label for="enroll-totp">{{ 'mfaSetup.codeLabel' | translate }}</label>
+    <input
+      pInputText
+      id="enroll-totp"
+      [(ngModel)]="totpCode"
+      autocomplete="one-time-code"
+      inputmode="numeric"
+      maxlength="6"
+      class="w-full"
+      (keyup.enter)="confirm()" />
+
+    <p class="ops-enroll-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <div class="ops-enroll-actions">
+      <button
+        pButton
+        type="button"
+        class="p-button-primary w-full"
+        [label]="'platformOps.enroll.submit' | translate"
+        [loading]="loadingConfirm"
+        (click)="confirm()">
+      </button>
+      <button
+        pButton
+        type="button"
+        class="p-button-text w-full"
+        [label]="'platformOps.enroll.cancel' | translate"
+        (click)="cancel()">
+      </button>
+    </div>
+  </ng-container>
+
+  <p class="ops-enroll-error" *ngIf="!loadingSetup && !setupSecret && errorMessage">{{ errorMessage }}</p>
+  <button
+    *ngIf="!loadingSetup && !setupSecret && errorMessage"
+    pButton
+    type="button"
+    class="p-button-outlined w-full"
+    [label]="'platformOps.enroll.cancel' | translate"
+    (click)="cancel()">
+  </button>
+</section>

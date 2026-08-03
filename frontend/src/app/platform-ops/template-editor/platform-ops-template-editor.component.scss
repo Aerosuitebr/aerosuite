@@ -1,0 +1,601 @@
+.tpl-wizard {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .tpl-wizard {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tpl-wizard__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.tpl-wizard__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.tpl-wizard__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tpl-wizard__section-actions {
+  display: flex;
+  gap: 0.15rem;
+  flex-wrap: wrap;
+}
+
+.tpl-wizard__label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+}
+
+.tpl-wizard__input {
+  width: 100%;
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: #f8fafc;
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+  font-size: 0.88rem;
+}
+
+:host ::ng-deep .tpl-wizard__input.p-inputtext:enabled:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.25);
+}
+
+.tpl-wizard__var-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tpl-wizard__var-hint {
+  font-size: 0.68rem;
+  color: #64748b;
+}
+
+.tpl-wizard__var-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.tpl-wizard__var-chip {
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #e0f2fe;
+  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.66rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  cursor: pointer;
+}
+
+.tpl-wizard__var-chip:hover {
+  border-color: #0369a1;
+  background: #1e3a5f;
+}
+
+.tpl-wizard__blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.tpl-wizard__block {
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 0.65rem;
+  background: #0f172a;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.tpl-wizard__block--active {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.2);
+}
+
+.tpl-wizard__block-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tpl-wizard__block-remove,
+.tpl-wizard__bullet-remove {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0.15rem;
+}
+
+.tpl-wizard__block-remove:hover,
+.tpl-wizard__bullet-remove:hover {
+  color: #f87171;
+}
+
+.tpl-wizard__bullet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.tpl-wizard__bullet-item {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.tpl-wizard__add-item {
+  align-self: flex-start;
+  border: none;
+  background: transparent;
+  color: #38bdf8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.15rem 0;
+}
+
+.tpl-wizard__hero-panel {
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: rgba(15, 23, 42, 0.55);
+  gap: 0.75rem;
+}
+
+.tpl-wizard__hero-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.tpl-wizard__hero-hint {
+  margin: 0.2rem 0 0;
+  font-size: 0.72rem;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.tpl-wizard__hero-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tpl-wizard__hero-layout-btns {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.tpl-wizard__layout-btn {
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #94a3b8;
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tpl-wizard__layout-btn--active {
+  border-color: #0284c7;
+  background: rgba(2, 132, 199, 0.2);
+  color: #e0f2fe;
+}
+
+.tpl-wizard__hero-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.tpl-wizard__dropzone {
+  position: relative;
+  min-height: 72px;
+  border: 1px dashed #475569;
+  border-radius: 8px;
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.55rem;
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  text-align: center;
+  overflow: hidden;
+
+  &:not(:has(.tpl-wizard__dropzone-frame)) {
+    align-items: center;
+  }
+}
+
+.tpl-wizard__dropzone-frame {
+  width: 100%;
+  aspect-ratio: 600 / 250;
+  max-height: 84px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #020617;
+}
+
+.tpl-wizard__hero-pan {
+  position: relative;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+
+  &--active {
+    cursor: grabbing;
+  }
+}
+
+.tpl-wizard__hero-pan-img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  pointer-events: none;
+}
+
+.tpl-wizard__hero-pan-hint {
+  margin: 0;
+  font-size: 0.68rem;
+  color: #64748b;
+  text-align: center;
+}
+
+.tpl-wizard__dropzone-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tpl-wizard__dropzone-change {
+  border: none;
+  background: transparent;
+  color: #38bdf8;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.15rem 0;
+}
+
+.tpl-wizard__dropzone-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: #0c1929;
+}
+
+.tpl-wizard__dropzone--active {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.tpl-wizard__dropzone--busy {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.tpl-wizard__hero-crop {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-top: 0.15rem;
+}
+
+.tpl-wizard__crop-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+.tpl-wizard__crop-slider {
+  width: 100%;
+  accent-color: #0284c7;
+  cursor: pointer;
+}
+
+.tpl-wizard__dropzone-remove {
+  border: none;
+  background: transparent;
+  color: #f87171;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.15rem 0;
+}
+
+.tpl-wizard__file-input {
+  display: none;
+}
+
+.tpl-wizard__hero-error {
+  margin: 0;
+  font-size: 0.72rem;
+  color: #f87171;
+}
+
+:host ::ng-deep .tpl-wizard__hero-panel .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+  background: #0284c7;
+}
+
+.tpl-wizard__preview {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.tpl-wizard__preview-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.tpl-wizard__preview-title {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+}
+
+.tpl-wizard__preview-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #7dd3fc;
+  background: rgba(3, 105, 161, 0.22);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+}
+
+.tpl-wizard__sandbox {
+  border: 1px solid #334155;
+  border-radius: 12px;
+  background: #e2e8f0;
+  padding: 16px;
+  min-height: 420px;
+  overflow: auto;
+}
+
+.tpl-wizard__sandbox--plain {
+  background: #0f172a;
+  padding: 24px;
+}
+
+.email-preview {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.email-preview__chrome {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px 10px 0 0;
+  padding: 12px 16px;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.email-preview__chrome-row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 2px 0;
+}
+
+.email-preview__chrome-label {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.email-preview__chrome-value {
+  color: #0f172a;
+  word-break: break-word;
+}
+
+.email-preview__chrome-value--subject {
+  font-weight: 600;
+}
+
+.email-preview__canvas {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.email-preview__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 32px 14px;
+  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.email-preview__logo {
+  display: block;
+  width: auto;
+  max-width: 10rem;
+  height: 5.25rem;
+  object-fit: contain;
+  object-position: center center;
+}
+
+.email-preview__hero {
+  border-bottom: none;
+}
+
+.email-preview__hero-wrap {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+
+  &--panning {
+    cursor: grabbing;
+  }
+}
+
+:host ::ng-deep .email-preview__hero .email-hero--classic {
+  display: block;
+}
+
+:host ::ng-deep .email-preview__hero .email-hero__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: top;
+  object-fit: contain;
+  background: #0c1929;
+}
+
+:host ::ng-deep .email-preview__hero .email-hero__band {
+  background: linear-gradient(180deg, #0c1929 0%, #0f172a 100%);
+  padding: 14px 24px 16px;
+  text-align: center;
+}
+
+:host ::ng-deep .email-preview__hero .email-hero--overlay {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 600 / 250;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:host ::ng-deep .email-preview__hero .email-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.28) 0%, rgba(15, 23, 42, 0.55) 100%);
+}
+
+:host ::ng-deep .email-preview__hero .email-hero__headline {
+  position: relative;
+  z-index: 1;
+  padding: 12px 20px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  color: #f8fafc;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+:host ::ng-deep .email-preview__hero .email-hero--classic .email-hero__headline {
+  color: #f8fafc;
+  font-size: 14px;
+}
+
+.email-preview__body {
+  padding: 32px;
+  color: #1e293b;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+:host ::ng-deep .email-preview__body p {
+  margin: 0 0 1rem;
+}
+
+:host ::ng-deep .email-preview__body p:last-child {
+  margin-bottom: 0;
+}
+
+:host ::ng-deep .email-preview__body ul {
+  margin: 0 0 1rem 1.1rem;
+  padding: 0;
+}
+
+:host ::ng-deep .email-preview__body li {
+  margin-bottom: 0.35rem;
+}
+
+:host ::ng-deep .email-preview__body .preview-var-pill {
+  display: inline-flex;
+  align-items: center;
+  background: #0369a1;
+  color: #e0f2fe;
+  border-radius: 999px;
+  padding: 0.05rem 0.45rem;
+  margin: 0 0.1rem;
+  font-size: 0.82em;
+  font-weight: 600;
+  vertical-align: baseline;
+}
+
+.email-preview__footer {
+  padding: 16px 32px 24px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #64748b;
+  background: #f8fafc;
+}
+
+.wa-preview {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.wa-preview__bubble {
+  max-width: 92%;
+  background: #dcf8c6;
+  color: #0f172a;
+  border-radius: 12px 12px 12px 4px;
+  padding: 12px 14px;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

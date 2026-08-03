@@ -1,0 +1,241 @@
+.perfil-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    .header-text {
+      .page-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 0 0 0.5rem 0;
+        font-size: 2rem;
+        font-weight: 600;
+        color: #1f2937;
+        
+        i {
+          color: #3b82f6;
+        }
+      }
+      
+      .page-subtitle {
+        margin: 0;
+        color: #6b7280;
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+.profile-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-photo-section {
+  .photo-card {
+    height: fit-content;
+    
+    :host ::ng-deep .p-card-body {
+      padding: 2rem;
+    }
+  }
+  
+  .photo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  app-usuario-foto-hover {
+    display: inline-block;
+  }
+  
+  .photo-actions {
+    width: 100%;
+    
+    .drop-zone {
+      border: 2px dashed #d1d5db;
+      border-radius: 0.5rem;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition:
+        border-color 0.3s ease,
+        background-color 0.3s ease;
+      background: #f9fafb;
+      
+      &:hover, &.dragover {
+        border-color: #3b82f6;
+        background: #eff6ff;
+      }
+      
+      i {
+        font-size: 2rem;
+        color: #6b7280;
+        margin-bottom: 1rem;
+        display: block;
+      }
+      
+      p {
+        margin: 0 0 0.5rem 0;
+        color: #374151;
+        font-weight: 500;
+      }
+      
+      small {
+        color: #6b7280;
+        font-size: 0.875rem;
+      }
+    }
+    
+    .upload-preview {
+      margin-top: 1rem;
+      text-align: center;
+      
+      img {
+        max-width: 200px;
+        max-height: 200px;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      
+      .preview-actions {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+      }
+    }
+    
+    .upload-progress {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: #f3f4f6;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+      
+      i {
+        color: #3b82f6;
+      }
+      
+      span {
+        color: #374151;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.profile-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .notifications-card {
+    .notifications-hint {
+      margin: 0 0 1rem;
+      color: #64748b;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    .notifications-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+
+      label {
+        font-weight: 600;
+        color: #334155;
+        font-size: 0.875rem;
+      }
+    }
+
+    .notifications-mode-hint {
+      color: #64748b;
+      font-size: 0.8125rem;
+      line-height: 1.45;
+    }
+
+    .notifications-actions {
+      margin-top: 1.25rem;
+    }
+  }
+
+  .info-card {
+    height: fit-content;
+    
+    :host ::ng-deep .p-card-body {
+      padding: 2rem;
+    }
+  }
+  
+  .info-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+  
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    label {
+      font-weight: 600;
+      color: #374151;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .info-value {
+      margin: 0;
+      color: #1f2937;
+      font-size: 1rem;
+    }
+  }
+}
+
+// Responsividade
+@media (max-width: 640px) {
+  .perfil-container {
+    padding: 1rem;
+  }
+  
+  .page-header .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .profile-content {
+    gap: 1.5rem;
+  }
+  
+  .drop-zone {
+    padding: 1.5rem 1rem !important;
+    
+    i {
+      font-size: 1.5rem !important;
+    }
+  }
+}

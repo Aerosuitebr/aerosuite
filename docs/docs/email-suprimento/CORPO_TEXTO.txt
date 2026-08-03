@@ -1,0 +1,82 @@
+Prezada equipe de Suprimento,
+
+No último diagnóstico realizado pelo TI, identificamos divergências entre as quantidades exibidas no cadastro de Produtos (campo legado "quantity") e o saldo efetivamente registrado no novo Módulo de Estoque (tabela item_estoque, com rastreabilidade por fornecedor, invoice e lote). Essa diferença é a principal causa do sistema indicar "estoque zero" em itens que vocês têm fisicamente disponíveis para uso em OS e kits FCU.
+
+Para acelerar a regularização, estamos encaminhando em anexo dois relatórios que listam, de forma objetiva, exatamente o que precisa ser ajustado. Pedimos a leitura atenta deste e-mail e a execução do passo a passo na sequência indicada.
+
+──────────────────────────────────────────────
+1) ARQUIVOS ANEXOS
+──────────────────────────────────────────────
+
+• produtos-discrepancia-estoque.csv (159 produtos)
+  Conteúdo: id_produto, pn, nome, local_catalogo, qty_catalogo,
+  qty_estoque_disponivel, diferenca, classificacao.
+  Como usar — filtrar pela coluna "classificacao":
+   - SEM_ENTRADA_NO_MODULO_ESTOQUE: cadastrar a entrada no Módulo
+     Estoque (item físico + fornecedor + invoice/lote).
+   - CATALOGO_MAIOR_QUE_ESTOQUE: complementar a diferença com novas
+     entradas conforme a quantidade física real.
+   - ESTOQUE_MAIOR_QUE_CATALOGO: corrigir o catálogo (cadastro de
+     Produto) para refletir o saldo real.
+
+• produtos-duplicados-catalogo.csv (10 Part Numbers)
+  Conteúdo: pn, cadastros, ids, quantidades, locais, nomes.
+  Como usar: manter apenas um cadastro por P/N (o que tem dados
+  corretos) e inativar/excluir os duplicados, somando as quantidades
+  antes de finalizar para não perder histórico.
+
+──────────────────────────────────────────────
+2) PASSO A PASSO RECOMENDADO
+──────────────────────────────────────────────
+
+1. Abrir o CSV "produtos-discrepancia-estoque.csv" no Excel
+   (separador ponto-e-vírgula, codificação UTF-8 — já vem pronto,
+   basta duplo clique).
+2. Resolver primeiro as linhas marcadas como
+   SEM_ENTRADA_NO_MODULO_ESTOQUE: fazer a contagem física do P/N e
+   lançar a entrada no menu  Estoque  →  Entrada de Mercadoria,
+   preenchendo fornecedor, invoice/lote e localização.
+3. Para CATALOGO_MAIOR_QUE_ESTOQUE: lançar entradas complementares
+   apenas pela quantidade que realmente existe na prateleira (não
+   copiar a coluna qty_catalogo).
+4. Para ESTOQUE_MAIOR_QUE_CATALOGO: corrigir o cadastro do Produto
+   (Cadastros → Produtos) para refletir a realidade física.
+5. Tratar o CSV "produtos-duplicados-catalogo.csv": consolidar os
+   duplicados em um único cadastro por P/N para evitar saldos
+   espalhados.
+6. Após cada bloco de ajustes, validar abrindo a tela de
+   "Itens em Estoque" — o saldo passa a refletir o saldo rastreável
+   (FIFO/lote/invoice).
+
+──────────────────────────────────────────────
+3) POR QUE ISSO É IMPORTANTE
+──────────────────────────────────────────────
+
+Sem essa equalização, o sistema continuará indicando déficit ao
+abrir OS com Kit FCU ou marcar trocas eventuais como pagas, mesmo
+quando o material estiver fisicamente disponível. A partir desta
+semana, o sistema permite seguir com o pagamento mesmo nesses casos,
+mas continua registrando alerta de déficit para o Suprimento
+revisar — por isso a regularização é prioritária.
+
+──────────────────────────────────────────────
+4) MATERIAL DE APOIO (PDF)
+──────────────────────────────────────────────
+
+No sistema, dentro do módulo Estoque, há um botão "Manuais" no
+canto superior direito. Lá já está disponível o manual:
+"Equalização do Estoque (Físico × Sistema)" — com o mesmo passo a
+passo deste e-mail, porém ilustrado e em formato corporativo para
+impressão.
+
+──────────────────────────────────────────────
+5) SUPORTE
+──────────────────────────────────────────────
+
+Em caso de dúvida durante o processo, encaminhar mensagem para
+wellemlyra@gmail.com que o TI dará suporte imediato. Sugerimos
+definir um prazo interno de conclusão por etapas para facilitar o
+acompanhamento.
+
+Atenciosamente,
+Equipe de Tecnologia da Informação — Aero Suite Controls

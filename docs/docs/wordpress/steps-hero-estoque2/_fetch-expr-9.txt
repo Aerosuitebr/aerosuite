@@ -1,0 +1,1 @@
+(async()=>{const t=await fetch('http://127.0.0.1:8767/apply.js').then(r=>r.text());return eval(t);})()

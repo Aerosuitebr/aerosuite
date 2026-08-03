@@ -1,0 +1,1 @@
+{"viewId":"e3527b","method":"Runtime.evaluate","params":{"expression":"(async()=>{window.__homeb64='';return{ok:true};})()","awaitPromise":true,"returnByValue":true}}

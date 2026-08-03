@@ -1,0 +1,235 @@
+.lang-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.lang-switcher--compact {
+  padding-bottom: 6px;
+}
+
+.lang-switcher--compact .lang-flag {
+  min-width: auto;
+  min-height: 1.75rem;
+  padding: 0.15rem 0.35rem;
+}
+
+.lang-switcher--compact .lang-flag__img {
+  width: 1.35rem;
+  height: auto;
+}
+
+.lang-switcher--compact .lang-flag__code {
+  font-size: 0.65rem;
+}
+
+.lang-flag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--surface-ground, rgba(0, 0, 0, 0.04));
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.1s ease,
+    background 0.15s ease;
+}
+
+.lang-flag__inner {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+}
+
+.lang-flag__img {
+  display: block;
+  flex-shrink: 0;
+  width: 1.5rem;
+  max-width: 1.5rem;
+  height: auto;
+  max-height: 1.125rem;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  object-position: center;
+}
+
+.lang-flag__code {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-color-secondary, rgba(0, 0, 0, 0.65));
+  font-variant-numeric: tabular-nums;
+}
+
+.lang-flag__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.05rem;
+  font-size: 0.55rem;
+  line-height: 1;
+  color: var(--primary-color, #0ea5e9);
+}
+
+.lang-flag:hover:not(.lang-flag--active) {
+  border-color: var(--primary-color, #3b82f6);
+  box-shadow: 0 0 0 1px var(--primary-color, #3b82f6);
+}
+
+.lang-flag:focus-visible {
+  outline: 2px solid var(--primary-color, #3b82f6);
+  outline-offset: 2px;
+}
+
+.lang-flag--active {
+  border-color: color-mix(in srgb, var(--primary-color, #38bdf8) 85%, white);
+  background: color-mix(in srgb, var(--primary-color, #0ea5e9) 22%, transparent);
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--primary-color, #38bdf8) 45%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.lang-flag--active .lang-flag__code {
+  color: var(--text-color, rgba(15, 23, 42, 0.92));
+  font-weight: 700;
+}
+
+/* Sidebar escura (variant compact neste projeto): contraste forte para idioma atual */
+.lang-switcher--compact .lang-flag {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.lang-switcher--compact .lang-flag__code {
+  color: rgba(248, 250, 252, 0.88);
+}
+
+.lang-switcher--compact .lang-flag:hover:not(.lang-flag--active) {
+  border-color: rgba(56, 189, 248, 0.65);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.lang-switcher--compact .lang-flag--active {
+  background: rgba(14, 165, 233, 0.42);
+  border-color: rgba(186, 230, 253, 0.95);
+  box-shadow:
+    0 0 0 2px rgba(56, 189, 248, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.lang-switcher--compact .lang-flag--active .lang-flag__code {
+  color: #f8fafc;
+}
+
+.lang-switcher--compact .lang-flag--active .lang-flag__check {
+  color: #f0f9ff;
+}
+
+.lang-switcher--compact .lang-flag--active .lang-flag__inner::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #7dd3fc;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.85);
+}
+
+.lang-switcher--panel {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.25rem 0;
+  box-sizing: border-box;
+}
+
+.lang-switcher--panel .lang-flag {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 2.15rem;
+  padding: 0.3rem 0.35rem;
+  justify-content: center;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.lang-switcher--panel .lang-flag__code {
+  color: rgba(248, 250, 252, 0.88);
+}
+
+.lang-switcher--panel .lang-flag:hover:not(.lang-flag--active) {
+  border-color: rgba(56, 189, 248, 0.65);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.lang-switcher--panel .lang-flag--active {
+  background: rgba(14, 165, 233, 0.42);
+  border-color: rgba(186, 230, 253, 0.95);
+  box-shadow:
+    0 0 0 2px rgba(56, 189, 248, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.lang-switcher--panel .lang-flag--active .lang-flag__code {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.lang-switcher--panel .lang-flag--active .lang-flag__check {
+  color: #f0f9ff;
+}
+
+.lang-switcher--panel .lang-flag__inner {
+  justify-content: center;
+  gap: 0.22rem;
+  white-space: nowrap;
+}
+
+.lang-switcher--panel .lang-flag__img {
+  width: 1.55rem;
+  flex-shrink: 0;
+}
+
+.lang-switcher--panel .lang-flag__code {
+  font-size: 0.68rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 2.5rem;
+}
+
+.lang-switcher--panel .lang-flag__check {
+  flex-shrink: 0;
+  font-size: 0.5rem;
+}
+
+@media (max-width: 380px) {
+  .lang-switcher--panel .lang-flag__code {
+    font-size: 0.6rem;
+    max-width: 2rem;
+  }
+
+  .lang-switcher--panel .lang-flag__img {
+    width: 1.35rem;
+  }
+
+  .lang-switcher--panel .lang-flag {
+    padding: 0.25rem 0.2rem;
+  }
+}

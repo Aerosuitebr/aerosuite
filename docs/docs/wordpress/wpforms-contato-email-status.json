@@ -1,0 +1,61 @@
+{
+  "plugins": [
+    {
+      "plugin": "aerosuite-wpforms-fix-1/aerosuite-wpforms-fix.php",
+      "active": false,
+      "version": "Versão 1.0.2 | Por Aero Suite"
+    },
+    {
+      "plugin": "aerosuite-wpforms-fix-3/aerosuite-wpforms-fix.php",
+      "active": false,
+      "version": "Versão 1.0.5 | Por Aero Suite"
+    },
+    {
+      "plugin": "aerosuite-wpforms-fix-6/aerosuite-wpforms-fix.php",
+      "active": false,
+      "version": "Versão 1.0.9 | Por Aero Suite"
+    },
+    {
+      "plugin": "aerosuite-wpforms-fix-4/aerosuite-wpforms-fix.php",
+      "active": false,
+      "version": "Versão 1.0.6 | Por Aero Suite"
+    },
+    {
+      "plugin": "aerosuite-wpforms-fix-5/aerosuite-wpforms-fix.php",
+      "active": false,
+      "version": "Versão 1.0.8 | Por Aero Suite"
+    },
+    {
+      "plugin": "aerosuite-wpforms-fix-2/aerosuite-wpforms-fix.php",
+      "active": false,
+      "version": "Versão 1.0.3 | Por Aero Suite"
+    },
+    {
+      "plugin": "aerosuite-wpforms-fix-7/aerosuite-wpforms-fix.php",
+      "active": true,
+      "version": "Versão 1.1.0 | Por Aero Suite"
+    },
+    {
+      "plugin": "wp-mail-smtp/wp_mail_smtp.php",
+      "active": false,
+      "version": "Versão 4.8.0 | Por WP Mail SMTP | Ver detalhes"
+    },
+    {
+      "plugin": "wpforms-lite/wpforms.php",
+      "active": true,
+      "version": "Versão 1.10.1.1 | Por WPForms | Ver detalhes"
+    }
+  ],
+  "smtp": {
+    "url": "https://aerosuite.com.br/wp-admin/admin.php?page=wp-mail-smtp",
+    "title": "Erro › WordPress",
+    "snippet": "Sem permissão para acessar esta página.",
+    "fromGuess": null,
+    "hasContato": false
+  },
+  "submit": {
+    "status": 500,
+    "success": false,
+    "body": "<p>Há um erro crítico no seu site.</p><p><a href=\"https://wordpress.org/documentation/article/faq-troubleshooting/\">Saiba mais sobre a como resolver problemas do WordPress.</a></p>"
+  }
+}

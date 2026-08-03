@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Material Comercial · SGQ · RNC/CAPA · ISO 9001 · Aero Suite</title>
+  <style>
+@page { size: A4; margin: 14mm 12mm 16mm 12mm; }
+@page :first { margin: 0; }
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 9.5pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif; color: #0f172a; line-height: 1.45; background: #fff; }
+
+.cover {
+  page-break-after: always; min-height: 297mm; width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 35%, #0f172a 70%, #1e293b 100%);
+  color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 18mm 16mm; position: relative; overflow: hidden;
+}
+.cover::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 75% 50% at 50% 0%, rgba(56,189,248,.22) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 40% at 100% 100%, rgba(201,162,39,.16) 0%, transparent 50%);
+  pointer-events: none;
+}
+.cover-grid {
+  position: absolute; inset: 0; opacity: .045;
+  background-image: linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.cover-inner { position: relative; z-index: 1; max-width: 155mm; }
+.cover-badge {
+  display: inline-block; font-size: 7pt; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: #7dd3fc; border: 1px solid rgba(125,211,252,.4); border-radius: 999px; padding: 2mm 5mm; margin-bottom: 4mm;
+}
+.cover h1 { font-size: 21pt; font-weight: 800; line-height: 1.12; margin: 0 0 3mm; }
+.cover-tagline { font-size: 11pt; color: #94a3b8; margin: 0 0 4mm; }
+.cover-gold-line { width: 48mm; height: 2px; background: linear-gradient(90deg, transparent, #c9a227, #e8c547, #c9a227, transparent); margin: 0 auto 5mm; }
+.cover-sub { font-size: 10pt; color: #cbd5e1; margin: 0 auto 5mm; line-height: 1.45; max-width: 128mm; }
+.cover-meta { font-size: 8.5pt; color: #94a3b8; line-height: 1.65; margin: 6mm 0 0; }
+.cover-meta strong { color: #e2e8f0; }
+.cover-footer {
+  position: absolute; bottom: 10mm; left: 0; right: 0; text-align: center;
+  font-size: 7pt; color: #64748b; letter-spacing: .08em; text-transform: uppercase;
+}
+.cover-seal {
+  display: inline-block; margin-top: 4mm; padding: 2mm 4mm; border: 1px solid rgba(201,162,39,.35); border-radius: 6px;
+  font-size: 7.5pt; color: #fde68a; background: rgba(201,162,39,.08);
+}
+
+.block { margin-bottom: 4mm; }
+.pb { page-break-before: always; }
+.avoid-break { page-break-inside: avoid; }
+
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0; padding-bottom: 2.5mm; margin-bottom: 4mm;
+}
+.page-header .brand { font-size: 9pt; font-weight: 700; color: #0369a1; }
+.page-header .chapter-label { font-size: 7.5pt; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .08em; }
+.page-footer {
+  margin-top: 5mm; padding-top: 2mm; border-top: 1px solid #e2e8f0;
+  display: flex; justify-content: space-between; font-size: 7pt; color: #94a3b8;
+}
+
+h2 { font-size: 12.5pt; color: #0f172a; margin: 0 0 2.5mm; font-weight: 700; }
+h3 { font-size: 10pt; color: #0369a1; margin: 3.5mm 0 2mm; font-weight: 600; }
+h4 { font-size: 9pt; color: #334155; margin: 2.5mm 0 1.5mm; font-weight: 600; }
+p { margin: 0 0 2.5mm; }
+.lead { font-size: 9.5pt; color: #334155; margin-bottom: 3mm; }
+.small { font-size: 7.5pt; color: #64748b; }
+
+.toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 6mm; list-style: none; padding: 0; margin: 0 0 4mm; }
+.toc-grid li { display: flex; gap: 2mm; padding: 1.5mm 0; border-bottom: 1px dotted #e2e8f0; font-size: 8.5pt; }
+.toc-num { font-weight: 700; color: #0369a1; min-width: 7mm; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2mm; margin: 3mm 0; }
+.kpi-card { border: 1px solid #e2e8f0; border-radius: 5px; padding: 2.5mm; text-align: center; background: #f8fafc; }
+.kpi-card--gold { background: #fffbeb; border-color: #fcd34d; }
+.kpi-val { font-size: 13pt; font-weight: 800; color: #0369a1; line-height: 1; }
+.kpi-card--gold .kpi-val { color: #b45309; }
+.kpi-lbl { font-size: 6.5pt; color: #64748b; margin-top: 1mm; text-transform: uppercase; }
+
+table { width: 100%; border-collapse: collapse; font-size: 7.5pt; margin: 2mm 0 3mm; }
+th, td { border: 1px solid #e2e8f0; padding: 2mm 2.5mm; text-align: left; vertical-align: top; }
+th { background: #f1f5f9; font-weight: 600; color: #334155; }
+tr:nth-child(even) td { background: #fafafa; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3mm; }
+
+.flow { display: flex; align-items: stretch; gap: 1mm; margin: 2mm 0 3mm; flex-wrap: wrap; }
+.flow-step {
+  flex: 1; min-width: 22mm; text-align: center; padding: 2mm 1.5mm; font-size: 6.5pt;
+  background: #f0f9ff; border: 1px solid #7dd3fc; border-radius: 5px;
+}
+.flow-step strong { display: block; font-size: 7pt; color: #0369a1; margin-bottom: .5mm; }
+.flow-arrow { align-self: center; color: #94a3b8; font-size: 10pt; font-weight: 700; }
+
+.module-tags { display: flex; flex-wrap: wrap; gap: 1mm; margin: 2mm 0; }
+.tag { font-size: 6.5pt; font-weight: 600; padding: .8mm 2mm; border-radius: 3px; background: #e0f2fe; color: #0369a1; }
+.tag--gold { background: #fef3c7; color: #92400e; }
+.tag--green { background: #dcfce7; color: #15803d; }
+
+.callout { background: #eff6ff; border-left: 3px solid #0369a1; padding: 3mm; margin: 3mm 0; font-size: 8.5pt; }
+.callout-gold { background: #fffbeb; border-left-color: #c9a227; }
+.callout-green { background: #ecfdf5; border-left-color: #15803d; }
+.disclaimer { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 5px; padding: 3mm; font-size: 8pt; color: #78350f; margin: 3mm 0; }
+
+.matrix .yes { color: #15803d; font-weight: 700; text-align: center; }
+.matrix .no { color: #cbd5e1; text-align: center; }
+.matrix .partial { color: #b45309; text-align: center; font-weight: 600; }
+.matrix .na { color: #94a3b8; text-align: center; font-size: 7pt; }
+
+.scene-card {
+  border: 1px solid #e2e8f0; border-radius: 6px; padding: 3mm; margin-bottom: 2.5mm; page-break-inside: avoid;
+  background: #fafafa;
+}
+.scene-time { font-size: 7pt; font-weight: 700; color: #0369a1; text-transform: uppercase; letter-spacing: .06em; }
+.scene-visual { font-size: 8pt; color: #475569; margin: 1mm 0; }
+.scene-vo { font-size: 8.5pt; font-style: italic; color: #0f172a; border-left: 2px solid #c9a227; padding-left: 2.5mm; margin: 1.5mm 0; }
+.scene-text { font-size: 7.5pt; font-weight: 600; color: #64748b; }
+
+.script-box {
+  background: #0f172a; color: #e2e8f0; border-radius: 6px; padding: 4mm; font-size: 8.5pt; line-height: 1.55;
+  margin: 3mm 0; page-break-inside: avoid;
+}
+.script-box strong { color: #7dd3fc; }
+.script-box em { color: #fde68a; }
+
+ul.check { margin: 1mm 0; padding-left: 4.5mm; font-size: 8pt; }
+ul.check li { margin-bottom: 1mm; }
+code { font-size: 7.5pt; background: #f1f5f9; padding: .3mm 1mm; border-radius: 2px; }
+.route { font-size: 7pt; color: #0369a1; font-family: Consolas, monospace; }
+  </style>
+</head>
+<body>
+
+<!-- CAPA -->
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <span class="cover-badge">Material comercial · Uso interno e vendas</span>
+    <h1>SGQ operacional com RNC/CAPA integrado</h1>
+    <p class="cover-tagline">Aero Suite · Conformidade Técnica</p>
+    <div class="cover-gold-line"></div>
+    <p class="cover-sub">
+      Kit completo para apresentações comerciais, demos e produção de vídeo:
+      matriz ISO 9001:2015, fluxo CAPA, roteiro de narração e dicas de cenas.
+    </p>
+    <p class="cover-meta">
+      <strong>Versão:</strong> 2026-06-25<br />
+      <strong>Público:</strong> Gestores de qualidade, RT, diretores MRO, auditores internos<br />
+      <strong>Módulo:</strong> <code style="color:#7dd3fc">CONFORMIDADE_NC</code> + ecossistema SGQ
+    </p>
+    <span class="cover-seal">Complementa o SGQ — não substitui certificação ISO</span>
+  </div>
+  <div class="cover-footer">Aero Suite · Gestão aeronáutica · Confidencial</div>
+</section>
+
+<!-- SUMÁRIO -->
+<section class="page">
+  <div class="page-header">
+    <span class="brand">Aero Suite</span>
+    <span class="chapter-label">Sumário</span>
+  </div>
+  <h2>Conteúdo deste material</h2>
+  <ul class="toc-grid">
+    <li><span class="toc-num">1</span> Proposta de valor comercial</li>
+    <li><span class="toc-num">2</span> O que é RNC/CAPA no Aero Suite</li>
+    <li><span class="toc-num">3</span> Ecossistema SGQ integrado</li>
+    <li><span class="toc-num">4</span> Matriz ISO 9001:2015 × Aero Suite</li>
+    <li><span class="toc-num">5</span> Comparativo: planilha vs Aero Suite</li>
+    <li><span class="toc-num">6</span> Roteiro de demo comercial (15 min)</li>
+    <li><span class="toc-num">7</span> Vídeo principal — roteiro e cenas (60 s)</li>
+    <li><span class="toc-num">8</span> Vídeo LinkedIn — ISO e qualidade (45 s)</li>
+    <li><span class="toc-num">9</span> Reels / Shorts — gancho rápido (30 s)</li>
+    <li><span class="toc-num">10</span> Objeções, claims seguros e pricing</li>
+  </ul>
+
+  <div class="disclaimer">
+    <strong>Disclaimer regulatório (obrigatório em todo material externo):</strong>
+    O Aero Suite <strong>apoia evidências operacionais</strong> e fluxos de qualidade integrados à operação MRO.
+    <strong>Não substitui</strong> o SGQ certificado da organização, o MOE/POP físico, nem constitui certificação ISO 9001.
+    A conformidade formal continua sendo responsabilidade da organização certificada/aprovada.
+  </div>
+
+  <div class="page-footer"><span>Material Comercial SGQ · ISO 9001</span><span>v2026-06-25</span></div>
+</section>
+
+<!-- 1. PROPOSTA DE VALOR -->
+<section class="page pb">
+  <div class="page-header">
+    <span class="brand">Aero Suite</span>
+    <span class="chapter-label">Capítulo 1</span>
+  </div>
+  <h2>Proposta de valor comercial</h2>
+  <p class="lead">Para oficinas MRO e organizações com SGQ (ISO 9001, Part 145, RBAC 145) que hoje gerenciam não conformidades em planilha, e-mail ou sistema desconectado da operação.</p>
+
+  <div class="kpi-grid">
+    <div class="kpi-card kpi-card--gold">
+      <div class="kpi-val">6</div>
+      <div class="kpi-lbl">Fases CAPA</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">1</div>
+      <div class="kpi-lbl">Login · OS + SGQ</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">ZIP</div>
+      <div class="kpi-lbl">Export SGQ</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">SMS</div>
+      <div class="kpi-lbl">KPIs no painel</div>
+    </div>
+  </div>
+
+  <h3>Mensagem principal (elevator pitch — 30 segundos)</h3>
+  <div class="script-box">
+    <em>«Sua oficina já tem SGQ no papel. Mas quando o auditor pergunta qual NC nasceu de qual OS, quanto tempo ficou aberta e se a ação corretiva foi eficaz — a resposta ainda está espalhada? O Aero Suite integra RNC e CAPA à operação: da ocorrência no hangar ao fechamento com verificação de eficácia, com evidências exportáveis em um clique. Não substituímos sua certificação — eliminamos a correria de juntar planilha na véspera da auditoria.»</em>
+  </div>
+
+  <h3>Dores que resolvemos</h3>
+  <div class="two-col">
+    <ul class="check">
+      <li>NC registrada em planilha, sem vínculo com OS ou peça</li>
+      <li>CAPA incompleto — falta contenção, causa raiz ou eficácia</li>
+      <li>Auditor pede evidência e a equipe monta dossiê manualmente</li>
+      <li>Treino vencido ou calibração vencida descobertos tarde demais</li>
+    </ul>
+    <ul class="check">
+      <li>Documentos MOE/POP com revisão desatualizada</li>
+      <li>Subcontratação Part 145 sem controle de validade</li>
+      <li>SGQ desconectado do hangar, estoque e liberação (CRS)</li>
+      <li>Indicadores de qualidade calculados manualmente</li>
+    </ul>
+  </div>
+
+  <h3>Público-alvo e persona</h3>
+  <table class="compact">
+    <thead><tr><th>Persona</th><th>Interesse</th><th>Gatilho de compra</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Gestor de Qualidade</strong></td><td>RNC/CAPA rastreável, export SGQ, KPIs SMS</td><td>Auditoria interna ou recertificação ISO</td></tr>
+      <tr><td><strong>RT / Gerente Manutenção</strong></td><td>NC vinculada à OS, enforcement operacional</td><td>NC crítica sem rastreio operacional</td></tr>
+      <tr><td><strong>Diretor / Dono</strong></td><td>Reduzir risco regulatório, um sistema só</td><td>Custo de múltiplas ferramentas + planilhas</td></tr>
+      <tr><td><strong>Auditor interno</strong></td><td>Pacote ZIP, trilha de alterações, anexos</td><td>Preparação para fiscalização ANAC/EASA</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer"><span>Capítulo 1 · Proposta de valor</span><span>Aero Suite</span></div>
+</section>
+
+<!-- 2. RNC/CAPA -->
+<section class="page pb">
+  <div class="page-header">
+    <span class="brand">Aero Suite</span>
+    <span class="chapter-label">Capítulo 2</span>
+  </div>
+  <h2>RNC / Não conformidades e CAPA</h2>
+  <p class="lead">Módulo <strong>CONFORMIDADE_NC</strong> · Rota <span class="route">/conformidade/nao-conformidades</span> · API <code>/api/conformidade/nao-conformidades</code></p>
+
+  <h3>Fluxo CAPA (6 fases)</h3>
+  <div class="flow avoid-break">
+    <div class="flow-step"><strong>1 · REGISTRO</strong>Abertura da ocorrência</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><strong>2 · CONTENÇÃO</strong>Ação imediata</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><strong>3 · CAUSA</strong>Causa raiz</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><strong>4 · AÇÃO</strong>Corretiva</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><strong>5 · VERIFICAÇÃO</strong>Eficácia</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><strong>6 · FECHADA</strong>Encerramento</div>
+  </div>
+
+  <h3>Funcionalidades por fase</h3>
+  <table>
+    <thead><tr><th>Recurso</th><th>Descrição comercial</th><th>Valor para auditoria</th></tr></thead>
+    <tbody>
+      <tr><td>Numeração automática</td><td>NC sequencial por tenant/ano</td><td>Rastreio único de cada ocorrência</td></tr>
+      <tr><td>Severidade</td><td>Baixa · Média · Alta · Crítica</td><td>Priorização e indicadores SMS</td></tr>
+      <tr><td>Vínculo com OS</td><td>Busca e associação à ordem de serviço</td><td>Liga NC ao registro de manutenção</td></tr>
+      <tr><td>Stepper CAPA</td><td>Interface guiada fase a fase</td><td>Evita CAPA incompleto (cláusula 10.2 ISO)</td></tr>
+      <tr><td>Responsável + prazo</td><td>Por etapa, com aprovação formal</td><td>Accountability documentada</td></tr>
+      <tr><td>Anexos por fase</td><td>Evidências (foto, PDF, laudo)</td><td>Dossiê pronto para auditor</td></tr>
+      <tr><td>Eficácia obrigatória</td><td>Bloqueio de fechamento sem verificação</td><td>Conformidade com ciclo PDCA</td></tr>
+      <tr><td>Notificações</td><td>Alertas in-app para responsáveis</td><td>NC crítica não fica esquecida</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-green">
+    <strong>Diferencial comercial:</strong> Enquanto sistemas genéricos de qualidade exigem digitar tudo duas vezes, no Aero Suite a NC nasce no mesmo tenant da OS, do estoque e do hangar. O auditor segue um fio só: da peça à ocorrência à ação corretiva.
+  </div>
+
+  <div class="page-footer"><span>Capítulo 2 · RNC/CAPA</span><span>Aero Suite</span></div>
+</section>
+
+<!-- 3. ECOSSISTEMA SGQ -->
+<section class="page pb">
+  <div class="page-header">
+    <span class="brand">Aero Suite</span>
+    <span class="chapter-label">Capítulo 3</span>
+  </div>
+  <h2>Ecossistema SGQ integrado</h2>
+  <p class="lead">RNC/CAPA é o núcleo da cláusula 10.2 — mas ISO 9001 e Part 145 exigem suporte documental, competência e controle operacional. O Aero Suite entrega módulos conectados.</p>
+
+  <div class="module-tags">
+    <span class="tag tag--gold">Painel qualidade</span>
+    <span class="tag">Documentos controlados</span>
+    <span class="tag">Treinamentos</span>
+    <span class="tag">Treinos obrigatórios</span>
+    <span class="tag">Calibração</span>
+    <span class="tag">Subcontratação</span>
+    <span class="tag">ASL fornecedores</span>
+    <span class="tag">Habilitações RT</span>
+    <span class="tag">Dossiê auditoria</span>
+    <span class="tag">Enforcement</span>
+  </div>
+
+  <table>
+    <thead><tr><th>Módulo</th><th>Rota</th><th>Cláusula ISO relacionada</th></tr></thead>
+    <tbody>
+      <tr><td>Painel qualidade + SMS</td><td class="route">/conformidade/painel</td><td>9.1 · 10.1 (monitoramento e melhoria)</td></tr>
+      <tr><td>Documentos controlados</td><td class="route">/conformidade/documentos</td><td>7.5 (informação documentada)</td></tr>
+      <tr><td>Treinamentos + obrigatórios</td><td class="route">/conformidade/treinamentos</td><td>7.2 (competência)</td></tr>
+      <tr><td>Calibração</td><td class="route">/conformidade/calibracao</td><td>7.1.5 (recursos de monitoramento)</td></tr>
+      <tr><td>Não conformidades / CAPA</td><td class="route">/conformidade/nao-conformidades</td><td>8.7 · 10.2 (NC e ação corretiva)</td></tr>
+      <tr><td>Subcontratação Part 145</td><td class="route">/conformidade/subcontratacao</td><td>8.4 (processos externalizados)</td></tr>
+      <tr><td>ASL fornecedores</td><td class="route">/estoque/fornecedores</td><td>8.4 (controle de fornecedores)</td></tr>
+      <tr><td>CRS / liberação</td><td class="route">OS → Emitir CRS</td><td>8.6 (liberação de produto/serviço)</td></tr>
+      <tr><td>Export SGQ (ZIP)</td><td class="route">Painel → Exportar</td><td>7.5 · 9.2 (evidências para auditoria)</td></tr>
+      <tr><td>Aceite de release</td><td class="route">/conformidade/releases</td><td>6.3 (planejamento de mudanças)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Enforcement operacional (diferencial de venda)</h3>
+  <p>Com toggles ativos no painel qualidade, o sistema <strong>bloqueia operação</strong> quando:</p>
+  <ul class="check">
+    <li>Ferramenta com calibração vencida (hangar / saída estoque)</li>
+    <li>Treinamento obrigatório vencido para a função do técnico</li>
+    <li>Subcontratação com certificado Part 145 vencido</li>
+    <li>Fornecedor sem ASL válido (entrada de material)</li>
+  </ul>
+  <p class="small">Mensagem comercial: «Qualidade deixa de ser planilha paralela e passa a ser regra do sistema — configurável pela oficina.»</p>
+
+  <div class="page-footer"><span>Capítulo 3 · Ecossistema SGQ</span><span>Aero Suite</span></div>
+</section>
+
+<!-- 4. MATRIZ ISO 9001 -->
+<section class="page pb">
+  <div class="page-header">
+    <span class="brand">Aero Suite</span>
+    <span class="chapter-label">Capítulo 4</span>
+  </div>
+  <h2>Matriz ISO 9001:2015 × Aero Suite</h2>
+  <p class="lead">Legenda: <strong class="yes">●</strong> Atende · <strong class="partial">◐</strong> Apoia parcialmente · <strong class="no">○</strong> Não coberto pelo software</p>
+
+  <table class="matrix compact">
+    <thead>
+      <tr><th style="width:12%">Cláusula</th><th style="width:28%">Requisito ISO 9001:2015</th><th style="width:8%">Nível</th><th>Como o Aero Suite apoia</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>4.1</td><td>Contexto da organização</td><td class="partial">◐</td><td>Configuração por tenant; não substitui análise de contexto formal</td></tr>
+      <tr><td>4.2</td><td>Partes interessadas</td><td class="no">○</td><td>Responsabilidade da organização; portal cliente apoia comunicação externa</td></tr>
+      <tr><td>4.3</td><td>Escopo do SGQ</td><td class="no">○</td><td>Documento formal da organização; pode ser armazenado em docs controlados</td></tr>
+      <tr><td>4.4</td><td>SGQ e processos</td><td class="partial">◐</td><td>Fluxos integrados OS → estoque → CRS → NC; não mapeia processos formalmente</td></tr>
+      <tr><td>5.1</td><td>Liderança e comprometimento</td><td class="no">○</td><td>Fora do escopo de software</td></tr>
+      <tr><td>5.2</td><td>Política da qualidade</td><td class="partial">◐</td><td>Política pode ser cadastrada como documento controlado (MOE/POP)</td></tr>
+      <tr><td>5.3</td><td>Papéis e responsabilidades</td><td class="partial">◐</td><td>RBAC, perfis Part 145, responsáveis por etapa CAPA</td></tr>
+      <tr><td>6.1</td><td>Riscos e oportunidades</td><td class="partial">◐</td><td>Indicadores SMS, score de risco NC; não é matriz de riscos formal</td></tr>
+      <tr><td>6.2</td><td>Objetivos da qualidade</td><td class="no">○</td><td>KPIs SMS derivados de NC; metas formais ficam com a organização</td></tr>
+      <tr><td>6.3</td><td>Planejamento de mudanças</td><td class="partial">◐</td><td>Aceite de release com checklist de impacto regulatório</td></tr>
+      <tr><td>7.1.5</td><td>Recursos de monitoramento</td><td class="partial">◐</td><td>Módulo calibração + enforcement + alertas no painel</td></tr>
+      <tr><td>7.2</td><td>Competência</td><td class="partial">◐</td><td>Treinamentos, treinos obrigatórios por função, habilitações RT/inspetor</td></tr>
+      <tr><td>7.3</td><td>Conscientização</td><td class="no">○</td><td>Notificações in-app; programa de awareness é da organização</td></tr>
+      <tr><td>7.4</td><td>Comunicação</td><td class="partial">◐</td><td>Notificações NC, digest e-mail tickets; portal cliente</td></tr>
+      <tr><td>7.5</td><td>Informação documentada</td><td class="yes">●</td><td>Documentos controlados, revisão, histórico, anexos, export ZIP</td></tr>
+      <tr><td>8.1</td><td>Planejamento operacional</td><td class="partial">◐</td><td>OS, job card, capacidade fila, proposta comercial</td></tr>
+      <tr><td>8.2</td><td>Requisitos produtos/serviços</td><td class="partial">◐</td><td>Proposta comercial → OS; escopo e cliente rastreáveis</td></tr>
+      <tr><td>8.4</td><td>Processos externalizados</td><td class="partial">◐</td><td>Subcontratação Part 145 + ASL fornecedores + enforcement</td></tr>
+      <tr><td>8.5</td><td>Produção e prestação de serviço</td><td class="partial">◐</td><td>OS, hangar, job card, apontamentos, AD/SB</td></tr>
+      <tr><td>8.6</td><td>Liberação de produtos/serviços</td><td class="partial">◐</td><td>CRS com checklist, segregação executor/inspetor, PDF</td></tr>
+      <tr><td>8.7</td><td>Controle de saídas não conformes</td><td class="yes">●</td><td>Módulo NC/RNC + quarentena estoque + bloqueios operacionais</td></tr>
+      <tr><td>9.1</td><td>Monitoramento e medição</td><td class="partial">◐</td><td>Painel SMS: KPIs NC, tendência 6 meses, severidade, fases CAPA</td></tr>
+      <tr><td>9.1.2</td><td>Satisfação do cliente</td><td class="no">○</td><td>Portal cliente apoia transparência; pesquisa formal não incluída</td></tr>
+      <tr><td>9.2</td><td>Auditoria interna</td><td class="partial">◐</td><td>Export SGQ + dossiê ZIP + trilha auditoria OS; sem programa de auditoria</td></tr>
+      <tr><td>9.3</td><td>Análise crítica pela direção</td><td class="no">○</td><td>Relatório exportável alimenta reunião; módulo dedicado não existe</td></tr>
+      <tr><td>10.1</td><td>Melhoria — generalidades</td><td class="partial">◐</td><td>Ciclo CAPA + indicadores SMS + enforcement preventivo</td></tr>
+      <tr><td>10.2</td><td>Não conformidade e ação corretiva</td><td class="yes">●</td><td><strong>RNC/CAPA completo:</strong> 6 fases, eficácia, anexos, aprovações</td></tr>
+      <tr><td>10.3</td><td>Melhoria contínua</td><td class="partial">◐</td><td>Tendência mensal NC, taxa fechamento; PDCA operacional via CAPA</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-gold">
+    <strong>Resumo para vendas:</strong> O Aero Suite cobre com profundidade as cláusulas <strong>7.5</strong>, <strong>8.7</strong> e <strong>10.2</strong> — núcleo documental, controle de NC e CAPA. Apoia parcialmente competência (7.2), fornecedores (8.4), liberação (8.6) e evidências para auditoria (9.2). Não substitui liderança, política formal, matriz de riscos, auditoria interna programada nem análise crítica pela direção.
+  </div>
+
+  <div class="page-footer"><span>Capítulo 4 · Matriz ISO 9001</span><span>Aero Suite</span></div>
+</section>
+
+<!-- 5. COMPARATIVO -->
+<section class="page pb">
+  <div class="page-header">
+    <span class="brand">Aero Suite</span>
+    <span class="chapter-label">Capítulo 5</span>
+  </div>
+  <h2>Comparativo comercial</h2>
+
+  <table>
+    <thead><tr><th>Critério</th><th>Planilha + e-mail</th><th>SGQ genérico (standalone)</th><th>Aero Suite SGQ integrado</th></tr></thead>
+    <tbody>
+      <tr><td>Vínculo NC ↔ OS</td><td>Manual / inconsistente</td><td>Integração customizada cara</td><td class="yes">Nativo</td></tr>
+      <tr><td>Fluxo CAPA guiado</td><td>Depende da disciplina</td><td>Sim, mas desconectado</td><td class="yes">Stepper 6 fases</td></tr>
+      <tr><td>Eficácia antes de fechar</td><td>Raramente enforced</td><td>Configurável</td><td class="yes">Bloqueio nativo</td></tr>
+      <tr><td>Evidências exportáveis</td><td>Horas de montagem</td><td>Relatório isolado</td><td class="yes">ZIP SGQ + dossiê OS</td></tr>
+      <tr><td>Enforcement no hangar</td><td class="no">Não</td><td class="no">Não</td><td class="yes">Calibração, treino, ASL</td></tr>
+      <tr><td>Vocabulário MRO</td><td class="no">N/A</td><td class="partial">Genérico</td><td class="yes">PN, SN, Part 145, CRS</td></tr>
+      <tr><td>Custo mensal SME</td><td>«Grátis» (risco oculto)</td><td>R$ 800–3.000+</td><td>A partir do Plano II (SGQ incluso)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer"><span>Capítulo 5 · Comparativo</span><span>Aero Suite</span></div>
+</section>
+
+<!-- 6. DEMO 15 MIN -->
+<section class="page pb">
+  <div class="page-header">
+    <span class="brand">Aero Suite</span>
+    <span class="chapter-label">Capítulo 6</span>
+  </div>
+  <h2>Roteiro de demo comercial (15 minutos)</h2>
+  <p class="lead">Sequência testada para gestor de qualidade + RT. Intercale tela real com narrativa. Tempo total: 12–15 min + Q&A.</p>
+
+  <table>
+    <thead><tr><th>Min</th><th>Tela / ação</th><th>Narração sugerida</th></tr></thead>
+    <tbody>
+      <tr><td>0–1</td><td>Login → Home</td><td>«Um login. Da proposta ao hangar ao SGQ — mesmo tenant, mesma verdade.»</td></tr>
+      <tr><td>1–3</td><td>Card alertas SGQ → Painel qualidade</td><td>«Aqui a qualidade deixa de ser surpresa: documentos vencidos, treinos, calibração, NC abertas — tudo consolidado.»</td></tr>
+      <tr><td>3–5</td><td>Indicadores SMS no painel</td><td>«KPIs derivados das NC reais da oficina: severidade, fase CAPA, tendência dos últimos 6 meses. Sem planilha paralela.»</td></tr>
+      <tr><td>5–8</td><td>Nova NC → stepper CAPA</td><td>«Vou abrir uma ocorrência vinculada à OS 1234. Contenção imediata, causa raiz, ação corretiva, verificação de eficácia — o sistema não deixa fechar sem evidência.»</td></tr>
+      <tr><td>8–9</td><td>Anexo na fase VERIFICAÇÃO</td><td>«Foto, laudo, PDF — anexo por fase. Quando o auditor pedir, já está aqui.»</td></tr>
+      <tr><td>9–11</td><td>Documentos controlados (MOE/POP)</td><td>«Cláusula 7.5: revisão, vigência, histórico. Nova revisão obsoleta a anterior automaticamente.»</td></tr>
+      <tr><td>11–12</td><td>Treinamento vencido + enforcement toggle</td><td>«Ligo o bloqueio: técnico com reciclagem vencida não aponta no hangar. Qualidade vira regra, não wishful thinking.»</td></tr>
+      <tr><td>12–14</td><td>Exportar relatório SGQ (ZIP)</td><td>«Um clique: CSVs de NC, documentos, treinos, calibração, snapshot JSON. Pacote pronto para auditoria interna.»</td></tr>
+      <tr><td>14–15</td><td>CTA</td><td>«Isso complementa seu SGQ certificado — não substitui. Elimina a correria. Vamos pilotar 30 dias no seu tenant?»</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>Dica de gravação:</strong> Use tenant demo com 2–3 NC em fases diferentes (uma CRÍTICA em CONTENÇÃO, uma FECHADA com eficácia). Evite tenant vazio — indicadores SMS precisam de dados.
+  </div>
+
+  <div class="page-footer"><span>Capítulo 6 · Demo 15 min</span><span>Aero Suite</span></div>
+</section>
+
+<!-- 7. VÍDEO 60s -->
+<section class="page pb">
+  <div class="page-header">
+    <span class="brand">Aero Suite</span>
+    <span class="chapter-label">Capítulo 7</span>
+  </div>
+  <h2>Vídeo principal — RNC/CAPA integrado (60 s · 16:9)</h2>
+  <p><strong>Título:</strong> «NC no papel não fecha CAPA. No hangar, fecha.» · <strong>Plataformas:</strong> YouTube, LinkedIn, site</p>
+
+  <div class="script-box">
+    <strong>Voiceover completo:</strong><br />
+    O auditor não quer saber onde você <em>deveria</em> ter registrado a não conformidade. Ele quer a evidência. Hoje, isso ainda mora em planilha, e-mail e pasta compartilhada — desconectado da OS, do hangar e da peça. No Aero Suite, RNC e CAPA vivem dentro da operação. Abra a ocorrência, vincule à ordem de serviço, avance pelas seis fases: registro, contenção, causa raiz, ação corretiva, verificação de eficácia e fechamento. Responsável, prazo, aprovação e anexo em cada etapa. O sistema não deixa fechar sem verificar eficácia. No painel qualidade, KPIs SMS mostram o que está aberto, o que é crítico e a tendência dos últimos meses. Exporte o pacote SGQ em um clique — CSV, snapshot, evidências prontas para auditoria interna ou recertificação. O Aero Suite complementa seu SGQ certificado. Não substitui. Integra. Agende uma demonstração.
+  </div>
+
+  <h3>Storyboard — dicas de cenas</h3>
+
+  <div class="scene-card">
+    <div class="scene-time">0:00 – 0:04 · GANCHO</div>
+    <div class="scene-text">Tela: «O auditor chegou. Onde está a NC?»</div>
+    <div class="scene-visual"><strong>Visual:</strong> Split screen — gestor de qualidade nervoso com pilha de papel vs tela limpa Aero Suite. Hangar ao fundo, luz dramática.</div>
+    <div class="scene-vo">O auditor não quer saber onde você deveria ter registrado. Ele quer a evidência.</div>
+    <p class="small"><strong>Prompt vídeo IA:</strong> «Cinematic split screen, stressed quality manager with paper folders vs clean aviation SaaS dashboard, aircraft hangar background, blue and amber lighting, 4K»</p>
+  </div>
+
+  <div class="scene-card">
+    <div class="scene-time">0:05 – 0:15 · DOR</div>
+    <div class="scene-text">Tela: «Planilha · E-mail · Pasta · OS desconectada»</div>
+    <div class="scene-visual"><strong>Visual:</strong> Ícones Excel, Outlook, pasta amarela desconectados. Linha tracejada quebrada até uma OS no tablet.</div>
+    <div class="scene-vo">Hoje isso mora em planilha, e-mail e pasta — desconectado da OS e do hangar.</div>
+    <p class="small"><strong>Prompt:</strong> «Motion graphics disconnected workflow icons Excel email folder broken dashed line to aviation work order tablet, professional dark background»</p>
+  </div>
+
+  <div class="scene-card">
+    <div class="scene-time">0:16 – 0:35 · SOLUÇÃO CAPA</div>
+    <div class="scene-text">Tela: «6 fases CAPA» + screen capture real</div>
+    <div class="scene-visual"><strong>Visual:</strong> Screen capture do stepper CAPA avançando fases. Destaque em amarelo: CONTENÇÃO → CAUSA → AÇÃO → VERIFICAÇÃO. Técnico no hangar ao lado (B-roll).</div>
+    <div class="scene-vo">Abra a ocorrência, vincule à OS, avance pelas seis fases… anexo e aprovação em cada etapa.</div>
+    <p class="small"><strong>Gravação real recomendada:</strong> <code>/conformidade/nao-conformidades</code> → Nova ocorrência → avançar stepper</p>
+  </div>
+
+  <div class="scene-card">
+    <div class="scene-time">0:36 – 0:48 · PAINEL + EXPORT</div>
+    <div class="scene-text">Tela: «KPIs SMS · Export ZIP»</div>
+    <div class="scene-visual"><strong>Visual:</strong> Painel qualidade com gráficos severidade + clique em «Exportar relatório SGQ». Animação de download ZIP.</div>
+    <div class="scene-vo">KPIs SMS, tendência mensal, pacote exportável em um clique.</div>
+  </div>
+
+  <div class="scene-card">
+    <div class="scene-time">0:49 – 0:60 · CTA</div>
+    <div class="scene-text">Tela: «Aero Suite · Complementa seu SGQ»</div>
+    <div class="scene-visual"><strong>Visual:</strong> Logo reveal + URL demo. Hangar bokeh. Texto legal pequeno: «Não substitui SGQ certificado».</div>
+    <div class="scene-vo">Aero Suite complementa seu SGQ. Integra. Agende uma demonstração.</div>
+  </div>
+
+  <p><strong>Legenda social:</strong> «RNC no Excel não fecha CAPA com eficácia. No Aero Suite, NC nasce na OS, passa por 6 fases e exporta evidência pro auditor. 🛩️ Demo gratuita.»</p>
+  <p class="small"><strong>Hashtags:</strong> #Qualidade #ISO9001 #Part145 #MRO #SGQ #GestaoDaQualidade #AviacaoBrasil #AeroSuite</p>
+
+  <div class="page-footer"><span>Capítulo 7 · Vídeo 60 s</span><span>Aero Suite</span></div>
+</section>
+
+<!-- 8. VÍDEO LINKEDIN -->
+<section class="page pb">
+  <div class="page-header">
+    <span class="brand">Aero Suite</span>
+    <span class="chapter-label">Capítulo 8</span>
+  </div>
+  <h2>Vídeo LinkedIn — ISO 9001 e MRO (45 s · 16:9)</h2>
+  <p><strong>Título:</strong> «Cláusula 10.2 no hangar, não na gaveta»</p>
+
+  <div class="script-box">
+    <strong>Voiceover:</strong><br />
+    ISO 9001 exige ação corretiva com eficácia comprovada. Part 145 exige rastreio da OS à peça. Se sua NC está numa planilha separada, você atende o requisito no papel — não na operação. O Aero Suite une os dois mundos: módulo RNC com CAPA de seis fases, documentos controlados, treinamentos, calibração e export SGQ — no mesmo sistema da ordem de serviço e do hangar. Preparado para apoiar auditorias e recertificações. A conformidade formal continua sendo da sua organização. A correria de juntar evidência, não. Conheça a Aero Suite.
+  </div>
+
+  <h3>Cenas (3 blocos)</h3>
+  <div class="three-col">
+    <div class="scene-card">
+      <div class="scene-time">0:00–0:12</div>
+      <div class="scene-visual">Close ISO 9001 certificate on wall → cut to Excel NC sheet</div>
+      <div class="scene-vo">ISO exige eficácia. Part 145 exige rastreio.</div>
+    </div>
+    <div class="scene-card">
+      <div class="scene-time">0:13–0:32</div>
+      <div class="scene-visual">Montagem rápida: NC list + doc controlado + calibração + OS link</div>
+      <div class="scene-vo">RNC, CAPA, docs, treino — mesmo tenant da OS.</div>
+    </div>
+    <div class="scene-card">
+      <div class="scene-time">0:33–0:45</div>
+      <div class="scene-visual">Export ZIP + logo + CTA LinkedIn</div>
+      <div class="scene-vo">Evidência exportável. Conheça a Aero Suite.</div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span>Capítulo 8 · LinkedIn 45 s</span><span>Aero Suite</span></div>
+</section>
+
+<!-- 9. REELS -->
+<section class="page pb">
+  <div class="page-header">
+    <span class="brand">Aero Suite</span>
+    <span class="chapter-label">Capítulo 9</span>
+  </div>
+  <h2>Reels / Shorts — gancho rápido (30 s · 9:16)</h2>
+  <p><strong>Hook 3 s:</strong> «NC crítica aberta há 90 dias. O auditor vai adorar…»</p>
+
+  <div class="script-box">
+    <strong>Voiceover:</strong><br />
+    NC crítica aberta há 90 dias. Sem causa raiz. Sem eficácia. O auditor vai adorar — disse ninguém nunca. No Aero Suite: seis fases CAPA, bloqueio de fechamento sem verificação, KPI no painel e export ZIP. Qualidade integrada ao hangar. Link na bio.
+  </div>
+
+  <table class="compact">
+    <thead><tr><th>Tempo</th><th>Texto na tela</th><th>Visual</th></tr></thead>
+    <tbody>
+      <tr><td>0–3 s</td><td>«90 dias aberta 😬»</td><td>Planilha vermelha, zoom dramático</td></tr>
+      <tr><td>4–12 s</td><td>«6 fases CAPA»</td><td>Screen capture stepper vertical (9:16 crop)</td></tr>
+      <tr><td>13–22 s</td><td>«Sem eficácia = não fecha»</td><td>Checkbox eficácia bloqueada + toast erro</td></tr>
+      <tr><td>23–30 s</td><td>«Aero Suite · Demo grátis»</td><td>Logo + swipe up</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer"><span>Capítulo 9 · Reels 30 s</span><span>Aero Suite</span></div>
+</section>
+
+<!-- 10. OBJEÇÕES E PRICING -->
+<section class="page pb">
+  <div class="page-header">
+    <span class="brand">Aero Suite</span>
+    <span class="chapter-label">Capítulo 10</span>
+  </div>
+  <h2>Objeções, claims seguros e pricing</h2>
+
+  <h3>Objeções frequentes</h3>
+  <table>
+    <thead><tr><th>Objeção</th><th>Resposta comercial</th></tr></thead>
+    <tbody>
+      <tr><td>«Já temos ISO 9001, não precisamos de software»</td><td>Certificação é da organização; o software elimina retrabalho na evidência e integra NC à OS — cláusula 10.2 exige rastreio, não só procedimento escrito.</td></tr>
+      <tr><td>«Usamos planilha há anos»</td><td>Funciona até a NC crítica ou a auditoria surpresa. Custo oculto: horas do gestor de qualidade montando dossiê.</td></tr>
+      <tr><td>«Isso certifica ISO?»</td><td>Não. Complementa. Certifica o organismo certificador, com processos que vocês já têm — o Aero Suite operacionaliza e exporta evidência.</td></tr>
+      <tr><td>«SGQ genérico resolve»</td><td>Resolve NC isolada. Não bloqueia hangar por calibração vencida nem vincula NC à OS Part 145 nativamente.</td></tr>
+      <tr><td>«Equipe não vai usar»</td><td>Enforcement configurável: qualidade entra no fluxo do técnico, não em sistema paralelo. Demo com perfil MECÂNICO + QUALIDADE.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Claims seguros vs evitar</h3>
+  <div class="two-col">
+    <div class="callout callout-green">
+      <strong>Pode dizer:</strong>
+      <ul class="check">
+        <li>Preparado para apoiar auditorias e recertificações</li>
+        <li>Fluxo CAPA alinhado à cláusula 10.2 ISO 9001</li>
+        <li>Complementa o SGQ certificado da organização</li>
+        <li>Evidências operacionais integradas</li>
+        <li>Export SGQ em um clique</li>
+      </ul>
+    </div>
+    <div class="disclaimer">
+      <strong>Não pode dizer:</strong>
+      <ul class="check">
+        <li>Certificado ISO 9001</li>
+        <li>Garante aprovação em auditoria</li>
+        <li>Substitui o SGQ / MOE / POP</li>
+        <li>Homologado ANAC (software)</li>
+        <li>Conformidade total automática</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Posicionamento de pricing (referência comercial)</h3>
+  <table class="compact">
+    <thead><tr><th>Plano</th><th>SGQ / RNC</th><th>Mensagem</th></tr></thead>
+    <tbody>
+      <tr><td>Plano I</td><td>Opcional (+ R$ 390/mês complemento SGQ)</td><td>Entrada MRO; qualidade como upsell</td></tr>
+      <tr><td>Plano II</td><td>SGQ completo incluso</td><td><strong>Recomendado</strong> para oficinas em recertificação ou Part 145</td></tr>
+      <tr><td>Plano III</td><td>SGQ + customização</td><td>Grupos multi-base, auditoria frequente</td></tr>
+    </tbody>
+  </table>
+
+  <h3>CTA padrão</h3>
+  <div class="script-box">
+    <strong>Primário:</strong> Agende uma demonstração gratuita de 30 minutos com foco em RNC/CAPA.<br />
+    <strong>Secundário:</strong> Piloto 30 dias no tenant — checklist go-live com Fase 7 SGQ.<br />
+    <strong>Material de apoio:</strong> Este documento + export demo ZIP + manual capítulo 11.
+  </div>
+
+  <div class="page-footer"><span>Capítulo 10 · Objeções e pricing</span><span>Aero Suite · Confidencial</span></div>
+</section>
+
+</body>
+</html>

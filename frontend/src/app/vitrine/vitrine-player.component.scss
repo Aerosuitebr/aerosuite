@@ -1,0 +1,261 @@
+:host {
+  display: block;
+}
+
+.player-page {
+  position: relative;
+  isolation: isolate;
+  padding: 1.25rem 1.5rem 2.5rem;
+  min-height: calc(100vh - 6rem);
+  color: #0f172a;
+  background:
+    radial-gradient(900px 360px at 100% 0%, rgba(14, 165, 233, 0.12), transparent 55%),
+    linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+}
+
+.player-page__glow {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  top: 10%;
+  left: -60px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.16);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.player-top,
+.player-layout,
+.player-missing {
+  position: relative;
+  z-index: 1;
+}
+
+.player-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.player-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #0369a1;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.player-now {
+  color: #64748b;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.player-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.9fr);
+  gap: 1.35rem;
+  align-items: start;
+}
+
+.player-stage,
+.player-side {
+  border-radius: 1.2rem;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+}
+
+.player-stage {
+  padding: 1rem;
+}
+
+.player-frame {
+  overflow: hidden;
+  border-radius: 0.9rem;
+  background: #020617;
+  aspect-ratio: 16 / 9;
+}
+
+.player-frame video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  background: #000;
+}
+
+.player-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+  margin-top: 0.9rem;
+}
+
+.player-speed {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.player-speed button {
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #334155;
+  padding: 0.3rem 0.55rem;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.player-speed button.is-active {
+  border-color: #0ea5e9;
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.player-hint {
+  margin: 0.85rem 0 0;
+  color: #64748b;
+  font-size: 0.88rem;
+}
+
+.player-side {
+  padding: 1.25rem 1.3rem 1.4rem;
+}
+
+.player-category {
+  display: inline-flex;
+  margin-bottom: 0.7rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.12);
+  color: #0369a1;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.player-side h1 {
+  margin: 0 0 0.7rem;
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.player-side > p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.55;
+}
+
+.player-meta {
+  margin-top: 1.35rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.player-meta h2 {
+  margin: 0 0 0.75rem;
+  font-size: 0.92rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.player-meta dl {
+  margin: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.player-meta div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.player-meta dt {
+  color: #94a3b8;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.player-meta dd {
+  margin: 0;
+  font-weight: 700;
+  color: #334155;
+}
+
+.player-download {
+  margin-top: 1.35rem;
+  padding: 1rem;
+  border-radius: 0.95rem;
+  background: linear-gradient(145deg, #f0f9ff, #e0f2fe);
+}
+
+.player-download p {
+  margin: 0 0 0.8rem;
+  color: #0369a1;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.player-missing {
+  display: grid;
+  place-items: center;
+  gap: 0.65rem;
+  padding: 4rem 1.25rem;
+  text-align: center;
+}
+
+.player-missing i {
+  font-size: 2rem;
+  color: #0ea5e9;
+}
+
+.player-missing h1 {
+  margin: 0;
+}
+
+.player-missing p {
+  margin: 0 0 0.75rem;
+  color: #64748b;
+  max-width: 28rem;
+}
+
+@media (max-width: 960px) {
+  .player-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .player-speed {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .player-page {
+    padding: 1rem 1rem 2rem;
+  }
+
+  .player-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

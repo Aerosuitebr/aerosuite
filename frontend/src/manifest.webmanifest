@@ -1,0 +1,24 @@
+{
+  "name": "Aero Suite — Hangar",
+  "short_name": "Hangar",
+  "description": "Job card mobile para execução de OS no hangar (modo offline).",
+  "start_url": "/hangar",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0ea5e9",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "favicon-48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

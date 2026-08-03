@@ -1,0 +1,631 @@
+// ========================================
+// CONSULTA FUNCIONALIDADES USUÁRIO COMPONENT STYLES
+// ========================================
+
+.consulta-container {
+  padding: 2rem;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+// ========================================
+// PAGE HEADER
+// ========================================
+
+.page-header {
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    padding: 2rem;
+    min-height: 120px;
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+
+      .header-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        i {
+          font-size: 2rem;
+          color: white;
+        }
+      }
+
+      .header-text {
+        h1 {
+          font-size: 2.2rem;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin: 0 0 0.5rem 0;
+          line-height: 1.2;
+        }
+
+        p {
+          font-size: 1rem;
+          color: #666;
+          margin: 0;
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}
+
+// ========================================
+// MAIN CONTENT
+// ========================================
+
+.main-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ========================================
+// USUARIOS SECTION
+// ========================================
+
+.usuarios-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+
+  .section-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin: 0 0 1rem 0;
+    }
+
+    .search-box {
+      .search-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+
+        &:focus {
+          outline: none;
+          border-color: #059669;
+          box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+      }
+    }
+  }
+
+  .usuarios-list {
+    padding: 0;
+
+    :host ::ng-deep {
+      .p-listbox {
+        border: none;
+        border-radius: 0;
+
+        .p-listbox-list {
+          padding: 0;
+        }
+
+        .p-listbox-item {
+          padding: 0;
+          border: none;
+          border-bottom: 1px solid #f1f5f9;
+          transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+
+          &:hover {
+            background: #f8fafc;
+          }
+
+          &.p-highlight {
+            background: #ecfdf5;
+            border-color: #059669;
+          }
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+      }
+    }
+
+    .usuario-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+
+      &:hover {
+        background: #f8fafc;
+      }
+
+      .usuario-avatar {
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+        flex-shrink: 0;
+
+        i {
+          font-size: 1.25rem;
+        }
+      }
+
+      .usuario-info {
+        flex: 1;
+        min-width: 0;
+
+        .usuario-nome {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #1a1a1a;
+          margin-bottom: 0.25rem;
+        }
+
+        .usuario-email {
+          font-size: 0.875rem;
+          color: #6b7280;
+          margin-bottom: 0.5rem;
+        }
+
+        .usuario-perfil {
+          :host ::ng-deep {
+            .p-tag {
+              font-size: 0.75rem;
+              padding: 0.25rem 0.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// ========================================
+// FUNCIONALIDADES SECTION
+// ========================================
+
+.funcionalidades-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+
+  .section-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin: 0;
+    }
+
+    .funcionalidades-stats {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #6b7280;
+      font-size: 0.875rem;
+
+      .func-count-chip {
+        display: inline-block;
+        padding: 0.25rem 0.65rem;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        font-weight: 600;
+        font-size: 0.8rem;
+      }
+
+      :host ::ng-deep {
+        .p-badge {
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+        }
+      }
+    }
+  }
+
+  .funcionalidades-content {
+    padding: 1.5rem;
+  }
+
+  .usuario-selecionado-info {
+    margin-bottom: 2rem;
+
+    .usuario-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+
+      .usuario-avatar-large {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-shrink: 0;
+
+        i {
+          font-size: 1.5rem;
+        }
+      }
+
+      .usuario-details {
+        h4 {
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: #1a1a1a;
+          margin: 0 0 0.25rem 0;
+        }
+
+        p {
+          font-size: 0.875rem;
+          color: #6b7280;
+          margin: 0 0 0.5rem 0;
+        }
+
+        :host ::ng-deep {
+          .p-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+          }
+        }
+      }
+    }
+  }
+
+  .funcionalidades-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .funcionalidade-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+
+      &:hover {
+        border-color: #d1d5db;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .funcionalidade-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-shrink: 0;
+
+        i {
+          font-size: 1.25rem;
+        }
+      }
+
+      .funcionalidade-info {
+        flex: 1;
+        min-width: 0;
+
+        .funcionalidade-nome {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #1a1a1a;
+          margin-bottom: 0.25rem;
+        }
+
+        .funcionalidade-descricao {
+          font-size: 0.875rem;
+          color: #6b7280;
+          margin-bottom: 0.5rem;
+          line-height: 1.4;
+        }
+
+        .funcionalidade-secao {
+          :host ::ng-deep {
+            .secao-tag {
+              font-size: 0.75rem;
+              padding: 0.25rem 0.5rem;
+            }
+          }
+        }
+      }
+
+      .funcionalidade-status {
+        flex-shrink: 0;
+
+        :host ::ng-deep {
+          .p-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+          }
+        }
+      }
+    }
+  }
+
+  .empty-funcionalidades {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6b7280;
+
+    i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #9ca3af;
+    }
+
+    p {
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+
+  .no-selection {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: #6b7280;
+
+    i {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      color: #9ca3af;
+    }
+
+    h4 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #374151;
+      margin: 0 0 0.5rem 0;
+    }
+
+    p {
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+}
+
+// ========================================
+// RESUMO SECTION
+// ========================================
+
+.resumo-section {
+  .resumo-card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin: 0 0 1.5rem 0;
+    }
+
+    .resumo-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+
+      .stat-item {
+        text-align: center;
+        padding: 1.5rem;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+
+        .stat-number {
+          font-size: 2.5rem;
+          font-weight: 700;
+          color: #059669;
+          margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+          font-size: 0.875rem;
+          color: #6b7280;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+      }
+    }
+  }
+}
+
+// ========================================
+// RESPONSIVE DESIGN
+// ========================================
+
+@media (max-width: 768px) {
+  .consulta-container {
+    padding: 1rem;
+  }
+
+  .page-header {
+    .header-content {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+      padding: 1.5rem;
+
+      .header-left {
+        flex-direction: column;
+        gap: 1rem;
+
+        .header-icon {
+          width: 50px;
+          height: 50px;
+
+          i {
+            font-size: 1.5rem;
+          }
+        }
+
+        .header-text {
+          h1 {
+            font-size: 1.8rem;
+          }
+
+          p {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+
+  .main-content {
+    gap: 1rem;
+  }
+
+  .usuarios-section,
+  .funcionalidades-section {
+    .section-header {
+      padding: 1rem;
+
+      h3 {
+        font-size: 1.125rem;
+      }
+    }
+  }
+
+  .funcionalidades-section {
+    .funcionalidades-content {
+      padding: 1rem;
+    }
+
+    .usuario-selecionado-info {
+      .usuario-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+
+        .usuario-avatar-large {
+          width: 50px;
+          height: 50px;
+
+          i {
+            font-size: 1.25rem;
+          }
+        }
+      }
+    }
+
+    .funcionalidades-list {
+      .funcionalidade-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+
+        .funcionalidade-icon {
+          width: 35px;
+          height: 35px;
+
+          i {
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  .resumo-section {
+    .resumo-card {
+      padding: 1.5rem;
+
+      .resumo-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+
+        .stat-item {
+          padding: 1rem;
+
+          .stat-number {
+            font-size: 2rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+// ========================================
+// ANIMATIONS
+// ========================================
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.funcionalidade-item {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.funcionalidade-item:nth-child(1) { animation-delay: 0.1s; }
+.funcionalidade-item:nth-child(2) { animation-delay: 0.2s; }
+.funcionalidade-item:nth-child(3) { animation-delay: 0.3s; }
+.funcionalidade-item:nth-child(4) { animation-delay: 0.4s; }
+.funcionalidade-item:nth-child(5) { animation-delay: 0.5s; }

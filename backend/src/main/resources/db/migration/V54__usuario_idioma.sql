@@ -1,0 +1,2 @@
+ALTER TABLE usuario
+    ADD COLUMN idioma VARCHAR(10) NULL;

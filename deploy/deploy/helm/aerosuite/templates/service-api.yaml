@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "aerosuite.fullname" . }}-api
+  labels:
+    {{- include "aerosuite.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+    {{- if .Values.metrics.serviceMonitor.enabled }}
+    {{- with .Values.metrics.serviceMonitor.additionalLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- end }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "aerosuite.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+  ports:
+    - name: http
+      port: {{ .Values.api.service.port }}
+      targetPort: http

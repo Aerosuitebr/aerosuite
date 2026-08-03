@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070a0f">
+  <title>AeroSupport — Sessão remota</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="dashboard.html" aria-label="AeroSupport">
+        <span class="brand-mark"><i></i><i></i></span>
+        <span><b>AERO</b>SUPPORT</span>
+      </a>
+
+      <div class="session-identity">
+        <div class="avatar">ML</div>
+        <div>
+          <strong>Marina Lopes</strong>
+          <span>FINANCEIRO-07 · Windows 11 Pro</span>
+        </div>
+        <span class="status-pill"><i></i>Sessão autorizada</span>
+      </div>
+
+      <div class="top-actions">
+        <button class="icon-button" data-tooltip="Fixar barra" aria-label="Fixar barra">
+          <svg viewBox="0 0 24 24"><path d="m14 4 6 6-3 1-4 4-1 5-2-2-2-2 5-1 4-4 1-3-6-6 2 6Z"/></svg>
+        </button>
+        <button class="session-timer" aria-label="Tempo da sessão"><i></i><span id="timer">00:18:42</span></button>
+        <button class="end-button" id="endSession">
+          <svg viewBox="0 0 24 24"><path d="M8.7 5.8a10 10 0 0 1 6.6 0M5.8 8.7a10 10 0 0 0 0 6.6m12.4-6.6a10 10 0 0 1 0 6.6M8.7 18.2a10 10 0 0 0 6.6 0M9 12h6"/></svg>
+          Encerrar
+        </button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="remote-stage" id="remoteStage">
+        <div class="connection-toast" id="connectionToast">
+          <span class="quality-dot"></span>
+          <div><strong>Conexão excelente</strong><small>Criptografia ponta a ponta · 18 ms</small></div>
+        </div>
+        <div class="view-status" id="viewStatus" aria-live="polite">
+          <span id="monitorLabel">Monitor 1</span><i></i><span id="zoomLabel">Ajustar à tela</span>
+        </div>
+        <div class="control-blocked" id="controlBlocked" hidden>
+          <span>Ⅱ</span><div><strong>Controle pausado pelo usuário</strong><small>Você ainda pode acompanhar a tela. Aguarde Marina retomar o controle.</small></div>
+        </div>
+
+        <div class="remote-screen-frame" id="remoteFrame">
+        <div class="remote-screen" id="remoteScreen" tabindex="0" aria-label="Área de trabalho remota">
+          <video class="remote-video" id="remoteVideo" autoplay playsinline></video>
+          <div class="wallpaper-glow one"></div><div class="wallpaper-glow two"></div>
+          <div class="desktop-icons">
+            <div><span>◆</span><small>Este Computador</small></div>
+            <div><span>▰</span><small>Relatórios</small></div>
+            <div><span>●</span><small>Financeiro</small></div>
+          </div>
+          <div class="demo-window">
+            <div class="window-bar">
+              <span class="app-glyph">A</span>
+              <b>Planejamento financeiro</b>
+              <div><i>—</i><i>□</i><i>×</i></div>
+            </div>
+            <div class="window-content">
+              <aside>
+                <strong>Visão geral</strong><span>Contas a pagar</span><span>Conciliação</span><span>Relatórios</span>
+              </aside>
+              <article>
+                <div class="sheet-head"><div><small>FLUXO DE CAIXA</small><h2>Julho de 2026</h2></div><button>Exportar</button></div>
+                <div class="metrics">
+                  <div><span>Saldo disponível</span><b>R$ 428.670</b><small class="up">+8,4% no período</small></div>
+                  <div><span>Recebimentos</span><b>R$ 164.280</b><small>38 lançamentos</small></div>
+                  <div><span>Pagamentos</span><b>R$ 91.840</b><small>24 lançamentos</small></div>
+                </div>
+                <div class="chart"><div class="chart-grid"></div><svg viewBox="0 0 700 180" preserveAspectRatio="none"><path class="area" d="M0 150 C90 120,120 145,185 95 S300 125,365 70 S470 90,535 42 S630 65,700 18 L700 180 L0 180Z"/><path class="line" d="M0 150 C90 120,120 145,185 95 S300 125,365 70 S470 90,535 42 S630 65,700 18"/></svg></div>
+              </article>
+            </div>
+          </div>
+          <div class="windows-taskbar"><span class="win-logo">⊞</span><span class="search">⌕ &nbsp; Pesquisar</span><span>◈</span><span>▣</span><span>●</span><span class="tray">POR &nbsp; 14:32<br><small>30/07/2026</small></span></div>
+          <div class="remote-cursor" id="remoteCursor"></div>
+        </div>
+        </div>
+
+        <nav class="session-dock" aria-label="Controles da sessão">
+          <button class="dock-button active" data-action="control"><svg viewBox="0 0 24 24"><path d="m5 3 14 9-6 2-3 6L5 3Z"/></svg><span>Controle</span></button>
+          <button class="dock-button" id="fullscreenButton" aria-label="Entrar em tela cheia"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M8 21H3v-5m13 5h5v-5"/></svg><span>Tela cheia</span><kbd>F11</kbd></button>
+          <button class="dock-button" data-panel="display"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg><span>Monitores</span><em>2</em></button>
+          <button class="dock-button" data-panel="quality"><svg viewBox="0 0 24 24"><path d="M4 16a8 8 0 1 1 16 0M7 16a5 5 0 1 1 10 0m-5 0 4-4"/></svg><span>Qualidade</span></button>
+          <span class="dock-separator"></span>
+          <button class="dock-button active" data-action="audio"><svg viewBox="0 0 24 24"><path d="M5 9v6h4l5 4V5L9 9H5Zm12 1a3 3 0 0 1 0 4m2-7a7 7 0 0 1 0 10"/></svg><span>Áudio</span></button>
+          <button class="dock-button" data-panel="chat"><svg viewBox="0 0 24 24"><path d="M4 5h16v12H8l-4 3V5Z"/></svg><span>Chat</span><i class="notification">2</i></button>
+          <button class="dock-button" data-panel="files"><svg viewBox="0 0 24 24"><path d="M3 7h7l2 2h9v10H3V7Z"/></svg><span>Arquivos</span></button>
+          <button class="dock-button" data-panel="more"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg><span>Mais</span></button>
+          <span class="dock-separator"></span>
+          <button class="dock-button secure" id="secureAttention"><svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5l-8-3Zm-3 9h6m-3-3v6"/></svg><span>Ctrl Alt Del</span></button>
+        </nav>
+      </section>
+
+      <aside class="side-panel" id="sidePanel">
+        <div class="panel-header"><div><small>CONVERSA</small><h2>Chat da sessão</h2></div><button class="icon-button" id="closePanel" aria-label="Fechar painel">×</button></div>
+        <div class="panel-content" id="panelContent"></div>
+      </aside>
+    </main>
+    <div class="fullscreen-hint" id="fullscreenHint" role="status">
+      <span>Modo imersivo ativo</span>
+      <small>Mova o mouse para a parte inferior para acessar os controles · Pressione Esc para sair</small>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-icon" id="modalIcon">⌁</div>
+      <small id="modalEyebrow">SESSÃO REMOTA</small>
+      <h2 id="modalTitle">Encerrar atendimento?</h2>
+      <p id="modalText">O controle, o áudio e todas as transferências serão interrompidos imediatamente.</p>
+      <label class="check-row" id="noteRow"><input type="checkbox" checked><span>Salvar resumo e registros da sessão</span></label>
+      <div class="modal-actions"><button class="ghost-button" id="cancelModal">Cancelar</button><button class="danger-button" id="confirmModal">Encerrar sessão</button></div>
+    </div>
+  </div>
+  <div class="sr-announcer" aria-live="polite" id="announcer"></div>
+  <script src="runtime-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

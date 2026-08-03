@@ -1,0 +1,50 @@
+# MySQL embutido + API + Web (primeira subida aplica schema/dados mínimos em ordem).
+#
+# Uso (na raiz do repositório):
+#   copy .env.example .env
+#   docker compose -f docker-compose.yml -f docker-compose.local-mysql.yml up --build
+#
+# JDBC na rede Compose: serviço "mysql" (porta 3306 interna). O overlay força esse host —
+# evita que .env com host.docker.internal quebre a API neste modo.
+#
+# Re-inicializar dados: apague o volume (apaga a BD) e suba de novo:
+#   docker compose -f docker-compose.yml -f docker-compose.local-mysql.yml down -v
+#
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: aerosuite-mysql-local
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: aerosuite
+    # 3306 por omissão; se o host já tiver MySQL, defina MYSQL_PORT=3307 (ou outra) no .env.
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - aerosuite_mysql_local_data:/var/lib/mysql
+      - ./backend/EstruturaBanco/aerosuite_funcionalidade.sql:/docker-entrypoint-initdb.d/01_funcionalidade.sql:ro
+      - ./backend/EstruturaBanco/aerosuite_funcionalidade_migration.sql:/docker-entrypoint-initdb.d/02_funcionalidade_migration.sql:ro
+      - ./backend/EstruturaBanco/aerosuite_perfil.sql:/docker-entrypoint-initdb.d/03_perfil.sql:ro
+      - ./backend/EstruturaBanco/aerosuite_funcionalidade_seed.sql:/docker-entrypoint-initdb.d/04_funcionalidade_seed.sql:ro
+      - ./docker/mysql/init/05_usuario.sql:/docker-entrypoint-initdb.d/05_usuario.sql:ro
+    command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_0900_ai_ci"]
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 40s
+
+  api:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://mysql:3306/aerosuite?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo&characterEncoding=UTF-8&useUnicode=true&connectionCollation=utf8mb4_unicode_ci
+      QUARKUS_DATASOURCE_USERNAME: ${QUARKUS_DATASOURCE_USERNAME:-root}
+      QUARKUS_DATASOURCE_PASSWORD: ${QUARKUS_DATASOURCE_PASSWORD:-root}
+    command: sh -c "java $$JAVA_OPTS -jar /app/app.jar"
+
+volumes:
+  aerosuite_mysql_local_data:

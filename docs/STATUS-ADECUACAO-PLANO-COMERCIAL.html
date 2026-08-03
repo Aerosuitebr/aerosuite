@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Status — Adequação ao Plano Comercial · Aero Suite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0c1222;
+      --muted: #5c6578;
+      --line: #e2e8f0;
+      --surface: #ffffff;
+      --surface-2: #f8fafc;
+      --accent: #c9a227;
+      --accent-soft: rgba(201, 162, 39, 0.12);
+      --navy: #0b1f3f;
+      --navy-2: #132a52;
+      --ok: #0d7a54;
+      --ok-bg: #e8f5ef;
+      --warn: #a35c00;
+      --warn-bg: #fff7e6;
+      --todo: #6b21a8;
+      --todo-bg: #f3e8ff;
+      --radius: 14px;
+      --shadow: 0 18px 50px rgba(12, 18, 34, 0.08);
+      --font: "DM Sans", system-ui, sans-serif;
+      --serif: "Instrument Serif", Georgia, serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--ink);
+      background: linear-gradient(165deg, #eef2f9 0%, #f8fafc 40%, #ffffff 100%);
+      min-height: 100vh;
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 32px 22px 56px; }
+    header.hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 55%, #1a3a6e 100%);
+      color: #fff;
+      border-radius: calc(var(--radius) + 6px);
+      padding: 40px 36px 36px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    header.hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 90% 0%, rgba(201, 162, 39, 0.18), transparent 55%);
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.65);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(1.85rem, 4vw, 2.6rem);
+      font-weight: 400;
+      font-style: italic;
+      margin: 0 0 12px;
+      line-height: 1.2;
+    }
+    .hero-sub { opacity: 0.88; max-width: 640px; margin: 0 0 28px; font-size: 1rem; }
+    .hero-meta {
+      display: flex; flex-wrap: wrap; gap: 20px 32px;
+      padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, 0.14);
+      font-size: 13px;
+    }
+    .hero-meta span { opacity: 0.75; }
+    .hero-meta strong { color: #fff; font-weight: 600; }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin-top: -28px;
+      position: relative;
+      z-index: 2;
+    }
+    .summary-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 22px 22px 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+    }
+    .summary-card h3 {
+      margin: 0 0 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .big-pct {
+      font-family: var(--serif);
+      font-size: 2.75rem;
+      font-style: italic;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .big-pct small { font-size: 1.1rem; font-style: normal; color: var(--muted); font-family: var(--font); }
+
+    section.block { margin-top: 40px; }
+    h2.section-title {
+      font-size: 13px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin: 0 0 16px;
+      font-weight: 800;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      padding: 22px 24px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 20px rgba(12, 18, 34, 0.04);
+    }
+    .card h4 { margin: 0 0 14px; font-size: 1.05rem; color: var(--navy); }
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+    .row:last-child { border-bottom: none; }
+    .row span:first-child { color: var(--ink); flex: 1; }
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 999px;
+      white-space: nowrap;
+      letter-spacing: 0.03em;
+    }
+    .badge-done { background: var(--ok-bg); color: var(--ok); }
+    .badge-prog { background: #e0f2fe; color: #0369a1; }
+    .badge-part { background: var(--warn-bg); color: var(--warn); }
+    .badge-todo { background: var(--todo-bg); color: var(--todo); }
+
+    .meter {
+      height: 10px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .meter > i {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--navy), #2563eb);
+    }
+    .meter.gold > i {
+      background: linear-gradient(90deg, #7c5c0a, var(--accent));
+    }
+
+    .next {
+      margin-top: 36px;
+      padding: 26px 28px;
+      border-radius: calc(var(--radius) + 4px);
+      background: linear-gradient(120deg, var(--accent-soft) 0%, #fff 45%);
+      border: 1px solid rgba(201, 162, 39, 0.35);
+      box-shadow: var(--shadow);
+    }
+    .next h3 {
+      margin: 0 0 10px;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--warn);
+    }
+    .next p { margin: 0 0 12px; color: var(--ink); }
+    .next ol { margin: 0; padding-left: 1.2rem; color: var(--muted); }
+    .next li { margin: 6px 0; }
+    .next strong { color: var(--navy); }
+
+    footer {
+      margin-top: 44px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer a { color: #2563eb; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 14px 22px; margin-top: 18px; font-size: 12px; color: var(--muted); }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="hero-inner">
+        <div class="eyebrow">Aero Suite · Alinhamento estratégico</div>
+        <h1>Status da adequação ao plano comercial</h1>
+        <p class="hero-sub">
+          Cruzamento entre o <strong>Plano de Comercialização</strong> (<code>docs/PLANO-COMERCIALIZACAO-SUITE.html</code>),
+          a onda técnica P0/P1/P2 e o que já existe no repositório. Percentagens são estimativas de maturidade, não métricas financeiras.
+        </p>
+        <div class="hero-meta">
+          <div><span>Documento de referência</span><br /><strong>PLANO-COMERCIALIZACAO-SUITE</strong></div>
+          <div><span>Rastreio técnico</span><br /><strong>IMPLEMENTACAO-PLANO-SAAS.md</strong></div>
+          <div><span>Atualizado</span><br /><strong>15 de maio de 2026</strong></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <h3>P0 — Fundação (plano §9)</h3>
+        <div class="big-pct">~40<small>%</small></div>
+        <p style="margin:10px 0 0;font-size:13px;color:var(--muted);">Flyway e JWT em curso; RBAC por funcionalidades reforçado; <code>tenant_id</code> em fase 1 (<code>usuario</code> + JWT <code>tid</code>).</p>
+        <div class="meter"><i style="width:40%"></i></div>
+      </div>
+      <div class="summary-card">
+        <h3>Módulo comercial / proposta</h3>
+        <div class="big-pct">~82<small>%</small></div>
+        <p style="margin:10px 0 0;font-size:13px;color:var(--muted);">Proposta→OS, portal cliente v1.1 (aditivos/anexos), Bling fase 1–2 + webhook MVP; faltam homologação Bling staging e ROI/landing.</p>
+        <div class="meter gold"><i style="width:90%"></i></div>
+      </div>
+      <div class="summary-card">
+        <h3>P1 — Pronto para vender</h3>
+        <div class="big-pct">~14<small>%</small></div>
+        <p style="margin:10px 0 0;font-size:13px;color:var(--muted);">OpenAPI ok; i18n do comercial fechado na proposta/lista/templates; LGPD/billing/white-label/global i18n ainda em aberto.</p>
+        <div class="meter"><i style="width:14%"></i></div>
+      </div>
+    </div>
+
+    <section class="block">
+      <h2 class="section-title">P0 — Fundação (inegociável antes de multi-tenant)</h2>
+      <div class="card">
+        <h4>Itens do roadmap técnico</h4>
+        <div class="row"><span>Remover <code>/api/test-*</code> e <code>/api/fix</code> em produção</span><span class="badge badge-done">Feito</span></div>
+        <div class="row"><span>JWT assinado + senhas BCrypt (login)</span><span class="badge badge-prog">Em curso</span></div>
+        <div class="row"><span>Flyway + migrações versionadas</span><span class="badge badge-prog">Iniciado</span></div>
+        <div class="row"><span>CI/CD (GitHub Actions)</span><span class="badge badge-prog">Iniciado</span></div>
+        <div class="row"><span><code>@RolesAllowed</code> / SecurityIdentity nos endpoints sensíveis</span><span class="badge badge-part">Parcial</span></div>
+        <div class="row"><span><code>tenant_id</code> + filtro Hibernate</span><span class="badge badge-part">Parcial</span></div>
+        <div class="row"><span>Auditoria de acesso (login / falha / permissão)</span><span class="badge badge-part">Parcial</span></div>
+        <div class="row"><span>Backup + restore testado (operacional)</span><span class="badge badge-part">Operação</span></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2 class="section-title">Módulo comercial (proposta · operação de venda)</h2>
+      <div class="card">
+        <h4>O que já está no produto</h4>
+        <div class="row"><span>Secção Comercial + rotas (propostas, templates)</span><span class="badge badge-done">Feito</span></div>
+        <div class="row"><span>CRUD propostas, itens, totais, desconto, USD/BRL, cotação</span><span class="badge badge-done">Feito</span></div>
+        <div class="row"><span>Templates de produto/serviço</span><span class="badge badge-done">Feito</span></div>
+        <div class="row"><span>Clientes de proposta + autocomplete</span><span class="badge badge-done">Feito</span></div>
+        <div class="row"><span>Envio por e-mail (HTML / PDF) + assinatura</span><span class="badge badge-done">Feito</span></div>
+        <div class="row"><span>UI comercial multi-idioma: proposta, condições gerais e listagens (templates/seletor) em PT / EN / ES / FR (<code>commercial-proposta-i18n.ts</code>, resolver ES/FR)</span><span class="badge badge-done">Feito</span></div>
+        <div class="row"><span>WhatsApp (API ou link fallback)</span><span class="badge badge-part">Parcial</span></div>
+        <div class="row"><span>Branding Aero Suite (nome, logos)</span><span class="badge badge-part">Parcial</span></div>
+        <div class="row"><span>Proposta → OS (P4.1) + portal cliente MVP (P4.2)</span><span class="badge badge-done">Feito</span></div>
+        <div class="row"><span>Portal v1.1 — aditivos/anexos (externo + aba Portal interna)</span><span class="badge badge-done">Feito</span></div>
+        <div class="row"><span>Integração Bling — status, contatos na proposta, webhook MVP (P5.5)</span><span class="badge badge-part">Parcial</span></div>
+        <div class="row"><span>Calculadora de ROI + landing (plano §12)</span><span class="badge badge-todo">Pendente</span></div>
+        <div class="row"><span>LGPD / termos / onboarding self-service (P1)</span><span class="badge badge-todo">Pendente</span></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2 class="section-title">P1 — Pronto para vender (amostra)</h2>
+      <div class="card">
+        <div class="row"><span>OpenAPI / Swagger</span><span class="badge badge-done">Feito</span></div>
+        <div class="row"><span>White-label completo</span><span class="badge badge-part">Parcial</span></div>
+        <div class="row"><span>i18n além do módulo comercial (suite global, portal externo, estoque/OS em ES/FR, etc.)</span><span class="badge badge-todo">Pendente</span></div>
+        <div class="row"><span>LGPD, billing, feature flags por tenant</span><span class="badge badge-todo">Pendente</span></div>
+      </div>
+    </section>
+
+    <div class="next">
+      <h3>Próximo passo (já priorizado no doc técnico)</h3>
+      <p><strong>1)</strong> Validar Flyway numa <strong>cópia</strong> da base (baseline + migrações), promovendo scripts estáveis de <code>db/scripts/</code> para <code>db/migration/V3__</code>… conforme risco.</p>
+      <p><strong>2)</strong> RBAC servidor: políticas <code>@RequiresFuncionalidades</code> em resources críticos; filtro aplica <strong>classe + método</strong> quando ambos existem. Opcional futuro: <code>@RolesAllowed</code> / <code>SecurityIdentity</code> nativos Quarkus.</p>
+      <p><strong>3)</strong> Trilha comercial (fora do sprint de código imediato): especificar escopo da integração <strong>Bling / ERP</strong> e entregar ROI + landing mínima (itens 5 e 8 da §12 do plano).</p>
+    </div>
+
+    <div class="legend">
+      <span><i class="dot" style="background:var(--ok)"></i> Feito</span>
+      <span><i class="dot" style="background:#0284c7"></i> Em curso / iniciado</span>
+      <span><i class="dot" style="background:var(--warn)"></i> Parcial</span>
+      <span><i class="dot" style="background:var(--todo)"></i> Pendente</span>
+    </div>
+
+    <footer>
+      Gerado automaticamente a partir do estado do repositório <strong>aerosuite-fullstack-pro</strong>.
+      · <a href="./PLANO-COMERCIALIZACAO-SUITE.html">Abrir plano completo</a>
+      · <a href="./IMPLEMENTACAO-PLANO-SAAS.md">Abrir matriz técnica (Markdown)</a>
+      · <a href="./P0-P1-EXECUCAO.md">Playbook Flyway / RBAC / Bling / ROI</a>
+    </footer>
+  </div>
+</body>
+</html>

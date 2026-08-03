@@ -1,0 +1,30 @@
+---
+description: UI e textos visíveis ao utilizador devem usar i18n (translate) nas quatro línguas do sistema.
+alwaysApply: true
+---
+
+# i18n — padrão obrigatório (Aero Suite / frontend)
+
+## Línguas
+
+Toda a cópia **visível ao usuário** (labels, botões, títulos, mensagens de erro/aviso, estados vazios, placeholders, `aria-label`, confirmações, toasts) deve existir nas **quatro** locales registadas no `TranslationService`: **`pt-BR`**, **`en-US`**, **`es-ES`**, **`fr-FR`**.
+
+## Português (`pt-BR`)
+
+O locale **`pt-BR` é português do Brasil**, não de Portugal. Evitar grafia e vocabulário europeus (ex.: *contacto* → **contato**, *ficheiro* → **arquivo**, *utilizador* → **usuário**, *guardar* → **salvar**, *registo* → **registro**).
+
+## Como implementar
+
+1. **Não** introduzir strings literais em português/inglês (ou outra língua) em templates ou em código que alimente a UI, exceto comentários técnicos ou logs de consola claramente não-UI.
+2. Usar **chaves** estáveis (ex.: `modulo.ecra.campo`, `biblioteca.error.loadFileFailed`) e o pipe **`translate`** / serviço de i18n já usados no projeto.
+3. Adicionar as entradas nos ficheiros de dicionário em `frontend/src/app/core/i18n/` (ou no ficheiro *-i18n.ts` do módulo), **replicando a chave nas quatro línguas** no mesmo PR/alteração.
+   - Onde hoje só existam blocos PT/EN para um módulo, **estender** ES/FR na mesma alteração (não deixar ES/FR a cair para inglês por omissão em texto novo sem o utilizador aceitar essa exceção).
+4. Mensagens com parâmetros: usar placeholders `{{nome}}` e o objeto de parâmetros do `translate`, alinhado ao padrão existente (ex. `commercial-proposta-i18n.ts`, `screens-misc-i18n.ts`).
+
+## Erros vindos da API
+
+Preferir mapear códigos ou chaves no cliente para strings traduzidas; se se mostrar texto cru do servidor, limitar a casos excecionais e documentar.
+
+## Resumo
+
+**Qualquer desenvolvimento novo de UI = chave + 4 línguas + pipe/serviço de translate.** Não fechar funcionalidade só com PT ou só com EN.

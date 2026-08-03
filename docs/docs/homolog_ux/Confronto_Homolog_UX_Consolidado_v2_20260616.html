@@ -1,0 +1,2792 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Confronto Técnico — Homologação UX Relatório Consolidado v2.0</title>
+  <style>/* Aero Suite — Relatório Executivo UX (print/PDF A4) */
+@page {
+  size: A4;
+  margin: 16mm 14mm 20mm 14mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.5;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 40%, #0f172a 75%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22mm 18mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 150mm;
+}
+
+.cover-logo {
+  width: 68mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8mm;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.4));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  border: 1px solid rgba(148,163,184,.35);
+  border-radius: 999px;
+  padding: 2.5mm 5mm;
+  margin-bottom: 6mm;
+}
+
+.cover h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+}
+
+.cover-sub {
+  font-size: 11pt;
+  color: #cbd5e1;
+  margin: 0 0 6mm;
+  line-height: 1.45;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a227, transparent);
+  margin: 0 auto 6mm;
+}
+
+.cover-meta {
+  font-size: 9.5pt;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cover-meta strong {
+  color: #e2e8f0;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 12mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #64748b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 7mm;
+  width: auto;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+h2 {
+  font-size: 14pt;
+  color: #0f172a;
+  margin: 0 0 4mm;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 11pt;
+  color: #0369a1;
+  margin: 5mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+.lead {
+  font-size: 10.5pt;
+  color: #334155;
+  margin-bottom: 5mm;
+}
+
+/* Sumário */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+  padding: 2mm 0;
+  border-bottom: 1px dotted #e2e8f0;
+  font-size: 9.5pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: none;
+  padding-top: 4mm;
+  font-size: 10pt;
+}
+
+.toc-num {
+  font-weight: 700;
+  color: #64748b;
+  min-width: 10mm;
+}
+
+/* Score dashboard */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin: 5mm 0 6mm;
+}
+
+.score-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4mm;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.score-card--ok {
+  background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #86efac;
+}
+
+.score-val {
+  font-size: 18pt;
+  font-weight: 800;
+  color: #0369a1;
+  line-height: 1;
+}
+
+.score-card--ok .score-val {
+  color: #15803d;
+}
+
+.score-label {
+  font-size: 7.5pt;
+  color: #64748b;
+  margin-top: 1.5mm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin: 4mm 0;
+}
+
+th, td {
+  border: 1px solid #e2e8f0;
+  padding: 2.5mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Item cards */
+.section-intro {
+  background: #f8fafc;
+  border-left: 3px solid #0369a1;
+  padding: 3mm 4mm;
+  margin-bottom: 5mm;
+  font-size: 9pt;
+  color: #475569;
+}
+
+.item-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 4mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  padding: 2.5mm 4mm;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item-id {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.item-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 9.5pt;
+}
+
+.sev {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.sev--CRITICO { background: #fee2e2; color: #991b1b; }
+.sev--ALTO { background: #ffedd5; color: #9a3412; }
+.sev--MEDIO { background: #fef9c3; color: #854d0e; }
+.sev--INFO { background: #e0e7ff; color: #3730a3; }
+
+.item-body {
+  padding: 3mm 4mm 4mm;
+  font-size: 8.75pt;
+}
+
+.item-row {
+  margin-bottom: 2.5mm;
+}
+
+.item-row:last-child {
+  margin-bottom: 0;
+}
+
+.item-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.5mm;
+}
+
+.item-text {
+  color: #1e293b;
+}
+
+.status-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+/* Assinatura */
+.signature-block {
+  margin-top: 10mm;
+  padding: 6mm;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.signature-line {
+  width: 55mm;
+  border-top: 1px solid #334155;
+  margin: 12mm 0 2mm;
+}
+
+.signature-name {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.signature-role {
+  font-size: 9pt;
+  color: #64748b;
+}
+
+.signature-date {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  margin-top: 2mm;
+}
+
+.callout {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 4mm;
+  margin: 4mm 0;
+  font-size: 9pt;
+}
+
+.callout strong {
+  color: #1d4ed8;
+}
+
+.supplementary {
+  page-break-inside: avoid;
+  margin-bottom: 4mm;
+  padding: 3mm 4mm;
+  border-left: 3px solid #c9a227;
+  background: #fffbeb;
+}
+
+.supplementary h4 {
+  margin: 0 0 1.5mm;
+  font-size: 9.5pt;
+  color: #92400e;
+}
+
+.supplementary p {
+  margin: 0;
+  font-size: 8.75pt;
+  color: #78350f;
+}
+
+.item-meta { font-size: 9pt; color: #64748b; margin: -2mm 0 3mm 0; }
+.confronto-antes { border-left: 3px solid #dc2626; padding-left: 3mm; }
+.confronto-depois { border-left: 3px solid #16a34a; padding-left: 3mm; }
+.item-evidence { font-size: 8.5pt; color: #475569; }
+.status-fixed { color: #15803d; font-weight: 700; font-size: 8pt; }
+.status-code { color: #b45309; font-weight: 700; font-size: 8pt; }
+.status-pos { color: #0369a1; font-weight: 700; font-size: 8pt; }
+.evidence-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 4mm 0; }
+.evidence-fig img { width: 100%; border: 1px solid #e2e8f0; border-radius: 4px; }
+.evidence-fig figcaption { font-size: 8pt; margin-top: 2mm; color: #475569; }
+.callout--warn { background: #fffbeb; border-color: #f59e0b; }
+.callout--info { background: #f0f9ff; border-color: #38bdf8; }
+.metric-table td, .metric-table th { font-size: 9pt; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Confronto técnico · Homologação UX · Confidencial</div>
+    <h1>Confronto Técnico — Homologação UX Relatório Consolidado v2.0</h1>
+    <p class="cover-sub">Antes e depois dos 61 achados (A1–A61) com evidências e métricas de eficácia<br/>Referência: Relatório AeroSuite Consolidado v2.0 — Rafaella Nottes Consultoria (15/jun/2026)</p>
+    <div class="cover-gold-line"></div>
+    <p class="cover-meta">
+      <strong>Versão 1.0</strong> · 16 de junho de 2026<br />
+      Responsável: <strong>Wellem Lyra</strong> · Diretor de TI<br />
+      Consultora: <strong>Rafaella Nottes — Rafaella Nottes Consultoria</strong><br />
+      Ambiente: <strong>https://app.aerosuite.com.br</strong>
+    </p>
+  </div>
+  <div class="cover-footer">Aero Suite — Gestão aeronáutica</div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Sumário executivo</span>
+  </div>
+  <h2>Sumário executivo do confronto</h2>
+  <p class="lead">
+    Este documento confronta, achado a achado, o estado reportado pela consultora
+    (<strong>antes</strong>) com o estado após as ações corretivas da equipe de desenvolvimento
+    (<strong>depois</strong>), incluindo métricas de eficácia e evidências objetivas quando disponíveis.
+  </p>
+
+  <div class="score-grid">
+    <div class="score-card"><div class="score-val">61</div><div class="score-label">Achados (A1–A61)</div></div>
+    <div class="score-card score-card--ok"><div class="score-val">49</div><div class="score-label">Corrigíveis</div></div>
+    <div class="score-card score-card--ok"><div class="score-val">12</div><div class="score-label">Positivos</div></div>
+    <div class="score-card"><div class="score-val">1</div><div class="score-label">Reincidência confirmada</div></div>
+  </div>
+
+  <h3>Métricas de eficácia (verificação 16/jun/2026)</h3>
+  <table class="metric-table">
+    <thead><tr><th>Indicador</th><th>Valor</th><th>Observação</th></tr></thead>
+    <tbody>
+      <tr><td>Verificação automatizada</td><td><strong>60/60</strong> (100.0%)</td><td>scripts/verify-consolidado-homolog.mjs</td></tr>
+      <tr><td>Achados corrigíveis verificados</td><td><strong>49/49</strong> (100.0%)</td><td>A1–A49</td></tr>
+      <tr><td>Positivos mantidos</td><td><strong>12</strong></td><td>A50–A61</td></tr>
+      <tr><td>Reincidência A2</td><td><strong>1 → 0</strong></td><td>100.0% resolvida após deploy + limpeza SQL</td></tr>
+      <tr><td><strong>Eficácia da intervenção</strong></td><td><strong>100.0%</strong></td><td>Todos os checks automatizados passaram</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout--info">
+    <strong>Metodologia:</strong> Script verify-consolidado-homolog.mjs: API homolog + presença de correção no código + smoke UI. Reteste manual consultora em todas as telas recomendado como confirmação final.
+  </div>
+
+  <h3>Legenda de status</h3>
+  <ul>
+    <li><span class="status-fixed">Reincid. corrigida</span> — Falha reportada novamente; corrigida e comprovada em homolog.</li>
+    <li><span class="status-ok">Validado homolog</span> — Verificado no ambiente após deploy.</li>
+    <li><span class="status-code">Código (reteste)</span> — Correção implementada; reteste pela consultora pendente.</li>
+    <li><span class="status-pos">Mantido</span> — Achado positivo preservado.</li>
+  </ul>
+
+  <div class="page-footer"><span>Aero Suite · Confronto UX</span><span>Sumário</span></div>
+</section>
+
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Evidência A2</span>
+  </div>
+  <h2>A2 — Antes e depois (login multi-organização)</h2>
+  <p class="lead">E-mail: <code>rafaellanottesconsultoria@gmail.com</code> · Ambiente: https://app.aerosuite.com.br · 16/06/2026</p>
+  <div class="evidence-pair">
+    <figure class="evidence-fig">
+      <img src="file:///D:/Desenvolvimento/aerosuite/docs/homolog_ux/evidencias/confronto-v2/20260616/antes-login-tenant-dropdown.png" alt="Antes A2" />
+      <figcaption><strong>Antes:</strong> 3 entradas idênticas no dropdown (tenants #16, #17, #18)</figcaption>
+    </figure>
+    <figure class="evidence-fig">
+      <img src="file:///D:/Desenvolvimento/aerosuite/docs/homolog_ux/evidencias/confronto-v2/20260616/depois-login-tenant-dropdown.png" alt="Depois A2" />
+      <figcaption><strong>Depois:</strong> 1 organização ativa; API retorna label com código, data e #id</figcaption>
+    </figure>
+  </div>
+  <div class="callout callout--info">
+    <strong>Ações:</strong> deploy backend/frontend com TenantLoginService + enrichTenantLoginOptions;
+    execução de <code>db/scripts/cleanup-duplicate-tenants-consultora-homolog.sql</code> (inativação tenants 17 e 18).
+  </div>
+  <div class="page-footer"><span>Aero Suite · Confronto UX</span><span>Evidência A2</span></div>
+</section>
+
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 1</span>
+  </div>
+  <h2>Críticos — Login, Wizard e Produtos</h2>
+  <p class="section-intro">Achados A1–A5 de severidade crítica.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A1</span>
+    <span class="item-title">Campos sem limite de caracteres</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ Validado homolog</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Conformidade</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Texto extrapola e falha silenciosa</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">FieldLengthValidator + maxlength UI + mensagens i18n</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Salvar AD/SB com texto &gt; limite → erro 400 legível</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">FieldLengthValidator + POST overflow rejeitado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A2</span>
+    <span class="item-title">Organização duplicada no dropdown</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-fixed">✓ Reincid. corrigida</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Login</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Mesma org repetida</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">1 organização no login; labels com código, data e #id; tenants 17 e 18 inativados</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Login multi-tenant sem duplicatas</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">API 1 tenant + prints antes/depois + SQL cleanup</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A3</span>
+    <span class="item-title">Sem redirect após conclusão</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ Validado homolog</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Wizard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Usuário fica perdido</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Tela completed + redirect 2,5s + invalidateStatusCache</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Concluir wizard → dashboard</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Código wizard + fluxo pós-fix A2</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A4</span>
+    <span class="item-title">P/N duplicado e barcode desvinculado</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Barcode por ID</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Unicidade P/N + CodigoBarrasUtil.gerarCodigoBarrasPorPn</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Dois produtos mesmo P/N bloqueados; barcode estável por P/N</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A5</span>
+    <span class="item-title">Imagem removida ao editar</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">photoUrl sobrescrito</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">ProductMapper ignora photoUrl/codigoBarras no update</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Editar nome mantém foto</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Consolidado v2</span>
+    <span>Seção 1</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 2</span>
+  </div>
+  <h2>Altos — Produtos, Conformidade e Relatórios</h2>
+  <p class="section-intro">Achados A6–A22 prioridade P1/P2.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A6</span>
+    <span class="item-title">CSV sem BOM UTF-8</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Validado homolog</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Go-live</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Acentos corrompidos</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">GoLiveMigracaoResource BOM no download</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Baixar template → UTF-8 correto</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">GET go-live template CSV com BOM UTF-8 (API)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A7</span>
+    <span class="item-title">Telefone aceita letras</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Wizard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Validação fraca</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">formatPhoneBr + isValidPhoneBr</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Campo telefone só dígitos formatados</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A8</span>
+    <span class="item-title">Textareas sem limite</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Conformidade</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Mesmo A1</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">maxlength + backend FieldLengthValidator</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Campos conformidade respeitam limite</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A9</span>
+    <span class="item-title">Fabricante inexistente</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Sem cadastro rápido</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Dialog quick-create fabricante em product-new</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Criar fabricante inline</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A10</span>
+    <span class="item-title">Dados fictícios</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Validado homolog</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Relatórios</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Hardcoded demo</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">RelatorioAnalyticsService + API real + empty state</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Gráficos com dados do tenant</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">GET /api/relatorios/resumo dados reais</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A11</span>
+    <span class="item-title">Textarea extrapola layout</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">CSS overflow</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">product-textarea max-width/overflow-wrap</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Descrição longa não quebra layout</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A12</span>
+    <span class="item-title">Layout não responsivo</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Relatórios/Go-live</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Mobile quebrado</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">SCSS responsivo relatorios.component</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Redimensionar janela</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A13</span>
+    <span class="item-title">FCU com spinner numérico</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> AD/SB</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">UX ruim</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">p-autoComplete FCU com busca</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Selecionar FCU por código</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A14</span>
+    <span class="item-title">USD/BRL confuso</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Sem contexto</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">localeMoney + footnote BCB na listagem</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Rodapé cotação visível</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A15</span>
+    <span class="item-title">Ícone lixeira para inativar</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Semântica errada</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">pi-ban + confirmação inativar</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Botão inativar com ícone correto</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A16</span>
+    <span class="item-title">Upload sem preview/remoção</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">UX incompleta</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Preview upload + remover imagem existente</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Selecionar foto → preview; remover</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A17</span>
+    <span class="item-title">Busca por barcode</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Não encontrava</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">ProductService busca codigoBarras</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Buscar EAN-13</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A18</span>
+    <span class="item-title">CPF na revisão</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Wizard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Dado sensível exposto</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">maskCpfInRazaoSocial na revisão</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Revisão sem CPF trailing</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A19</span>
+    <span class="item-title">Busca por data ambígua</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Formatos diversos</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">normalizeDateSearchTerm + parseSearchDate backend</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Buscar 10062026 ou 10.06.2026</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A20</span>
+    <span class="item-title">Item 00 no dropdown tipo</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> SGQ</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Dado inválido</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Whitelist SGQ_TIPOS_VALIDOS + appendTo body</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Dropdown só tipos válidos</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A21</span>
+    <span class="item-title">Gráfico híbrido incorreto</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Validado homolog</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Relatórios</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Donut+bar misturado</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Donut e bar separados com dados reais</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Dois gráficos distintos</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">GET /api/relatorios/resumo</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A22</span>
+    <span class="item-title">Data rodapé maiúscula</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Global</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Preposições erradas</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">formatFooterDate locale-currency</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Rodapé pt: de junho de</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Consolidado v2</span>
+    <span>Seção 2</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 3</span>
+  </div>
+  <h2>Médios — UX, i18n e Go-live</h2>
+  <p class="section-intro">Achados A23–A49 qualidade e consistência.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A23</span>
+    <span class="item-title">Hint CNPJ informal</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Wizard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Tom coloquial</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Texto i18n formal A23</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Hint CNPJ revisado</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A24</span>
+    <span class="item-title">Textos endereço</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Wizard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Travessão informal</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">section.address.lead atualizado</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Instruções endereço revisadas</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A25</span>
+    <span class="item-title">Endereço caixa alta</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Wizard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Inconsistente</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">formatBrTitleCase em CEP/CNPJ lookup</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Bairro/cidade Title Case</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A26</span>
+    <span class="item-title">Toast CNPJ duplicado</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Wizard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Double fire</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Debounce 850ms + guard inFlight + lastNotFound</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">CNPJ inválido → 1 toast</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A27</span>
+    <span class="item-title">Checkbox linguagem</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Wizard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">autorizo gravar</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">confirm.label formal</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Texto declaração oficial</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A28</span>
+    <span class="item-title">Termo backend na revisão</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Wizard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Jargão dev</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">review.intro sem backend</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Texto usuário final</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A29</span>
+    <span class="item-title">Pontuação revisão</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Wizard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Separadores</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">displayAddressLine getter</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Endereço formatado consistente</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A30</span>
+    <span class="item-title">No results fabricante</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Empty confuso</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Dropdown fabricantes + quick add</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Lista fabricantes populada</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A31</span>
+    <span class="item-title">Cursor preço</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Grouping</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">useGrouping false no preço</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Digitar preço sem salto cursor</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A32</span>
+    <span class="item-title">Foto na listagem</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Thumbnails</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Photo cache + modal upload listagem</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Coluna foto funcional</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A33</span>
+    <span class="item-title">Specs aeronáuticas</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Campos genéricos</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Seção specs peso/dimensões/material</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Formulário specs visível</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A34</span>
+    <span class="item-title">Cotação BCB desatualizada</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Footnote</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">localeCurrency footnote dinâmico</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Footnote data cotação</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A35</span>
+    <span class="item-title">Filtro ativo/inativo</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Validado homolog</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Só ativos</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Dropdown status + isActive tri-state API</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Filtrar inativos/todos</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">GET /products?isActive=all</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A36</span>
+    <span class="item-title">Barcode Code128</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Formato</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">JsBarcode CODE128/EAN13 na impressão</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Imprimir código legível</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A37</span>
+    <span class="item-title">Print manual</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Sem auto-print</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">window.print onload no printBarcode</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Impressão abre diálogo auto</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A38</span>
+    <span class="item-title">Empty state</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Lista vazia</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">ListDataStatesComponent + CTA novo</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Lista vazia com botão</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A39</span>
+    <span class="item-title">Textarea borda</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Conformidade</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Estilo global</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">_premium-a11y.scss textarea focus</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Borda visível em textareas</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A40</span>
+    <span class="item-title">AD/SB sem tradução</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Conformidade</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Siglas fixas</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">aero.diretriz.tipo i18n AD/SB/OUTRO</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Trocar idioma → labels traduzidos</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A41</span>
+    <span class="item-title">Painel uso longo</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Conformidade</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Scroll excessivo</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">usage-panel recolhível CSS</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Painel conformidade compacto</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A42</span>
+    <span class="item-title">Alertas pouco visíveis</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Conformidade</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Cards métricas</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">metric-grid alertas clicáveis</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Cards vencidas/próximas</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A43</span>
+    <span class="item-title">Cards sem cor</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Conformidade</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Hierarquia</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">severity colors danger/warn/info</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Cards coloridos por severidade</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A44</span>
+    <span class="item-title">Habilitações layout</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Conformidade</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Espaçamento</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Field limits + list scroll</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Lista habilitações alinhada</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A45</span>
+    <span class="item-title">Banner trial</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Go-live</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Contexto trial</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Banner i18n go-live trial</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Banner visível no kit</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A46</span>
+    <span class="item-title">Linguagem técnica</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Go-live</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Jargão</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">go-live-migracao-i18n revisado</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Textos go-live claros</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A47</span>
+    <span class="item-title">Breadcrumb módulo</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Go-live</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Perde contexto</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Links checklist com query returnUrl</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Abrir módulo mantém checklist</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A48</span>
+    <span class="item-title">Download sem feedback</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Go-live</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Spinner ausente</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Indicador loading download template</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Download mostra progresso</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A49</span>
+    <span class="item-title">Estrutura i18n</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ Verificado auto</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Menu</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Itens variam</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">menu-i18n chaves estáveis 4 idiomas</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Menu PT/EN/ES/FR consistente</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">verify-consolidado-homolog.mjs — código + checks (16/jun/2026)</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Consolidado v2</span>
+    <span>Seção 3</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 4</span>
+  </div>
+  <h2>Positivos — Mantidos</h2>
+  <p class="section-intro">Achados A50–A61 referência de qualidade.</p>
+  
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A50</span>
+    <span class="item-title">Login claro</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Global</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Tela de entrada premium</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Tela login premium</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA login — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A51</span>
+    <span class="item-title">Progresso etapas</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Wizard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Stepper claro</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">4 etapas visíveis</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA login — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A52</span>
+    <span class="item-title">Validação inline</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Wizard</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Erros por campo</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Erros por campo</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA login — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A53</span>
+    <span class="item-title">Menu modular</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Global</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Sidebar intuitiva</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Navegação intuitiva</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA login — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A54</span>
+    <span class="item-title">Painel métricas</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Conformidade</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Cards alertas</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Métricas conformidade</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA login — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A55</span>
+    <span class="item-title">Subtítulo claro</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Habilitações</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Hero informativo</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Subtítulo informativo</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA login — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A56</span>
+    <span class="item-title">Modal barcode</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Produtos</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Zoom código</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Zoom código barras</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA login — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A57</span>
+    <span class="item-title">Confirmação inativar</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Global</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Modal antes ação</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Modal antes inativar</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA login — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A58</span>
+    <span class="item-title">Tipos aeronáuticos</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> SGQ</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">MOE/POP adequados</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Tipos adequados</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA login — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A59</span>
+    <span class="item-title">Export CSV</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Relatórios</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Export funcional</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Baixar CSV relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA login — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A60</span>
+    <span class="item-title">i18n 4 idiomas</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Global</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">PT/EN/ES/FR</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Trocar idioma</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA login — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card confronto-card">
+  <div class="item-head">
+    <span class="item-id">A61</span>
+    <span class="item-title">Sistema online</span>
+    <span class="sev sev--POSITIVO">POSITIVO</span>
+    <span class="status-pos">✓ Mantido</span>
+  </div>
+  <div class="item-meta"><strong>Módulo:</strong> Global</div>
+  <div class="item-body confronto-grid">
+    <div class="item-row confronto-antes">
+      <div class="item-label">Antes (relatório consultora)</div>
+      <div class="item-text">Indicador rodapé</div>
+    </div>
+    <div class="item-row confronto-depois">
+      <div class="item-label">Depois (ação corretiva)</div>
+      <div class="item-text">Funcionalidade mantida conforme relatório</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação sugerida</div>
+      <div class="item-text">Rodapé online</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência</div>
+      <div class="item-text item-evidence">Smoke SPA login — comportamento preservado</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Confronto UX Consolidado v2</span>
+    <span>Seção 4</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Anexo A</span>
+  </div>
+  <h2>Matriz consolidada de confronto</h2>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Severidade</th><th>Módulo</th><th>Título</th><th>Status final</th></tr>
+    </thead>
+    <tbody><tr>
+      <td>A1</td>
+      <td>CRITICO</td>
+      <td>Conformidade</td>
+      <td>Campos sem limite de caracteres</td>
+      <td><span class="status-ok">✓ Validado homolog</span></td>
+    </tr>
+<tr>
+      <td>A2</td>
+      <td>CRITICO</td>
+      <td>Login</td>
+      <td>Organização duplicada no dropdown</td>
+      <td><span class="status-fixed">✓ Reincid. corrigida</span></td>
+    </tr>
+<tr>
+      <td>A3</td>
+      <td>CRITICO</td>
+      <td>Wizard</td>
+      <td>Sem redirect após conclusão</td>
+      <td><span class="status-ok">✓ Validado homolog</span></td>
+    </tr>
+<tr>
+      <td>A4</td>
+      <td>CRITICO</td>
+      <td>Produtos</td>
+      <td>P/N duplicado e barcode desvinculado</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A5</td>
+      <td>CRITICO</td>
+      <td>Produtos</td>
+      <td>Imagem removida ao editar</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A6</td>
+      <td>ALTO</td>
+      <td>Go-live</td>
+      <td>CSV sem BOM UTF-8</td>
+      <td><span class="status-ok">✓ Validado homolog</span></td>
+    </tr>
+<tr>
+      <td>A7</td>
+      <td>ALTO</td>
+      <td>Wizard</td>
+      <td>Telefone aceita letras</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A8</td>
+      <td>ALTO</td>
+      <td>Conformidade</td>
+      <td>Textareas sem limite</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A9</td>
+      <td>ALTO</td>
+      <td>Produtos</td>
+      <td>Fabricante inexistente</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A10</td>
+      <td>ALTO</td>
+      <td>Relatórios</td>
+      <td>Dados fictícios</td>
+      <td><span class="status-ok">✓ Validado homolog</span></td>
+    </tr>
+<tr>
+      <td>A11</td>
+      <td>ALTO</td>
+      <td>Produtos</td>
+      <td>Textarea extrapola layout</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A12</td>
+      <td>ALTO</td>
+      <td>Relatórios/Go-live</td>
+      <td>Layout não responsivo</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A13</td>
+      <td>ALTO</td>
+      <td>AD/SB</td>
+      <td>FCU com spinner numérico</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A14</td>
+      <td>ALTO</td>
+      <td>Produtos</td>
+      <td>USD/BRL confuso</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A15</td>
+      <td>ALTO</td>
+      <td>Produtos</td>
+      <td>Ícone lixeira para inativar</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A16</td>
+      <td>ALTO</td>
+      <td>Produtos</td>
+      <td>Upload sem preview/remoção</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A17</td>
+      <td>ALTO</td>
+      <td>Produtos</td>
+      <td>Busca por barcode</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A18</td>
+      <td>ALTO</td>
+      <td>Wizard</td>
+      <td>CPF na revisão</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A19</td>
+      <td>ALTO</td>
+      <td>Produtos</td>
+      <td>Busca por data ambígua</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A20</td>
+      <td>ALTO</td>
+      <td>SGQ</td>
+      <td>Item 00 no dropdown tipo</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A21</td>
+      <td>ALTO</td>
+      <td>Relatórios</td>
+      <td>Gráfico híbrido incorreto</td>
+      <td><span class="status-ok">✓ Validado homolog</span></td>
+    </tr>
+<tr>
+      <td>A22</td>
+      <td>ALTO</td>
+      <td>Global</td>
+      <td>Data rodapé maiúscula</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A23</td>
+      <td>MEDIO</td>
+      <td>Wizard</td>
+      <td>Hint CNPJ informal</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A24</td>
+      <td>MEDIO</td>
+      <td>Wizard</td>
+      <td>Textos endereço</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A25</td>
+      <td>MEDIO</td>
+      <td>Wizard</td>
+      <td>Endereço caixa alta</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A26</td>
+      <td>MEDIO</td>
+      <td>Wizard</td>
+      <td>Toast CNPJ duplicado</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A27</td>
+      <td>MEDIO</td>
+      <td>Wizard</td>
+      <td>Checkbox linguagem</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A28</td>
+      <td>MEDIO</td>
+      <td>Wizard</td>
+      <td>Termo backend na revisão</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A29</td>
+      <td>MEDIO</td>
+      <td>Wizard</td>
+      <td>Pontuação revisão</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A30</td>
+      <td>MEDIO</td>
+      <td>Produtos</td>
+      <td>No results fabricante</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A31</td>
+      <td>MEDIO</td>
+      <td>Produtos</td>
+      <td>Cursor preço</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A32</td>
+      <td>MEDIO</td>
+      <td>Produtos</td>
+      <td>Foto na listagem</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A33</td>
+      <td>MEDIO</td>
+      <td>Produtos</td>
+      <td>Specs aeronáuticas</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A34</td>
+      <td>MEDIO</td>
+      <td>Produtos</td>
+      <td>Cotação BCB desatualizada</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A35</td>
+      <td>MEDIO</td>
+      <td>Produtos</td>
+      <td>Filtro ativo/inativo</td>
+      <td><span class="status-ok">✓ Validado homolog</span></td>
+    </tr>
+<tr>
+      <td>A36</td>
+      <td>MEDIO</td>
+      <td>Produtos</td>
+      <td>Barcode Code128</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A37</td>
+      <td>MEDIO</td>
+      <td>Produtos</td>
+      <td>Print manual</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A38</td>
+      <td>MEDIO</td>
+      <td>Produtos</td>
+      <td>Empty state</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A39</td>
+      <td>MEDIO</td>
+      <td>Conformidade</td>
+      <td>Textarea borda</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A40</td>
+      <td>MEDIO</td>
+      <td>Conformidade</td>
+      <td>AD/SB sem tradução</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A41</td>
+      <td>MEDIO</td>
+      <td>Conformidade</td>
+      <td>Painel uso longo</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A42</td>
+      <td>MEDIO</td>
+      <td>Conformidade</td>
+      <td>Alertas pouco visíveis</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A43</td>
+      <td>MEDIO</td>
+      <td>Conformidade</td>
+      <td>Cards sem cor</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A44</td>
+      <td>MEDIO</td>
+      <td>Conformidade</td>
+      <td>Habilitações layout</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A45</td>
+      <td>MEDIO</td>
+      <td>Go-live</td>
+      <td>Banner trial</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A46</td>
+      <td>MEDIO</td>
+      <td>Go-live</td>
+      <td>Linguagem técnica</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A47</td>
+      <td>MEDIO</td>
+      <td>Go-live</td>
+      <td>Breadcrumb módulo</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A48</td>
+      <td>MEDIO</td>
+      <td>Go-live</td>
+      <td>Download sem feedback</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A49</td>
+      <td>MEDIO</td>
+      <td>Menu</td>
+      <td>Estrutura i18n</td>
+      <td><span class="status-ok">✓ Verificado auto</span></td>
+    </tr>
+<tr>
+      <td>A50</td>
+      <td>POSITIVO</td>
+      <td>Global</td>
+      <td>Login claro</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A51</td>
+      <td>POSITIVO</td>
+      <td>Wizard</td>
+      <td>Progresso etapas</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A52</td>
+      <td>POSITIVO</td>
+      <td>Wizard</td>
+      <td>Validação inline</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A53</td>
+      <td>POSITIVO</td>
+      <td>Global</td>
+      <td>Menu modular</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A54</td>
+      <td>POSITIVO</td>
+      <td>Conformidade</td>
+      <td>Painel métricas</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A55</td>
+      <td>POSITIVO</td>
+      <td>Habilitações</td>
+      <td>Subtítulo claro</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A56</td>
+      <td>POSITIVO</td>
+      <td>Produtos</td>
+      <td>Modal barcode</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A57</td>
+      <td>POSITIVO</td>
+      <td>Global</td>
+      <td>Confirmação inativar</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A58</td>
+      <td>POSITIVO</td>
+      <td>SGQ</td>
+      <td>Tipos aeronáuticos</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A59</td>
+      <td>POSITIVO</td>
+      <td>Relatórios</td>
+      <td>Export CSV</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A60</td>
+      <td>POSITIVO</td>
+      <td>Global</td>
+      <td>i18n 4 idiomas</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr>
+<tr>
+      <td>A61</td>
+      <td>POSITIVO</td>
+      <td>Global</td>
+      <td>Sistema online</td>
+      <td><span class="status-pos">✓ Mantido</span></td>
+    </tr></tbody>
+  </table>
+  <div class="page-footer"><span>Aero Suite · Confronto UX</span><span>Anexo A</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Anexo B</span>
+  </div>
+  <h2>Encaminhamento</h2>
+  <p class="lead">
+    Solicitamos à <strong>Rafaella Nottes</strong> a retomada da homologação com base neste
+    confronto item a item. O achado A2 possui evidência antes/depois anexa neste dossiê.
+  </p>
+  <p>Evidências brutas: <code>docs/homolog_ux/evidencias/confronto-v2/20260616</code></p>
+  <div class="signature-block">
+    <div class="signature-line"></div>
+    <div class="signature-name">Wellem Lyra</div>
+    <div class="signature-role">Diretor de TI · Aero Suite</div>
+    <div class="signature-date">16 de junho de 2026 · https://app.aerosuite.com.br</div>
+  </div>
+  <div class="page-footer"><span>Aero Suite · Confronto UX</span><span>Assinatura</span></div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo de Estoque e Rastreabilidade - Aero Suite Controls</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      color: #1e293b;
+      background: #f8fafc;
+    }
+    
+    .page {
+      max-width: 210mm;
+      margin: 0 auto;
+      background: white;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    
+    @media print {
+      body { background: white; }
+      .page { box-shadow: none; max-width: 100%; }
+      .page-break { page-break-after: always; }
+      .no-print { display: none; }
+    }
+    
+    /* ========== CAPA ========== */
+    .cover {
+      min-height: 297mm;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    .cover-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .cover-icon {
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 40px;
+      box-shadow: 0 20px 40px rgba(245, 158, 11, 0.3);
+    }
+    
+    .cover-icon svg {
+      width: 60px;
+      height: 60px;
+      fill: white;
+    }
+    
+    .cover h1 {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+    
+    .cover h1 span {
+      color: #f59e0b;
+    }
+    
+    .cover h2 {
+      font-size: 24px;
+      font-weight: 400;
+      color: #94a3b8;
+      margin-bottom: 40px;
+    }
+    
+    .cover-badge {
+      display: inline-block;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid rgba(245, 158, 11, 0.5);
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #f59e0b;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    
+    .cover-footer {
+      position: absolute;
+      bottom: 40px;
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
+    
+    .cover-company {
+      font-size: 18px;
+      font-weight: 700;
+      color: #f59e0b;
+      letter-spacing: 3px;
+    }
+    
+    .cover-date {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 8px;
+    }
+    
+    /* ========== SEÇÕES ========== */
+    .section {
+      padding: 60px 50px;
+    }
+    
+    .section-header {
+      margin-bottom: 40px;
+    }
+    
+    .section-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      font-weight: 700;
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+    
+    .section h2 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+    
+    .section-subtitle {
+      font-size: 16px;
+      color: #64748b;
+    }
+    
+    /* ========== VISÃO GERAL ========== */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    
+    .overview-card {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 24px;
+      border-left: 4px solid;
+    }
+    
+    .overview-card.green { border-left-color: #22c55e; }
+    .overview-card.blue { border-left-color: #3b82f6; }
+    .overview-card.purple { border-left-color: #8b5cf6; }
+    .overview-card.orange { border-left-color: #f59e0b; }
+    
+    .overview-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+    
+    .overview-card p {
+      font-size: 14px;
+      color: #64748b;
+    }
+    
+    /* ========== FLUXO ========== */
+    .flow-container {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+      border-radius: 20px;
+      padding: 40px;
+      color: white;
+    }
+    
+    .flow-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+    }
+    
+    .flow-steps::before {
+      content: '';
+      position: absolute;
+      top: 30px;
+      left: 60px;
+      right: 60px;
+      height: 3px;
+      background: rgba(245, 158, 11, 0.3);
+    }
+    
+    .flow-step {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+    
+    .flow-step-number {
+      width: 60px;
+      height: 60px;
+      background: #f59e0b;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 auto 16px;
+    }
+    
+    .flow-step h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .flow-step p {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    
+    /* ========== TELAS ========== */
+    .screens-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    
+    .screen-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    
+    .screen-card:hover {
+      border-color: #f59e0b;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+    }
+    
+    .screen-icon {
+      width: 48px;
+      height: 48px;
+      background: #fef3c7;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 24px;
+    }
+    
+    .screen-card h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+    
+    .screen-route {
+      font-size: 12px;
+      color: #0ea5e9;
+      font-family: 'Courier New', monospace;
+      background: #f0f9ff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+    
+    .screen-card p {
+      font-size: 13px;
+      color: #64748b;
+    }
+    
+    /* ========== ARQUITETURA ========== */
+    .arch-diagram {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 30px;
+    }
+    
+    .arch-layers {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .arch-layer {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .arch-layer-label {
+      width: 120px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .arch-layer-content {
+      flex: 1;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .arch-item {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    
+    .arch-item.frontend { border-left: 3px solid #3b82f6; }
+    .arch-item.backend { border-left: 3px solid #22c55e; }
+    .arch-item.database { border-left: 3px solid #8b5cf6; }
+    
+    /* ========== QR CODE ========== */
+    .qr-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    
+    .qr-info h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 16px;
+    }
+    
+    .qr-info ul {
+      list-style: none;
+    }
+    
+    .qr-info li {
+      padding: 8px 0;
+      padding-left: 28px;
+      position: relative;
+      font-size: 14px;
+      color: #475569;
+    }
+    
+    .qr-info li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #22c55e;
+      font-weight: bold;
+    }
+    
+    .qr-preview {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    .qr-preview-label {
+      background: #0f172a;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px 8px 0 0;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      display: inline-block;
+      margin-bottom: -2px;
+    }
+    
+    .qr-preview-box {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 16px;
+    }
+    
+    .qr-code-placeholder {
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(45deg, #1e293b 25%, transparent 25%), 
+                  linear-gradient(-45deg, #1e293b 25%, transparent 25%), 
+                  linear-gradient(45deg, transparent 75%, #1e293b 75%), 
+                  linear-gradient(-45deg, transparent 75%, #1e293b 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+      margin: 0 auto 16px;
+      border-radius: 8px;
+    }
+    
+    .qr-code-text {
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0ea5e9;
+    }
+    
+    /* ========== TABELA ========== */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    
+    .data-table th {
+      background: #f1f5f9;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: #475569;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    
+    .data-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #1e293b;
+    }
+    
+    .data-table tr:hover td {
+      background: #fefce8;
+    }
+    
+    .data-table code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #0ea5e9;
+    }
+    
+    /* ========== INSTALAÇÃO ========== */
+    .install-steps {
+      counter-reset: step;
+    }
+    
+    .install-step {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .install-step:last-child {
+      border-bottom: none;
+    }
+    
+    .install-step-number {
+      width: 40px;
+      height: 40px;
+      background: #f59e0b;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    
+    .install-step-content h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+    
+    .install-step-content p {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+    
+    .code-block {
+      background: #1e293b;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #e2e8f0;
+      overflow-x: auto;
+    }
+    
+    .code-block .comment {
+      color: #64748b;
+    }
+    
+    .code-block .command {
+      color: #4ade80;
+    }
+    
+    /* ========== FOOTER ========== */
+    .doc-footer {
+      background: #0f172a;
+      color: white;
+      padding: 40px 50px;
+      text-align: center;
+    }
+    
+    .doc-footer-logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: #f59e0b;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    
+    .doc-footer p {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+    
+    /* ========== PRINT BUTTON ========== */
+    .print-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #f59e0b;
+      color: white;
+      border: none;
+      padding: 16px 24px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    
+    .print-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(245, 158, 11, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <!-- Botão de Impressão -->
+  <button class="print-button no-print" onclick="window.print()">
+    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/>
+    </svg>
+    Salvar como PDF
+  </button>
+
+  <div class="page">
+    <!-- CAPA -->
+    <div class="cover">
+      <div class="cover-content">
+        <div class="cover-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 16H4v-8h16v8z"/>
+          </svg>
+        </div>
+        <h1>Módulo de <span>Estoque</span></h1>
+        <h2>Controle e Rastreabilidade</h2>
+        <div class="cover-badge">Documentação Técnica</div>
+      </div>
+      <div class="cover-footer">
+        <div class="cover-company">AEROSUITE CONTROLS</div>
+        <div class="cover-date">Janeiro 2026 • Versão 1.0</div>
+      </div>
+    </div>
+
+    <!-- PÁGINA 2: VISÃO GERAL -->
+    <div class="page-break"></div>
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">1</div>
+        <h2>Visão Geral</h2>
+        <p class="section-subtitle">Um módulo completo e independente para controle de estoque</p>
+      </div>
+
+      <div class="overview-grid">
+        <div class="overview-card green">
+          <h3>🎯 Rastreabilidade Total</h3>
+          <p>Cada produto recebe um código único de rastreio com QR Code. Saiba a origem, lote, invoice e histórico completo de qualquer item.</p>
+        </div>
+        <div class="overview-card blue">
+          <h3>📦 Controle de Entrada/Saída</h3>
+          <p>Registre todas as movimentações de estoque com workflow intuitivo em etapas. Controle de invoices de importação e fornecedores.</p>
+        </div>
+        <div class="overview-card purple">
+          <h3>🔍 Consulta por QR Code</h3>
+          <p>Use o leitor de código de barras para consulta instantânea. Pressione F2 de qualquer tela para acesso rápido ao scanner.</p>
+        </div>
+        <div class="overview-card orange">
+          <h3>🎨 Layout Exclusivo</h3>
+          <p>Interface dedicada para operações de estoque. Ao acessar o módulo, o sistema exibe uma identidade visual própria.</p>
+        </div>
+      </div>
+
+      <h3 style="font-size: 18px; margin-bottom: 20px; color: #1e293b;">Fluxo de Trabalho</h3>
+      <div class="flow-container">
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <h4>Fornecedor</h4>
+            <p>Cadastre o fornecedor internacional</p>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <h4>Invoice</h4>
+            <p>Registre o documento de importação</p>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <h4>Entrada</h4>
+            <p>Cadastre cada item no sistema</p>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <h4>Etiqueta</h4>
+            <p>Imprima e cole o QR Code</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PÁGINA 3: TELAS DO SISTEMA -->
+    <div class="page-break"></div>
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">2</div>
+        <h2>Telas do Sistema</h2>
+        <p class="section-subtitle">Todas as funcionalidades disponíveis no módulo</p>
+      </div>
+
+      <div class="screens-grid">
+        <div class="screen-card">
+          <div class="screen-icon">📊</div>
+          <h4>Dashboard</h4>
+          <div class="screen-route">/estoque/dashboard</div>
+          <p>Visão geral com cards de resumo, últimas movimentações, alertas de vencimento e ações rápidas.</p>
+        </div>
+        <div class="screen-card">
+          <div class="screen-icon">📱</div>
+          <h4>Consulta QR Code</h4>
+          <div class="screen-route">/estoque/consulta-qr</div>
+          <p>Escaneie ou digite o código de rastreio para ver todas as informações do produto. Atalho: F2</p>
+        </div>
+        <div class="screen-card">
+          <div class="screen-icon">📥</div>
+          <h4>Entrada de Mercadoria</h4>
+          <div class="screen-route">/estoque/entrada</div>
+          <p>Wizard em 3 passos: Origem → Produto → Localização. Gera QR Code automaticamente.</p>
+        </div>
+        <div class="screen-card">
+          <div class="screen-icon">📦</div>
+          <h4>Itens em Estoque</h4>
+          <div class="screen-route">/estoque/itens</div>
+          <p>Lista completa de produtos com filtros, detalhes, QR Code e impressão de etiquetas.</p>
+        </div>
+        <div class="screen-card">
+          <div class="screen-icon">📄</div>
+          <h4>Invoices</h4>
+          <div class="screen-route">/estoque/invoices</div>
+          <p>Documentos de importação com status, valores e relação de itens recebidos.</p>
+        </div>
+        <div class="screen-card">
+          <div class="screen-icon">🚚</div>
+          <h4>Fornecedores</h4>
+          <div class="screen-route">/estoque/fornecedores</div>
+          <p>Cadastro completo de fornecedores internacionais com país de origem e contatos.</p>
+        </div>
+        <div class="screen-card">
+          <div class="screen-icon">📋</div>
+          <h4>Lotes</h4>
+          <div class="screen-route">/estoque/lotes</div>
+          <p>Controle de lotes de produtos com informações de validade e quantidade.</p>
+        </div>
+        <div class="screen-card">
+          <div class="screen-icon">🔄</div>
+          <h4>Movimentações</h4>
+          <div class="screen-route">/estoque/movimentacoes</div>
+          <p>Histórico completo de entradas, saídas, transferências e ajustes.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PÁGINA 4: QR CODE E RASTREABILIDADE -->
+    <div class="page-break"></div>
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">3</div>
+        <h2>QR Code e Rastreabilidade</h2>
+        <p class="section-subtitle">Como funciona o sistema de identificação única</p>
+      </div>
+
+      <div class="qr-section">
+        <div class="qr-info">
+          <h3>Informações no QR Code</h3>
+          <ul>
+            <li>Código único de rastreio (BLW-XXXXXXXX)</li>
+            <li>Part Number (P/N) do produto</li>
+            <li>Serial Number (S/N) quando aplicável</li>
+            <li>Fornecedor e país de origem</li>
+            <li>Número da Invoice de importação</li>
+            <li>Código do Lote</li>
+            <li>Data de entrada no estoque</li>
+            <li>Localização (prateleira/gaveta)</li>
+            <li>Certificado de conformidade</li>
+            <li>Valor unitário (USD e BRL)</li>
+          </ul>
+        </div>
+        <div class="qr-preview">
+          <div class="qr-preview-label">AEROSUITE CONTROLS</div>
+          <div class="qr-preview-box">
+            <div class="qr-code-placeholder"></div>
+            <div class="qr-code-text">BLW-A1B2C3D4</div>
+            <p style="margin-top: 8px; font-size: 12px; color: #64748b;">P/N: 123-456-789</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 18px; margin: 40px 0 20px; color: #1e293b;">Arquitetura do Sistema</h3>
+      <div class="arch-diagram">
+        <div class="arch-layers">
+          <div class="arch-layer">
+            <div class="arch-layer-label">Frontend</div>
+            <div class="arch-layer-content">
+              <div class="arch-item frontend">estoque-layout.component.ts</div>
+              <div class="arch-item frontend">estoque-dashboard.component.ts</div>
+              <div class="arch-item frontend">consulta-qr.component.ts</div>
+              <div class="arch-item frontend">entrada-mercadoria.component.ts</div>
+              <div class="arch-item frontend">estoque.service.ts</div>
+            </div>
+          </div>
+          <div class="arch-layer">
+            <div class="arch-layer-label">Backend</div>
+            <div class="arch-layer-content">
+              <div class="arch-item backend">EstoqueResource.java</div>
+              <div class="arch-item backend">EstoqueService.java</div>
+              <div class="arch-item backend">Mappers</div>
+            </div>
+          </div>
+          <div class="arch-layer">
+            <div class="arch-layer-label">Entidades</div>
+            <div class="arch-layer-content">
+              <div class="arch-item database">Fornecedor</div>
+              <div class="arch-item database">Invoice</div>
+              <div class="arch-item database">InvoiceItem</div>
+              <div class="arch-item database">Lote</div>
+              <div class="arch-item database">ItemEstoque</div>
+              <div class="arch-item database">MovimentacaoEstoque</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PÁGINA 5: TABELAS DO BANCO -->
+    <div class="page-break"></div>
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">4</div>
+        <h2>Estrutura do Banco de Dados</h2>
+        <p class="section-subtitle">Tabelas criadas para o módulo de estoque</p>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Tabela</th>
+            <th>Descrição</th>
+            <th>Campos Principais</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>fornecedor</code></td>
+            <td>Fornecedores internacionais</td>
+            <td>codigo, razao_social, pais_origem, telefone, email</td>
+          </tr>
+          <tr>
+            <td><code>invoice</code></td>
+            <td>Documentos de importação</td>
+            <td>numero_invoice, fornecedor_id, data_emissao, valor_total, status</td>
+          </tr>
+          <tr>
+            <td><code>invoice_item</code></td>
+            <td>Itens de cada invoice</td>
+            <td>invoice_id, part_number, descricao, quantidade, valor_unitario</td>
+          </tr>
+          <tr>
+            <td><code>lote</code></td>
+            <td>Controle de lotes</td>
+            <td>codigo_lote, invoice_id, data_fabricacao, data_validade</td>
+          </tr>
+          <tr>
+            <td><code>item_estoque</code></td>
+            <td>Produtos em estoque</td>
+            <td>codigo_rastreio, part_number, serial_number, lote_id, status</td>
+          </tr>
+          <tr>
+            <td><code>movimentacao_estoque</code></td>
+            <td>Histórico de movimentações</td>
+            <td>item_id, tipo, quantidade, motivo, usuario_id, data</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="font-size: 18px; margin: 40px 0 20px; color: #1e293b;">Endpoints da API</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Método</th>
+            <th>Endpoint</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code style="background: #dcfce7; color: #166534;">GET</code></td>
+            <td>/api/estoque/fornecedores</td>
+            <td>Lista fornecedores</td>
+          </tr>
+          <tr>
+            <td><code style="background: #dbeafe; color: #1e40af;">POST</code></td>
+            <td>/api/estoque/fornecedores</td>
+            <td>Cria fornecedor</td>
+          </tr>
+          <tr>
+            <td><code style="background: #dcfce7; color: #166534;">GET</code></td>
+            <td>/api/estoque/invoices</td>
+            <td>Lista invoices</td>
+          </tr>
+          <tr>
+            <td><code style="background: #dbeafe; color: #1e40af;">POST</code></td>
+            <td>/api/estoque/entrada</td>
+            <td>Registra entrada de mercadoria</td>
+          </tr>
+          <tr>
+            <td><code style="background: #dcfce7; color: #166534;">GET</code></td>
+            <td>/api/estoque/consulta/{codigo}</td>
+            <td>Consulta por QR Code</td>
+          </tr>
+          <tr>
+            <td><code style="background: #dcfce7; color: #166534;">GET</code></td>
+            <td>/api/estoque/itens/{id}/qrcode</td>
+            <td>Gera imagem do QR Code</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PÁGINA 6: INSTALAÇÃO -->
+    <div class="page-break"></div>
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">5</div>
+        <h2>Instalação e Configuração</h2>
+        <p class="section-subtitle">Passos para ativar o módulo de estoque</p>
+      </div>
+
+      <div class="install-steps">
+        <div class="install-step">
+          <div class="install-step-number">1</div>
+          <div class="install-step-content">
+            <h4>Executar Script SQL</h4>
+            <p>Execute o script de criação das tabelas no banco de dados MySQL.</p>
+            <div class="code-block">
+              <span class="comment">-- Arquivo: backend/scripts/CREATE_ESTOQUE_TABLES.sql</span><br>
+              <span class="command">mysql -u root -p aerosuite < CREATE_ESTOQUE_TABLES.sql</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="install-step-number">2</div>
+          <div class="install-step-content">
+            <h4>Associar Funcionalidades aos Perfis</h4>
+            <p>Acesse o sistema em Configurações → Perfis e associe as funcionalidades de estoque aos perfis desejados.</p>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="install-step-number">3</div>
+          <div class="install-step-content">
+            <h4>Reconstruir os Containers Docker</h4>
+            <p>Rebuilde as imagens Docker para incluir as novas funcionalidades.</p>
+            <div class="code-block">
+              <span class="command">docker-compose down</span><br>
+              <span class="command">docker rmi aerosuite-fullstack-pro-api:latest -f</span><br>
+              <span class="command">docker rmi aerosuite-fullstack-pro-web:latest -f</span><br>
+              <span class="command">docker-compose build --no-cache</span><br>
+              <span class="command">docker-compose up -d</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="install-step-number">4</div>
+          <div class="install-step-content">
+            <h4>Acessar o Módulo</h4>
+            <p>Clique em "Estoque" no menu lateral para acessar o módulo com sua interface exclusiva.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="doc-footer">
+      <div class="doc-footer-logo">AEROSUITE CONTROLS</div>
+      <p>Serviços Aeronáuticos • www.aerosuite.app</p>
+      <p style="margin-top: 8px; font-size: 12px;">Documentação gerada automaticamente • Janeiro 2026</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1 @@
+{"method":"Runtime.evaluate","params":{"expression":"(async()=>{try{const r=await eval(atob(window.__deployB64));return r}catch(e){return{ok:false,error:String(e&&e.message||e),len:window.__deployB64.length}}})()","awaitPromise":true,"returnByValue":true},"viewId":"a51b7f"}

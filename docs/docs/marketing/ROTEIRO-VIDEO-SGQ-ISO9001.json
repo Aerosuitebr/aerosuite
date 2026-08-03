@@ -1,0 +1,337 @@
+{
+  "meta": {
+    "product": "Aero Suite",
+    "module": "SGQ / RNC-CAPA / Conformidade Técnica",
+    "document_ref": "docs/comercial/Material_Comercial_SGQ_ISO9001_20260625.html",
+    "tagline": "RNC e CAPA integrados à operação MRO",
+    "positioning": "Suite SaaS MRO com módulo SGQ operacional: RNC/CAPA de 6 fases, documentos controlados, treinamentos, calibração e export ZIP — no mesmo tenant da OS e do hangar. Preparado para apoiar auditorias ISO 9001 e Part 145. Não substitui SGQ certificado.",
+    "primary_audience": "Gestores de qualidade, RT, auditores internos, diretores MRO em recertificação ISO 9001 ou fiscalização Part 145",
+    "secondary_audience": "Consultores ISO, integradores, equipe comercial Aero Suite",
+    "language": "pt-BR",
+    "brand_voice": "Técnico-comercial, vocabulário qualidade real (RNC, CAPA, eficácia, cláusula 10.2, MOE, POP). Tom: parceiro que entende auditoria, não fear-mongering regulatório.",
+    "legal_safe_phrases": [
+      "Preparado para apoiar auditorias e recertificações",
+      "Fluxo CAPA alinhado à cláusula 10.2 da ISO 9001:2015",
+      "Complementa o SGQ certificado da organização",
+      "Evidências operacionais integradas — conformidade formal continua sendo da organização",
+      "Export SGQ em um clique para auditoria interna"
+    ],
+    "avoid_claims": [
+      "Certificado ISO 9001",
+      "Garante aprovação em auditoria ou recertificação",
+      "Substitui o SGQ, MOE ou POP",
+      "Homologado pela ANAC ou organismo certificador",
+      "Conformidade ISO automática",
+      "Software de certificação ISO"
+    ],
+    "claim_replacements": [
+      {
+        "instead_of": "Certificado ISO 9001",
+        "use": "Fluxo CAPA alinhado à cláusula 10.2 — complementa processos ISO existentes"
+      },
+      {
+        "instead_of": "Garante aprovação na auditoria",
+        "use": "Organiza evidências para quando o auditor solicitar"
+      },
+      {
+        "instead_of": "Substitui o SGQ",
+        "use": "Operacionaliza e integra o SGQ ao hangar e à OS"
+      }
+    ],
+    "demo_routes": [
+      "/conformidade/painel",
+      "/conformidade/nao-conformidades",
+      "/conformidade/documentos",
+      "/conformidade/treinamentos",
+      "/conformidade/treinamentos-obrigatorios",
+      "/conformidade/calibracao",
+      "/conformidade/subcontratacao",
+      "/dossie-auditoria"
+    ],
+    "global_cta": {
+      "primary": "Agende uma demonstração gratuita — foco RNC/CAPA",
+      "secondary": "Piloto 30 dias com checklist SGQ Fase 7",
+      "url_placeholder": "https://SEU-DOMINIO.com/demo"
+    },
+    "visual_identity": {
+      "colors_hint": "Azul aviação (#0369a1), âmbar alertas conformidade (#c9a227), verde eficácia (#15803d)",
+      "settings": [
+        "Sala qualidade com certificado ISO na parede (sem claim de certificação do software)",
+        "Gestor qualidade com tablet no painel SGQ",
+        "Hangar + overlay UI CAPA stepper",
+        "Close-up stepper 6 fases CAPA",
+        "Download animado ZIP relatório SGQ"
+      ],
+      "screen_capture_priority": [
+        "Painel qualidade — cards alertas + indicadores SMS",
+        "Nova NC — stepper REGISTRO → VERIFICAÇÃO",
+        "Checkbox eficácia bloqueando fechamento",
+        "Export relatório SGQ ZIP",
+        "Documento controlado — nova revisão"
+      ]
+    }
+  },
+  "how_to_use_with_ai": {
+    "video_generation": "Copie scenes[].prompts.video para Runway, Kling, Pika ou Sora. Intercale com screen capture real das rotas em demo_routes.",
+    "voiceover": "Cole voiceover_full em ElevenLabs ou Play.ht. Voz: 35-50 anos, neutro BR, ritmo seguro (auditor/confiável).",
+    "editing": "Use time + on_screen_text + duration_seconds. Inserir disclaimer 1s no final: «Não substitui SGQ certificado».",
+    "html_companion": "Material expandido com matriz ISO e demo 15 min: docs/comercial/Material_Comercial_SGQ_ISO9001_20260625.html"
+  },
+  "videos": [
+    {
+      "id": "V13_RNC_CAPA_HERO",
+      "title": "NC no papel não fecha CAPA. No hangar, fecha.",
+      "subtitle": "Vídeo principal SGQ / RNC — site e YouTube",
+      "duration_seconds": 60,
+      "format": "16:9",
+      "platforms": ["YouTube", "Site", "LinkedIn"],
+      "hook_3_seconds": "O auditor chegou. Onde está a NC da OS 1234?",
+      "voiceover_full": "O auditor não quer saber onde você deveria ter registrado a não conformidade. Ele quer a evidência. Hoje, isso ainda mora em planilha, e-mail e pasta compartilhada — desconectado da OS, do hangar e da peça. No Aero Suite, RNC e CAPA vivem dentro da operação. Abra a ocorrência, vincule à ordem de serviço, avance pelas seis fases: registro, contenção, causa raiz, ação corretiva, verificação de eficácia e fechamento. Responsável, prazo, aprovação e anexo em cada etapa. O sistema não deixa fechar sem verificar eficácia. No painel qualidade, KPIs SMS mostram o que está aberto, o que é crítico e a tendência dos últimos meses. Exporte o pacote SGQ em um clique — CSV, snapshot, evidências prontas para auditoria interna ou recertificação. O Aero Suite complementa seu SGQ certificado. Não substitui. Integra. Agende uma demonstração.",
+      "scenes": [
+        {
+          "time": "0:00-0:04",
+          "duration_seconds": 4,
+          "on_screen_text": "O auditor chegou. Onde está a NC?",
+          "visual_description": "Split: gestor qualidade com papéis vs dashboard Aero Suite limpo",
+          "voiceover": "O auditor não quer saber onde você deveria ter registrado. Ele quer a evidência.",
+          "prompts": {
+            "video": "Cinematic split screen stressed aviation quality manager paper folders vs clean blue SaaS quality dashboard aircraft hangar background dramatic amber and blue lighting 4K photorealistic",
+            "image": "Aviation quality manager audit stress versus modern SGQ software dashboard contrast photorealistic"
+          },
+          "tips": "Rosto real ou stock MRO; evitar uniforme com logo ANAC."
+        },
+        {
+          "time": "0:05-0:15",
+          "duration_seconds": 10,
+          "on_screen_text": "Planilha · E-mail · OS desconectada",
+          "visual_description": "Ícones desconectados Excel Outlook pasta amarela linha tracejada quebrada",
+          "voiceover": "Hoje isso mora em planilha, e-mail e pasta — desconectado da OS e do hangar.",
+          "prompts": {
+            "video": "Motion graphics disconnected workflow Excel Outlook yellow folder broken dashed lines aviation MRO office professional dark background",
+            "image": "Disconnected quality workflow icons chaos aviation maintenance office"
+          },
+          "tips": "Som sutil de notificação/email acumulado aumenta tensão."
+        },
+        {
+          "time": "0:16-0:35",
+          "duration_seconds": 19,
+          "on_screen_text": "6 fases CAPA · Vinculado à OS",
+          "visual_description": "Screen capture stepper CAPA + B-roll técnico tablet hangar",
+          "voiceover": "Abra a ocorrência, vincule à OS, avance pelas seis fases… responsável, prazo, anexo e aprovação em cada etapa.",
+          "prompts": {
+            "video": "Aviation maintenance technician tablet hangar work order linked non-conformity CAPA workflow UI overlay six phases stepper professional daylight",
+            "image": "CAPA stepper six phases aviation quality software interface mockup"
+          },
+          "tips": "OBRIGATÓRIO: gravação real /conformidade/nao-conformidades — credibilidade máxima."
+        },
+        {
+          "time": "0:36-0:48",
+          "duration_seconds": 12,
+          "on_screen_text": "KPIs SMS · Export ZIP",
+          "visual_description": "Painel qualidade gráficos severidade + botão export",
+          "voiceover": "KPIs SMS, tendência mensal, pacote exportável em um clique.",
+          "prompts": {
+            "video": "Quality dashboard SMS KPIs severity chart monthly trend export ZIP button click aviation SaaS blue UI smooth scroll",
+            "image": "Aviation SGQ quality dashboard KPI charts export report"
+          },
+          "tips": "Zoom no botão «Exportar relatório SGQ (ZIP)»."
+        },
+        {
+          "time": "0:49-0:60",
+          "duration_seconds": 11,
+          "on_screen_text": "Aero Suite · Complementa seu SGQ",
+          "visual_description": "Logo CTA + disclaimer legal pequeno",
+          "voiceover": "Aero Suite complementa seu SGQ. Integra. Agende uma demonstração.",
+          "prompts": {
+            "video": "Logo reveal Aero Suite aviation SaaS elegant blue white hangar bokeh slow push CTA demo URL",
+            "image": "Aero Suite branding quality management aviation hangar professional"
+          },
+          "tips": "Rodapé 7pt: «Não substitui SGQ certificado da organização»."
+        }
+      ],
+      "social": {
+        "caption": "RNC no Excel não fecha CAPA com eficácia comprovada. No Aero Suite: 6 fases, vínculo com OS, KPIs SMS e export ZIP pro auditor. Complementa seu SGQ — não substitui. Demo gratuita 👇",
+        "hashtags": ["#Qualidade", "#ISO9001", "#SGQ", "#Part145", "#MRO", "#CAPA", "#GestaoDaQualidade", "#AviacaoBrasil", "#AeroSuite"]
+      }
+    },
+    {
+      "id": "V14_ISO9001_LINKEDIN",
+      "title": "Cláusula 10.2 no hangar, não na gaveta",
+      "subtitle": "ISO 9001 + MRO integrado — LinkedIn vendas qualidade",
+      "duration_seconds": 45,
+      "format": "16:9",
+      "platforms": ["LinkedIn", "YouTube"],
+      "hook_3_seconds": "ISO 9001 exige eficácia. Sua NC está na mesma gaveta da OS?",
+      "voiceover_full": "ISO 9001 exige ação corretiva com eficácia comprovada. Part 145 exige rastreio da OS à peça. Se sua NC está numa planilha separada, você atende o requisito no papel — não na operação. O Aero Suite une os dois mundos: módulo RNC com CAPA de seis fases, documentos controlados, treinamentos, calibração e export SGQ — no mesmo sistema da ordem de serviço e do hangar. Preparado para apoiar auditorias e recertificações. A conformidade formal continua sendo da sua organização. A correria de juntar evidência, não. Conheça a Aero Suite.",
+      "scenes": [
+        {
+          "time": "0:00-0:12",
+          "on_screen_text": "10.2 · Eficácia · Rastreio",
+          "visual_description": "Certificado ISO parede (organização) → corte planilha NC",
+          "voiceover": "ISO exige eficácia comprovada. Part 145 exige rastreio da OS à peça.",
+          "prompts": {
+            "video": "ISO 9001 certificate frame on office wall cut to Excel non-conformity spreadsheet aviation quality office professional",
+            "image": "ISO certificate wall aviation quality office transition to spreadsheet"
+          },
+          "tips": "Certificado genérico sem logo organismo; texto ilegível."
+        },
+        {
+          "time": "0:13-0:32",
+          "on_screen_text": "RNC + Docs + Treino + OS",
+          "visual_description": "Montagem 4 telas: NC list, doc controlado, calibração, OS link",
+          "voiceover": "RNC, CAPA, documentos, treinamentos — mesmo tenant da ordem de serviço.",
+          "prompts": {
+            "video": "Fast professional montage four aviation SaaS screens non-conformity controlled documents training work order linked unified platform blue theme",
+            "image": "Four panel aviation quality management integrated platform mockup"
+          },
+          "tips": "Screen capture real em sequência rápida (2-3s cada tela)."
+        },
+        {
+          "time": "0:33-0:45",
+          "on_screen_text": "Export evidências · Aero Suite",
+          "visual_description": "Download ZIP + logo LinkedIn CTA",
+          "voiceover": "Evidência exportável. A correria de juntar dossiê, não. Conheça a Aero Suite.",
+          "prompts": {
+            "video": "ZIP file download animation aviation quality report export professional UI transition to logo CTA LinkedIn style",
+            "image": "Export quality evidence ZIP download aviation software CTA"
+          }
+        }
+      ],
+      "social": {
+        "caption": "Cláusula 10.2 no papel ≠ 10.2 na operação. RNC/CAPA integrado à OS MRO, com export SGQ para auditoria. Para gestores de qualidade em Part 145 e ISO 9001. 🔗 Demo na bio.",
+        "hashtags": ["#ISO9001", "#Qualidade", "#Part145", "#MRO", "#AuditoriaInterna", "#AeroSuite", "#LinkedIn"]
+      }
+    },
+    {
+      "id": "V15_RNC_REELS",
+      "title": "NC crítica 90 dias aberta. O auditor vai adorar…",
+      "subtitle": "Reels / Shorts — gancho qualidade",
+      "duration_seconds": 30,
+      "format": "9:16",
+      "platforms": ["Instagram Reels", "TikTok", "YouTube Shorts"],
+      "hook_3_seconds": "NC crítica aberta há 90 dias. Sem causa raiz.",
+      "voiceover_full": "NC crítica aberta há 90 dias. Sem causa raiz. Sem eficácia. O auditor vai adorar — disse ninguém nunca. No Aero Suite: seis fases CAPA, bloqueio de fechamento sem verificação, KPI no painel e export ZIP. Qualidade integrada ao hangar. Link na bio.",
+      "scenes": [
+        {
+          "time": "0:00-0:03",
+          "on_screen_text": "90 dias aberta 😬",
+          "visual_description": "Planilha Excel linha vermelha NC crítica zoom dramático vertical",
+          "prompts": {
+            "video": "Vertical dramatic zoom Excel spreadsheet red highlighted critical non-conformity row 90 days aviation office quick cut",
+            "image": "Excel NC critical 90 days vertical dramatic"
+          }
+        },
+        {
+          "time": "0:04-0:12",
+          "on_screen_text": "6 fases CAPA",
+          "visual_description": "Screen capture stepper vertical crop 9:16",
+          "prompts": {
+            "video": "Vertical smartphone screen CAPA six phase stepper aviation quality app smooth swipe between phases",
+            "image": "Mobile CAPA stepper vertical aviation quality"
+          },
+          "tips": "Gravação real mobile ou crop 9:16 do desktop."
+        },
+        {
+          "time": "0:13-0:22",
+          "on_screen_text": "Sem eficácia = não fecha",
+          "visual_description": "Checkbox eficácia + toast erro tentativa fechar",
+          "prompts": {
+            "video": "Software UI effectiveness checkbox blocked error toast cannot close non-conformity aviation quality vertical frame",
+            "image": "Effectiveness verification blocked close NC software UI"
+          }
+        },
+        {
+          "time": "0:23-0:30",
+          "on_screen_text": "Aero Suite · Demo grátis",
+          "visual_description": "Logo swipe up link bio",
+          "prompts": {
+            "video": "Vertical logo reveal Aero Suite aviation quality CTA swipe up animation energetic",
+            "image": "Aero Suite vertical CTA reels aviation"
+          }
+        }
+      ],
+      "social": {
+        "caption": "90 dias de NC crítica sem eficácia? 🚫 No Aero Suite o CAPA não deixa fechar. 6 fases + export ZIP. Link na bio.",
+        "hashtags": ["#Qualidade", "#CAPA", "#ISO9001", "#OficinaAeronautica", "#AeroSuite", "#Reels"]
+      }
+    },
+    {
+      "id": "V16_DEMO_WALKTHROUGH",
+      "title": "Walkthrough comercial SGQ — gravação de tela (12 min)",
+      "subtitle": "Roteiro narrado para Loom / demo vendas / onboarding comercial",
+      "duration_seconds": 720,
+      "format": "16:9",
+      "platforms": ["Loom", "Sales enablement", "YouTube unlisted"],
+      "hook_3_seconds": "Em 12 minutos você vê RNC, CAPA, painel SMS e export completo.",
+      "voiceover_full": "Roteiro segmentado — ver scenes[] para narração por bloco. Usar tenant demo com NC em múltiplas fases.",
+      "scenes": [
+        {
+          "time": "0:00-1:00",
+          "chapter": "Abertura",
+          "on_screen_text": "Aero Suite · SGQ operacional",
+          "voiceover": "Bem-vindo. Vou mostrar como o Aero Suite integra RNC e CAPA à operação MRO — do registro da ocorrência ao pacote exportável para auditoria. Lembrete: complementamos seu SGQ certificado, não substituímos.",
+          "action": "Login → Home → destacar card alertas SGQ se visível"
+        },
+        {
+          "time": "1:00-3:00",
+          "chapter": "Painel qualidade",
+          "on_screen_text": "Alertas consolidados",
+          "voiceover": "O painel qualidade consolida NC abertas, documentos vencidos, treinos, calibrações, ASL e subcontratação. Cada card é clicável. Ajusto a janela de dias e vejo os indicadores SMS: severidade, fase CAPA, tendência de seis meses.",
+          "action": "/conformidade/painel — scroll cards + indicadores SMS"
+        },
+        {
+          "time": "3:00-6:00",
+          "chapter": "Nova NC + CAPA",
+          "on_screen_text": "RNC · 6 fases",
+          "voiceover": "Nova ocorrência: título, severidade, descrição, OS vinculada. No stepper: contenção imediata, análise de causa raiz, ação corretiva, verificação de eficácia. Defino responsável e prazo por etapa. Anexo evidência na fase de verificação. Tento fechar sem eficácia — o sistema bloqueia.",
+          "action": "/conformidade/nao-conformidades — criar/editar NC completa"
+        },
+        {
+          "time": "6:00-8:00",
+          "chapter": "Documentos + treino + calibração",
+          "on_screen_text": "Cláusulas 7.5 · 7.2 · 7.1.5",
+          "voiceover": "Documentos controlados com revisão e histórico — cláusula 7.5. Treinamentos e cursos obrigatórios por função — competência 7.2. Calibração com alerta e enforcement opcional — 7.1.5.",
+          "action": "Tour rápido documentos → treinamentos → calibração"
+        },
+        {
+          "time": "8:00-10:00",
+          "chapter": "Enforcement",
+          "on_screen_text": "Qualidade vira regra",
+          "voiceover": "No painel, três toggles de enforcement: calibração vencida, treino obrigatório, subcontratação vencida. Quando ligados, o hangar e a operação respeitam a política da qualidade — configurável pela oficina.",
+          "action": "Painel → toggles enforcement → salvar política"
+        },
+        {
+          "time": "10:00-11:30",
+          "chapter": "Export SGQ",
+          "on_screen_text": "Pacote auditoria",
+          "voiceover": "Export relatório SGQ: ZIP com CSVs por módulo, resumo, snapshot JSON. Complementar ao dossiê multi-OS que inclui pasta sgq no pacote de auditoria.",
+          "action": "Export ZIP → mostrar conteúdo extraído brevemente"
+        },
+        {
+          "time": "11:30-12:00",
+          "chapter": "CTA",
+          "on_screen_text": "Demo · Piloto 30 dias",
+          "voiceover": "Isso é o SGQ operacional integrado ao MRO. Agende demo ou pilote 30 dias com checklist go-live Fase 7. Obrigado.",
+          "action": "Tela contato / QR demo"
+        }
+      ],
+      "social": {
+        "caption": "Walkthrough completo: RNC, CAPA 6 fases, painel SMS e export SGQ no Aero Suite. Para gestores de qualidade MRO.",
+        "hashtags": ["#AeroSuite", "#SGQ", "#Demo", "#MRO"]
+      }
+    }
+  ],
+  "master_prompts_for_specialized_ai": {
+    "elevenlabs_voice_direction": "Voz brasileira neutra, 35-50 anos, tom confiável de consultor qualidade aeronáutica. Ritmo moderado. Pausas curtas antes de «eficácia» e «evidência». Evitar tom alarmista.",
+    "runway_or_kling_scene_template": "Cinematic aviation MRO quality management, photorealistic, blue (#0369a1) and amber (#c9a227) accent lighting, professional hangar or quality office, no readable regulatory logos, 4K, {SCENE_DESCRIPTION}",
+    "midjourney_scene_template": "Aviation quality management CAPA workflow, professional MRO environment, clean modern SaaS UI overlay, blue white amber palette --ar 16:9 --style raw",
+    "heygen_avatar": "Business casual, quality manager persona, neutral background aviation office, Brazilian Portuguese script"
+  },
+  "iso_9001_matrix_summary": {
+    "full_matrix_in": "docs/comercial/Material_Comercial_SGQ_ISO9001_20260625.html#capitulo-4",
+    "strong_coverage": ["7.5", "8.7", "10.2"],
+    "partial_coverage": ["7.2", "7.1.5", "8.4", "8.5", "8.6", "9.1", "9.2", "10.1", "10.3"],
+    "not_covered_by_software": ["5.1", "5.2", "6.2", "7.3", "9.1.2", "9.3"],
+    "sales_one_liner": "Profundidade em documentação, controle de NC e CAPA; apoio operacional amplo para MRO Part 145."
+  }
+}

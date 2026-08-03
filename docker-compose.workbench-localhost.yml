@@ -1,0 +1,9 @@
+# Produção: MySQL só na loopback do host (acesso remoto via SSH tunnel / Workbench).
+# Uso com produção:
+#   docker compose -f docker-compose.yml -f docker-compose.local-mysql.yml \
+#     -f docker-compose.production.yml -f docker-compose.workbench-localhost.yml up -d mysql
+
+services:
+  mysql:
+    ports: !override
+      - "127.0.0.1:${MYSQL_PORT:-3306}:3306"

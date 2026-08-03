@@ -1,0 +1,141 @@
+// Scroll de listagens: horizontal no tablet; scroll vertical no main-content (list-viewport-layout.global.scss)
+$layout-compact-max: 1023px;
+
+@mixin list-page-scroll-compact() {
+  .as-page:not(.list-container) {
+    height: auto !important;
+    min-height: 0 !important;
+    flex: 1 0 auto !important;
+    max-width: 100%;
+    min-width: 0;
+    overflow-y: visible !important;
+    overflow-x: clip !important;
+
+    &:not(:has(.as-page-body)) {
+      overflow-y: visible !important;
+      overflow-x: clip !important;
+    }
+  }
+
+  .as-page-body {
+    flex: none !important;
+    min-height: unset !important;
+    overflow-x: clip !important;
+    overflow-y: visible !important;
+  }
+
+  .list-container:not(.as-page),
+  .perfil-container,
+  .funcionalidade-container,
+  .propostas-container,
+  .comercial-container,
+  .fornecedor-container,
+  .quarentena-page,
+  .controle-acesso-container,
+  .relatorios-container,
+  .biblioteca-container,
+  .configuracoes-container,
+  .lotes-container,
+  .movimentacoes-container,
+  .itens-container,
+  .invoice-container,
+  .usuarios-externos-container,
+  .rastreio-container,
+  .saida-container,
+  .associacao-container,
+  .suporte-page {
+    height: auto !important;
+    min-height: 0 !important;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip !important;
+    overflow-y: visible !important;
+    flex: none !important;
+  }
+
+  // Listagens premium (.as-page.list-container): layout flex — ver list-viewport-layout.global.scss
+  .as-page.list-container {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip !important;
+  }
+
+  .as-page.list-container .table-section,
+  .as-page.list-container .table-card,
+  .as-page.list-container .table-container,
+  .as-page.list-container .data-card,
+  .as-page.list-container .filters-section {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  .as-page:not(.list-container) .table-section,
+  .as-page:not(.list-container) .table-card,
+  .as-page:not(.list-container) .table-container,
+  .as-page:not(.list-container) .data-card,
+  .filters-section,
+  .as-table-card {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    flex: none !important;
+    min-height: unset !important;
+  }
+
+  .as-page:not(.list-container) .p-datatable {
+    height: auto !important;
+    display: block !important;
+    flex: none !important;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .as-page:not(.list-container) .p-datatable:not(.p-datatable-responsive-stack) {
+    .p-datatable-wrapper,
+    .p-datatable-table-container,
+    .p-scroller,
+    .p-scroller-viewport,
+    .p-datatable-scrollable-view,
+    .p-datatable-scrollable-body,
+    .p-datatable-scrollable-table-container {
+      max-height: none !important;
+      height: auto !important;
+      max-width: 100%;
+      min-width: 0;
+      overflow-x: auto !important;
+      overflow-y: visible !important;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      flex: none !important;
+    }
+  }
+
+  .p-datatable.p-datatable-responsive-stack {
+    .p-datatable-wrapper,
+    .p-datatable-table-container {
+      overflow-x: visible !important;
+      overflow-y: visible !important;
+    }
+  }
+
+  .p-paginator {
+    flex-shrink: 0;
+    position: relative !important;
+  }
+}
+
+@media (max-width: $layout-compact-max) {
+  .main-content {
+    @include list-page-scroll-compact();
+  }
+
+  .estoque-content {
+    @include list-page-scroll-compact();
+  }
+}

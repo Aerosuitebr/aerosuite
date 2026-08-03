@@ -1,0 +1,625 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="organizacoes-page">
+  <app-page-hero
+    variant="navy"
+    kickerKey="tenants.wizard.kicker"
+    titleKey="tenants.title"
+    subtitleKey="tenants.subtitle"
+    titleIcon="pi-building"
+    [hasActions]="true">
+    <div actions class="hero-actions">
+        <button pButton type="button" icon="pi pi-refresh" class="p-button-outlined p-button-secondary"
+                [label]="'tenants.btn.refresh' | translate" (click)="loadTenants()" [loading]="loading"></button>
+        <button pButton type="button" icon="pi pi-plus" class="p-button-primary"
+                [label]="'tenants.btn.provision' | translate" (click)="openWizard()"></button>
+    </div>
+  </app-page-hero>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon total"><i class="pi pi-database"></i></div>
+      <div>
+        <div class="kpi-value">{{ stats.total }}</div>
+        <div class="kpi-label">{{ 'tenants.kpi.total' | translate }}</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon active"><i class="pi pi-check-circle"></i></div>
+      <div>
+        <div class="kpi-value">{{ stats.active }}</div>
+        <div class="kpi-label">{{ 'tenants.kpi.active' | translate }}</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon inactive"><i class="pi pi-ban"></i></div>
+      <div>
+        <div class="kpi-value">{{ stats.inactive }}</div>
+        <div class="kpi-label">{{ 'tenants.kpi.inactive' | translate }}</div>
+      </div>
+    </div>
+    <div class="kpi-card" *ngIf="platformStats">
+      <div class="kpi-icon platform"><i class="pi pi-users"></i></div>
+      <div>
+        <div class="kpi-value">{{ platformStats.usuariosInternos + platformStats.usuariosExternos }}</div>
+        <div class="kpi-label">{{ 'tenants.kpi.platformUsers' | translate }}</div>
+      </div>
+    </div>
+    <div class="kpi-card" *ngIf="platformStats">
+      <div class="kpi-icon total"><i class="pi pi-file-edit"></i></div>
+      <div>
+        <div class="kpi-value">{{ platformStats.ordensServico }}</div>
+        <div class="kpi-label">{{ 'tenants.kpi.platformOs' | translate }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="p-input-icon-left search-wrap">
+      <i class="pi pi-search"></i>
+      <input type="text" pInputText [(ngModel)]="searchTerm" [placeholder]="'tenants.search.placeholder' | translate" />
+    </span>
+    <p-selectButton [options]="statusFilterOptions" [(ngModel)]="statusFilter" optionLabel="label" optionValue="value"></p-selectButton>
+  </div>
+
+  <div class="table-shell">
+    <app-list-data-states
+      [loading]="loading"
+      [itemCount]="filteredTenants.length"
+      [skeletonRows]="8"
+      [skeletonCols]="7"
+      emptyTitleKey="tenants.empty.title"
+      emptyDescriptionKey="tenants.empty.subtitle">
+      <button emptyAction pButton [label]="'tenants.empty.cta' | translate" icon="pi pi-plus" class="p-button"
+              (click)="openWizard()"></button>
+    <p-table [value]="filteredTenants" [loading]="loading" [paginator]="true" [rows]="listPageSize"
+             [rowsPerPageOptions]="listRowsPerPageOptions"
+             styleClass="p-datatable-striped tenants-table"
+             responsiveLayout="stack"
+             breakpoint="768px">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="col-codigo" pSortableColumn="codigo">{{ 'tenants.table.codigo' | translate }} <p-sortIcon field="codigo"></p-sortIcon></th>
+          <th class="col-nome" pSortableColumn="nome">{{ 'tenants.table.nome' | translate }} <p-sortIcon field="nome"></p-sortIcon></th>
+          <th class="col-status">{{ 'tenants.table.status' | translate }}</th>
+          <th class="col-metric">{{ 'tenants.table.users' | translate }}</th>
+          <th class="col-metric">{{ 'tenants.table.os' | translate }}</th>
+          <th class="col-usage">{{ 'tenants.table.usage' | translate }}</th>
+          <th class="col-actions">{{ 'tenants.table.actions' | translate }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr [class.row-suspended]="!row.ativo">
+          <td class="col-codigo">
+            <div class="codigo-cell" [pTooltip]="row.codigo" tooltipPosition="top">
+              <span class="codigo-chip">{{ row.codigo }}</span>
+              <p-tag *ngIf="isDefaultTenant(row)" [value]="'tenants.default.badge' | translate" severity="info" class="codigo-tag"></p-tag>
+            </div>
+          </td>
+          <td class="col-nome">
+            <div class="nome-cell" [pTooltip]="row.displayName ? row.nome + ' - ' + row.displayName : row.nome" tooltipPosition="top">
+              <strong>{{ row.nome }}</strong>
+              <small class="nome-cell__meta" *ngIf="row.displayName">{{ row.displayName }}</small>
+            </div>
+          </td>
+          <td class="col-status">
+            <p-tag [value]="(row.ativo ? 'tenants.status.active' : 'tenants.status.inactive') | translate"
+                   [severity]="row.ativo ? 'success' : 'danger'"></p-tag>
+          </td>
+          <td class="col-metric">{{ row.stats?.usuariosInternos ?? 0 }}</td>
+          <td class="col-metric">{{ row.stats?.ordensServico ?? 0 }}</td>
+          <td class="col-usage usage-cell">
+            <p-progressBar
+              [value]="usagePercent(row)"
+              [showValue]="true"
+              [styleClass]="usageBarStyleClass(row)">
+            </p-progressBar>
+          </td>
+          <td class="col-actions">
+            <div class="action-row">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-pencil"
+                class="p-button-text p-button-rounded"
+                [attr.aria-label]="'tenants.action.edit' | translate"
+                [pTooltip]="'tenants.action.edit' | translate"
+                (click)="openEdit(row)">
+              </button>
+              <button
+                pButton
+                type="button"
+                icon="pi pi-sign-in"
+                class="p-button-rounded p-button-primary btn-access-instance"
+                [attr.aria-label]="'tenants.action.accessInstance' | translate"
+                [pTooltip]="'tenants.action.accessInstance' | translate"
+                (click)="accessInstance(row)">
+              </button>
+              <button
+                pButton
+                type="button"
+                icon="pi pi-ellipsis-v"
+                class="p-button-text p-button-rounded btn-row-menu"
+                [attr.aria-label]="'tenants.action.more' | translate"
+                [pTooltip]="'tenants.action.more' | translate"
+                (click)="openRowMenu($event, row)">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    </app-list-data-states>
+  </div>
+</div>
+
+<p-menu #rowMenu [model]="rowMenuItems" [popup]="true" appendTo="body" styleClass="tenant-row-menu"></p-menu>
+
+<!-- Painel de utilização -->
+<p-sidebar [(visible)]="dashboardVisible" position="right" [style]="{ width: 'min(420px, 96vw)' }"
+           (onHide)="selected = null; selectedDetail = null">
+  <ng-template pTemplate="header">
+    <span class="font-semibold">{{ 'tenants.dashboard.title' | translate }}</span>
+  </ng-template>
+  <div *ngIf="selected" class="dashboard-panel">
+    <h3>{{ selected.nome }}</h3>
+    <p class="codigo-chip">{{ selected.codigo }}</p>
+    <p *ngIf="detailLoading" class="mt-3"><i class="pi pi-spin pi-spinner"></i></p>
+    <ng-container *ngIf="selectedDetail && !detailLoading">
+      <p class="hint">{{ 'tenants.dashboard.comparePlatform' | translate }}</p>
+      <div class="stat-row" *ngFor="let item of dashboardStatRows(selectedDetail)">
+        <div class="stat-label">{{ item.key | translate }}</div>
+        <div class="stat-numbers">{{ item.v }} / {{ item.total }}</div>
+        <p-progressBar [value]="statPercent(item.v, item.total)" [showValue]="false"></p-progressBar>
+      </div>
+    </ng-container>
+  </div>
+</p-sidebar>
+
+<!-- Editar -->
+<p-dialog styleClass="as-hero-dialog tenant-premium-dialog tenant-edit-dialog" [(visible)]="editVisible" [modal]="true" [style]="{ width: 'min(760px, 96vw)' }"
+          [draggable]="false" [resizable]="false">
+  <ng-template pTemplate="header">
+    <div class="premium-dialog-header premium-dialog-header--compact">
+      <span class="premium-kicker">{{ 'tenants.wizard.kicker' | translate }}</span>
+      <h2 class="premium-title">{{ 'tenants.edit.title' | translate }}</h2>
+    </div>
+  </ng-template>
+  <form [formGroup]="editForm" class="edit-form premium-dialog-body">
+    <p class="form-required-legend">{{ 'tenants.form.requiredLegend' | translate }}</p>
+    <div class="field-block">
+      <label for="editNome">
+        {{ 'tenants.field.nome' | translate }}
+        <span class="required" aria-hidden="true">{{ 'common.required' | translate }}</span>
+      </label>
+      <input id="editNome" pInputText formControlName="nome" class="w-full"
+             [class.p-invalid]="editForm.get('nome')?.invalid && editForm.get('nome')?.touched" />
+      <small *ngIf="editForm.get('nome')?.invalid && editForm.get('nome')?.touched" class="field-error p-error">
+        {{ 'tenants.validation.nomeRequired' | translate }}
+      </small>
+    </div>
+    <div class="field-block">
+      <label>{{ 'tenants.field.displayName' | translate }}</label>
+      <input pInputText formControlName="displayName" class="w-full" />
+    </div>
+    <div class="field-block">
+      <label>{{ 'tenants.field.supportEmail' | translate }}</label>
+      <input pInputText formControlName="supportEmail" class="w-full" type="email" />
+    </div>
+    <div class="field-block" *ngIf="selected && !isDefaultTenant(selected)">
+      <p-checkbox formControlName="ativo" [binary]="true" inputId="editAtivo"></p-checkbox>
+      <label for="editAtivo" class="ml-2">{{ 'tenants.status.active' | translate }}</label>
+    </div>
+    <div class="edit-section" *ngIf="!editDetailLoading">
+      <div class="edit-section-head">
+        <span class="edit-section-icon" aria-hidden="true"><i class="pi pi-th-large"></i></span>
+        <h3 class="edit-section-title">{{ 'tenants.field.modulos' | translate }}</h3>
+      </div>
+      <div class="module-cards edit-module-cards">
+        <label class="module-card">
+          <p-checkbox formControlName="modMro" [binary]="true" inputId="editModMro"></p-checkbox>
+          <span class="module-card-body">
+            <i class="pi pi-wrench" aria-hidden="true"></i>
+            <span>{{ 'tenants.field.moduloMro' | translate }}</span>
+          </span>
+        </label>
+        <label class="module-card">
+          <p-checkbox formControlName="modEstoque" [binary]="true" inputId="editModEstoque"></p-checkbox>
+          <span class="module-card-body">
+            <i class="pi pi-box" aria-hidden="true"></i>
+            <span>{{ 'tenants.field.moduloEstoque' | translate }}</span>
+          </span>
+        </label>
+        <label class="module-card">
+          <p-checkbox formControlName="modComercial" [binary]="true" inputId="editModComercial"></p-checkbox>
+          <span class="module-card-body">
+            <i class="pi pi-briefcase" aria-hidden="true"></i>
+            <span>{{ 'tenants.field.moduloComercial' | translate }}</span>
+          </span>
+        </label>
+      </div>
+    </div>
+    <section
+      class="tenant-features-panel"
+      *ngIf="!editDetailLoading && editFeatureItems.length"
+      aria-labelledby="tenant-features-panel-title">
+      <header class="tenant-features-panel__head">
+        <span class="tenant-features-panel__icon" aria-hidden="true"><i class="pi pi-sparkles"></i></span>
+        <div class="tenant-features-panel__titles">
+          <h3 id="tenant-features-panel-title" class="tenant-features-panel__title">
+            {{ 'tenants.field.features' | translate }}
+          </h3>
+          <p class="tenant-features-panel__subtitle">{{ 'tenants.field.features.subtitle' | translate }}</p>
+        </div>
+        <span class="tenant-features-panel__badge" role="status">
+          {{ 'tenants.field.features.activeCount' | translate:{ count: editEnabledFeaturesCount } }}
+        </span>
+      </header>
+      <p class="tenant-features-panel__hint">{{ 'tenants.field.features.hint' | translate }}</p>
+      <div class="tenant-features-groups">
+        <div class="tenant-features-group" *ngFor="let group of editFeatureGroupsView; trackBy: trackFeatureGroup">
+          <header class="tenant-features-group__head">
+            <i [class]="group.icon" aria-hidden="true"></i>
+            <span>{{ group.labelKey | translate }}</span>
+          </header>
+          <div class="tenant-features-group__cards">
+            <label
+              *ngFor="let f of group.items; trackBy: trackFeatureItem"
+              class="feature-flag-card"
+              [class.is-on]="isFeatureFlagOn(f.code)"
+              [class.is-disabled]="isFeatureFlagDisabled(f)"
+              [attr.for]="'feat-' + f.code">
+              <p-checkbox
+                [binary]="true"
+                [ngModel]="isFeatureFlagOn(f.code)"
+                (ngModelChange)="setFeatureFlag(f.code, $event)"
+                [ngModelOptions]="{ standalone: true }"
+                [disabled]="isFeatureFlagDisabled(f)"
+                [inputId]="'feat-' + f.code"></p-checkbox>
+              <span class="feature-flag-card__content">
+                <span class="feature-flag-card__title-row">
+                  <span class="feature-flag-card__title">{{ featureLabelKey(f.code) | translate }}</span>
+                  <span class="feature-flag-card__status" aria-hidden="true">
+                    <i class="pi" [ngClass]="isFeatureFlagOn(f.code) ? 'pi-check-circle' : 'pi-circle-off'"></i>
+                  </span>
+                </span>
+                <span class="feature-flag-card__desc">{{ featureDescriptionKey(f.code) | translate }}</span>
+                <span class="feature-flag-card__meta">
+                  <code class="feature-code-chip">{{ f.code }}</code>
+                  <span class="feature-pill feature-pill--experimental" *ngIf="f.experimental">
+                    {{ 'tenants.field.features.experimental' | translate }}
+                  </span>
+                </span>
+                <span class="feature-flag-card__lock" *ngIf="isFeatureFlagDisabled(f)">
+                  <i class="pi pi-lock" aria-hidden="true"></i>
+                  {{ featureRequiresModuleHint(f) }}
+                </span>
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+    <p *ngIf="editDetailLoading" class="hint"><i class="pi pi-spin pi-spinner"></i></p>
+  </form>
+  <ng-template pTemplate="footer">
+    <div class="premium-dialog-footer">
+      <button pButton type="button" class="p-button-text" [label]="'common.actions.cancel' | translate" (click)="editVisible = false"></button>
+      <button pButton type="button" [label]="'tenants.edit.save' | translate" icon="pi pi-check"
+              (click)="saveEdit()" [loading]="savingEdit" [disabled]="editForm.invalid"></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog styleClass="as-hero-dialog tenant-premium-dialog tenant-welcome-dialog" [(visible)]="welcomeVisible" [modal]="true" [style]="{ width: 'min(480px, 96vw)' }"
+          [draggable]="false" [resizable]="false"
+          (onHide)="welcomeTarget = null">
+  <ng-template pTemplate="header">
+    <div class="premium-dialog-header premium-dialog-header--compact">
+      <span class="premium-kicker">{{ 'tenants.wizard.kicker' | translate }}</span>
+      <h2 class="premium-title">{{ 'tenants.welcome.dialogTitle' | translate }}</h2>
+    </div>
+  </ng-template>
+  <div class="premium-dialog-body">
+  <p *ngIf="welcomeTarget" class="welcome-body">
+    {{ 'tenants.welcome.dialogBody' | translate:{ nome: welcomeTarget.nome, codigo: welcomeTarget.codigo } }}
+  </p>
+  <div class="field-block mt-3">
+    <p-checkbox [(ngModel)]="resendResetPassword" [binary]="true" inputId="resendResetPwd"></p-checkbox>
+    <label for="resendResetPwd" class="ml-2">{{ 'tenants.welcome.resetPassword' | translate }}</label>
+  </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="premium-dialog-footer">
+      <button pButton type="button" class="p-button-text" [label]="'common.actions.cancel' | translate"
+              (click)="welcomeVisible = false"></button>
+      <button pButton type="button" icon="pi pi-send" [label]="'tenants.welcome.send' | translate"
+              (click)="confirmResendWelcome()" [loading]="resendingWelcome"></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog styleClass="as-hero-dialog tenant-wizard-dialog tenant-premium-dialog" [(visible)]="wizardVisible" [modal]="true" appendTo="body"
+          [style]="{ width: 'min(920px, 96vw)' }" [closable]="!provisioning"
+         
+          [draggable]="false" [resizable]="false" (onHide)="onWizardHide()">
+  <ng-template pTemplate="header">
+    <div class="wizard-shell-header">
+      <span class="wizard-kicker">{{ 'tenants.wizard.kicker' | translate }}</span>
+      <h2 class="wizard-title">{{ 'tenants.wizard.title' | translate }}</h2>
+      <p class="wizard-subtitle">{{ 'tenants.wizard.subtitle' | translate }}</p>
+    </div>
+  </ng-template>
+
+  <div class="wizard-shell" [class.is-success]="!!provisionResult">
+  <nav class="wizard-stepper" *ngIf="!provisionResult" [attr.aria-label]="'tenants.wizard.aria.progress' | translate">
+    <div *ngFor="let step of stepItems; let i = index" class="wizard-step-pill"
+         [class.active]="wizardStep === i" [class.done]="wizardStep > i">
+      <span class="pill-connector" *ngIf="i > 0" [class.filled]="wizardStep >= i"></span>
+      <span class="pill-core">
+        <span class="pill-num">
+          <i *ngIf="wizardStep > i" class="pi pi-check" aria-hidden="true"></i>
+          <span *ngIf="wizardStep <= i">{{ i + 1 }}</span>
+        </span>
+        <span class="pill-label">{{ step.label }}</span>
+      </span>
+    </div>
+  </nav>
+
+  <div class="wizard-body" [formGroup]="form" *ngIf="!provisionResult">
+    <header class="wizard-step-head">
+      <span class="step-head-icon"><i class="pi" [ngClass]="wizardStepIcons[wizardStep]"></i></span>
+      <div>
+        <h3>{{ stepItems[wizardStep]?.label }}</h3>
+        <p>{{ wizardStepDescKey(wizardStep) | translate }}</p>
+      </div>
+    </header>
+
+    <p class="form-required-legend" *ngIf="wizardStep < 3">{{ 'tenants.form.requiredLegend' | translate }}</p>
+
+    <div class="wizard-panel" *ngIf="wizardStep === 0">
+      <div class="wizard-step-grid wizard-step-grid--single">
+        <div class="wizard-field">
+          <label for="nome" class="wizard-field-label">
+            {{ 'tenants.field.nome' | translate }}
+            <span class="required" aria-hidden="true">{{ 'common.required' | translate }}</span>
+          </label>
+          <input id="nome" pInputText formControlName="nome" class="wizard-input w-full"
+                 [placeholder]="'tenants.field.nome.ph' | translate" (blur)="onNomeBlur()"
+                 [class.p-invalid]="form.get('nome')?.invalid && form.get('nome')?.touched" />
+          <small *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched" class="wizard-field-error p-error">
+            <span *ngIf="form.get('nome')?.errors?.['required']">{{ 'tenants.validation.nomeRequired' | translate }}</span>
+          </small>
+        </div>
+        <div class="wizard-field">
+          <label for="codigo" class="wizard-field-label">
+            {{ 'tenants.field.codigo' | translate }}
+            <span class="required" aria-hidden="true">{{ 'common.required' | translate }}</span>
+          </label>
+          <input id="codigo" pInputText formControlName="codigo" class="wizard-input w-full"
+                 [placeholder]="'tenants.field.codigo.ph' | translate"
+                 [readonly]="form.get('autoCodigo')?.value"
+                 [class.p-invalid]="form.get('codigo')?.invalid && form.get('codigo')?.touched" />
+          <small *ngIf="form.get('codigo')?.invalid && form.get('codigo')?.touched" class="wizard-field-error p-error">
+            <span *ngIf="form.get('codigo')?.errors?.['required']">{{ 'tenants.validation.codigoRequired' | translate }}</span>
+            <span *ngIf="form.get('codigo')?.errors?.['pattern']">{{ 'tenants.validation.codigoPattern' | translate }}</span>
+          </small>
+          <p class="wizard-field-hint">{{ 'tenants.field.codigo.hint' | translate }}</p>
+          <div class="codigo-status wait" *ngIf="codigoChecking">
+            <i class="pi pi-spin pi-spinner"></i> {{ 'tenants.field.codigo.checking' | translate }}
+          </div>
+          <div class="codigo-status ok" *ngIf="!codigoChecking && codigoAvailable === true">
+            <i class="pi pi-check-circle"></i> {{ 'tenants.field.codigo.available' | translate }}
+          </div>
+          <div class="codigo-status err" *ngIf="!codigoChecking && codigoAvailable === false">
+            <i class="pi pi-times-circle"></i>
+            <span>{{ codigoStatusLabel | translate }}</span>
+            <button *ngIf="codigoSuggestion" pButton type="button" class="p-button-link p-button-sm"
+                    [label]="'tenants.field.codigo.useSuggestion' | translate:{ s: codigoSuggestion }"
+                    (click)="applyCodigoSuggestion()"></button>
+          </div>
+          <label class="wizard-toggle-row" for="autoCodigo">
+            <p-checkbox formControlName="autoCodigo" [binary]="true" inputId="autoCodigo"></p-checkbox>
+            <span>{{ 'tenants.field.codigo.auto' | translate }}</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="wizard-panel" *ngIf="wizardStep === 1">
+      <div class="wizard-step-grid">
+        <div class="wizard-col">
+          <div class="wizard-field">
+            <label for="displayName" class="wizard-field-label">{{ 'tenants.field.displayName' | translate }}</label>
+            <input id="displayName" pInputText formControlName="displayName" class="wizard-input w-full"
+                   [placeholder]="'tenants.field.displayName.ph' | translate" />
+          </div>
+          <div class="wizard-field">
+            <label for="supportEmail" class="wizard-field-label">{{ 'tenants.field.supportEmail' | translate }}</label>
+            <input id="supportEmail" pInputText formControlName="supportEmail" class="wizard-input w-full"
+                   [placeholder]="'tenants.field.supportEmail.ph' | translate"
+                   [readonly]="form.get('autoSupportEmail')?.value" />
+            <p class="wizard-field-hint">{{ 'tenants.field.supportEmail.hint' | translate }}</p>
+            <label class="wizard-toggle-row" for="autoSupportEmail">
+              <p-checkbox formControlName="autoSupportEmail" [binary]="true" inputId="autoSupportEmail"></p-checkbox>
+              <span>{{ 'tenants.field.supportEmail.auto' | translate }}</span>
+            </label>
+          </div>
+        </div>
+        <div class="wizard-col wizard-col--aside">
+          <div class="wizard-field">
+            <span class="wizard-field-label">{{ 'tenants.field.modulos' | translate }}</span>
+            <div class="module-cards">
+              <label class="module-card">
+                <p-checkbox formControlName="modMro" [binary]="true" inputId="modMro"></p-checkbox>
+                <span class="module-card-body">
+                  <i class="pi pi-wrench" aria-hidden="true"></i>
+                  <span>{{ 'tenants.field.moduloMro' | translate }}</span>
+                </span>
+              </label>
+              <label class="module-card">
+                <p-checkbox formControlName="modEstoque" [binary]="true" inputId="modEstoque"></p-checkbox>
+                <span class="module-card-body">
+                  <i class="pi pi-box" aria-hidden="true"></i>
+                  <span>{{ 'tenants.field.moduloEstoque' | translate }}</span>
+                </span>
+              </label>
+              <label class="module-card">
+                <p-checkbox formControlName="modComercial" [binary]="true" inputId="modComercial"></p-checkbox>
+                <span class="module-card-body">
+                  <i class="pi pi-briefcase" aria-hidden="true"></i>
+                  <span>{{ 'tenants.field.moduloComercial' | translate }}</span>
+                </span>
+              </label>
+            </div>
+          </div>
+          <div class="logo-uploader wizard-field">
+            <span class="wizard-field-label">{{ 'tenants.field.logo' | translate }}</span>
+            <p class="wizard-field-hint">{{ 'tenants.field.logo.hint' | translate }}</p>
+            <div class="logo-uploader-row">
+              <button type="button" class="logo-pick-btn" (click)="triggerWizardLogoInput()">
+                <i class="pi pi-upload" aria-hidden="true"></i>
+                {{ 'tenants.wizard.logo.pick' | translate }}
+              </button>
+              <span class="logo-file-name" [class.is-empty]="!wizardLogoFileName">
+                {{ wizardLogoFileName || ('tenants.wizard.logo.none' | translate) }}
+              </span>
+              <button type="button" class="logo-remove-btn" *ngIf="wizardLogoFileName"
+                      (click)="clearWizardLogoSelection()">
+                {{ 'tenants.wizard.logo.remove' | translate }}
+              </button>
+            </div>
+            <input #wizardLogoInput type="file" accept="image/*" class="logo-input-hidden"
+                   (change)="onWizardLogoSelected($event)" />
+            <div class="logo-preview-frame" *ngIf="wizardLogoPreview">
+              <img class="wizard-logo-preview" [src]="wizardLogoPreview"
+                   [alt]="'tenants.field.logo.previewAlt' | translate" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wizard-panel" *ngIf="wizardStep === 2">
+      <div class="admin-panel-card">
+        <p class="wizard-field-hint admin-hint">{{ 'tenants.section.admin.hint' | translate }}</p>
+        <label class="wizard-toggle-row wizard-toggle-row--emphasis" for="createAdmin">
+          <p-checkbox formControlName="createAdmin" [binary]="true" inputId="createAdmin"></p-checkbox>
+          <span>{{ 'tenants.section.admin' | translate }}</span>
+        </label>
+        <ng-container *ngIf="form.get('createAdmin')?.value">
+          <div class="wizard-step-grid wizard-step-grid--single admin-fields">
+            <div class="wizard-field">
+              <label for="adminEmail" class="wizard-field-label">
+                {{ 'tenants.field.adminEmail' | translate }}
+                <span class="required" aria-hidden="true">{{ 'common.required' | translate }}</span>
+              </label>
+              <input id="adminEmail" pInputText formControlName="adminEmail" class="wizard-input w-full" type="email"
+                     [class.p-invalid]="form.get('adminEmail')?.invalid && form.get('adminEmail')?.touched" />
+              <small *ngIf="form.get('adminEmail')?.invalid && form.get('adminEmail')?.touched" class="wizard-field-error p-error">
+                <span *ngIf="form.get('adminEmail')?.errors?.['required']">{{ 'tenants.validation.adminEmailRequired' | translate }}</span>
+                <span *ngIf="form.get('adminEmail')?.errors?.['email']">{{ 'tenants.validation.adminEmailInvalid' | translate }}</span>
+              </small>
+            </div>
+            <div class="wizard-field">
+              <label for="adminNome" class="wizard-field-label">{{ 'tenants.field.adminNome' | translate }}</label>
+              <input id="adminNome" pInputText formControlName="adminNome" class="wizard-input w-full" />
+            </div>
+            <div class="wizard-field">
+              <label for="adminSenha" class="wizard-field-label">{{ 'tenants.field.adminSenha' | translate }}</label>
+              <p-password id="adminSenha" formControlName="adminSenha" [feedback]="false" [toggleMask]="true"
+                          styleClass="w-full wizard-password" inputStyleClass="wizard-input w-full"
+                          [placeholder]="'tenants.field.adminSenha.ph' | translate"
+                          [disabled]="form.get('autoAdminSenha')?.value"></p-password>
+              <app-password-policy-panel
+                *ngIf="!form.get('autoAdminSenha')?.value"
+                [password]="form.get('adminSenha')?.value ?? ''">
+              </app-password-policy-panel>
+              <label class="wizard-toggle-row" for="autoAdminSenha">
+                <p-checkbox formControlName="autoAdminSenha" [binary]="true" inputId="autoAdminSenha"></p-checkbox>
+                <span>{{ 'tenants.field.adminSenha.auto' | translate }}</span>
+              </label>
+            </div>
+            <label class="wizard-toggle-row" for="sendWelcomeEmail">
+              <p-checkbox formControlName="sendWelcomeEmail" [binary]="true" inputId="sendWelcomeEmail"></p-checkbox>
+              <span>{{ 'tenants.field.sendWelcome' | translate }}</span>
+            </label>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="wizard-panel" *ngIf="wizardStep === 3">
+      <p class="review-lead">{{ 'tenants.review.title' | translate }}</p>
+      <div class="review-grid review-grid--wizard">
+        <div class="review-card">
+          <h4>{{ 'tenants.review.identity' | translate }}</h4>
+          <dl>
+            <div><dt>{{ 'tenants.field.nome' | translate }}</dt><dd>{{ form.get('nome')?.value }}</dd></div>
+            <div><dt>{{ 'tenants.field.codigo' | translate }}</dt><dd>{{ form.get('codigo')?.value }}</dd></div>
+          </dl>
+        </div>
+        <div class="review-card">
+          <h4>{{ 'tenants.review.branding' | translate }}</h4>
+          <dl>
+            <div><dt>{{ 'tenants.field.displayName' | translate }}</dt><dd>{{ reviewDisplayName }}</dd></div>
+            <div><dt>{{ 'tenants.field.supportEmail' | translate }}</dt><dd>{{ reviewSupportEmail }}</dd></div>
+            <div><dt>{{ 'tenants.review.modulos' | translate }}</dt><dd>{{ reviewModulos }}</dd></div>
+          </dl>
+        </div>
+        <div class="review-card">
+          <h4>{{ 'tenants.review.admin' | translate }}</h4>
+          <dl *ngIf="form.get('createAdmin')?.value; else noAdmin">
+            <div><dt>{{ 'tenants.field.adminEmail' | translate }}</dt><dd>{{ form.get('adminEmail')?.value }}</dd></div>
+            <div><dt>{{ 'tenants.field.sendWelcome' | translate }}</dt><dd>{{ form.get('sendWelcomeEmail')?.value ? '✓' : '—' }}</dd></div>
+          </dl>
+          <ng-template #noAdmin><p class="review-empty">{{ 'tenants.review.admin.none' | translate }}</p></ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="success-panel wizard-success" *ngIf="provisionResult">
+    <div class="success-icon"><i class="pi pi-check"></i></div>
+    <h2>{{ 'tenants.success.title' | translate }}</h2>
+    <p>{{ 'tenants.success.subtitle' | translate }}</p>
+    <div class="cred-box">
+      <div><strong>{{ 'tenants.success.tenant' | translate }}:</strong> {{ provisionResult.tenant.nome }} ({{ provisionResult.tenant.codigo }})</div>
+      <div *ngIf="provisionResult.adminCreated">
+        <strong>{{ 'tenants.success.admin' | translate }}:</strong> {{ provisionResult.adminEmail }}
+      </div>
+      <div *ngIf="provisionResult.adminSenhaTemporaria">
+        <strong>{{ 'tenants.success.password' | translate }}:</strong> {{ provisionResult.adminSenhaTemporaria }}
+      </div>
+      <div *ngIf="provisionResult.welcomeEmailSent">{{ 'tenants.success.welcomeSent' | translate }}</div>
+      <div *ngIf="provisionResult.adminCreated && !provisionResult.welcomeEmailSent">{{ 'tenants.success.welcomeNotSent' | translate }}</div>
+    </div>
+    <div class="success-actions">
+      <button pButton type="button" icon="pi pi-copy" [label]="'tenants.btn.copyAll' | translate"
+              (click)="copyCredentials()"></button>
+      <button pButton type="button" icon="pi pi-sign-in" class="p-button-outlined"
+              [label]="'tenants.btn.openLogin' | translate" (click)="openLogin()"></button>
+    </div>
+  </div>
+  </div>
+
+
+  <ng-template pTemplate="footer">
+    <div class="wizard-footer" *ngIf="!provisionResult">
+      <button pButton type="button" class="wizard-back-btn p-button-text" icon="pi pi-arrow-left"
+              [label]="'tenants.btn.back' | translate" (click)="wizardBack()" [disabled]="wizardStep === 0 || provisioning"></button>
+      <div class="wizard-footer-actions">
+        <button pButton type="button" *ngIf="wizardStep < 3" class="wizard-primary-btn" icon="pi pi-arrow-right" iconPos="right"
+                [label]="'tenants.btn.next' | translate" (click)="wizardNext()" [disabled]="!canAdvance()"></button>
+        <button pButton type="button" *ngIf="wizardStep === 3" class="wizard-primary-btn" icon="pi pi-bolt"
+                [label]="'tenants.btn.provisionNow' | translate" (click)="provision()" [loading]="provisioning"
+                [disabled]="!canAdvance()"></button>
+      </div>
+    </div>
+    <div class="wizard-footer wizard-footer--end" *ngIf="provisionResult">
+      <button pButton type="button" class="wizard-primary-btn" [label]="'tenants.btn.close' | translate" (click)="closeWizard()"></button>
+    </div>
+  </ng-template>
+</p-dialog>
+

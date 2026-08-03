@@ -1,0 +1,1031 @@
+{
+  "keys": {
+    "pageHelp.configuracoes.title": "Como usar a página de Configurações",
+    "pageHelp.configuracoes.s0.title": "Visão Geral",
+    "pageHelp.configuracoes.s0.c0": "A página de Configurações permite personalizar as preferências do sistema conforme suas necessidades.",
+    "pageHelp.configuracoes.s0.c1": "Todas as alterações são salvas automaticamente quando você clica em \"Salvar Todas\".",
+    "pageHelp.configuracoes.s1.title": "Recursos Disponíveis",
+    "pageHelp.configuracoes.s1.c0": "Aparência: Personalize o tema, densidade da interface e tamanho da fonte",
+    "pageHelp.configuracoes.s1.c1": "Idioma: Alterne entre diferentes idiomas do sistema",
+    "pageHelp.configuracoes.s1.c2": "Notificações: Configure alertas e notificações",
+    "pageHelp.configuracoes.s1.c3": "Preferências: Ajuste configurações gerais do sistema",
+    "pageHelp.configuracoes.s2.title": "Passos para Configurar",
+    "pageHelp.configuracoes.s2.c0": "1. Navegue pelas categorias de configurações",
+    "pageHelp.configuracoes.s2.c1": "2. Modifique os valores conforme necessário",
+    "pageHelp.configuracoes.s2.c2": "3. Clique em \"Salvar Todas\" para aplicar as alterações",
+    "pageHelp.configuracoes.s2.c3": "4. Use \"Restaurar Padrões\" para voltar aos valores originais",
+    "pageHelp.products.title": "Como usar a página de Produtos",
+    "pageHelp.products.s0.title": "Visão Geral",
+    "pageHelp.products.s0.c0": "A página de Produtos permite gerenciar todos os produtos cadastrados no sistema.",
+    "pageHelp.products.s0.c1": "Você pode visualizar, criar, editar e inativar produtos conforme necessário.",
+    "pageHelp.products.s1.title": "Recursos Disponíveis",
+    "pageHelp.products.s1.c0": "Listagem: Visualize todos os produtos em uma tabela organizada",
+    "pageHelp.products.s1.c1": "Busca: Use o campo de busca para encontrar produtos específicos",
+    "pageHelp.products.s1.c2": "Filtros: Aplique filtros para refinar sua busca",
+    "pageHelp.products.s1.c3": "Ações: Crie, edite, visualize detalhes e inative produtos",
+    "pageHelp.products.s2.title": "Passos para Gerenciar Produtos",
+    "pageHelp.products.s2.c0": "1. Clique em \"Novo Produto\" para criar um novo registro",
+    "pageHelp.products.s2.c1": "2. Preencha todos os campos obrigatórios (marcados com *)",
+    "pageHelp.products.s2.c2": "3. Adicione uma foto do produto se disponível",
+    "pageHelp.products.s2.c3": "4. Clique em \"Salvar\" para confirmar",
+    "pageHelp.products.s2.c4": "5. Use os botões de ação na tabela para editar ou visualizar",
+    "pageHelp.products.s2.c5": "6. Para inativar, clique em \"Inativar\" e confirme a ação",
+    "pageHelp.fabricantes.title": "Como usar a página de Fabricantes",
+    "pageHelp.fabricantes.s0.title": "Visão Geral",
+    "pageHelp.fabricantes.s0.c0": "A página de Fabricantes permite gerenciar os fabricantes de produtos cadastrados no sistema.",
+    "pageHelp.fabricantes.s0.c1": "Mantenha uma lista organizada de todos os fabricantes para facilitar o cadastro de produtos.",
+    "pageHelp.fabricantes.s1.title": "Recursos Disponíveis",
+    "pageHelp.fabricantes.s1.c0": "Listagem: Visualize todos os fabricantes cadastrados",
+    "pageHelp.fabricantes.s1.c1": "Busca: Encontre fabricantes específicos rapidamente",
+    "pageHelp.fabricantes.s1.c2": "CRUD Completo: Crie, edite, visualize e inative fabricantes",
+    "pageHelp.fabricantes.s1.c3": "Validação: Sistema valida dados antes de salvar",
+    "pageHelp.fabricantes.s2.title": "Passos para Gerenciar Fabricantes",
+    "pageHelp.fabricantes.s2.c0": "1. Clique em \"Novo Fabricante\" para adicionar um novo registro",
+    "pageHelp.fabricantes.s2.c1": "2. Preencha o nome do fabricante (campo obrigatório)",
+    "pageHelp.fabricantes.s2.c2": "3. Adicione informações adicionais se necessário",
+    "pageHelp.fabricantes.s2.c3": "4. Clique em \"Salvar\" para confirmar o cadastro",
+    "pageHelp.fabricantes.s2.c4": "5. Use os botões de ação para editar ou visualizar detalhes",
+    "pageHelp.fabricantes.s2.c5": "6. Para inativar um fabricante, use o botão \"Inativar\"",
+    "pageHelp.fcu.title": "Como usar a página de FCU",
+    "pageHelp.fcu.s0.title": "Visão Geral",
+    "pageHelp.fcu.s0.c0": "A página de FCU (Flight Control Unit) permite gerenciar todas as unidades de controle de voo cadastradas.",
+    "pageHelp.fcu.s0.c1": "FCUs são componentes críticos que controlam sistemas de voo em aeronaves.",
+    "pageHelp.fcu.s1.title": "Recursos Disponíveis",
+    "pageHelp.fcu.s1.c0": "Listagem Completa: Visualize todos os FCUs cadastrados",
+    "pageHelp.fcu.s1.c1": "Busca Avançada: Encontre FCUs por código, modelo ou descrição",
+    "pageHelp.fcu.s1.c2": "Gestão Completa: Crie, edite, visualize e inative FCUs",
+    "pageHelp.fcu.s1.c3": "Associações: Gerencie associações entre FCUs e produtos",
+    "pageHelp.fcu.s2.title": "Passos para Gerenciar FCUs",
+    "pageHelp.fcu.s2.c0": "1. Clique em \"Novo FCU\" para criar um novo registro",
+    "pageHelp.fcu.s2.c1": "2. Preencha os dados obrigatórios: código, modelo e descrição",
+    "pageHelp.fcu.s2.c2": "3. Adicione informações técnicas se disponíveis",
+    "pageHelp.fcu.s2.c3": "4. Clique em \"Salvar\" para confirmar",
+    "pageHelp.fcu.s2.c4": "5. Use os botões de ação para editar ou visualizar detalhes",
+    "pageHelp.fcu.s2.c5": "6. Gerencie associações com produtos através do botão \"Associar\"",
+    "pageHelp.tipos-servico.title": "Como usar a página de Tipos de Serviço",
+    "pageHelp.tipos-servico.s0.title": "Visão Geral",
+    "pageHelp.tipos-servico.s0.c0": "A página de Tipos de Serviço permite gerenciar os diferentes tipos de serviços que podem ser realizados.",
+    "pageHelp.tipos-servico.s0.c1": "Organize os serviços por categorias para facilitar a gestão de ordens de serviço.",
+    "pageHelp.tipos-servico.s1.title": "Recursos Disponíveis",
+    "pageHelp.tipos-servico.s1.c0": "Listagem: Visualize todos os tipos de serviço cadastrados",
+    "pageHelp.tipos-servico.s1.c1": "Categorização: Organize serviços por categorias",
+    "pageHelp.tipos-servico.s1.c2": "CRUD Completo: Crie, edite, visualize e inative tipos de serviço",
+    "pageHelp.tipos-servico.s1.c3": "Busca: Encontre tipos de serviço rapidamente",
+    "pageHelp.tipos-servico.s2.title": "Passos para Gerenciar Tipos de Serviço",
+    "pageHelp.tipos-servico.s2.c0": "1. Clique em \"Novo Tipo de Serviço\" para adicionar um novo registro",
+    "pageHelp.tipos-servico.s2.c1": "2. Preencha o nome e descrição do tipo de serviço",
+    "pageHelp.tipos-servico.s2.c2": "3. Selecione a categoria apropriada",
+    "pageHelp.tipos-servico.s2.c3": "4. Clique em \"Salvar\" para confirmar",
+    "pageHelp.tipos-servico.s2.c4": "5. Use os botões de ação para editar ou visualizar",
+    "pageHelp.tipos-servico.s2.c5": "6. Para inativar, use o botão \"Inativar\" e confirme",
+    "pageHelp.os.title": "Como usar a página de Ordens de Serviço",
+    "pageHelp.os.s0.title": "Visão Geral",
+    "pageHelp.os.s0.c0": "A página de Ordens de Serviço (OS) permite criar e gerenciar todas as ordens de serviço do sistema.",
+    "pageHelp.os.s0.c1": "As OSs documentam serviços realizados em produtos e componentes aeronáuticos.",
+    "pageHelp.os.s1.title": "Recursos Disponíveis",
+    "pageHelp.os.s1.c0": "Criação de OS: Crie novas ordens de serviço completas",
+    "pageHelp.os.s1.c1": "Listagem: Visualize todas as OSs cadastradas",
+    "pageHelp.os.s1.c2": "Busca e Filtros: Encontre OSs específicas rapidamente",
+    "pageHelp.os.s1.c3": "Edição: Modifique OSs existentes",
+    "pageHelp.os.s1.c4": "Impressão: Gere relatórios impressos das OSs",
+    "pageHelp.os.s1.c5": "Associação com FCU: Vincule OSs a Flight Control Units",
+    "pageHelp.os.s2.title": "Passos para Criar uma OS",
+    "pageHelp.os.s2.c0": "1. Clique em \"Nova OS\" para iniciar o cadastro",
+    "pageHelp.os.s2.c1": "2. Preencha os dados básicos: número, data, cliente",
+    "pageHelp.os.s2.c2": "3. Selecione o produto e FCU relacionados",
+    "pageHelp.os.s2.c3": "4. Adicione a descrição do artigo e serviços realizados",
+    "pageHelp.os.s2.c4": "5. Preencha as referências de serviço",
+    "pageHelp.os.s2.c5": "6. Revise todas as informações",
+    "pageHelp.os.s2.c6": "7. Clique em \"Salvar\" para finalizar",
+    "pageHelp.os.s2.c7": "8. Use \"Imprimir\" para gerar o documento",
+    "pageHelp.os.s3.title": "Dicas Importantes",
+    "pageHelp.os.s3.c0": "Certifique-se de preencher todos os campos obrigatórios",
+    "pageHelp.os.s3.c1": "Associe corretamente o FCU ao produto",
+    "pageHelp.os.s3.c2": "Mantenha as descrições claras e detalhadas",
+    "pageHelp.os.s3.c3": "Revise a OS antes de salvar para evitar erros",
+    "pageHelp.usuarios.title": "Como usar a página de Usuários",
+    "pageHelp.usuarios.s0.title": "Visão Geral",
+    "pageHelp.usuarios.s0.c0": "A página de Usuários permite gerenciar todos os usuários do sistema.",
+    "pageHelp.usuarios.s0.c1": "Você pode criar, editar, visualizar e gerenciar permissões de usuários.",
+    "pageHelp.usuarios.s1.title": "Recursos Disponíveis",
+    "pageHelp.usuarios.s1.c0": "Listagem: Visualize todos os usuários cadastrados",
+    "pageHelp.usuarios.s1.c1": "Criação: Adicione novos usuários ao sistema",
+    "pageHelp.usuarios.s1.c2": "Edição: Modifique dados e permissões de usuários",
+    "pageHelp.usuarios.s1.c3": "Perfis: Associe usuários a perfis de acesso",
+    "pageHelp.usuarios.s1.c4": "Foto de Perfil: Gerencie fotos dos usuários",
+    "pageHelp.usuarios.s1.c5": "Ativação/Inativação: Controle o acesso dos usuários",
+    "pageHelp.usuarios.s2.title": "Passos para Gerenciar Usuários",
+    "pageHelp.usuarios.s2.c0": "1. Clique em \"Novo Usuário\" para criar um registro",
+    "pageHelp.usuarios.s2.c1": "2. Preencha os dados pessoais: nome, email, telefone",
+    "pageHelp.usuarios.s2.c2": "3. Defina credenciais de acesso: login e senha",
+    "pageHelp.usuarios.s2.c3": "4. Selecione o perfil de acesso apropriado",
+    "pageHelp.usuarios.s2.c4": "5. Adicione uma foto de perfil se desejar",
+    "pageHelp.usuarios.s2.c5": "6. Clique em \"Salvar\" para confirmar",
+    "pageHelp.usuarios.s2.c6": "7. Use os botões de ação para editar ou visualizar",
+    "pageHelp.usuarios.s2.c7": "8. Gerencie permissões através do botão \"Permissões\"",
+    "pageHelp.perfis.title": "Como usar a página de Perfis",
+    "pageHelp.perfis.s0.title": "Visão Geral",
+    "pageHelp.perfis.s0.c0": "A página de Perfis permite gerenciar os perfis de acesso do sistema.",
+    "pageHelp.perfis.s0.c1": "Os perfis definem quais funcionalidades cada grupo de usuários pode acessar.",
+    "pageHelp.perfis.s1.title": "Recursos Disponíveis",
+    "pageHelp.perfis.s1.c0": "Listagem: Visualize todos os perfis cadastrados",
+    "pageHelp.perfis.s1.c1": "Criação: Crie novos perfis de acesso",
+    "pageHelp.perfis.s1.c2": "Edição: Modifique perfis existentes",
+    "pageHelp.perfis.s1.c3": "Permissões: Gerencie funcionalidades permitidas por perfil",
+    "pageHelp.perfis.s1.c4": "Associação: Veja quais usuários estão associados a cada perfil",
+    "pageHelp.perfis.s2.title": "Passos para Gerenciar Perfis",
+    "pageHelp.perfis.s2.c0": "1. Clique em \"Novo Perfil\" para criar um novo perfil",
+    "pageHelp.perfis.s2.c1": "2. Preencha o nome e descrição do perfil",
+    "pageHelp.perfis.s2.c2": "3. Selecione as funcionalidades permitidas",
+    "pageHelp.perfis.s2.c3": "4. Configure permissões específicas se necessário",
+    "pageHelp.perfis.s2.c4": "5. Clique em \"Salvar\" para confirmar",
+    "pageHelp.perfis.s2.c5": "6. Use os botões de ação para editar ou visualizar",
+    "pageHelp.perfis.s2.c6": "7. Gerencie permissões através do botão \"Permissões\"",
+    "pageHelp.funcionalidades.title": "Como usar a página de Funcionalidades",
+    "pageHelp.funcionalidades.s0.title": "Visão Geral",
+    "pageHelp.funcionalidades.s0.c0": "A página de Funcionalidades permite gerenciar todas as funcionalidades disponíveis no sistema.",
+    "pageHelp.funcionalidades.s0.c1": "As funcionalidades definem o que cada perfil de usuário pode acessar.",
+    "pageHelp.funcionalidades.s1.title": "Recursos Disponíveis",
+    "pageHelp.funcionalidades.s1.c0": "Listagem: Visualize todas as funcionalidades cadastradas",
+    "pageHelp.funcionalidades.s1.c1": "Criação: Adicione novas funcionalidades ao sistema",
+    "pageHelp.funcionalidades.s1.c2": "Edição: Modifique funcionalidades existentes",
+    "pageHelp.funcionalidades.s1.c3": "Organização: Organize funcionalidades por seções",
+    "pageHelp.funcionalidades.s1.c4": "Permissões: Veja quais perfis têm acesso a cada funcionalidade",
+    "pageHelp.funcionalidades.s2.title": "Passos para Gerenciar Funcionalidades",
+    "pageHelp.funcionalidades.s2.c0": "1. Clique em \"Nova Funcionalidade\" para criar um registro",
+    "pageHelp.funcionalidades.s2.c1": "2. Preencha o nome e código da funcionalidade",
+    "pageHelp.funcionalidades.s2.c2": "3. Defina a rota e ícone da funcionalidade",
+    "pageHelp.funcionalidades.s2.c3": "4. Selecione a seção à qual pertence",
+    "pageHelp.funcionalidades.s2.c4": "5. Adicione uma descrição explicativa",
+    "pageHelp.funcionalidades.s2.c5": "6. Clique em \"Salvar\" para confirmar",
+    "pageHelp.funcionalidades.s2.c6": "7. Use os botões de ação para editar ou visualizar",
+    "pageHelp.controle-acesso.title": "Como usar a página de Controle de Acesso",
+    "pageHelp.controle-acesso.s0.title": "Visão Geral",
+    "pageHelp.controle-acesso.s0.c0": "A página de Controle de Acesso permite gerenciar permissões de funcionalidades por perfil.",
+    "pageHelp.controle-acesso.s0.c1": "Configure quais funcionalidades cada perfil de usuário pode acessar.",
+    "pageHelp.controle-acesso.s1.title": "Recursos Disponíveis",
+    "pageHelp.controle-acesso.s1.c0": "Gestão de Permissões: Configure acesso por perfil",
+    "pageHelp.controle-acesso.s1.c1": "Visualização: Veja todas as funcionalidades e seus acessos",
+    "pageHelp.controle-acesso.s1.c2": "Atribuição em Massa: Atribua múltiplas permissões de uma vez",
+    "pageHelp.controle-acesso.s1.c3": "Filtros: Filtre por perfil ou funcionalidade",
+    "pageHelp.controle-acesso.s1.c4": "Validação: Sistema valida permissões antes de salvar",
+    "pageHelp.controle-acesso.s2.title": "Passos para Gerenciar Permissões",
+    "pageHelp.controle-acesso.s2.c0": "1. Selecione o perfil que deseja configurar",
+    "pageHelp.controle-acesso.s2.c1": "2. Visualize todas as funcionalidades disponíveis",
+    "pageHelp.controle-acesso.s2.c2": "3. Marque as funcionalidades que o perfil deve ter acesso",
+    "pageHelp.controle-acesso.s2.c3": "4. Desmarque as funcionalidades que não devem ser acessíveis",
+    "pageHelp.controle-acesso.s2.c4": "5. Clique em \"Salvar Permissões\" para confirmar",
+    "pageHelp.controle-acesso.s2.c5": "6. Use os filtros para encontrar funcionalidades específicas",
+    "pageHelp.controle-acesso.s2.c6": "7. Revise as alterações antes de salvar",
+    "pageHelp.settings-backup.title": "Como usar a página de Backup do Banco",
+    "pageHelp.settings-backup.s0.title": "Visão Geral",
+    "pageHelp.settings-backup.s0.c0": "A página de Backup do Banco permite configurar e gerenciar backups automáticos do banco de dados.",
+    "pageHelp.settings-backup.s0.c1": "Proteja seus dados com backups regulares e configuráveis.",
+    "pageHelp.settings-backup.s1.title": "Recursos Disponíveis",
+    "pageHelp.settings-backup.s1.c0": "Configuração de Conexão: Configure conexão com o banco de dados",
+    "pageHelp.settings-backup.s1.c1": "Caminho de Backup: Defina onde os backups serão salvos",
+    "pageHelp.settings-backup.s1.c2": "Agendamento: Configure horários automáticos de backup",
+    "pageHelp.settings-backup.s1.c3": "Execução Manual: Execute backups sob demanda",
+    "pageHelp.settings-backup.s1.c4": "Histórico: Visualize histórico de backups realizados",
+    "pageHelp.settings-backup.s1.c5": "Notificações: Configure alertas de backup",
+    "pageHelp.settings-backup.s2.title": "Passos para Configurar Backup",
+    "pageHelp.settings-backup.s2.c0": "1. Configure a conexão com o banco de dados na aba \"Conexão\"",
+    "pageHelp.settings-backup.s2.c1": "2. Teste a conexão antes de prosseguir",
+    "pageHelp.settings-backup.s2.c2": "3. Defina o caminho de backup na aba \"Caminho de Backup\"",
+    "pageHelp.settings-backup.s2.c3": "4. Valide o caminho antes de salvar",
+    "pageHelp.settings-backup.s2.c4": "5. Configure o agendamento na aba \"Agendamento\"",
+    "pageHelp.settings-backup.s2.c5": "6. Defina frequência e horários de backup",
+    "pageHelp.settings-backup.s2.c6": "7. Configure notificações na aba \"Notificações\"",
+    "pageHelp.settings-backup.s2.c7": "8. Salve todas as configurações",
+    "pageHelp.settings-backup.s2.c8": "9. Execute um backup manual para testar",
+    "pageHelp.settings-backup.s3.title": "Dicas Importantes",
+    "pageHelp.settings-backup.s3.c0": "Mantenha backups em locais seguros e separados",
+    "pageHelp.settings-backup.s3.c1": "Teste restaurações periodicamente",
+    "pageHelp.settings-backup.s3.c2": "Configure agendamentos durante horários de baixo uso",
+    "pageHelp.settings-backup.s3.c3": "Monitore o histórico de backups regularmente",
+    "pageHelp.settings-backup.s3.c4": "Configure notificações para ser alertado sobre falhas",
+    "pageHelp.fcu-assembly.title": "Como usar o Editor de Documentos de Montagem FCU",
+    "pageHelp.fcu-assembly.s0.title": "Visão Geral",
+    "pageHelp.fcu-assembly.s0.c0": "O Editor de Documentos de Montagem FCU permite criar e editar documentos técnicos de montagem.",
+    "pageHelp.fcu-assembly.s0.c1": "Crie documentos estruturados com seções, passos e traduções.",
+    "pageHelp.fcu-assembly.s1.title": "Recursos Disponíveis",
+    "pageHelp.fcu-assembly.s1.c0": "Editor de Seções: Crie e organize seções do documento",
+    "pageHelp.fcu-assembly.s1.c1": "Editor de Passos: Adicione passos detalhados em cada seção",
+    "pageHelp.fcu-assembly.s1.c2": "Tradução: Traduza documentos para múltiplos idiomas",
+    "pageHelp.fcu-assembly.s1.c3": "Visualização: Visualize documentos formatados",
+    "pageHelp.fcu-assembly.s1.c4": "Exportação: Exporte documentos em diferentes formatos",
+    "pageHelp.fcu-assembly.s1.c5": "Templates: Use templates pré-definidos",
+    "pageHelp.fcu-assembly.s2.title": "Passos para Criar um Documento",
+    "pageHelp.fcu-assembly.s2.c0": "1. Clique em \"Novo Documento\" para iniciar",
+    "pageHelp.fcu-assembly.s2.c1": "2. Preencha as informações básicas do documento",
+    "pageHelp.fcu-assembly.s2.c2": "3. Adicione seções usando o botão \"Adicionar Seção\"",
+    "pageHelp.fcu-assembly.s2.c3": "4. Para cada seção, adicione passos detalhados",
+    "pageHelp.fcu-assembly.s2.c4": "5. Use o editor de texto para formatar conteúdo",
+    "pageHelp.fcu-assembly.s2.c5": "6. Adicione traduções na aba \"Tradução\"",
+    "pageHelp.fcu-assembly.s2.c6": "7. Revise o documento na visualização",
+    "pageHelp.fcu-assembly.s2.c7": "8. Salve o documento quando concluído",
+    "pageHelp.fcu-assembly.s3.title": "Dicas de Uso",
+    "pageHelp.fcu-assembly.s3.c0": "Organize seções de forma lógica e sequencial",
+    "pageHelp.fcu-assembly.s3.c1": "Use passos numerados para facilitar a compreensão",
+    "pageHelp.fcu-assembly.s3.c2": "Mantenha descrições claras e objetivas",
+    "pageHelp.fcu-assembly.s3.c3": "Revise traduções antes de finalizar",
+    "pageHelp.fcu-assembly.s3.c4": "Use a visualização para verificar a formatação",
+    "pageHelp.home.title": "Como usar o Dashboard",
+    "pageHelp.home.s0.title": "Visão Geral",
+    "pageHelp.home.s0.c0": "O Dashboard é a página inicial do sistema AEROSUITE.",
+    "pageHelp.home.s0.c1": "Aqui você encontra uma visão geral das informações mais importantes.",
+    "pageHelp.home.s1.title": "Recursos Disponíveis",
+    "pageHelp.home.s1.c0": "Visão Geral: Acompanhe estatísticas principais do sistema",
+    "pageHelp.home.s1.c1": "Acesso Rápido: Acesse funcionalidades mais usadas",
+    "pageHelp.home.s1.c2": "Notificações: Veja alertas e avisos importantes",
+    "pageHelp.home.s1.c3": "Navegação: Use o menu lateral para acessar outras páginas",
+    "pageHelp.home.s2.title": "Navegação",
+    "pageHelp.home.s2.c0": "1. Use o menu lateral para navegar entre páginas",
+    "pageHelp.home.s2.c1": "2. Clique em qualquer funcionalidade para acessá-la",
+    "pageHelp.home.s2.c2": "3. Use o perfil no canto superior para acessar configurações",
+    "pageHelp.home.s2.c3": "4. Explore as diferentes seções do sistema",
+    "pageHelp.propostas-comerciais.title": "Como usar a página de Propostas Comerciais",
+    "pageHelp.propostas-comerciais.s0.title": "Visão Geral",
+    "pageHelp.propostas-comerciais.s0.c0": "A página de Propostas Comerciais permite criar, gerenciar e enviar propostas de serviços para clientes.",
+    "pageHelp.propostas-comerciais.s0.c1": "As propostas são compostas por três seções: Produto, Cliente e Proposta.",
+    "pageHelp.propostas-comerciais.s0.c2": "O documento é gerado automaticamente conforme você preenche os dados.",
+    "pageHelp.propostas-comerciais.s1.title": "Recursos Disponíveis",
+    "pageHelp.propostas-comerciais.s1.c0": "Listagem: Visualize todas as propostas cadastradas com filtros por status e busca",
+    "pageHelp.propostas-comerciais.s1.c1": "Criação: Crie novas propostas com formulário guiado em três etapas",
+    "pageHelp.propostas-comerciais.s1.c2": "Edição: Modifique propostas existentes a qualquer momento",
+    "pageHelp.propostas-comerciais.s1.c3": "Duplicação: Crie cópias de propostas existentes para agilizar o processo",
+    "pageHelp.propostas-comerciais.s1.c4": "Impressão/PDF: Gere documentos formatados para envio ao cliente",
+    "pageHelp.propostas-comerciais.s1.c5": "Controle de Status: Acompanhe o ciclo de vida da proposta (Rascunho, Enviada, Aprovada, etc.)",
+    "pageHelp.propostas-comerciais.s2.title": "Aba Produto",
+    "pageHelp.propostas-comerciais.s2.c0": "Nome do Produto: Identifique o produto ou serviço oferecido",
+    "pageHelp.propostas-comerciais.s2.c1": "PN e SN: Part Number e Serial Number do componente",
+    "pageHelp.propostas-comerciais.s2.c2": "Manual: Referência do manual técnico aplicável",
+    "pageHelp.propostas-comerciais.s2.c3": "Valor: Preço do serviço ou produto",
+    "pageHelp.propostas-comerciais.s2.c4": "Aplicação Motor: Motor onde o componente é aplicado",
+    "pageHelp.propostas-comerciais.s2.c5": "Aeronave Prefixo: Prefixo da aeronave relacionada",
+    "pageHelp.propostas-comerciais.s2.c6": "Serviço a Ser Executado: Descrição detalhada do serviço (até 1000 caracteres)",
+    "pageHelp.propostas-comerciais.s2.c7": "Tipo de Serviço: Classificação do serviço conforme cadastro",
+    "pageHelp.propostas-comerciais.s3.title": "Aba Cliente",
+    "pageHelp.propostas-comerciais.s3.c0": "Nome/Razão Social: Nome completo ou razão social do cliente",
+    "pageHelp.propostas-comerciais.s3.c1": "CNPJ/CPF: Documento de identificação",
+    "pageHelp.propostas-comerciais.s3.c2": "Pessoa de Contato: Nome do contato na empresa",
+    "pageHelp.propostas-comerciais.s3.c3": "E-mail e Telefone: Informações de contato",
+    "pageHelp.propostas-comerciais.s3.c4": "Endereço Completo: Logradouro, cidade, estado e CEP",
+    "pageHelp.propostas-comerciais.s4.title": "Aba Proposta",
+    "pageHelp.propostas-comerciais.s4.c0": "Visualize a prévia do documento enquanto preenche os dados",
+    "pageHelp.propostas-comerciais.s4.c1": "Configure datas: Data da proposta e validade",
+    "pageHelp.propostas-comerciais.s4.c2": "Defina condições: Prazo de entrega e forma de pagamento",
+    "pageHelp.propostas-comerciais.s4.c3": "Adicione observações específicas para o cliente",
+    "pageHelp.propostas-comerciais.s4.c4": "Personalize as condições gerais conforme necessário",
+    "pageHelp.propostas-comerciais.s5.title": "Fluxo de Status",
+    "pageHelp.propostas-comerciais.s5.c0": "RASCUNHO: Proposta em elaboração, pode ser editada livremente",
+    "pageHelp.propostas-comerciais.s5.c1": "ENVIADA: Proposta enviada ao cliente, aguardando resposta",
+    "pageHelp.propostas-comerciais.s5.c2": "APROVADA: Cliente aceitou a proposta",
+    "pageHelp.propostas-comerciais.s5.c3": "REJEITADA: Cliente recusou a proposta",
+    "pageHelp.propostas-comerciais.s5.c4": "CANCELADA: Proposta cancelada internamente",
+    "pageHelp.propostas-comerciais.s6.title": "Dicas de Uso",
+    "pageHelp.propostas-comerciais.s6.c0": "Preencha pelo menos o nome do produto e do cliente antes de salvar",
+    "pageHelp.propostas-comerciais.s6.c1": "Use a duplicação para criar propostas similares rapidamente",
+    "pageHelp.propostas-comerciais.s6.c2": "A prévia é atualizada em tempo real conforme você preenche os campos",
+    "pageHelp.propostas-comerciais.s6.c3": "Salve como rascunho para continuar editando depois",
+    "pageHelp.propostas-comerciais.s6.c4": "Revise a proposta antes de mudar o status para \"Enviada\"",
+    "pageHelp.propostas-comerciais.s6.c5": "Use o botão de impressão para gerar PDF do documento",
+    "pageHelp.usuarios-externos.title": "Como usar a página de Usuários Externos",
+    "pageHelp.usuarios-externos.s0.title": "Visão Geral",
+    "pageHelp.usuarios-externos.s0.c0": "A página de Usuários Externos permite gerenciar clientes que possuem acesso ao Portal Externo.",
+    "pageHelp.usuarios-externos.s0.c1": "Usuários externos são clientes que podem acompanhar suas Ordens de Serviço através de um portal dedicado.",
+    "pageHelp.usuarios-externos.s0.c2": "Gerencie cadastros, permissões e status de acesso de forma centralizada.",
+    "pageHelp.usuarios-externos.s1.title": "Recursos Disponíveis",
+    "pageHelp.usuarios-externos.s1.c0": "Listagem Completa: Visualize todos os usuários externos cadastrados em uma tabela organizada",
+    "pageHelp.usuarios-externos.s1.c1": "Busca Avançada: Encontre usuários por nome, email ou empresa",
+    "pageHelp.usuarios-externos.s1.c2": "Filtro de Status: Alterne entre visualizar todos ou apenas usuários ativos",
+    "pageHelp.usuarios-externos.s1.c3": "Avatares: Identificação visual rápida com iniciais do nome do usuário",
+    "pageHelp.usuarios-externos.s1.c4": "Status em Tempo Real: Veja o status (Ativo/Inativo) de cada usuário",
+    "pageHelp.usuarios-externos.s1.c5": "Último Acesso: Acompanhe quando cada usuário acessou o portal pela última vez",
+    "pageHelp.usuarios-externos.s1.c6": "Paginação: Navegue facilmente por grandes quantidades de registros",
+    "pageHelp.usuarios-externos.s2.title": "Ações Disponíveis na Tabela",
+    "pageHelp.usuarios-externos.s2.c0": "Olho (Ver Detalhes): Visualize todas as informações do usuário em modo de leitura",
+    "pageHelp.usuarios-externos.s2.c1": "Chave (Gerenciar Permissões): Acesse a tela para configurar quais OSs o usuário pode visualizar",
+    "pageHelp.usuarios-externos.s2.c2": "Lápis (Editar): Modifique os dados cadastrais do usuário",
+    "pageHelp.usuarios-externos.s2.c3": "Ativar/Desativar: Alterne o status do usuário entre ativo e inativo",
+    "pageHelp.usuarios-externos.s3.title": "Passos para Cadastrar um Novo Usuário",
+    "pageHelp.usuarios-externos.s3.c0": "1. Clique no botão \"Novo Usuário Externo\" no canto superior direito",
+    "pageHelp.usuarios-externos.s3.c1": "2. Preencha o nome completo do cliente",
+    "pageHelp.usuarios-externos.s3.c2": "3. Informe o email que será usado para login (deve ser único)",
+    "pageHelp.usuarios-externos.s3.c3": "4. Digite uma senha segura para o usuário",
+    "pageHelp.usuarios-externos.s3.c4": "5. Opcionalmente, informe o nome da empresa do cliente",
+    "pageHelp.usuarios-externos.s3.c5": "6. Clique em \"Salvar\" para criar o cadastro",
+    "pageHelp.usuarios-externos.s3.c6": "7. O usuário receberá as credenciais para acesso ao Portal Externo",
+    "pageHelp.usuarios-externos.s4.title": "Gerenciando Permissões de OS",
+    "pageHelp.usuarios-externos.s4.c0": "Cada usuário externo pode ter acesso a Ordens de Serviço específicas.",
+    "pageHelp.usuarios-externos.s4.c1": "Clique no ícone de chave para acessar a tela de permissões.",
+    "pageHelp.usuarios-externos.s4.c2": "Na tela de permissões, você pode vincular OSs específicas ao usuário.",
+    "pageHelp.usuarios-externos.s4.c3": "O usuário só poderá visualizar as OSs que foram atribuídas a ele.",
+    "pageHelp.usuarios-externos.s4.c4": "As permissões podem ser adicionadas ou removidas a qualquer momento.",
+    "pageHelp.usuarios-externos.s5.title": "Ativando e Desativando Usuários",
+    "pageHelp.usuarios-externos.s5.c0": "Usuários ativos podem acessar o Portal Externo normalmente.",
+    "pageHelp.usuarios-externos.s5.c1": "Para desativar um usuário, clique no ícone de proibido (ban).",
+    "pageHelp.usuarios-externos.s5.c2": "Usuários inativos não conseguem fazer login no portal.",
+    "pageHelp.usuarios-externos.s5.c3": "Para reativar, clique no ícone de check (circle-check).",
+    "pageHelp.usuarios-externos.s5.c4": "Desativar um usuário não exclui seus dados do sistema.",
+    "pageHelp.usuarios-externos.s6.title": "Dicas e Boas Práticas",
+    "pageHelp.usuarios-externos.s6.c0": "Mantenha os dados dos usuários sempre atualizados",
+    "pageHelp.usuarios-externos.s6.c1": "Revise periodicamente as permissões de OS de cada usuário",
+    "pageHelp.usuarios-externos.s6.c2": "Desative usuários que não devem mais ter acesso ao portal",
+    "pageHelp.usuarios-externos.s6.c3": "Use o filtro \"Ativos\" para focar nos usuários em operação",
+    "pageHelp.usuarios-externos.s6.c4": "Verifique o \"Último Acesso\" para identificar usuários inativos",
+    "pageHelp.usuarios-externos.s6.c5": "Utilize a busca para encontrar rapidamente um usuário específico"
+  },
+  "defs": [
+    {
+      "route": "/configuracoes",
+      "titleKey": "pageHelp.configuracoes.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.configuracoes.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.configuracoes.s0.c0",
+            "pageHelp.configuracoes.s0.c1"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.configuracoes.s1.title",
+          "icon": "pi pi-cog",
+          "contentKeys": [
+            "pageHelp.configuracoes.s1.c0",
+            "pageHelp.configuracoes.s1.c1",
+            "pageHelp.configuracoes.s1.c2",
+            "pageHelp.configuracoes.s1.c3"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.configuracoes.s2.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.configuracoes.s2.c0",
+            "pageHelp.configuracoes.s2.c1",
+            "pageHelp.configuracoes.s2.c2",
+            "pageHelp.configuracoes.s2.c3"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/products",
+      "titleKey": "pageHelp.products.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.products.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.products.s0.c0",
+            "pageHelp.products.s0.c1"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.products.s1.title",
+          "icon": "pi pi-box",
+          "contentKeys": [
+            "pageHelp.products.s1.c0",
+            "pageHelp.products.s1.c1",
+            "pageHelp.products.s1.c2",
+            "pageHelp.products.s1.c3"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.products.s2.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.products.s2.c0",
+            "pageHelp.products.s2.c1",
+            "pageHelp.products.s2.c2",
+            "pageHelp.products.s2.c3",
+            "pageHelp.products.s2.c4",
+            "pageHelp.products.s2.c5"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/fabricantes",
+      "titleKey": "pageHelp.fabricantes.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.fabricantes.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.fabricantes.s0.c0",
+            "pageHelp.fabricantes.s0.c1"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.fabricantes.s1.title",
+          "icon": "pi pi-building",
+          "contentKeys": [
+            "pageHelp.fabricantes.s1.c0",
+            "pageHelp.fabricantes.s1.c1",
+            "pageHelp.fabricantes.s1.c2",
+            "pageHelp.fabricantes.s1.c3"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.fabricantes.s2.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.fabricantes.s2.c0",
+            "pageHelp.fabricantes.s2.c1",
+            "pageHelp.fabricantes.s2.c2",
+            "pageHelp.fabricantes.s2.c3",
+            "pageHelp.fabricantes.s2.c4",
+            "pageHelp.fabricantes.s2.c5"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/fcu",
+      "titleKey": "pageHelp.fcu.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.fcu.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.fcu.s0.c0",
+            "pageHelp.fcu.s0.c1"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.fcu.s1.title",
+          "icon": "pi pi-microchip",
+          "contentKeys": [
+            "pageHelp.fcu.s1.c0",
+            "pageHelp.fcu.s1.c1",
+            "pageHelp.fcu.s1.c2",
+            "pageHelp.fcu.s1.c3"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.fcu.s2.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.fcu.s2.c0",
+            "pageHelp.fcu.s2.c1",
+            "pageHelp.fcu.s2.c2",
+            "pageHelp.fcu.s2.c3",
+            "pageHelp.fcu.s2.c4",
+            "pageHelp.fcu.s2.c5"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/tipos-servico",
+      "titleKey": "pageHelp.tipos-servico.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.tipos-servico.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.tipos-servico.s0.c0",
+            "pageHelp.tipos-servico.s0.c1"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.tipos-servico.s1.title",
+          "icon": "pi pi-wrench",
+          "contentKeys": [
+            "pageHelp.tipos-servico.s1.c0",
+            "pageHelp.tipos-servico.s1.c1",
+            "pageHelp.tipos-servico.s1.c2",
+            "pageHelp.tipos-servico.s1.c3"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.tipos-servico.s2.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.tipos-servico.s2.c0",
+            "pageHelp.tipos-servico.s2.c1",
+            "pageHelp.tipos-servico.s2.c2",
+            "pageHelp.tipos-servico.s2.c3",
+            "pageHelp.tipos-servico.s2.c4",
+            "pageHelp.tipos-servico.s2.c5"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/os",
+      "titleKey": "pageHelp.os.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.os.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.os.s0.c0",
+            "pageHelp.os.s0.c1"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.os.s1.title",
+          "icon": "pi pi-file-edit",
+          "contentKeys": [
+            "pageHelp.os.s1.c0",
+            "pageHelp.os.s1.c1",
+            "pageHelp.os.s1.c2",
+            "pageHelp.os.s1.c3",
+            "pageHelp.os.s1.c4",
+            "pageHelp.os.s1.c5"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.os.s2.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.os.s2.c0",
+            "pageHelp.os.s2.c1",
+            "pageHelp.os.s2.c2",
+            "pageHelp.os.s2.c3",
+            "pageHelp.os.s2.c4",
+            "pageHelp.os.s2.c5",
+            "pageHelp.os.s2.c6",
+            "pageHelp.os.s2.c7"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.os.s3.title",
+          "icon": "pi pi-lightbulb",
+          "contentKeys": [
+            "pageHelp.os.s3.c0",
+            "pageHelp.os.s3.c1",
+            "pageHelp.os.s3.c2",
+            "pageHelp.os.s3.c3"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/usuarios",
+      "titleKey": "pageHelp.usuarios.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.usuarios.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.usuarios.s0.c0",
+            "pageHelp.usuarios.s0.c1"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.usuarios.s1.title",
+          "icon": "pi pi-users",
+          "contentKeys": [
+            "pageHelp.usuarios.s1.c0",
+            "pageHelp.usuarios.s1.c1",
+            "pageHelp.usuarios.s1.c2",
+            "pageHelp.usuarios.s1.c3",
+            "pageHelp.usuarios.s1.c4",
+            "pageHelp.usuarios.s1.c5"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.usuarios.s2.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.usuarios.s2.c0",
+            "pageHelp.usuarios.s2.c1",
+            "pageHelp.usuarios.s2.c2",
+            "pageHelp.usuarios.s2.c3",
+            "pageHelp.usuarios.s2.c4",
+            "pageHelp.usuarios.s2.c5",
+            "pageHelp.usuarios.s2.c6",
+            "pageHelp.usuarios.s2.c7"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/perfis",
+      "titleKey": "pageHelp.perfis.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.perfis.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.perfis.s0.c0",
+            "pageHelp.perfis.s0.c1"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.perfis.s1.title",
+          "icon": "pi pi-id-card",
+          "contentKeys": [
+            "pageHelp.perfis.s1.c0",
+            "pageHelp.perfis.s1.c1",
+            "pageHelp.perfis.s1.c2",
+            "pageHelp.perfis.s1.c3",
+            "pageHelp.perfis.s1.c4"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.perfis.s2.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.perfis.s2.c0",
+            "pageHelp.perfis.s2.c1",
+            "pageHelp.perfis.s2.c2",
+            "pageHelp.perfis.s2.c3",
+            "pageHelp.perfis.s2.c4",
+            "pageHelp.perfis.s2.c5",
+            "pageHelp.perfis.s2.c6"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/funcionalidades",
+      "titleKey": "pageHelp.funcionalidades.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.funcionalidades.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.funcionalidades.s0.c0",
+            "pageHelp.funcionalidades.s0.c1"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.funcionalidades.s1.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.funcionalidades.s1.c0",
+            "pageHelp.funcionalidades.s1.c1",
+            "pageHelp.funcionalidades.s1.c2",
+            "pageHelp.funcionalidades.s1.c3",
+            "pageHelp.funcionalidades.s1.c4"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.funcionalidades.s2.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.funcionalidades.s2.c0",
+            "pageHelp.funcionalidades.s2.c1",
+            "pageHelp.funcionalidades.s2.c2",
+            "pageHelp.funcionalidades.s2.c3",
+            "pageHelp.funcionalidades.s2.c4",
+            "pageHelp.funcionalidades.s2.c5",
+            "pageHelp.funcionalidades.s2.c6"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/controle-acesso",
+      "titleKey": "pageHelp.controle-acesso.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.controle-acesso.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.controle-acesso.s0.c0",
+            "pageHelp.controle-acesso.s0.c1"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.controle-acesso.s1.title",
+          "icon": "pi pi-shield",
+          "contentKeys": [
+            "pageHelp.controle-acesso.s1.c0",
+            "pageHelp.controle-acesso.s1.c1",
+            "pageHelp.controle-acesso.s1.c2",
+            "pageHelp.controle-acesso.s1.c3",
+            "pageHelp.controle-acesso.s1.c4"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.controle-acesso.s2.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.controle-acesso.s2.c0",
+            "pageHelp.controle-acesso.s2.c1",
+            "pageHelp.controle-acesso.s2.c2",
+            "pageHelp.controle-acesso.s2.c3",
+            "pageHelp.controle-acesso.s2.c4",
+            "pageHelp.controle-acesso.s2.c5",
+            "pageHelp.controle-acesso.s2.c6"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/settings/backup",
+      "titleKey": "pageHelp.settings-backup.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.settings-backup.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.settings-backup.s0.c0",
+            "pageHelp.settings-backup.s0.c1"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.settings-backup.s1.title",
+          "icon": "pi pi-database",
+          "contentKeys": [
+            "pageHelp.settings-backup.s1.c0",
+            "pageHelp.settings-backup.s1.c1",
+            "pageHelp.settings-backup.s1.c2",
+            "pageHelp.settings-backup.s1.c3",
+            "pageHelp.settings-backup.s1.c4",
+            "pageHelp.settings-backup.s1.c5"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.settings-backup.s2.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.settings-backup.s2.c0",
+            "pageHelp.settings-backup.s2.c1",
+            "pageHelp.settings-backup.s2.c2",
+            "pageHelp.settings-backup.s2.c3",
+            "pageHelp.settings-backup.s2.c4",
+            "pageHelp.settings-backup.s2.c5",
+            "pageHelp.settings-backup.s2.c6",
+            "pageHelp.settings-backup.s2.c7",
+            "pageHelp.settings-backup.s2.c8"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.settings-backup.s3.title",
+          "icon": "pi pi-lightbulb",
+          "contentKeys": [
+            "pageHelp.settings-backup.s3.c0",
+            "pageHelp.settings-backup.s3.c1",
+            "pageHelp.settings-backup.s3.c2",
+            "pageHelp.settings-backup.s3.c3",
+            "pageHelp.settings-backup.s3.c4"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/fcu-assembly",
+      "titleKey": "pageHelp.fcu-assembly.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.fcu-assembly.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.fcu-assembly.s0.c0",
+            "pageHelp.fcu-assembly.s0.c1"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.fcu-assembly.s1.title",
+          "icon": "pi pi-file-edit",
+          "contentKeys": [
+            "pageHelp.fcu-assembly.s1.c0",
+            "pageHelp.fcu-assembly.s1.c1",
+            "pageHelp.fcu-assembly.s1.c2",
+            "pageHelp.fcu-assembly.s1.c3",
+            "pageHelp.fcu-assembly.s1.c4",
+            "pageHelp.fcu-assembly.s1.c5"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.fcu-assembly.s2.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.fcu-assembly.s2.c0",
+            "pageHelp.fcu-assembly.s2.c1",
+            "pageHelp.fcu-assembly.s2.c2",
+            "pageHelp.fcu-assembly.s2.c3",
+            "pageHelp.fcu-assembly.s2.c4",
+            "pageHelp.fcu-assembly.s2.c5",
+            "pageHelp.fcu-assembly.s2.c6",
+            "pageHelp.fcu-assembly.s2.c7"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.fcu-assembly.s3.title",
+          "icon": "pi pi-lightbulb",
+          "contentKeys": [
+            "pageHelp.fcu-assembly.s3.c0",
+            "pageHelp.fcu-assembly.s3.c1",
+            "pageHelp.fcu-assembly.s3.c2",
+            "pageHelp.fcu-assembly.s3.c3",
+            "pageHelp.fcu-assembly.s3.c4"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "titleKey": "pageHelp.home.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.home.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.home.s0.c0",
+            "pageHelp.home.s0.c1"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.home.s1.title",
+          "icon": "pi pi-home",
+          "contentKeys": [
+            "pageHelp.home.s1.c0",
+            "pageHelp.home.s1.c1",
+            "pageHelp.home.s1.c2",
+            "pageHelp.home.s1.c3"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.home.s2.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.home.s2.c0",
+            "pageHelp.home.s2.c1",
+            "pageHelp.home.s2.c2",
+            "pageHelp.home.s2.c3"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/propostas-comerciais",
+      "titleKey": "pageHelp.propostas-comerciais.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.propostas-comerciais.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.propostas-comerciais.s0.c0",
+            "pageHelp.propostas-comerciais.s0.c1",
+            "pageHelp.propostas-comerciais.s0.c2"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.propostas-comerciais.s1.title",
+          "icon": "pi pi-file-edit",
+          "contentKeys": [
+            "pageHelp.propostas-comerciais.s1.c0",
+            "pageHelp.propostas-comerciais.s1.c1",
+            "pageHelp.propostas-comerciais.s1.c2",
+            "pageHelp.propostas-comerciais.s1.c3",
+            "pageHelp.propostas-comerciais.s1.c4",
+            "pageHelp.propostas-comerciais.s1.c5"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.propostas-comerciais.s2.title",
+          "icon": "pi pi-box",
+          "contentKeys": [
+            "pageHelp.propostas-comerciais.s2.c0",
+            "pageHelp.propostas-comerciais.s2.c1",
+            "pageHelp.propostas-comerciais.s2.c2",
+            "pageHelp.propostas-comerciais.s2.c3",
+            "pageHelp.propostas-comerciais.s2.c4",
+            "pageHelp.propostas-comerciais.s2.c5",
+            "pageHelp.propostas-comerciais.s2.c6",
+            "pageHelp.propostas-comerciais.s2.c7"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.propostas-comerciais.s3.title",
+          "icon": "pi pi-user",
+          "contentKeys": [
+            "pageHelp.propostas-comerciais.s3.c0",
+            "pageHelp.propostas-comerciais.s3.c1",
+            "pageHelp.propostas-comerciais.s3.c2",
+            "pageHelp.propostas-comerciais.s3.c3",
+            "pageHelp.propostas-comerciais.s3.c4"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.propostas-comerciais.s4.title",
+          "icon": "pi pi-file",
+          "contentKeys": [
+            "pageHelp.propostas-comerciais.s4.c0",
+            "pageHelp.propostas-comerciais.s4.c1",
+            "pageHelp.propostas-comerciais.s4.c2",
+            "pageHelp.propostas-comerciais.s4.c3",
+            "pageHelp.propostas-comerciais.s4.c4"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.propostas-comerciais.s5.title",
+          "icon": "pi pi-sync",
+          "contentKeys": [
+            "pageHelp.propostas-comerciais.s5.c0",
+            "pageHelp.propostas-comerciais.s5.c1",
+            "pageHelp.propostas-comerciais.s5.c2",
+            "pageHelp.propostas-comerciais.s5.c3",
+            "pageHelp.propostas-comerciais.s5.c4"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.propostas-comerciais.s6.title",
+          "icon": "pi pi-lightbulb",
+          "contentKeys": [
+            "pageHelp.propostas-comerciais.s6.c0",
+            "pageHelp.propostas-comerciais.s6.c1",
+            "pageHelp.propostas-comerciais.s6.c2",
+            "pageHelp.propostas-comerciais.s6.c3",
+            "pageHelp.propostas-comerciais.s6.c4",
+            "pageHelp.propostas-comerciais.s6.c5"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/usuarios-externos",
+      "titleKey": "pageHelp.usuarios-externos.title",
+      "sections": [
+        {
+          "titleKey": "pageHelp.usuarios-externos.s0.title",
+          "icon": "pi pi-info-circle",
+          "contentKeys": [
+            "pageHelp.usuarios-externos.s0.c0",
+            "pageHelp.usuarios-externos.s0.c1",
+            "pageHelp.usuarios-externos.s0.c2"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.usuarios-externos.s1.title",
+          "icon": "pi pi-users",
+          "contentKeys": [
+            "pageHelp.usuarios-externos.s1.c0",
+            "pageHelp.usuarios-externos.s1.c1",
+            "pageHelp.usuarios-externos.s1.c2",
+            "pageHelp.usuarios-externos.s1.c3",
+            "pageHelp.usuarios-externos.s1.c4",
+            "pageHelp.usuarios-externos.s1.c5",
+            "pageHelp.usuarios-externos.s1.c6"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.usuarios-externos.s2.title",
+          "icon": "pi pi-cog",
+          "contentKeys": [
+            "pageHelp.usuarios-externos.s2.c0",
+            "pageHelp.usuarios-externos.s2.c1",
+            "pageHelp.usuarios-externos.s2.c2",
+            "pageHelp.usuarios-externos.s2.c3"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.usuarios-externos.s3.title",
+          "icon": "pi pi-list",
+          "contentKeys": [
+            "pageHelp.usuarios-externos.s3.c0",
+            "pageHelp.usuarios-externos.s3.c1",
+            "pageHelp.usuarios-externos.s3.c2",
+            "pageHelp.usuarios-externos.s3.c3",
+            "pageHelp.usuarios-externos.s3.c4",
+            "pageHelp.usuarios-externos.s3.c5",
+            "pageHelp.usuarios-externos.s3.c6"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.usuarios-externos.s4.title",
+          "icon": "pi pi-key",
+          "contentKeys": [
+            "pageHelp.usuarios-externos.s4.c0",
+            "pageHelp.usuarios-externos.s4.c1",
+            "pageHelp.usuarios-externos.s4.c2",
+            "pageHelp.usuarios-externos.s4.c3",
+            "pageHelp.usuarios-externos.s4.c4"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.usuarios-externos.s5.title",
+          "icon": "pi pi-ban",
+          "contentKeys": [
+            "pageHelp.usuarios-externos.s5.c0",
+            "pageHelp.usuarios-externos.s5.c1",
+            "pageHelp.usuarios-externos.s5.c2",
+            "pageHelp.usuarios-externos.s5.c3",
+            "pageHelp.usuarios-externos.s5.c4"
+          ]
+        },
+        {
+          "titleKey": "pageHelp.usuarios-externos.s6.title",
+          "icon": "pi pi-lightbulb",
+          "contentKeys": [
+            "pageHelp.usuarios-externos.s6.c0",
+            "pageHelp.usuarios-externos.s6.c1",
+            "pageHelp.usuarios-externos.s6.c2",
+            "pageHelp.usuarios-externos.s6.c3",
+            "pageHelp.usuarios-externos.s6.c4",
+            "pageHelp.usuarios-externos.s6.c5"
+          ]
+        }
+      ]
+    }
+  ]
+}

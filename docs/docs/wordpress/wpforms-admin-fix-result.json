@@ -1,0 +1,20 @@
+{
+  "at": "2026-06-03T18:20:06.113Z",
+  "before": {
+    "status": 500,
+    "ok": false,
+    "bodyPreview": "<p>Há um erro crítico no seu site.</p><p><a href=\"https://wordpress.org/documentation/article/faq-troubleshooting/\">Saiba mais sobre a como resolver problemas do WordPress.</a></p>"
+  },
+  "notificationToggle": {
+    "notes": [
+      "notification_disabled_via_click"
+    ],
+    "saveFound": true,
+    "saved": true
+  },
+  "after": {
+    "status": 500,
+    "ok": false,
+    "bodyPreview": "<p>Há um erro crítico no seu site.</p><p><a href=\"https://wordpress.org/documentation/article/faq-troubleshooting/\">Saiba mais sobre a como resolver problemas do WordPress.</a></p>"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "at": "2026-06-04T04:02:05.000Z",
+  "source": "pagespeed.web.dev browser",
+  "url": "https://pagespeed.web.dev/analysis/https-aerosuite-com-br/or2znkeovw?form_factor=mobile",
+  "performance": 81,
+  "accessibility": 94,
+  "bestPractices": 100,
+  "seo": 85,
+  "metaPerformanceMin": 70,
+  "metaMet": true,
+  "changesThisSession": [
+    "aerosuite-performance v1.2.0 (defer CSS/JS, WP bloat removal, cache headers)",
+    "Calendly lazy: só carrega em /contato/ ao scroll (analytics.js)",
+    "CSS crítico hero no header (~5.4 KB)",
+    "Imagens com sizes/width/fetchpriority",
+    "Cloudflare Purge Everything"
+  ],
+  "notes": "Score lab 81 mobile pós purge. Variância 72–85 é normal. Para purge automático: CLOUDFLARE_API_TOKEN + CLOUDFLARE_ZONE_ID."
+}

@@ -1,0 +1,82 @@
+/* ===== 🌐 Tema global de modais ===== */
+
+.p-dialog {
+  border-radius: 12px !important;
+  border: 1px solid #d1d5db !important;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.35) !important;
+  overflow: hidden !important;
+  backdrop-filter: blur(3px);
+}
+
+/* Fundo de toda a área do modal */
+.p-dialog-header,
+.p-dialog-content,
+.p-dialog-footer {
+  background: #f8f9fa !important; /* cinza-claro */
+  color: #111827 !important; /* texto escuro */
+  border: none !important;
+}
+
+/* Cabeçalho */
+.p-dialog-header {
+  padding: 1rem 1.25rem !important;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+/* Botão de fechar */
+.p-dialog-header .p-button.p-button-text {
+  color: #4b5563 !important;
+}
+.p-dialog-header .p-button.p-button-text:hover {
+  color: #111827 !important;
+}
+
+/* Corpo */
+.p-dialog-content {
+  padding: 1.5rem !important;
+}
+
+/* Rodapé */
+.p-dialog-footer {
+  padding: 1rem 1.25rem !important;
+  border-top: 1px solid #e5e7eb !important;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Máscara de fundo */
+.p-dialog-mask {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(2px);
+}
+
+/* Botões padrão */
+.p-button {
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+}
+
+/* Botão primário azul */
+.p-button.p-button-primary {
+  background-color: #2563eb !important; /* Azul padrão */
+  border: none !important;
+  color: white !important;
+}
+.p-button.p-button-primary:hover {
+  background-color: #1d4ed8 !important;
+}
+
+/* Dropdown dentro de modais */
+.p-dialog .p-dropdown {
+  background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  color: #111827 !important;
+}
+.p-dialog .p-dropdown-panel {
+  background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}

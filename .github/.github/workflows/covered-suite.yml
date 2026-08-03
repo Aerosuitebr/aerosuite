@@ -1,0 +1,58 @@
+# Suite final local (5 pilares): stack Docker com MySQL + run-all.
+# Disparo manual — util apos merge ou antes de release.
+name: Covered suite
+
+on:
+  workflow_dispatch:
+    inputs:
+      skip_stress:
+        description: 'Ignorar stress HTTP'
+        type: boolean
+        default: false
+
+jobs:
+  full-stack:
+    name: Docker stack + run-all
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare .env
+        run: cp .env.example .env
+
+      - name: Start stack (MySQL + API + Web)
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose.local-mysql.yml up -d --build
+
+      - name: Wait API + bootstrap admin
+        shell: pwsh
+        run: |
+          ./scripts/test/wait-api-ready.ps1 -MaxAttempts 50 -SleepSec 5
+          if ($LASTEXITCODE -ne 0) {
+            ./scripts/test/bootstrap-ci-admin.ps1
+            ./scripts/test/wait-api-ready.ps1 -MaxAttempts 20 -SleepSec 5
+          }
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+
+      - name: UTF-8 menu fix (SQL)
+        run: |
+          docker exec -i aerosuite-mysql-local mysql -uroot -proot --default-character-set=utf8mb4 aerosuite \
+            < db/scripts/fix_funcionalidade_secao_utf8.sql
+
+      - name: Flyway V8-V16
+        shell: pwsh
+        run: ./scripts/test/verify-flyway.ps1
+
+      - name: Run final suite
+        shell: pwsh
+        run: |
+          $stress = '${{ inputs.skip_stress }}' -eq 'true'
+          $args = @{
+            SkipDockerRebuild = $true
+            SkipMaven = $true
+            ProvisionDemoTenant = $true
+            SkipEnvValidation = $true
+          }
+          if ($stress) { $args['SkipStress'] = $true }
+          ./scripts/test/run-all.ps1 @args

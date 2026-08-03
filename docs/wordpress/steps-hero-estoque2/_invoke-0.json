@@ -1,0 +1,1 @@
+{"method":"Runtime.evaluate","params":{"expression":"new Function(\"window.__b64buf=\\\"\\\";window.__urls={};return {ok:true};\")()","awaitPromise":false,"returnByValue":true}}

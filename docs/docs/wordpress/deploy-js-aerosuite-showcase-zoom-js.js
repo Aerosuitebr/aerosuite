@@ -1,0 +1,13 @@
+(async()=>{
+    const js="/**\r\n * Zoom: hover no card + lightbox ao clicar nas capturas do showcase.\r\n */\r\n(function () {\r\n  'use strict';\r\n\r\n  function bind(img) {\r\n    if (!img || img.dataset.asZoomBound === '1') return;\r\n    img.dataset.asZoomBound = '1';\r\n    img.setAttribute('tabindex', '0');\r\n    img.style.cursor = 'zoom-in';\r\n\r\n    function open() {\r\n      const lb = document.createElement('div');\r\n      lb.className = 'as-shot-lightbox';\r\n      lb.setAttribute('role', 'dialog');\r\n      lb.setAttribute('aria-modal', 'true');\r\n      const full = document.createElement('img');\r\n      full.src = img.currentSrc || img.src;\r\n      full.alt = img.alt || '';\r\n      lb.appendChild(full);\r\n      function close() {\r\n        lb.remove();\r\n        document.removeEventListener('keydown', onKey);\r\n      }\r\n      function onKey(e) {\r\n        if (e.key === 'Escape') close();\r\n      }\r\n      lb.addEventListener('click', close);\r\n      document.addEventListener('keydown', onKey);\r\n      document.body.appendChild(lb);\r\n    }\r\n\r\n    img.addEventListener('click', open);\r\n    img.addEventListener('keydown', function (e) {\r\n      if (e.key === 'Enter' || e.key === ' ') {\r\n        e.preventDefault();\r\n        open();\r\n      }\r\n    });\r\n  }\r\n\r\n  function scan() {\r\n    document.querySelectorAll('.as-ui-shot img').forEach(bind);\r\n  }\r\n\r\n  if (document.readyState === 'loading') {\r\n    document.addEventListener('DOMContentLoaded', scan);\r\n  } else {\r\n    scan();\r\n  }\r\n  new MutationObserver(scan).observe(document.body, { childList: true, subtree: true });\r\n})();\r\n";
+    let footer=(await wp.apiFetch({path:'/wp/v2/template-parts/extendable//footer?context=edit'})).content.raw;
+    const id='aerosuite-showcase-zoom-js';
+    const tag='<script id="'+id+'">';
+    if(footer.includes(tag)){
+      footer=footer.replace(new RegExp('<script id="'+id+'">[\\s\\S]*?<\\/script>\\n?'),tag+js+'</script>\n');
+    } else {
+      footer=footer.replace('</style>','</style>\n'+tag+js+'</script>\n');
+    }
+    await wp.apiFetch({path:'/wp/v2/template-parts/extendable//footer?id=extendable//footer',method:'POST',data:{content:footer}});
+    return{ok:true,id};
+  })()

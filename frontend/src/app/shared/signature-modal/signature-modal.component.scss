@@ -1,0 +1,494 @@
+// Importar Google Fonts via CSS
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Tangerine:wght@400;700&family=Pacifico&family=Kaushan+Script&family=Pinyon+Script&family=Caveat:wght@400;600;700&family=Dancing+Script:wght@400;700&family=Sacramento&family=Alex+Brush&display=swap');
+
+// ============================================
+// VARIÁVEIS E TEMA
+// ============================================
+$primary-gradient: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%);
+$gold-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+$shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
+$shadow-medium: 0 8px 32px rgba(0, 0, 0, 0.12);
+
+// ============================================
+// MODAL CONTAINER - CORRIGIDO
+// ============================================
+:host ::ng-deep {
+  .signature-modal {
+    .p-dialog {
+      border-radius: 16px;
+      overflow: hidden;
+      background: #f8fafc;
+      border: 1px solid rgba(14, 165, 233, 0.1);
+      box-shadow: $shadow-medium;
+      max-height: 90vh !important;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .p-dialog-header {
+      background: $primary-gradient;
+      border-bottom: none;
+      padding: 0 !important;
+      flex-shrink: 0;
+    }
+
+    .p-dialog-content {
+      padding: 0 !important;
+      background: transparent;
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .p-dialog-footer {
+      background: white;
+      border-top: 1px solid #e2e8f0;
+      padding: 12px 20px !important;
+      flex-shrink: 0;
+      position: sticky;
+      bottom: 0;
+    }
+  }
+}
+
+// ============================================
+// HEADER - COMPACTO
+// ============================================
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  color: white;
+
+  .header-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 20px;
+      color: white;
+    }
+  }
+
+  .header-content {
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 2px 0 0;
+      font-size: 12px;
+      opacity: 0.9;
+    }
+  }
+}
+
+// ============================================
+// CONTEÚDO PRINCIPAL - COMPACTO
+// ============================================
+.signature-content {
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+
+// ============================================
+// INPUT DE NOME - COMPACTO
+// ============================================
+.name-input-section {
+  margin-bottom: 16px;
+
+  .input-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+
+    i {
+      color: #0ea5e9;
+      font-size: 14px;
+    }
+  }
+
+  .input-wrapper {
+    .name-input {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 16px;
+      font-weight: 500;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      background: white;
+      transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+      color: #1e293b;
+
+      &::placeholder {
+        color: #94a3b8;
+        font-weight: 400;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: #0ea5e9;
+        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+      }
+    }
+  }
+}
+
+// ============================================
+// PREVIEW DA ASSINATURA - COMPACTO
+// ============================================
+.signature-preview-section {
+  margin-bottom: 16px;
+
+  .preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+
+    .preview-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+
+      i {
+        color: #0ea5e9;
+        font-size: 12px;
+      }
+    }
+
+    .selected-style {
+      font-size: 11px;
+      color: #0ea5e9;
+      background: #f0f9ff;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+  }
+}
+
+.signature-preview-box {
+  background: white;
+  border: 2px solid #0ea5e9;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+
+  .preview-paper {
+    text-align: center;
+
+    .signature-line {
+      border-bottom: 2px solid #1e293b;
+      padding: 8px 0;
+      margin-bottom: 8px;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+
+      .signature-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        display: block;
+      }
+    }
+
+    .preview-label-text {
+      font-size: 10px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+// ============================================
+// GRADE DE ESTILOS - COMPACTA
+// ============================================
+.styles-section {
+  .styles-header {
+    margin-bottom: 12px;
+
+    h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0;
+
+      i {
+        color: #0ea5e9;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.styles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  padding: 4px 0;
+}
+
+.signature-style-card {
+  position: relative;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px 10px;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #0ea5e9, #0284c7);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  &:hover {
+    border-color: #0ea5e9;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.2);
+
+    &::before {
+      transform: scaleX(1);
+    }
+  }
+
+  &.selected {
+    border-color: #0ea5e9;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15), 0 4px 12px rgba(14, 165, 233, 0.1);
+
+    &::before {
+      transform: scaleX(1);
+    }
+  }
+
+  .style-badge {
+    position: absolute;
+    top: -6px;
+    right: 6px;
+    background: $gold-gradient;
+    color: white;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.4);
+    z-index: 2;
+
+    i {
+      font-size: 8px;
+    }
+  }
+
+  .card-content {
+    .style-preview {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .style-name {
+      text-align: center;
+      font-size: 10px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .selection-indicator {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 20px;
+    height: 20px;
+    background: $primary-gradient;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(14, 165, 233, 0.4);
+    z-index: 2;
+
+    i {
+      color: white;
+      font-size: 10px;
+    }
+  }
+}
+
+// ============================================
+// ESTADO VAZIO - COMPACTO
+// ============================================
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+
+  .empty-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    border: 2px dashed #0ea5e9;
+
+    i {
+      font-size: 24px;
+      color: #0ea5e9;
+    }
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 8px;
+  }
+
+  p {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0;
+  }
+}
+
+// ============================================
+// FOOTER - SEMPRE VISÍVEL
+// ============================================
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0;
+
+  button {
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+  }
+
+  .confirm-btn {
+    background: $primary-gradient;
+    border: none;
+    font-weight: 600;
+    border-radius: 8px;
+
+    &:not(:disabled):hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+    }
+
+    &:disabled {
+      background: #e2e8f0;
+      color: #94a3b8;
+    }
+  }
+}
+
+// ============================================
+// RESPONSIVIDADE
+// ============================================
+@media (max-width: 600px) {
+  .signature-content {
+    padding: 12px 16px;
+  }
+
+  .modal-header {
+    padding: 12px 16px;
+
+    .header-icon {
+      width: 36px;
+      height: 36px;
+
+      i {
+        font-size: 18px;
+      }
+    }
+
+    .header-content {
+      h2 {
+        font-size: 16px;
+      }
+
+      p {
+        font-size: 11px;
+      }
+    }
+  }
+
+  .styles-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .signature-style-card {
+    padding: 10px 6px;
+
+    .card-content {
+      .style-preview {
+        height: 28px;
+        font-size: 14px !important;
+      }
+
+      .style-name {
+        font-size: 9px;
+      }
+    }
+  }
+
+  .modal-footer {
+    flex-direction: row;
+    gap: 8px;
+
+    button {
+      padding: 8px 16px !important;
+      font-size: 13px !important;
+    }
+  }
+}

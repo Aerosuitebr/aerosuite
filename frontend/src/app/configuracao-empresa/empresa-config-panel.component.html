@@ -1,0 +1,229 @@
+<p-toast position="top-right"></p-toast>
+
+<div class="panel-wrap" *ngIf="loaded">
+  <p-card styleClass="panel-card">
+    <ng-template pTemplate="header">
+      <div class="panel-head">
+        <h2>{{ t('empresa.panel.title') }}</h2>
+        <p>{{ introEmpresa() }}</p>
+        <p class="read-only-hint" *ngIf="!canEdit">{{ t('empresa.panel.readOnly') }}</p>
+      </div>
+    </ng-template>
+
+    <p-accordion [multiple]="true" [activeIndex]="[0, 1, 2, 3]">
+      <p-accordionTab [header]="t('empresa.accordion.identity')">
+        <div class="grid">
+          <div class="span-2">
+            <label class="lbl" for="empresa-displayName">{{ t('empresa.field.displayName') }}</label>
+            <input id="empresa-displayName" pInputText class="w-full" [(ngModel)]="draft.displayName" />
+          </div>
+          <div class="span-2">
+            <label class="lbl" for="empresa-tagline">{{ t('empresa.field.tagline') }}</label>
+            <input id="empresa-tagline" pInputText class="w-full" [(ngModel)]="draft.tagline" />
+          </div>
+          <div>
+            <label class="lbl" for="empresa-emailSubjectSuffix">{{ t('empresa.field.emailSubjectSuffix') }}</label>
+            <input id="empresa-emailSubjectSuffix" pInputText class="w-full" [(ngModel)]="draft.emailSubjectSuffix" />
+          </div>
+          <div>
+            <label class="lbl" for="empresa-browserTitleSuffix">{{ t('empresa.field.browserTitleSuffix') }}</label>
+            <input id="empresa-browserTitleSuffix" pInputText class="w-full" [(ngModel)]="draft.browserTitleSuffix" />
+          </div>
+          <div>
+            <label class="lbl" for="empresa-copyrightEntity">{{ t('empresa.field.copyrightEntity') }}</label>
+            <input id="empresa-copyrightEntity" pInputText class="w-full" [(ngModel)]="draft.copyrightEntity" />
+          </div>
+          <div class="span-2">
+            <label class="lbl" for="empresa-logoUrl">{{ t('empresa.field.logoUrl') }}</label>
+            <input
+              id="empresa-logoUrl"
+              pInputText
+              class="w-full"
+              [(ngModel)]="draft.logoUrl"
+              [placeholder]="t('empresa.field.logoPlaceholder')"
+            />
+            <div class="upload-row" style="margin-top: 10px">
+              <input #fileLogo type="file" accept="image/*" hidden (change)="onLogoFile($event)" [attr.aria-label]="t('empresa.upload.logo')" />
+              <button
+                pButton
+                type="button"
+                [label]="t('empresa.upload.logo')"
+                icon="pi pi-upload"
+                class="p-button-outlined p-button-sm"
+                (click)="fileLogo.click()"
+              ></button>
+              <img *ngIf="draft.logoUrl" class="thumb" [src]="previewLogo" [alt]="t('empresa.preview.logoAlt')" />
+            </div>
+          </div>
+          <div class="span-2">
+            <label class="lbl" for="empresa-wordmarkUrl">{{ t('empresa.field.wordmark') }}</label>
+            <input id="empresa-wordmarkUrl" pInputText class="w-full" [(ngModel)]="draft.wordmarkUrl" />
+            <div class="upload-row" style="margin-top: 10px">
+              <input #fileWm type="file" accept="image/*" hidden (change)="onWordmarkFile($event)" [attr.aria-label]="t('empresa.upload.wordmark')" />
+              <button
+                pButton
+                type="button"
+                [label]="t('empresa.upload.wordmark')"
+                icon="pi pi-upload"
+                class="p-button-outlined p-button-sm"
+                (click)="fileWm.click()"
+              ></button>
+              <img *ngIf="draft.wordmarkUrl" class="thumb" [src]="previewWordmark" [alt]="t('empresa.preview.wordmarkAlt')" />
+            </div>
+          </div>
+          <div>
+            <label class="lbl" for="empresa-primaryColor">{{ t('empresa.field.primaryColor') }}</label>
+            <span class="field-hint">{{ t('empresa.field.primaryColor.hint') }}</span>
+            <app-brand-primary-color-input
+              nativeInputId="empresa-primaryColor"
+              hexInputId="empresa-primaryColorHex"
+              [ariaLabel]="t('empresa.field.primaryColor')"
+              [placeholder]="t('empresa.field.primaryColor.ph')"
+              [(ngModel)]="draft.primaryColor"
+              [disabled]="!canEdit">
+            </app-brand-primary-color-input>
+          </div>
+        </div>
+      </p-accordionTab>
+
+      <p-accordionTab [header]="t('empresa.accordion.contacts')">
+        <div class="grid">
+          <div class="span-2">
+            <label class="lbl" for="empresa-supportEmail">{{ t('empresa.field.supportEmail') }}</label>
+            <input id="empresa-supportEmail" pInputText class="w-full" type="email" [(ngModel)]="draft.supportEmail" />
+            <span class="field-hint">{{ t('empresa.field.supportEmail.hint') }}</span>
+          </div>
+          <div>
+            <label class="lbl" for="empresa-telefone">{{ t('empresa.field.telefone') }}</label>
+            <input id="empresa-telefone" pInputText class="w-full" [(ngModel)]="draft.telefone" inputmode="tel" autocomplete="tel" maxlength="15" (input)="onTelefoneInput()" />
+          </div>
+          <div>
+            <label class="lbl" for="empresa-siteUrl">{{ t('empresa.field.siteUrl') }}</label>
+            <input id="empresa-siteUrl" pInputText class="w-full" [(ngModel)]="draft.siteUrl" />
+          </div>
+        </div>
+      </p-accordionTab>
+
+      <p-accordionTab [header]="t('empresa.accordion.fiscal')">
+        <div class="grid">
+          <div class="span-2">
+            <label class="lbl" for="empresa-razaoSocial">{{ t('empresa.field.razaoSocial') }}</label>
+            <input id="empresa-razaoSocial" pInputText class="w-full" [(ngModel)]="draft.razaoSocial" />
+          </div>
+          <div>
+            <label class="lbl" for="empresa-cnpj">{{ t('empresa.field.cnpj') }}</label>
+            <input id="empresa-cnpj" pInputText class="w-full" [(ngModel)]="draft.cnpj" />
+          </div>
+          <div>
+            <label class="lbl" for="empresa-inscricaoEstadual">{{ t('empresa.field.inscricaoEstadual') }}</label>
+            <input id="empresa-inscricaoEstadual" pInputText class="w-full" [(ngModel)]="draft.inscricaoEstadual" />
+          </div>
+          <div>
+            <label class="lbl" for="empresa-inscricaoMunicipal">{{ t('empresa.field.inscricaoMunicipal') }}</label>
+            <input id="empresa-inscricaoMunicipal" pInputText class="w-full" [(ngModel)]="draft.inscricaoMunicipal" />
+          </div>
+          <div>
+            <label class="lbl" for="empresa-emailNfe">{{ t('empresa.field.emailNfe') }}</label>
+            <input id="empresa-emailNfe" pInputText class="w-full" type="email" [(ngModel)]="draft.emailNfe" />
+          </div>
+          <div class="span-2">
+            <label class="lbl" for="empresa-enderecoLogradouro">{{ t('empresa.field.enderecoLogradouro') }}</label>
+            <input id="empresa-enderecoLogradouro" pInputText class="w-full" [(ngModel)]="draft.enderecoLogradouro" />
+          </div>
+          <div>
+            <label class="lbl" for="empresa-enderecoNumero">{{ t('empresa.field.enderecoNumero') }}</label>
+            <input id="empresa-enderecoNumero" pInputText class="w-full" [(ngModel)]="draft.enderecoNumero" />
+          </div>
+          <div>
+            <label class="lbl" for="empresa-enderecoComplemento">{{ t('empresa.field.enderecoComplemento') }}</label>
+            <input id="empresa-enderecoComplemento" pInputText class="w-full" [(ngModel)]="draft.enderecoComplemento" />
+          </div>
+          <div>
+            <label class="lbl" for="empresa-enderecoBairro">{{ t('empresa.field.enderecoBairro') }}</label>
+            <input id="empresa-enderecoBairro" pInputText class="w-full" [(ngModel)]="draft.enderecoBairro" />
+          </div>
+          <div>
+            <label class="lbl" for="empresa-cidade">{{ t('empresa.field.cidade') }}</label>
+            <input id="empresa-cidade" pInputText class="w-full" [(ngModel)]="draft.cidade" />
+          </div>
+          <div>
+            <label class="lbl" for="empresa-uf">{{ t('empresa.field.uf') }}</label>
+            <input id="empresa-uf" pInputText class="w-full" maxlength="2" [(ngModel)]="draft.uf" style="text-transform: uppercase" />
+          </div>
+          <div>
+            <label class="lbl" for="empresa-cep">{{ t('empresa.field.cep') }}</label>
+            <input id="empresa-cep" pInputText class="w-full" [(ngModel)]="draft.cep" />
+          </div>
+        </div>
+      </p-accordionTab>
+
+      <p-accordionTab [header]="t('empresa.accordion.lgpd')">
+        <p class="hint mb-3">{{ t('empresa.lgpd.intro') }}</p>
+        <label class="lgpd-toggle">
+          <p-checkbox [(ngModel)]="draft.lgpdTextosCustomizados" [binary]="true" inputId="lgpdCustom"></p-checkbox>
+          <span>{{ t('empresa.lgpd.useCustom') }}</span>
+        </label>
+        <div class="grid mt-3" *ngIf="draft.lgpdTextosCustomizados">
+          <div class="span-2">
+            <label class="lbl" for="empresa-lgpdTermos">{{ t('empresa.lgpd.termos') }}</label>
+            <textarea
+              id="empresa-lgpdTermos"
+              pInputTextarea
+              class="w-full lgpd-text"
+              [rows]="12"
+              [(ngModel)]="draft.lgpdTermosText"
+              [placeholder]="t('empresa.lgpd.termosPh')"></textarea>
+          </div>
+          <div class="span-2">
+            <label class="lbl" for="empresa-lgpdPrivacidade">{{ t('empresa.lgpd.privacidade') }}</label>
+            <textarea
+              id="empresa-lgpdPrivacidade"
+              pInputTextarea
+              class="w-full lgpd-text"
+              [rows]="12"
+              [(ngModel)]="draft.lgpdPrivacidadeText"
+              [placeholder]="t('empresa.lgpd.privacidadePh')"></textarea>
+          </div>
+        </div>
+        <p class="hint mt-2" *ngIf="!draft.lgpdTextosCustomizados">{{ t('empresa.lgpd.defaultHint') }}</p>
+      </p-accordionTab>
+    </p-accordion>
+
+    <div class="actions-bar" *ngIf="!onboardingCompleto">
+      <label style="display: flex; align-items: center; gap: 8px; margin-right: auto; font-size: 0.9rem">
+        <p-checkbox [(ngModel)]="confirmPublish" [binary]="true" inputId="pub"></p-checkbox>
+        <span>{{ t('empresa.confirmPublish') }}</span>
+      </label>
+      <button
+        pButton
+        type="button"
+        [label]="t('empresa.action.saveDraft')"
+        class="p-button-outlined"
+        [loading]="saving"
+        [disabled]="!canEdit"
+        (click)="save(false)"
+      ></button>
+      <button
+        pButton
+        type="button"
+        [label]="t('empresa.action.publish')"
+        icon="pi pi-check"
+        [disabled]="!confirmPublish || !canPublish"
+        [loading]="saving"
+        (click)="save(true)"
+      ></button>
+    </div>
+
+    <div class="actions-bar" *ngIf="onboardingCompleto">
+      <button
+        pButton
+        type="button"
+        [label]="t('empresa.action.saveChanges')"
+        icon="pi pi-save"
+        [loading]="saving"
+        [disabled]="!canEdit"
+        (click)="save(false)"
+      ></button>
+    </div>
+  </p-card>
+</div>

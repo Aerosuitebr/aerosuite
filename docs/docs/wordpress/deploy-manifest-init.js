@@ -1,0 +1,1 @@
+(async()=>{window.__manifestb64='';return{ok:true};})()

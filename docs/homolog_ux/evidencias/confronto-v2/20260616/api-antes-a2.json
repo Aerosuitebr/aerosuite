@@ -1,0 +1,28 @@
+{
+  "capturedAt": "2026-06-16T12:26:05Z",
+  "endpoint": "https://app.aerosuite.com.br/api/auth/login-tenants?email=rafaellanottesconsultoria%40gmail.com",
+  "tenantCount": 3,
+  "tenants": [
+    {
+      "id": 16,
+      "codigo": "rafaella-nottes-consultoria",
+      "nome": "Rafaella Nottes Consultoria",
+      "label": "Rafaella Nottes Consultoria · rafaella-nottes-consultoria · 09/06/2026 · #16",
+      "criadoEm": "09/06/2026"
+    },
+    {
+      "id": 17,
+      "codigo": "rafaella-nottes-consultoria-1",
+      "nome": "Rafaella Nottes Consultoria",
+      "label": "Rafaella Nottes Consultoria · rafaella-nottes-consultoria-1 · 09/06/2026 · #17",
+      "criadoEm": "09/06/2026"
+    },
+    {
+      "id": 18,
+      "codigo": "rafaella-nottes-consultoria-2",
+      "nome": "Rafaella Nottes Consultoria",
+      "label": "Rafaella Nottes Consultoria · rafaella-nottes-consultoria-2 · 11/06/2026 · #18",
+      "criadoEm": "11/06/2026"
+    }
+  ]
+}

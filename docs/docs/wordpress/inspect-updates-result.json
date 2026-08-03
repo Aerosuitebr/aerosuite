@@ -1,0 +1,167 @@
+{
+  "at": "2026-06-08T11:02:40.925Z",
+  "dashboardUrl": "https://aerosuite.com.br/wp-admin/",
+  "sessionExpired": false,
+  "updateMenuBadge": "0",
+  "updateCore": {
+    "forms": [
+      {
+        "id": "",
+        "action": "https://aerosuite.com.br/wp-admin/update-core.php?action=do-core-reinstall",
+        "checkboxes": [],
+        "submit": [
+          {
+            "name": "upgrade",
+            "id": "upgrade",
+            "value": "Reinstalar versão 7.0–pt_BR"
+          },
+          {
+            "name": "dismiss",
+            "id": "dismiss",
+            "value": "Esconder essa atualização"
+          }
+        ]
+      },
+      {
+        "id": "",
+        "action": "https://aerosuite.com.br/wp-admin/update-core.php",
+        "checkboxes": [],
+        "submit": [
+          {
+            "name": "",
+            "id": "",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "headings": [
+      "Versão atual: 7.0",
+      "Você possui a última versão do WordPress.",
+      "Plugins",
+      "Temas",
+      "Traduções"
+    ],
+    "updateLinks": [],
+    "bodySnippet": "Pular para o conteúdo principal\nPular para a barra de ferramentas\n\n\nAssistente do Site\n\n\nPainel\nInício\nAtualizações\nPlugin Notificações 14\nInsights\n\n\nPosts\nTodos os posts\nAdicionar post\nCategorias\nTags\n\n\nMídia\nLibrary\nAdicionar arquivo de mídia\nOtimização em massa\nOther Media\n\n\nPáginas\nTodas as páginas\nAdicionar página\n\n\nComentários\n\n\nEventos\nEventos\nAdicionar novo\nCalendários\nIngressos\nLocais\nPalestrantes\nRSVP\nConfigurações\nFerramentas\nComplementos\nAtualizar para a versão Pro\n\n\nWPForms\nTodos os formulários\nAdd New Form\nRegistros\nPagamentos NEW!\nModelos de formulário\nConfigurações\nFerramentas\nComplementos\nPrivacy Compliance\nSMTP\nSobre nós\nComunidade\nAtualizar para a versão Pro\n\n\nAparência\nTemas\nEditor\nFontes\n\n\nPlugins\nPlugins instalados\nAdicionar plugin\n\n\nUsuários\nTodos os usuários\nAdicionar usuário\nPerfil\nJetBackup\nJetBackup\nBackups\nBackup Jobs\nDestinations\nSchedules\nQueue\nDownloads\nAlerts\nSettings\nSystem Info\n\n\nFerramentas\nFerramentas disponíveis\nImportar\nExportar\nDiagnóstico 1\nExportar dados pessoais\nApagar dados pessoais\n\n\nConfigurações\nGeral\nConectores\nEscrita\nLeitura\nDiscussão\nMídia\nLinks permanentes\nPrivacidade\nImagify\nLazyLoad\nLiteSpeed Cache\n\n\nWP Mail SMTP\nConfigurações\nRegistro de e-mail\nRelatórios de e-mail\nFerramentas\nQuem somos\nAtualizar para a versão Pro\n\n\nSegurança2\n\n\nInsights\nLista de verificação de configuração\n18\nRelatórios\nConfigurações\nNotas do site\nPosts populares\nFerramentas\nComplementos\nUserFeedback\n NOVO\nQuem somos\nAtualizar para a versão Pro\n\n\nLiteSpeed Cache\nPainel\nPredefinições\nGeral\nCache\nCDN\nOtimização de imagem\nOtimização de página\nBanco de dados\nRastreador\nCaixa de ferramentas\nRecolher menu\nSobre o WordPress\naerosuite.com.br\nCtrl+K\nAbrir paleta de comandos\n0\n0 comentário esperando moderação\nNovo\nInsights\nWPForms\nImagify\nAgente de IA\nOlá, wlyra\nAjuda\nAtualizações do WordPress\n\nAtualizações podem levar vários minutos para concluir. Se não houver nenhum retorno após 5 minutos, ou se algum erro ocorrer, cheque a seção Ajuda abaixo.\n\nVersão atual: 7.0\n\nÚltima verificação em 8 de junho de 2026 às 08:01 -03. Verificar novamente.\n\nEste site é automaticamente atualizado para cada nova versão do WordPress.\nTrocar para atualizações automáticas apenas para versões de manutenção e segurança.\n\nVocê possui a última versão do WordPress.\n\nPlugins\n\nOs seus plugins estão todos atualizados.\n\nTemas\n\nOs seus temas estão todos atualizados.\n\nTraduções\n\nAs suas traduções estão todas atualizadas.\n\nObrigado por criar com WordPress.\n\nVersão 7.0\n\nArraste para mover\nFechar janela\nquero colocar o logo do aerosuite\n\nNo momento eu não consigo fazer isso para você, mas vou te guiar passo a passo.\n\nComo adicionar o logo da Aerosuite (tema em blocos):\n\nNo painel do WordPress, vá em Aparência > Editor.\nClique em Modelos.\nAbra o modelo Cabeçalho (Header) ou o modelo principal.\nClique no bloco Logo do site.\nClique em Substituir.\nEnvie o logo da Aerosuite ou selecione da Biblioteca de Mídia.\nAjuste o tamanho se necessário.\nClique em Salvar.\n\nO logo será atualizado em todo o site automaticamente.\n\nEnviar mensagem\nO agente de IA pode cometer erros. Verifique as alterações antes de salvar."
+  },
+  "pluginsUpgrade": {
+    "count": 0,
+    "updates": [
+      {
+        "name": "Aero Suite Performance",
+        "updateLink": null,
+        "rowText": "Selecionar Aero Suite PerformanceAero Suite PerformanceAtivar | ExcluirMostrar mais detalhes Preloads LCP, adia CSS não crítico e reforça cache no edge. Versão 1.0.1 | Por Aero Suite"
+      },
+      {
+        "name": "Aero Suite Performance",
+        "updateLink": null,
+        "rowText": "Selecionar Aero Suite PerformanceAero Suite PerformanceDesativarMostrar mais detalhes Preloads LCP, adia CSS/JS não crítico, cache edge e limpeza WP. Versão 1.2.7 | Por Aero Suite"
+      },
+      {
+        "name": "Aero Suite Performance",
+        "updateLink": null,
+        "rowText": "Selecionar Aero Suite PerformanceAero Suite PerformanceAtivar | ExcluirMostrar mais detalhes Preloads LCP, adia CSS não crítico e reforça cache no edge. Versão 1.0.1 | Por Aero Suite"
+      },
+      {
+        "name": "Aero Suite Send Auth Emails Once",
+        "updateLink": null,
+        "rowText": "Selecionar Aero Suite Send Auth Emails OnceAero Suite Send Auth Emails OnceAtivar | ExcluirMostrar mais detalhes Envia e-mails de autorização portfólio na ativação (one-shot). Versão 1.1.0 | Por Aero "
+      },
+      {
+        "name": "Aero Suite Send Homologacao Manual Once",
+        "updateLink": null,
+        "rowText": "Selecionar Aero Suite Send Homologacao Manual OnceAero Suite Send Homologacao Manual OnceAtivar | ExcluirMostrar mais detalhes Envia e-mail do Manual de Homologacao na ativacao (one-shot). Versão 2.0."
+      },
+      {
+        "name": "Aero Suite Send Homologacao Manual Once",
+        "updateLink": null,
+        "rowText": "Selecionar Aero Suite Send Homologacao Manual OnceAero Suite Send Homologacao Manual OnceAtivar | ExcluirMostrar mais detalhes Envia e-mail do Manual de Homologacao na ativacao (one-shot). Versão 2.0."
+      },
+      {
+        "name": "Aero Suite Send Homologacao Manual Once",
+        "updateLink": null,
+        "rowText": "Selecionar Aero Suite Send Homologacao Manual OnceAero Suite Send Homologacao Manual OnceAtivar | ExcluirMostrar mais detalhes Envia e-mail do Manual de Homologacao na ativacao (one-shot). Versão 2.0."
+      },
+      {
+        "name": "Akismet Anti-spam: Spam Protection",
+        "updateLink": null,
+        "rowText": "Selecionar Akismet Anti-spam: Spam ProtectionAkismet Anti-spam: Spam ProtectionAtivar | ExcluirMostrar mais detalhes Used by millions, Akismet is quite possibly the best way in the world to protect yo"
+      },
+      {
+        "name": "Complianz | Consentimento de cookies para GDPR/CCPA",
+        "updateLink": null,
+        "rowText": "Selecionar Complianz | Consentimento de cookies para GDPR/CCPAComplianz | Consentimento de cookies para GDPR/CCPAAtivar | ExcluirMostrar mais detalhes Conjunto de ferramentas de conformidade de privac"
+      },
+      {
+        "name": "Extendify - Assistente de Onboarding e IA para WordPress",
+        "updateLink": null,
+        "rowText": "Selecionar Extendify - Assistente de Onboarding e IA para WordPressExtendify - Assistente de Onboarding e IA para WordPressDesativarMostrar mais detalhes Assistente para WordPress com inteligência art"
+      },
+      {
+        "name": "Google Analytics para WordPress por MonsterInsights",
+        "updateLink": null,
+        "rowText": "Selecionar Google Analytics para WordPress por MonsterInsightsGoogle Analytics para WordPress por MonsterInsightsObter MonsterInsights Pro | Configurações | Suporte | Documentação | DesativarMostrar m"
+      },
+      {
+        "name": "Hello Dolly",
+        "updateLink": null,
+        "rowText": "Selecionar Hello DollyHello DollyAtivar | ExcluirMostrar mais detalhes Isto não é só um plugin, é algo que simboliza a esperança e o entusiamo de uma geração inteira resumida em duas palavras cantadas"
+      },
+      {
+        "name": "Imagify",
+        "updateLink": null,
+        "rowText": "Selecionar ImagifyImagifyConfigurações | Otimização em massa | Documentação | DesativarMostrar mais detalhes Dramatically reduce image file sizes without losing quality, make your website load faster,"
+      },
+      {
+        "name": "JetBackup",
+        "updateLink": null,
+        "rowText": "Selecionar JetBackupJetBackupDashboard | Settings | DesativarMostrar mais detalhes JetBackup is the most complete WordPress site backup and restore plugin. We offer the easiest way to backup, restore "
+      },
+      {
+        "name": "Lazy Load - Optimize Images",
+        "updateLink": null,
+        "rowText": "Selecionar Lazy Load - Optimize ImagesLazy Load - Optimize ImagesSettings | DesativarMostrar mais detalhes The tiny Lazy Load script for WordPress without jQuery or others libraries. Versão 2.4.0 | Po"
+      },
+      {
+        "name": "LiteSpeed Cache",
+        "updateLink": null,
+        "rowText": "Selecionar LiteSpeed CacheLiteSpeed CacheDesativar | ConfiguraçõesMostrar mais detalhes Cache de página de alto desempenho e otimização de site da LiteSpeed Versão 7.8.1 | Por LiteSpeed Technologies |"
+      },
+      {
+        "name": "Really Simple Security",
+        "updateLink": null,
+        "rowText": "Selecionar Really Simple SecurityReally Simple SecurityMelhorar a segurança - Atualizar | Suporte | Configurações | DesativarMostrar mais detalhes Melhore facilmente a segurança do site com o reforço "
+      },
+      {
+        "name": "SimplyBook.me - Booking and reservations calendar",
+        "updateLink": null,
+        "rowText": "Selecionar SimplyBook.me - Booking and reservations calendarSimplyBook.me - Booking and reservations calendarAtivar | ExcluirMostrar mais detalhes Simply add a booking calendar to your site to schedul"
+      },
+      {
+        "name": "Sugar Calendar (Lite)",
+        "updateLink": null,
+        "rowText": "Selecionar Sugar Calendar (Lite)Sugar Calendar (Lite)DesativarMostrar mais detalhes O calendário extremamente simpático. Versão 3.11.1 | Por Sugar Calendar | Ver detalhesAtivar atualizações automática"
+      },
+      {
+        "name": "TranslatePress - Multilingual",
+        "updateLink": null,
+        "rowText": "Selecionar TranslatePress - MultilingualTranslatePress - MultilingualAtivar | ExcluirMostrar mais detalhes Experimente uma maneira melhor de traduzir seu site WordPress, usando um editor visual de tra"
+      },
+      {
+        "name": "WP Mail SMTP",
+        "updateLink": null,
+        "rowText": "Selecionar WP Mail SMTPWP Mail SMTPObtenha o WP Mail SMTP Pro | Configurações | Documentação | DesativarMostrar mais detalhes Send WordPress emails reliably via SMTP or API using SendLayer, Brevo, SMT"
+      },
+      {
+        "name": "WPForms Lite",
+        "updateLink": null,
+        "rowText": "Selecionar WPForms LiteWPForms LiteObtenha o WPForms Pro | Configurações | Documentação | DesativarMostrar mais detalhes Plugin de formulário de contato do WordPress intuitivo para iniciantes. Use nos"
+      }
+    ]
+  },
+  "pluginsAll": {
+    "count": 0,
+    "plugins": []
+  }
+}

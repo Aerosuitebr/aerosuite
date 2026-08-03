@@ -1,0 +1,221 @@
+{
+  "summary": {
+    "pass": 30,
+    "fail": 0,
+    "total": 30,
+    "base": "https://app.aerosuite.com.br",
+    "stamp": "20260617"
+  },
+  "results": [
+    {
+      "id": "F01",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.478Z"
+    },
+    {
+      "id": "F02",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.479Z"
+    },
+    {
+      "id": "F03",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.479Z"
+    },
+    {
+      "id": "F04",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.480Z"
+    },
+    {
+      "id": "F05",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.481Z"
+    },
+    {
+      "id": "F06",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.481Z"
+    },
+    {
+      "id": "F07",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.481Z"
+    },
+    {
+      "id": "F08",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.481Z"
+    },
+    {
+      "id": "F09",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.481Z"
+    },
+    {
+      "id": "F10",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.482Z"
+    },
+    {
+      "id": "F12",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.482Z"
+    },
+    {
+      "id": "F13",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.482Z"
+    },
+    {
+      "id": "F14",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.483Z"
+    },
+    {
+      "id": "C01",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.483Z"
+    },
+    {
+      "id": "C02",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.483Z"
+    },
+    {
+      "id": "C03",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.483Z"
+    },
+    {
+      "id": "C04",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.484Z"
+    },
+    {
+      "id": "P01",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.484Z"
+    },
+    {
+      "id": "P02",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.485Z"
+    },
+    {
+      "id": "P03",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.485Z"
+    },
+    {
+      "id": "P04",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.485Z"
+    },
+    {
+      "id": "P05",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.485Z"
+    },
+    {
+      "id": "P06",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.486Z"
+    },
+    {
+      "id": "P07",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.486Z"
+    },
+    {
+      "id": "P08",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.486Z"
+    },
+    {
+      "id": "P09",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.486Z"
+    },
+    {
+      "id": "P10",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.487Z"
+    },
+    {
+      "id": "P11",
+      "passed": true,
+      "detail": "verify-relatorio4-homolog.mjs OK",
+      "method": "code",
+      "at": "2026-06-17T21:34:16.487Z"
+    },
+    {
+      "id": "F04_API",
+      "passed": true,
+      "detail": "GET /logo status=404",
+      "method": "api",
+      "at": "2026-06-17T21:34:16.613Z"
+    },
+    {
+      "id": "BEHAVIOR_BR_INPUT",
+      "passed": true,
+      "detail": "vitest br-input.util.spec.ts OK",
+      "method": "vitest",
+      "at": "2026-06-17T21:34:17.752Z"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confronto Técnico — Relatório 5 Homologação UX</title>
+</head>
+<body style="margin:0;padding:0;background:#e2e8f0;font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:#0f172a;">
+
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#e2e8f0;padding:32px 12px;">
+  <tr><td align="center">
+    <table role="presentation" width="680" cellspacing="0" cellpadding="0" border="0" style="max-width:680px;width:100%;">
+      <tr>
+        <td style="background:linear-gradient(145deg,#020617 0%,#0f172a 75%,#1e293b 100%);padding:36px 40px;text-align:center;">
+          <img src="{{LOGO_CID_SRC}}" alt="Aero Suite" width="64" height="64" style="display:block;margin:0 auto 16px auto;" />
+          <div style="font-size:26px;font-weight:700;color:#f8fafc;">Confronto Técnico — Relatório 5</div>
+          <div style="font-size:15px;color:#94a3b8;margin-top:8px;">Homologação UX Sessão 3 · 13/13 achados verificados (100%)</div>
+          <div style="margin-top:16px;font-size:12px;color:#bae6fd;">📎 PDF em anexo · {{PDF_SIZE_MB}} MB</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="background:#ffffff;padding:32px 40px;">
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#334155;">
+            Prezados(as),
+          </p>
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#475569;">
+            Encaminho o <strong>Confronto Técnico — Homologação UX Relatório 5</strong>, documento formal de resposta
+            à <strong>Sessão 3</strong> realizada em <strong>18 de junho de 2026</strong> pela consultora Rafaella Nottes,
+            referente aos módulos <strong>Relatórios</strong>, <strong>Dashboard (Home)</strong> e
+            <strong>Conformidade Técnica</strong> do Aero Suite.
+          </p>
+          <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#475569;">
+            O PDF em anexo consolida, achado a achado, o <em>antes</em> e o <em>depois</em> das correções, as evidências
+            de verificação pós-deploy em <strong>https://app.aerosuite.com.br</strong> e as métricas de eficácia —
+            no mesmo padrão adotado nos confrontos dos Relatórios 2, 3 e 4.
+          </p>
+
+          <div style="background:#ecfdf5;border:1px solid #86efac;border-radius:12px;padding:18px 20px;margin-bottom:20px;">
+            <strong style="color:#15803d;font-size:15px;">Resultado consolidado: 13/13 achados em conformidade (100%)</strong>
+            <ul style="margin:12px 0 0;padding-left:20px;font-size:14px;color:#166534;line-height:1.65;">
+              <li><strong>2/2 críticos</strong> resolvidos — salvamento em Conformidade Técnica (<strong>R-10</strong>) e checklist Go-live (<strong>R-13</strong>)</li>
+              <li><strong>2/2 altos</strong> resolvidos — i18n do modal de relatórios (<strong>R-06</strong>) e preview por tipo (<strong>R-08</strong>)</li>
+              <li><strong>13 verificações</strong> (API real + UI em produção) documentadas no anexo</li>
+              <li>Seção <strong>Conformidade Técnica</strong> no menu lateral com 10 itens agrupados (<strong>R-05</strong>)</li>
+            </ul>
+          </div>
+
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:20px;">
+            <strong style="color:#0f172a;font-size:14px;">Escopo coberto neste confronto</strong>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px;font-size:13px;color:#475569;line-height:1.6;">
+              <tr><td style="padding:4px 0;vertical-align:top;width:28px;">①</td><td><strong>R-10, R-13</strong> — Conformidade Técnica e Kit Go-live (bloqueadores)</td></tr>
+              <tr><td style="padding:4px 0;vertical-align:top;">②</td><td><strong>R-06, R-08</strong> — modais de preview de relatórios (i18n e dados por tipo)</td></tr>
+              <tr><td style="padding:4px 0;vertical-align:top;">③</td><td><strong>R-02, R-05</strong> — mensagens de estado e menu Conformidade Técnica</td></tr>
+              <tr><td style="padding:4px 0;vertical-align:top;">④</td><td><strong>R-03 a R-04, R-07, R-09, R-11 a R-14</strong> — polimento de UX, i18n e microcopy</td></tr>
+            </table>
+          </div>
+
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.7;color:#64748b;">
+            A evidência técnica completa permanece versionada no repositório
+            (<code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:12px;">docs/homolog_ux/evidencias/confronto-relatorio5/20260618/</code>),
+            reproduzível pelo script <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:12px;">verify-relatorio5-homolog.mjs</code>.
+          </p>
+
+          <p style="margin:0 0 8px;font-size:14px;line-height:1.7;color:#475569;">
+            Permaneço à disposição para esclarecimentos, demonstração pontual de qualquer achado ou alinhamento de agenda
+            de reteste com a consultora.
+          </p>
+
+          <p style="margin:24px 0 0;font-size:14px;color:#64748b;line-height:1.6;">
+            Atenciosamente,<br>
+            <strong style="color:#0f172a;">Wellem Lyra</strong><br>
+            Diretor de TI · Aero Suite<br>
+            <a href="mailto:wellemlyra@aerosuite.com.br" style="color:#2563eb;text-decoration:none;">wellemlyra@aerosuite.com.br</a>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td style="background:#f1f5f9;padding:16px 40px;text-align:center;font-size:11px;color:#94a3b8;line-height:1.5;">
+          Aero Suite — Gestão Aeronáutica Integrada · Documento interno de homologação UX<br>
+          Referência: Relatório Técnico de Homologação UX — Sessão 3 · 18/jun/2026 · Rafaella Nottes Consultoria
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>

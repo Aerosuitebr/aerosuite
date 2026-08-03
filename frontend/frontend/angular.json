@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json.schemastore.org/angular.json",
+  "version": 1,
+  "projects": {
+    "aerosuite-frontend": {
+      "projectType": "application",
+      "root": "",
+      "sourceRoot": "src",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/aerosuite-frontend",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "tsConfig": "tsconfig.app.json",
+            "polyfills": [
+              "zone.js"
+            ],
+            "assets": [
+              "src/favicon.svg",
+              "src/favicon.ico",
+              "src/favicon-32.png",
+              "src/favicon-48.png",
+              "src/apple-touch-icon.png",
+              "src/hangar-sw.js",
+              "src/manifest.webmanifest",
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/primeng/resources/themes/lara-light-indigo",
+                "output": "assets/themes/lara-light-indigo"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/primeng/resources/themes/lara-dark-indigo",
+                "output": "assets/themes/lara-dark-indigo"
+              }
+            ],
+            "styles": [
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/primeicons/primeicons.css",
+              "src/styles.scss"
+            ],
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "jsbarcode",
+              "mammoth",
+              "pptxviewjs",
+              "qrcode"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "3mb",
+                  "maximumError": "4mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "300kb",
+                  "maximumError": "500kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "outputHashing": "none",
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "aerosuite-frontend:build:development",
+            "proxyConfig": "proxy.conf.json"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "aerosuite-frontend:build:production"
+            },
+            "development": {
+              "buildTarget": "aerosuite-frontend:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": false
+  }
+}

@@ -1,0 +1,48 @@
+# Overlay Helm — cluster de staging (K8s).
+# Uso:
+#   helm upgrade --install aerosuite-staging ./deploy/helm/aerosuite \
+#     -f deploy/helm/aerosuite/values.yaml \
+#     -f deploy/helm/aerosuite/values-staging.yaml \
+#     --namespace aerosuite-staging --create-namespace
+
+global:
+  imagePullPolicy: IfNotPresent
+
+api:
+  replicaCount: 1
+  image:
+    # Substituir pelo registry real (GHCR/ECR/ACR)
+    repository: ghcr.io/sua-org/aerosuite-backend
+    tag: "staging"
+  env:
+    QUARKUS_PROFILE: prod
+    AERO_SUITE_OTEL_ENABLED: "false"
+    AERO_SUITE_PUBLIC_API_RATE_LIMIT_ENABLED: "true"
+    AERO_SUITE_PUBLIC_API_RATE_LIMIT_RPM: "180"
+    MAIL_MOCK: "true"
+    QUARKUS_FLYWAY_REPAIR_AT_START: "true"
+  # Secret criado fora do chart (ver docs/HELM-STAGING-K8S.md):
+  existingSecret: aerosuite-staging-api-env
+
+web:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/sua-org/aerosuite-frontend
+    tag: "staging"
+
+ingress:
+  enabled: true
+  className: nginx
+  host: staging.aerosuite.app
+  tls: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "500m"
+
+metrics:
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    scrapeTimeout: 10s
+    additionalLabels:
+      release: kube-prometheus-stack

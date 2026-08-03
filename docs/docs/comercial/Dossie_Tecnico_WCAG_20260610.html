@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dossiê Técnico WCAG</title>
+  <style>/* Aero Suite — Relatório Executivo UX (print/PDF A4) */
+@page {
+  size: A4;
+  margin: 16mm 14mm 20mm 14mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.5;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 40%, #0f172a 75%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22mm 18mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 150mm;
+}
+
+.cover-logo {
+  width: 68mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8mm;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.4));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  border: 1px solid rgba(148,163,184,.35);
+  border-radius: 999px;
+  padding: 2.5mm 5mm;
+  margin-bottom: 6mm;
+}
+
+.cover h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+}
+
+.cover-sub {
+  font-size: 11pt;
+  color: #cbd5e1;
+  margin: 0 0 6mm;
+  line-height: 1.45;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a227, transparent);
+  margin: 0 auto 6mm;
+}
+
+.cover-meta {
+  font-size: 9.5pt;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cover-meta strong {
+  color: #e2e8f0;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 12mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #64748b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 7mm;
+  width: auto;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+h2 {
+  font-size: 14pt;
+  color: #0f172a;
+  margin: 0 0 4mm;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 11pt;
+  color: #0369a1;
+  margin: 5mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+.lead {
+  font-size: 10.5pt;
+  color: #334155;
+  margin-bottom: 5mm;
+}
+
+/* Sumário */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+  padding: 2mm 0;
+  border-bottom: 1px dotted #e2e8f0;
+  font-size: 9.5pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: none;
+  padding-top: 4mm;
+  font-size: 10pt;
+}
+
+.toc-num {
+  font-weight: 700;
+  color: #64748b;
+  min-width: 10mm;
+}
+
+/* Score dashboard */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin: 5mm 0 6mm;
+}
+
+.score-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4mm;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.score-card--ok {
+  background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #86efac;
+}
+
+.score-val {
+  font-size: 18pt;
+  font-weight: 800;
+  color: #0369a1;
+  line-height: 1;
+}
+
+.score-card--ok .score-val {
+  color: #15803d;
+}
+
+.score-label {
+  font-size: 7.5pt;
+  color: #64748b;
+  margin-top: 1.5mm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin: 4mm 0;
+}
+
+th, td {
+  border: 1px solid #e2e8f0;
+  padding: 2.5mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Item cards */
+.section-intro {
+  background: #f8fafc;
+  border-left: 3px solid #0369a1;
+  padding: 3mm 4mm;
+  margin-bottom: 5mm;
+  font-size: 9pt;
+  color: #475569;
+}
+
+.item-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 4mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  padding: 2.5mm 4mm;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item-id {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.item-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 9.5pt;
+}
+
+.sev {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.sev--CRITICO { background: #fee2e2; color: #991b1b; }
+.sev--ALTO { background: #ffedd5; color: #9a3412; }
+.sev--MEDIO { background: #fef9c3; color: #854d0e; }
+.sev--INFO { background: #e0e7ff; color: #3730a3; }
+
+.item-body {
+  padding: 3mm 4mm 4mm;
+  font-size: 8.75pt;
+}
+
+.item-row {
+  margin-bottom: 2.5mm;
+}
+
+.item-row:last-child {
+  margin-bottom: 0;
+}
+
+.item-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.5mm;
+}
+
+.item-text {
+  color: #1e293b;
+}
+
+.status-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+/* Assinatura */
+.signature-block {
+  margin-top: 10mm;
+  padding: 6mm;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.signature-line {
+  width: 55mm;
+  border-top: 1px solid #334155;
+  margin: 12mm 0 2mm;
+}
+
+.signature-name {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.signature-role {
+  font-size: 9pt;
+  color: #64748b;
+}
+
+.signature-date {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  margin-top: 2mm;
+}
+
+.callout {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 4mm;
+  margin: 4mm 0;
+  font-size: 9pt;
+}
+
+.callout strong {
+  color: #1d4ed8;
+}
+
+.supplementary {
+  page-break-inside: avoid;
+  margin-bottom: 4mm;
+  padding: 3mm 4mm;
+  border-left: 3px solid #c9a227;
+  background: #fffbeb;
+}
+
+.supplementary h4 {
+  margin: 0 0 1.5mm;
+  font-size: 9.5pt;
+  color: #92400e;
+}
+
+.supplementary p {
+  margin: 0;
+  font-size: 8.75pt;
+  color: #78350f;
+}
+
+.wcag-dest { background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;padding:4mm 5mm;margin:4mm 0;font-size:9.5pt; }
+.wcag-gold { color:#b45309;font-weight:700; }
+.role-table td:first-child { font-weight:700;color:#0369a1;width:38mm;vertical-align:top; }
+.checklist td:last-child { text-align:center;width:18mm; }
+</style>
+</head>
+<body>
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Dossiê técnico · Diretoria de TI</div>
+    <h1>Certificação WCAG 2.2 AA — acessibilidade digital de classe enterprise</h1>
+    <div class="cover-gold-line"></div>
+    <p class="cover-sub">Documento para alinhar Comercial, Marketing, Qualidade e TI sobre o que é a certificação WCAG, o valor para o Aero Suite e como nos prepararmos para a auditoria externa e o VPAT comercial.</p>
+    <p class="cover-meta">
+      <strong>Data:</strong> 10 de junho de 2026<br />
+      <strong>Baseline técnica:</strong> commit 586cb45<br />
+      <strong>Destinatários:</strong> Comercial · Marketing · Qualidade · TI<br />
+      <strong>Remetente:</strong> Wellem Lyra — Diretor de TI
+    </p>
+  </div>
+  <div class="cover-footer">Documento confidencial · Uso interno Aero Suite</div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Sumário executivo</span></div>
+  <h2>O passo rumo à excelência</h2>
+  <p class="lead">
+    O Aero Suite concluiu a <strong>trilha de código 100%</strong> para acessibilidade WCAG 2.2 nível AA:
+    <strong>52 rotas</strong> validadas automaticamente, <strong>12 fluxos críticos</strong> (F1–F12) e gate contínuo no CI.
+    Este é o mesmo patamar que empresas SaaS enterprise exibem em procurement internacional (VPAT / Section 508).
+  </p>
+  <div class="score-grid">
+    <div class="score-card score-card--ok">
+      <div class="score-val">52/52</div>
+      <div class="score-lbl">Rotas axe OK</div>
+    </div>
+    <div class="score-card score-card--ok">
+      <div class="score-val">12/12</div>
+      <div class="score-lbl">Fluxos F1–F12</div>
+    </div>
+    <div class="score-card score-card--ok">
+      <div class="score-val">100%</div>
+      <div class="score-lbl">Trilha código</div>
+    </div>
+    <div class="score-card score-card--info">
+      <div class="score-val">4</div>
+      <div class="score-lbl">Idiomas UI</div>
+    </div>
+  </div>
+  <div class="wcag-dest">
+    <strong>Mensagem para o mercado:</strong> não se trata apenas de “cumprir lei” — é <em>diferencial competitivo</em>
+    em licitações, contratos enterprise, parcerias internacionais e posicionamento premium frente a ERPs genéricos.
+  </div>
+  <div class="page-footer"><span>Aero Suite · Certificação WCAG 2.2 AA</span><span>Sumário executivo</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Capítulo 1</span></div>
+  <h2>O que é a certificação WCAG?</h2>
+  <p class="lead">
+    <strong>WCAG</strong> (Web Content Accessibility Guidelines) é o padrão internacional da W3C para acessibilidade digital.
+    O nível <strong>AA</strong> (nossa meta) é o exigido por legislações como a LBI (Brasil), ADA (EUA) e directivas europeias
+    para software utilizado por pessoas com deficiência visual, motora, auditiva ou cognitiva.
+  </p>
+  <table class="data-table">
+    <thead><tr><th>Conceito</th><th>Explicação</th></tr></thead>
+    <tbody>
+      <tr><td>WCAG 2.2 AA</td><td>Conjunto de critérios testáveis (contraste, teclado, leitor de tela, formulários, erros i18n).</td></tr>
+      <tr><td>VPAT 2.5</td><td>Voluntary Product Accessibility Template — documento comercial que resume conformidade para compradores enterprise.</td></tr>
+      <tr><td>Auditoria externa</td><td>Avaliação independente por especialista CPACC/WAS; emite relatório com severidades (blocker/major/minor).</td></tr>
+      <tr><td>Declaração de acessibilidade</td><td>Página pública no site informando o compromisso e canal de feedback (pós-certificação).</td></tr>
+    </tbody>
+  </table>
+  <h3>Os quatro princípios WCAG</h3>
+  <ul class="bullet-list">
+    <li><strong>Perceptível</strong> — conteúdo visível ou alternativo (texto, contraste, não depender só de cor).</li>
+    <li><strong>Operável</strong> — navegação completa por teclado; sem armadilhas de foco em modais.</li>
+    <li><strong>Compreensível</strong> — labels, erros em texto, interface em 4 idiomas (pt-BR, en-US, es-ES, fr-FR).</li>
+    <li><strong>Robusto</strong> — componentes PrimeNG/Angular expõem roles ARIA corretos para leitores de tela.</li>
+  </ul>
+  <div class="page-footer"><span>Aero Suite · Certificação WCAG 2.2 AA</span><span>Capítulo 1</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Capítulo 2</span></div>
+  <h2>O que a certificação agrega ao Aero Suite</h2>
+  <table class="data-table role-table">
+    <thead><tr><th>Área</th><th>Valor agregado</th></tr></thead>
+    <tbody>
+      <tr><td>Comercial</td><td>VPAT anexável a propostas; redução de objeções em RFPs enterprise; narrativa “software acessível e auditável” alinhada à ANAC/SGQ.</td></tr>
+      <tr><td>Marketing</td><td>Claim verificável de acessibilidade AA; material para site, LinkedIn e demos; diferenciação vs. concorrentes sem trilha documentada.</td></tr>
+      <tr><td>Qualidade</td><td>Processo mensurável (gate CI + checklist); evidências JSON; integração com cultura SGQ e auditorias de cliente.</td></tr>
+      <tr><td>TI / Produto</td><td>Regressão automática em PR; menos retrabalho pós-venda; conformidade com boas práticas Angular 18 + i18n obrigatório.</td></tr>
+      <tr><td>Cliente final</td><td>Mecânicos e gestores podem usar teclado e NVDA; portal externo acessível; trial e login públicos inclusivos.</td></tr>
+    </tbody>
+  </table>
+  <div class="wcag-dest">
+    <strong>Escopo do produto:</strong> portal interno + portal externo cliente · 52 rotas · fluxos OS, estoque, comercial, conformidade SGQ, hangar e cadastro trial.
+  </div>
+  <div class="page-footer"><span>Aero Suite · Certificação WCAG 2.2 AA</span><span>Capítulo 2</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Capítulo 3</span></div>
+  <h2>Estado actual (junho/2026)</h2>
+  <table class="data-table">
+    <thead><tr><th>Trilha</th><th>Meta</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td>A — Código</td><td>100% automatizável</td><td><span class="status-ok">✓ Concluída</span> — <code>npm run a11y:gate</code></td></tr>
+      <tr><td>B — Humano</td><td>NVDA + teclado</td><td><span class="status-warn">⏳ Próxima</span> — sessão ~60–90 min</td></tr>
+      <tr><td>C — Externa</td><td>Auditoria + VPAT 2.5</td><td><span class="status-warn">⏳ RFP pronto</span> — contratação pendente</td></tr>
+    </tbody>
+  </table>
+  <h3>Evidências técnicas já disponíveis</h3>
+  <ul class="bullet-list">
+    <li><code>docs/wcag-evidencias/axe-baseline-latest.json</code> — 52 rotas, 0 violações critical/serious.</li>
+    <li><code>docs/wcag-evidencias/gate-codigo-latest.json</code> — gate código 100%.</li>
+    <li>CI GitHub: build + unit + axe + flow-p0 + flow-full em cada PR.</li>
+    <li>Conta de auditoria: <code>wcag-auditor@aerosuite.com.br</code> (homologação).</li>
+  </ul>
+  <div class="page-footer"><span>Aero Suite · Certificação WCAG 2.2 AA</span><span>Capítulo 3</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Capítulo 4</span></div>
+  <h2>Como nos preparamos para solicitar a certificação</h2>
+  <p class="lead">Plano em <strong>4 fases</strong> (detalhe no anexo — Roteiro 100% passo a passo):</p>
+  <table class="data-table phase-table">
+    <thead><tr><th>Fase</th><th>Objectivo</th><th>Responsável principal</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Fecho interno — gate §8 “Pronto para auditor externa”</td><td>TI + Qualidade (sessão NVDA)</td></tr>
+      <tr><td>2</td><td>Auditoria externa WCAG 2.2 AA (relatório independente)</td><td>TI (RFP) + fornecedor</td></tr>
+      <tr><td>3</td><td>VPAT 2.5 comercial + declaração PT no site</td><td>Comercial + Marketing + TI</td></tr>
+      <tr><td>4</td><td>Manutenção contínua (CI + amostra release)</td><td>TI + Qualidade</td></tr>
+    </tbody>
+  </table>
+  <h3>Próximas acções por área</h3>
+  <table class="data-table role-table">
+    <thead><tr><th>Área</th><th>Acção</th><th>Prazo sugerido</th></tr></thead>
+    <tbody>
+      <tr><td>TI</td><td>Conduzir sessão NVDA; enviar RFP a 2–3 auditores; remediar blockers pós-relatório</td><td>Jun–Jul/2026</td></tr>
+      <tr><td>Qualidade</td><td>Validar checklist §7; participar sessão NVDA; alinhar evidências ao SGQ</td><td>Jun/2026</td></tr>
+      <tr><td>Comercial</td><td>Revisar RFP; preparar talking points VPAT para propostas; não prometer “certificado” antes da Fase 3</td><td>Jul/2026</td></tr>
+      <tr><td>Marketing</td><td>Planejar página “Acessibilidade” no site pós-VPAT; evitar claims adiantados</td><td>Ago/2026</td></tr>
+    </tbody>
+  </table>
+  <div class="page-footer"><span>Aero Suite · Certificação WCAG 2.2 AA</span><span>Capítulo 4</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Consolidação</span></div>
+  <h2>Consolidação técnica (o que já fizemos)</h2>
+  <ul class="bullet-list">
+    <li>Smoke axe em <strong>52 rotas</strong> (interno + externo) integrado ao CI.</li>
+    <li>Smoke estrutural <strong>F1–F12</strong> (modais OS, hangar, FCU, proposta, confirm dialogs, trial, idioma, erros API).</li>
+    <li>Correcções UI: contraste, labels, <code>aria-label</code> i18n, modo escuro, upload OS, totais proposta com live region.</li>
+    <li>Documentação: checklist pré-auditoria, VPAT interno, protocolo NVDA, RFP Fase 2, roteiro 100%.</li>
+    <li>Gate único: <code>npm run a11y:gate</code> — referência objectiva para releases.</li>
+  </ul>
+  <h2>Anexos deste envio</h2>
+  <ol class="numbered-list">
+    <li><strong>Dossiê técnico WCAG</strong> (este documento) — visão executiva e por área.</li>
+    <li><strong>Roteiro 100% passo a passo</strong> — trilhas Código, Humano e Externa até certificação comercial total.</li>
+  </ol>
+  <div class="signature-block">
+    <p class="lead" style="margin-bottom:6mm">
+      Com este dossiê, a equipe passa a operar com o mesmo rigor que aplicamos à trilha ANAC:
+      <span class="wcag-gold">excelência técnica documentada, mensurável e comunicável ao mercado.</span>
+    </p>
+    <div class="signature-line"></div>
+    <div class="signature-name">Wellem Lyra</div>
+    <div class="signature-role">Diretor de TI</div>
+    <div class="signature-role">Aero Suite</div>
+    <div class="signature-date">10 de junho de 2026 · wellem@aerosuite.com.br · aerosuite.com.br</div>
+  </div>
+  <div class="page-footer"><span>Aero Suite · Certificação WCAG 2.2 AA</span><span>Assinatura</span></div>
+</section>
+</body>
+</html>

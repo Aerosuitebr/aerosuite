@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1017">
+  <title>AeroSupport — Receber suporte</title>
+  <link rel="stylesheet" href="agent.css">
+</head>
+<body>
+  <main class="agent-shell">
+    <header>
+      <a class="brand" href="agent.html" aria-label="AeroSupport">
+        <span class="brand-mark"><i></i><i></i></span>
+        <span><b>AERO</b>SUPPORT</span>
+      </a>
+      <span class="security-label"><i></i>Conexão protegida</span>
+    </header>
+
+    <section class="agent-card" id="startView">
+      <div class="hero-mark"><span>⌁</span></div>
+      <small class="eyebrow">SUPORTE ASSISTIDO</small>
+      <h1>Como podemos ajudar?</h1>
+      <p class="lead">Informe o código fornecido pelo técnico. Você verá exatamente quem está solicitando acesso antes de permitir a conexão.</p>
+
+      <form id="codeForm">
+        <label for="sessionCode">Código do atendimento</label>
+        <div class="code-input-wrap">
+          <input id="sessionCode" inputmode="numeric" maxlength="9" autocomplete="one-time-code" placeholder="000 000" aria-describedby="codeHint">
+          <span id="codeState">6 dígitos</span>
+        </div>
+        <small id="codeHint">O código expira em poucos minutos e só pode ser usado uma vez.</small>
+        <button class="primary-button" id="continueButton" disabled>Continuar <span>→</span></button>
+      </form>
+
+      <div class="trust-row">
+        <div><span>◇</span><p><b>Você mantém o controle</b><small>Encerre a sessão a qualquer momento</small></p></div>
+        <div><span>◎</span><p><b>Acesso sempre visível</b><small>Nenhuma conexão acontece em segredo</small></p></div>
+      </div>
+    </section>
+
+    <section class="agent-card consent-card" id="consentView" hidden>
+      <button class="back-button" id="backButton" aria-label="Voltar">←</button>
+      <div class="technician">
+        <div class="tech-avatar">RC</div>
+        <div><small>SOLICITAÇÃO DE ACESSO</small><h2>Rafael Costa</h2><p>AeroSuite Tecnologia · Suporte técnico</p></div>
+        <span class="verified">✓ Identidade verificada</span>
+      </div>
+      <div class="request-summary">
+        <span>Atendimento #AS-28419</span><i></i><span>FINANCEIRO-07</span><i></i><span>Agora</span>
+      </div>
+      <h3>Escolha o que deseja permitir</h3>
+      <p class="permission-intro">Você poderá alterar estas permissões durante todo o atendimento.</p>
+      <div class="permissions">
+        <label class="permission">
+          <span class="permission-icon">▣</span>
+          <span><b>Visualizar minha tela</b><small>O técnico poderá acompanhar o que aparece no monitor</small></span>
+          <input type="checkbox" checked data-permission="screen"><i class="switch"></i>
+        </label>
+        <label class="permission">
+          <span class="permission-icon">⌁</span>
+          <span><b>Controlar mouse e teclado</b><small>Você pode interromper o controle a qualquer momento</small></span>
+          <input type="checkbox" checked data-permission="control"><i class="switch"></i>
+        </label>
+        <label class="permission">
+          <span class="permission-icon">◖</span>
+          <span><b>Compartilhar áudio do computador</b><small>Som de aplicativos, sem acesso ao microfone</small></span>
+          <input type="checkbox" data-permission="audio"><i class="switch"></i>
+        </label>
+        <label class="permission">
+          <span class="permission-icon">◇</span>
+          <span><b>Transferir arquivos</b><small>Cada envio será exibido para sua confirmação</small></span>
+          <input type="checkbox" checked data-permission="files"><i class="switch"></i>
+        </label>
+      </div>
+      <div class="consent-actions">
+        <button class="secondary-button" id="denyButton">Recusar</button>
+        <button class="primary-button" id="acceptButton">Permitir e iniciar <span>→</span></button>
+      </div>
+      <p class="legal-note">Ao permitir, você autoriza somente esta sessão. O acesso termina automaticamente ao fechar o aplicativo.</p>
+    </section>
+
+    <section class="session-card" id="activeView" hidden>
+      <div class="active-topline">
+        <div class="live-status"><i></i><span><b>Suporte em andamento</b><small id="activeTimer">00:00:00</small></span></div>
+        <span class="session-id">#AS-28419</span>
+      </div>
+      <div class="active-body">
+        <div class="pulse-orbit"><span class="tech-avatar large">RC</span><i></i><i></i></div>
+        <small class="eyebrow">CONECTADO COM</small>
+        <h1>Rafael Costa</h1>
+        <p>AeroSuite Tecnologia · Suporte técnico verificado</p>
+        <div class="local-preview-wrap" id="localPreviewWrap" hidden>
+          <video id="localPreview" autoplay muted playsinline></video>
+          <span><i></i>Você está compartilhando esta tela</span>
+        </div>
+        <div class="active-permissions" id="activePermissions"></div>
+        <section class="session-chat" aria-label="Chat da sessão">
+          <div class="session-chat-messages" id="agentChatMessages" aria-live="polite"><small>O chat ficará disponível após o início do compartilhamento.</small></div>
+          <form id="agentChatForm"><input id="agentChatInput" maxlength="2000" placeholder="Mensagem para o técnico…" aria-label="Mensagem para o técnico" autocomplete="off"><button aria-label="Enviar mensagem" disabled>Enviar</button></form>
+        </section>
+        <div class="notice"><span>◉</span><p><b>Sua privacidade permanece protegida</b><small>O técnico vê apenas os monitores permitidos. Senhas e telas protegidas do Windows não são liberadas automaticamente.</small></p></div>
+      </div>
+      <div class="session-controls">
+        <button class="pause-button share-button" id="shareScreen"><span>▣</span><b>Compartilhar tela</b><small>Escolha o monitor que será exibido</small></button>
+        <button class="pause-button" id="pauseControl"><span>Ⅱ</span><b>Pausar controle</b><small>O técnico continuará vendo a tela</small></button>
+        <button class="end-session-button" id="localEnd"><span>×</span><b>Encerrar atendimento</b></button>
+      </div>
+    </section>
+
+    <section class="agent-card finished-card" id="finishedView" hidden>
+      <div class="success-mark">✓</div>
+      <small class="eyebrow">ATENDIMENTO FINALIZADO</small>
+      <h1>Sessão encerrada com segurança</h1>
+      <p class="lead">Rafael Costa não pode mais visualizar ou controlar este computador.</p>
+      <div class="summary">
+        <div><span>Duração</span><b id="summaryDuration">00:00:00</b></div>
+        <div><span>Protocolo</span><b>#AS-28419</b></div>
+        <div><span>Encerrado por</span><b>Você</b></div>
+      </div>
+      <button class="primary-button" id="newSession">Novo atendimento</button>
+    </section>
+
+    <footer><span>AeroSupport 0.1</span><span>Privacidade</span><span>Ajuda</span></footer>
+  </main>
+  <div class="toast" id="agentToast" role="status" aria-live="polite"></div>
+  <script src="runtime-config.js"></script>
+  <script src="agent.js"></script>
+</body>
+</html>

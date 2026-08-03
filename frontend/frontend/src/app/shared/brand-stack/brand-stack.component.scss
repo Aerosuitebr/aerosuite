@@ -1,0 +1,391 @@
+.brand-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.brand-stack__logo-slot {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Recorta o reflexo embutido no PNG Aero_suite_logo.png */
+.brand-stack__logo-slot--clip {
+  overflow: hidden;
+  align-items: flex-start;
+
+  .brand-stack__logo {
+    object-position: top center;
+  }
+}
+
+/* —— Hero (home claro ou portal externo escuro) —— */
+.brand-stack--hero {
+  gap: clamp(0.55rem, 1.5vh, 0.75rem);
+
+  .brand-stack__wordmark {
+    display: block;
+    max-height: clamp(3.5rem, 14vw, 5.5rem);
+    width: auto;
+    max-width: min(100%, 720px);
+    object-fit: contain;
+  }
+}
+
+/* Dashboard / home — símbolo sem fundo; recorte do reflexo do PNG */
+.brand-stack--light.brand-stack--hero {
+  .brand-stack__logo-slot--clip {
+    height: clamp(5rem, 15vw, 6.75rem);
+  }
+
+  .brand-stack__logo {
+    width: clamp(5.25rem, 16vw, 7.25rem);
+    height: auto;
+    min-height: calc(100% + 18%);
+    object-fit: contain;
+    filter: drop-shadow(0 6px 18px rgba(15, 23, 42, 0.14));
+  }
+}
+
+/* —— Home (dashboard): A colorido + wordmark PNG empilhados —— */
+.brand-stack--home {
+  flex-direction: column;
+  gap: clamp(0.55rem, 1.5vh, 0.85rem);
+
+  .brand-stack__wordmark {
+    display: block;
+    max-height: clamp(2.75rem, 8vw, 3.75rem);
+    width: auto;
+    max-width: min(100%, 22rem);
+    object-fit: contain;
+  }
+}
+
+.brand-stack--dark.brand-stack--home {
+  .brand-stack__logo-slot--clip {
+    height: clamp(5.5rem, 17vw, 7.75rem);
+  }
+
+  .brand-stack__logo {
+    width: clamp(6rem, 18vw, 8.25rem);
+    height: auto;
+    min-height: calc(100% + 18%);
+    object-fit: contain;
+    object-position: top center;
+    filter: drop-shadow(0 8px 22px rgba(15, 23, 42, 0.16));
+  }
+
+  .brand-stack__wordmark-text {
+    font-size: clamp(1.35rem, 3.5vw, 2rem);
+  }
+}
+
+.brand-stack--light.brand-stack--home {
+  .brand-stack__logo-slot--clip {
+    height: clamp(5.5rem, 17vw, 7.75rem);
+  }
+
+  .brand-stack__logo {
+    width: clamp(6rem, 18vw, 8.25rem);
+    height: auto;
+    min-height: calc(100% + 18%);
+    object-fit: contain;
+    object-position: top center;
+    filter: drop-shadow(0 8px 22px rgba(15, 23, 42, 0.16));
+  }
+
+  .brand-stack__wordmark-text {
+    font-size: clamp(1.35rem, 3.5vw, 2rem);
+  }
+}
+
+.brand-stack--home.brand-stack--chrome-icon {
+  gap: 0;
+  padding-bottom: 0.25rem;
+
+  .brand-stack__logo {
+    width: clamp(6.5rem, 22vw, 10rem);
+    height: clamp(6.5rem, 22vw, 10rem);
+    object-fit: contain;
+    filter: drop-shadow(0 8px 22px rgba(0, 0, 0, 0.35));
+  }
+}
+
+/* Dashboard e login: Aero_Colorido.png (emblema + wordmark num único asset) */
+.brand-stack--combined {
+  gap: 0;
+
+  .brand-stack__logo {
+    width: auto;
+    max-width: min(100%, 22rem);
+    height: auto;
+    max-height: clamp(7.5rem, 22vw, 10rem);
+    min-height: 0;
+    object-fit: contain;
+    object-position: center;
+    filter: drop-shadow(0 8px 22px rgba(15, 23, 42, 0.14));
+  }
+}
+
+.brand-stack--auth.brand-stack--combined {
+  max-width: min(100%, 26rem);
+}
+
+/* —— Dashboard home: Aero_Claro em destaque —— */
+.brand-stack--home-hero.brand-stack--chrome-icon {
+  gap: 0;
+  margin-inline: 0;
+  padding-block: 0;
+  max-width: 100%;
+
+  .brand-stack__logo {
+    width: clamp(5.5rem, 16vw, 7.5rem);
+    height: clamp(5.5rem, 16vw, 7.5rem);
+    object-fit: contain;
+    filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.45));
+  }
+}
+
+.brand-stack--dark.brand-stack--hero {
+  .brand-stack__logo {
+    width: clamp(3.75rem, 12vw, 5.25rem);
+    height: clamp(3.75rem, 12vw, 5.25rem);
+    object-fit: contain;
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.45));
+  }
+
+  .brand-stack__wordmark {
+    filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.35));
+  }
+}
+
+/* —— Sidebar (fundo escuro): Aero_Claro —— */
+.brand-stack--sidebar {
+  gap: 0.45rem;
+  padding: 0 0.35rem 0.2rem;
+
+  .brand-stack__logo {
+    width: clamp(2.75rem, 8vw, 3.35rem);
+    height: clamp(2.75rem, 8vw, 3.35rem);
+    object-fit: contain;
+    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
+  }
+
+  .brand-stack__wordmark {
+    display: block;
+    max-height: 1.35rem;
+    width: auto;
+    max-width: min(100%, 11rem);
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+  }
+}
+
+.brand-stack--sidebar.brand-stack--chrome-icon {
+  gap: 0;
+  padding-bottom: 0.35rem;
+
+  .brand-stack__logo {
+    width: clamp(2.5rem, 7vw, 3rem);
+    height: clamp(2.5rem, 7vw, 3rem);
+  }
+}
+
+/* —— Auth (login / senha): A colorido + wordmark, sem moldura —— */
+.brand-stack--auth {
+  gap: 0.55rem;
+  max-width: 16rem;
+  margin-inline: auto;
+  padding-block: 0.25rem;
+
+  .brand-stack__wordmark-text {
+    font-size: 1.05rem;
+  }
+}
+
+.brand-stack--light.brand-stack--auth {
+  .brand-stack__logo-slot--clip {
+    height: clamp(3.25rem, 10vw, 4.35rem);
+  }
+
+  .brand-stack__logo {
+    width: clamp(4rem, 14vw, 5.5rem);
+    height: auto;
+    min-height: calc(100% + 20%);
+    object-fit: contain;
+    filter: drop-shadow(0 6px 18px rgba(15, 23, 42, 0.14));
+  }
+
+  .brand-stack__wordmark {
+    display: block;
+    max-height: clamp(2.25rem, 7vw, 3rem);
+    width: auto;
+    max-width: min(100%, 18rem);
+    object-fit: contain;
+  }
+}
+
+/* —— Footer inline: Aero_Claro —— */
+.brand-stack--footer-inline {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: auto;
+
+  .brand-stack__logo {
+    width: 1.85rem;
+    height: 1.85rem;
+    object-fit: contain;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+  }
+
+  .brand-stack__wordmark {
+    display: block;
+    max-height: 1.35rem;
+    width: auto;
+    max-width: min(12rem, 42vw);
+    object-fit: contain;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+  }
+}
+
+.brand-stack--footer-inline.brand-stack--chrome-icon {
+  gap: 0;
+
+  .brand-stack__logo {
+    width: 1.85rem;
+    height: 1.85rem;
+  }
+}
+
+/* —— Footer (ícone branco + wordmark, pilha centralizada pelo pai) —— */
+.brand-stack--footer {
+  align-items: center;
+  text-align: center;
+  gap: clamp(0.35rem, 1vh, 0.5rem);
+  width: 100%;
+
+  .brand-stack__logo {
+    width: clamp(2.5rem, 6vw, 3rem);
+    height: clamp(2.5rem, 6vw, 3rem);
+    object-fit: contain;
+    filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.4));
+  }
+
+  .brand-stack__wordmark {
+    display: block;
+    max-height: clamp(1.5rem, 4vw, 1.85rem);
+    width: auto;
+    max-width: min(100%, 16rem);
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+  }
+}
+
+/* —— Chat (barra escura): Aero_Claro —— */
+.brand-stack--chat {
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.65rem;
+  width: auto;
+  text-align: left;
+
+  .brand-stack__logo {
+    width: 2.25rem;
+    height: 2.25rem;
+    object-fit: contain;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+  }
+
+  .brand-stack__wordmark {
+    display: block;
+    max-height: 1.35rem;
+    width: auto;
+    max-width: 9rem;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+  }
+}
+
+.brand-stack--chat.brand-stack--chrome-icon {
+  gap: 0;
+
+  .brand-stack__logo {
+    width: 2.1rem;
+    height: 2.1rem;
+  }
+}
+
+/* —— Sidebar marca compacta (ícone + texto ao lado) —— */
+.brand-stack--sidebar-mark {
+  gap: 0;
+
+  .brand-stack__logo {
+    width: 5.75rem;
+    height: 5.75rem;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
+  }
+
+  &.brand-stack--sidebar-mark-compact .brand-stack__logo {
+    width: 4.25rem;
+    height: 4.25rem;
+  }
+}
+
+/* —— Sidebar recolhida: só A light —— */
+.brand-stack--collapsed {
+  gap: 0;
+
+  .brand-stack__logo {
+    width: 2.35rem;
+    height: 2.35rem;
+    object-fit: contain;
+  }
+}
+
+/* Wordmark tipografico (substitui PNG LOGO_LETRA_* com xadrez) */
+.brand-stack__wordmark-text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.42rem;
+  line-height: 1;
+  white-space: nowrap;
+  font-family: var(--as-font-sans, 'Segoe UI', system-ui, sans-serif);
+  letter-spacing: -0.02em;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.22));
+}
+
+.brand-stack__wordmark-aero {
+  font-weight: 700;
+}
+
+.brand-stack__wordmark-sep {
+  width: 1px;
+  height: 1.05em;
+  background: currentColor;
+  opacity: 0.42;
+  flex-shrink: 0;
+}
+
+.brand-stack__wordmark-suite {
+  font-weight: 300;
+  letter-spacing: 0.03em;
+}
+
+.brand-stack--dark .brand-stack__wordmark-text {
+  color: #f8fafc;
+}
+
+.brand-stack--light .brand-stack__wordmark-text {
+  color: #0c1929;
+}

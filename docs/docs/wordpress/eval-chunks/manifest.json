@@ -1,0 +1,25 @@
+{
+  "text": [
+    "css",
+    "js",
+    "showcase",
+    "cta"
+  ],
+  "bin": {
+    "logo": {
+      "name": "aerosuite-pictureandletter.png",
+      "mime": "image/png",
+      "parts": 6
+    },
+    "mark": {
+      "name": "aerosuite-logo-aero.png",
+      "mime": "image/png",
+      "parts": 1
+    },
+    "bg": {
+      "name": "aerosuite-bg-deco.svg",
+      "mime": "image/svg+xml",
+      "parts": 1
+    }
+  }
+}

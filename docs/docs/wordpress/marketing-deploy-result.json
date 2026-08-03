@@ -1,0 +1,35 @@
+{
+  "ok": true,
+  "homeLen": 26712,
+  "hasSchema": true,
+  "hasCalendly": true,
+  "pillarResults": [
+    {
+      "slug": "software-gestao-oficina-aeronautica-mro",
+      "id": 198
+    },
+    {
+      "slug": "estoque-pecas-aeronauticas-rastreabilidade",
+      "id": 199
+    },
+    {
+      "slug": "ordem-servico-manutencao-aeronaves",
+      "id": 200
+    },
+    {
+      "slug": "portal-cliente-oficina-aviacao",
+      "id": 201
+    },
+    {
+      "slug": "propostas-comerciais-servicos-aeronauticos",
+      "id": 202
+    }
+  ],
+  "postResults": [
+    {
+      "slug": "substituir-planilhas-gestao-oficina-mro",
+      "id": 203
+    }
+  ],
+  "blogId": 197
+}

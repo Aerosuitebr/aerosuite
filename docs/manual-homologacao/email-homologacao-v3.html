@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual de Homologação Aero Suite v3.0</title>
+</head>
+<body style="margin:0;padding:0;background:#e2e8f0;font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:#0f172a;">
+
+<!--
+Para: timmaia@bellowscontrols.com.br; wellemlyra@aerosuite.com.br; rafaellanottesconsultoria@gmail.com; thiagolyra18@gmail.com
+Assunto: Manual de Homologação Aero Suite v3.0 — certificação ANAC e rotina completa (PDF)
+Anexo: manuals/Manual_Aero_Suite_Homologacao.pdf
+-->
+
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#e2e8f0;padding:32px 12px;">
+  <tr><td align="center">
+    <table role="presentation" width="680" cellspacing="0" cellpadding="0" border="0" style="max-width:680px;width:100%;">
+
+      <tr>
+        <td style="background:linear-gradient(90deg,#b45309,#d97706,#f59e0b);border-radius:16px 16px 0 0;padding:14px 24px;text-align:center;">
+          <div style="font-size:13px;font-weight:700;color:#fffbeb;letter-spacing:.06em;text-transform:uppercase;">
+            Documentação oficial · Substitui versões anteriores do manual
+          </div>
+        </td>
+      </tr>
+
+      <!-- HERO padrão: LOGO_AERO_WHITE + texto Aero Suite (CID inline no envio) -->
+      <tr>
+        <td style="background:linear-gradient(145deg,#020617 0%,#0c1929 40%,#0f172a 75%,#1e293b 100%);padding:36px 40px 32px 40px;text-align:center;">
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 20px auto;">
+            <tr>
+              <td style="vertical-align:middle;padding-right:16px;">
+                <img src="{{LOGO_CID_SRC}}" alt="Aero Suite" width="64" height="64" style="display:block;width:64px;height:64px;border:0;outline:none;" />
+              </td>
+              <td style="vertical-align:middle;text-align:left;">
+                <div style="font-size:34px;font-weight:800;color:#f8fafc;line-height:1.1;letter-spacing:-.02em;">Aero Suite</div>
+                <div style="font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#94a3b8;margin-top:4px;font-weight:600;">Gestão aeronáutica integrada</div>
+              </td>
+            </tr>
+          </table>
+          <div style="width:140px;height:3px;background:linear-gradient(90deg,transparent,#c9a227,#e8c547,#c9a227,transparent);margin:0 auto 18px auto;border-radius:2px;"></div>
+          <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#fbbf24;font-weight:600;margin-bottom:10px;">Homologação · Certificação ANAC · Junho 2026</div>
+          <div style="font-size:26px;font-weight:700;color:#f8fafc;line-height:1.25;margin-bottom:8px;">Manual de Homologação v3.0</div>
+          <div style="font-size:15px;color:#94a3b8;line-height:1.5;max-width:540px;margin:0 auto;">
+            Roteiro completo atualizado com a <strong style="color:#e2e8f0;">fase de habilitação à certificação ANAC</strong>,
+            SGQ Part 145, evidências automatizadas e checklist <strong style="color:#e2e8f0;">Fase 8</strong>
+          </div>
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:22px auto 0 auto;">
+            <tr>
+              <td style="background:rgba(251,191,36,.18);border:1px solid rgba(251,191,36,.45);border-radius:999px;padding:6px 18px;font-size:12px;color:#fde68a;font-weight:600;">📎 PDF em anexo · {{PDF_SIZE_MB}} MB</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="background:#ffffff;padding:36px 40px 12px 40px;">
+          <p style="margin:0 0 16px 0;font-size:16px;line-height:1.65;color:#334155;">Prezados membros da <strong style="color:#0f172a;">Direção</strong>,</p>
+          <p style="margin:0 0 16px 0;font-size:15px;line-height:1.65;color:#475569;">
+            <strong>Tim Maia</strong> (Comercial), <strong>Rafaela Nottes</strong> (Qualidade),
+            <strong>Thiago Lyra</strong> (Marketing) e equipe de TI —
+          </p>
+          <p style="margin:0 0 16px 0;font-size:15px;line-height:1.65;color:#475569;">
+            A <strong>Diretoria de TI da Aero Suite</strong> disponibiliza a <strong>versão 3.0</strong> do
+            <strong>Manual de Homologação</strong>, documento oficial que consolida toda a operação da plataforma
+            e as funcionalidades introduzidas na preparação para <strong>certificação ANAC</strong> (Part 145).
+            Utilizem <em>exclusivamente</em> o PDF anexo (<strong>Manual_Aero_Suite_Homologacao.pdf</strong>)
+            como referência de validação e comunicação externa.
+          </p>
+
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 24px;">
+            <tr>
+              <td width="33%" style="padding:4px;">
+                <table role="presentation" width="100%" style="background:#ecfdf5;border:1px solid #86efac;border-radius:8px;">
+                  <tr><td style="padding:16px 10px;text-align:center;">
+                    <p style="margin:0;font-size:28px;font-weight:800;color:#15803d;line-height:1;">19</p>
+                    <p style="margin:6px 0 0;font-size:10px;color:#166534;text-transform:uppercase;letter-spacing:.05em;">Capítulos + ANAC</p>
+                  </td></tr>
+                </table>
+              </td>
+              <td width="33%" style="padding:4px;">
+                <table role="presentation" width="100%" style="background:#ecfdf5;border:1px solid #86efac;border-radius:8px;">
+                  <tr><td style="padding:16px 10px;text-align:center;">
+                    <p style="margin:0;font-size:28px;font-weight:800;color:#15803d;line-height:1;">8</p>
+                    <p style="margin:6px 0 0;font-size:10px;color:#166534;text-transform:uppercase;letter-spacing:.05em;">Fases checklist</p>
+                  </td></tr>
+                </table>
+              </td>
+              <td width="33%" style="padding:4px;">
+                <table role="presentation" width="100%" style="background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;">
+                  <tr><td style="padding:16px 10px;text-align:center;">
+                    <p style="margin:0;font-size:28px;font-weight:800;color:#0369a1;line-height:1;">11/11</p>
+                    <p style="margin:6px 0 0;font-size:10px;color:#1d4ed8;text-transform:uppercase;letter-spacing:.05em;">Evidências ANAC</p>
+                  </td></tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border:2px solid #fbbf24;border-radius:12px;overflow:hidden;background:#fffbeb;margin-bottom:28px;">
+            <tr>
+              <td style="background:linear-gradient(90deg,#b45309,#d97706);padding:12px 18px;">
+                <div style="font-size:14px;font-weight:700;color:#fffbeb;">Novidades da versão 3.0 — fase ANAC</div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:18px 20px;font-size:13px;line-height:1.85;color:#78350f;">
+                <strong style="color:#92400e;">Capítulo 19 — Certificação ANAC</strong><br>
+                MFA TOTP, integridade SHA-256 do job card, bloqueio de OS encerrada, CRS segregado,
+                hangar offline, backup Docker (<code>/app/backups</code>), contingência e empacotamento do dossiê.<br><br>
+                <strong style="color:#92400e;">Apêndice B — Fase 8</strong><br>
+                Checklist dedicado à submissão ANAC (suite 11/11, restore, releases, matriz 30/30).<br><br>
+                <strong style="color:#92400e;">Capítulos 11 e 17 revisados</strong><br>
+                Contingência (<span style="font-family:Consolas,monospace;font-size:12px;">/conformidade/contingencia</span>),
+                aceites de release, paths de backup por ambiente.<br><br>
+                <strong style="color:#92400e;">Nota editorial</strong><br>
+                Assinatura institucional da Diretoria de TI — alinhamento com comunicado de certificação já enviado.
+              </td>
+            </tr>
+          </table>
+
+          <h3 style="margin:8px 0 12px 0;font-size:17px;color:#0369a1;border-bottom:2px solid #e2e8f0;padding-bottom:8px;">Papel de cada área</h3>
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;margin-bottom:24px;">
+            <tr style="background:#0f172a;">
+              <th align="left" style="padding:12px 14px;font-size:12px;color:#f8fafc;">Área</th>
+              <th align="left" style="padding:12px 14px;font-size:12px;color:#f8fafc;">Ação sugerida</th>
+            </tr>
+            <tr>
+              <td style="padding:12px 14px;font-size:13px;border-bottom:1px solid #e2e8f0;font-weight:600;color:#0369a1;">Comercial</td>
+              <td style="padding:12px 14px;font-size:13px;border-bottom:1px solid #e2e8f0;line-height:1.5;">Usar o manual como base de demonstração e proposta — destaque Fase 8 e matriz ANAC no pitch regulatório.</td>
+            </tr>
+            <tr>
+              <td style="padding:12px 14px;font-size:13px;border-bottom:1px solid #e2e8f0;font-weight:600;color:#0369a1;">Qualidade</td>
+              <td style="padding:12px 14px;font-size:13px;border-bottom:1px solid #e2e8f0;line-height:1.5;">Conduzir homologação piloto com Apêndices A e B; validar evidências SGQ e checklist Fase 8.</td>
+            </tr>
+            <tr>
+              <td style="padding:12px 14px;font-size:13px;border-bottom:1px solid #e2e8f0;font-weight:600;color:#0369a1;">Marketing</td>
+              <td style="padding:12px 14px;font-size:13px;border-bottom:1px solid #e2e8f0;line-height:1.5;">Alinhar materiais de marca ao posicionamento Part 145 / certificação ANAC documentada.</td>
+            </tr>
+            <tr>
+              <td style="padding:12px 14px;font-size:13px;font-weight:600;color:#0369a1;">TI</td>
+              <td style="padding:12px 14px;font-size:13px;line-height:1.5;">Suporte à execução dos scripts de evidência e ambiente de homologação piloto.</td>
+            </tr>
+          </table>
+
+          <p style="margin:0 0 8px 0;font-size:15px;line-height:1.65;color:#475569;">
+            Dúvidas ou solicitação de sessão de walkthrough: responda a este e-mail ou contate
+            <a href="mailto:wellemlyra@aerosuite.com.br" style="color:#0369a1;">wellemlyra@aerosuite.com.br</a>.
+          </p>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="background:#f8fafc;padding:28px 40px 32px 40px;border-top:1px solid #e2e8f0;">
+          <p style="margin:0 0 4px 0;font-size:15px;font-weight:700;color:#0f172a;">Wellem Lyra</p>
+          <p style="margin:0 0 16px 0;font-size:13px;color:#64748b;">Diretor de TI · Aero Suite</p>
+          <p style="margin:0;font-size:12px;color:#94a3b8;line-height:1.5;">
+            <a href="https://aerosuite.com.br" style="color:#0369a1;text-decoration:none;">aerosuite.com.br</a>
+            · Documentação interna — não distribuir PDF sem autorização
+          </p>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="background:#0f172a;border-radius:0 0 16px 16px;padding:16px 24px;text-align:center;">
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
+            <tr>
+              <td style="vertical-align:middle;padding-right:10px;">
+                <img src="{{LOGO_CID_SRC}}" alt="Aero Suite" width="32" height="32" style="display:block;width:32px;height:32px;border:0;opacity:.95;" />
+              </td>
+              <td style="vertical-align:middle;font-size:13px;font-weight:700;color:#e2e8f0;letter-spacing:.04em;">Aero Suite</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>

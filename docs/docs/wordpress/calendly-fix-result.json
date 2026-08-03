@@ -1,0 +1,33 @@
+{
+  "at": "2026-06-09T12:52:00.000Z",
+  "eventSlug": "30min",
+  "account": "comercial-aerosuite",
+  "previousTitle": "30 Minute Meeting",
+  "newTitle": "Demonstração Aero Suite — 30 minutos",
+  "publicUrl": "https://calendly.com/comercial-aerosuite/30min",
+  "embedOnSite": "https://aerosuite.com.br/contato/#agendar-demo",
+  "status": "renamed_and_test_booking_ok",
+  "testBooking": {
+    "date": "2026-06-16",
+    "time": "09:00",
+    "timezone": "America/Sao_Paulo",
+    "inviteeName": "Teste UX Aero Suite",
+    "inviteeEmail": "wellemlyra@gmail.com",
+    "redirectAfterBooking": "https://aerosuite.com.br/obrigado/",
+    "eventTypeNameInRedirect": "Demonstração Aero Suite — 30 minutos"
+  },
+  "accountEmails": {
+    "calendlyLogin": "comercial@aerosuite.com.br",
+    "googleCalendarConnected": "wellemlyra@gmail.com",
+    "siteWpMailSmtp": "contato@aerosuite.com.br",
+    "testInvitee": "wellemlyra@gmail.com"
+  },
+  "languages": {
+    "accountProfile": "pt-BR",
+    "eventInvitee": "pt-BR",
+    "welcomeMessage": "Bem-vindo à página de agendamento da Aero Suite. Escolha um horário para sua demonstração."
+  },
+  "emailDeliveryValidated": true,
+  "emailDeliveryValidatedAt": "2026-06-09",
+  "emailDeliveryNote": "Confirmado pelo usuário: notificações chegam em comercial@aerosuite.com.br (correto). Login Calendly = comercial@; Google Calendar conectado = wellemlyra@gmail.com (envio dos convites)."
+}

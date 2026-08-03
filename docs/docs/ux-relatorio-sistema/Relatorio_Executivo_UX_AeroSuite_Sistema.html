@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relatório Executivo de Adequação UX — Sistema · Aero Suite</title>
+  <style>/* Aero Suite — Relatório Executivo UX (print/PDF A4) */
+@page {
+  size: A4;
+  margin: 16mm 14mm 20mm 14mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.5;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 40%, #0f172a 75%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22mm 18mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 150mm;
+}
+
+.cover-logo {
+  width: 68mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8mm;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.4));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  border: 1px solid rgba(148,163,184,.35);
+  border-radius: 999px;
+  padding: 2.5mm 5mm;
+  margin-bottom: 6mm;
+}
+
+.cover h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+}
+
+.cover-sub {
+  font-size: 11pt;
+  color: #cbd5e1;
+  margin: 0 0 6mm;
+  line-height: 1.45;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a227, transparent);
+  margin: 0 auto 6mm;
+}
+
+.cover-meta {
+  font-size: 9.5pt;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cover-meta strong {
+  color: #e2e8f0;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 12mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #64748b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 7mm;
+  width: auto;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+h2 {
+  font-size: 14pt;
+  color: #0f172a;
+  margin: 0 0 4mm;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 11pt;
+  color: #0369a1;
+  margin: 5mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+.lead {
+  font-size: 10.5pt;
+  color: #334155;
+  margin-bottom: 5mm;
+}
+
+/* Sumário */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+  padding: 2mm 0;
+  border-bottom: 1px dotted #e2e8f0;
+  font-size: 9.5pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: none;
+  padding-top: 4mm;
+  font-size: 10pt;
+}
+
+.toc-num {
+  font-weight: 700;
+  color: #64748b;
+  min-width: 10mm;
+}
+
+/* Score dashboard */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin: 5mm 0 6mm;
+}
+
+.score-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4mm;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.score-card--ok {
+  background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #86efac;
+}
+
+.score-val {
+  font-size: 18pt;
+  font-weight: 800;
+  color: #0369a1;
+  line-height: 1;
+}
+
+.score-card--ok .score-val {
+  color: #15803d;
+}
+
+.score-label {
+  font-size: 7.5pt;
+  color: #64748b;
+  margin-top: 1.5mm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin: 4mm 0;
+}
+
+th, td {
+  border: 1px solid #e2e8f0;
+  padding: 2.5mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Item cards */
+.section-intro {
+  background: #f8fafc;
+  border-left: 3px solid #0369a1;
+  padding: 3mm 4mm;
+  margin-bottom: 5mm;
+  font-size: 9pt;
+  color: #475569;
+}
+
+.item-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 4mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  padding: 2.5mm 4mm;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item-id {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.item-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 9.5pt;
+}
+
+.sev {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.sev--CRITICO { background: #fee2e2; color: #991b1b; }
+.sev--ALTO { background: #ffedd5; color: #9a3412; }
+.sev--MEDIO { background: #fef9c3; color: #854d0e; }
+.sev--INFO { background: #e0e7ff; color: #3730a3; }
+
+.item-body {
+  padding: 3mm 4mm 4mm;
+  font-size: 8.75pt;
+}
+
+.item-row {
+  margin-bottom: 2.5mm;
+}
+
+.item-row:last-child {
+  margin-bottom: 0;
+}
+
+.item-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.5mm;
+}
+
+.item-text {
+  color: #1e293b;
+}
+
+.status-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+/* Assinatura */
+.signature-block {
+  margin-top: 10mm;
+  padding: 6mm;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.signature-line {
+  width: 55mm;
+  border-top: 1px solid #334155;
+  margin: 12mm 0 2mm;
+}
+
+.signature-name {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.signature-role {
+  font-size: 9pt;
+  color: #64748b;
+}
+
+.signature-date {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  margin-top: 2mm;
+}
+
+.callout {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 4mm;
+  margin: 4mm 0;
+  font-size: 9pt;
+}
+
+.callout strong {
+  color: #1d4ed8;
+}
+
+.supplementary {
+  page-break-inside: avoid;
+  margin-bottom: 4mm;
+  padding: 3mm 4mm;
+  border-left: 3px solid #c9a227;
+  background: #fffbeb;
+}
+
+.supplementary h4 {
+  margin: 0 0 1.5mm;
+  font-size: 9.5pt;
+  color: #92400e;
+}
+
+.supplementary p {
+  margin: 0;
+  font-size: 8.75pt;
+  color: #78350f;
+}
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Documento executivo · Confidencial · Sistema</div>
+    <h1>Relatório Executivo de Adequação UX</h1>
+    <p class="cover-sub">Aplicação app.aerosuite.com.br<br/>Referência: Relatório Técnico UX Aero Suite v1 — §3.5 e §7 (sistema)</p>
+    <div class="cover-gold-line"></div>
+    <p class="cover-meta">
+      <strong>Versão 1.0</strong> · 09 de junho de 2026<br />
+      Analista responsável: <strong>Wellem Lyra</strong><br />
+      Resultado: <strong>12/12 itens aderentes (100%)</strong>
+    </p>
+  </div>
+  <div class="cover-footer">Aero Suite — Aplicação de gestão aeronáutica</div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Sumário</span>
+  </div>
+  <h2>Conteúdo do relatório</h2>
+  <ul class="toc-list">
+    <li><span class="toc-num">1</span><span class="toc-title">Sumário executivo e metodologia</span></li>
+    <li class="part">Seção 3.5 — Dados, encoding e internacionalização (app)</li><li><span class="toc-num">3.5.1</span><span class="toc-title">Dados reais de clientes na lista de OS</span></li><li><span class="toc-num">3.5.2</span><span class="toc-title">Smoke / Serviço smoke (Propostas)</span></li><li><span class="toc-num">3.5.3</span><span class="toc-title">Chave i18n common.actions.refresh visível (Painel SGQ)</span></li><li><span class="toc-num">3.5.4</span><span class="toc-title">Erro ortográfico 'Servico' sem cedilha (Propostas)</span></li><li><span class="toc-num">3.5.5</span><span class="toc-title">Enum CAPA CONTENCAO sem tradução (NC)</span></li><li><span class="toc-num">3.5.6</span><span class="toc-title">Encoding corrompido (??) em textos visíveis</span></li>
+<li class="part">Seção 7 — Módulo Conformidade / SGQ</li><li><span class="toc-num">conf.documentos</span><span class="toc-title">Enums/i18n vazados (Documentos SGQ)</span></li><li><span class="toc-num">conf.treinamentos</span><span class="toc-title">Enums/i18n vazados (Treinamentos)</span></li><li><span class="toc-num">conf.calibracao</span><span class="toc-title">Enums/i18n vazados (Calibração)</span></li><li><span class="toc-num">conf.subcontratacao</span><span class="toc-title">Enums/i18n vazados (Subcontratação)</span></li><li><span class="toc-num">conf.habilitacoes</span><span class="toc-title">Enums/i18n vazados (Habilitações)</span></li><li><span class="toc-num">conf.treinObrig</span><span class="toc-title">Enums/i18n vazados (Treinamentos obrigatórios)</span></li>
+    <li><span class="toc-num">A</span><span class="toc-title">Matriz consolidada de verificação</span></li>
+    <li><span class="toc-num">B</span><span class="toc-title">Informações complementares e assinatura</span></li>
+  </ul>
+  <div class="page-footer"><span>Aero Suite · Relatório Executivo UX · Sistema</span><span>Versão 1.0</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Sumário executivo</span>
+  </div>
+  <h2>Sumário executivo</h2>
+  <p class="lead">
+    Este documento consolida as <strong>12 observações</strong> do Relatório Técnico UX Aero Suite v1
+    aplicáveis ao <strong>sistema</strong> (§3.5 e §7) e descreve, de forma técnica e auditável, a resolução de cada item em
+    <a href="https://app.aerosuite.com.br">https://app.aerosuite.com.br</a>, com verificação automatizada em 09 de junho de 2026.
+  </p>
+
+  <div class="score-grid">
+    <div class="score-card score-card--ok"><div class="score-val">12</div><div class="score-label">Aderentes</div></div>
+    <div class="score-card"><div class="score-val">0</div><div class="score-label">Parciais</div></div>
+    <div class="score-card"><div class="score-val">0</div><div class="score-label">Não aderentes</div></div>
+    <div class="score-card score-card--ok"><div class="score-val">100%</div><div class="score-label">Conformidade</div></div>
+  </div>
+
+  <div class="callout">
+    <strong>Conclusão:</strong> Todas as observações mapeadas para o app foram endereçadas e validadas em homologação.
+    Dados sensíveis/smoke são sanitizados via SQL; i18n e enums CAPA estão traduzidos no frontend Angular; rotas SGQ
+    auditadas sem vazamento de chaves técnicas.
+  </div>
+
+  <h3>Metodologia</h3>
+  <p>
+    Cada item foi verificado por <code>scripts/verify-system-ux-report.mjs</code> (Playwright + login API),
+    percorrendo rotas de OS, propostas comerciais e módulo conformidade. Sanitização de tenant demo:
+    <code>db/scripts/sanitize-demo-tenant-homologacao.sql</code>. Fluxo integrado:
+    <code>scripts/run-homologacao-ux-sistema.ps1</code>.
+  </p>
+  <p>
+    Correções de código em <code>frontend/src/app/core/i18n/</code>, componentes de conformidade e painel SGQ.
+    Evidências registradas em <code>scripts/.verify-system-ux-report.json</code>.
+  </p>
+
+  <div class="page-footer"><span>Aero Suite · Relatório Executivo UX · Sistema</span><span>Sumário executivo</span></div>
+</section>
+
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 3.5</span>
+  </div>
+  <h2>Dados, encoding e internacionalização (app)</h2>
+  <p class="section-intro">Apontamentos visíveis nas telas do sistema em homologação/produção: nomes reais de clientes, registros smoke, chaves i18n expostas, ortografia pt-BR e encoding corrompido.</p>
+  
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.5.1</span>
+    <span class="item-title">Dados reais de clientes na lista de OS</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Listagem de ordens de serviço exibia nomes reais de clientes (ex.: GRUPO FARROUPILHA, QUICK MNT, AXIAL AVIATION) no tenant de demonstração.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Script db/scripts/sanitize-demo-tenant-homologacao.sql renomeia clientes sensíveis para &quot;Cliente Demo NN&quot;, corrige encoding VOAR Táxi Aéreo e deve ser executado antes de demos/capturas. Pipeline verify-system-ux-report.mjs bloqueia regressão.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Playwright em /os após sanitização: zero ocorrências de FARROUPIL, QUICK MNT, AXIAL ou ?? — scripts/.verify-system-ux-report.json.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — scripts/verify-system-ux-report.mjs + SQL sanitize</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.5.2</span>
+    <span class="item-title">Smoke / Serviço smoke (Propostas)</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Propostas comerciais de teste (&quot;Cliente Smoke&quot;, &quot;Servico smoke P4.1&quot;) visíveis na listagem comercial.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Sanitização SQL substitui nomenclatura smoke por &quot;Serviço demonstração P4.1&quot; e clientes fictícios; catálogo tipo_servico/template atualizado em cascata.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Regex cliente smoke / servico smoke ausentes em /propostas-comerciais na verificação automatizada.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — verify-system-ux-report.mjs</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.5.3</span>
+    <span class="item-title">Chave i18n common.actions.refresh visível (Painel SGQ)</span>
+    <span class="sev sev--CRITICO">CRITICO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Botão &quot;Atualizar&quot; do painel de conformidade exibia a chave técnica common.actions.refresh em vez do rótulo traduzido.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Entradas common.actions.refresh adicionadas em listings-common-i18n.ts (pt-BR, en-US, es-ES, fr-FR). Template usa pipe translate no conformidade-painel.component.ts.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Pattern common.actions. ausente em /conformidade/painel; botão exibe &quot;Atualizar&quot; ou equivalente i18n.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — verify-system-ux-report.mjs</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.5.4</span>
+    <span class="item-title">Erro ortográfico 'Servico' sem cedilha (Propostas)</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Texto &quot;Servico&quot; sem acentuação pt-BR em tipos de serviço e propostas.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">REPLACE Servico→Serviço no script SQL de sanitização (proposta_comercial, tipo_servico, template_produto_servico, os).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Pattern \bservico\b ausente na listagem de propostas após deploy.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — verify-system-ux-report.mjs</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.5.5</span>
+    <span class="item-title">Enum CAPA CONTENCAO sem tradução (NC)</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Fase CAPA exibia enums crus (CONTENCAO, VERIFICACAO) na listagem de não conformidades e nos chips SMS do painel SGQ.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Chaves conformidade.nc.capa.* em conformidade-sgq-i18n.ts; labelCapa() no stepper NC; painel SGQ traduz porCapaFase/porSeveridade e categorias de alerta (commit ed9cb0d).</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">CONTENCAO e VERIFICACAO ausentes em /conformidade/nao-conformidades e /conformidade/painel.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — verify-system-ux-report.mjs</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">3.5.6</span>
+    <span class="item-title">Encoding corrompido (??) em textos visíveis</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Mojibake em nomes (ex.: VOAR T??XI / A??RE) nas telas de OS.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Correção pontual no SQL sanitize-demo-tenant-homologacao.sql; charset UTF-8 na conexão JDBC e SET NAMES utf8mb4 nos scripts.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Pattern ?? ausente na rota /os na verificação pós-deploy.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — verify-system-ux-report.mjs</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Relatório Executivo UX · Sistema</span>
+    <span>Seção 3.5 · 1.0</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Seção 7</span>
+  </div>
+  <h2>Módulo Conformidade / SGQ</h2>
+  <p class="section-intro">Rotas do painel de qualidade auditadas quanto a enums técnicos (CAPA, severidade) e chaves de tradução exibidas ao usuário final.</p>
+  
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">conf.documentos</span>
+    <span class="item-title">Enums/i18n vazados (Documentos SGQ)</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Risco de exibir identificadores técnicos ou chaves i18n na gestão documental SGQ.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Telas em conformidade/documentos usam TranslatePipe e dicionário conformidade-sgq-i18n / sgq.documento.* nas quatro locales.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Rota /conformidade/documentos sem CONTENCAO, common.actions.* ou ?? na auditoria Playwright.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — verify-system-ux-report.mjs</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">conf.treinamentos</span>
+    <span class="item-title">Enums/i18n vazados (Treinamentos)</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Mesmo risco de vazamento de enums na listagem de treinamentos SGQ.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Componente treinamento-list.component.ts com labels via i18n; severidade via translateCatalog.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Auditoria automatizada /conformidade/treinamentos — sem ocorrências proibidas.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — verify-system-ux-report.mjs</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">conf.calibracao</span>
+    <span class="item-title">Enums/i18n vazados (Calibração)</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Tipos de instrumento e alertas poderiam exibir códigos internos.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">calibracao-list.component.ts com conformidade.calibracao.tipo.* traduzido.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Rota /conformidade/calibracao aderente na verificação.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — verify-system-ux-report.mjs</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">conf.subcontratacao</span>
+    <span class="item-title">Enums/i18n vazados (Subcontratação)</span>
+    <span class="sev sev--ALTO">ALTO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Status ASL/subcontratação sem camada i18n consistente.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">subcontratacao-list.component.ts com conformidade.subcontratacao.status.*.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Rota /conformidade/subcontratacao aderente.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — verify-system-ux-report.mjs</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">conf.habilitacoes</span>
+    <span class="item-title">Enums/i18n vazados (Habilitações)</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Listagem de habilitações técnicas exposta em demos comerciais.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">habilitacao-list.component.ts alinhado ao padrão i18n do módulo conformidade.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Rota /conformidade/habilitacoes aderente.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — verify-system-ux-report.mjs</div>
+    </div>
+  </div>
+</article>
+
+<article class="item-card">
+  <div class="item-head">
+    <span class="item-id">conf.treinObrig</span>
+    <span class="item-title">Enums/i18n vazados (Treinamentos obrigatórios)</span>
+    <span class="sev sev--MEDIO">MEDIO</span>
+    <span class="status-ok">✓ ADERENTE</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row">
+      <div class="item-label">Observação do relatório técnico</div>
+      <div class="item-text">Cadastro de treinamentos obrigatórios por função sem auditoria UX dedicada.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Ação implementada</div>
+      <div class="item-text">Rota incluída no verify-system-ux-report.mjs; copy via conformidade.treinObrig.* em conformidade-sgq-i18n.ts.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Evidência técnica</div>
+      <div class="item-text">Rota /conformidade/treinamentos-obrigatorios aderente na verificação pós-deploy.</div>
+    </div>
+    <div class="item-row">
+      <div class="item-label">Verificação</div>
+      <div class="item-text">Automático — verify-system-ux-report.mjs</div>
+    </div>
+  </div>
+</article>
+  <div class="page-footer">
+    <span>Aero Suite · Relatório Executivo UX · Sistema</span>
+    <span>Seção 7 · 1.0</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Anexo A</span>
+  </div>
+  <h2>Matriz consolidada de verificação</h2>
+  <p class="lead">Status final de cada observação — verificação 09 de junho de 2026.</p>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Severidade</th><th>Observação</th><th>Status</th></tr>
+    </thead>
+    <tbody><tr><td>3.5.1</td><td>CRITICO</td><td>Dados reais de clientes na lista de OS</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.5.2</td><td>CRITICO</td><td>Smoke / Serviço smoke (Propostas)</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.5.3</td><td>CRITICO</td><td>Chave i18n common.actions.refresh visível (Painel SGQ)</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.5.4</td><td>ALTO</td><td>Erro ortográfico 'Servico' sem cedilha (Propostas)</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.5.5</td><td>ALTO</td><td>Enum CAPA CONTENCAO sem tradução (NC)</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>3.5.6</td><td>ALTO</td><td>Encoding corrompido (??) em textos visíveis</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>conf.documentos</td><td>ALTO</td><td>Enums/i18n vazados (Documentos SGQ)</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>conf.treinamentos</td><td>ALTO</td><td>Enums/i18n vazados (Treinamentos)</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>conf.calibracao</td><td>ALTO</td><td>Enums/i18n vazados (Calibração)</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>conf.subcontratacao</td><td>ALTO</td><td>Enums/i18n vazados (Subcontratação)</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>conf.habilitacoes</td><td>MEDIO</td><td>Enums/i18n vazados (Habilitações)</td><td><span class="status-ok">✓ ADERENTE</span></td></tr>
+<tr><td>conf.treinObrig</td><td>MEDIO</td><td>Enums/i18n vazados (Treinamentos obrigatórios)</td><td><span class="status-ok">✓ ADERENTE</span></td></tr></tbody>
+  </table>
+  <div class="page-footer"><span>Aero Suite · Relatório Executivo UX · Sistema</span><span>Anexo A</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header">
+    <img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" />
+    <span class="chapter-label">Anexo B</span>
+  </div>
+  <h2>Informações complementares</h2>
+  <div class="supplementary"><h4>Verificação automatizada contínua</h4><p>Script scripts/verify-system-ux-report.mjs (Playwright + login API) cobre 12 rotas do app. Fluxo recomendado: scripts/run-homologacao-ux-sistema.ps1 (SQL sanitize + verify). Documentação: docs/HOMOLOGACAO-UX-SISTEMA.md.</p></div>
+<div class="supplementary"><h4>Dados vs código</h4><p>Itens 3.5.1, 3.5.2, 3.5.4 e 3.5.6 dependem do tenant sanitizado (db/scripts/sanitize-demo-tenant-homologacao.sql). Itens 3.5.3, 3.5.5 e rotas §7 dependem de build frontend/backend deployado.</p></div>
+<div class="supplementary"><h4>Escopo complementar (fora deste relatório)</h4><p>Moeda BRL/USD/EUR em propostas comerciais, branding dinâmico e site WordPress possuem relatório executivo próprio (32 itens — aerosuite.com.br). WCAG 2.1 AA completo segue roteiro docs/wcag quando aplicável.</p></div>
+
+  <div class="signature-block">
+    <p class="lead" style="margin-bottom:6mm">
+      Declaro, para os devidos fins, que as informações deste relatório refletem o estado verificado
+      da aplicação Aero Suite na data indicada, com base nas evidências técnicas citadas
+      em cada item e nos scripts de auditoria automatizada do repositório.
+    </p>
+    <div class="signature-line"></div>
+    <div class="signature-name">Wellem Lyra</div>
+    <div class="signature-role">Analista responsável — UX &amp; Produto</div>
+    <div class="signature-role">Aero Suite</div>
+    <div class="signature-date">09 de junho de 2026 · https://app.aerosuite.com.br</div>
+  </div>
+
+  <div class="page-footer"><span>Aero Suite · Relatório Executivo UX · Sistema</span><span>Assinatura · Wellem Lyra</span></div>
+</section>
+
+</body>
+</html>

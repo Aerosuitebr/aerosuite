@@ -1,0 +1,12 @@
+(async()=>{
+  const est=window.__estUrl;
+  const results=[];
+  for(const id of [21,20]){
+    const page=await wp.apiFetch({path:'/wp/v2/pages/'+id+'?context=edit'});
+    let c=page.content.raw||'';
+    c=c.replace(/https:\/\/aerosuite\.com\.br\/wp-content\/uploads\/[^"'\s]*estoque-(fifo|itens)[^"'\s]*/gi,est);
+    await wp.apiFetch({path:'/wp/v2/pages/'+id,method:'POST',data:{content:c}});
+    results.push({id,est});
+  }
+  return {ok:true,est,results};
+})()

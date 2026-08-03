@@ -1,0 +1,485 @@
+<p-toast></p-toast>
+
+<section class="ops-page">
+  <header class="ops-page-header">
+    <h2>{{ 'platformOps.billing.title' | translate }}</h2>
+    <p>{{ 'platformOps.billing.subtitle' | translate }}</p>
+  </header>
+
+  <div class="ops-billing-kpi-grid" *ngIf="data?.summary as s">
+    <button
+      type="button"
+      class="ops-billing-kpi ops-billing-kpi--active"
+      [class.ops-billing-kpi--selected]="isFilterSelected('active')"
+      [attr.aria-pressed]="isFilterSelected('active')"
+      (click)="toggleFilter('active')">
+      <span class="ops-billing-kpi-label-row">
+        <span class="ops-billing-kpi-led ops-billing-kpi-led--active" aria-hidden="true"></span>
+        <span class="ops-billing-kpi-label">{{ 'platformOps.billing.summary.active' | translate }}</span>
+      </span>
+      <strong class="ops-billing-kpi-value">{{ s.active }}</strong>
+    </button>
+    <button
+      type="button"
+      class="ops-billing-kpi ops-billing-kpi--trial"
+      [class.ops-billing-kpi--selected]="isFilterSelected('trialing')"
+      [attr.aria-pressed]="isFilterSelected('trialing')"
+      (click)="toggleFilter('trialing')">
+      <span class="ops-billing-kpi-label-row">
+        <span class="ops-billing-kpi-led ops-billing-kpi-led--trial" aria-hidden="true"></span>
+        <span class="ops-billing-kpi-label">{{ 'platformOps.billing.summary.trialing' | translate }}</span>
+      </span>
+      <strong class="ops-billing-kpi-value">{{ s.trialing }}</strong>
+    </button>
+    <button
+      type="button"
+      class="ops-billing-kpi ops-billing-kpi--trial-expired"
+      [class.ops-billing-kpi--selected]="isFilterSelected('trial_expired')"
+      [attr.aria-pressed]="isFilterSelected('trial_expired')"
+      (click)="toggleFilter('trial_expired')">
+      <span class="ops-billing-kpi-label-row">
+        <span class="ops-billing-kpi-led ops-billing-kpi-led--trial-expired" aria-hidden="true"></span>
+        <span class="ops-billing-kpi-label">{{ 'platformOps.billing.summary.trialExpired' | translate }}</span>
+      </span>
+      <strong class="ops-billing-kpi-value">{{ s.trialExpired }}</strong>
+    </button>
+    <button
+      type="button"
+      class="ops-billing-kpi ops-billing-kpi--overdue"
+      [class.ops-billing-kpi--selected]="isFilterSelected('overdue')"
+      [attr.aria-pressed]="isFilterSelected('overdue')"
+      (click)="toggleFilter('overdue')">
+      <span class="ops-billing-kpi-label-row">
+        <span class="ops-billing-kpi-led ops-billing-kpi-led--overdue" aria-hidden="true"></span>
+        <span class="ops-billing-kpi-label">{{ 'platformOps.billing.summary.overdue' | translate }}</span>
+      </span>
+      <strong class="ops-billing-kpi-value">{{ overdueCount(s) }}</strong>
+    </button>
+  </div>
+
+  <div class="ops-list-frame">
+  <div class="ops-billing-filter-bar" *ngIf="statusFilter">
+    <span class="ops-billing-filter-label">{{ filterBarText() }}</span>
+    <button type="button" class="ops-billing-filter-clear" (click)="clearFilter()">
+      {{ 'platformOps.billing.filter.clear' | translate }}
+    </button>
+  </div>
+
+  <div class="ops-bulk-bar" *ngIf="selectedCount() > 0" role="region" [attr.aria-label]="'platformOps.billing.bulk.selected' | translate:{ count: selectedCount() }">
+    <div class="ops-bulk-bar-main">
+      <span class="ops-bulk-count">
+        {{ 'platformOps.billing.bulk.selected' | translate:{ count: selectedCount() } }}
+      </span>
+      <div class="ops-bulk-actions">
+        <button
+          type="button"
+          class="ops-bulk-btn"
+          [class.ops-bulk-btn--active]="bulkPanelMode === 'trial'"
+          (click)="openBulkPanel('trial')">
+          {{ 'platformOps.billing.bulk.extendTrial' | translate }}
+        </button>
+        <button
+          type="button"
+          class="ops-bulk-btn"
+          [class.ops-bulk-btn--active]="bulkPanelMode === 'plan'"
+          (click)="openBulkPanel('plan')">
+          {{ 'platformOps.billing.bulk.setPlan' | translate }}
+        </button>
+        <button
+          type="button"
+          class="ops-bulk-btn"
+          [class.ops-bulk-btn--active]="bulkPanelMode === 'status'"
+          (click)="openBulkPanel('status')">
+          {{ 'platformOps.billing.bulk.setStatus' | translate }}
+        </button>
+        <button type="button" class="ops-bulk-btn ops-bulk-btn--ghost" (click)="exportSelectedCsv()">
+          {{ 'platformOps.billing.bulk.exportCsv' | translate }}
+        </button>
+        <button type="button" class="ops-bulk-btn ops-bulk-btn--ghost" (click)="clearSelection()">
+          {{ 'platformOps.billing.bulk.clear' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="ops-bulk-panel" *ngIf="bulkPanelMode === 'trial'">
+      <label class="ops-bulk-field-label" for="bulk-trial-days">{{ 'platformOps.billing.bulk.trialDays' | translate }}</label>
+      <p-inputNumber
+        inputId="bulk-trial-days"
+        [(ngModel)]="bulkTrialDays"
+        [min]="1"
+        [max]="365"
+        [showButtons]="true"
+        styleClass="ops-input-number ops-bulk-input-number">
+      </p-inputNumber>
+      <button
+        pButton
+        type="button"
+        [label]="'platformOps.billing.bulk.apply' | translate"
+        [loading]="bulkApplying"
+        (click)="applyBulkTrial()">
+      </button>
+      <button
+        pButton
+        type="button"
+        class="p-button-text"
+        [label]="'platformOps.billing.bulk.cancel' | translate"
+        (click)="closeBulkPanel()">
+      </button>
+    </div>
+
+    <div class="ops-bulk-panel" *ngIf="bulkPanelMode === 'plan'">
+      <label class="ops-bulk-field-label" for="bulk-plan">{{ 'platformOps.billing.bulk.choosePlan' | translate }}</label>
+      <p-dropdown
+        inputId="bulk-plan"
+        [options]="planOptions"
+        optionLabel="labelKey"
+        optionValue="value"
+        [(ngModel)]="bulkPlan"
+        [placeholder]="'platformOps.billing.bulk.selectPlan' | translate"
+        styleClass="ops-dropdown ops-bulk-dropdown">
+        <ng-template pTemplate="selectedItem" let-opt>
+          {{ opt.labelKey | translate }}
+        </ng-template>
+        <ng-template pTemplate="item" let-opt>
+          {{ opt.labelKey | translate }}
+        </ng-template>
+      </p-dropdown>
+      <button
+        pButton
+        type="button"
+        [label]="'platformOps.billing.bulk.apply' | translate"
+        [loading]="bulkApplying"
+        (click)="applyBulkPlan()">
+      </button>
+      <button
+        pButton
+        type="button"
+        class="p-button-text"
+        [label]="'platformOps.billing.bulk.cancel' | translate"
+        (click)="closeBulkPanel()">
+      </button>
+    </div>
+
+    <div class="ops-bulk-panel" *ngIf="bulkPanelMode === 'status'">
+      <label class="ops-bulk-field-label" for="bulk-status">{{ 'platformOps.billing.bulk.chooseStatus' | translate }}</label>
+      <p-dropdown
+        inputId="bulk-status"
+        [options]="statusOptions"
+        optionLabel="labelKey"
+        optionValue="value"
+        [(ngModel)]="bulkStatus"
+        [placeholder]="'platformOps.billing.bulk.selectStatus' | translate"
+        styleClass="ops-dropdown ops-bulk-dropdown">
+        <ng-template pTemplate="selectedItem" let-opt>
+          {{ opt.labelKey | translate }}
+        </ng-template>
+        <ng-template pTemplate="item" let-opt>
+          {{ opt.labelKey | translate }}
+        </ng-template>
+      </p-dropdown>
+      <button
+        pButton
+        type="button"
+        [label]="'platformOps.billing.bulk.apply' | translate"
+        [loading]="bulkApplying"
+        (click)="applyBulkStatus()">
+      </button>
+      <button
+        pButton
+        type="button"
+        class="p-button-text"
+        [label]="'platformOps.billing.bulk.cancel' | translate"
+        (click)="closeBulkPanel()">
+      </button>
+    </div>
+  </div>
+
+  <div class="ops-billing-table-shell">
+  <p-table
+    [value]="paginatedItems()"
+    [loading]="loading"
+    styleClass="ops-table ops-billing-table p-datatable-sm"
+    [rowHover]="true">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="ops-col-select">
+          <p-checkbox
+            [binary]="true"
+            [ngModel]="isAllPageSelected()"
+            (ngModelChange)="toggleSelectAllPage($event)"
+            [attr.aria-label]="'platformOps.billing.footer.selectAll' | translate">
+          </p-checkbox>
+        </th>
+        <th>{{ 'platformOps.billing.col.org' | translate }}</th>
+        <th>{{ 'platformOps.billing.col.plan' | translate }}</th>
+        <th>{{ 'platformOps.billing.col.status' | translate }}</th>
+        <th>{{ 'platformOps.billing.col.trialEnds' | translate }}</th>
+        <th>{{ 'platformOps.billing.col.provider' | translate }}</th>
+        <th class="ops-col-actions">{{ 'platformOps.billing.col.actions' | translate }}</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr [class.ops-row-checked]="isRowSelected(row)">
+        <td class="ops-col-select">
+          <p-checkbox
+            [binary]="true"
+            [ngModel]="isRowSelected(row)"
+            (ngModelChange)="toggleRowSelection(row, $event)"
+            [attr.aria-label]="'platformOps.billing.footer.selectRow' | translate">
+          </p-checkbox>
+        </td>
+        <td class="ops-col-org">
+          <div class="ops-org-cell">
+            <strong>{{ row.tenantNome }}</strong>
+            <span>{{ row.tenantCodigo }}</span>
+          </div>
+        </td>
+        <td>
+          <span class="ops-plan-label">{{ planLabelKey(row.planoCodigo) | translate }}</span>
+        </td>
+        <td>
+          <span
+            class="ops-status-badge"
+            [ngClass]="statusBadgeClass(row.effectiveStatus)"
+            [attr.title]="row.status !== row.effectiveStatus ? ('platformOps.billing.rawStatusHint' | translate:{ raw: row.status }) : null">
+            {{ statusLabelKey(row.effectiveStatus) | translate }}
+          </span>
+        </td>
+        <td>
+          <time class="ops-date" *ngIf="row.trialEndsAt; else noTrial" [dateTime]="row.trialEndsAt">
+            {{ row.trialEndsAt | date:'dd MMM yyyy' }}
+          </time>
+          <ng-template #noTrial>—</ng-template>
+        </td>
+        <td>
+          <span class="ops-provider">{{ row.provedor }}</span>
+        </td>
+        <td class="ops-col-actions">
+          <div class="ops-billing-actions">
+            <button
+              pButton
+              type="button"
+              class="p-button-text p-button-rounded ops-config-btn"
+              icon="pi pi-history"
+              [attr.aria-label]="'platformOps.billing.history.open' | translate"
+              (click)="openHistoryDrawer(row)">
+            </button>
+            <button
+              pButton
+              type="button"
+              class="p-button-text p-button-rounded ops-config-btn"
+              icon="pi pi-cog"
+              [attr.aria-label]="'platformOps.billing.configure' | translate"
+              (click)="openDrawer(row)">
+            </button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="ops-empty-cell">
+          {{ (statusFilter ? 'platformOps.billing.emptyFilter' : 'platformOps.common.empty') | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <footer class="ops-table-footer" *ngIf="!loading && totalFilteredCount() > 0">
+    <div class="ops-footer-page-size">
+      <span class="ops-footer-page-size-label">{{ 'platformOps.billing.footer.pageSizePrefix' | translate }}</span>
+      <p-dropdown
+        [options]="pageSizeOptions"
+        optionLabel="label"
+        optionValue="value"
+        [(ngModel)]="pageSize"
+        (onChange)="onPageSizeChange()"
+        styleClass="ops-footer-page-size-dropdown"
+        [appendTo]="'body'">
+      </p-dropdown>
+      <span class="ops-footer-page-size-label">{{ 'platformOps.billing.footer.pageSizeSuffix' | translate }}</span>
+    </div>
+
+    <nav class="ops-footer-pagination" [attr.aria-label]="'platformOps.billing.footer.nextPage' | translate">
+      <button
+        type="button"
+        class="ops-page-btn ops-page-btn--nav"
+        [disabled]="currentPage <= 1"
+        [attr.aria-label]="'platformOps.billing.footer.prevPage' | translate"
+        (click)="goToPage(currentPage - 1)">
+        &lt;
+      </button>
+      <ng-container *ngFor="let slot of paginationSlots()">
+        <span *ngIf="slot === 'ellipsis'" class="ops-page-ellipsis" aria-hidden="true">…</span>
+        <button
+          *ngIf="slot !== 'ellipsis'"
+          type="button"
+          class="ops-page-btn"
+          [class.ops-page-btn--active]="slot === currentPage"
+          (click)="goToPage(slot)">
+          {{ slot }}
+        </button>
+      </ng-container>
+      <button
+        type="button"
+        class="ops-page-btn ops-page-btn--nav"
+        [disabled]="currentPage >= totalPages()"
+        [attr.aria-label]="'platformOps.billing.footer.nextPage' | translate"
+        (click)="goToPage(currentPage + 1)">
+        &gt;
+      </button>
+    </nav>
+
+    <div class="ops-footer-sync">
+      <span class="ops-sync-led" aria-hidden="true"></span>
+      <span>{{ 'platformOps.billing.footer.gatewaySync' | translate }}</span>
+    </div>
+  </footer>
+  </div>
+  </div>
+</section>
+
+<p-sidebar
+  [(visible)]="drawerVisible"
+  position="right"
+  styleClass="ops-billing-drawer"
+  [style]="{ width: 'min(420px, 96vw)' }"
+  (onHide)="closeDrawer()">
+  <ng-template pTemplate="header">
+    <span class="ops-drawer-title">{{ 'platformOps.billing.drawer.title' | translate }}</span>
+  </ng-template>
+
+  <div class="ops-drawer-body" *ngIf="selectedRow as row">
+    <p class="ops-drawer-org">{{ row.tenantNome }}</p>
+    <p class="ops-drawer-codigo">{{ row.tenantCodigo }}</p>
+    <p class="ops-drawer-hint">{{ 'platformOps.billing.drawer.subtitle' | translate }}</p>
+
+    <div class="ops-drawer-field">
+      <label for="billing-drawer-plan">{{ 'platformOps.billing.col.plan' | translate }}</label>
+      <p-dropdown
+        inputId="billing-drawer-plan"
+        [options]="planOptions"
+        optionLabel="labelKey"
+        optionValue="value"
+        [(ngModel)]="draftPlan"
+        styleClass="ops-dropdown ops-dropdown-full">
+        <ng-template pTemplate="selectedItem" let-opt>
+          {{ opt.labelKey | translate }}
+        </ng-template>
+        <ng-template pTemplate="item" let-opt>
+          {{ opt.labelKey | translate }}
+        </ng-template>
+      </p-dropdown>
+    </div>
+
+    <div class="ops-drawer-field">
+      <label for="billing-drawer-status">{{ 'platformOps.billing.drawer.rawStatus' | translate }}</label>
+      <p-dropdown
+        inputId="billing-drawer-status"
+        [options]="statusOptions"
+        optionLabel="labelKey"
+        optionValue="value"
+        [(ngModel)]="draftStatus"
+        styleClass="ops-dropdown ops-dropdown-full">
+        <ng-template pTemplate="selectedItem" let-opt>
+          {{ opt.labelKey | translate }}
+        </ng-template>
+        <ng-template pTemplate="item" let-opt>
+          {{ opt.labelKey | translate }}
+        </ng-template>
+      </p-dropdown>
+      <p class="ops-drawer-note">
+        {{ 'platformOps.billing.drawer.effectiveHint' | translate }}:
+        <span class="ops-status-badge ops-status-badge--inline" [ngClass]="statusBadgeClass(row.effectiveStatus)">
+          {{ statusLabelKey(row.effectiveStatus) | translate }}
+        </span>
+      </p>
+    </div>
+
+    <div class="ops-drawer-field">
+      <label for="billing-drawer-trial">{{ 'platformOps.billing.drawer.trialBonus' | translate }}</label>
+      <p-inputNumber
+        inputId="billing-drawer-trial"
+        [(ngModel)]="trialBonusDays"
+        [min]="0"
+        [max]="365"
+        [showButtons]="true"
+        styleClass="ops-input-number">
+      </p-inputNumber>
+      <p class="ops-drawer-note">{{ 'platformOps.billing.drawer.trialBonusHint' | translate }}</p>
+    </div>
+
+    <div class="ops-drawer-field" *ngIf="row.trialEndsAt">
+      <span class="ops-drawer-meta-label">{{ 'platformOps.billing.col.trialEnds' | translate }}</span>
+      <span class="ops-drawer-meta-value">{{ row.trialEndsAt | date:'dd MMM yyyy, HH:mm' }}</span>
+    </div>
+
+    <div class="ops-drawer-actions">
+      <button
+        pButton
+        type="button"
+        class="p-button-outlined"
+        [label]="'platformOps.common.cancel' | translate"
+        (click)="closeDrawer()">
+      </button>
+      <button
+        pButton
+        type="button"
+        [label]="'platformOps.billing.drawer.save' | translate"
+        [loading]="saving"
+        (click)="saveDrawer()">
+      </button>
+    </div>
+  </div>
+</p-sidebar>
+
+<div
+  class="ops-history-overlay"
+  *ngIf="historyDrawerVisible"
+  (click)="closeHistoryDrawer()"
+  role="presentation">
+  <aside
+    class="ops-history-drawer"
+    role="dialog"
+    [attr.aria-label]="'platformOps.billing.history.title' | translate"
+    (click)="$event.stopPropagation()">
+    <header class="ops-history-drawer-head">
+      <div>
+        <h3>{{ 'platformOps.billing.history.title' | translate }}</h3>
+        <span class="ops-history-tenant-tag" *ngIf="historyRow as row">
+          {{ row.tenantCodigo }} · {{ row.tenantNome }}
+        </span>
+      </div>
+      <button
+        type="button"
+        class="ops-history-close"
+        [attr.aria-label]="'platformOps.common.cancel' | translate"
+        (click)="closeHistoryDrawer()">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="ops-history-body">
+      <p *ngIf="historyLoading" class="ops-history-loading">{{ 'platformOps.common.loading' | translate }}</p>
+
+      <ol class="ops-billing-timeline" *ngIf="!historyLoading && historyData?.events?.length">
+        <li class="ops-timeline-node" *ngFor="let event of historyData!.events">
+          <span class="ops-timeline-pin" [ngClass]="historyPinClass(event)" aria-hidden="true"></span>
+          <div class="ops-timeline-content">
+            <time class="ops-timeline-ts" [dateTime]="event.createdAt">{{ event.createdAt | date:'dd MMM yyyy, HH:mm:ss' }}</time>
+            <strong class="ops-timeline-title">{{ event.title }}</strong>
+            <p class="ops-timeline-detail" *ngIf="event.detail">{{ event.detail }}</p>
+            <p class="ops-timeline-meta" *ngIf="event.operatorEmail">
+              {{ 'platformOps.billing.history.operator' | translate }}: {{ event.operatorEmail }}
+            </p>
+            <p class="ops-timeline-amount" *ngIf="formatHistoryAmount(event.amountCents) as amount">{{ amount }}</p>
+          </div>
+        </li>
+      </ol>
+
+      <p *ngIf="!historyLoading && !historyData?.events?.length" class="ops-history-empty">
+        {{ 'platformOps.billing.history.empty' | translate }}
+      </p>
+    </div>
+  </aside>
+</div>

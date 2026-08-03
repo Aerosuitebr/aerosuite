@@ -1,0 +1,342 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="as-page list-container associacao-fcu-page">
+  <app-page-hero
+    variant="navy"
+    kickerKey="home.nav.fcu"
+    titleKey="associacao.fcu.title"
+    subtitleKey="associacao.fcu.subtitle"
+    titleIcon="pi-microchip"
+  />
+
+  <div class="modern-associacao-container">
+  <!-- Produto Aeronáutico Selection Section - Only show when no Produto Aeronáutico selected -->
+  <div class="fcu-selection-section" *ngIf="!selectedFcu">
+    <div class="section-header">
+      <div class="section-icon">
+        <i class="pi pi-microchip"></i>
+      </div>
+      <h2>{{ 'associacao.fcu.selectTitle' | translate }}</h2>
+    </div>
+
+    <div class="fcu-selector">
+      <div class="selector-wrapper">
+        <i class="pi pi-search selector-icon"></i>
+        <p-dropdown
+                [options]="fcuOptions"
+                [(ngModel)]="selectedFcu"
+                optionLabel="fcuCodigo"
+                [filter]="true"
+                filterBy="fcuCodigo,fcuDescription,modelo,pn,serialNumber"
+                [showClear]="true"
+                [placeholder]="'associacao.fcu.selectPh' | translate"
+                (onChange)="onFcuSelect($event.value)"
+                (onFilter)="fcuSearchSubject.next($event.query)"
+                [loading]="loadingFcus"
+                [disabled]="loadingFcus"
+                class="modern-dropdown"
+                [style]="{'width': '100%'}"
+        >
+          <ng-template pTemplate="selectedItem">
+            <div *ngIf="selectedFcu" class="selected-fcu">
+              <div class="fcu-badge">
+                <i class="pi pi-cog"></i>
+                <span>{{ selectedFcu.fcuCodigo }}</span>
+              </div>
+              <div class="fcu-info">{{ selectedFcu.fcuDescription }}</div>
+            </div>
+          </ng-template>
+
+          <ng-template pTemplate="item" let-fcu>
+            <div class="fcu-option">
+              <div class="fcu-main">
+                <div class="fcu-code">{{ fcu.fcuCodigo }}</div>
+                <div class="fcu-desc">{{ fcu.fcuDescription }}</div>
+              </div>
+              <div class="fcu-tags">
+                <span *ngIf="fcu.modelo" class="tag">
+                  <i class="pi pi-cog"></i> {{ fcu.modelo }}
+                </span>
+                <span *ngIf="fcu.pn" class="tag">
+                  <i class="pi pi-tag"></i> {{ fcu.pn }}
+                </span>
+                <span *ngIf="fcu.serialNumber" class="tag">
+                  <i class="pi pi-barcode"></i> {{ fcu.serialNumber }}
+                </span>
+              </div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
+    </div>
+  </div>
+
+  <!-- Produto Aeronáutico Selected Banner - Only show when Produto Aeronáutico is selected -->
+  <div class="fcu-selected-banner" *ngIf="selectedFcu">
+    <div class="banner-content">
+      <div class="banner-icon">
+        <img [src]="fcuBannerImageUrl" [alt]="'associacao.fcu.bannerAlt' | translate" class="banner-image">
+      </div>
+      <div class="banner-info">
+        <h2>{{ selectedFcu.fcuCodigo }}</h2>
+        <p>{{ selectedFcu.fcuDescription }}</p>
+        <div class="banner-tags">
+          <span *ngIf="selectedFcu.modelo" class="tag">
+            <i class="pi pi-cog"></i> {{ selectedFcu.modelo }}
+          </span>
+          <span *ngIf="selectedFcu.pn" class="tag">
+            <i class="pi pi-tag"></i> {{ selectedFcu.pn }}
+          </span>
+          <span *ngIf="selectedFcu.serialNumber" class="tag">
+            <i class="pi pi-barcode"></i> {{ selectedFcu.serialNumber }}
+          </span>
+        </div>
+      </div>
+      <div class="banner-actions">
+        <p-button
+                icon="pi pi-times"
+                (onClick)="clearFcuSelection()"
+                styleClass="p-button-text p-button-danger"
+                [pTooltip]="'associacao.fcu.tooltip.change' | translate"
+                tooltipPosition="top"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" *ngIf="selectedFcu">
+    <div class="content-layout">
+      
+      <!-- Transfer Arrow -->
+      <div class="transfer-arrow" (click)="transferSelectedProducts()" *ngIf="selectedProducts.length > 0">
+        <i class="pi pi-arrow-right"></i>
+      </div>
+      
+      <!-- Available Products -->
+      <div class="products-section">
+        <div class="section-header">
+          <div class="section-icon">
+            <i class="pi pi-box"></i>
+          </div>
+          <div class="section-title">
+            <h2>{{ 'associacao.fcu.available' | translate }}</h2>
+            <span class="count-badge">{{ availableProductsCount }}</span>
+          </div>
+        </div>
+
+        <div class="section-content">
+          <!-- Search and Controls -->
+          <div class="search-controls">
+            <div class="search-input-container">
+              <i class="pi pi-search search-icon"></i>
+              <input
+                      type="text"
+                      [(ngModel)]="searchTerm"
+                      (ngModelChange)="onSearchChange($event)"
+                      [placeholder]="'associacao.fcu.searchAvailable' | translate"
+                      class="search-input"
+              />
+            </div>
+            
+            <div class="selection-controls">
+              <p-checkbox
+                      [binary]="true"
+                      [(ngModel)]="selectAllAvailable"
+                      (onChange)="onSelectAllAvailableToggle()"
+              ></p-checkbox>
+              <label (click)="toggleSelectAll()">{{ 'associacao.fcu.selectAll' | translate }}</label>
+            </div>
+          </div>
+
+          <!-- Products List -->
+          <div class="products-container">
+            <div *ngIf="loadingProducts" class="loading">
+              <p-progressSpinner [style]="{'width': '40px', 'height': '40px'}"></p-progressSpinner>
+              <p>{{ 'associacao.fcu.loadingProducts' | translate }}</p>
+            </div>
+
+            <div *ngIf="!loadingProducts && availableProducts.length === 0" class="empty">
+              <i class="pi pi-inbox"></i>
+              <h3>{{ 'associacao.fcu.noProducts' | translate }}</h3>
+              <p>{{ 'associacao.fcu.noProductsHint' | translate }}</p>
+            </div>
+
+            <div class="products-grid" *ngIf="!loadingProducts && availableProducts.length > 0">
+              <div
+                      class="product-item"
+                      *ngFor="let product of availableProducts; trackBy: trackByProductId"
+                      [class.selected]="isProductSelected(product)"
+                      [class.transferred]="isProductTransferred(product)"
+                      [data-product-id]="product.id"
+                      (click)="toggleProductSelection(product)"
+              >
+                <div class="product-checkbox">
+                  <p-checkbox
+                          [ngModel]="isProductSelected(product)"
+                          (ngModelChange)="toggleProductSelection(product)"
+                  ></p-checkbox>
+                </div>
+
+                <div class="product-info">
+                  <div class="product-header">
+                    <h4>{{ product.name }}</h4>
+                  </div>
+
+                  <div class="product-details">
+                    <div *ngIf="product.productpn" class="detail">
+                      <i class="pi pi-tag"></i>
+                      <span>{{ product.productpn }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="product-action">
+                  <p-button
+                          [icon]="isProductSelected(product) ? 'pi pi-check' : 'pi pi-plus'"
+                          [styleClass]="isProductSelected(product) ? 'p-button-success' : 'p-button-outlined'"
+                          [text]="true"
+                          [rounded]="true"
+                          size="small"
+                  ></p-button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Associated Products -->
+      <div class="associated-section">
+        <div class="section-header">
+          <div class="section-icon">
+            <i class="pi pi-link"></i>
+          </div>
+          <div class="section-title">
+            <h2>{{ 'associacao.fcu.associated' | translate }}</h2>
+            <span class="count-badge">{{ associatedProductsCount }}</span>
+          </div>
+        </div>
+
+        <div class="section-content">
+          <!-- Search and Controls for Associated Products -->
+          <div class="search-controls" *ngIf="associatedProducts.length > 4">
+            <div class="search-input-container">
+              <i class="pi pi-search search-icon"></i>
+              <input
+                      type="text"
+                      [(ngModel)]="associatedSearchTerm"
+                      (ngModelChange)="onAssociatedSearchChange($event)"
+                      [placeholder]="'associacao.fcu.searchAssociated' | translate"
+                      class="search-input"
+              />
+            </div>
+            
+            <div class="selection-controls">
+              <p-checkbox
+                      [binary]="true"
+                      [(ngModel)]="selectAllAssociated"
+                      (onChange)="onSelectAllAssociatedToggle()"
+              ></p-checkbox>
+              <label (click)="toggleSelectAllAssociated()">{{ 'associacao.fcu.selectAll' | translate }}</label>
+            </div>
+          </div>
+
+          <div *ngIf="loadingAssociations" class="loading">
+            <p-progressSpinner [style]="{'width': '40px', 'height': '40px'}"></p-progressSpinner>
+            <p>{{ 'associacao.fcu.loadingAssoc' | translate }}</p>
+          </div>
+
+          <div *ngIf="!loadingAssociations && associatedProducts.length === 0" class="empty">
+            <i class="pi pi-link"></i>
+            <h3>{{ 'associacao.fcu.noAssoc' | translate }}</h3>
+            <p>{{ 'associacao.fcu.noAssocHint' | translate }}</p>
+          </div>
+
+          <div class="associated-list" *ngIf="!loadingAssociations && associatedProducts.length > 0">
+            <div
+                    class="associated-item"
+                    *ngFor="let association of getFilteredAssociatedProducts(); trackBy: trackByAssociationId"
+                    [class.newly-added]="isNewlyAdded(association)"
+                    [class.selected]="isAssociatedSelected(association)"
+                    [data-association-id]="association.id"
+            >
+              <div class="item-checkbox" *ngIf="associatedProducts.length > 4">
+                <p-checkbox
+                        [binary]="true"
+                        [(ngModel)]="association.selected"
+                        (onChange)="onAssociatedItemSelect(association)"
+                ></p-checkbox>
+              </div>
+              
+              <div class="item-info">
+                <div class="item-header">
+                  <h4>{{ association.productName }}</h4>
+                </div>
+
+                <div class="item-details">
+                  <div *ngIf="association.productPn" class="detail">
+                    <i class="pi pi-tag"></i>
+                    <span>{{ association.productPn }}</span>
+                  </div>
+                  <div *ngIf="association.productDescription" class="detail">
+                    <i class="pi pi-file-text"></i>
+                    <span>{{ association.productDescription }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="item-controls">
+                <!-- Campo de Quantidade Requerida -->
+                <div class="quantity-field">
+                  <label class="quantity-label">
+                    <i class="pi pi-shopping-cart"></i>
+                    {{ 'associacao.fcu.qtyRequired' | translate }}
+                    <!-- Indicador visual sutil de estado de salvamento -->
+                    <span class="save-indicator" 
+                          [class.saving]="getSavingState(association.id) === 'saving'"
+                          [class.saved]="getSavingState(association.id) === 'saved'"
+                          [class.error]="getSavingState(association.id) === 'error'"
+                          [pTooltip]="savingTooltip(association.id)"
+                          tooltipPosition="top">
+                      <i class="pi" 
+                         [class.pi-spin]="getSavingState(association.id) === 'saving'"
+                         [class.pi-spinner]="getSavingState(association.id) === 'saving'"
+                         [class.pi-check]="getSavingState(association.id) === 'saved'"
+                         [class.pi-times]="getSavingState(association.id) === 'error'"></i>
+                    </span>
+                  </label>
+                  <p-inputNumber
+                          [(ngModel)]="association.qtdProduct"
+                          [min]="1"
+                          [max]="9999"
+                          [showButtons]="true"
+                          [disabled]="savingAssociations || getSavingState(association.id) === 'saving'"
+                          (onInput)="onQuantityChange(association)"
+                          [style]="{'width': '80px'}"
+                          inputId="qty-{{association.id}}"
+                          [useGrouping]="false"
+                          [ngClass]="{'saving': getSavingState(association.id) === 'saving', 
+                                     'saved': getSavingState(association.id) === 'saved'}"
+                  ></p-inputNumber>
+                </div>
+                
+                <div class="undo-arrow" 
+                     (click)="undoAssociation(association)"
+                     [disabled]="savingAssociations"
+                     [pTooltip]="'associacao.fcu.tooltip.undo' | translate"
+                     tooltipPosition="top">
+                  <i class="pi pi-arrow-left"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </div>
+</div>

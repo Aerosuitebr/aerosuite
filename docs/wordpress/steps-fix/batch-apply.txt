@@ -1,0 +1,15 @@
+(async()=>{
+  const base='http://127.0.0.1:9876';
+  const results=[];
+  {
+      const s=await fetch(base+'/apply-pages-footer.js').then(r=>r.text());
+      const trimmed=s.trim();
+      let v;
+      if(trimmed.startsWith('(async')){
+        const only=trimmed.replace(/;\s*return\s+window\.__last\w+;?\s*$/i,'');
+        v=await eval(only);
+      } else v=await eval(s);
+      results.push({name:'apply-pages-footer',value:v});
+    }
+  return results;
+})()

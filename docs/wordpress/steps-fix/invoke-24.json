@@ -1,0 +1,1 @@
+{"step":24,"name":"estoque-init","method":"Runtime.evaluate","params":{"expression":"new Function(\"window.__b64buf=\\\"\\\";return {ok:true};\")()","awaitPromise":false,"returnByValue":false}}

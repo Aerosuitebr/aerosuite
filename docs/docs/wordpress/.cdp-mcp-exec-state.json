@@ -1,0 +1,31 @@
+{
+  "results": {
+    "0": {
+      "batch": 0,
+      "from": 0,
+      "to": 4
+    },
+    "1": {
+      "len": 34708,
+      "ok": true
+    },
+    "2": {
+      "len": 34708,
+      "ok": true
+    },
+    "3": {
+      "len": 34708,
+      "ok": true
+    },
+    "4": {
+      "len": 34708,
+      "ok": true
+    }
+  },
+  "errors": [
+    {
+      "step": 2,
+      "error": "SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)"
+    }
+  ]
+}

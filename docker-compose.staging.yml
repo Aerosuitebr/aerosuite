@@ -1,0 +1,14 @@
+# Staging: mesma stack do docker-compose.yml, com variáveis sobrescritas por .env.staging
+#
+# 1) cp .env.example .env   (ajuste o que for comum)
+# 2) cp .env.staging.example .env.staging   (JDBC de staging, MAIL_MOCK, etc.)
+# 3) docker compose -f docker-compose.yml -f docker-compose.staging.yml up --build -d
+#
+# Ordem dos env_file: depois sobrescreve antes (valores de .env.staging vencem).
+
+services:
+  api:
+    env_file:
+      - .env
+      - path: .env.staging
+        required: false

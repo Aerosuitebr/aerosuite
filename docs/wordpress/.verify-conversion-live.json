@@ -1,0 +1,23 @@
+﻿{
+  "at": "2026-06-09T15:48:19.761Z",
+  "spf": {
+    "ok": true,
+    "preview": "v=spf1 include:_spf.google.com ~all | google-site-verification=VrapYgxLdrxUQWM_D22gHRX3v918mN68DJGRn23EKVo | google-site-verification=Qo1nvXxLasaOLwgwc5xyn0QeF5dyawFVF-rmyESmoPk"
+  },
+  "dmarc": {
+    "ok": true,
+    "preview": "v=DMARC1; p=quarantine; rua=mailto:contato@aerosuite.com.br; pct=100; adkim=r; aspf=r"
+  },
+  "dkim": {
+    "ok": true,
+    "preview": "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv0huz46ritjA+MnajE+fkBDuja37xEe/GlJyxyGElxK2bltsJZKjcOyd/B"
+  },
+  "calendlyEmbed": true,
+  "obrigadoClean": true,
+  "footerLegal": true,
+  "notes": [
+    "DKIM Google: ap├│s publicar TXT, clique em Iniciar autentica├º├úo no Admin (propaga├º├úo at├® 48h)",
+    "E-mail From: s├│ confirm├ível com agendamento real",
+    "T├¡tulo Calendly: ajustar no painel Calendly (ver FLUXO-CONVERSAO-OPERACIONAL.md)"
+  ]
+}

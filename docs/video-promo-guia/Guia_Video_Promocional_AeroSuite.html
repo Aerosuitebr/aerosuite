@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Guia de Produção do Vídeo Promocional — Aero Suite</title>
+  <style>/* Aero Suite — Relatório Executivo UX (print/PDF A4) */
+@page {
+  size: A4;
+  margin: 16mm 14mm 20mm 14mm;
+}
+
+@page :first {
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  color: #0f172a;
+  line-height: 1.5;
+  background: #fff;
+}
+
+/* ─── Capa ─── */
+.cover {
+  page-break-after: always;
+  min-height: 297mm;
+  width: 100%;
+  background: linear-gradient(145deg, #020617 0%, #0c1929 40%, #0f172a 75%, #1e293b 100%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22mm 18mm;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 150mm;
+}
+
+.cover-logo {
+  width: 68mm;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8mm;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.4));
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  border: 1px solid rgba(148,163,184,.35);
+  border-radius: 999px;
+  padding: 2.5mm 5mm;
+  margin-bottom: 6mm;
+}
+
+.cover h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 4mm;
+  letter-spacing: -0.02em;
+}
+
+.cover-sub {
+  font-size: 11pt;
+  color: #cbd5e1;
+  margin: 0 0 6mm;
+  line-height: 1.45;
+}
+
+.cover-gold-line {
+  width: 48mm;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a227, transparent);
+  margin: 0 auto 6mm;
+}
+
+.cover-meta {
+  font-size: 9.5pt;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cover-meta strong {
+  color: #e2e8f0;
+}
+
+.cover-footer {
+  position: absolute;
+  bottom: 12mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: #64748b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Páginas internas ─── */
+.page {
+  page-break-after: always;
+}
+
+.page:last-child {
+  page-break-after: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 3mm;
+  margin-bottom: 6mm;
+}
+
+.page-header img {
+  height: 7mm;
+  width: auto;
+}
+
+.page-header .chapter-label {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-footer {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #94a3b8;
+}
+
+h2 {
+  font-size: 14pt;
+  color: #0f172a;
+  margin: 0 0 4mm;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 11pt;
+  color: #0369a1;
+  margin: 5mm 0 2mm;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 3mm;
+}
+
+.lead {
+  font-size: 10.5pt;
+  color: #334155;
+  margin-bottom: 5mm;
+}
+
+/* Sumário */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+  padding: 2mm 0;
+  border-bottom: 1px dotted #e2e8f0;
+  font-size: 9.5pt;
+}
+
+.toc-list li.part {
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: none;
+  padding-top: 4mm;
+  font-size: 10pt;
+}
+
+.toc-num {
+  font-weight: 700;
+  color: #64748b;
+  min-width: 10mm;
+}
+
+/* Score dashboard */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin: 5mm 0 6mm;
+}
+
+.score-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4mm;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.score-card--ok {
+  background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #86efac;
+}
+
+.score-val {
+  font-size: 18pt;
+  font-weight: 800;
+  color: #0369a1;
+  line-height: 1;
+}
+
+.score-card--ok .score-val {
+  color: #15803d;
+}
+
+.score-label {
+  font-size: 7.5pt;
+  color: #64748b;
+  margin-top: 1.5mm;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin: 4mm 0;
+}
+
+th, td {
+  border: 1px solid #e2e8f0;
+  padding: 2.5mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Item cards */
+.section-intro {
+  background: #f8fafc;
+  border-left: 3px solid #0369a1;
+  padding: 3mm 4mm;
+  margin-bottom: 5mm;
+  font-size: 9pt;
+  color: #475569;
+}
+
+.item-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 4mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  padding: 2.5mm 4mm;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item-id {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.item-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 9.5pt;
+}
+
+.sev {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+.sev--CRITICO { background: #fee2e2; color: #991b1b; }
+.sev--ALTO { background: #ffedd5; color: #9a3412; }
+.sev--MEDIO { background: #fef9c3; color: #854d0e; }
+.sev--INFO { background: #e0e7ff; color: #3730a3; }
+
+.item-body {
+  padding: 3mm 4mm 4mm;
+  font-size: 8.75pt;
+}
+
+.item-row {
+  margin-bottom: 2.5mm;
+}
+
+.item-row:last-child {
+  margin-bottom: 0;
+}
+
+.item-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.5mm;
+}
+
+.item-text {
+  color: #1e293b;
+}
+
+.status-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+}
+
+/* Assinatura */
+.signature-block {
+  margin-top: 10mm;
+  padding: 6mm;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.signature-line {
+  width: 55mm;
+  border-top: 1px solid #334155;
+  margin: 12mm 0 2mm;
+}
+
+.signature-name {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.signature-role {
+  font-size: 9pt;
+  color: #64748b;
+}
+
+.signature-date {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  margin-top: 2mm;
+}
+
+.callout {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 4mm;
+  margin: 4mm 0;
+  font-size: 9pt;
+}
+
+.callout strong {
+  color: #1d4ed8;
+}
+
+.supplementary {
+  page-break-inside: avoid;
+  margin-bottom: 4mm;
+  padding: 3mm 4mm;
+  border-left: 3px solid #c9a227;
+  background: #fffbeb;
+}
+
+.supplementary h4 {
+  margin: 0 0 1.5mm;
+  font-size: 9.5pt;
+  color: #92400e;
+}
+
+.supplementary p {
+  margin: 0;
+  font-size: 8.75pt;
+  color: #78350f;
+}
+
+/* Aero Suite — Guia de Produção Vídeo Promocional (print/PDF A4) */
+
+
+.prompt-block {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 5px;
+  padding: 3.5mm 4mm;
+  margin: 3mm 0;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 7.75pt;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  page-break-inside: avoid;
+}
+
+.prompt-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+  margin-bottom: 1.5mm;
+}
+
+.timeline-table td:first-child {
+  font-weight: 700;
+  color: #0369a1;
+  white-space: nowrap;
+  width: 8mm;
+}
+
+.timeline-table td:nth-child(2) {
+  font-family: 'Consolas', monospace;
+  font-size: 8pt;
+  white-space: nowrap;
+  width: 14mm;
+}
+
+.timeline-table .col-caption {
+  font-style: italic;
+  color: #475569;
+}
+
+.timeline-table .col-narration {
+  color: #1e293b;
+  font-size: 8pt;
+}
+
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 3mm 0;
+}
+
+.checklist li {
+  padding: 1.5mm 0 1.5mm 6mm;
+  position: relative;
+  font-size: 9pt;
+}
+
+.checklist li::before {
+  content: '☐';
+  position: absolute;
+  left: 0;
+  color: #0369a1;
+  font-weight: 700;
+}
+
+.workflow-step {
+  display: flex;
+  gap: 3mm;
+  margin-bottom: 3mm;
+  page-break-inside: avoid;
+}
+
+.workflow-num {
+  flex-shrink: 0;
+  width: 8mm;
+  height: 8mm;
+  border-radius: 50%;
+  background: #0369a1;
+  color: #fff;
+  font-weight: 800;
+  font-size: 9pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.workflow-body {
+  flex: 1;
+  font-size: 9pt;
+}
+
+.workflow-body strong {
+  display: block;
+  margin-bottom: 0.5mm;
+  color: #0f172a;
+}
+
+.tag-do {
+  display: inline-block;
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.5mm 2mm;
+  border-radius: 3px;
+  background: #dcfce7;
+  color: #15803d;
+  margin-right: 1.5mm;
+}
+
+.tag-dont {
+  display: inline-block;
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.5mm 2mm;
+  border-radius: 3px;
+  background: #fee2e2;
+  color: #991b1b;
+  margin-right: 1.5mm;
+}
+
+.scene-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin-bottom: 3mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.scene-head {
+  background: #f1f5f9;
+  padding: 2mm 3mm;
+  font-size: 8.5pt;
+  font-weight: 600;
+  display: flex;
+  gap: 3mm;
+  flex-wrap: wrap;
+}
+
+.scene-time {
+  font-family: 'Consolas', monospace;
+  color: #0369a1;
+}
+
+.scene-body {
+  padding: 2.5mm 3mm;
+  font-size: 8.5pt;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3mm;
+  margin: 3mm 0;
+}
+
+@media print {
+  .two-col { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <img class="cover-logo" src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA_LIGHT.png" alt="Aero Suite" />
+    <div class="cover-badge">Marketing · Produção de vídeo</div>
+    <h1>Guia de Produção do Vídeo Promocional</h1>
+    <p class="cover-sub">Gravação, edição e uso do Abacus · Departamento de Marketing</p>
+    <div class="cover-gold-line"></div>
+    <p class="cover-meta">
+      <strong>Versão 1.0</strong> · 09 de junho de 2026<br />
+      Destinatário: <strong>Thiago Lyra — Marketing</strong><br />
+      Autor: <strong>Wellem Lyra</strong><br />
+      Duração alvo: <strong>60–90 segundos (versão final)</strong>
+    </p>
+  </div>
+  <div class="cover-footer">Aero Suite — Gestão aeronáutica integrada</div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Sumário</span></div>
+  <h2>Conteúdo do guia</h2>
+  <ul class="toc-list">
+    <li><span class="toc-num">1</span><span class="toc-title">Visão geral e fluxo de produção</span></li>
+    <li><span class="toc-num">2</span><span class="toc-title">Pré-gravação (checklist)</span></li>
+    <li><span class="toc-num">3</span><span class="toc-title">Especificações técnicas de gravação</span></li>
+    <li><span class="toc-num">4</span><span class="toc-title">Roteiro de gravação — teleprompter de ações</span></li>
+    <li><span class="toc-num">5</span><span class="toc-title">Roteiro de narração (TTS)</span></li>
+    <li><span class="toc-num">6</span><span class="toc-title">Abacus — prompts prontos</span></li>
+    <li><span class="toc-num">7</span><span class="toc-title">Legendas, marca e áudio</span></li>
+    <li><span class="toc-num">8</span><span class="toc-title">Compliance de copy</span></li>
+    <li class="part">Anexos</li>
+    <li><span class="toc-num">A</span><span class="toc-title">Mapeamento de vídeo bruto (pós-gravação)</span></li>
+    <li><span class="toc-num">B</span><span class="toc-title">Modelo de tabela de cenas</span></li>
+    <li><span class="toc-num">C</span><span class="toc-title">Checklist de publicação</span></li>
+  </ul>
+  <div class="page-footer"><span>Aero Suite · Guia Vídeo Promocional</span><span>Sumário · v1.0</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Seção 1</span></div>
+  <h2>Visão geral e fluxo de produção</h2>
+  <p class="lead">
+    Este guia orienta o departamento de marketing na produção do <strong>vídeo promocional do Aero Suite</strong>,
+    software de gestão para oficinas aeronáuticas (MRO). A gravação é um <strong>tour contínuo do produto</strong>;
+    a edição final (60–90 s) combina <strong>CapCut</strong> para corte e legendas com <strong>Abacus</strong> apenas
+    para tarefas pontuais (upscale, B-roll, voz).
+  </p>
+  <div class="callout">
+    <strong>Princípio central:</strong> a gravação da interface é sagrada — nitidez dos textos, botões e labels
+    é mais importante que efeitos cinematográficos. O Abacus <em>não</em> substitui o editor de vídeo.
+  </div>
+  <h3>Entregáveis</h3>
+  <ul><li>aerosuite-demo-bruto.mp4 (1080p, gravação contínua)</li><li>aerosuite-promo-90s.mp4 (corte final com legendas)</li><li>aerosuite-promo-90s-voz.mp4 (opcional, com narração TTS)</li></ul>
+  <h3>Fluxo em 6 etapas</h3>
+  
+<div class="workflow-step">
+  <div class="workflow-num">1</div>
+  <div class="workflow-body"><strong>Preparar ambiente demo</strong>Tenant limpo, tema claro, pt-BR, sidebar expandida, dados fictícios. Fechar popups e notificações. Navegador em zoom 100%, barra de favoritos oculta.</div>
+</div>
+<div class="workflow-step">
+  <div class="workflow-num">2</div>
+  <div class="workflow-body"><strong>Gravar tour contínuo (~8 min)</strong>OBS ou Win+G · 1920×1080 · 60 fps (30 ok). Mouse devagar, pausas de 1–2 s em cada tela. Um único fluxo sem erros de login. Salvar como aerosuite-demo-bruto.mp4.</div>
+</div>
+<div class="workflow-step">
+  <div class="workflow-num">3</div>
+  <div class="workflow-body"><strong>Mapear timestamps (Wellem ou Thiago)</strong>Identificar os 6–8 melhores momentos para o corte de 90 s. Preencher tabela de cenas (Anexo C) ou enviar o MP4 para mapeamento assistido.</div>
+</div>
+<div class="workflow-step">
+  <div class="workflow-num">4</div>
+  <div class="workflow-body"><strong>Editar no CapCut</strong>Cortar para 60–90 s, aplicar legendas PT-BR por cena, transições suaves (fade 0,3 s). Manter UI legível — não aplicar filtros pesados na gravação.</div>
+</div>
+<div class="workflow-step">
+  <div class="workflow-num">5</div>
+  <div class="workflow-body"><strong>Abacus — tarefas pontuais</strong>Upscale (se 720p), B-roll hangar (intro/outro 6 s cada), TTS narração PT-BR. Nunca video-to-video sobre a gravação da UI.</div>
+</div>
+<div class="workflow-step">
+  <div class="workflow-num">6</div>
+  <div class="workflow-body"><strong>Revisão e publicação</strong>Checklist final (Anexo D), export 16:9 LinkedIn + 9:16 Reels (reframe manual), CTA com link aerosuite.com.br/demo.</div>
+</div>
+  <div class="page-footer"><span>Aero Suite · Guia Vídeo Promocional</span><span>Seção 1 · v1.0</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Seção 2</span></div>
+  <h2>Pré-gravação — checklist</h2>
+  <p class="lead">Executar <strong>na véspera</strong> e repetir 5 minutos antes de gravar. Evita refazer por detalhes evitáveis.</p>
+  <ul class="checklist"><li>Tenant demo com dados fictícios (sem nomes reais de clientes ou P/N sensíveis)</li><li>Tema claro ativo (Settings → Aparência)</li><li>Idioma pt-BR selecionado na tela de login</li><li>Sidebar expandida (não colapsada)</li><li>Fechar toasts, modais e notificações pendentes</li><li>Desativar extensões do navegador que sobreponham a UI (tradutores, adblockers visíveis)</li><li>Zoom do navegador em 100% (Ctrl+0)</li><li>Ocultar barra de favoritos (Ctrl+Shift+B no Chrome)</li><li>Resolução do monitor ≥ 1920×1080; gravar área 1920×1080</li><li>Cursor do mouse visível; movimentos lentos e intencionais</li><li>Ter credenciais demo anotadas (evitar errar senha na gravação)</li><li>Testar o roteiro uma vez antes de gravar de verdade</li></ul>
+  <div class="page-footer"><span>Aero Suite · Guia Vídeo Promocional</span><span>Seção 2 · v1.0</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Seção 3</span></div>
+  <h2>Especificações técnicas</h2>
+  <table>
+    <thead><tr><th>Parâmetro</th><th>Valor recomendado</th></tr></thead>
+    <tbody><tr><td><strong>tool</strong></td><td>OBS Studio (recomendado) ou Gravação Xbox (Win+G)</td></tr><tr><td><strong>resolution</strong></td><td>1920 × 1080 (1080p)</td></tr><tr><td><strong>fps</strong></td><td>60 fps preferível; 30 fps aceitável</td></tr><tr><td><strong>codec</strong></td><td>H.264 · MP4</td></tr><tr><td><strong>audio</strong></td><td>Desligar microfone ambiente (narração será TTS depois) ou gravar silencioso</td></tr><tr><td><strong>webcam</strong></td><td>Não usar webcam (ou cantinho pequeno, se Thiago aparecer)</td></tr><tr><td><strong>filename</strong></td><td>aerosuite-demo-bruto.mp4</td></tr></tbody>
+  </table>
+  <h3>Regras de ouro durante a gravação</h3>
+  <ul>
+    <li><strong>Mouse devagar</strong> — movimentos amplos, sem jitter</li>
+    <li><strong>Pausa 1–2 s</strong> em cada tela antes de clicar</li>
+    <li><strong>Um fluxo contínuo</strong> — evita cortes feios; erros = gravar de novo</li>
+    <li><strong>Sem scroll frenético</strong> — scroll em incrementos pequenos</li>
+    <li><strong>Sem digitar URLs</strong> — usar favoritos ou menu interno</li>
+  </ul>
+  <div class="page-footer"><span>Aero Suite · Guia Vídeo Promocional</span><span>Seção 3 · v1.0</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Seção 4</span></div>
+  <h2>Roteiro de gravação — teleprompter de ações</h2>
+  <p class="lead">
+    Gravação bruta estimada: <strong>8–12 minutos (gravação bruta)</strong>.
+    Siga a ordem; tempos são orientativos. Colunas “Legenda” e “Narração” servem para o CapCut e TTS depois.
+  </p>
+  <table class="timeline-table">
+    <thead>
+      <tr><th>#</th><th>Tempo</th><th>Rota e ação</th><th>Legenda sugerida</th><th>Hint narração</th></tr>
+    </thead>
+    <tbody><tr>
+    <td>1</td>
+    <td>5 s</td>
+    <td><code>/login</code><br/>Abrir tela de login. Pausar 2 s no logo Aero Suite colorido.<br/><small>Não digitar ainda. Deixar o logo respirar.</small></td>
+    <td class="col-caption">Acesso seguro e multilíngue</td>
+    <td class="col-narration">O Aero Suite começa com uma experiência clara desde o primeiro acesso.</td>
+  </tr><tr>
+    <td>2</td>
+    <td>8 s</td>
+    <td><code>/login</code><br/>Clicar seletor de idiomas: PT → EN → ES → voltar PT (devagar, 1 s em cada).<br/><small>Mostrar que os labels mudam na tela de login.</small></td>
+    <td class="col-caption">Português, inglês, espanhol e francês</td>
+    <td class="col-narration">Quatro idiomas nativos para equipes e clientes internacionais.</td>
+  </tr><tr>
+    <td>3</td>
+    <td>12 s</td>
+    <td><code>/login → home</code><br/>Login demo (sem errar). Entrada suave até o dashboard.<br/><small>Usar usuário demo preparado. Sem “tentativa e erro”.</small></td>
+    <td class="col-caption">Painel operacional em segundos</td>
+    <td class="col-narration">Em poucos cliques, a equipe está no centro das operações.</td>
+  </tr><tr>
+    <td>4</td>
+    <td>15 s</td>
+    <td><code>Sidebar</code><br/>Scroll lento na sidebar. Usar busca rápida: digitar “estoque” ou “os”.<br/><small>Destacar ícones e hierarquia. Não scrollar freneticamente.</small></td>
+    <td class="col-caption">Navegação por módulos</td>
+    <td class="col-narration">Todos os módulos acessíveis: ordens de serviço, estoque, comercial e conformidade.</td>
+  </tr><tr>
+    <td>5</td>
+    <td>6 s</td>
+    <td><code>/home</code><br/>Mostrar dashboard / home com cards e indicadores visíveis.<br/><small>Pausa 1,5 s nos cards principais.</small></td>
+    <td class="col-caption">Visão do dia</td>
+    <td class="col-narration">Indicadores e pendências em um único painel.</td>
+  </tr><tr>
+    <td>6</td>
+    <td>22 s</td>
+    <td><code>/os</code><br/>Lista de OS → abrir 1 OS (lista → detalhe). Mostrar cabeçalho, cliente, FCU.<br/><small>Escolher OS com dados fictícios limpos. Scroll lento no detalhe.</small></td>
+    <td class="col-caption">Ordens de serviço integradas</td>
+    <td class="col-narration">Da abertura da OS ao acompanhamento técnico — tudo conectado.</td>
+  </tr><tr>
+    <td>7</td>
+    <td>18 s</td>
+    <td><code>/estoque/itens ou /estoque/consulta-qr</code><br/>Lista de itens OU consulta QR: buscar item, mostrar rastreabilidade.<br/><small>Se QR: aproximar código fictício; se lista: abrir 1 item com certificado.</small></td>
+    <td class="col-caption">Estoque rastreável</td>
+    <td class="col-narration">Peças, certificados e rastreio por QR — prontos para auditoria.</td>
+  </tr><tr>
+    <td>8</td>
+    <td>18 s</td>
+    <td><code>/propostas-comerciais</code><br/>Abrir 1 proposta comercial. Mostrar itens, valores, status.<br/><small>Valores fictícios. Scroll até seção de totais.</small></td>
+    <td class="col-caption">Propostas comerciais</td>
+    <td class="col-narration">Do orçamento ao fechamento, com histórico e rastreabilidade.</td>
+  </tr><tr>
+    <td>9</td>
+    <td>15 s</td>
+    <td><code>/externo (opcional)</code><br/>Portal do cliente: visão simplificada para o cliente final.<br/><small>Opcional se tempo apertar; forte diferencial se couber.</small></td>
+    <td class="col-caption">Portal do cliente</td>
+    <td class="col-narration">Seu cliente acompanha propostas e documentos em tempo real.</td>
+  </tr><tr>
+    <td>10</td>
+    <td>6 s</td>
+    <td><code>/home</code><br/>Voltar à home. Pausa final 2 s no logo ou dashboard.<br/><small>Este trecho vira outro/CTA no CapCut.</small></td>
+    <td class="col-caption">Aero Suite — Gestão aeronáutica integrada</td>
+    <td class="col-narration">Aero Suite. Menos planilha, mais hangar.</td>
+  </tr></tbody>
+  </table>
+  <div class="page-footer"><span>Aero Suite · Guia Vídeo Promocional</span><span>Seção 4 · v1.0</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Seção 5</span></div>
+  <h2>Roteiro de narração completo (TTS)</h2>
+  <p class="lead">
+    Texto para Abacus TTS ou locutor. Tom: neutro, profissional, 35–45 anos, ritmo calmo (~130 palavras/min).
+    Ajustar cortes no CapCut para sincronizar com as cenas visíveis.
+  </p>
+  <div class="prompt-block">O Aero Suite reúne, em uma única plataforma, tudo o que uma oficina aeronáutica precisa para operar com rastreabilidade e confiança.
+
+Do login multilíngue ao painel operacional, a equipe acessa ordens de serviço, estoque com certificados de peça, propostas comerciais e evidências para auditoria — sem saltar entre planilhas e sistemas isolados.
+
+Cada ordem de serviço conecta técnica, suprimentos e comercial. O estoque registra part number, lote, certificado e consulta por QR Code.
+
+Propostas comerciais e portal do cliente mantêm o relacionamento transparente, do orçamento à entrega.
+
+Aero Suite — gestão aeronáutica integrada. Conheça em aerosuite.com.br.</div>
+  <p><em>Dica:</em> grave primeiro sem narração; adicione voz na pós-produção. Música ambiente 20 dB abaixo da voz.</p>
+  <div class="page-footer"><span>Aero Suite · Guia Vídeo Promocional</span><span>Seção 5 · v1.0</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Seção 6</span></div>
+  <h2>Abacus — prompts prontos (copiar e colar)</h2>
+  <p class="lead">Pedir <strong>uma tarefa por vez</strong>. Anexar MP4 apenas quando o prompt pedir análise de vídeo.</p>
+  
+<div class="item-card">
+  <div class="item-head">
+    <span class="item-id">A1</span>
+    <span class="item-title">Analisar gravação e sugerir cortes</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row"><div class="item-label">Quando usar</div><div class="item-text">Após gravar aerosuite-demo-bruto.mp4</div></div>
+    <div class="item-label prompt-label">Prompt (copiar e colar no Abacus)</div>
+    <div class="prompt-block">Analyze this SaaS product screen recording (aviation MRO software Aero Suite).
+List the best 6-8 moments for a 90-second promo with timestamps (MM:SS).
+For each moment suggest:
+- KEEP or TRIM note
+- On-screen caption in Brazilian Portuguese (max 8 words)
+- Suggested narration line (1 sentence, neutral professional tone)
+Rules:
+- Do not invent product features not visible in the video
+- Avoid claims like &quot;ANAC certified&quot; — use &quot;supports audit evidence&quot; instead
+- Preserve UI text legibility — no artistic distortion
+Output as a markdown table.</div>
+  </div>
+</div>
+<div class="item-card">
+  <div class="item-head">
+    <span class="item-id">A2</span>
+    <span class="item-title">Upscale para 1080p (se necessário)</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row"><div class="item-label">Quando usar</div><div class="item-text">Somente se a gravação saiu em 720p</div></div>
+    <div class="item-label prompt-label">Prompt (copiar e colar no Abacus)</div>
+    <div class="prompt-block">Upscale this screen recording to 1080p preserving UI text sharpness.
+Minimal artistic changes — product demo fidelity is critical.
+Do not add motion blur, film grain or color grading that reduces text readability.</div>
+  </div>
+</div>
+<div class="item-card">
+  <div class="item-head">
+    <span class="item-id">A3</span>
+    <span class="item-title">B-roll intro — hangar (6 s)</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row"><div class="item-label">Quando usar</div><div class="item-text">Antes da cena 01 no CapCut</div></div>
+    <div class="item-label prompt-label">Prompt (copiar e colar no Abacus)</div>
+    <div class="prompt-block">Cinematic B-roll, 6 seconds, 16:9:
+Modern aviation maintenance hangar at golden hour, shallow depth of field,
+aircraft tail section softly visible, technicians in background (no readable faces),
+professional corporate tone, cool blue and warm amber lighting,
+no text overlays, no logos, photorealistic, smooth slow dolly.</div>
+  </div>
+</div>
+<div class="item-card">
+  <div class="item-head">
+    <span class="item-id">A4</span>
+    <span class="item-title">B-roll outro — hangar (6 s)</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row"><div class="item-label">Quando usar</div><div class="item-text">Depois da cena final / CTA</div></div>
+    <div class="item-label prompt-label">Prompt (copiar e colar no Abacus)</div>
+    <div class="prompt-block">Cinematic B-roll, 6 seconds, 16:9:
+Wide shot of clean MRO hangar floor, aircraft on jacks, organized tool carts,
+morning light through hangar doors, sense of precision and trust,
+corporate aviation aesthetic, no text, no watermarks, slow push-in camera.</div>
+  </div>
+</div>
+<div class="item-card">
+  <div class="item-head">
+    <span class="item-id">A5</span>
+    <span class="item-title">Narração TTS (português Brasil)</span>
+  </div>
+  <div class="item-body">
+    <div class="item-row"><div class="item-label">Quando usar</div><div class="item-text">Após roteiro aprovado — colar texto, não o vídeo</div></div>
+    <div class="item-label prompt-label">Prompt (copiar e colar no Abacus)</div>
+    <div class="prompt-block">Generate Brazilian Portuguese voiceover, neutral professional tone,
+35-45 years, calm confident pace, aviation MRO SaaS promo.
+Pace: ~130 words per minute. Clear articulation for technical audience.
+Insert [PAUSE 0.5s] between paragraphs.
+
+[PASTE NARRATION TEXT FROM SECTION 5 OF THE GUIDE]</div>
+  </div>
+</div>
+  <h3>O que NÃO pedir ao Abacus</h3>
+  <table>
+    <thead><tr><th>Pedido</th><th>Motivo</th></tr></thead>
+    <tbody><tr><td><span class="tag-dont">Evitar</span> “Transforme este vídeo em comercial cinematográfico”</td><td>Distorce texto da UI, botões ficam ilegíveis</td></tr><tr><td><span class="tag-dont">Evitar</span> Video-to-video / estilo filme em cima da gravação</td><td>Labels e números perdem nitidez — inaceitável para demo de software</td></tr><tr><td><span class="tag-dont">Evitar</span> Motion Control usando gravação como referência</td><td>Serve para personagem/cena nova, não para polish de screen recording</td></tr><tr><td><span class="tag-dont">Evitar</span> Pedir “certificação ANAC” ou claims regulatórios</td><td>Aero Suite apoia evidências de auditoria; não substitui certificação</td></tr><tr><td><span class="tag-dont">Evitar</span> Inventar funcionalidades não visíveis no vídeo</td><td>Risco legal e perda de credibilidade com público técnico</td></tr></tbody>
+  </table>
+  <div class="page-footer"><span>Aero Suite · Guia Vídeo Promocional</span><span>Seção 6 · v1.0</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Seção 7</span></div>
+  <h2>Legendas, identidade visual e áudio</h2>
+  <div class="two-col">
+    <div>
+      <h3>Legendas por cena</h3>
+      <table>
+        <thead><tr><th>Cena</th><th>Legenda</th><th>Alternativa</th></tr></thead>
+        <tbody><tr><td>Login + logo</td><td><strong>Acesso multilíngue</strong></td><td>PT · EN · ES · FR</td></tr><tr><td>Dashboard</td><td><strong>Painel operacional</strong></td><td>Visão do dia</td></tr><tr><td>Sidebar</td><td><strong>Todos os módulos</strong></td><td>OS · Estoque · Comercial</td></tr><tr><td>OS detalhe</td><td><strong>Ordem de serviço</strong></td><td>Técnica + suprimentos</td></tr><tr><td>Estoque / QR</td><td><strong>Rastreabilidade total</strong></td><td>Certificado + lote</td></tr><tr><td>Proposta</td><td><strong>Proposta comercial</strong></td><td>Do orçamento ao fechamento</td></tr><tr><td>Portal cliente</td><td><strong>Portal do cliente</strong></td><td>Transparência</td></tr><tr><td>CTA final</td><td><strong>aerosuite.com.br</strong></td><td>Agende uma demo</td></tr></tbody>
+      </table>
+    </div>
+    <div>
+      <h3>Marca Aero Suite</h3>
+      <table>
+        <tr><td>Cor primária</td><td>#0369a1 (azul Aero Suite)</td></tr>
+        <tr><td>Destaque</td><td>#c9a227 (dourado)</td></tr>
+        <tr><td>Tipografia</td><td>Segoe UI / system sans — consistente com produto</td></tr>
+        <tr><td>Lower third</td><td>Fundo semi-transparente #0f172a 85%, texto branco, canto inferior esquerdo</td></tr>
+        <tr><td>CTA</td><td>Botão ou texto: “Conheça o Aero Suite” → aerosuite.com.br</td></tr>
+      </table>
+      <h3>Música de fundo</h3>
+      <p><strong>Estilo:</strong> Corporate ambient, calmo, sem bateria agressiva</p>
+      <p><strong>Fontes:</strong> Artlist, Epidemic Sound, YouTube Audio Library (filtrar “corporate technology”)</p>
+      <p><strong>Nível:</strong> Música ~20 dB abaixo da narração; ducking automático no CapCut</p>
+    </div>
+  </div>
+  <div class="page-footer"><span>Aero Suite · Guia Vídeo Promocional</span><span>Seção 7 · v1.0</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Seção 8</span></div>
+  <h2>Compliance de copy (marketing)</h2>
+  <p class="lead">Público técnico aeronáutico detecta exageros. Use linguagem precisa.</p>
+  <div class="two-col">
+    <div>
+      <h3><span class="tag-do">Usar</span></h3>
+      <ul><li>“Gestão aeronáutica integrada”</li><li>“Rastreabilidade de peças e certificados”</li><li>“Apoia evidências para auditoria e conformidade”</li><li>“Ordens de serviço, estoque e comercial conectados”</li><li>“Portal do cliente”</li><li>“Multilíngue: PT, EN, ES, FR”</li></ul>
+    </div>
+    <div>
+      <h3><span class="tag-dont">Evitar</span></h3>
+      <ul><li>“Certificado pela ANAC / FAA / EASA” (software não certifica organização)</li><li>“Substitui seu SGQ”</li><li>“100% conformidade garantida”</li><li>Nomes de clientes reais sem autorização escrita</li><li>Métricas inventadas (“reduz 80% do tempo”) sem case documentado</li></ul>
+    </div>
+  </div>
+  <div class="page-footer"><span>Aero Suite · Guia Vídeo Promocional</span><span>Seção 8 · v1.0</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Anexo A</span></div>
+  <h2>Mapeamento do vídeo bruto (pós-gravação)</h2>
+  <p class="lead">Quando Thiago (ou marketing) enviar o MP4 bruto para Wellem, o mapeamento entrega uma tabela pronta para CapCut + Abacus.</p>
+  <h3>Como enviar o arquivo</h3>
+  <ul><li>Salvar em docs/marketing/aerosuite-demo-bruto.mp4 no repositório, ou</li><li>Anexar o MP4 no chat/projeto com duração alvo (60 s Reels ou 90 s LinkedIn)</li></ul>
+  <h3>Formato de retorno esperado</h3>
+  <div class="prompt-block">CENA 01 | 0:00–0:08 | Login + idiomas | KEEP | Legenda: &quot;Acesso multilíngue&quot; | ABACUS: —
+CENA 02 | 0:08–0:22 | Sidebar + busca | TRIM 2s início | Legenda: &quot;Painel de voo&quot; | ...
+...
+ABACUS: upscale CENA 01–08 | B-roll antes CENA 01 | outro depois CENA final | TTS parágrafo 1–4</div>
+  <h3>Limitações</h3>
+  <ul><li>Análise por frames — se UI estiver borrada, confirmar timestamps manualmente</li><li>Áudio ambiente da gravação não vira narração final; usar roteiro TTS</li><li>Nomes exatos de telas podem precisar confirmação se texto estiver pequeno</li></ul>
+  <div class="page-footer"><span>Aero Suite · Guia Vídeo Promocional</span><span>Anexo A · v1.0</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Anexo B</span></div>
+  <h2>Modelo de tabela de cenas (CapCut + Abacus)</h2>
+  <p class="lead">Preencher após assistir aerosuite-demo-bruto.mp4. Ordenar cenas na sequência final do vídeo de 90 s.</p>
+  <table>
+    <thead><tr><th>Coluna</th><th>Exemplo</th></tr></thead>
+    <tbody><tr><td>CENA</td><td>01</td></tr><tr><td>TIMESTAMP</td><td>0:00–0:08</td></tr><tr><td>TELA</td><td>Login + idiomas</td></tr><tr><td>AÇÃO</td><td>KEEP</td></tr><tr><td>LEGENDA PT</td><td>Acesso multilíngue</td></tr><tr><td>NARRAÇÃO</td><td>Quatro idiomas nativos…</td></tr><tr><td>ABACUS</td><td>—</td></tr></tbody>
+  </table>
+  <p style="margin-top:5mm"><em>Repita linhas CENA 01–08 conforme necessário. Coluna ABACUS: upscale | B-roll intro | TTS | —</em></p>
+  <div class="page-footer"><span>Aero Suite · Guia Vídeo Promocional</span><span>Anexo B · v1.0</span></div>
+</section>
+
+<section class="page">
+  <div class="page-header"><img src="file:///D:/Desenvolvimento/aerosuite/frontend/src/assets/LOGO_LETRA.png" alt="Aero Suite" /><span class="chapter-label">Anexo C</span></div>
+  <h2>Checklist de publicação</h2>
+  <ul class="checklist"><li>Duração final entre 60 e 90 segundos</li><li>Legendas PT-BR revisadas (sem typos, sem chaves i18n visíveis)</li><li>Nenhum dado real de cliente ou P/N sensível</li><li>UI legível em mobile (testar preview 360p)</li><li>CTA final: aerosuite.com.br ou link de demo Calendly</li><li>Versão 16:9 para LinkedIn e site</li><li>Versão 9:16 reframed para Reels/Stories (opcional)</li><li>Áudio: narração TTS ou música royalty-free baixa (-18 LUFS aprox.)</li><li>Claims: “apoia evidências de auditoria”, nunca “certificado pela ANAC”</li><li>Aprovação Wellem + Thiago antes de publicar</li></ul>
+  <div class="signature-block">
+    <p class="lead" style="margin-bottom:6mm">
+      Este guia foi preparado para capacitar a produção de um vídeo promocional de alta qualidade,
+      preservando a fidelidade do produto e a credibilidade técnica da marca Aero Suite.
+      Dúvidas sobre telas ou fluxos do demo: contatar Wellem Lyra.
+    </p>
+    <div class="signature-line"></div>
+    <div class="signature-name">Wellem Lyra</div>
+    <div class="signature-role">Analista responsável — UX &amp; Conversão Digital</div>
+    <div class="signature-role">Aero Suite</div>
+    <div class="signature-date">09 de junho de 2026 · aerosuite.com.br</div>
+  </div>
+  <div class="page-footer"><span>Aero Suite · Guia Vídeo Promocional</span><span>Anexo C · Assinatura · v1.0</span></div>
+</section>
+
+</body>
+</html>

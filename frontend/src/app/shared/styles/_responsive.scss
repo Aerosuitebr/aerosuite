@@ -1,0 +1,309 @@
+// ========================================
+// ESTILOS RESPONSIVOS GLOBAIS
+// ========================================
+
+// Breakpoints
+$mobile-breakpoint: 768px;
+$tablet-breakpoint: 1024px;
+$desktop-breakpoint: 1440px;
+
+// Mixins para Media Queries
+@mixin mobile {
+  @media (max-width: #{$mobile-breakpoint - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$mobile-breakpoint}) and (max-width: #{$tablet-breakpoint - 1px}) {
+    @content;
+  }
+}
+
+@mixin mobile-or-tablet {
+  @media (max-width: #{$tablet-breakpoint - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$tablet-breakpoint}) {
+    @content;
+  }
+}
+
+@mixin large-desktop {
+  @media (min-width: #{$desktop-breakpoint}) {
+    @content;
+  }
+}
+
+// Classes utilitárias responsivas
+.responsive-container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  
+  @include mobile {
+    padding: 12px;
+  }
+  
+  @include tablet {
+    padding: 16px;
+  }
+  
+  @include desktop {
+    padding: 24px;
+  }
+}
+
+.responsive-grid {
+  display: grid;
+  gap: 16px;
+  
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  @include desktop {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+}
+
+.responsive-table {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  @include mobile {
+    display: block;
+    width: 100%;
+    
+    table {
+      min-width: 600px;
+    }
+  }
+  
+  @include desktop {
+    overflow-x: visible;
+    
+    table {
+      width: 100%;
+      min-width: auto;
+    }
+  }
+}
+
+.responsive-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  @include mobile {
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  @include desktop {
+    padding: 24px;
+    border-radius: 16px;
+  }
+}
+
+.responsive-button {
+  width: 100%;
+  
+  @include tablet {
+    width: auto;
+    min-width: 120px;
+  }
+  
+  @include desktop {
+    width: auto;
+  }
+}
+
+.responsive-form {
+  .form-field {
+    margin-bottom: 16px;
+    
+    @include mobile {
+      margin-bottom: 12px;
+    }
+  }
+  
+  .form-row {
+    display: grid;
+    gap: 16px;
+    
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+  
+    @include tablet {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+  
+    @include desktop {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+  }
+}
+
+.responsive-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  @include tablet {
+    flex-direction: row;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  
+  h1 {
+    font-size: 24px;
+    
+    @include mobile {
+      font-size: 20px;
+    }
+    
+    @include tablet {
+      font-size: 22px;
+    }
+  }
+}
+
+// Utilitários para ocultar/mostrar elementos
+.hide-mobile {
+  @include mobile {
+    display: none !important;
+  }
+}
+
+.hide-tablet {
+  @include tablet {
+    display: none !important;
+  }
+}
+
+.hide-desktop {
+  @include desktop {
+    display: none !important;
+  }
+}
+
+.show-mobile {
+  display: none !important;
+  
+  @include mobile {
+    display: block !important;
+  }
+}
+
+.show-tablet {
+  display: none !important;
+  
+  @include tablet {
+    display: block !important;
+  }
+}
+
+// Tratamento de texto para mobile
+.responsive-text {
+  @include mobile {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  @include desktop {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+}
+
+// Scroll suave em mobile
+.smooth-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+}
+
+// Espaçamento responsivo
+.responsive-spacing {
+  padding: 16px;
+  
+  @include mobile {
+    padding: 12px;
+  }
+  
+  @include tablet {
+    padding: 16px;
+  }
+  
+  @include desktop {
+    padding: 24px;
+  }
+}
+
+// Flexbox responsivo
+.responsive-flex {
+  display: flex;
+  gap: 16px;
+  
+  @include mobile {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  @include tablet {
+    flex-direction: row;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  @include desktop {
+    flex-direction: row;
+    gap: 20px;
+    flex-wrap: nowrap;
+  }
+}
+
+// Grid responsivo com colunas automáticas
+.auto-grid {
+  display: grid;
+  gap: 16px;
+  
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  @include desktop {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+}
+

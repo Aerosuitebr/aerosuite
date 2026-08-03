@@ -1,0 +1,54 @@
+{
+  "at": "2026-06-08T11:01:27.259Z",
+  "before": {
+    "plugins": {
+      "count": 1,
+      "items": [
+        "complianz-gdpr/complianz-gpdr.php"
+      ]
+    },
+    "themes": {
+      "count": 3,
+      "items": [
+        "twentytwentyfive",
+        "twentytwentyfour",
+        "twentytwentytwo"
+      ]
+    }
+  },
+  "pluginRounds": [
+    {
+      "ok": true,
+      "updated": 1,
+      "items": [
+        "complianz-gdpr/complianz-gpdr.php"
+      ]
+    }
+  ],
+  "themeRounds": [
+    {
+      "ok": true,
+      "updated": 3,
+      "items": [
+        "twentytwentyfive",
+        "twentytwentyfour",
+        "twentytwentytwo"
+      ]
+    }
+  ],
+  "pluginLinks": {
+    "count": 0,
+    "links": []
+  },
+  "after": {
+    "plugins": {
+      "count": 0,
+      "items": []
+    },
+    "themes": {
+      "count": 0,
+      "items": []
+    },
+    "menuBadge": "0"
+  }
+}

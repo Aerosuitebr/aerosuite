@@ -1,0 +1,134 @@
+# Stack padrão: API + Web com MySQL no host (URL JDBC: host.docker.internal no .env).
+# MySQL no Docker com bootstrap (funcionalidade, perfil, usuario, seed) + mesma API/Web:
+#   docker compose -f docker-compose.yml -f docker-compose.local-mysql.yml up --build
+# Staging (dump parecido com produção; ver docs/OPERACAO-STAGING.md):
+#   docker compose -f docker-compose.yml -f docker-compose.staging.yml up --build -d
+
+services:
+  # API: 1º build Maven/Quarkus pode levar 5–15 min (parece "travado" — é normal).
+  # Depois, cache do BuildKit acelera. Ver backend/Dockerfile.
+  api:
+    build: ./backend
+    container_name: aerosuite-backend  # Nome fixo para reinicialização automática
+    restart: unless-stopped  # Reinicia automaticamente se parar
+    # JDBC: QUARKUS_DATASOURCE_JDBC_URL no .env (nunca UARKUS_*). Evite 127.0.0.1/localhost na URL com API no Docker.
+    # Validar .env: .\scripts\validate-env.ps1
+    env_file: .env
+    environment:
+      TZ: America/Sao_Paulo
+      QUARKUS_PROFILE: prod
+      QUARKUS_DATASOURCE_DB_KIND: ${QUARKUS_DATASOURCE_DB_KIND:-mysql}
+      # Padrão: MySQL no host (Windows/Mac). Sobrescreva no .env se o MySQL for remoto (IP/hostname).
+      QUARKUS_DATASOURCE_JDBC_URL: ${QUARKUS_DATASOURCE_JDBC_URL:-jdbc:mysql://host.docker.internal:3306/aerosuite?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo&characterEncoding=UTF-8&useUnicode=true&connectionCollation=utf8mb4_unicode_ci}
+      QUARKUS_DATASOURCE_USERNAME: ${QUARKUS_DATASOURCE_USERNAME:-root}
+      QUARKUS_DATASOURCE_PASSWORD: ${QUARKUS_DATASOURCE_PASSWORD:-root}
+      # Google Workspace: valores vêm do .env (senha de app em QUARKUS_MAILER_PASSWORD)
+      QUARKUS_MAILER_HOST: ${QUARKUS_MAILER_HOST:-smtp.gmail.com}
+      QUARKUS_MAILER_PORT: ${QUARKUS_MAILER_PORT:-587}
+      QUARKUS_MAILER_FROM: ${QUARKUS_MAILER_FROM:-noreply@aerosuite.com.br}
+      QUARKUS_MAILER_USERNAME: ${QUARKUS_MAILER_USERNAME:-contato@aerosuite.com.br}
+      QUARKUS_MAILER_PASSWORD: ${QUARKUS_MAILER_PASSWORD}
+      QUARKUS_MAILER_SSL: ${QUARKUS_MAILER_SSL:-false}
+      QUARKUS_MAILER_START_TLS: ${QUARKUS_MAILER_START_TLS:-REQUIRED}
+      QUARKUS_MAILER_AUTH_METHODS: ${QUARKUS_MAILER_AUTH_METHODS:-PLAIN,LOGIN}
+      # URL pública do frontend (links em e-mails). Use quando atrás do Cloudflare (ex: https://app.aerosuite.app)
+      FRONTEND_URL: ${FRONTEND_URL:-https://app.aerosuite.app}
+      # Configurações para atualização automática
+      CONTAINER_NAME: aerosuite-backend  # Nome do container para reinicialização
+      DOCKER_HOST: unix:///var/run/docker.sock  # Socket do Docker (se disponível)
+      # HTTP Update Service - Verificação de atualizações via Google Drive
+      HTTP_UPDATE_ENABLED: "true"
+      HTTP_UPDATE_VERSION_URL: "https://drive.google.com/uc?export=download&id=1G3i9XNZcGFEohHOXX_S-XGLv8OqPvwGP"
+      HTTP_UPDATE_DOWNLOAD_BASE_URL: "https://drive.google.com/uc?export=download&id=1d4cca4hTpqdhtPIvh9XtTBg-ExTrrYnG"
+      # Aero Suite — variáveis de ambiente (identificador técnico AERO_SUITE_*)
+      AERO_SUITE_MANUALS_PATH: "/app/manuals"
+      AERO_SUITE_BIBLIOTECA_PATH: "/biblioteca"
+      # Vídeos da vitrine (pasta na raiz do repositório)
+      AERO_SUITE_VITRINE_PATH: ${AERO_SUITE_VITRINE_PATH:-/app/vitrine-videos}
+      # Logo/wordmark (POST /api/sistema-empresa/logo|wordmark); volume abaixo persiste entre restarts.
+      AERO_SUITE_EMPRESA_ASSETS_DIR: ${AERO_SUITE_EMPRESA_ASSETS_DIR:-/app/empresa-assets}
+      AERO_SUITE_USUARIO_FOTO_DIR: ${AERO_SUITE_USUARIO_FOTO_DIR:-/app/data/uploads/usuarios}
+      # Contato publico via sessao efemera do WhatsApp (QR -> envio unico -> desconexao).
+      AERO_SUITE_MARKETING_WHATSAPP_ENABLED: ${AERO_SUITE_MARKETING_WHATSAPP_ENABLED:-true}
+      AERO_SUITE_MARKETING_WHATSAPP_DESTINATION_PHONE: ${AERO_SUITE_MARKETING_WHATSAPP_DESTINATION_PHONE:-5521990403514}
+      # JWT interno (≥32 caracteres). Em produção defina AERO_SUITE_JWT_SECRET no .env.
+      AERO_SUITE_JWT_SECRET: ${AERO_SUITE_JWT_SECRET:-dev-only-secret-change-in-production-min-32chars}
+      # Plano de controle — allowlist e MFA (lidas de .env via env_file; reforço explícito)
+      PLATFORM_OPS_EMAILS: ${PLATFORM_OPS_EMAILS:-admin@aerosuite.com}
+      PLATFORM_OPS_TOKEN_TTL_MINUTES: ${PLATFORM_OPS_TOKEN_TTL_MINUTES:-60}
+      PLATFORM_OPS_MFA_REQUIRED: ${PLATFORM_OPS_MFA_REQUIRED:-true}
+      PLATFORM_OPS_MFA_REVALIDATE_MINUTES: ${PLATFORM_OPS_MFA_REVALIDATE_MINUTES:-30}
+      # Pasta de backup no container (volume ./backups). Explorer no host: pasta backups/ do projeto.
+      AERO_SUITE_BACKUP_CONTAINER_PATH: "/app/backups"
+      BACKUP_HOST_EXPLORER_FOLDER: "./backups"
+    command: sh -c "echo '⏳ Conectando ao banco MySQL externo...' && sleep 5 && java $$JAVA_OPTS -jar /app/app.jar"
+    ports:
+      - "0.0.0.0:8080:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # Montar Docker socket para permitir reinicialização do próprio container
+    # IMPORTANTE: Descomente apenas se necessário e em ambiente seguro
+    # volumes:
+    #   - /var/run/docker.sock:/var/run/docker.sock:ro  # Read-only para segurança
+    # Montar pasta os para acesso aos arquivos
+    volumes:
+      - ./backend/os:/app/os:rw  # Read-write para permitir criação de diretórios
+      # Backup Docker local: use /app/backups na configuração da API (REQ-022 / homologação)
+      - ./backups:/app/backups:rw
+      # Opcional: caminhos Windows legados (D:\Backup\BD) via /mnt/win_* — descomente se necessário
+      # - D:/:/mnt/win_d:rw
+      # - C:/:/mnt/win_c:rw
+      - ./manuals:/app/manuals:ro  # Manuais do módulo Estoque (PDF)
+      # Biblioteca: pasta ./biblioteca no projeto (no host pode usar mklink /D biblioteca <caminho-da-biblioteca>)
+      # Se o Docker tiver acesso ao drive P:, descomente a linha abaixo e comente a de ./biblioteca:
+      # - P:/caminho/biblioteca:/biblioteca:ro
+      - ./biblioteca:/biblioteca:ro
+      # Vitrine de vídeos (raiz do projeto)
+      - ./vitrine-videos:/app/vitrine-videos:ro
+      # Marca da empresa (ficheiros gravados pela API)
+      - ./empresa-assets:/app/empresa-assets:rw
+      # Fotos de perfil (persistem entre restarts do container API)
+      - ./data/uploads/usuarios:/app/data/uploads/usuarios:rw
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  web:
+    build: ./frontend
+    container_name: aerosuite-frontend  # Nome fixo para reinicialização automática
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "0.0.0.0:8081:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      # Flag de manutenção suave: touch data/nginx-maintenance/on + nginx -s reload no container
+      - ./data/nginx-maintenance:/etc/nginx/maintenance:rw
+    # Configurações para atualização automática
+    environment:
+      CONTAINER_NAME: aerosuite-frontend  # Nome do container para reinicialização
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Página "Opa! Voltaremos em seguida…" na 8081 enquanto o frontend principal está fora (deploy).
+  # Ativar: docker compose --profile maintenance up -d maintenance
+  # Ou: .\scripts\deploy\maintenance-on.ps1
+  maintenance:
+    profiles: ["maintenance"]
+    image: nginx:1.25-alpine
+    container_name: aerosuite-maintenance
+    volumes:
+      - ./frontend/maintenance/nginx-maintenance.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./frontend/maintenance/index.html:/usr/share/nginx/html/index.html:ro
+      - ./frontend/src/assets/logo_side.png:/usr/share/nginx/html/assets/logo_side.png:ro
+      - ./frontend/src/assets/LOGO_LETRA_LIGHT.png:/usr/share/nginx/html/assets/LOGO_LETRA_LIGHT.png:ro
+    ports:
+      - "0.0.0.0:8081:80"
+    restart: "no"

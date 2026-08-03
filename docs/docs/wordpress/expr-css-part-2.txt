@@ -1,0 +1,1 @@
+(async()=>{window.__cssP2="dow);\r\n}\r\n\r\n/* Secção recursos */\r\n#recursos {\r\n  scroll-margin-top: 5rem;\r\n}\r\n";window.__asFooterCss=(window.__asFooterCss||'')+window.__cssP2;return{part:2,total:window.__asFooterCss.length}})()

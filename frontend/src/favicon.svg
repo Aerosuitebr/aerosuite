@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="6" fill="url(#bg)"/>
+  <image href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAE00lEQVR4nMWXbUyVZRjHnxnnebvPQ9bqQ7I+uCnTaur80sq2GuWaNSZtrZUmMHTgDiiExXhLJicVOJxX4HB4U0AaqKExlbSt2dqUAyrngAicg2UJ6Gqr1vD7v133wyE2OW/NwbNd2/Pt97/e70sQQp8zIGmdDw8aO2a9xo7ZR1rHLMiM7TO6nZzW7cR9MLK233Rr/RWs9R7UFrJfoDaT/Qy1iewuFA/ZFBT31CPZHfQqDYEDxBIWf0r7/STt1AO/1vkA3J40vJEsCMUdhOwOQGyY9CmNgaT/PF9GuNxANgmxbsLHI0FhX264XD8BuW4Ckms8TzB2zgyuCLxuHAbXnQHB2DE7txJwyTUOyXlnTvi/8Mdg8cJdd0gAhHjhStPdJT2XGwkYjAsuOccgxAUnKMGdo2DFfTDuc4PtawQr6oVi83M4h8YIlxwhAfHAK65wsPa2CdoeK7RMJ/9nWS4oZZc4XKqbhOyehBQFLjpuQ4gHzqoHwA5fBqu8CuPumoWcG3fVQD3yA5TyfijHrnHPCRoNLtpDAmKodso9c47wnLM9tVAOfweFIA3jUMv7wT618LBLdh+ebwli87mHWHMiGBEu2kchxNpqVGi84KoGoKWVgRWegfaOCVqKCepnPUjcWQrJ/CM0zyQ2nZ3GG1f+wrNNAR3uWBou2kYhxNrnoVZjmQ5or6dDzWtH4vufQ3vvEFTTSSivZSCprBdb+//GmrYgGA/9WFjPCS7aRiDEBKdcU5/b/Uh8dTfUsos8Aiy/C9KBLqgF3Ujuvo8tzV487fLPDxkCRoYbrCEBUSYc72/PFFi6DcZ386G4xqCmFkGyDOEZzzi2tvmwrm8G6vaDkD+u0sNuH40KN1j9EKLCabJ5piA7RqFtywDbWQr1yPfY4LyGTb2z2HLxT7xQchaGgq/B0r7E6m3pUCw39QgQNALcUMsFRJ7t1NfUamx/K690JaseL3/7B9adnsXqpgCM1HLFF8A+qYK6tx7iLisMWc3cc4NtJCLcUOuDEBFOhUcRsN0CSyuH5LyNVzomsb55hBeYbB2GZBuGZPVB21EI+QMzNnsuY3tpJd7y9OI55+A8fGRJuMEyTALCbzXqa6p+lt0MxXQCG/t/x4bK85BTcsGy6mHM7wIr6Abb1wAtJRuGDDf29nSisvsoStrNkO2+sJ4TPIELCAefXyyy3Q8ltQQbu+8huSMAObUUsuUGlLxTYB+awT4yQ8lth1zthSHNjPS6KhS2HUV2m41HJhI8oeYWCVh6n9M45VstpwUvmc9j/aVpyDnNUPe38vEqOsYWJhyFmXIu7W3Ci7kOXrBrj3wDueA0hxNsKbguIMJjQnLdxtqSHiTXXoVY2gdjajFkyxDvc57bxQVG1X7MC3lHERIOXYBo6oL2Zg4Mx71h4QnVN0lA+JeM1jCBJMcQ5Kx6sHQ71C/O6XDn4xOOPCUxSuEZfVFl1kHJcEGs/CksnAuI5yUjUriXgC+OBM91hJwvhj9VdYMERIZTnhcgjuizPcHin4fooEhwXUDj1Fy8z6ho4zUWz7kdH/pHkN2BwRWCY9WxoQGBbrWVgOsCvHn8NKNbbQXgPqFiTNSP08ZAEt1qywr/6vr8cRr6KsZEutXoXKKL5cnDB+dWHR+8zsMe8lwQhH8Bj0BxDJ2eeagAAAAASUVORK5CYII=" x="0" y="0" width="32" height="32"/>
+</svg>

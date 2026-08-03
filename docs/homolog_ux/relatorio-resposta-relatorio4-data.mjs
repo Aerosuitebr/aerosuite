@@ -1,0 +1,53 @@
+/** Resposta técnica — Relatório de Homologação 4 (17/jun/2026) */
+export const META = {
+  title: 'Resposta Técnica — Homologação UX Relatório 4',
+  subtitle: 'Retorno formal aos 28 achados (F01–F14, C01–C04, P01–P11) do reteste de 17/jun/2026',
+  reference: 'Relatório Técnico de Homologação Aero Suite — Rafaella Nottes Consultoria (17/jun/2026)',
+  reportPath: 'D:/Desenvolvimento/homologacao/relatorio 4/Relatório Homologação AeroSuite .pdf',
+  version: '1.0',
+  date: '17 de junho de 2026',
+  site: 'https://app.aerosuite.com.br',
+  analyst: 'Wellem Lyra',
+  role: 'Diretor de TI',
+  org: 'Aero Suite',
+  consultant: 'Rafaella Nottes — Rafaella Nottes Consultoria',
+  verificationAt: '2026-06-17',
+  score: { total: 28, corrected: 28, positive: 0, pending: 0 },
+};
+
+export const SECTIONS = [
+  { id: '1', title: 'Reteste Onboarding (F01–F14)', intro: 'Achados do Relatório 3 revalidados em produção.' },
+  { id: '2', title: 'Cadastro Trial e Assistente (C01–C04)', intro: 'Novos achados no fluxo de cadastro e wizard.' },
+  { id: '3', title: 'Módulo Produtos (P01–P11)', intro: 'Exploração inédita do módulo Produtos.' },
+];
+
+export const ITEMS = [
+  { id: 'F01', section: '1', sev: 'BAIXO', module: 'Login pós-trial', title: 'CTA de conversão após trial expirado', observation: 'Não retestado pela consultora — cenário indisponível.', resolution: 'login: CTA Assinar agora (/billing) quando SUBSCRIPTION_INACTIVE; link novo trial oculto (showStartTrialLink).', verify: 'Login tenant expirado — CTA assinatura visível, sem link cadastro trial' },
+  { id: 'F02', section: '1', sev: 'MEDIO', module: 'Cadastro Trial', title: 'E-mail na query string', observation: 'Resolvido no reteste da consultora.', resolution: 'sessionStorage aerosuite.trialSignupEmail; URL só trialCreated=1.', verify: 'Código — sem queryParam email' },
+  { id: 'F03', section: '1', sev: 'BAIXO', module: 'Wizard Etapa 0', title: 'Tagline pré-preenchida igual ao nome', observation: 'Reincidente — tagline idêntica ao nome na primeira renderização.', resolution: 'applyConfig limpa tagline quando igual a displayName; aviso taglineDuplicatesName visível já na Etapa 0.', verify: 'Wizard novo tenant — tagline vazio e aviso se duplicar' },
+  { id: 'F04', section: '1', sev: 'CRITICO', module: 'Wizard Etapa 0', title: 'Logo de outro tenant', observation: 'Reincidente crítico — asset alheio carregado automaticamente.', resolution: 'sanitizeTenantAssetUrl remove URLs globais/legadas; upload por tenant; GET global 404; saveLogoForTenant.', verify: 'API GET /logo=404; wizard sem URL alheia' },
+  { id: 'F05', section: '1', sev: 'BAIXO', module: 'Wizard Etapa 0', title: 'Cor primária revertendo para preto', observation: 'Resolvido no reteste.', resolution: 'brand-primary-color-input ignora #000000 espúrio.', verify: 'Código — guard onNativeInput' },
+  { id: 'F06', section: '1', sev: 'MEDIO', module: 'Global CSS', title: 'Borda de foco em elementos não interativos', observation: 'Reincidente sistêmico em wizard e produtos.', resolution: 'Removido :focus-visible genérico; exclusões globais para hints, wizard-actions, auth-modulos.', verify: 'Inspecionar wizard e produtos sem outline indevido' },
+  { id: 'F07', section: '1', sev: 'BAIXO', module: 'Cadastro Trial', title: 'E-mail .local sugerido', observation: 'Resolvido no reteste.', resolution: 'TenantSignupService usa e-mail real do admin.', verify: 'Código — sem .local' },
+  { id: 'F08', section: '1', sev: 'MEDIO', module: 'Wizard Etapa 1', title: 'Telefone aceita texto livre', observation: 'Reincidente — validação só no submit com mensagem genérica.', resolution: 'telefoneFormatError + máscara em tempo real; mensagem invalidPhoneFormat.', verify: 'Digitar letras — campo filtra e erro específico' },
+  { id: 'F09', section: '1', sev: 'BAIXO', module: 'Wizard Etapa 1', title: 'Limite de dígitos no telefone', observation: 'Resolvido no reteste.', resolution: 'formatPhoneBr slice(0,11) + maxlength=15.', verify: 'Código — br-input.util.ts' },
+  { id: 'F10', section: '1', sev: 'BAIXO', module: 'Toasts', title: 'Toast sem auto-dismiss', observation: 'Não retestado pela consultora.', resolution: 'MessageService global (i18n-message.factory) injeta life 4–8s e sticky:false em todo toast; TranslationService e toastKey alinhados.', verify: 'Qualquer toast fecha automaticamente sem interação' },
+  { id: 'F12', section: '1', sev: 'BAIXO', module: 'Wizard Revisão', title: 'Botões desalinhados e borda indevida', observation: 'Reincidente nas etapas 1 e 4.', resolution: 'Correção F06 na origem + wizard-btn-primary em linha única.', verify: 'Etapas 1 e 4 — layout e foco' },
+  { id: 'F13', section: '1', sev: 'BAIXO', module: 'Wizard Etapa 0', title: 'Aviso tagline e label cor primária', observation: 'Resolvido no reteste.', resolution: 'Label Cor primária: {{color}}; aviso duplicidade.', verify: 'Revisão com label e aviso' },
+  { id: 'F14', section: '1', sev: 'ALTO', module: 'Cadastro Trial', title: 'Checkbox aceite sem abrir documentos', observation: 'Parcial — checkbox marcável sem abrir links.', resolution: 'FormControl aceito disabled até ambos documentos abertos + bloqueio no submit.', verify: 'Checkbox desabilitado até abrir Termos e Privacidade' },
+  { id: 'C01', section: '2', sev: 'CRITICO', module: 'Cadastro Trial', title: 'Módulos não obrigatórios', observation: 'Cadastro concluído com 0 módulos e acesso total.', resolution: 'Validator requireAtLeastOneModule no frontend; TENANT_SIGNUP_MODULOS_REQUIRED no backend.', verify: 'Desmarcar todos — bloqueio no submit' },
+  { id: 'C02', section: '2', sev: 'BAIXO', module: 'Wizard Revisão', title: 'Capitalização corrompida no endereço', observation: 'Title-case quebrava acentos (ex. Araújo).', resolution: 'displayAddressLine exibe texto como digitado, sem formatBrTitleCase.', verify: 'Revisão mostra endereço fiel ao input' },
+  { id: 'C03', section: '2', sev: 'BAIXO', module: 'Wizard Etapa 2', title: 'Caractere residual no bairro via CEP', observation: 'Sobra " ·" no bairro autopreenchido.', resolution: 'sanitizeAddressField remove separadores residuais.', verify: 'CEP lookup — bairro limpo' },
+  { id: 'C04', section: '2', sev: 'MEDIO', module: 'Wizard Revisão', title: 'Resumo omite complemento e bairro', observation: 'Campos preenchidos não apareciam na revisão.', resolution: 'displayAddressLine inclui bairro e complemento.', verify: 'Revisão lista endereço completo' },
+  { id: 'P01', section: '3', sev: 'ALTO', module: 'Produtos', title: 'Fabricante sem limite de caracteres', observation: 'Nome gigante quebra layout e modal inativar.', resolution: 'maxlength 255 no quick-add; FieldLengthValidator no FabricanteService.', verify: 'Salvar fabricante >255 — erro 400' },
+  { id: 'P02', section: '3', sev: 'MEDIO', module: 'Produtos', title: 'Nome do produto sem limite', observation: 'Texto ilimitado na listagem.', resolution: 'maxlength 255 + contador de caracteres.', verify: 'Campo nome com maxlength e contador' },
+  { id: 'P03', section: '3', sev: 'MEDIO', module: 'Produtos', title: 'Descrição sem limite visível', observation: 'Limite 1000 só no backend; erro com "description".', resolution: 'maxlength 1000 + contador; field label traduzido em fieldTooLong.', verify: 'Contador visível; erro em português' },
+  { id: 'P04', section: '3', sev: 'MEDIO', module: 'Produtos', title: 'Erro genérico ao salvar fabricante longo', observation: 'Ocorreu um erro inesperado.', resolution: 'FieldLengthValidator em FabricanteService retorna mensagem i18n.', verify: 'Overflow fabricante — mensagem clara' },
+  { id: 'P05', section: '3', sev: 'ALTO', module: 'Produtos', title: 'Conversão de moeda incorreta na listagem', observation: 'BRL multiplicado pela cotação USD sempre.', resolution: 'rowCurrency(row) via decodeProductLocal; localeMoney com moeda correta.', verify: 'Produto BRL exibe valor sem conversão indevida' },
+  { id: 'P06', section: '3', sev: 'MEDIO', module: 'Produtos', title: 'Descrição duplicada ao reabrir edição', observation: 'Texto duplicado sem ação do usuário.', resolution: 'loadedProductId evita double-fetch na edição.', verify: 'Editar produto — descrição estável' },
+  { id: 'P07', section: '3', sev: 'MEDIO', module: 'Produtos', title: 'Modal foto estado inconsistente', observation: 'Alterna entre sem foto e substituir.', resolution: 'showPhotoModal limpa cache/preview antes de carregar.', verify: 'Abrir modal — estado consistente' },
+  { id: 'P08', section: '3', sev: 'BAIXO', module: 'Produtos', title: 'Nome arquivo após exclusão de imagem', observation: 'Filename permanece visível.', resolution: 'clearExistingPhoto limpa previews e imagensSelecionadas.', verify: 'Remover foto — UI limpa' },
+  { id: 'P09', section: '3', sev: 'BAIXO', module: 'Produtos', title: 'Tooltip Inativar quebra palavra', observation: 'Inativa/r em duas linhas.', resolution: 'CSS white-space: nowrap no tooltip.', verify: 'Tooltip uma linha' },
+  { id: 'P10', section: '3', sev: 'MEDIO', module: 'Produtos', title: 'Preço/estoque zero sem input real', observation: 'Campos obrigatórios aceitam zero padrão.', resolution: 'formularioValido exige preco > 0 na criação.', verify: 'Criar produto com preço 0 — bloqueado' },
+  { id: 'P11', section: '3', sev: 'MEDIO', module: 'Produtos', title: 'Código PN sem padronização', observation: 'Aceita espaços e texto livre; sem checagem de duplicidade.', resolution: 'PRODUCT_PN_PATTERN + isDuplicateProductPn (FE, aviso inline); assertUniqueProductPn + api.product.pnDuplicate (BE).', verify: 'PN com espaços ou duplicado — bloqueado FE+BE' },
+];

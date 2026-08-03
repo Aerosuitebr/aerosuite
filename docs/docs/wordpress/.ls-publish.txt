@@ -1,0 +1,14 @@
+(async()=>{
+  let b64='';
+  for(let i=0;i<5;i++) b64+=localStorage.getItem('as_home_b64_'+i)||'';
+  if(b64.length!==26780) return{ok:false,stage:'b64',got:b64.length,expected:26780};
+  const bin=atob(b64);
+  const bytes=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+  const home=new TextDecoder('utf-8').decode(bytes);
+  if(!home.includes('5521990403514')) return{ok:false,err:'whatsapp'};
+  if(!home.includes('Integrações podem ser avaliadas na demo')) return{ok:false,err:'faq'};
+  const seo={"title":"Aero Suite — Gestão aeronáutica para oficinas MRO | Rastreabilidade e conformidade","excerpt":"Plataforma SaaS para oficinas, MROs e OMs: OS, estoque FIFO, propostas, documentos e portal do cliente com rastreabilidade e controle operacional. Agende uma demonstração."};
+  await wp.apiFetch({path:'/wp/v2/pages/21',method:'POST',data:{content:home,title:seo.title,excerpt:seo.excerpt,status:'publish'}});
+  return{ok:true,homeLen:home.length,wa:true,hero:home.includes('rastreabilidade'),title:seo.title};
+})()

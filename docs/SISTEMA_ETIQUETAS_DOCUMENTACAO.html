@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Etiquetas Integradas - Aero Suite Controls</title>
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #f97316;
+            --success: #22c55e;
+            --warning: #eab308;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --light: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #334155;
+            background: #f1f5f9;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--dark) 0%, #334155 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .header .subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .header .version {
+            display: inline-block;
+            background: var(--secondary);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(14, 165, 233, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .print-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.5);
+        }
+
+        /* Content */
+        .content {
+            padding: 40px;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .toc h2 {
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .toc ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .toc li a {
+            color: var(--gray);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .toc li a:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .toc li a::before {
+            content: '→';
+            color: var(--primary);
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 50px;
+            page-break-inside: avoid;
+        }
+
+        .section h2 {
+            color: var(--dark);
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section h2 .icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .section h3 {
+            color: var(--dark);
+            font-size: 18px;
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .section p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .info-box.warning {
+            background: #fefce8;
+            border-color: #fde047;
+        }
+
+        .info-box.success {
+            background: #f0fdf4;
+            border-color: #86efac;
+        }
+
+        .info-box.tip {
+            background: #faf5ff;
+            border-color: #d8b4fe;
+        }
+
+        .info-box h4 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .card h4 {
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h4 .badge {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: normal;
+        }
+
+        .card h4 .badge.popular {
+            background: var(--success);
+            color: white;
+        }
+
+        .card h4 .badge.compact {
+            background: var(--warning);
+            color: var(--dark);
+        }
+
+        .card .dimensions {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .card .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .card .features span {
+            background: var(--light);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--dark);
+        }
+
+        /* Etiqueta Preview */
+        .etiqueta-preview {
+            background: white;
+            border: 2px solid var(--dark);
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 350px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .etiqueta-preview .empresa {
+            font-weight: bold;
+            font-size: 14px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .etiqueta-preview .codes {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .etiqueta-preview .qr-placeholder {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #000 25%, transparent 25%),
+                        linear-gradient(-45deg, #000 25%, transparent 25%),
+                        linear-gradient(45deg, transparent 75%, #000 75%),
+                        linear-gradient(-45deg, transparent 75%, #000 75%);
+            background-size: 10px 10px;
+            background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+            border: 1px solid #ccc;
+        }
+
+        .etiqueta-preview .barcode-placeholder {
+            width: 120px;
+            height: 50px;
+            background: repeating-linear-gradient(90deg, #000, #000 2px, #fff 2px, #fff 5px);
+        }
+
+        .etiqueta-preview .codigo {
+            font-family: monospace;
+            font-size: 12px;
+            background: #f0f0f0;
+            padding: 5px;
+            margin: 8px 0;
+            color: #0066cc;
+            font-weight: bold;
+        }
+
+        .etiqueta-preview .pn {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .etiqueta-preview .sn {
+            font-size: 12px;
+            color: #333;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        table th {
+            background: var(--dark);
+            color: white;
+            font-weight: 600;
+        }
+
+        table tr:hover {
+            background: var(--light);
+        }
+
+        table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Steps */
+        .steps {
+            margin: 25px 0;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .step-content p {
+            color: var(--gray);
+            margin: 0;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .code-block .comment {
+            color: #64748b;
+        }
+
+        .code-block .keyword {
+            color: #f472b6;
+        }
+
+        .code-block .string {
+            color: #86efac;
+        }
+
+        .code-block .number {
+            color: #fbbf24;
+        }
+
+        /* Specs List */
+        .specs-list {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .specs-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .specs-list li:last-child {
+            border-bottom: none;
+        }
+
+        .specs-list .label {
+            color: var(--gray);
+        }
+
+        .specs-list .value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* Supplier Card */
+        .supplier-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .supplier-card h4 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .supplier-card .category {
+            color: var(--primary);
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .supplier-card .contact {
+            color: var(--gray);
+            font-size: 13px;
+        }
+
+        .supplier-card .products {
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .supplier-card .products span {
+            background: var(--light);
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        /* Workflow Diagram */
+        .workflow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 30px 0;
+            padding: 30px;
+            background: var(--light);
+            border-radius: 12px;
+        }
+
+        .workflow-item {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            min-width: 140px;
+        }
+
+        .workflow-item .icon {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .workflow-item span {
+            display: block;
+            font-size: 13px;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .workflow-arrow {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .footer p {
+            opacity: 0.8;
+            font-size: 14px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .print-btn {
+                display: none !important;
+            }
+
+            .header {
+                background: var(--dark) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+
+            .card, .supplier-card, .step {
+                page-break-inside: avoid;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+            tr {
+                page-break-inside: avoid;
+            }
+
+            a {
+                text-decoration: none;
+                color: inherit;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow {
+                flex-direction: column;
+            }
+
+            .workflow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1>🏷️ Sistema de Etiquetas Integradas</h1>
+            <p class="subtitle">Documentação Completa - Implementação e Utilização</p>
+            <span class="version">Versão 1.0 - Janeiro 2026</span>
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h2>📋 Índice</h2>
+            <ul>
+                <li><a href="#visao-geral">Visão Geral do Sistema</a></li>
+                <li><a href="#tamanhos">Tamanhos de Etiquetas</a></li>
+                <li><a href="#fluxo">Fluxo de Utilização</a></li>
+                <li><a href="#qrcode">QR Code e Código de Barras</a></li>
+                <li><a href="#impressoras">Impressoras Compatíveis</a></li>
+                <li><a href="#insumos">Insumos e Materiais</a></li>
+                <li><a href="#fornecedores">Fornecedores Recomendados</a></li>
+                <li><a href="#configuracao">Configuração Técnica</a></li>
+                <li><a href="#boas-praticas">Boas Práticas</a></li>
+                <li><a href="#troubleshooting">Solução de Problemas</a></li>
+            </ul>
+        </div>
+
+        <!-- Seção 1: Visão Geral -->
+        <div class="section" id="visao-geral">
+            <h2><span class="icon">📦</span> Visão Geral do Sistema</h2>
+            
+            <p>
+                O Sistema de Etiquetas Integradas da Aero Suite Controls foi desenvolvido para garantir a <strong>rastreabilidade completa</strong> de todos os produtos e componentes aeronáuticos que passam pelo estoque da empresa. Através de códigos QR e códigos de barras tradicionais, cada item pode ser identificado, localizado e ter seu histórico consultado instantaneamente.
+            </p>
+
+            <div class="info-box success">
+                <h4>✅ Benefícios Principais</h4>
+                <ul>
+                    <li><strong>Rastreabilidade Total:</strong> Histórico completo desde a entrada até o consumo</li>
+                    <li><strong>Agilidade:</strong> Consulta instantânea com leitores de código de barras</li>
+                    <li><strong>Conformidade:</strong> Atende requisitos de qualidade aeronáutica</li>
+                    <li><strong>Flexibilidade:</strong> 5 tamanhos de etiqueta para diferentes necessidades</li>
+                    <li><strong>Integração:</strong> Conectado ao sistema de gestão Aero Suite</li>
+                </ul>
+            </div>
+
+            <h3>Componentes da Etiqueta</h3>
+            
+            <div class="etiqueta-preview">
+                <div class="empresa">AEROSUITE CONTROLS</div>
+                <div class="codes">
+                    <div class="qr-placeholder" title="QR Code com código de rastreio"></div>
+                    <div class="barcode-placeholder" title="Código de Barras Code128"></div>
+                </div>
+                <div class="codigo">BLW-2026-01-00001</div>
+                <div class="pn">P/N: 123-456-789</div>
+                <div class="sn">S/N: ABC123456</div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Elemento</th>
+                        <th>Descrição</th>
+                        <th>Escaneável</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>QR Code</strong></td>
+                        <td>Contém o código de rastreio completo (BLW-YYYY-MM-XXXXX)</td>
+                        <td>✅ Sim</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Código de Barras</strong></td>
+                        <td>Code128 com o Part Number do item</td>
+                        <td>✅ Sim</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Código de Rastreio</strong></td>
+                        <td>Identificador único gerado pelo sistema</td>
+                        <td>Texto</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Part Number (P/N)</strong></td>
+                        <td>Código do fabricante do componente</td>
+                        <td>Texto</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Serial Number (S/N)</strong></td>
+                        <td>Número de série único do item</td>
+                        <td>Texto</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Seção 2: Tamanhos de Etiquetas -->
+        <div class="section" id="tamanhos">
+            <h2><span class="icon">📏</span> Tamanhos de Etiquetas Disponíveis</h2>
+
+            <p>
+                O sistema oferece <strong>5 tamanhos padronizados</strong> de etiquetas, cada um otimizado para diferentes tipos de produtos e necessidades operacionais. A escolha do tamanho correto é fundamental para garantir a legibilidade e praticidade no dia a dia.
+            </p>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <h4>Etiqueta Completa <span class="badge popular">Recomendada</span></h4>
+                    <div class="dimensions">100mm × 80mm (4" × 3.15")</div>
+                    <p>Todas as informações: QR Code, código de barras, fornecedor, lote, invoice e localização.</p>
+                    <div class="features">
+                        <span>✓ QR Code</span>
+                        <span>✓ Barcode</span>
+                        <span>✓ Detalhes Completos</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4>Etiqueta Padrão</h4>
+                    <div class="dimensions">100mm × 50mm (4" × 2")</div>
+                    <p>QR Code + Código de Barras + P/N, S/N e localização. Ideal para uso geral.</p>
+                    <div class="features">
+                        <span>✓ QR Code</span>
+                        <span>✓ Barcode</span>
+                        <span>✓ Info Básica</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4>Etiqueta Média</h4>
+                    <div class="dimensions">80mm × 40mm (3.15" × 1.57")</div>
+                    <p>QR Code + P/N e S/N. Sem código de barras tradicional.</p>
+                    <div class="features">
+                        <span>✓ QR Code</span>
+                        <span>✓ P/N + S/N</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4>Etiqueta Compacta <span class="badge compact">Compacta</span></h4>
+                    <div class="dimensions">60mm × 40mm (2.4" × 1.6")</div>
+                    <p>QR Code + Part Number apenas. Para peças de tamanho médio.</p>
+                    <div class="features">
+                        <span>✓ QR Code</span>
+                        <span>✓ P/N</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4>Etiqueta Mínima</h4>
+                    <div class="dimensions">40mm × 30mm (1.57" × 1.18")</div>
+                    <p>Apenas QR Code com código. Para componentes muito pequenos.</p>
+                    <div class="features">
+                        <span>✓ QR Code</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box tip">
+                <h4>💡 Dica de Escolha</h4>
+                <p>
+                    <strong>Regra geral:</strong> Use o maior tamanho que couber no item ou na embalagem. 
+                    Etiquetas maiores são mais fáceis de escanear e têm informações mais legíveis.
+                </p>
+            </div>
+
+            <h3>Tabela de Recomendação por Tipo de Item</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo de Item</th>
+                        <th>Tamanho Recomendado</th>
+                        <th>Justificativa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Caixas e Embalagens Grandes</td>
+                        <td>Completa (100×80mm)</td>
+                        <td>Espaço disponível, visibilidade total</td>
+                    </tr>
+                    <tr>
+                        <td>Peças médias em sacolas</td>
+                        <td>Padrão (100×50mm)</td>
+                        <td>Equilíbrio entre informação e tamanho</td>
+                    </tr>
+                    <tr>
+                        <td>Componentes em bags plásticos</td>
+                        <td>Média (80×40mm)</td>
+                        <td>Cabe em bags padrão sem dobrar</td>
+                    </tr>
+                    <tr>
+                        <td>Peças pequenas individuais</td>
+                        <td>Compacta (60×40mm)</td>
+                        <td>Informação essencial, tamanho reduzido</td>
+                    </tr>
+                    <tr>
+                        <td>Parafusos, arruelas, O-rings</td>
+                        <td>Mínima (40×30mm)</td>
+                        <td>Cabe em itens muito pequenos</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Seção 3: Fluxo de Utilização -->
+        <div class="section" id="fluxo">
+            <h2><span class="icon">🔄</span> Fluxo de Utilização no Sistema</h2>
+
+            <p>
+                O processo de geração e impressão de etiquetas está totalmente integrado ao módulo de Estoque do sistema Aero Suite. Abaixo está o fluxo completo desde a entrada do material até a identificação final.
+            </p>
+
+            <div class="workflow">
+                <div class="workflow-item">
+                    <div class="icon">📥</div>
+                    <span>Entrada de<br>Mercadoria</span>
+                </div>
+                <span class="workflow-arrow">→</span>
+                <div class="workflow-item">
+                    <div class="icon">📝</div>
+                    <span>Cadastro no<br>Sistema</span>
+                </div>
+                <span class="workflow-arrow">→</span>
+                <div class="workflow-item">
+                    <div class="icon">🔢</div>
+                    <span>Geração do<br>Código</span>
+                </div>
+                <span class="workflow-arrow">→</span>
+                <div class="workflow-item">
+                    <div class="icon">📏</div>
+                    <span>Seleção do<br>Tamanho</span>
+                </div>
+                <span class="workflow-arrow">→</span>
+                <div class="workflow-item">
+                    <div class="icon">🖨️</div>
+                    <span>Impressão da<br>Etiqueta</span>
+                </div>
+                <span class="workflow-arrow">→</span>
+                <div class="workflow-item">
+                    <div class="icon">📦</div>
+                    <span>Fixação no<br>Item</span>
+                </div>
+            </div>
+
+            <h3>Passo a Passo Detalhado</h3>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Entrada de Mercadoria</h4>
+                        <p>
+                            Acesse o módulo <strong>Estoque → Entrada de Mercadoria</strong>. 
+                            Preencha os dados da Invoice, fornecedor e itens recebidos.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Cadastro do Item</h4>
+                        <p>
+                            Para cada item, informe: Part Number, Serial Number (se houver), 
+                            quantidade, localização no estoque, certificações e observações.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Geração Automática do Código</h4>
+                        <p>
+                            Ao salvar, o sistema gera automaticamente o código de rastreio no formato 
+                            <strong>BLW-AAAA-MM-XXXXX</strong> (ex: BLW-2026-01-00042).
+                        </p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Seleção do Tamanho</h4>
+                        <p>
+                            Na tela de sucesso ou na lista de itens, clique em <strong>"Imprimir Etiqueta"</strong>. 
+                            O sistema exibirá um modal com os 5 tamanhos disponíveis.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>Impressão</h4>
+                        <p>
+                            Selecione o tamanho adequado e clique em <strong>"Imprimir"</strong>. 
+                            A etiqueta será enviada para a impressora configurada.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h4>Fixação no Item</h4>
+                        <p>
+                            Cole a etiqueta em local visível do item ou embalagem. 
+                            Evite dobras sobre os códigos QR e de barras.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Acesso Rápido (Atalho F2)</h3>
+            
+            <div class="info-box">
+                <h4>⌨️ Atalho de Teclado</h4>
+                <p>
+                    Em qualquer tela do módulo de Estoque, pressione <strong>F2</strong> para abrir 
+                    diretamente a tela de <strong>Consulta por QR Code</strong>. Isso agiliza o processo 
+                    de verificação de itens com leitores de código de barras.
+                </p>
+            </div>
+        </div>
+
+        <!-- Seção 4: QR Code e Código de Barras -->
+        <div class="section" id="qrcode">
+            <h2><span class="icon">📱</span> QR Code e Código de Barras</h2>
+
+            <p>
+                O sistema utiliza duas tecnologias complementares de identificação automática: 
+                <strong>QR Code</strong> para smartphones e tablets, e <strong>Código de Barras Code128</strong> 
+                para leitores tradicionais de código de barras.
+            </p>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <h4>📱 QR Code</h4>
+                    <ul class="specs-list">
+                        <li>
+                            <span class="label">Formato</span>
+                            <span class="value">QR Code Version 2</span>
+                        </li>
+                        <li>
+                            <span class="label">Conteúdo</span>
+                            <span class="value">Código de Rastreio</span>
+                        </li>
+                        <li>
+                            <span class="label">Correção de Erro</span>
+                            <span class="value">Nível M (15%)</span>
+                        </li>
+                        <li>
+                            <span class="label">Biblioteca</span>
+                            <span class="value">qrcode.js (CDN)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>📊 Código de Barras</h4>
+                    <ul class="specs-list">
+                        <li>
+                            <span class="label">Formato</span>
+                            <span class="value">Code128 (auto)</span>
+                        </li>
+                        <li>
+                            <span class="label">Conteúdo</span>
+                            <span class="value">Part Number</span>
+                        </li>
+                        <li>
+                            <span class="label">Altura</span>
+                            <span class="value">35-50px (variável)</span>
+                        </li>
+                        <li>
+                            <span class="label">Biblioteca</span>
+                            <span class="value">JsBarcode (CDN)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Flexibilidade de Busca</h3>
+            
+            <p>
+                A tela de <strong>Consulta por QR Code</strong> aceita múltiplos formatos de busca, 
+                permitindo encontrar itens mesmo sem o código de rastreio completo:
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo de Busca</th>
+                        <th>Exemplo</th>
+                        <th>Resultado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Código de Rastreio</td>
+                        <td><code>BLW-2026-01-00042</code></td>
+                        <td>Item específico</td>
+                    </tr>
+                    <tr>
+                        <td>Part Number</td>
+                        <td><code>123-456-789</code></td>
+                        <td>Lista de itens com mesmo P/N</td>
+                    </tr>
+                    <tr>
+                        <td>Serial Number</td>
+                        <td><code>ABC123456</code></td>
+                        <td>Item específico</td>
+                    </tr>
+                    <tr>
+                        <td>Busca Parcial</td>
+                        <td><code>456</code></td>
+                        <td>Itens que contenham "456"</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box warning">
+                <h4>⚠️ Importante</h4>
+                <p>
+                    Leitores de código de barras tradicionais só conseguem ler o <strong>código de barras Code128</strong> 
+                    (Part Number). Para ler o QR Code, é necessário um leitor 2D ou smartphone/tablet.
+                </p>
+            </div>
+        </div>
+
+        <!-- Seção 5: Impressoras Compatíveis -->
+        <div class="section" id="impressoras">
+            <h2><span class="icon">🖨️</span> Impressoras Compatíveis</h2>
+
+            <p>
+                Para impressão de etiquetas, recomendamos o uso de <strong>impressoras térmicas de etiquetas</strong>, 
+                que oferecem qualidade profissional, durabilidade e velocidade de impressão adequadas 
+                para ambiente industrial.
+            </p>
+
+            <h3>Impressoras Recomendadas</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Modelo</th>
+                        <th>Fabricante</th>
+                        <th>Tipo</th>
+                        <th>Largura Máx.</th>
+                        <th>Preço Aprox.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>ZD220</strong></td>
+                        <td>Zebra</td>
+                        <td>Térmica Direta</td>
+                        <td>104mm</td>
+                        <td>R$ 1.200 - 1.500</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ZD420</strong></td>
+                        <td>Zebra</td>
+                        <td>Térmica / Ribbon</td>
+                        <td>104mm</td>
+                        <td>R$ 2.500 - 3.000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ZT230</strong></td>
+                        <td>Zebra</td>
+                        <td>Industrial</td>
+                        <td>114mm</td>
+                        <td>R$ 4.500 - 6.000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>OS-214 Plus</strong></td>
+                        <td>Argox</td>
+                        <td>Térmica / Ribbon</td>
+                        <td>104mm</td>
+                        <td>R$ 1.800 - 2.200</td>
+                    </tr>
+                    <tr>
+                        <td><strong>L42 Pro</strong></td>
+                        <td>Elgin</td>
+                        <td>Térmica Direta</td>
+                        <td>104mm</td>
+                        <td>R$ 800 - 1.000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>QL-820NWB</strong></td>
+                        <td>Brother</td>
+                        <td>Térmica Direta</td>
+                        <td>62mm</td>
+                        <td>R$ 1.500 - 2.000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TSC TTP-244 Pro</strong></td>
+                        <td>TSC</td>
+                        <td>Térmica / Ribbon</td>
+                        <td>104mm</td>
+                        <td>R$ 1.400 - 1.800</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Especificações Técnicas Necessárias</h3>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <h4>📐 Resolução</h4>
+                    <p><strong>Mínimo: 203 DPI</strong></p>
+                    <p>Recomendado 300 DPI para QR Codes menores (etiquetas compactas e mínimas).</p>
+                </div>
+
+                <div class="card">
+                    <h4>📏 Largura de Impressão</h4>
+                    <p><strong>Mínimo: 60mm</strong></p>
+                    <p>Ideal: 104mm para suportar todos os tamanhos de etiqueta.</p>
+                </div>
+
+                <div class="card">
+                    <h4>🔌 Conectividade</h4>
+                    <p><strong>USB obrigatório</strong></p>
+                    <p>Wi-Fi ou Ethernet são vantagens para uso compartilhado.</p>
+                </div>
+
+                <div class="card">
+                    <h4>🌡️ Método de Impressão</h4>
+                    <p><strong>Térmica direta ou transferência térmica</strong></p>
+                    <p>Transferência térmica oferece maior durabilidade.</p>
+                </div>
+            </div>
+
+            <div class="info-box tip">
+                <h4>💡 Recomendação para Aero Suite Controls</h4>
+                <p>
+                    Para uso industrial aeronáutico, recomendamos a <strong>Zebra ZD420</strong> ou <strong>Argox OS-214 Plus</strong> 
+                    com ribbon de resina, que produz etiquetas resistentes a produtos químicos, 
+                    abrasão e condições adversas de armazenamento.
+                </p>
+            </div>
+        </div>
+
+        <!-- Seção 6: Insumos e Materiais -->
+        <div class="section" id="insumos">
+            <h2><span class="icon">🧻</span> Insumos e Materiais</h2>
+
+            <h3>Tipos de Etiqueta</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Material</th>
+                        <th>Características</th>
+                        <th>Uso Recomendado</th>
+                        <th>Durabilidade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Papel Couché</strong></td>
+                        <td>Econômico, boa impressão</td>
+                        <td>Itens internos, curto prazo</td>
+                        <td>6-12 meses</td>
+                    </tr>
+                    <tr>
+                        <td><strong>BOPP (Polipropileno)</strong></td>
+                        <td>Resistente a água e umidade</td>
+                        <td>Itens em bags plásticos</td>
+                        <td>2-3 anos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Poliéster</strong></td>
+                        <td>Alta resistência química</td>
+                        <td>Componentes aeronáuticos</td>
+                        <td>5+ anos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vinil</strong></td>
+                        <td>Flexível, resistente a UV</td>
+                        <td>Peças expostas</td>
+                        <td>3-5 anos</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Ribbons (Fitas de Impressão)</h3>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <h4>🖤 Ribbon de Cera</h4>
+                    <p>Mais econômico, ideal para etiquetas de papel. Não resiste a atrito ou solventes.</p>
+                    <div class="features">
+                        <span>Papel couché</span>
+                        <span>Uso interno</span>
+                        <span>Menor custo</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4>⚫ Ribbon Misto (Cera/Resina)</h4>
+                    <p>Boa resistência, custo intermediário. Funciona bem em BOPP e papel sintético.</p>
+                    <div class="features">
+                        <span>BOPP</span>
+                        <span>Papel sintético</span>
+                        <span>Custo-benefício</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4>🔵 Ribbon de Resina</h4>
+                    <p>Máxima durabilidade, resiste a solventes, abrasão e altas temperaturas.</p>
+                    <div class="features">
+                        <span>Poliéster</span>
+                        <span>Vinil</span>
+                        <span>Aeronáutico</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box warning">
+                <h4>⚠️ Atenção para Ambiente Aeronáutico</h4>
+                <p>
+                    Para componentes aeronáuticos certificados, utilize <strong>etiquetas de poliéster</strong> com 
+                    <strong>ribbon de resina</strong>. Esta combinação resiste a MEK, querosene de aviação, 
+                    óleos hidráulicos e variações de temperatura de -40°C a +150°C.
+                </p>
+            </div>
+
+            <h3>Estimativa de Consumo Mensal</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Volume de Entradas</th>
+                        <th>Etiquetas/Mês</th>
+                        <th>Rolos de Etiqueta</th>
+                        <th>Ribbons</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Baixo (até 100 itens)</td>
+                        <td>~150</td>
+                        <td>1 rolo (1.000 un)</td>
+                        <td>1 ribbon</td>
+                    </tr>
+                    <tr>
+                        <td>Médio (100-500 itens)</td>
+                        <td>~600</td>
+                        <td>1-2 rolos</td>
+                        <td>1-2 ribbons</td>
+                    </tr>
+                    <tr>
+                        <td>Alto (500+ itens)</td>
+                        <td>~1.500+</td>
+                        <td>2-3 rolos</td>
+                        <td>2-3 ribbons</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Seção 7: Fornecedores Recomendados -->
+        <div class="section" id="fornecedores">
+            <h2><span class="icon">🏪</span> Fornecedores Recomendados</h2>
+
+            <p>
+                Listamos abaixo fornecedores nacionais confiáveis para aquisição de impressoras, 
+                etiquetas, ribbons e leitores de código de barras.
+            </p>
+
+            <h3>Impressoras e Equipamentos</h3>
+
+            <div class="supplier-card">
+                <h4>Zebra Brasil</h4>
+                <div class="category">Fabricante - Impressoras e Leitores</div>
+                <div class="contact">
+                    🌐 www.zebra.com/br<br>
+                    📞 0800 891 7005
+                </div>
+                <div class="products">
+                    Produtos: <span>ZD220</span> <span>ZD420</span> <span>ZT230</span> <span>Leitores DS2208</span>
+                </div>
+            </div>
+
+            <div class="supplier-card">
+                <h4>Elgin Automação</h4>
+                <div class="category">Fabricante Nacional - Impressoras</div>
+                <div class="contact">
+                    🌐 www.elgin.com.br<br>
+                    📞 (11) 3383-5000
+                </div>
+                <div class="products">
+                    Produtos: <span>L42</span> <span>L42 Pro</span> <span>I7</span>
+                </div>
+            </div>
+
+            <div class="supplier-card">
+                <h4>Compex Automação</h4>
+                <div class="category">Distribuidor - Diversas Marcas</div>
+                <div class="contact">
+                    🌐 www.compex.com.br<br>
+                    📞 (11) 3305-4700
+                </div>
+                <div class="products">
+                    Produtos: <span>Zebra</span> <span>Argox</span> <span>Datalogic</span> <span>Insumos</span>
+                </div>
+            </div>
+
+            <h3>Etiquetas e Ribbons</h3>
+
+            <div class="supplier-card">
+                <h4>Flexmedia</h4>
+                <div class="category">Fabricante - Etiquetas Especiais</div>
+                <div class="contact">
+                    🌐 www.flexmedia.com.br<br>
+                    📞 (11) 2065-9500
+                </div>
+                <div class="products">
+                    Produtos: <span>Etiquetas BOPP</span> <span>Poliéster</span> <span>Ribbons</span>
+                </div>
+            </div>
+
+            <div class="supplier-card">
+                <h4>Canguru Etiquetas</h4>
+                <div class="category">Fabricante - Etiquetas Personalizadas</div>
+                <div class="contact">
+                    🌐 www.canguru.com.br<br>
+                    📞 (11) 3871-5000
+                </div>
+                <div class="products">
+                    Produtos: <span>Etiquetas sob medida</span> <span>BOPP</span> <span>Vinil</span>
+                </div>
+            </div>
+
+            <div class="supplier-card">
+                <h4>Ribbons Brasil</h4>
+                <div class="category">Especialista - Ribbons</div>
+                <div class="contact">
+                    🌐 www.ribbonsbrasil.com.br<br>
+                    📞 (11) 2306-3700
+                </div>
+                <div class="products">
+                    Produtos: <span>Ribbon Cera</span> <span>Misto</span> <span>Resina Premium</span>
+                </div>
+            </div>
+
+            <h3>Leitores de Código de Barras</h3>
+
+            <div class="supplier-card">
+                <h4>Datalogic</h4>
+                <div class="category">Fabricante - Leitores Premium</div>
+                <div class="contact">
+                    🌐 www.datalogic.com<br>
+                    📞 Distribuidores autorizados
+                </div>
+                <div class="products">
+                    Produtos: <span>QuickScan QD2500</span> <span>Gryphon GD4500</span> <span>2D Imagers</span>
+                </div>
+            </div>
+
+            <div class="supplier-card">
+                <h4>Honeywell</h4>
+                <div class="category">Fabricante - Leitores Industriais</div>
+                <div class="contact">
+                    🌐 www.honeywell.com/br<br>
+                    📞 0800 770 0102
+                </div>
+                <div class="products">
+                    Produtos: <span>Voyager 1472g</span> <span>Granit 1981i</span> <span>Xenon 1952g</span>
+                </div>
+            </div>
+
+            <div class="info-box tip">
+                <h4>💡 Dica de Compra</h4>
+                <p>
+                    Para leitura de QR Code, certifique-se de adquirir um leitor <strong>2D (imager)</strong>. 
+                    Leitores laser tradicionais (1D) só leem códigos de barras lineares como Code128.
+                </p>
+            </div>
+        </div>
+
+        <!-- Seção 8: Configuração Técnica -->
+        <div class="section" id="configuracao">
+            <h2><span class="icon">⚙️</span> Configuração Técnica</h2>
+
+            <h3>Bibliotecas Utilizadas</h3>
+
+            <p>O sistema utiliza duas bibliotecas JavaScript via CDN para geração dos códigos:</p>
+
+            <div class="code-block">
+<span class="comment">/* QR Code - qrcode.js */</span>
+&lt;script src=<span class="string">"https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"</span>&gt;&lt;/script&gt;
+
+<span class="comment">/* Código de Barras - JsBarcode */</span>
+&lt;script src=<span class="string">"https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"</span>&gt;&lt;/script&gt;
+            </div>
+
+            <h3>Configuração de Impressão CSS</h3>
+
+            <p>Cada tamanho de etiqueta possui configuração específica de página:</p>
+
+            <div class="code-block">
+<span class="comment">/* Etiqueta Completa 100x80mm */</span>
+<span class="keyword">@page</span> { 
+    size: <span class="number">100mm</span> <span class="number">80mm</span>; 
+    margin: <span class="number">0</span>; 
+}
+
+<span class="comment">/* Etiqueta Padrão 100x50mm */</span>
+<span class="keyword">@page</span> { 
+    size: <span class="number">100mm</span> <span class="number">50mm</span>; 
+    margin: <span class="number">0</span>; 
+}
+
+<span class="comment">/* Etiqueta Média 80x40mm */</span>
+<span class="keyword">@page</span> { 
+    size: <span class="number">80mm</span> <span class="number">40mm</span>; 
+    margin: <span class="number">0</span>; 
+}
+
+<span class="comment">/* Etiqueta Compacta 60x40mm */</span>
+<span class="keyword">@page</span> { 
+    size: <span class="number">60mm</span> <span class="number">40mm</span>; 
+    margin: <span class="number">0</span>; 
+}
+
+<span class="comment">/* Etiqueta Mínima 40x30mm */</span>
+<span class="keyword">@page</span> { 
+    size: <span class="number">40mm</span> <span class="number">30mm</span>; 
+    margin: <span class="number">0</span>; 
+}
+            </div>
+
+            <h3>Geração do QR Code</h3>
+
+            <div class="code-block">
+<span class="comment">// Gerar QR Code no canvas</span>
+QRCode.toCanvas(
+    document.getElementById(<span class="string">'qrcode'</span>),
+    <span class="string">'BLW-2026-01-00042'</span>,  <span class="comment">// Código de rastreio</span>
+    {
+        width: <span class="number">120</span>,
+        margin: <span class="number">1</span>,
+        color: {
+            dark: <span class="string">'#000000'</span>,
+            light: <span class="string">'#ffffff'</span>
+        }
+    }
+);
+            </div>
+
+            <h3>Geração do Código de Barras</h3>
+
+            <div class="code-block">
+<span class="comment">// Gerar Code128 em SVG</span>
+JsBarcode(<span class="string">"#barcode"</span>, <span class="string">"123-456-789"</span>, {
+    format: <span class="string">"CODE128"</span>,
+    width: <span class="number">2</span>,
+    height: <span class="number">50</span>,
+    displayValue: <span class="keyword">true</span>,
+    fontSize: <span class="number">12</span>,
+    margin: <span class="number">5</span>
+});
+            </div>
+
+            <h3>Configuração da Impressora no Windows</h3>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Instalar Driver</h4>
+                        <p>Baixe e instale o driver da impressora do site do fabricante.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Configurar Tamanho de Papel</h4>
+                        <p>
+                            Acesse <strong>Configurações → Impressoras</strong> → clique com botão direito na impressora 
+                            → <strong>Preferências de Impressão</strong> → configure o tamanho de etiqueta desejado.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Definir como Padrão (Opcional)</h4>
+                        <p>Para imprimir diretamente, defina a impressora de etiquetas como padrão do sistema.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Testar Impressão</h4>
+                        <p>Imprima uma etiqueta de teste pelo sistema para verificar alinhamento e qualidade.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 9: Boas Práticas -->
+        <div class="section" id="boas-praticas">
+            <h2><span class="icon">✅</span> Boas Práticas</h2>
+
+            <h3>Posicionamento da Etiqueta</h3>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <h4>✓ Correto</h4>
+                    <ul>
+                        <li>Superfície limpa e seca</li>
+                        <li>Local visível e acessível</li>
+                        <li>Sem dobras sobre os códigos</li>
+                        <li>Temperatura ambiente na aplicação</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>✗ Evitar</h4>
+                    <ul>
+                        <li>Superfícies oleosas ou sujas</li>
+                        <li>Locais de atrito constante</li>
+                        <li>Aplicação em baixa temperatura</li>
+                        <li>Dobrar a etiqueta na embalagem</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Armazenamento de Insumos</h3>
+
+            <div class="info-box">
+                <h4>📦 Condições de Armazenamento</h4>
+                <ul>
+                    <li><strong>Etiquetas:</strong> Ambiente seco, temperatura 15-25°C, longe de luz solar direta</li>
+                    <li><strong>Ribbons:</strong> Embalagem original fechada até o uso, mesmas condições das etiquetas</li>
+                    <li><strong>Validade:</strong> Utilizar dentro de 12 meses da fabricação para melhor adesão</li>
+                </ul>
+            </div>
+
+            <h3>Procedimento de Verificação</h3>
+
+            <p>Após imprimir a etiqueta, sempre verifique:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Verificação</th>
+                        <th>Ação se Falhar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>QR Code</td>
+                        <td>Escanear com smartphone</td>
+                        <td>Reimprimir, verificar ribbon</td>
+                    </tr>
+                    <tr>
+                        <td>Código de Barras</td>
+                        <td>Escanear com leitor</td>
+                        <td>Verificar configuração Code128</td>
+                    </tr>
+                    <tr>
+                        <td>Texto legível</td>
+                        <td>Leitura visual</td>
+                        <td>Aumentar contraste/verificar ribbon</td>
+                    </tr>
+                    <tr>
+                        <td>Adesão</td>
+                        <td>Tentar descolar levemente</td>
+                        <td>Limpar superfície, usar etiqueta adequada</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Seção 10: Troubleshooting -->
+        <div class="section" id="troubleshooting">
+            <h2><span class="icon">🔧</span> Solução de Problemas</h2>
+
+            <h3>Problemas Comuns e Soluções</h3>
+
+            <div class="info-box warning">
+                <h4>❓ QR Code não é lido pelo scanner</h4>
+                <p><strong>Causas possíveis:</strong></p>
+                <ul>
+                    <li>Impressão com baixa resolução → Usar impressora 300 DPI</li>
+                    <li>QR Code muito pequeno → Usar tamanho de etiqueta maior</li>
+                    <li>Ribbon gasto → Trocar ribbon</li>
+                    <li>Leitor 1D (só lê barcode) → Usar leitor 2D</li>
+                </ul>
+            </div>
+
+            <div class="info-box warning">
+                <h4>❓ Etiqueta não adere corretamente</h4>
+                <p><strong>Causas possíveis:</strong></p>
+                <ul>
+                    <li>Superfície oleosa → Limpar com álcool isopropílico</li>
+                    <li>Temperatura muito baixa → Aplicar em ambiente aquecido</li>
+                    <li>Etiqueta inadequada para material → Usar BOPP ou poliéster</li>
+                    <li>Etiqueta vencida → Verificar data de fabricação</li>
+                </ul>
+            </div>
+
+            <div class="info-box warning">
+                <h4>❓ Impressão borrada ou fraca</h4>
+                <p><strong>Causas possíveis:</strong></p>
+                <ul>
+                    <li>Ribbon incompatível com etiqueta → Verificar combinação ribbon/etiqueta</li>
+                    <li>Cabeça de impressão suja → Limpar com álcool e cotonete</li>
+                    <li>Temperatura de impressão baixa → Aumentar nas configurações</li>
+                    <li>Velocidade muito alta → Reduzir velocidade de impressão</li>
+                </ul>
+            </div>
+
+            <div class="info-box warning">
+                <h4>❓ Tamanho da etiqueta não corresponde ao impresso</h4>
+                <p><strong>Causas possíveis:</strong></p>
+                <ul>
+                    <li>Driver não configurado → Configurar tamanho nas preferências da impressora</li>
+                    <li>Navegador alterando escala → Usar "Escala: 100%" na impressão</li>
+                    <li>Margem do navegador → Remover cabeçalho/rodapé de impressão</li>
+                </ul>
+            </div>
+
+            <h3>Manutenção Preventiva</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Frequência</th>
+                        <th>Ação</th>
+                        <th>Material</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Diária</td>
+                        <td>Verificar estoque de etiquetas</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>Semanal</td>
+                        <td>Limpar cabeça de impressão</td>
+                        <td>Álcool isopropílico + cotonete</td>
+                    </tr>
+                    <tr>
+                        <td>Mensal</td>
+                        <td>Limpar sensores e rolos</td>
+                        <td>Pano seco + ar comprimido</td>
+                    </tr>
+                    <tr>
+                        <td>Trimestral</td>
+                        <td>Verificar desgaste de componentes</td>
+                        <td>Manutenção técnica se necessário</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box tip">
+                <h4>💡 Suporte Técnico</h4>
+                <p>
+                    Em caso de problemas não resolvidos com este guia, entre em contato com o 
+                    suporte técnico da Aero Suite Controls ou consulte a documentação do fabricante 
+                    da impressora.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p><strong>AEROSUITE CONTROLS SERVIÇOS AERONÁUTICOS</strong></p>
+        <p>Sistema de Etiquetas Integradas - Documentação v1.0</p>
+        <p>Janeiro 2026 - www.aerosuite.app</p>
+    </div>
+</div>
+
+<!-- Print Button -->
+<button class="print-btn" onclick="window.print()">
+    <span>📄</span> Salvar como PDF
+</button>
+
+</body>
+</html>

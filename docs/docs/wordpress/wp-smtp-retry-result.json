@@ -1,0 +1,22 @@
+{
+  "pageInfo": {
+    "links": [
+      {
+        "tag": "BUTTON",
+        "text": "Excluir senha",
+        "id": ""
+      }
+    ],
+    "passPlaceholder": "",
+    "passValueLen": 13
+  },
+  "passAfter": 16,
+  "saved": {},
+  "test": {
+    "success": true,
+    "fail": false,
+    "debug": [],
+    "excerpt": "E-mail de teste Exportar Ações programadas Eventos de depuração\nE-mail de teste\nSucesso!\n\nO e-mail de teste em HTML foi enviado! Verifique sua caixa de entrada para se certificar de que foi entregue.\n\nFeito com ♥ pela equipe WP Mail SMTP\n\nSuporte/\nDocumentação/\nPlugins gratuitos\nFacebook\nX\nYouTube\n\nAvalie o WP Mail SMTP ★★★★★ em WordPress.org para nos ajudar a divulgar o plugin. A equipe do WP Mail SMTP agradece!\n\nWP Mail SMTP 4.8.0\n\nVer Links Rápidos"
+  },
+  "at": "2026-06-09T15:37:20.314Z"
+}

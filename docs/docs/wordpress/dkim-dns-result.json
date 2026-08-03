@@ -1,0 +1,8 @@
+{
+  "at": "2026-06-09T13:56:00.000Z",
+  "action": "created",
+  "host": "google._domainkey.aerosuite.com.br",
+  "selector": "google",
+  "googleAdmin": "autenticacao_iniciada",
+  "dnsVerified": true
+}

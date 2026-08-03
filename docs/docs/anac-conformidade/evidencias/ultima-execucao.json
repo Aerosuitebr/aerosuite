@@ -1,0 +1,157 @@
+﻿{
+    "schema":  "aerosuite-anac-evidencias-v1",
+    "generatedAt":  "2026-06-10T11:42:01.8092008-03:00",
+    "durationSec":  474.3,
+    "dossiePath":  "docs/anac-conformidade",
+    "matriz":  "docs/anac-conformidade/03-matriz-requisitos.csv",
+    "summary":  {
+                    "pass":  11,
+                    "fail":  0,
+                    "skip":  0,
+                    "total":  11
+                },
+    "readyForAnacSubmission":  true,
+    "blockersIfAny":  [
+                          "Processo organizacional: ver docs/anac-conformidade/21-pendencias-acoes-certificacao.md",
+                          "Assinaturas RT/TI/Qualidade (escopo, relatorio, atas) e restore homologacao VAL-19"
+                      ],
+    "steps":  [
+                  {
+                      "id":  "MVN-01",
+                      "name":  "Maven unit: Part145CrsSegregationTest,Part145CrsSegregationEmitTest,ConformidadeEnforcementTest,CertificadoPecaUtilTest,DossieAuditoriaLabelsTest,OsRegistroEncerradoGuardTest,TotpServiceTest,MfaPolicyServiceTest,OsTarefaDadoTecnicoServiceTest,JobCardAssinaturaIntegrityTest,ConformidadeChecklistJsonTest",
+                      "category":  "junit",
+                      "status":  "PASS",
+                      "detail":  "",
+                      "reqIds":  [
+                                     "REQ-002",
+                                     "REQ-005",
+                                     "REQ-010",
+                                     "REQ-014",
+                                     "REQ-016",
+                                     "REQ-017",
+                                     "REQ-018",
+                                     "REQ-019",
+                                     "REQ-001",
+                                     "REQ-008"
+                                 ],
+                      "at":  "2026-06-10T11:34:16.2656562-03:00"
+                  },
+                  {
+                      "id":  "MVN-02",
+                      "name":  "Maven IT: ConformidadeEnforcementP1IT,ConformidadeApiAuthIT,ConformidadeOndaDFunctionalIT,JobCardAssinaturaIntegrityIT",
+                      "category":  "junit",
+                      "status":  "PASS",
+                      "detail":  "",
+                      "reqIds":  [
+                                     "REQ-008",
+                                     "REQ-010",
+                                     "REQ-016",
+                                     "REQ-017",
+                                     "REQ-019"
+                                 ],
+                      "at":  "2026-06-10T11:34:53.3051727-03:00"
+                  },
+                  {
+                      "id":  "FLY-01",
+                      "name":  "verify-flyway.ps1",
+                      "category":  "infra",
+                      "status":  "PASS",
+                      "detail":  "",
+                      "reqIds":  [
+                                     "REQ-028"
+                                 ],
+                      "at":  "2026-06-10T11:34:55.3219003-03:00"
+                  },
+                  {
+                      "id":  "SMK-01",
+                      "name":  "RBAC smoke",
+                      "category":  "smoke",
+                      "status":  "PASS",
+                      "detail":  "",
+                      "reqIds":  [
+                                     "REQ-010"
+                                 ],
+                      "at":  "2026-06-10T11:35:20.7537101-03:00"
+                  },
+                  {
+                      "id":  "SMK-02",
+                      "name":  "Tenant isolation",
+                      "category":  "smoke",
+                      "status":  "PASS",
+                      "detail":  "",
+                      "reqIds":  [
+                                     "REQ-012"
+                                 ],
+                      "at":  "2026-06-10T11:35:40.6809883-03:00"
+                  },
+                  {
+                      "id":  "SMK-03",
+                      "name":  "Enforcement smoke",
+                      "category":  "smoke",
+                      "status":  "PASS",
+                      "detail":  "",
+                      "reqIds":  [
+                                     "REQ-017",
+                                     "REQ-018",
+                                     "REQ-021"
+                                 ],
+                      "at":  "2026-06-10T11:37:14.4384113-03:00"
+                  },
+                  {
+                      "id":  "SMK-04",
+                      "name":  "RelatÃ³rios SGQ smoke",
+                      "category":  "smoke",
+                      "status":  "PASS",
+                      "detail":  "",
+                      "reqIds":  [
+                                     "REQ-025"
+                                 ],
+                      "at":  "2026-06-10T11:37:31.7598405-03:00"
+                  },
+                  {
+                      "id":  "SMK-05",
+                      "name":  "Hangar offline sync",
+                      "category":  "smoke",
+                      "status":  "PASS",
+                      "detail":  "",
+                      "reqIds":  [
+                                     "REQ-004"
+                                 ],
+                      "at":  "2026-06-10T11:37:53.4111643-03:00"
+                  },
+                  {
+                      "id":  "DOC-01",
+                      "name":  "SimulaÃ§Ã£o contingÃªncia (ata JSON)",
+                      "category":  "doc",
+                      "status":  "PASS",
+                      "detail":  "",
+                      "reqIds":  [
+                                     "REQ-026"
+                                 ],
+                      "at":  "2026-06-10T11:38:05.7062055-03:00"
+                  },
+                  {
+                      "id":  "DOC-02",
+                      "name":  "EvidÃªncia backup/restore (ata JSON)",
+                      "category":  "doc",
+                      "status":  "PASS",
+                      "detail":  "",
+                      "reqIds":  [
+                                     "REQ-022"
+                                 ],
+                      "at":  "2026-06-10T11:38:28.5301171-03:00"
+                  },
+                  {
+                      "id":  "E2E-01",
+                      "name":  "Playwright conformidade + hangar offline",
+                      "category":  "e2e",
+                      "status":  "PASS",
+                      "detail":  "",
+                      "reqIds":  [
+                                     "REQ-004",
+                                     "REQ-017"
+                                 ],
+                      "at":  "2026-06-10T11:42:01.8076456-03:00"
+                  }
+              ]
+}

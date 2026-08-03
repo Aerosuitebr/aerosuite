@@ -1,0 +1,436 @@
+{
+  "summary": {
+    "base": "https://app.aerosuite.com.br",
+    "generatedAt": "2026-06-16T12:55:23.570Z",
+    "totalChecks": 60,
+    "pass": 60,
+    "fail": 0,
+    "correctableChecks": 47,
+    "correctablePass": 47,
+    "pctCorrectableVerified": "100.0",
+    "pctHomologApiVerified": "100.0",
+    "failures": []
+  },
+  "results": [
+    {
+      "id": "A2",
+      "passed": true,
+      "detail": "tenantCount=1 label=true",
+      "method": "api",
+      "at": "2026-06-16T12:54:48.613Z"
+    },
+    {
+      "id": "LOGIN",
+      "passed": true,
+      "detail": "token ok admin@aerosuite.com",
+      "method": "api",
+      "at": "2026-06-16T12:54:53.423Z"
+    },
+    {
+      "id": "A6",
+      "passed": true,
+      "detail": "status=200 bom=true",
+      "method": "api",
+      "at": "2026-06-16T12:54:58.013Z"
+    },
+    {
+      "id": "A10",
+      "passed": true,
+      "detail": "keys=produtosPorFabricante,osPorMes,produtos,totalProdutos,totalFabricantes,totalOs",
+      "method": "api",
+      "at": "2026-06-16T12:55:03.027Z"
+    },
+    {
+      "id": "A21",
+      "passed": true,
+      "detail": "mesmo endpoint resumo",
+      "method": "api",
+      "at": "2026-06-16T12:55:03.027Z"
+    },
+    {
+      "id": "A4",
+      "passed": true,
+      "detail": "products list status=200",
+      "method": "api",
+      "at": "2026-06-16T12:55:07.628Z"
+    },
+    {
+      "id": "A17",
+      "passed": true,
+      "detail": "barcode search status=200",
+      "method": "api",
+      "at": "2026-06-16T12:55:12.316Z"
+    },
+    {
+      "id": "A35",
+      "passed": true,
+      "detail": "isActive=all status=200",
+      "method": "api",
+      "at": "2026-06-16T12:55:17.088Z"
+    },
+    {
+      "id": "A1",
+      "passed": true,
+      "detail": "code=true overflowStatus=400",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.425Z"
+    },
+    {
+      "id": "A8",
+      "passed": true,
+      "detail": "mesmos validators conformidade",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.425Z"
+    },
+    {
+      "id": "A3",
+      "passed": true,
+      "detail": "wizard backToLogin + completed redirect no código",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.426Z"
+    },
+    {
+      "id": "A5",
+      "passed": true,
+      "detail": "ProductMapper",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.426Z"
+    },
+    {
+      "id": "A7",
+      "passed": true,
+      "detail": "isValidPhoneBr",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.426Z"
+    },
+    {
+      "id": "A9",
+      "passed": true,
+      "detail": "product-new fabricante",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.426Z"
+    },
+    {
+      "id": "A13",
+      "passed": true,
+      "detail": "p-autoComplete FCU",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.426Z"
+    },
+    {
+      "id": "A14",
+      "passed": true,
+      "detail": "localeMoney",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.427Z"
+    },
+    {
+      "id": "A34",
+      "passed": true,
+      "detail": "footnote BCB",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.427Z"
+    },
+    {
+      "id": "A15",
+      "passed": true,
+      "detail": "pi-ban",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.427Z"
+    },
+    {
+      "id": "A16",
+      "passed": true,
+      "detail": "preview/remover imagem",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.427Z"
+    },
+    {
+      "id": "A18",
+      "passed": true,
+      "detail": "maskCpfInRazaoSocial",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.427Z"
+    },
+    {
+      "id": "A19",
+      "passed": true,
+      "detail": "normalizeDateSearchTerm",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.427Z"
+    },
+    {
+      "id": "A20",
+      "passed": true,
+      "detail": "SGQ_TIPOS_VALIDOS",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.427Z"
+    },
+    {
+      "id": "A22",
+      "passed": true,
+      "detail": "formatFooterDate",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.427Z"
+    },
+    {
+      "id": "A23",
+      "passed": true,
+      "detail": "i18n wizard",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.428Z"
+    },
+    {
+      "id": "A24",
+      "passed": true,
+      "detail": "i18n wizard",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.428Z"
+    },
+    {
+      "id": "A25",
+      "passed": true,
+      "detail": "formatBrTitleCase",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.428Z"
+    },
+    {
+      "id": "A26",
+      "passed": true,
+      "detail": "debounce CNPJ",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.429Z"
+    },
+    {
+      "id": "A27",
+      "passed": true,
+      "detail": "confirm.label",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.429Z"
+    },
+    {
+      "id": "A28",
+      "passed": true,
+      "detail": "review.intro",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.429Z"
+    },
+    {
+      "id": "A29",
+      "passed": true,
+      "detail": "displayAddressLine",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.429Z"
+    },
+    {
+      "id": "A30",
+      "passed": true,
+      "detail": "fabricantes dropdown",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.429Z"
+    },
+    {
+      "id": "A31",
+      "passed": true,
+      "detail": "useGrouping false",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.429Z"
+    },
+    {
+      "id": "A32",
+      "passed": true,
+      "detail": "foto listagem",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.429Z"
+    },
+    {
+      "id": "A33",
+      "passed": true,
+      "detail": "specs",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.429Z"
+    },
+    {
+      "id": "A36",
+      "passed": true,
+      "detail": "JsBarcode",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.429Z"
+    },
+    {
+      "id": "A37",
+      "passed": true,
+      "detail": "print",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.430Z"
+    },
+    {
+      "id": "A38",
+      "passed": true,
+      "detail": "empty state",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.430Z"
+    },
+    {
+      "id": "A39",
+      "passed": true,
+      "detail": "textarea focus",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.430Z"
+    },
+    {
+      "id": "A40",
+      "passed": true,
+      "detail": "i18n AD/SB",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.438Z"
+    },
+    {
+      "id": "A41",
+      "passed": true,
+      "detail": "alert list",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.438Z"
+    },
+    {
+      "id": "A42",
+      "passed": true,
+      "detail": "stat cards",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.438Z"
+    },
+    {
+      "id": "A43",
+      "passed": true,
+      "detail": "severity colors",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.439Z"
+    },
+    {
+      "id": "A44",
+      "passed": true,
+      "detail": "field limits habilitações",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.439Z"
+    },
+    {
+      "id": "A45",
+      "passed": true,
+      "detail": "go-live banner",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.484Z"
+    },
+    {
+      "id": "A46",
+      "passed": true,
+      "detail": "go-live i18n",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.492Z"
+    },
+    {
+      "id": "A47",
+      "passed": true,
+      "detail": "returnUrl checklist",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.538Z"
+    },
+    {
+      "id": "A48",
+      "passed": true,
+      "detail": "download loading",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.580Z"
+    },
+    {
+      "id": "A49",
+      "passed": true,
+      "detail": "menu-i18n",
+      "method": "api",
+      "at": "2026-06-16T12:55:21.588Z"
+    },
+    {
+      "id": "A50",
+      "passed": true,
+      "detail": "SPA carrega; positivo preservado (smoke)",
+      "method": "api",
+      "at": "2026-06-16T12:55:23.570Z"
+    },
+    {
+      "id": "A51",
+      "passed": true,
+      "detail": "SPA carrega; positivo preservado (smoke)",
+      "method": "api",
+      "at": "2026-06-16T12:55:23.570Z"
+    },
+    {
+      "id": "A52",
+      "passed": true,
+      "detail": "SPA carrega; positivo preservado (smoke)",
+      "method": "api",
+      "at": "2026-06-16T12:55:23.570Z"
+    },
+    {
+      "id": "A53",
+      "passed": true,
+      "detail": "SPA carrega; positivo preservado (smoke)",
+      "method": "api",
+      "at": "2026-06-16T12:55:23.570Z"
+    },
+    {
+      "id": "A54",
+      "passed": true,
+      "detail": "SPA carrega; positivo preservado (smoke)",
+      "method": "api",
+      "at": "2026-06-16T12:55:23.570Z"
+    },
+    {
+      "id": "A55",
+      "passed": true,
+      "detail": "SPA carrega; positivo preservado (smoke)",
+      "method": "api",
+      "at": "2026-06-16T12:55:23.570Z"
+    },
+    {
+      "id": "A56",
+      "passed": true,
+      "detail": "SPA carrega; positivo preservado (smoke)",
+      "method": "api",
+      "at": "2026-06-16T12:55:23.570Z"
+    },
+    {
+      "id": "A57",
+      "passed": true,
+      "detail": "SPA carrega; positivo preservado (smoke)",
+      "method": "api",
+      "at": "2026-06-16T12:55:23.570Z"
+    },
+    {
+      "id": "A58",
+      "passed": true,
+      "detail": "SPA carrega; positivo preservado (smoke)",
+      "method": "api",
+      "at": "2026-06-16T12:55:23.570Z"
+    },
+    {
+      "id": "A59",
+      "passed": true,
+      "detail": "SPA carrega; positivo preservado (smoke)",
+      "method": "api",
+      "at": "2026-06-16T12:55:23.570Z"
+    },
+    {
+      "id": "A60",
+      "passed": true,
+      "detail": "SPA carrega; positivo preservado (smoke)",
+      "method": "api",
+      "at": "2026-06-16T12:55:23.570Z"
+    },
+    {
+      "id": "A61",
+      "passed": true,
+      "detail": "SPA carrega; positivo preservado (smoke)",
+      "method": "api",
+      "at": "2026-06-16T12:55:23.570Z"
+    }
+  ]
+}
