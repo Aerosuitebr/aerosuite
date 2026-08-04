@@ -254,7 +254,7 @@ export function buildComercialPropostaKeys(lang: PropostaI18nLang): TranslationD
     'comercial.proposta.contato.dialogTitle': L(lang, 'Informações de Contato', 'Contact information', 'Datos de contacto', 'Coordonnées'),
     'comercial.proposta.contato.phNome': L(lang, 'Ex: João Silva', 'John Doe', 'Ej.: Juan Pérez', 'Ex. : Jean Dupont'),
     'comercial.proposta.contato.phTel': L(lang, 'Ex: (11) 99999-9999', '+1 …', 'Ej.: +34 600 000 000', 'Ex. : +33 6 00 00 00 00'),
-    'comercial.proposta.contato.phEmail': L(lang, 'Ex: contato@aerosuite.app', 'contact@company.com', 'contacto@empresa.com', 'contact@entreprise.com'),
+    'comercial.proposta.contato.phEmail': L(lang, 'Ex: contato@aerosuite.com.br', 'contact@company.com', 'contacto@empresa.com', 'contact@entreprise.com'),
     'comercial.proposta.dialog.btnCancel': L(lang, 'Cancelar', 'Cancel', 'Cancelar', 'Annuler'),
     'comercial.proposta.dialog.btnContinuar': L(lang, 'Continuar', 'Continue', 'Continuar', 'Continuer'),
     'comercial.proposta.email.dialogTitle': L(lang, 'Enviar Proposta por E-mail', 'Send proposal by email', 'Enviar propuesta por correo', 'Envoyer la proposition par e-mail'),

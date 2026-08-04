@@ -19,10 +19,21 @@ export const SITE = {
   origin: 'https://aerosuite.com.br',
   appUrl: 'https://app.aerosuite.com.br',
   brand: 'Aero Suite',
+  qualifiedBrand: 'Aero Suite Brasil',
   legalName: 'Aero Suite',
   locale: 'pt-BR',
   email: 'contato@aerosuite.com.br',
 };
+
+/** Official brand profiles included in Organization.sameAs when configured. */
+export const SOCIAL_PROFILES = [
+  secrets.linkedInCompanyUrl,
+  secrets.youtubeChannelUrl,
+  secrets.instagramProfileUrl,
+  secrets.facebookPageUrl,
+]
+  .filter((url) => typeof url === 'string' && /^https:\/\//i.test(url.trim()))
+  .map((url) => url.trim());
 
 export const GA4_MEASUREMENT_ID =
   (secrets.ga4MeasurementId || process.env.AEROSUITE_GA4 || '').trim();
@@ -112,6 +123,7 @@ function readTourVideoMedia() {
           videoMp4: data.videoMp4,
           poster: data.poster,
           durationLabel: data.durationLabel || '5 min',
+          uploadDate: data.generatedAt || '',
           title: data.title || 'Tour Aero Suite — gestão MRO em ação',
         };
       }

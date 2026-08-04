@@ -37,7 +37,16 @@ Guia rápido: docs/wordpress/SETUP-GA4-CALENDLY.md
   process.exit(1);
 }
 
-let existing = { ga4MeasurementId: '', calendlyEmbedUrl: '', metaPixelId: '', linkedInPartnerId: '' };
+let existing = {
+  ga4MeasurementId: '',
+  calendlyEmbedUrl: '',
+  metaPixelId: '',
+  linkedInPartnerId: '',
+  linkedInCompanyUrl: '',
+  youtubeChannelUrl: '',
+  instagramProfileUrl: '',
+  facebookPageUrl: '',
+};
 if (fs.existsSync(secretsPath)) {
   const mod = await import(pathToFileURL(secretsPath).href + '?t=' + Date.now());
   existing = mod.SECRETS || existing;
@@ -48,6 +57,10 @@ const next = {
   calendlyEmbedUrl: calendly || existing.calendlyEmbedUrl,
   metaPixelId: metaPixel || existing.metaPixelId || '',
   linkedInPartnerId: linkedIn || existing.linkedInPartnerId || '',
+  linkedInCompanyUrl: existing.linkedInCompanyUrl || '',
+  youtubeChannelUrl: existing.youtubeChannelUrl || '',
+  instagramProfileUrl: existing.instagramProfileUrl || '',
+  facebookPageUrl: existing.facebookPageUrl || '',
 };
 
 const body = `/** Gerado por setup-marketing-ids.mjs — não commitar */
@@ -56,6 +69,10 @@ export const SECRETS = {
   calendlyEmbedUrl: ${JSON.stringify(next.calendlyEmbedUrl)},
   metaPixelId: ${JSON.stringify(next.metaPixelId)},
   linkedInPartnerId: ${JSON.stringify(next.linkedInPartnerId)},
+  linkedInCompanyUrl: ${JSON.stringify(next.linkedInCompanyUrl)},
+  youtubeChannelUrl: ${JSON.stringify(next.youtubeChannelUrl)},
+  instagramProfileUrl: ${JSON.stringify(next.instagramProfileUrl)},
+  facebookPageUrl: ${JSON.stringify(next.facebookPageUrl)},
 };
 `;
 

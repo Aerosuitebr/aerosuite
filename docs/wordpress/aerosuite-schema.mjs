@@ -1,4 +1,12 @@
-import { SITE, LINKS, MEDIA, PILLAR_PAGES } from './aerosuite-site-config.mjs';
+import {
+  SITE,
+  LINKS,
+  MEDIA,
+  PILLAR_PAGES,
+  SOCIAL_PROFILES,
+  TOUR_VIDEO,
+  isTourVideoConfigured,
+} from './aerosuite-site-config.mjs';
 import {
   HOME_SEO,
   HOME_SITE_SECTIONS,
@@ -39,6 +47,7 @@ export function organizationSchema() {
     '@type': 'Organization',
     '@id': `${SITE.origin}/#organization`,
     name: SITE.brand,
+    alternateName: [SITE.qualifiedBrand, 'AeroSuite Brasil'],
     url: SITE.origin,
     logo,
     image: { '@id': logo['@id'] },
@@ -51,12 +60,15 @@ export function organizationSchema() {
       availableLanguage: ['Portuguese'],
     },
     areaServed: { '@type': 'Country', name: 'Brasil' },
+    ...(SOCIAL_PROFILES.length ? { sameAs: SOCIAL_PROFILES } : {}),
     knowsAbout: [
       'Manutenção aeronáutica',
       'MRO',
       'Gestão de ordens de serviço',
       'Estoque de peças aeronáuticas',
       'Software SaaS',
+      'ANAC RBAC 145',
+      'Sistema de Gestao da Qualidade para MRO',
     ],
   };
 }
@@ -66,12 +78,12 @@ export function softwareApplicationSchema() {
     '@type': 'SoftwareApplication',
     '@id': `${SITE.origin}/#software`,
     name: SITE.brand,
+    alternateName: SITE.qualifiedBrand,
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
     offers: {
       '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'BRL',
+      url: LINKS.contatoAgendar,
       description: 'Demonstração e proposta comercial sob consulta.',
     },
     description:
@@ -86,6 +98,23 @@ export function softwareApplicationSchema() {
       'Dashboard operacional',
       'Controle de acesso por perfil (RBAC)',
     ],
+  };
+}
+
+export function videoObjectSchema() {
+  if (!isTourVideoConfigured() || !TOUR_VIDEO) return null;
+  return {
+    '@type': 'VideoObject',
+    '@id': `${SITE.origin}/#tour-video`,
+    name: TOUR_VIDEO.title,
+    description:
+      'Tour da Aero Suite mostrando gestao MRO, ordens de servico, estoque FIFO, conformidade SGQ e portal do cliente.',
+    thumbnailUrl: [TOUR_VIDEO.poster],
+    contentUrl: TOUR_VIDEO.videoMp4,
+    embedUrl: LINKS.videoTour,
+    ...(TOUR_VIDEO.uploadDate ? { uploadDate: TOUR_VIDEO.uploadDate } : {}),
+    publisher: { '@id': `${SITE.origin}/#organization` },
+    inLanguage: 'pt-BR',
   };
 }
 
@@ -174,7 +203,8 @@ export function homeSchemaGraph() {
     homePageSchema(),
     homeSiteSectionsItemListSchema(),
     faqPageSchema(HOME_FAQ_ITEMS),
-  ];
+    videoObjectSchema(),
+  ].filter(Boolean);
 }
 
 export function breadcrumbSchema(items) {
