@@ -58,6 +58,10 @@ import { enrichTenantLoginOptions, defaultTenantOptionLabelParts } from '../tena
             id="email"
             pInputText
             formControlName="email"
+            autocomplete="username"
+            autocapitalize="none"
+            spellcheck="false"
+            [attr.aria-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
             [placeholder]="'login.placeholderEmail' | translate"
             class="form-input"
             [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
@@ -71,6 +75,7 @@ import { enrichTenantLoginOptions, defaultTenantOptionLabelParts } from '../tena
           <p-password
             id="password"
             formControlName="password"
+            autocomplete="current-password"
             [placeholder]="'login.placeholderPassword' | translate"
             [feedback]="false"
             [toggleMask]="true"
