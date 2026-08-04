@@ -20,6 +20,7 @@ interface HomeKpiCard {
   icon: string;
   color: string;
   value: () => number;
+  loading?: () => boolean;
 }
 
 interface HomeQuickAction {
@@ -65,8 +66,8 @@ interface HomeQuickAction {
           <div class="home-kpi__icon"><i [class]="card.icon"></i></div>
           <div class="home-kpi__body">
             <span class="home-kpi__value">
-              <i *ngIf="loadingMetrics" class="pi pi-spin pi-spinner" aria-hidden="true"></i>
-              <ng-container *ngIf="!loadingMetrics">{{ formatCount(card.value()) }}</ng-container>
+              <i *ngIf="isKpiLoading(card)" class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+              <ng-container *ngIf="!isKpiLoading(card)">{{ formatCount(card.value()) }}</ng-container>
             </span>
             <span class="home-kpi__label">{{ card.labelKey | translate }}</span>
             <span class="home-kpi__hint">{{ card.hintKey | translate }}</span>
@@ -222,6 +223,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       icon: 'pi pi-shield',
       color: '#dc2626',
       value: () => this.sgqAlertasCount,
+      loading: () => this.loadingSgqKpi,
     },
   ];
 
@@ -276,6 +278,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ];
 
   loadingMetrics = true;
+  loadingSgqKpi = true;
   loadingRecentOs = true;
   loadingAlerts = true;
 
@@ -327,6 +330,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   loadMetrics(): void {
     this.loadingMetrics = true;
+    this.loadingSgqKpi = this.userHasConformidadeKpi();
     this.homeDashboard.loadMetrics({ suppressForbiddenToast: true }).subscribe({
       next: (m) => {
         this.productsCount = m.products ?? 0;
@@ -341,6 +345,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       setTimeout(() => this.loadSgqKpi(), 2_000);
     } else {
       this.sgqAlertasCount = 0;
+      this.loadingSgqKpi = false;
     }
   }
 
@@ -357,6 +362,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           (p.totalTreinamentosVencidos ?? 0) +
           (p.totalDocumentosVencidos ?? 0);
       }
+      this.loadingSgqKpi = false;
       this.cdr.markForCheck();
     });
   }
@@ -483,6 +489,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       return `${k.replace(/\.0$/, '')}K+`;
     }
     return count.toString();
+  }
+
+  isKpiLoading(card: HomeKpiCard): boolean {
+    return this.loadingMetrics || Boolean(card.loading?.());
   }
 
   formatOsNumber(os: OS): string {
