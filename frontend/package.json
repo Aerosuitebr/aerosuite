@@ -13,8 +13,8 @@
     "a11y:flow-full": "node scripts/a11y-flow-p0-smoke.mjs",
     "a11y:gate": "node ../scripts/wcag-gate-verify.mjs",
     "perf:lcp": "node scripts/lcp-smoke.mjs",
-    "test:unit": "vitest run",
-    "test:unit:watch": "vitest"
+    "test:unit": "vitest run --config vitest.config.mts",
+    "test:unit:watch": "vitest --config vitest.config.mts"
   },
   "dependencies": {
     "@angular/animations": "^18.2.0",
