@@ -2,7 +2,7 @@
 /**
  * Gerado automaticamente por build-seo-php.mjs — NÃO EDITAR.
  * Fonte: aerosuite-seo.mjs (PAGE_SEO).
- * Gerado em: 2026-08-01T14:18:37.389Z
+ * Gerado em: 2026-08-04T12:50:30.479Z
  */
 if (!defined('ABSPATH')) {
     exit;
