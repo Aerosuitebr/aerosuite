@@ -25,6 +25,12 @@ import { buildComparativoContent, COMPARATIVO_SEO } from './aerosuite-comparativ
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
 
+// Páginas criadas via REST usam o título do WordPress, que o tema completa
+// com o nome do site. Evita "| Aero Suite | Aero Suite" no <title> público.
+function wordpressTitle(title) {
+  return title.replace(/\s*\|\s*Aero Suite\s*$/i, '').trim();
+}
+
 const css = readPremiumCss();
 const jsParts = loadFooterJsParts();
 const siteConfigSnippet = buildSiteConfigSnippet();
@@ -53,8 +59,12 @@ const manifest = {
 fs.writeFileSync(path.join(dir, '.marketing-manifest.json'), JSON.stringify(manifest, null, 2));
 
 const pillarsPayload = JSON.stringify(manifest.pages.pillars);
-const postsPayload = JSON.stringify(manifest.posts);
-const extraPagesPayload = JSON.stringify(manifest.extraPages);
+const postsPayload = JSON.stringify(
+  manifest.posts.map((post) => ({ ...post, title: wordpressTitle(post.title) }))
+);
+const extraPagesPayload = JSON.stringify(
+  manifest.extraPages.map((page) => ({ ...page, title: wordpressTitle(page.title) }))
+);
 
 const deployScript = `(async()=>{
   async function upsertPage(slug,data){
@@ -103,10 +113,10 @@ const deployScript = `(async()=>{
   await wp.apiFetch({path:'/wp/v2/pages/${WP_PAGE_IDS.sobre}',method:'POST',data:{content:sobreContent,title:${JSON.stringify(manifest.pages.sobre.title)},excerpt:${JSON.stringify(manifest.pages.sobre.excerpt)},status:'publish'}});
   await wp.apiFetch({path:'/wp/v2/pages/${WP_PAGE_IDS.contato}',method:'POST',data:{content:contatoContent,title:${JSON.stringify(manifest.pages.contato.title)},excerpt:${JSON.stringify(manifest.pages.contato.excerpt)},status:'publish'}});
 
-  const blogPage=await upsertPage('blog',{content:blogContent,title:${JSON.stringify(manifest.pages.blog.title)},excerpt:${JSON.stringify(manifest.pages.blog.excerpt)}});
+  const blogPage=await upsertPage('blog',{content:blogContent,title:${JSON.stringify(wordpressTitle(manifest.pages.blog.title))},excerpt:${JSON.stringify(manifest.pages.blog.excerpt)}});
   const pillarResults=[];
   for(const p of pillars){
-    const r=await upsertPage(p.slug,{content:p.content,title:p.seo.title,excerpt:p.seo.description});
+    const r=await upsertPage(p.slug,{content:p.content,title:p.title,excerpt:p.seo.description});
     pillarResults.push({slug:p.slug,id:r.id});
   }
   const postResults=[];

@@ -15,7 +15,12 @@ const headed = process.env.WP_HEADED !== '0';
 const loginWaitMs = Number(process.env.WP_LOGIN_WAIT_MS || 180000);
 const deployCode = fs.readFileSync(path.join(dir, '.deploy-marketing-once.js'), 'utf8');
 
-const browser = await pw.chromium.launch({ headless: !headed });
+const browser = await pw.chromium.launch({
+  headless: !headed,
+  ...(process.env.WP_BROWSER_EXECUTABLE
+    ? { executablePath: process.env.WP_BROWSER_EXECUTABLE }
+    : {}),
+});
 const context = await browser.newContext(
   fs.existsSync(storage) ? { storageState: storage } : {}
 );
