@@ -3,6 +3,7 @@ package com.aerosuite.service;
 import com.aerosuite.i18n.ApiI18nMessages;
 import com.aerosuite.domain.*;
 import com.aerosuite.dto.*;
+import com.aerosuite.util.DisplayTextRepair;
 import com.aerosuite.util.PanacheMaps;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -341,7 +342,7 @@ public class ChatService {
             if (u != null) {
                 participantes.add(new ParticipanteResumoDto(
                         cp.usuarioId,
-                        u.nome,
+                        DisplayTextRepair.repair(u.nome),
                         u.email,
                         u.fotoPerfil,
                         cp.papel,
@@ -363,8 +364,8 @@ public class ChatService {
         return new ConversaDto(
                 conversa.id,
                 conversa.tipo,
-                nomeConversa,
-                conversa.descricao,
+                DisplayTextRepair.repair(nomeConversa),
+                DisplayTextRepair.repair(conversa.descricao),
                 conversa.imagem,
                 conversa.criadorId,
                 conversa.dataCriacao,
@@ -397,7 +398,7 @@ public class ChatService {
                     if (u != null) {
                         participantes.add(new ParticipanteResumoDto(
                                 cp.usuarioId,
-                                u.nome,
+                                DisplayTextRepair.repair(u.nome),
                                 u.email,
                                 u.fotoPerfil,
                                 cp.papel,
@@ -422,8 +423,8 @@ public class ChatService {
         return new ConversaDto(
                 conversa.id,
                 conversa.tipo,
-                nomeConversa,
-                conversa.descricao,
+                DisplayTextRepair.repair(nomeConversa),
+                DisplayTextRepair.repair(conversa.descricao),
                 conversa.imagem,
                 conversa.criadorId,
                 conversa.dataCriacao,
@@ -462,9 +463,9 @@ public class ChatService {
                 mensagem.id,
                 mensagem.conversa.id,
                 mensagem.remetenteId,
-                remetenteNome,
+                DisplayTextRepair.repair(remetenteNome),
                 remetenteFoto,
-                mensagem.conteudo,
+                DisplayTextRepair.repair(mensagem.conteudo),
                 mensagem.tipo,
                 mensagem.dataEnvio,
                 mensagem.dataEdicao,
@@ -479,7 +480,7 @@ public class ChatService {
         return new MensagemAnexoDto(
                 anexo.id,
                 anexo.mensagem.id,
-                anexo.nomeOriginal,
+                DisplayTextRepair.repair(anexo.nomeOriginal),
                 anexo.nomeArquivo,
                 anexo.tipoArquivo,
                 anexo.tamanhoBytes,
