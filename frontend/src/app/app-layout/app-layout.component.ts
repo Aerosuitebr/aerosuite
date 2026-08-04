@@ -845,13 +845,6 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
   platformOpsEligible = false;
   secoesExpanded = new Map<string, boolean>();
   
-  // Seções colapsáveis (mantidas para compatibilidade)
-  editorMontagemExpanded = true;
-  cadastroExpanded = true;
-  sistemaExpanded = true;
-  controleAcessoExpanded = true;
-  acoesRapidasExpanded = true;
-  
          navItems: MenuItem[] = [
            {
              label: 'layout.nav.settings',
@@ -996,6 +989,7 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe(() => {
         this.syncMainContentImmersive();
+        this.expandCurrentRouteSection();
         this.closeMobileMenu();
       });
   }
@@ -1301,26 +1295,6 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
     this.authService.logout();
   }
 
-  toggleEditorMontagem() {
-    this.editorMontagemExpanded = !this.editorMontagemExpanded;
-  }
-
-  toggleCadastro() {
-    this.cadastroExpanded = !this.cadastroExpanded;
-  }
-
-  toggleSistema() {
-    this.sistemaExpanded = !this.sistemaExpanded;
-  }
-
-  toggleControleAcesso() {
-    this.controleAcessoExpanded = !this.controleAcessoExpanded;
-  }
-
-  toggleAcoesRapidas() {
-    this.acoesRapidasExpanded = !this.acoesRapidasExpanded;
-  }
-
   private injectPendenciasTrocasMenuIfAllowed() {
     const link = '/os/pendentes-pagamento-trocas';
     const existingIdx = this.cadastroItems.findIndex((i) => i.routerLink === link);
@@ -1376,9 +1350,10 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
     this.menuSections = secoes;
     secoes.forEach((secao) => {
       if (!this.secoesExpanded.has(secao.id)) {
-        this.secoesExpanded.set(secao.id, true);
+        this.secoesExpanded.set(secao.id, false);
       }
     });
+    this.expandCurrentRouteSection();
     this.menuLoading = false;
     this.recomputeMenuFiltrado();
     this.cdr.markForCheck();
@@ -1445,51 +1420,43 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.menuSearchQuery.trim()) {
       return true;
     }
-    switch (secaoId) {
-      case 'principal':
-        return true; // Dashboard sempre expandido
-      case 'documentos':
-        return this.editorMontagemExpanded;
-      case 'cadastro':
-        return this.cadastroExpanded;
-      case 'sistema':
-        return this.sistemaExpanded;
-      case 'controle-de-acesso':
-        return this.controleAcessoExpanded;
-      case 'acoes-rapidas':
-        return this.acoesRapidasExpanded;
-      default:
-        // Para seções dinâmicas, verificar se estão no mapa de expansão
-        return this.secoesExpanded.has(secaoId) ? this.secoesExpanded.get(secaoId)! : true;
-    }
+    return this.secoesExpanded.get(secaoId) ?? false;
   }
 
   /**
    * Alterna o estado de expansão de uma seção
    */
-  toggleSecao(secaoId: string) {
-    switch (secaoId) {
-      case 'documentos':
-        this.toggleEditorMontagem();
-        break;
-      case 'cadastro':
-        this.toggleCadastro();
-        break;
-      case 'sistema':
-        this.toggleSistema();
-        break;
-      case 'controle-de-acesso':
-        this.toggleControleAcesso();
-        break;
-      case 'acoes-rapidas':
-        this.toggleAcoesRapidas();
-        break;
-      default:
-        // Para seções dinâmicas, alternar no mapa
-        const currentState = this.secoesExpanded.get(secaoId) ?? true;
-        this.secoesExpanded.set(secaoId, !currentState);
-        break;
+  toggleSecao(secaoId: string): void {
+    const currentState = this.secoesExpanded.get(secaoId) ?? false;
+    this.secoesExpanded.set(secaoId, !currentState);
+  }
+
+  /** Mantém o módulo ativo visível sem reabrir toda a navegação. */
+  private expandCurrentRouteSection(): void {
+    const currentPath = this.normalizeMenuRoute(this.router.url);
+    const activeSection = this.menuSections.find((secao) =>
+      secao.funcionalidades.some((funcionalidade) => {
+        const routerLink = this.getRouterLink(funcionalidade);
+        if (!routerLink) {
+          return false;
+        }
+        const route = this.normalizeMenuRoute(routerLink);
+        return route === '/'
+          ? currentPath === route
+          : currentPath === route || currentPath.startsWith(`${route}/`);
+      })
+    );
+
+    if (activeSection) {
+      this.secoesExpanded.set(activeSection.id, true);
+      this.cdr.markForCheck();
     }
+  }
+
+  private normalizeMenuRoute(route: string): string {
+    const path = (route || '/').split('?')[0].split('#')[0].trim();
+    const withLeadingSlash = path.startsWith('/') ? path : `/${path}`;
+    return withLeadingSlash.replace(/\/+$/, '') || '/';
   }
 
   /**
