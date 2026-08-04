@@ -8,6 +8,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ChatService } from '../../core/chat.service';
 import { AuthService } from '../../auth/auth.service';
 import { TranslatePipe } from '../../core/translate.pipe';
+import { buildChatPopupFeatures } from '../chat-popup.util';
 
 @Component({
   selector: 'app-chat-icon',
@@ -116,12 +117,6 @@ export class ChatIconComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Calcular posição e tamanho da janela (maior para caber a lista de contatos)
-    const width = 900;
-    const height = 700;
-    const left = Math.max(0, (window.screen.width - width) / 2);
-    const top = Math.max(0, (window.screen.height - height) / 2 - 50);
-
     // Obter a URL base correta (pode variar entre desenvolvimento e produção)
     const baseUrl = window.location.origin;
     const chatUrl = `${baseUrl}/chat`;
@@ -130,7 +125,7 @@ export class ChatIconComponent implements OnInit, OnDestroy {
     this.chatWindow = window.open(
       chatUrl,
       'aerosuite-chat',
-      `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no,location=no`
+      buildChatPopupFeatures(window.screen)
     );
 
     // Fallback: se o popup for bloqueado, navegar na mesma janela

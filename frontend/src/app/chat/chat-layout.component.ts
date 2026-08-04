@@ -316,6 +316,52 @@ import { formatChatConversationDate } from './chat-date.util';
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
+    .chat-container.is-popup {
+      .chat-header {
+        padding: 5px 12px;
+      }
+
+      .contacts-panel {
+        width: clamp(290px, 36vw, 330px);
+      }
+
+      .welcome-content {
+        padding: 20px 28px;
+
+        .welcome-illustration {
+          margin-bottom: 18px;
+
+          .phone-mockup {
+            width: 104px;
+            height: 104px;
+
+            .phone-screen i {
+              font-size: 48px;
+            }
+          }
+        }
+
+        h1 {
+          font-size: 25px;
+          margin-bottom: 10px;
+        }
+
+        .welcome-text {
+          line-height: 1.45;
+          margin-bottom: 18px;
+        }
+
+        .welcome-features {
+          gap: 20px;
+          margin-bottom: 20px;
+        }
+
+        .welcome-hint {
+          padding: 12px 18px;
+        }
+      }
+    }
+
     /* ========== HEADER ========== */
     .chat-header {
       display: flex;

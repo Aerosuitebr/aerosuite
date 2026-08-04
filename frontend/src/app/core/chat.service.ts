@@ -5,6 +5,7 @@ import { map, tap, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { bustStaticAssetUrl } from '../../environments/asset-cache-bust';
 import { TranslationService } from './translation.service';
+import { repairChatConversation, repairChatMessage, repairChatParticipant } from './chat-display-text.util';
 import {
   CHAT_BADGE_POLL_MS,
   CHAT_CONVERSAS_POLL_MS,
@@ -393,19 +394,20 @@ export class ChatService implements OnDestroy {
   listarConversas(usuarioId: number): Observable<Conversa[]> {
     return this.http.get<Conversa[]>(`${this.base}/conversas`, {
       params: { usuarioId: usuarioId.toString() }
-    });
+    }).pipe(map(conversas => conversas.map(repairChatConversation)));
   }
 
   buscarConversa(conversaId: number, usuarioId: number): Observable<Conversa> {
     return this.http.get<Conversa>(`${this.base}/conversas/${conversaId}`, {
       params: { usuarioId: usuarioId.toString() }
-    });
+    }).pipe(map(repairChatConversation));
   }
 
   criarConversa(request: CriarConversaRequest, criadorId: number): Observable<Conversa> {
     return this.http.post<Conversa>(`${this.base}/conversas`, request, {
       params: { criadorId: criadorId.toString() }
     }).pipe(
+      map(repairChatConversation),
       tap(() => {
         if (this.usuarioId) {
           this.carregarConversas(this.usuarioId);
@@ -441,7 +443,7 @@ export class ChatService implements OnDestroy {
         page: page.toString(),
         size: size.toString()
       }
-    });
+    }).pipe(map(mensagens => mensagens.map(repairChatMessage)));
   }
 
   enviarMensagem(conversaId: number, remetenteId: number, conteudo: string): Observable<Mensagem> {
@@ -466,6 +468,7 @@ export class ChatService implements OnDestroy {
     return this.http.post<Mensagem>(`${this.base}/conversas/${conversaId}/mensagens`, request, {
       params: { remetenteId: remetenteId.toString() }
     }).pipe(
+      map(repairChatMessage),
       tap(mensagem => {
         // Substituir mensagem temporária pela real
         const mensagens = this._mensagens.value.filter(m => m.id !== mensagemTemp.id);
@@ -503,6 +506,7 @@ export class ChatService implements OnDestroy {
     return this.http.post<Mensagem>(`${this.base}/conversas/${conversaId}/mensagens/arquivo`, formData, {
       params: { remetenteId: remetenteId.toString() }
     }).pipe(
+      map(repairChatMessage),
       tap(mensagem => {
         // Substituir mensagem temporária pela real
         const mensagens = this._mensagens.value.filter(m => m.id !== mensagemTemp.id);
@@ -536,7 +540,7 @@ export class ChatService implements OnDestroy {
         termo,
         usuarioId: usuarioId.toString()
       }
-    });
+    }).pipe(map(participantes => participantes.map(repairChatParticipant)));
   }
 
   // ==================== HELPERS ====================

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ChatService, NovaMensagemNotificacao } from '../../core/chat.service';
 import { Subscription } from 'rxjs';
 import { TranslatePipe } from '../../core/translate.pipe';
+import { buildChatPopupFeatures } from '../chat-popup.util';
 
 interface NotificacaoVisivel extends NovaMensagemNotificacao {
   id: number;
@@ -264,16 +265,10 @@ export class ChatNotificationComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Abrir chat em nova janela
-    const width = 900;
-    const height = 700;
-    const left = Math.max(0, (window.screen.width - width) / 2);
-    const top = Math.max(0, (window.screen.height - height) / 2 - 50);
-
     this.chatWindow = window.open(
       '/chat',
       'aerosuite-chat',
-      `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no,location=no`
+      buildChatPopupFeatures(window.screen)
     );
   }
 
