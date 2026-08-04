@@ -106,7 +106,7 @@ import { PageHeroComponent } from '../../shared/page-hero/page-hero.component';
             <i class="pi pi-info-circle"></i>
             <p>
               {{ 'externo.perfil.notice' | translate }}
-              <strong>contato&#64;aerosuite.app</strong>
+              <strong>contato&#64;aerosuite.com.br</strong>
             </p>
           </div>
         </div>
