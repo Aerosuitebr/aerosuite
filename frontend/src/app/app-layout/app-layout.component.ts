@@ -456,7 +456,8 @@ import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
                 <span class="nav-section-flight-copy">
                   <span class="nav-section-flight-title">{{ i18n.translateMenuSecao(secao.titulo) }}</span>
                   <span class="nav-section-flight-meta">
-                    {{ 'layout.navModuleCount' | translate: { count: '' + secao.funcionalidades.length } }}
+                    {{ (secao.funcionalidades.length === 1 ? 'layout.navModuleCountOne' : 'layout.navModuleCount')
+                      | translate: { count: '' + secao.funcionalidades.length } }}
                   </span>
                 </span>
                 <span class="nav-section-flight-chevron" [class.is-open]="isSecaoExpanded(secao.id)">
