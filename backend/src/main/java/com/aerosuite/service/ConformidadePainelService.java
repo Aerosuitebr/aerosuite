@@ -3,6 +3,7 @@ package com.aerosuite.service;
 import com.aerosuite.domain.ConformidadeSubcontratacao;
 import com.aerosuite.domain.Fornecedor;
 import com.aerosuite.dto.*;
+import com.aerosuite.util.DisplayTextRepair;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -59,7 +60,7 @@ public class ConformidadePainelService {
             ConformidadePainelItemDto item = new ConformidadePainelItemDto();
             item.categoria = "ASL";
             item.severidade = "ALTA";
-            item.titulo = f.razaoSocial;
+            item.titulo = DisplayTextRepair.repair(f.razaoSocial);
             item.detalhe = f.aslStatus != null ? f.aslStatus : "PENDENTE";
             item.rota = "/estoque/fornecedores";
             item.referenciaId = f.id;
@@ -75,7 +76,7 @@ public class ConformidadePainelService {
             ConformidadePainelItemDto item = new ConformidadePainelItemDto();
             item.categoria = "ASL";
             item.severidade = "CRITICA";
-            item.titulo = f.razaoSocial;
+            item.titulo = DisplayTextRepair.repair(f.razaoSocial);
             item.detalhe = "ASL vencido: " + f.aslValidade;
             item.rota = "/estoque/fornecedores";
             item.referenciaId = f.id;
@@ -96,7 +97,7 @@ public class ConformidadePainelService {
             item.categoria = "SUBCONTRATACAO";
             item.severidade =
                     s.validadeCertificado != null && s.validadeCertificado.isBefore(LocalDate.now()) ? "VENCIDA" : "PROXIMA";
-            item.titulo = s.razaoSocial;
+            item.titulo = DisplayTextRepair.repair(s.razaoSocial);
             item.detalhe = s.validadeCertificado != null ? s.validadeCertificado.toString() : "";
             item.rota = "/conformidade/subcontratacao";
             item.referenciaId = s.id;
@@ -116,17 +117,17 @@ public class ConformidadePainelService {
             item.rota = rota;
             if (raw instanceof SgqDocumentoDto doc) {
                 item.severidade = doc.severidadeAlerta;
-                item.titulo = doc.codigo + " — " + doc.titulo;
+                item.titulo = DisplayTextRepair.repair(doc.codigo + " — " + doc.titulo);
                 item.detalhe = doc.dataVigencia;
                 item.referenciaId = doc.id;
             } else if (raw instanceof ConformidadeTreinamentoDto treino) {
                 item.severidade = treino.severidadeAlerta;
-                item.titulo = treino.curso;
+                item.titulo = DisplayTextRepair.repair(treino.curso);
                 item.detalhe = treino.dataValidade;
                 item.referenciaId = treino.id;
             } else if (raw instanceof ConformidadeCalibracaoDto cal) {
                 item.severidade = cal.severidadeAlerta;
-                item.titulo = cal.identificador + " — " + cal.descricao;
+                item.titulo = DisplayTextRepair.repair(cal.identificador + " — " + cal.descricao);
                 item.detalhe = cal.dataProximaCalibracao;
                 item.referenciaId = cal.id;
             } else {

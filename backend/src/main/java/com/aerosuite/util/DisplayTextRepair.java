@@ -1,5 +1,6 @@
 package com.aerosuite.util;
 
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.util.Locale;
@@ -23,6 +24,17 @@ public final class DisplayTextRepair {
     }
 
     private static String repairMojibake(String value) {
+        if (value.contains("├")) {
+            try {
+                byte[] bytes = value.getBytes(Charset.forName("IBM850"));
+                String decoded = new String(bytes, StandardCharsets.UTF_8);
+                if (!decoded.contains("\uFFFD") && !decoded.equals(value)) {
+                    return decoded;
+                }
+            } catch (Exception ignored) {
+                // mantém original
+            }
+        }
         if (!value.contains("Ã") && !value.contains("Â")) {
             return value;
         }
