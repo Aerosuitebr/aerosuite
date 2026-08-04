@@ -19,7 +19,7 @@ jobs:
     name: API smoke (PowerShell)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: API smoke
         shell: pwsh
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: http-smoke
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: API stress
         shell: pwsh
@@ -61,7 +61,7 @@ jobs:
     name: Menu i18n audit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Audit keys
         shell: pwsh
         run: ./scripts/test/audit-menu-i18n.ps1 -SkipApi
@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: http-smoke
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: RBAC smoke
         shell: pwsh
         env:
@@ -93,7 +93,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: http-smoke
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Tenants API
         shell: pwsh
         env:
@@ -115,7 +115,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: http-smoke
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Isolation (demo tenant)
         shell: pwsh
         env:
