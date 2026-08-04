@@ -17,4 +17,9 @@ class DisplayTextRepairTest {
     void repairsMojibake() {
         assertEquals("Manutenção", DisplayTextRepair.repair("ManutenÃ§Ã£o"));
     }
+
+    @Test
+    void repairsOem850MojibakeFromLegacyImports() {
+        assertEquals("G3 RIO AVIAÇÃO LTDA", DisplayTextRepair.repair("G3 RIO AVIA├ç├âO LTDA"));
+    }
 }
