@@ -799,6 +799,33 @@ body.mobile-nav-open {
   }
 }
 
+// Em listagens largas, mantém a última coluna de ações alcançável no mobile.
+@media (max-width: 767px) {
+  ::ng-deep .p-datatable:not(.p-datatable-responsive-stack) {
+    .p-datatable-thead > tr > th.col-actions,
+    .p-datatable-tbody > tr > td.col-actions {
+      position: sticky;
+      right: 0;
+      min-width: 7.5rem;
+      z-index: 2;
+      box-shadow: -8px 0 12px -10px rgba(15, 23, 42, 0.65);
+    }
+
+    .p-datatable-thead > tr > th.col-actions {
+      z-index: 3;
+      background: #f1f5f9;
+    }
+
+    .p-datatable-tbody > tr > td.col-actions {
+      background: #ffffff;
+    }
+
+    .p-datatable-tbody > tr:hover > td.col-actions {
+      background: var(--as-table-row-hover, #e2e8f0);
+    }
+  }
+}
+
 // Mobile — evita scroll horizontal da página em listagens
 @media (max-width: 767px) {
   .list-container,

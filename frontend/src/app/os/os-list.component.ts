@@ -260,7 +260,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                   {{ 'os.list.col.openDate' | translate }}
                   <p-sortIcon field="dtAbertura"></p-sortIcon>
                 </th>
-                <th style="width: 120px;">{{ 'common.list.col.actions' | translate }}</th>
+                <th class="col-actions" style="width: 120px;">{{ 'common.list.col.actions' | translate }}</th>
               </tr>
             </ng-template>
 
@@ -323,7 +323,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                     {{ row.dtAbertura ? (row.dtAbertura | localeDateTime:'dateNumeric') : '-' }}
                   </div>
                 </td>
-                <td>
+                <td class="col-actions">
                   <div class="action-buttons" (click)="$event.stopPropagation()">
                     <button 
                       pButton 
