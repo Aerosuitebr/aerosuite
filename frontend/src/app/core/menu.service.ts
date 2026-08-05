@@ -148,6 +148,18 @@ export class MenuService {
     );
   }
 
+  /** Aplica migrações de rota também a menus serializados em versões anteriores. */
+  private normalizeCachedMenuSections(sections: MenuSection[]): MenuSection[] {
+    const normalized = sections.map(section => {
+      const funcionalidades = this.normalizeMenuRoutes(section.funcionalidades);
+      const changed = funcionalidades.some(
+        (funcionalidade, index) => funcionalidade !== section.funcionalidades[index]
+      );
+      return changed ? { ...section, funcionalidades } : section;
+    });
+    return normalized.some((section, index) => section !== sections[index]) ? normalized : sections;
+  }
+
   /** Remove rotas do plano de controle do menu comum (auditoria, backup, organizações). */
   private stripPlatformOpsRoutesFromTenantMenu(funcionalidades: Funcionalidade[]): Funcionalidade[] {
     return funcionalidades.filter(f => !isPlatformOpsRestrictedRoute(f.rota));
@@ -163,7 +175,11 @@ export class MenuService {
       if (parsed.userKey !== userKey || !Array.isArray(parsed.sections) || !parsed.sections.length) {
         return null;
       }
-      return parsed.sections;
+      const sections = this.normalizeCachedMenuSections(parsed.sections);
+      if (sections !== parsed.sections) {
+        this.writeSessionMenu(userKey, sections);
+      }
+      return sections;
     } catch {
       return null;
     }
