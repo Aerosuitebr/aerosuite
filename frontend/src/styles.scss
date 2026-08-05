@@ -801,7 +801,7 @@ body.mobile-nav-open {
 
 // Em listagens largas, mantém a última coluna de ações alcançável no mobile.
 @media (max-width: 767px) {
-  ::ng-deep .p-datatable:not(.p-datatable-responsive-stack) {
+  .p-datatable:not(.p-datatable-responsive-stack) {
     .p-datatable-thead > tr > th.col-actions,
     .p-datatable-tbody > tr > td.col-actions {
       position: sticky;
