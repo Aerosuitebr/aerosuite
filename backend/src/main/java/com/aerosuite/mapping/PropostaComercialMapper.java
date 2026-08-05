@@ -2,6 +2,7 @@ package com.aerosuite.mapping;
 
 import com.aerosuite.domain.PropostaComercial;
 import com.aerosuite.dto.PropostaComercialDto;
+import com.aerosuite.util.DisplayTextRepair;
 import org.mapstruct.*;
 
 /**
@@ -46,7 +47,25 @@ public interface PropostaComercialMapper {
         dto.itens = null;
         dto.aditivos = null;
         dto.anexos = null;
+        repairForDisplay(dto);
         return dto;
+    }
+
+    @AfterMapping
+    default void repairForDisplay(@MappingTarget PropostaComercialDto dto) {
+        dto.numeroProposta = DisplayTextRepair.repair(dto.numeroProposta);
+        dto.produtoNome = DisplayTextRepair.repair(dto.produtoNome);
+        dto.produtoPn = DisplayTextRepair.repair(dto.produtoPn);
+        dto.produtoSn = DisplayTextRepair.repair(dto.produtoSn);
+        dto.produtoManual = DisplayTextRepair.repair(dto.produtoManual);
+        dto.aplicacaoMotor = DisplayTextRepair.repair(dto.aplicacaoMotor);
+        dto.aeronavePrefixo = DisplayTextRepair.repair(dto.aeronavePrefixo);
+        dto.servicoExecutado = DisplayTextRepair.repair(dto.servicoExecutado);
+        dto.tipoServicoNome = DisplayTextRepair.repair(dto.tipoServicoNome);
+        dto.clienteNome = DisplayTextRepair.repair(dto.clienteNome);
+        dto.clienteObservacao = DisplayTextRepair.repair(dto.clienteObservacao);
+        dto.observacoes = DisplayTextRepair.repair(dto.observacoes);
+        dto.condicoesGerais = DisplayTextRepair.repair(dto.condicoesGerais);
     }
 
     // Ignorar relacionamentos ao converter para Entity (eles são salvos manualmente)

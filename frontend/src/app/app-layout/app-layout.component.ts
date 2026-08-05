@@ -212,6 +212,9 @@ import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
         class="mobile-menu-btn"
         (click)="toggleMobileMenu()"
         [pTooltip]="'layout.menu' | translate"
+        [attr.aria-label]="'layout.menu' | translate"
+        [attr.aria-expanded]="mobileMenuOpen"
+        aria-controls="primary-navigation"
         tooltipPosition="bottom">
       </button>
 
@@ -408,7 +411,7 @@ import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
           </div>
 
           <!-- Navigation Menu — flight deck -->
-          <nav class="sidebar-nav sidebar-nav--flight-deck" [attr.aria-label]="'layout.menu' | translate">
+          <nav id="primary-navigation" class="sidebar-nav sidebar-nav--flight-deck" [attr.aria-label]="'layout.menu' | translate">
             <div class="nav-deck-toolbar" *ngIf="!sidebarCollapsed || isCompactNav()">
               <div class="nav-deck-toolbar-head">
                 <span class="nav-deck-kicker"><i class="pi pi-compass"></i> {{ 'layout.navFlightDeck' | translate }}</span>
@@ -505,7 +508,7 @@ import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
                       *ngIf="funcionalidade.tipo === 'submenu' && (!sidebarCollapsed || isCompactNav())"
                       value="+"
                       severity="info"
-                      size="small">
+                      badgeSize="small">
                     </p-badge>
                   </a>
                 </li>
@@ -556,7 +559,7 @@ import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
                       *ngIf="item.badge && !sidebarCollapsed" 
                       [value]="item.badge" 
                       severity="danger" 
-                      size="small">
+                      badgeSize="small">
                     </p-badge>
                   </a>
                 </li>

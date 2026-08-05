@@ -134,7 +134,18 @@ export class MenuService {
     merged = this.stripPlatformOpsRoutesFromTenantMenu(merged);
     merged = this.ensureBlingIntegracaoMenuItem(merged);
     merged = this.ensureWhatsAppIntegracaoMenuItem(merged);
+    merged = this.normalizeMenuRoutes(merged);
     return this.organizarFuncionalidadesPorSecao(merged);
+  }
+
+  /** Mantém destinos distintos para itens de suporte que antes levavam à mesma tela. */
+  private normalizeMenuRoutes(funcionalidades: Funcionalidade[]): Funcionalidade[] {
+    return funcionalidades.map(funcionalidade =>
+      canonFuncionalidadeCodigo(funcionalidade.codigo) === 'SUPORTE_CHAMADOS'
+        && (funcionalidade.rota || '').trim().toLowerCase() === '/suporte'
+        ? { ...funcionalidade, rota: '/suporte/chamados' }
+        : funcionalidade
+    );
   }
 
   /** Remove rotas do plano de controle do menu comum (auditoria, backup, organizações). */

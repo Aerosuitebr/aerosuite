@@ -218,7 +218,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                     <p-badge 
                       [value]="row.id" 
                       severity="info" 
-                      size="small">
+                      badgeSize="small">
                     </p-badge>
                   </div>
                 </td>
@@ -228,7 +228,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                     <div class="user-avatar">
                       <p-avatar 
                         [label]="getInitials(row.nome)"
-                        size="normal"
+                        badgeSize="normal"
                         shape="circle"
                         styleClass="user-avatar-img">
                       </p-avatar>
@@ -252,7 +252,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                       [value]="row.perfil.nome | uiLabel:'perfil.label':row.perfil.codigo" 
                       severity="info" 
                       [rounded]="true"
-                      size="small">
+                      badgeSize="small">
                     </p-tag>
                     <span *ngIf="!row.perfil?.nome" class="no-perfil">-</span>
                   </div>
@@ -264,7 +264,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                       [value]="(row.ativo !== false ? 'common.status.active' : 'common.status.inactive') | translate" 
                       [severity]="row.ativo !== false ? 'success' : 'danger'" 
                       [rounded]="true"
-                      size="small">
+                      badgeSize="small">
                     </p-tag>
                   </div>
                 </td>

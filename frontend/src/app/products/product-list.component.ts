@@ -92,7 +92,8 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
               <input 
                 type="text" 
                 pInputText 
-                [(ngModel)]="q" 
+                [(ngModel)]="q"
+                [attr.aria-label]="'products.list.searchPlaceholder' | translate"
                 [placeholder]="'products.list.searchPlaceholder' | translate" 
                 (input)="onSearchChange($event)"
                 class="search-input">
@@ -248,7 +249,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                     <p-badge 
                       [value]="row.id" 
                       severity="info" 
-                      size="small">
+                      badgeSize="small">
                     </p-badge>
                   </div>
                 </td>
@@ -364,6 +365,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                         class="p-button-text edit-btn"
                         (click)="initRowEdit(row, $event)"
                         [pTooltip]="'products.list.tooltipEdit' | translate"
+                        [attr.aria-label]="'products.list.tooltipEdit' | translate"
                         tooltipPosition="top">
                       </button>
                       <button 
@@ -373,6 +375,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                         class="p-button-text delete-btn"
                         (click)="confirmDelete(row)"
                         [pTooltip]="'products.list.tooltipDelete' | translate"
+                        [attr.aria-label]="'products.list.tooltipDelete' | translate"
                         tooltipPosition="top">
                       </button>
                     </div>
@@ -385,6 +388,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                         class="p-button-success save-btn"
                         (click)="save(row)"
                         [pTooltip]="'products.list.tooltipSave' | translate"
+                        [attr.aria-label]="'products.list.tooltipSave' | translate"
                         tooltipPosition="top">
                       </button>
                       <button 
@@ -394,6 +398,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                         class="p-button-text cancel-btn"
                         (click)="cancelRowEdit()"
                         [pTooltip]="'products.list.tooltipCancel' | translate"
+                        [attr.aria-label]="'products.list.tooltipCancel' | translate"
                         tooltipPosition="top">
                       </button>
                     </div>
@@ -539,6 +544,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
             class="close-btn"
             (click)="barcodeModalVisible = false"
             [pTooltip]="'products.barcodeModal.closeTooltip' | translate"
+            [attr.aria-label]="'products.barcodeModal.closeTooltip' | translate"
             tooltipPosition="left">
             <i class="pi pi-times"></i>
           </button>

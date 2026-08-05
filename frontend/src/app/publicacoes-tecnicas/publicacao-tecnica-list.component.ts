@@ -208,7 +208,7 @@ import { ListDataStatesComponent } from '../shared/list-data-states/list-data-st
                     <p-badge 
                       [value]="row.id" 
                       severity="info" 
-                      size="small">
+                      badgeSize="small">
                     </p-badge>
                   </div>
                 </td>

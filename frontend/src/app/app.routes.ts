@@ -709,6 +709,10 @@ export const routes: Routes = [
         loadComponent: () => import('./suporte/ticket-list.component').then(m => m.TicketListComponent)
       },
       {
+        path: 'chamados',
+        loadComponent: () => import('./suporte/ticket-list.component').then(m => m.TicketListComponent)
+      },
+      {
         path: 'novo',
         loadComponent: () => import('./suporte/ticket-new.component').then(m => m.TicketNewComponent)
       },
