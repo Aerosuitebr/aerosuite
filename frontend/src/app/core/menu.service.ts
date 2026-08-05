@@ -141,11 +141,16 @@ export class MenuService {
   /** Mantém destinos distintos para itens de suporte que antes levavam à mesma tela. */
   private normalizeMenuRoutes(funcionalidades: Funcionalidade[]): Funcionalidade[] {
     return funcionalidades.map(funcionalidade =>
-      canonFuncionalidadeCodigo(funcionalidade.codigo) === 'SUPORTE_CHAMADOS'
+      this.isSupportTicketsCode(funcionalidade.codigo)
         && (funcionalidade.rota || '').trim().toLowerCase() === '/suporte'
         ? { ...funcionalidade, rota: '/suporte/chamados' }
         : funcionalidade
     );
+  }
+
+  private isSupportTicketsCode(codigo: string | null | undefined): boolean {
+    const canonical = canonFuncionalidadeCodigo(codigo);
+    return canonical === 'SUPORTE_CHAMADOS' || canonical === 'SUPORTE-CHAMADOS';
   }
 
   /** Aplica migrações de rota também a menus serializados em versões anteriores. */
