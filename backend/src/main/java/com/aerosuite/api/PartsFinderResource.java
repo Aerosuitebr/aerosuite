@@ -4,6 +4,7 @@ import com.aerosuite.dto.parts.PartsFinderSearchRequest;
 import com.aerosuite.dto.parts.PartsRfqRequest;
 import com.aerosuite.dto.parts.PartsRfqSendRequest;
 import com.aerosuite.parts.PartsFinderService;
+import com.aerosuite.integration.evolution.EvolutionApiException;
 import com.aerosuite.security.RequiresFuncionalidades;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -65,10 +66,12 @@ public class PartsFinderResource {
     @POST @Path("/rfqs/whatsapp/activate") public Response activateWhatsapp() {
         try { return Response.ok(service.activateWhatsapp()).build(); }
         catch (IllegalStateException e) { return whatsappBadRequest(e); }
+        catch (EvolutionApiException e) { return whatsappProviderError(e); }
     }
     @GET @Path("/rfqs/whatsapp/qrcode") public Response whatsappQrCode() {
         try { return Response.ok(service.whatsappQrCode()).build(); }
         catch (IllegalStateException e) { return whatsappBadRequest(e); }
+        catch (EvolutionApiException e) { return whatsappProviderError(e); }
     }
     @jakarta.ws.rs.DELETE @Path("/rfqs/whatsapp/disconnect") public Response disconnectWhatsapp() {
         try { service.disconnectWhatsapp(); return Response.ok(Map.of("ok", true)).build(); }
@@ -77,5 +80,9 @@ public class PartsFinderResource {
 
     private static Response whatsappBadRequest(IllegalStateException error) {
         return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("error", error.getMessage())).build();
+    }
+
+    private static Response whatsappProviderError(EvolutionApiException error) {
+        return Response.status(Response.Status.BAD_GATEWAY).entity(Map.of("error", error.getMessage())).build();
     }
 }

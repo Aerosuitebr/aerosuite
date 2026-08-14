@@ -112,6 +112,10 @@ if docker inspect "${EVOLUTION_CONTAINER}" >/dev/null 2>&1; then
   EVOLUTION_NETWORK="$(docker inspect "${EVOLUTION_CONTAINER}" --format '{{range $name, $_ := .NetworkSettings.Networks}}{{println $name}}{{end}}' | head -1)"
   if [[ -n "${EVOLUTION_NETWORK}" ]]; then
     docker network connect "${EVOLUTION_NETWORK}" aerosuite-staging-backend 2>/dev/null || true
+    docker exec aerosuite-staging-backend getent hosts "${EVOLUTION_CONTAINER}" >/dev/null || {
+        echo "ERRO: backend de staging não resolve a Evolution API"
+        exit 1
+      }
   fi
 fi
 
