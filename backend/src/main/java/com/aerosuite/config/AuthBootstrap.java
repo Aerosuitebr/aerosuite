@@ -1,5 +1,6 @@
 package com.aerosuite.config;
 
+import com.aerosuite.domain.Perfil;
 import com.aerosuite.domain.TenantConstants;
 import com.aerosuite.domain.Usuario;
 import com.aerosuite.security.PasswordCredentials;
@@ -20,8 +21,12 @@ public class AuthBootstrap {
 
     @Transactional
     void onStart(@Observes StartupEvent event) {
+        Perfil adminPerfil = Perfil.find("codigo", "ADMIN").firstResult();
         Usuario existing = Usuario.find("email = ?1", "admin@aerosuite.com").firstResult();
         if (existing != null) {
+            if (existing.perfil == null && adminPerfil != null) {
+                existing.perfil = adminPerfil;
+            }
             return;
         }
         Usuario admin = new Usuario();
@@ -31,6 +36,7 @@ public class AuthBootstrap {
         admin.dataCadastro = LocalDate.now();
         admin.orgTenantId = TenantConstants.DEFAULT_TENANT_ID;
         admin.ativo = true;
+        admin.perfil = adminPerfil;
         admin.persist();
         LOG.info("Utilizador admin@aerosuite.com criado no arranque (dev/homologação).");
     }

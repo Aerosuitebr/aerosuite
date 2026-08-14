@@ -77,7 +77,7 @@ fi
 
 # Reaplica o perfil administrativo em todos os deploys, inclusive quando o banco já foi inicializado.
 docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e \
-  "UPDATE usuario u JOIN perfil p ON p.codigo='ADMIN' SET u.perfil_id=p.id,u.ativo=1,u.tenant_id=1 WHERE u.email='admin.staging@aerosuite.com';"
+  "UPDATE usuario u JOIN perfil p ON p.codigo='ADMIN' SET u.perfil_id=p.id,u.ativo=1,u.tenant_id=1 WHERE u.email IN ('admin.staging@aerosuite.com','admin@aerosuite.com');"
 
 "${COMPOSE[@]}" up -d api web
 
