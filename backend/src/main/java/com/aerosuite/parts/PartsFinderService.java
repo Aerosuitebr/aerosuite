@@ -29,17 +29,21 @@ public class PartsFinderService {
         if (request.quantity != null && request.quantity.signum() <= 0) {
             throw new BadRequestException("Quantity must be greater than zero");
         }
-        Comparator<PartsFinderResult> order = request.aog
+        List<PartsFinderResult> results = StreamSupport.stream(connectors.spliterator(), false)
+                .flatMap(connector -> connector.search(request).stream())
+                .sorted(resultOrder(request.aog))
+                .toList();
+        recordSearch(request, results.size());
+        return results;
+    }
+
+    static Comparator<PartsFinderResult> resultOrder(boolean aog) {
+        Comparator<PartsFinderResult> order = aog
                 ? Comparator.comparing((PartsFinderResult r) -> !Boolean.TRUE.equals(r.aogAvailable))
                     .thenComparing(r -> r.estimatedLeadTimeHours == null ? Integer.MAX_VALUE : r.estimatedLeadTimeHours)
                     .thenComparing(r -> r.source)
                 : Comparator.comparing((PartsFinderResult r) -> r.source);
-        List<PartsFinderResult> results = StreamSupport.stream(connectors.spliterator(), false)
-                .flatMap(connector -> connector.search(request).stream())
-                .sorted(order.thenComparing(r -> r.supplier == null ? "" : r.supplier))
-                .toList();
-        recordSearch(request, results.size());
-        return results;
+        return order.thenComparing(r -> r.supplier == null ? "" : r.supplier);
     }
 
     private void recordSearch(PartsFinderSearchRequest request, int resultCount) {
