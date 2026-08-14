@@ -62,7 +62,20 @@ public class PartsFinderResource {
     public Response sendWhatsApp(@PathParam("id") Long id, PartsRfqSendRequest request) { return Response.ok(service.sendRfqWhatsApp(id, request)).build(); }
 
     @GET @Path("/rfqs/whatsapp/status") public Response whatsappStatus() { return Response.ok(service.whatsappStatus()).build(); }
-    @POST @Path("/rfqs/whatsapp/activate") public Response activateWhatsapp() { return Response.ok(service.activateWhatsapp()).build(); }
-    @GET @Path("/rfqs/whatsapp/qrcode") public Response whatsappQrCode() { return Response.ok(service.whatsappQrCode()).build(); }
-    @jakarta.ws.rs.DELETE @Path("/rfqs/whatsapp/disconnect") public Response disconnectWhatsapp() { service.disconnectWhatsapp(); return Response.ok(Map.of("ok", true)).build(); }
+    @POST @Path("/rfqs/whatsapp/activate") public Response activateWhatsapp() {
+        try { return Response.ok(service.activateWhatsapp()).build(); }
+        catch (IllegalStateException e) { return whatsappBadRequest(e); }
+    }
+    @GET @Path("/rfqs/whatsapp/qrcode") public Response whatsappQrCode() {
+        try { return Response.ok(service.whatsappQrCode()).build(); }
+        catch (IllegalStateException e) { return whatsappBadRequest(e); }
+    }
+    @jakarta.ws.rs.DELETE @Path("/rfqs/whatsapp/disconnect") public Response disconnectWhatsapp() {
+        try { service.disconnectWhatsapp(); return Response.ok(Map.of("ok", true)).build(); }
+        catch (IllegalStateException e) { return whatsappBadRequest(e); }
+    }
+
+    private static Response whatsappBadRequest(IllegalStateException error) {
+        return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("error", error.getMessage())).build();
+    }
 }

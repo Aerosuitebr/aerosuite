@@ -11,6 +11,8 @@ import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { ISO_COUNTRIES } from '../../shared/countries/iso-countries';
 import { TenantWhatsAppConnection } from '../../core/whatsapp-api.service';
+import { TranslationService } from '../../core/translation.service';
+import { extractApiErrorMessage } from '../../core/backend-i18n-message.util';
 import { PartsFinderResult, PartsFinderService, PartsRfqItem, PartsRfqResult } from './parts-finder.service';
 
 @Component({
@@ -22,6 +24,7 @@ import { PartsFinderResult, PartsFinderService, PartsRfqItem, PartsRfqResult } f
 })
 export class PartsFinderComponent {
   private service = inject(PartsFinderService);
+  private i18n = inject(TranslationService);
   partNumber = '';
   quantity: number | null = 1;
   condition = '';
@@ -173,17 +176,20 @@ export class PartsFinderComponent {
     if (channel === 'WHATSAPP') this.startWhatsappConnection();
   }
   startWhatsappConnection(): void {
-    this.service.activateWhatsapp().subscribe({ next: connection => { this.whatsappConnection = connection; this.refreshWhatsappConnection(); this.stopWhatsappPoll(); this.whatsappPoll = setInterval(() => this.refreshWhatsappConnection(), 2500); }, error: err => { this.sendState = 'ERROR'; this.sendError = err?.error?.error || 'Não foi possível iniciar a conexão temporária.'; } });
+    this.service.activateWhatsapp().subscribe({ next: connection => { this.whatsappConnection = connection; this.refreshWhatsappConnection(); this.stopWhatsappPoll(); this.whatsappPoll = setInterval(() => this.refreshWhatsappConnection(), 2500); }, error: err => { this.sendState = 'ERROR'; this.sendError = extractApiErrorMessage(err, this.i18n) || 'Não foi possível iniciar a conexão temporária.'; } });
   }
   refreshWhatsappConnection(): void {
-    this.service.whatsappStatus().subscribe(connection => { this.whatsappConnection = connection; if (connection.connected) { this.sendState = 'READY'; this.sendProgress = 45; this.whatsappQr = ''; this.stopWhatsappPoll(); } else { this.service.whatsappQrCode().subscribe(qr => this.whatsappQr = qr.qrCodeBase64 || ''); } });
+    this.service.whatsappStatus().subscribe({
+      next: connection => { this.whatsappConnection = connection; if (connection.connected) { this.sendState = 'READY'; this.sendProgress = 45; this.whatsappQr = ''; this.stopWhatsappPoll(); } else { this.service.whatsappQrCode().subscribe({ next: qr => this.whatsappQr = qr.qrCodeBase64 || '', error: err => { this.sendState = 'ERROR'; this.sendError = extractApiErrorMessage(err, this.i18n) || 'Não foi possível gerar o QR Code.'; this.stopWhatsappPoll(); } }); } },
+      error: err => { this.sendState = 'ERROR'; this.sendError = extractApiErrorMessage(err, this.i18n) || 'Não foi possível consultar a conexão.'; this.stopWhatsappPoll(); }
+    });
   }
   sendActiveRfq(): void {
     if (!this.activeRfq || !this.sendChannel || !this.sendDestination.trim()) return;
     this.sendState = 'SENDING'; this.sendProgress = 70;
     const request = { destination: this.sendDestination.trim(), message: this.sendMessage };
     const operation = this.sendChannel === 'EMAIL' ? this.service.sendRfqEmail(this.activeRfq.id, request) : this.service.sendRfqWhatsApp(this.activeRfq.id, request);
-    operation.subscribe({ next: () => { this.sendProgress = 100; this.sendState = 'SUCCESS'; this.activeRfq!.status = 'SENT'; this.loadRfqs(); this.stopWhatsappPoll(); }, error: err => { this.sendState = 'ERROR'; this.sendError = err?.error?.error || 'O envio não foi concluído.'; } });
+    operation.subscribe({ next: () => { this.sendProgress = 100; this.sendState = 'SUCCESS'; this.activeRfq!.status = 'SENT'; this.loadRfqs(); this.stopWhatsappPoll(); }, error: err => { this.sendState = 'ERROR'; this.sendError = extractApiErrorMessage(err, this.i18n) || 'O envio não foi concluído.'; } });
   }
   closeRfqCenter(): void { this.stopWhatsappPoll(); this.rfqCenterVisible = false; }
   private stopWhatsappPoll(): void { if (this.whatsappPoll) clearInterval(this.whatsappPoll); this.whatsappPoll = undefined; }

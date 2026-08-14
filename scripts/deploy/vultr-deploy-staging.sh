@@ -34,6 +34,25 @@ EOF
   chmod 600 .env.staging
 fi
 
+# Reutiliza a Evolution API do host sem registrar sua chave no repositório.
+EVOLUTION_CONTAINER="${AEROSUITE_EVOLUTION_CONTAINER:-aerosuite-evolution-api}"
+if docker inspect "${EVOLUTION_CONTAINER}" >/dev/null 2>&1; then
+  EVOLUTION_API_KEY="$(docker inspect "${EVOLUTION_CONTAINER}" --format '{{range .Config.Env}}{{println .}}{{end}}' | sed -n 's/^AUTHENTICATION_API_KEY=//p' | head -1)"
+  if [[ -n "${EVOLUTION_API_KEY}" ]]; then
+    sed -i '/^AERO_SUITE_EVOLUTION_ENABLED=/d;/^AERO_SUITE_EVOLUTION_API_BASE_URL=/d;/^AERO_SUITE_EVOLUTION_ADMIN_API_KEY=/d;/^AERO_SUITE_EVOLUTION_WEBHOOK_BASE_URL=/d' .env.staging
+    cat >> .env.staging <<EOF
+AERO_SUITE_EVOLUTION_ENABLED=true
+AERO_SUITE_EVOLUTION_API_BASE_URL=http://${EVOLUTION_CONTAINER}:8080
+AERO_SUITE_EVOLUTION_ADMIN_API_KEY=${EVOLUTION_API_KEY}
+AERO_SUITE_EVOLUTION_WEBHOOK_BASE_URL=https://staging.aerosuite.com.br
+EOF
+  else
+    echo "AVISO: Evolution API encontrada, mas a chave administrativa não está disponível"
+  fi
+else
+  echo "AVISO: Evolution API não encontrada; envio por WhatsApp ficará indisponível"
+fi
+
 COMPOSE=(docker compose --env-file .env.staging -p aerosuite-staging -f docker-compose.yml -f docker-compose.local-mysql.yml -f docker-compose.staging.yml)
 "${COMPOSE[@]}" config -q
 "${COMPOSE[@]}" build api web
@@ -88,6 +107,13 @@ docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e
   "INSERT INTO sistema_empresa_config (id,tenant_id,display_name,tagline,support_email,copyright_entity,browser_title_suffix,logo_url,wordmark_url,primary_color,razao_social,cnpj,endereco_logradouro,endereco_numero,endereco_bairro,cidade,uf,cep,telefone,site_url,onboarding_completo) VALUES (1,1,'AeroSuite','Plataforma MRO','suporte@aerosuite.com.br','AeroSuite','Gestão MRO','assets/LOGO_AERO.png','assets/LOGO_LETRA.png','#0ea5e9','AeroSuite Staging','00000000000191','Ambiente de staging','S/N','Staging','São Paulo','SP','01000-000','(11) 0000-0000','https://staging.aerosuite.com.br',1) ON DUPLICATE KEY UPDATE display_name=VALUES(display_name),tagline=VALUES(tagline),support_email=VALUES(support_email),copyright_entity=VALUES(copyright_entity),browser_title_suffix=VALUES(browser_title_suffix),logo_url=VALUES(logo_url),wordmark_url=VALUES(wordmark_url),primary_color=VALUES(primary_color),razao_social=VALUES(razao_social),cnpj=VALUES(cnpj),endereco_logradouro=VALUES(endereco_logradouro),endereco_numero=VALUES(endereco_numero),endereco_bairro=VALUES(endereco_bairro),cidade=VALUES(cidade),uf=VALUES(uf),cep=VALUES(cep),telefone=VALUES(telefone),site_url=VALUES(site_url),onboarding_completo=1;"
 
 "${COMPOSE[@]}" up -d api web
+
+if docker inspect "${EVOLUTION_CONTAINER}" >/dev/null 2>&1; then
+  EVOLUTION_NETWORK="$(docker inspect "${EVOLUTION_CONTAINER}" --format '{{range $name, $_ := .NetworkSettings.Networks}}{{println $name}}{{end}}' | head -1)"
+  if [[ -n "${EVOLUTION_NETWORK}" ]]; then
+    docker network connect "${EVOLUTION_NETWORK}" aerosuite-staging-backend 2>/dev/null || true
+  fi
+fi
 
 for _ in $(seq 1 60); do
   curl -sf http://127.0.0.1:8180/q/health >/dev/null 2>&1 && break
