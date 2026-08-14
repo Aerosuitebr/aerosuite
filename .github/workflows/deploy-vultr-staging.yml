@@ -15,7 +15,8 @@ jobs:
   deploy:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    environment: staging
+    # Credencial SSH existente fica no environment production; o stack remoto é isolado.
+    environment: production
     steps:
       - uses: actions/checkout@v5
         with:
@@ -25,25 +26,26 @@ jobs:
           tar -czf /tmp/aerosuite-staging-repo.tgz --exclude=.git --exclude=node_modules --exclude=frontend/node_modules --exclude=backend/target --exclude=frontend/dist --exclude=.env --exclude=.env.staging .
       - name: Prepare SSH key
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.VULTR_STAGING_SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.VULTR_SSH_PRIVATE_KEY }}
         run: |
-          test -n "${SSH_PRIVATE_KEY}" || { echo "Configure VULTR_STAGING_SSH_PRIVATE_KEY"; exit 1; }
+          test -n "${SSH_PRIVATE_KEY}" || { echo "Configure VULTR_SSH_PRIVATE_KEY"; exit 1; }
           mkdir -p ~/.ssh
           printf '%s\n' "${SSH_PRIVATE_KEY}" > ~/.ssh/vultr_staging
           chmod 600 ~/.ssh/vultr_staging
       - name: Upload and deploy isolated stack
         env:
-          HOST: ${{ vars.VULTR_STAGING_HOST }}
-          USER: ${{ vars.VULTR_STAGING_SSH_USER || 'root' }}
+          HOST: ${{ vars.VULTR_HOST }}
+          USER: ${{ vars.VULTR_SSH_USER || 'root' }}
         run: |
-          test -n "${HOST}" || { echo "Configure VULTR_STAGING_HOST"; exit 1; }
+          test -n "${HOST}" || { echo "Configure VULTR_HOST"; exit 1; }
           OPTS="-i ~/.ssh/vultr_staging -o StrictHostKeyChecking=accept-new -o BatchMode=yes"
           scp ${OPTS} /tmp/aerosuite-staging-repo.tgz "${USER}@${HOST}:/tmp/aerosuite-staging-repo.tgz"
           scp ${OPTS} scripts/deploy/vultr-deploy-staging.sh "${USER}@${HOST}:/tmp/vultr-deploy-staging.sh"
           ssh ${OPTS} "${USER}@${HOST}" "chmod +x /tmp/vultr-deploy-staging.sh && INSTALL_DIR=/opt/aerosuite-staging TARBALL=/tmp/aerosuite-staging-repo.tgz bash /tmp/vultr-deploy-staging.sh"
       - name: Smoke public staging URL
+        if: ${{ vars.STAGING_PUBLIC_URL != '' }}
         env:
-          URL: ${{ vars.STAGING_PUBLIC_URL || 'https://staging.aerosuite.app' }}
+          URL: ${{ vars.STAGING_PUBLIC_URL }}
         run: |
           curl -sfI "${URL}/" | head -3
           curl -sf "${URL}/api/public/deployment" | head -c 200
