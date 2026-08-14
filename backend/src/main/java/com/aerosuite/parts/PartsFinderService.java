@@ -7,12 +7,19 @@ import com.aerosuite.domain.PartsRfq;
 import com.aerosuite.domain.PartsRfqItem;
 import com.aerosuite.dto.parts.PartsRfqRequest;
 import com.aerosuite.dto.parts.PartsRfqResult;
+import com.aerosuite.dto.parts.PartsRfqSendRequest;
+import com.aerosuite.integration.evolution.EvolutionService;
+import com.aerosuite.integration.evolution.dto.TenantWhatsAppConnectionViewDto;
+import com.aerosuite.integration.evolution.dto.WhatsAppQrCodeDto;
+import com.aerosuite.service.EmailService;
+import com.aerosuite.util.HtmlToPdfConverter;
 import com.aerosuite.security.InternalUserContext;
 import com.aerosuite.security.TenantDataAccess;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -24,6 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Base64;
 import java.util.stream.StreamSupport;
 
 @ApplicationScoped
@@ -31,6 +39,9 @@ public class PartsFinderService {
     @Inject Instance<PartsFinderConnector> connectors;
     @Inject TenantDataAccess tenantDataAccess;
     @Inject InternalUserContext internalUserContext;
+    @Inject HtmlToPdfConverter pdfConverter;
+    @Inject EmailService emailService;
+    @Inject EvolutionService evolutionService;
 
     @Transactional
     public List<PartsFinderResult> search(PartsFinderSearchRequest request) {
@@ -87,6 +98,78 @@ public class PartsFinderService {
             item.persist();
         }
         return toRfqResult(rfq, PartsRfqItem.<PartsRfqItem>find("rfqId = ?1 order by lineNumber", rfq.id).list());
+    }
+
+    @Transactional
+    public List<PartsRfqResult> listRfqs(String query) {
+        String needle = query == null ? "" : query.trim().toLowerCase(Locale.ROOT);
+        return PartsRfq.<PartsRfq>find("order by createdAt desc").page(0, 100).list().stream()
+                .map(rfq -> toRfqResult(rfq, PartsRfqItem.<PartsRfqItem>find("rfqId = ?1 order by lineNumber", rfq.id).list()))
+                .filter(rfq -> needle.isBlank() || rfqMatches(rfq, needle))
+                .toList();
+    }
+
+    @Transactional
+    public PartsRfqResult getRfq(Long id) {
+        PartsRfq rfq = PartsRfq.findById(id);
+        if (rfq == null) throw new NotFoundException("RFQ not found");
+        return toRfqResult(rfq, PartsRfqItem.<PartsRfqItem>find("rfqId = ?1 order by lineNumber", id).list());
+    }
+
+    public byte[] generateRfqPdf(Long id) {
+        try { return pdfConverter.toPdf(rfqHtml(getRfq(id))); }
+        catch (Exception error) { throw new IllegalStateException("Could not generate RFQ PDF", error); }
+    }
+
+    @Transactional
+    public Map<String, Object> sendRfqEmail(Long id, PartsRfqSendRequest request) {
+        if (request == null || request.destination == null || request.destination.isBlank()) throw new BadRequestException("Destination email is required");
+        PartsRfqResult rfq = getRfq(id);
+        byte[] pdf = generateRfqPdf(id);
+        String subject = request.subject == null || request.subject.isBlank() ? rfq.number + " - " + rfq.title : request.subject;
+        String message = request.message == null || request.message.isBlank() ? "Segue em anexo nossa solicitação de cotação." : request.message;
+        boolean sent = emailService.sendEmail(request.destination.trim(), subject, "<p>" + HtmlToPdfConverter.escapeHtml(message) + "</p>", message, pdf, rfq.number + ".pdf");
+        if (!sent) throw new IllegalStateException("Email delivery failed");
+        markRfqSent(id);
+        return Map.of("success", true, "channel", "EMAIL", "destination", request.destination);
+    }
+
+    @Transactional
+    public Map<String, Object> sendRfqWhatsApp(Long id, PartsRfqSendRequest request) {
+        if (request == null || request.destination == null || request.destination.replaceAll("\\D", "").length() < 10) throw new BadRequestException("Valid WhatsApp number is required");
+        PartsRfqResult rfq = getRfq(id);
+        String message = request.message == null || request.message.isBlank() ? "Solicitação de cotação " + rfq.number + " - " + rfq.title : request.message;
+        try {
+            evolutionService.sendMediaForTenant(tenantDataAccess.currentTenantId(), request.destination, message, null,
+                    Base64.getEncoder().encodeToString(generateRfqPdf(id)), rfq.number + ".pdf", "application/pdf");
+            markRfqSent(id);
+            return Map.of("success", true, "channel", "WHATSAPP", "destination", request.destination, "disconnected", true);
+        } finally {
+            try { evolutionService.disconnect(); } catch (Exception ignored) { }
+        }
+    }
+
+    public TenantWhatsAppConnectionViewDto whatsappStatus() { return evolutionService.getConnectionView(true); }
+    public TenantWhatsAppConnectionViewDto activateWhatsapp() { return evolutionService.activateWhatsApp(); }
+    public WhatsAppQrCodeDto whatsappQrCode() { return evolutionService.fetchQrCode(); }
+    public void disconnectWhatsapp() { evolutionService.disconnect(); }
+
+    private void markRfqSent(Long id) {
+        PartsRfq rfq = PartsRfq.findById(id);
+        if (rfq != null) { rfq.status = "SENT"; rfq.persist(); }
+    }
+
+    private boolean rfqMatches(PartsRfqResult rfq, String needle) {
+        if ((rfq.number + " " + rfq.title + " " + rfq.status).toLowerCase(Locale.ROOT).contains(needle)) return true;
+        return rfq.items.stream().anyMatch(item -> (String.valueOf(item.partNumber) + " " + String.valueOf(item.description) + " " + String.valueOf(item.supplier) + " " + String.valueOf(item.country)).toLowerCase(Locale.ROOT).contains(needle));
+    }
+
+    private String rfqHtml(PartsRfqResult rfq) {
+        StringBuilder rows = new StringBuilder();
+        for (PartsRfqResult.Item item : rfq.items) rows.append("<tr><td>").append(HtmlToPdfConverter.escapeHtml(item.partNumber)).append("</td><td>").append(HtmlToPdfConverter.escapeHtml(item.description)).append("</td><td>").append(HtmlToPdfConverter.escapeHtml(item.supplier)).append("</td><td>").append(item.quantity).append("</td><td>").append(item.currency == null ? "" : item.currency).append(" ").append(item.unitPrice == null ? "Sob consulta" : item.unitPrice).append("</td><td>").append(item.currency == null ? "" : item.currency).append(" ").append(item.lineTotal == null ? "Sob consulta" : item.lineTotal).append("</td></tr>");
+        StringBuilder totals = new StringBuilder();
+        rfq.totalsByCurrency.forEach((currency, total) -> totals.append("<div><b>Total ").append(currency).append(":</b> ").append(currency).append(" ").append(total).append("</div>"));
+        return "<html><head><style>@page{margin:22mm}body{font-family:Arial;color:#17324d}h1{font-size:22px}small{color:#64748b}table{width:100%;border-collapse:collapse;margin-top:20px}th{background:#0f2d4a;color:white;padding:9px;font-size:10px;text-align:left}td{padding:9px;border-bottom:1px solid #dbe4ee;font-size:10px}.totals{text-align:right;margin-top:20px;font-size:14px}</style></head><body><small>AEROSUITE · REQUEST FOR QUOTATION</small><h1>" + HtmlToPdfConverter.escapeHtml(rfq.number) + "</h1><p>" + HtmlToPdfConverter.escapeHtml(rfq.title) + "</p><table><thead><tr><th>P/N</th><th>Descrição</th><th>Fornecedor</th><th>Qtd.</th><th>Unitário</th><th>Total</th></tr></thead><tbody>" + rows + "</tbody></table><div class='totals'>" + totals + "</div><p><small>Valores sujeitos à confirmação, impostos e frete.</small></p></body></html>";
     }
 
     private void validateRfqItem(PartsRfqRequest.Item item) {

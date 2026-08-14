@@ -10,6 +10,7 @@ import { TagModule } from 'primeng/tag';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { ISO_COUNTRIES } from '../../shared/countries/iso-countries';
+import { TenantWhatsAppConnection } from '../../core/whatsapp-api.service';
 import { PartsFinderResult, PartsFinderService, PartsRfqItem, PartsRfqResult } from './parts-finder.service';
 
 @Component({
@@ -40,6 +41,21 @@ export class PartsFinderComponent {
   rfqNotes = '';
   rfqItems: PartsRfqItem[] = [];
   createdRfq: PartsRfqResult | null = null;
+  rfqCenterVisible = false;
+  rfqCenterLoading = false;
+  rfqQuery = '';
+  rfqs: PartsRfqResult[] = [];
+  activeRfq: PartsRfqResult | null = null;
+  sendChannel: 'EMAIL' | 'WHATSAPP' | null = null;
+  sendDestination = '';
+  sendMessage = '';
+  sendProgress = 0;
+  sendState: 'IDLE' | 'CONNECTING' | 'READY' | 'SENDING' | 'SUCCESS' | 'ERROR' = 'IDLE';
+  sendError = '';
+  whatsappConnection: TenantWhatsAppConnection | null = null;
+  whatsappQr = '';
+  private whatsappPoll?: ReturnType<typeof setInterval>;
+  get whatsappQrSrc(): string { return this.whatsappQr.startsWith('data:') ? this.whatsappQr : `data:image/png;base64,${this.whatsappQr}`; }
 
   get hasDemoResults(): boolean {
     return this.results.some(item => item.source === 'STAGING_DEMO');
@@ -147,6 +163,30 @@ export class PartsFinderComponent {
       error: () => this.error = 'Não foi possível salvar a RFQ. Revise os itens e tente novamente.'
     });
   }
+
+  openRfqCenter(): void { this.rfqCenterVisible = true; this.activeRfq = null; this.loadRfqs(); }
+  loadRfqs(): void { this.rfqCenterLoading = true; this.service.listRfqs(this.rfqQuery).pipe(finalize(() => this.rfqCenterLoading = false)).subscribe({ next: items => this.rfqs = items, error: () => this.error = 'Não foi possível carregar as RFQs.' }); }
+  selectRfq(rfq: PartsRfqResult): void { this.activeRfq = rfq; this.sendChannel = null; this.sendState = 'IDLE'; }
+  downloadRfqPdf(rfq: PartsRfqResult): void { this.service.downloadRfqPdf(rfq.id).subscribe(blob => { const url = URL.createObjectURL(blob); const anchor = document.createElement('a'); anchor.href = url; anchor.download = `${rfq.number}.pdf`; anchor.click(); URL.revokeObjectURL(url); }); }
+  openSend(channel: 'EMAIL' | 'WHATSAPP'): void {
+    this.sendChannel = channel; this.sendState = channel === 'WHATSAPP' ? 'CONNECTING' : 'READY'; this.sendProgress = channel === 'WHATSAPP' ? 12 : 35; this.sendError = ''; this.whatsappQr = '';
+    if (channel === 'WHATSAPP') this.startWhatsappConnection();
+  }
+  startWhatsappConnection(): void {
+    this.service.activateWhatsapp().subscribe({ next: connection => { this.whatsappConnection = connection; this.refreshWhatsappConnection(); this.stopWhatsappPoll(); this.whatsappPoll = setInterval(() => this.refreshWhatsappConnection(), 2500); }, error: err => { this.sendState = 'ERROR'; this.sendError = err?.error?.error || 'Não foi possível iniciar a conexão temporária.'; } });
+  }
+  refreshWhatsappConnection(): void {
+    this.service.whatsappStatus().subscribe(connection => { this.whatsappConnection = connection; if (connection.connected) { this.sendState = 'READY'; this.sendProgress = 45; this.whatsappQr = ''; this.stopWhatsappPoll(); } else { this.service.whatsappQrCode().subscribe(qr => this.whatsappQr = qr.qrCodeBase64 || ''); } });
+  }
+  sendActiveRfq(): void {
+    if (!this.activeRfq || !this.sendChannel || !this.sendDestination.trim()) return;
+    this.sendState = 'SENDING'; this.sendProgress = 70;
+    const request = { destination: this.sendDestination.trim(), message: this.sendMessage };
+    const operation = this.sendChannel === 'EMAIL' ? this.service.sendRfqEmail(this.activeRfq.id, request) : this.service.sendRfqWhatsApp(this.activeRfq.id, request);
+    operation.subscribe({ next: () => { this.sendProgress = 100; this.sendState = 'SUCCESS'; this.activeRfq!.status = 'SENT'; this.loadRfqs(); this.stopWhatsappPoll(); }, error: err => { this.sendState = 'ERROR'; this.sendError = err?.error?.error || 'O envio não foi concluído.'; } });
+  }
+  closeRfqCenter(): void { this.stopWhatsappPoll(); this.rfqCenterVisible = false; }
+  private stopWhatsappPoll(): void { if (this.whatsappPoll) clearInterval(this.whatsappPoll); this.whatsappPoll = undefined; }
 
   private calculateLineTotal(unitPrice: number | undefined, quantity: number): number { return unitPrice == null ? 0 : Math.round(unitPrice * quantity * 100) / 100; }
 

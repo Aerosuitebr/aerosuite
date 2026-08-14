@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { TenantWhatsAppConnection, WhatsAppQrCode } from '../../core/whatsapp-api.service';
 
 export interface PartsFinderResult {
   inventoryItemId?: number;
@@ -44,4 +45,11 @@ export class PartsFinderService {
   createRfq(request: PartsRfqRequest): Observable<PartsRfqResult> {
     return this.http.post<PartsRfqResult>('/api/parts-finder/rfqs', request);
   }
+  listRfqs(query = ''): Observable<PartsRfqResult[]> { return this.http.get<PartsRfqResult[]>('/api/parts-finder/rfqs', { params: query ? { q: query } : {} }); }
+  downloadRfqPdf(id: number): Observable<Blob> { return this.http.get(`/api/parts-finder/rfqs/${id}/pdf`, { responseType: 'blob' }); }
+  sendRfqEmail(id: number, request: { destination: string; subject?: string; message?: string }): Observable<{ success: boolean }> { return this.http.post<{ success: boolean }>(`/api/parts-finder/rfqs/${id}/send-email`, request); }
+  sendRfqWhatsApp(id: number, request: { destination: string; message?: string }): Observable<{ success: boolean; disconnected: boolean }> { return this.http.post<{ success: boolean; disconnected: boolean }>(`/api/parts-finder/rfqs/${id}/send-whatsapp`, request); }
+  whatsappStatus(): Observable<TenantWhatsAppConnection> { return this.http.get<TenantWhatsAppConnection>('/api/parts-finder/rfqs/whatsapp/status'); }
+  activateWhatsapp(): Observable<TenantWhatsAppConnection> { return this.http.post<TenantWhatsAppConnection>('/api/parts-finder/rfqs/whatsapp/activate', {}); }
+  whatsappQrCode(): Observable<WhatsAppQrCode> { return this.http.get<WhatsAppQrCode>('/api/parts-finder/rfqs/whatsapp/qrcode'); }
 }
