@@ -37,7 +37,40 @@ fi
 COMPOSE=(docker compose --env-file .env.staging -p aerosuite-staging -f docker-compose.yml -f docker-compose.local-mysql.yml -f docker-compose.staging.yml)
 "${COMPOSE[@]}" config -q
 "${COMPOSE[@]}" build api web
-"${COMPOSE[@]}" up -d mysql api web
+"${COMPOSE[@]}" up -d mysql
+
+DB_PASSWORD="$(grep '^MYSQL_ROOT_PASSWORD=' .env.staging | cut -d= -f2- | tr -d '\r')"
+for _ in $(seq 1 60); do
+  docker exec aerosuite-staging-mysql mysqladmin ping -h 127.0.0.1 -uroot -p"${DB_PASSWORD}" --silent >/dev/null 2>&1 && break
+  sleep 2
+done
+
+if ! docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -N -e "SHOW TABLES LIKE 'os';" 2>/dev/null | grep -q '^os$'; then
+  echo "==> Importar schema base de domínio no staging"
+  BASE_SCHEMA_FILES=(
+    backend/EstruturaBanco/aerosuite_fabricante.sql
+    backend/EstruturaBanco/aerosuite_product.sql
+    backend/EstruturaBanco/aerosuite_fcu.sql
+    backend/EstruturaBanco/aerosuite_os.sql
+    backend/EstruturaBanco/aerosuite_associacao_fcu.sql
+    backend/EstruturaBanco/aerosuite_tipo_servico.sql
+    db/scripts/create_proposta_comercial.sql
+    db/scripts/create_cliente_proposta.sql
+    db/scripts/create_chat_tables.sql
+    db/scripts/create_chamada_table.sql
+    db/scripts/create_ticket_suporte.sql
+    db/scripts/create_publicacoes_tecnicas.sql
+    db/scripts/bootstrap_estoque_tables.sql
+    db/init/usuario_externo.sql
+  )
+  for schema_file in "${BASE_SCHEMA_FILES[@]}"; do
+    [[ -f "${schema_file}" ]] || continue
+    echo "  -> ${schema_file}"
+    docker exec -i aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite < "${schema_file}"
+  done
+fi
+
+"${COMPOSE[@]}" up -d api web
 
 for _ in $(seq 1 60); do
   curl -sf http://127.0.0.1:8180/q/health >/dev/null 2>&1 && break
