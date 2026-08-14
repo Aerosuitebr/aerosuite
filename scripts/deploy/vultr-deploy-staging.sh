@@ -43,6 +43,16 @@ for _ in $(seq 1 60); do
   curl -sf http://127.0.0.1:8180/q/health >/dev/null 2>&1 && break
   sleep 3
 done
-curl -sf http://127.0.0.1:8180/q/health >/dev/null
-curl -sfI http://127.0.0.1:8181/ >/dev/null
+if ! curl -sf http://127.0.0.1:8180/q/health >/dev/null; then
+  echo "ERRO: API de staging não ficou saudável"
+  "${COMPOSE[@]}" ps
+  "${COMPOSE[@]}" logs --tail=160 api
+  exit 1
+fi
+if ! curl -sfI http://127.0.0.1:8181/ >/dev/null; then
+  echo "ERRO: frontend de staging não respondeu"
+  "${COMPOSE[@]}" ps
+  "${COMPOSE[@]}" logs --tail=80 web
+  exit 1
+fi
 echo "OK - staging ativo em 127.0.0.1:8181"
