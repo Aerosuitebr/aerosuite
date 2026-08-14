@@ -35,6 +35,49 @@ export class PartsFinderComponent {
     return this.results.some(item => item.source === 'STAGING_DEMO');
   }
 
+  get recommendedOffer(): PartsFinderResult | undefined {
+    return [...this.selected].sort((a, b) => this.offerScore(b) - this.offerScore(a))[0];
+  }
+
+  get fastestLeadTime(): number | undefined {
+    const values = this.selected.map(item => item.estimatedLeadTimeHours).filter((value): value is number => value != null);
+    return values.length ? Math.min(...values) : undefined;
+  }
+
+  isRecommended(item: PartsFinderResult): boolean { return item === this.recommendedOffer; }
+
+  isLowestPrice(item: PartsFinderResult): boolean {
+    if (item.unitPrice == null) return false;
+    const prices = this.selected.filter(candidate => candidate.currency === item.currency && candidate.unitPrice != null).map(candidate => candidate.unitPrice as number);
+    return prices.length > 1 && item.unitPrice === Math.min(...prices);
+  }
+
+  isFastest(item: PartsFinderResult): boolean {
+    return item.estimatedLeadTimeHours != null && item.estimatedLeadTimeHours === this.fastestLeadTime;
+  }
+
+  offerScore(item: PartsFinderResult): number {
+    let score = 0;
+    if (item.supplierAslStatus === 'APROVADO') score += 30;
+    if (item.certification) score += 15;
+    if (item.quantity != null && item.quantity >= (this.quantity ?? 1)) score += 20;
+    if (this.isLowestPrice(item)) score += 15;
+    if (this.isFastest(item)) score += 10;
+    if (this.aog && item.aogAvailable) score += 25;
+    return score;
+  }
+
+  offerReasons(item: PartsFinderResult): string[] {
+    const reasons: string[] = [];
+    if (item.supplierAslStatus === 'APROVADO') reasons.push('Fornecedor aprovado na ASL');
+    if (item.quantity != null && item.quantity >= (this.quantity ?? 1)) reasons.push('Atende a quantidade solicitada');
+    if (this.isLowestPrice(item)) reasons.push('Menor preço comparável');
+    if (this.isFastest(item)) reasons.push('Menor prazo estimado');
+    if (this.aog && item.aogAvailable) reasons.push('Disponível para atendimento AOG');
+    if (item.certification) reasons.push('Certificação informada');
+    return reasons;
+  }
+
   decreaseQuantity(): void {
     this.quantity = Math.max(1, (this.quantity ?? 1) - 1);
   }

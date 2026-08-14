@@ -45,12 +45,32 @@
   </p-table>
 
   <section class="comparison" *ngIf="comparisonVisible && selected.length">
-    <header><div><span class="eyebrow">COMPARAÇÃO</span><h3>Ofertas selecionadas</h3></div><button type="button" aria-label="Fechar comparação" (click)="comparisonVisible = false"><i class="pi pi-times"></i></button></header>
+    <header class="comparison-header"><div><span class="eyebrow">ANÁLISE COMPARATIVA</span><h3>Decisão apoiada por dados</h3><p>Os destaques consideram disponibilidade, conformidade, prazo e preço entre as ofertas selecionadas.</p></div><button type="button" aria-label="Fechar comparação" (click)="comparisonVisible = false"><i class="pi pi-times"></i></button></header>
+
+    <div class="recommendation" *ngIf="recommendedOffer as recommended">
+      <div class="recommendation-icon"><i class="pi pi-sparkles"></i></div>
+      <div class="recommendation-copy"><span>OPÇÃO RECOMENDADA</span><strong>{{ recommended.supplier || 'Estoque próprio' }}</strong><p>Melhor equilíbrio nos critérios disponíveis, com {{ offerScore(recommended) }} pontos na análise.</p></div>
+      <div class="recommendation-reasons"><span *ngFor="let reason of offerReasons(recommended)"><i class="pi pi-check"></i>{{ reason }}</span></div>
+      <button type="button" class="recommendation-action" (click)="createRfq()"><i class="pi pi-send"></i> Solicitar cotação</button>
+    </div>
+
+    <div class="comparison-legend"><span><i class="legend-dot best"></i> Melhor resultado no critério</span><span><i class="legend-dot attention"></i> Requer validação</span><small>A recomendação é um subsídio à decisão e deve ser confirmada por RFQ.</small></div>
     <div class="comparison-grid">
-      <article *ngFor="let item of selected">
-        <div class="offer-source">{{ item.source === 'STAGING_DEMO' ? 'Demonstração' : item.source === 'AEROSUITE_INTERNAL' ? 'AeroSuite' : item.source }}</div>
-        <h4>{{ item.partNumber }}</h4><p>{{ item.supplier || 'Estoque próprio' }}</p>
-        <dl><div><dt>Condição</dt><dd>{{ item.condition || '—' }}</dd></div><div><dt>Quantidade</dt><dd>{{ item.quantity ?? '—' }}</dd></div><div><dt>Preço</dt><dd>{{ item.unitPrice != null ? (item.currency + ' ' + item.unitPrice) : 'Sob consulta' }}</dd></div><div><dt>Prazo estimado</dt><dd>{{ item.estimatedLeadTimeHours != null ? (item.estimatedLeadTimeHours + 'h') : '—' }}</dd></div><div><dt>Certificação</dt><dd>{{ item.certification || '—' }}</dd></div><div><dt>País</dt><dd>{{ item.country || '—' }}</dd></div><div><dt>ASL</dt><dd>{{ item.supplierAslStatus || 'N/A' }}</dd></div></dl>
+      <article class="offer-card" *ngFor="let item of selected; let index = index" [class.recommended-card]="isRecommended(item)">
+        <div class="offer-card-top"><span class="offer-index">OPÇÃO {{ index + 1 }}</span><span class="recommended-badge" *ngIf="isRecommended(item)"><i class="pi pi-star-fill"></i> Recomendada</span></div>
+        <div class="offer-identity"><div class="offer-source">{{ item.source === 'STAGING_DEMO' ? 'Demonstração' : item.source === 'AEROSUITE_INTERNAL' ? 'AeroSuite' : item.source }}</div><h4>{{ item.supplier || 'Estoque próprio' }}</h4><p>{{ item.partNumber }} · {{ item.description || 'Descrição não informada' }}</p></div>
+        <div class="score-row"><span>Pontuação da análise</span><strong>{{ offerScore(item) }}</strong><div class="score-track"><span [style.width.%]="offerScore(item)"></span></div></div>
+        <dl class="criteria-list">
+          <div [class.criterion-best]="isLowestPrice(item)"><dt><i class="pi pi-dollar"></i> Preço</dt><dd>{{ item.unitPrice != null ? (item.currency + ' ' + (item.unitPrice | number:'1.2-2')) : 'Sob consulta' }}<small *ngIf="isLowestPrice(item)">MENOR PREÇO</small></dd></div>
+          <div [class.criterion-best]="isFastest(item)"><dt><i class="pi pi-clock"></i> Prazo</dt><dd>{{ item.estimatedLeadTimeHours != null ? (item.estimatedLeadTimeHours + 'h') : 'Não informado' }}<small *ngIf="isFastest(item)">MAIS RÁPIDO</small></dd></div>
+          <div [class.criterion-best]="item.quantity != null && item.quantity >= (quantity || 1)"><dt><i class="pi pi-box"></i> Quantidade</dt><dd>{{ item.quantity ?? 'Não informada' }}<small *ngIf="item.quantity != null && item.quantity >= (quantity || 1)">ATENDE A DEMANDA</small></dd></div>
+          <div [class.criterion-best]="item.supplierAslStatus === 'APROVADO'" [class.criterion-attention]="item.supplierAslStatus !== 'APROVADO'"><dt><i class="pi pi-verified"></i> Status ASL</dt><dd>{{ item.supplierAslStatus || 'Não avaliado' }}<small>{{ item.supplierAslStatus === 'APROVADO' ? 'FORNECEDOR APROVADO' : 'VALIDAÇÃO NECESSÁRIA' }}</small></dd></div>
+          <div [class.criterion-best]="aog && item.aogAvailable"><dt><i class="pi pi-bolt"></i> Atendimento AOG</dt><dd>{{ item.aogAvailable ? 'Disponível' : 'Não confirmado' }}<small *ngIf="aog && item.aogAvailable">PRONTO PARA AOG</small></dd></div>
+          <div><dt><i class="pi pi-file-check"></i> Certificação</dt><dd>{{ item.certification || 'Não informada' }}</dd></div>
+          <div><dt><i class="pi pi-map-marker"></i> Localização</dt><dd>{{ item.location || item.country || 'Não informada' }}</dd></div>
+          <div><dt><i class="pi pi-tag"></i> Condição</dt><dd>{{ item.condition || 'Não informada' }}</dd></div>
+        </dl>
+        <div class="decision-reasons"><strong>Subsídios desta opção</strong><span *ngFor="let reason of offerReasons(item)"><i class="pi pi-check-circle"></i>{{ reason }}</span><span class="no-evidence" *ngIf="!offerReasons(item).length"><i class="pi pi-exclamation-circle"></i>Dados insuficientes para destacar esta opção</span></div>
       </article>
     </div>
   </section>
