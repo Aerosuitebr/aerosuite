@@ -18,5 +18,7 @@ public class PartsFinderResult {
     public String certification;
     public String source;
     public String location;
+    public Boolean aogAvailable;
+    public Integer estimatedLeadTimeHours;
     public LocalDateTime lastUpdatedAt;
 }

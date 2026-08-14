@@ -49,6 +49,8 @@ public class InternalInventoryPartsConnector implements PartsFinderConnector {
         result.certification = item.certTipo != null ? item.certTipo : item.certificadoConformidade;
         result.source = source();
         result.location = item.localizacao;
+        result.aogAvailable = item.quantidade != null && item.quantidade.signum() > 0;
+        result.estimatedLeadTimeHours = result.aogAvailable ? 2 : null;
         result.lastUpdatedAt = item.updatedAt;
         return result;
     }

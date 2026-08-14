@@ -17,6 +17,8 @@ export interface PartsFinderResult {
   certification?: string;
   source: string;
   location?: string;
+  aogAvailable?: boolean;
+  estimatedLeadTimeHours?: number;
   lastUpdatedAt?: string;
 }
 

@@ -21,25 +21,27 @@
     </label>
     <label class="field country-field"><span>País</span><input pInputText name="country" [(ngModel)]="country" placeholder="Brasil ou US"></label>
     <label class="field certification-field"><span>Certificação</span><input pInputText name="certification" [(ngModel)]="certification" placeholder="FAA 8130-3"></label>
-    <label class="aog-toggle"><input type="checkbox" name="aog" [(ngModel)]="aog"><span class="toggle-track"></span><span>AOG</span></label>
+    <label class="aog-toggle" title="Prioriza fornecedores com resposta e expedição imediatas; não altera as fontes pesquisadas"><input type="checkbox" name="aog" [(ngModel)]="aog"><span class="toggle-track"></span><span>AOG urgente</span></label>
     <button pButton class="search-button" type="submit" icon="pi pi-search" label="Pesquisar" [loading]="loading" [disabled]="!partNumber.trim()"></button>
   </form>
 
   <div class="notice"><i class="pi pi-info-circle"></i> A disponibilidade deve ser confirmada por RFQ antes da compra.</div>
+  <div class="aog-notice" *ngIf="aog"><i class="pi pi-bolt"></i> Modo AOG: as mesmas fontes são pesquisadas, com prioridade para resposta e expedição imediatas.</div>
   <div class="demo-notice" *ngIf="hasDemoResults"><i class="pi pi-info-circle"></i> Catálogo demonstrativo de staging — fornecedores, preços e disponibilidade não são reais.</div>
   <div class="error" *ngIf="error">{{ error }}</div>
 
   <p-table [value]="results" [loading]="loading" styleClass="p-datatable-sm" [tableStyle]="{'min-width':'960px'}">
     <ng-template pTemplate="caption"><div class="table-caption"><div class="table-title">Resultados <span>{{ results.length }}</span></div><div class="selection-actions" *ngIf="selected.length"><span>{{ selected.length }} selecionado(s)</span><button type="button" (click)="comparisonVisible = !comparisonVisible"><i class="pi pi-clone"></i> Comparar</button><button type="button" class="rfq-button" (click)="createRfq()"><i class="pi pi-send"></i> Criar RFQ</button></div></div></ng-template>
-    <ng-template pTemplate="header"><tr><th class="select-column"></th><th>P/N</th><th>Descrição</th><th>Fornecedor</th><th>País</th><th>Qtd.</th><th>Preço</th><th>Certificação</th><th>ASL</th><th>Fonte</th></tr></ng-template>
+    <ng-template pTemplate="header"><tr><th class="select-column"></th><th>P/N</th><th>Descrição</th><th>Fornecedor</th><th>País</th><th>Qtd.</th><th>Preço</th><th>Prazo</th><th>Certificação</th><th>ASL</th><th>Fonte</th></tr></ng-template>
     <ng-template pTemplate="body" let-r><tr>
       <td class="select-column"><input type="checkbox" [checked]="isSelected(r)" (change)="toggleSelection(r, $any($event.target).checked)" [attr.aria-label]="'Selecionar ' + r.partNumber"></td>
       <td><strong>{{ r.partNumber }}</strong></td><td>{{ r.description || '—' }}</td><td>{{ r.supplier || 'Estoque próprio' }}</td>
       <td>{{ r.country || '—' }}</td><td>{{ r.quantity ?? '—' }}</td><td>{{ r.unitPrice != null ? (r.currency + ' ' + r.unitPrice) : 'Sob consulta' }}</td>
+      <td><p-tag *ngIf="r.aogAvailable" value="AOG" severity="danger"></p-tag> {{ r.estimatedLeadTimeHours != null ? (r.estimatedLeadTimeHours + 'h') : '—' }}</td>
       <td>{{ r.certification || '—' }}</td><td><p-tag [value]="r.supplierAslStatus || 'N/A'" [severity]="r.supplierAslStatus === 'APROVADO' ? 'success' : 'warning'"></p-tag></td>
       <td><p-tag [value]="r.source === 'STAGING_DEMO' ? 'Demonstração' : 'AeroSuite'" [severity]="r.source === 'STAGING_DEMO' ? 'warning' : 'info'"></p-tag></td>
     </tr></ng-template>
-    <ng-template pTemplate="emptymessage"><tr><td colspan="10" class="empty">{{ searched ? 'Nenhuma disponibilidade encontrada para este P/N.' : 'Informe o P/N para iniciar a busca.' }}</td></tr></ng-template>
+    <ng-template pTemplate="emptymessage"><tr><td colspan="11" class="empty">{{ searched ? 'Nenhuma disponibilidade encontrada para este P/N.' : 'Informe o P/N para iniciar a busca.' }}</td></tr></ng-template>
   </p-table>
 
   <section class="comparison" *ngIf="comparisonVisible && selected.length">
@@ -48,7 +50,7 @@
       <article *ngFor="let item of selected">
         <div class="offer-source">{{ item.source === 'STAGING_DEMO' ? 'Demonstração' : item.source === 'AEROSUITE_INTERNAL' ? 'AeroSuite' : item.source }}</div>
         <h4>{{ item.partNumber }}</h4><p>{{ item.supplier || 'Estoque próprio' }}</p>
-        <dl><div><dt>Condição</dt><dd>{{ item.condition || '—' }}</dd></div><div><dt>Quantidade</dt><dd>{{ item.quantity ?? '—' }}</dd></div><div><dt>Preço</dt><dd>{{ item.unitPrice != null ? (item.currency + ' ' + item.unitPrice) : 'Sob consulta' }}</dd></div><div><dt>Certificação</dt><dd>{{ item.certification || '—' }}</dd></div><div><dt>País</dt><dd>{{ item.country || '—' }}</dd></div><div><dt>ASL</dt><dd>{{ item.supplierAslStatus || 'N/A' }}</dd></div></dl>
+        <dl><div><dt>Condição</dt><dd>{{ item.condition || '—' }}</dd></div><div><dt>Quantidade</dt><dd>{{ item.quantity ?? '—' }}</dd></div><div><dt>Preço</dt><dd>{{ item.unitPrice != null ? (item.currency + ' ' + item.unitPrice) : 'Sob consulta' }}</dd></div><div><dt>Prazo estimado</dt><dd>{{ item.estimatedLeadTimeHours != null ? (item.estimatedLeadTimeHours + 'h') : '—' }}</dd></div><div><dt>Certificação</dt><dd>{{ item.certification || '—' }}</dd></div><div><dt>País</dt><dd>{{ item.country || '—' }}</dd></div><div><dt>ASL</dt><dd>{{ item.supplierAslStatus || 'N/A' }}</dd></div></dl>
       </article>
     </div>
   </section>
