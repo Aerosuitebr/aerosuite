@@ -70,10 +70,14 @@ if [[ ! -f "${DATA_ROOT}/.schema-cloned" ]]; then
   docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e \
     "INSERT INTO tenant (id,codigo,nome,ativo,modulos_habilitados,created_at) VALUES (1,'staging','AeroSuite Staging',1,'MRO,ESTOQUE,COMERCIAL',NOW(6)) ON DUPLICATE KEY UPDATE codigo='staging',nome='AeroSuite Staging',ativo=1,modulos_habilitados='MRO,ESTOQUE,COMERCIAL';"
   docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e \
-    "INSERT INTO usuario (nome,email,senha,perfil_id,ativo,data_cadastro,tenant_id,precisa_trocar_senha) SELECT 'Administrador Staging','admin.staging@aerosuite.com','admin123',p.id,1,CURDATE(),1,0 FROM perfil p WHERE p.codigo='ADMIN' ON DUPLICATE KEY UPDATE ativo=1, tenant_id=1;"
+    "INSERT INTO usuario (nome,email,senha,perfil_id,ativo,data_cadastro,tenant_id,precisa_trocar_senha) SELECT 'Administrador Staging','admin.staging@aerosuite.com','admin123',p.id,1,CURDATE(),1,0 FROM perfil p WHERE p.codigo='ADMIN' ON DUPLICATE KEY UPDATE perfil_id=VALUES(perfil_id),ativo=1,tenant_id=1;"
   touch "${DATA_ROOT}/.schema-cloned"
   rm -f /tmp/aerosuite-production-schema.sql /tmp/aerosuite-production-flyway.sql
 fi
+
+# Reaplica o perfil administrativo em todos os deploys, inclusive quando o banco já foi inicializado.
+docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e \
+  "UPDATE usuario u JOIN perfil p ON p.codigo='ADMIN' SET u.perfil_id=p.id,u.ativo=1,u.tenant_id=1 WHERE u.email='admin.staging@aerosuite.com';"
 
 "${COMPOSE[@]}" up -d api web
 
