@@ -7,6 +7,8 @@ import com.aerosuite.security.PasswordCredentials;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import org.jboss.logging.Logger;
@@ -19,9 +21,17 @@ public class AuthBootstrap {
 
     private static final Logger LOG = Logger.getLogger(AuthBootstrap.class);
 
+    @Inject
+    EntityManager entityManager;
+
     @Transactional
     void onStart(@Observes StartupEvent event) {
-        Perfil adminPerfil = Perfil.find("codigo", "ADMIN").firstResult();
+        Perfil adminPerfil = entityManager
+                .createQuery("SELECT p FROM Perfil p WHERE p.codigo = :codigo", Perfil.class)
+                .setParameter("codigo", "ADMIN")
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
         Usuario existing = Usuario.find("email = ?1", "admin@aerosuite.com").firstResult();
         if (existing != null) {
             if (existing.perfil == null && adminPerfil != null) {
