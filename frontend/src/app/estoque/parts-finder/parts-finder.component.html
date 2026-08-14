@@ -1,0 +1,28 @@
+<section class="finder">
+  <header class="hero">
+    <div><span class="eyebrow">AEROSUITE PARTS FINDER</span><h2>Localizador de Peças</h2>
+      <p>Consulte disponibilidades internas agora. Marketplaces licenciados serão conectados à mesma busca.</p></div>
+    <span class="source-status"><i class="pi pi-database"></i> Estoque interno ativo</span>
+  </header>
+
+  <form class="search-panel" (ngSubmit)="search()">
+    <label>P/N <input pInputText name="partNumber" [(ngModel)]="partNumber" placeholder="Ex.: 23064518" autocomplete="off"></label>
+    <label>Quantidade <p-inputNumber name="quantity" [(ngModel)]="quantity" [min]="1" [showButtons]="true"></p-inputNumber></label>
+    <button pButton type="submit" icon="pi pi-search" label="Pesquisar" [loading]="loading" [disabled]="!partNumber.trim()"></button>
+  </form>
+
+  <div class="notice"><i class="pi pi-info-circle"></i> A disponibilidade deve ser confirmada por RFQ antes da compra.</div>
+  <div class="error" *ngIf="error">{{ error }}</div>
+
+  <p-table [value]="results" [loading]="loading" styleClass="p-datatable-sm" [tableStyle]="{'min-width':'960px'}">
+    <ng-template pTemplate="caption"><div class="table-title">Resultados <span>{{ results.length }}</span></div></ng-template>
+    <ng-template pTemplate="header"><tr><th>P/N</th><th>Descrição</th><th>Fornecedor</th><th>País</th><th>Qtd.</th><th>Preço</th><th>Certificação</th><th>ASL</th><th>Fonte</th></tr></ng-template>
+    <ng-template pTemplate="body" let-r><tr>
+      <td><strong>{{ r.partNumber }}</strong></td><td>{{ r.description || '—' }}</td><td>{{ r.supplier || 'Estoque próprio' }}</td>
+      <td>{{ r.country || '—' }}</td><td>{{ r.quantity ?? '—' }}</td><td>{{ r.unitPrice != null ? (r.currency + ' ' + r.unitPrice) : 'Sob consulta' }}</td>
+      <td>{{ r.certification || '—' }}</td><td><p-tag [value]="r.supplierAslStatus || 'N/A'" [severity]="r.supplierAslStatus === 'APROVADO' ? 'success' : 'warning'"></p-tag></td>
+      <td><p-tag value="AeroSuite" severity="info"></p-tag></td>
+    </tr></ng-template>
+    <ng-template pTemplate="emptymessage"><tr><td colspan="9" class="empty">{{ searched ? 'Nenhuma disponibilidade encontrada para este P/N.' : 'Informe o P/N para iniciar a busca.' }}</td></tr></ng-template>
+  </p-table>
+</section>

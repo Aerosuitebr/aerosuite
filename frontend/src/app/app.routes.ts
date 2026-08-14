@@ -782,6 +782,10 @@ export const routes: Routes = [
         loadComponent: () => import('./estoque/itens/item-estoque-list.component').then(m => m.ItemEstoqueListComponent)
       },
       {
+        path: 'parts-finder',
+        loadComponent: () => import('./estoque/parts-finder/parts-finder.component').then(m => m.PartsFinderComponent)
+      },
+      {
         path: 'quarentena',
         loadComponent: () => import('./estoque/quarentena/quarentena-list.component').then(m => m.QuarentenaListComponent)
       },
