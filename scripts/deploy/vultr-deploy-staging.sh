@@ -45,29 +45,32 @@ for _ in $(seq 1 60); do
   sleep 2
 done
 
-if ! docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -N -e "SHOW TABLES LIKE 'os';" 2>/dev/null | grep -q '^os$'; then
-  echo "==> Importar schema base de domínio no staging"
-  BASE_SCHEMA_FILES=(
-    backend/EstruturaBanco/aerosuite_fabricante.sql
-    backend/EstruturaBanco/aerosuite_product.sql
-    backend/EstruturaBanco/aerosuite_fcu.sql
-    backend/EstruturaBanco/aerosuite_os.sql
-    backend/EstruturaBanco/aerosuite_associacao_fcu.sql
-    backend/EstruturaBanco/aerosuite_tipo_servico.sql
-    db/scripts/create_proposta_comercial.sql
-    db/scripts/create_cliente_proposta.sql
-    db/scripts/create_chat_tables.sql
-    db/scripts/create_chamada_table.sql
-    db/scripts/create_ticket_suporte.sql
-    db/scripts/create_publicacoes_tecnicas.sql
-    db/scripts/bootstrap_estoque_tables.sql
-    db/init/usuario_externo.sql
-  )
-  for schema_file in "${BASE_SCHEMA_FILES[@]}"; do
-    [[ -f "${schema_file}" ]] || continue
-    echo "  -> ${schema_file}"
-    docker exec -i aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite < "${schema_file}"
-  done
+if [[ ! -f "${DATA_ROOT}/.schema-cloned" ]]; then
+  echo "==> Clonar somente estrutura e histórico Flyway da produção"
+  PROD_CONTAINER="${AEROSUITE_PRODUCTION_MYSQL_CONTAINER:-aerosuite-mysql-local}"
+  docker inspect "${PROD_CONTAINER}" >/dev/null 2>&1 || {
+    echo "ERRO: container MySQL de produção não encontrado: ${PROD_CONTAINER}"
+    exit 1
+  }
+  PROD_DB_PASSWORD="$(docker inspect "${PROD_CONTAINER}" --format '{{range .Config.Env}}{{println .}}{{end}}' | sed -n 's/^MYSQL_ROOT_PASSWORD=//p' | head -1)"
+  [[ -n "${PROD_DB_PASSWORD}" ]] || { echo "ERRO: MYSQL_ROOT_PASSWORD de produção indisponível"; exit 1; }
+
+  docker exec "${PROD_CONTAINER}" mysqldump -uroot -p"${PROD_DB_PASSWORD}" \
+    --no-data --routines --triggers --single-transaction --skip-lock-tables aerosuite > /tmp/aerosuite-production-schema.sql
+  docker exec "${PROD_CONTAINER}" mysqldump -uroot -p"${PROD_DB_PASSWORD}" \
+    --no-create-info --single-transaction --skip-lock-tables aerosuite flyway_schema_history > /tmp/aerosuite-production-flyway.sql
+
+  docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" -e \
+    "DROP DATABASE IF EXISTS aerosuite; CREATE DATABASE aerosuite CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
+  docker exec -i aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite < /tmp/aerosuite-production-schema.sql
+  docker exec -i aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite < /tmp/aerosuite-production-flyway.sql
+
+  docker exec -i aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite < backend/EstruturaBanco/aerosuite_funcionalidade_seed.sql
+  docker exec -i aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite < backend/EstruturaBanco/aerosuite_perfil.sql
+  docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e \
+    "INSERT INTO usuario (nome,email,senha,perfil_id,ativo,data_cadastro,tenant_id,precisa_trocar_senha) SELECT 'Administrador Staging','admin.staging@aerosuite.com','admin123',p.id,1,CURDATE(),1,0 FROM perfil p WHERE p.codigo='ADMIN' ON DUPLICATE KEY UPDATE ativo=1, tenant_id=1;"
+  touch "${DATA_ROOT}/.schema-cloned"
+  rm -f /tmp/aerosuite-production-schema.sql /tmp/aerosuite-production-flyway.sql
 fi
 
 "${COMPOSE[@]}" up -d api web
