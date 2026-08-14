@@ -45,16 +45,16 @@ for _ in $(seq 1 60); do
   sleep 2
 done
 
+PROD_CONTAINER="${AEROSUITE_PRODUCTION_MYSQL_CONTAINER:-aerosuite-mysql-local}"
+docker inspect "${PROD_CONTAINER}" >/dev/null 2>&1 || {
+  echo "ERRO: container MySQL de produção não encontrado: ${PROD_CONTAINER}"
+  exit 1
+}
+PROD_DB_PASSWORD="$(docker inspect "${PROD_CONTAINER}" --format '{{range .Config.Env}}{{println .}}{{end}}' | sed -n 's/^MYSQL_ROOT_PASSWORD=//p' | head -1)"
+[[ -n "${PROD_DB_PASSWORD}" ]] || { echo "ERRO: MYSQL_ROOT_PASSWORD de produção indisponível"; exit 1; }
+
 if [[ ! -f "${DATA_ROOT}/.schema-cloned" ]]; then
   echo "==> Clonar somente estrutura e histórico Flyway da produção"
-  PROD_CONTAINER="${AEROSUITE_PRODUCTION_MYSQL_CONTAINER:-aerosuite-mysql-local}"
-  docker inspect "${PROD_CONTAINER}" >/dev/null 2>&1 || {
-    echo "ERRO: container MySQL de produção não encontrado: ${PROD_CONTAINER}"
-    exit 1
-  }
-  PROD_DB_PASSWORD="$(docker inspect "${PROD_CONTAINER}" --format '{{range .Config.Env}}{{println .}}{{end}}' | sed -n 's/^MYSQL_ROOT_PASSWORD=//p' | head -1)"
-  [[ -n "${PROD_DB_PASSWORD}" ]] || { echo "ERRO: MYSQL_ROOT_PASSWORD de produção indisponível"; exit 1; }
-
   docker exec "${PROD_CONTAINER}" mysqldump -uroot -p"${PROD_DB_PASSWORD}" \
     --no-data --routines --triggers --single-transaction --skip-lock-tables aerosuite > /tmp/aerosuite-production-schema.sql
   docker exec "${PROD_CONTAINER}" mysqldump -uroot -p"${PROD_DB_PASSWORD}" \
@@ -75,6 +75,12 @@ if [[ ! -f "${DATA_ROOT}/.schema-cloned" ]]; then
   rm -f /tmp/aerosuite-production-schema.sql /tmp/aerosuite-production-flyway.sql
 fi
 
+# Sincroniza apenas o catálogo técnico de funcionalidades; nenhum dado operacional é copiado.
+docker exec "${PROD_CONTAINER}" mysqldump -uroot -p"${PROD_DB_PASSWORD}" \
+  --no-create-info --replace --single-transaction --skip-lock-tables aerosuite funcionalidade > /tmp/aerosuite-production-funcionalidade.sql
+docker exec -i aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite < /tmp/aerosuite-production-funcionalidade.sql
+rm -f /tmp/aerosuite-production-funcionalidade.sql
+
 # Reaplica o perfil administrativo em todos os deploys, inclusive quando o banco já foi inicializado.
 docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e \
   "UPDATE usuario u JOIN perfil p ON p.codigo='ADMIN' SET u.perfil_id=p.id,u.ativo=1,u.tenant_id=1 WHERE u.email IN ('admin.staging@aerosuite.com','admin@aerosuite.com');"
@@ -93,6 +99,9 @@ if ! curl -sf http://127.0.0.1:8180/q/health >/dev/null; then
   "${COMPOSE[@]}" logs --tail=160 api
   exit 1
 fi
+# Flyway já criou funcionalidades exclusivas desta branch; ADMIN recebe o catálogo completo.
+docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e \
+  "INSERT IGNORE INTO perfil_funcionalidade (perfil_id,funcionalidade_id) SELECT p.id,f.id FROM perfil p CROSS JOIN funcionalidade f WHERE p.codigo='ADMIN' AND f.ativo=1;"
 if ! curl -sfI http://127.0.0.1:8181/ >/dev/null; then
   echo "ERRO: frontend de staging não respondeu"
   "${COMPOSE[@]}" ps
