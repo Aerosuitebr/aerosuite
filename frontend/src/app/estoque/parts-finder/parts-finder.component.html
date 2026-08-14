@@ -74,4 +74,19 @@
       </article>
     </div>
   </section>
+
+  <p-dialog [(visible)]="rfqVisible" [modal]="true" [draggable]="false" [resizable]="false" [style]="{width:'min(1180px,96vw)'}" styleClass="rfq-dialog" header="RFQ inteligente">
+    <div class="rfq-success" *ngIf="createdRfq as rfq"><i class="pi pi-check-circle"></i><div><span>RFQ CRIADA COM SUCESSO</span><strong>{{ rfq.number }}</strong><p>{{ rfq.items.length }} item(ns) incorporados e valores recalculados pelo servidor.</p></div></div>
+    <ng-container *ngIf="!createdRfq">
+      <div class="rfq-heading"><div><span class="eyebrow">SOLICITAÇÃO DE COTAÇÃO</span><h3>Revise os produtos selecionados</h3><p>Quantidades e valores podem ser ajustados. Os totais são recalculados automaticamente.</p></div><span class="rfq-aog" *ngIf="aog"><i class="pi pi-bolt"></i> PRIORIDADE AOG</span></div>
+      <div class="rfq-meta"><label><span>Título da RFQ</span><input pInputText [(ngModel)]="rfqTitle" maxlength="180"></label><label><span>Observações ao fornecedor</span><input pInputText [(ngModel)]="rfqNotes" placeholder="Prazo, documentação e condições comerciais esperadas"></label></div>
+      <div class="rfq-table-wrap">
+        <table class="rfq-table"><thead><tr><th>#</th><th>Produto</th><th>Fornecedor</th><th>Condição / Certificação</th><th class="numeric">Qtd.</th><th>Moeda</th><th class="numeric">Valor unitário</th><th class="numeric">Total</th><th>Prazo</th><th></th></tr></thead>
+          <tbody><tr *ngFor="let item of rfqItems; let index = index"><td class="line-number">{{ index + 1 }}</td><td class="product-cell"><strong>{{ item.partNumber }}</strong><span>{{ item.description || 'Descrição não informada' }}</span></td><td><strong>{{ item.supplier || 'Estoque próprio' }}</strong><span>{{ item.country || 'País não informado' }}</span></td><td><strong>{{ item.condition || '—' }}</strong><span>{{ item.certification || 'Certificação a confirmar' }}</span></td><td class="numeric"><input class="rfq-number" type="number" min="0.001" step="1" [(ngModel)]="item.requestedQuantity" (ngModelChange)="updateRfqLine(item)"></td><td><select class="rfq-currency" [(ngModel)]="item.currency" (ngModelChange)="updateRfqLine(item)"><option>USD</option><option>BRL</option><option>EUR</option></select></td><td class="numeric"><input class="rfq-price" type="number" min="0" step="0.01" [(ngModel)]="item.unitPrice" (ngModelChange)="updateRfqLine(item)" placeholder="Sob consulta"></td><td class="numeric line-total"><strong *ngIf="item.unitPrice != null">{{ item.currency || 'USD' }} {{ item.lineTotal | number:'1.2-2' }}</strong><span *ngIf="item.unitPrice == null">Sob consulta</span></td><td><strong>{{ item.estimatedLeadTimeHours != null ? item.estimatedLeadTimeHours + 'h' : 'A confirmar' }}</strong><span *ngIf="item.aogAvailable" class="mini-aog">AOG</span></td><td><button class="remove-line" type="button" (click)="removeRfqLine(item)" aria-label="Remover item"><i class="pi pi-trash"></i></button></td></tr></tbody>
+        </table>
+      </div>
+      <div class="rfq-footer"><div class="rfq-summary"><span>{{ rfqItems.length }} produto(s)</span><span>{{ rfqItems.length }} linha(s) de cotação</span><span>Valores sem impostos e frete</span></div><div class="rfq-totals"><div *ngFor="let total of rfqTotals()"><span>TOTAL {{ total.currency }}</span><strong>{{ total.currency }} {{ total.total | number:'1.2-2' }}</strong></div><div *ngIf="!rfqTotals().length"><span>TOTAL</span><strong>Sob consulta</strong></div></div></div>
+      <div class="rfq-actions"><button type="button" class="secondary-action" (click)="rfqVisible = false">Cancelar</button><button pButton type="button" icon="pi pi-save" label="Criar RFQ" [loading]="rfqSaving" [disabled]="!rfqItems.length || !rfqTitle.trim()" (click)="saveRfq()"></button></div>
+    </ng-container>
+  </p-dialog>
 </section>

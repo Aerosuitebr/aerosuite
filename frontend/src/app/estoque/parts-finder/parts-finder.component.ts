@@ -7,12 +7,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { PartsFinderResult, PartsFinderService } from './parts-finder.service';
+import { DialogModule } from 'primeng/dialog';
+import { PartsFinderResult, PartsFinderService, PartsRfqItem, PartsRfqResult } from './parts-finder.service';
 
 @Component({
   selector: 'app-parts-finder',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, InputTextModule, InputNumberModule, TableModule, TagModule],
+  imports: [CommonModule, FormsModule, ButtonModule, InputTextModule, InputNumberModule, TableModule, TagModule, DialogModule],
   templateUrl: './parts-finder.component.html',
   styleUrls: ['./parts-finder.component.scss']
 })
@@ -30,6 +31,12 @@ export class PartsFinderComponent {
   results: PartsFinderResult[] = [];
   selected: PartsFinderResult[] = [];
   comparisonVisible = false;
+  rfqVisible = false;
+  rfqSaving = false;
+  rfqTitle = '';
+  rfqNotes = '';
+  rfqItems: PartsRfqItem[] = [];
+  createdRfq: PartsRfqResult | null = null;
 
   get hasDemoResults(): boolean {
     return this.results.some(item => item.source === 'STAGING_DEMO');
@@ -99,14 +106,46 @@ export class PartsFinderComponent {
 
   createRfq(): void {
     if (!this.selected.length) return;
-    const recipients = [...new Set(this.selected.map(item => item.supplierEmail).filter(Boolean))].join(';');
-    const lines = this.selected.map(item =>
-      `- PN ${item.partNumber} | Qtd. ${this.quantity ?? 1} | Condição ${item.condition || this.condition || 'a confirmar'} | Certificação ${item.certification || this.certification || 'a confirmar'}`
-    );
-    const subject = `RFQ AeroSuite${this.aog ? ' - AOG' : ''} - ${this.partNumber.trim()}`;
-    const body = `Prezados,\n\nSolicitamos cotação para os itens abaixo:\n\n${lines.join('\n')}\n\nFavor informar preço, disponibilidade, lead time, condição e rastreabilidade.\n\nAtenciosamente.`;
-    window.location.href = `mailto:${recipients}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    this.rfqTitle = `RFQ${this.aog ? ' AOG' : ''} - ${this.partNumber.trim()}`;
+    this.rfqNotes = this.aog ? 'Atendimento AOG prioritário. Confirmar disponibilidade e prazo de expedição.' : '';
+    this.rfqItems = this.selected.map(item => ({ ...item, requestedQuantity: this.quantity ?? 1, lineTotal: this.calculateLineTotal(item.unitPrice, this.quantity ?? 1) }));
+    this.createdRfq = null;
+    this.rfqVisible = true;
   }
+
+  updateRfqLine(item: PartsRfqItem): void {
+    item.requestedQuantity = Math.max(0.001, Number(item.requestedQuantity) || 0.001);
+    item.unitPrice = item.unitPrice == null ? undefined : Math.max(0, Number(item.unitPrice) || 0);
+    item.lineTotal = this.calculateLineTotal(item.unitPrice, item.requestedQuantity);
+  }
+
+  removeRfqLine(item: PartsRfqItem): void { this.rfqItems = this.rfqItems.filter(line => line !== item); }
+
+  rfqTotals(): Array<{ currency: string; total: number }> {
+    const totals = new Map<string, number>();
+    this.rfqItems.forEach(item => {
+      if (item.unitPrice == null) return;
+      const currency = item.currency || 'USD';
+      totals.set(currency, (totals.get(currency) || 0) + this.calculateLineTotal(item.unitPrice, item.requestedQuantity));
+    });
+    return [...totals.entries()].map(([currency, total]) => ({ currency, total }));
+  }
+
+  saveRfq(): void {
+    if (!this.rfqItems.length || this.rfqSaving) return;
+    this.rfqSaving = true;
+    this.service.createRfq({
+      title: this.rfqTitle,
+      aog: this.aog,
+      notes: this.rfqNotes,
+      items: this.rfqItems.map(({ requestedQuantity, lineTotal, ...item }) => ({ ...item, quantity: requestedQuantity }))
+    }).pipe(finalize(() => this.rfqSaving = false)).subscribe({
+      next: rfq => this.createdRfq = rfq,
+      error: () => this.error = 'Não foi possível salvar a RFQ. Revise os itens e tente novamente.'
+    });
+  }
+
+  private calculateLineTotal(unitPrice: number | undefined, quantity: number): number { return unitPrice == null ? 0 : Math.round(unitPrice * quantity * 100) / 100; }
 
   search(): void {
     const pn = this.partNumber.trim();

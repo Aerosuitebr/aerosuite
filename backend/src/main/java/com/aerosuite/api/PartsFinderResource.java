@@ -1,6 +1,7 @@
 package com.aerosuite.api;
 
 import com.aerosuite.dto.parts.PartsFinderSearchRequest;
+import com.aerosuite.dto.parts.PartsRfqRequest;
 import com.aerosuite.parts.PartsFinderService;
 import com.aerosuite.security.RequiresFuncionalidades;
 import jakarta.inject.Inject;
@@ -24,5 +25,11 @@ public class PartsFinderResource {
     public Response search(PartsFinderSearchRequest request) {
         var results = service.search(request);
         return Response.ok(Map.of("results", results, "total", results.size())).build();
+    }
+
+    @POST
+    @Path("/rfqs")
+    public Response createRfq(PartsRfqRequest request) {
+        return Response.status(Response.Status.CREATED).entity(service.createRfq(request)).build();
     }
 }

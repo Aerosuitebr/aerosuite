@@ -23,6 +23,9 @@ export interface PartsFinderResult {
 }
 
 export interface PartsFinderResponse { results: PartsFinderResult[]; total: number; }
+export interface PartsRfqItem extends PartsFinderResult { requestedQuantity: number; lineTotal?: number; }
+export interface PartsRfqRequest { title: string; aog: boolean; notes?: string; items: Array<PartsFinderResult & { quantity: number }>; }
+export interface PartsRfqResult { id: number; number: string; status: string; title: string; aog: boolean; items: Array<PartsFinderResult & { quantity: number; lineTotal?: number }>; totalsByCurrency: Record<string, number>; createdAt: string; }
 export interface PartsFinderSearchRequest {
   partNumber: string;
   quantity?: number;
@@ -37,5 +40,8 @@ export class PartsFinderService {
   private http = inject(HttpClient);
   search(request: PartsFinderSearchRequest): Observable<PartsFinderResponse> {
     return this.http.post<PartsFinderResponse>('/api/parts-finder/search', request);
+  }
+  createRfq(request: PartsRfqRequest): Observable<PartsRfqResult> {
+    return this.http.post<PartsRfqResult>('/api/parts-finder/rfqs', request);
   }
 }
