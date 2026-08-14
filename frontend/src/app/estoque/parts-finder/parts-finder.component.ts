@@ -31,6 +31,10 @@ export class PartsFinderComponent {
   selected: PartsFinderResult[] = [];
   comparisonVisible = false;
 
+  get hasDemoResults(): boolean {
+    return this.results.some(item => item.source === 'STAGING_DEMO');
+  }
+
   decreaseQuantity(): void {
     this.quantity = Math.max(1, (this.quantity ?? 1) - 1);
   }

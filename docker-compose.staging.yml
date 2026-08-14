@@ -16,6 +16,7 @@ services:
       QUARKUS_FLYWAY_REPAIR_AT_START: "true"
       AERO_SUITE_MARKETING_WHATSAPP_ENABLED: "false"
       HTTP_UPDATE_ENABLED: "false"
+      AERO_SUITE_PARTS_FINDER_DEMO_ENABLED: "true"
       AERO_SUITE_DATA_ROOT: /var/aerosuite-staging
     volumes: !override
       - ${AEROSUITE_STAGING_DATA_ROOT:-/var/aerosuite-staging}/os:/app/os:rw

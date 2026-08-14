@@ -26,6 +26,7 @@
   </form>
 
   <div class="notice"><i class="pi pi-info-circle"></i> A disponibilidade deve ser confirmada por RFQ antes da compra.</div>
+  <div class="demo-notice" *ngIf="hasDemoResults"><i class="pi pi-info-circle"></i> Catálogo demonstrativo de staging — fornecedores, preços e disponibilidade não são reais.</div>
   <div class="error" *ngIf="error">{{ error }}</div>
 
   <p-table [value]="results" [loading]="loading" styleClass="p-datatable-sm" [tableStyle]="{'min-width':'960px'}">
@@ -36,7 +37,7 @@
       <td><strong>{{ r.partNumber }}</strong></td><td>{{ r.description || '—' }}</td><td>{{ r.supplier || 'Estoque próprio' }}</td>
       <td>{{ r.country || '—' }}</td><td>{{ r.quantity ?? '—' }}</td><td>{{ r.unitPrice != null ? (r.currency + ' ' + r.unitPrice) : 'Sob consulta' }}</td>
       <td>{{ r.certification || '—' }}</td><td><p-tag [value]="r.supplierAslStatus || 'N/A'" [severity]="r.supplierAslStatus === 'APROVADO' ? 'success' : 'warning'"></p-tag></td>
-      <td><p-tag value="AeroSuite" severity="info"></p-tag></td>
+      <td><p-tag [value]="r.source === 'STAGING_DEMO' ? 'Demonstração' : 'AeroSuite'" [severity]="r.source === 'STAGING_DEMO' ? 'warning' : 'info'"></p-tag></td>
     </tr></ng-template>
     <ng-template pTemplate="emptymessage"><tr><td colspan="10" class="empty">{{ searched ? 'Nenhuma disponibilidade encontrada para este P/N.' : 'Informe o P/N para iniciar a busca.' }}</td></tr></ng-template>
   </p-table>
@@ -45,7 +46,7 @@
     <header><div><span class="eyebrow">COMPARAÇÃO</span><h3>Ofertas selecionadas</h3></div><button type="button" aria-label="Fechar comparação" (click)="comparisonVisible = false"><i class="pi pi-times"></i></button></header>
     <div class="comparison-grid">
       <article *ngFor="let item of selected">
-        <div class="offer-source">{{ item.source === 'AEROSUITE_INTERNAL' ? 'AeroSuite' : item.source }}</div>
+        <div class="offer-source">{{ item.source === 'STAGING_DEMO' ? 'Demonstração' : item.source === 'AEROSUITE_INTERNAL' ? 'AeroSuite' : item.source }}</div>
         <h4>{{ item.partNumber }}</h4><p>{{ item.supplier || 'Estoque próprio' }}</p>
         <dl><div><dt>Condição</dt><dd>{{ item.condition || '—' }}</dd></div><div><dt>Quantidade</dt><dd>{{ item.quantity ?? '—' }}</dd></div><div><dt>Preço</dt><dd>{{ item.unitPrice != null ? (item.currency + ' ' + item.unitPrice) : 'Sob consulta' }}</dd></div><div><dt>Certificação</dt><dd>{{ item.certification || '—' }}</dd></div><div><dt>País</dt><dd>{{ item.country || '—' }}</dd></div><div><dt>ASL</dt><dd>{{ item.supplierAslStatus || 'N/A' }}</dd></div></dl>
       </article>
