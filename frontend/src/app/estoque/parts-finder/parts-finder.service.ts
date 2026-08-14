@@ -11,6 +11,7 @@ export interface PartsFinderResult {
   currency?: string;
   unitPrice?: number;
   supplier?: string;
+  supplierEmail?: string;
   supplierAslStatus?: string;
   country?: string;
   certification?: string;

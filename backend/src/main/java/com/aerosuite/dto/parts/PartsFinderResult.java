@@ -12,6 +12,7 @@ public class PartsFinderResult {
     public String currency;
     public BigDecimal unitPrice;
     public String supplier;
+    public String supplierEmail;
     public String supplierAslStatus;
     public String country;
     public String certification;

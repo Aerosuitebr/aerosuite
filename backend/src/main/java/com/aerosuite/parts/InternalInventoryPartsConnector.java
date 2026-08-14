@@ -43,6 +43,7 @@ public class InternalInventoryPartsConnector implements PartsFinderConnector {
         result.currency = item.valorUnitarioUsd != null ? "USD" : item.valorUnitarioBrl != null ? "BRL" : null;
         result.unitPrice = item.valorUnitarioUsd != null ? item.valorUnitarioUsd : item.valorUnitarioBrl;
         result.supplier = item.fornecedor == null ? null : item.fornecedor.razaoSocial;
+        result.supplierEmail = item.fornecedor == null ? null : item.fornecedor.email;
         result.supplierAslStatus = item.fornecedor == null ? null : item.fornecedor.aslStatus;
         result.country = item.fornecedor == null ? null : item.fornecedor.paisOrigem;
         result.certification = item.certTipo != null ? item.certTipo : item.certificadoConformidade;
