@@ -1,8 +1,8 @@
 package com.aerosuite.config;
 
-import com.aerosuite.domain.Perfil;
 import com.aerosuite.domain.TenantConstants;
 import com.aerosuite.domain.Usuario;
+import com.aerosuite.model.Perfil;
 import com.aerosuite.security.PasswordCredentials;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
