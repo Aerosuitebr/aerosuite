@@ -15,7 +15,7 @@ import java.util.Map;
 @Path("/api/parts-finder")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@RequiresFuncionalidades(anyCodigoStartingWith = {"ESTOQUE", "PARTS_FINDER"})
+@RequiresFuncionalidades(anyCodigo = {"PARTS_FINDER_CONSULTAR"})
 public class PartsFinderResource {
     @Inject PartsFinderService service;
 
