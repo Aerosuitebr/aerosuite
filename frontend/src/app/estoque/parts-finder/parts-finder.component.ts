@@ -20,6 +20,10 @@ export class PartsFinderComponent {
   private service = inject(PartsFinderService);
   partNumber = '';
   quantity: number | null = 1;
+  condition = '';
+  country = '';
+  certification = '';
+  aog = false;
   loading = false;
   searched = false;
   error = '';
@@ -30,7 +34,14 @@ export class PartsFinderComponent {
     if (!pn || this.loading) return;
     this.loading = true;
     this.error = '';
-    this.service.search(pn, this.quantity ?? undefined)
+    this.service.search({
+      partNumber: pn,
+      quantity: this.quantity ?? undefined,
+      condition: this.condition || undefined,
+      country: this.country.trim() || undefined,
+      certification: this.certification.trim() || undefined,
+      aog: this.aog
+    })
       .pipe(finalize(() => this.loading = false))
       .subscribe({
         next: response => { this.results = response.results; this.searched = true; },

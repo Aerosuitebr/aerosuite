@@ -28,6 +28,8 @@ public class InternalInventoryPartsConnector implements PartsFinderConnector {
                 .filter(item -> request.quantity == null || item.quantidade == null
                         || item.quantidade.compareTo(request.quantity) >= 0)
                 .map(this::toResult)
+                .filter(result -> containsIgnoreCase(result.country, request.country))
+                .filter(result -> containsIgnoreCase(result.certification, request.certification))
                 .toList();
     }
 
@@ -52,5 +54,10 @@ public class InternalInventoryPartsConnector implements PartsFinderConnector {
 
     private static String normalize(String value) {
         return value == null ? "" : value.toUpperCase(Locale.ROOT).replaceAll("[^A-Z0-9]", "");
+    }
+
+    private static boolean containsIgnoreCase(String value, String filter) {
+        return filter == null || filter.isBlank()
+                || value != null && value.toUpperCase(Locale.ROOT).contains(filter.trim().toUpperCase(Locale.ROOT));
     }
 }

@@ -20,11 +20,19 @@ export interface PartsFinderResult {
 }
 
 export interface PartsFinderResponse { results: PartsFinderResult[]; total: number; }
+export interface PartsFinderSearchRequest {
+  partNumber: string;
+  quantity?: number;
+  condition?: string;
+  country?: string;
+  certification?: string;
+  aog: boolean;
+}
 
 @Injectable({ providedIn: 'root' })
 export class PartsFinderService {
   private http = inject(HttpClient);
-  search(partNumber: string, quantity?: number): Observable<PartsFinderResponse> {
-    return this.http.post<PartsFinderResponse>('/api/parts-finder/search', { partNumber, quantity });
+  search(request: PartsFinderSearchRequest): Observable<PartsFinderResponse> {
+    return this.http.post<PartsFinderResponse>('/api/parts-finder/search', request);
   }
 }

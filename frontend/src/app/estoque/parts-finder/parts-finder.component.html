@@ -8,6 +8,14 @@
   <form class="search-panel" (ngSubmit)="search()">
     <label>P/N <input pInputText name="partNumber" [(ngModel)]="partNumber" placeholder="Ex.: 23064518" autocomplete="off"></label>
     <label>Quantidade <p-inputNumber name="quantity" [(ngModel)]="quantity" [min]="1" [showButtons]="true"></p-inputNumber></label>
+    <label>Condição
+      <select name="condition" [(ngModel)]="condition">
+        <option value="">Todas</option><option>NEW</option><option>NE</option><option>NS</option><option>OH</option><option>SV</option><option>AR</option>
+      </select>
+    </label>
+    <label>País <input pInputText name="country" [(ngModel)]="country" placeholder="Ex.: Brasil, US"></label>
+    <label>Certificação <input pInputText name="certification" [(ngModel)]="certification" placeholder="Ex.: FAA 8130-3"></label>
+    <label class="aog"><input type="checkbox" name="aog" [(ngModel)]="aog"> Busca urgente AOG</label>
     <button pButton type="submit" icon="pi pi-search" label="Pesquisar" [loading]="loading" [disabled]="!partNumber.trim()"></button>
   </form>
 
