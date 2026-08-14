@@ -19,7 +19,7 @@
         <option value="">Todas</option><option>NEW</option><option>NE</option><option>NS</option><option>OH</option><option>SV</option><option>AR</option>
       </select>
     </label>
-    <label class="field country-field"><span>País</span><input pInputText name="country" [(ngModel)]="country" placeholder="Brasil ou US"></label>
+    <label class="field country-field"><span>País (ISO)</span><p-dropdown name="country" [(ngModel)]="country" [options]="countryOptions" optionLabel="label" optionValue="code" [filter]="true" filterBy="label,code,name" [showClear]="true" filterPlaceholder="Digite o país ou código" placeholder="Selecione" appendTo="body" styleClass="country-select"><ng-template pTemplate="item" let-option><div class="country-option" [title]="option.name"><strong>{{ option.code }}</strong><span>{{ option.name }}</span></div></ng-template><ng-template pTemplate="selectedItem" let-option><div class="country-selected" *ngIf="option" [title]="option.name"><strong>{{ option.code }}</strong><span>{{ option.name }}</span></div></ng-template></p-dropdown></label>
     <label class="field certification-field"><span>Certificação</span><input pInputText name="certification" [(ngModel)]="certification" placeholder="FAA 8130-3"></label>
     <label class="aog-toggle" title="Prioriza fornecedores com resposta e expedição imediatas; não altera as fontes pesquisadas"><input type="checkbox" name="aog" [(ngModel)]="aog"><span class="toggle-track"></span><span>AOG urgente</span></label>
     <button pButton class="search-button" type="submit" icon="pi pi-search" label="Pesquisar" [loading]="loading" [disabled]="!partNumber.trim()"></button>

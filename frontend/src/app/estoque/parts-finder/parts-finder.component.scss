@@ -7,6 +7,8 @@
 .search-panel { display: grid; grid-template-columns: minmax(210px,1.35fr) 148px 132px minmax(140px,.8fr) minmax(170px,1fr) 92px 154px; align-items: end; gap: 12px; padding: 18px; background: linear-gradient(180deg,#fff,#f8fafc); border: 1px solid #dbe4ee; border-radius: 16px; box-shadow: 0 10px 28px #0f172a0d; }
 .field { display: flex; min-width: 0; flex-direction: column; gap: 7px; }.field > span:first-child { color: #475569; font-size: 11px; font-weight: 800; letter-spacing: .035em; text-transform: uppercase; }
 .field input,.field select { width: 100%; height: 44px; border: 1px solid #cbd5e1; border-radius: 10px; padding: 0 12px; background: #fff; color: #172033; outline: none; transition: border-color .18s,box-shadow .18s; }
+.country-option,.country-selected { display: flex; align-items: center; gap: 9px; min-width: 0; }.country-option strong,.country-selected strong { flex: 0 0 27px; color: #0369a1; font-size: 11px; letter-spacing: .4px; }.country-option span,.country-selected span { overflow: hidden; color: #334155; text-overflow: ellipsis; white-space: nowrap; }.country-option { padding: 3px 0; }.country-selected { height: 42px; }
+:host ::ng-deep .country-select { width: 100%; height: 44px; border-color: #cbd5e1; border-radius: 10px; }:host ::ng-deep .country-select .p-dropdown-label { padding-block: 0; }
 .field input:focus,.field select:focus { border-color: #0284c7; box-shadow: 0 0 0 3px #0ea5e91f; }
 .quantity-stepper { display: grid; grid-template-columns: 38px 1fr 38px; height: 44px; overflow: hidden; border: 1px solid #cbd5e1; border-radius: 10px; background: #fff; }
 .quantity-stepper button { border: 0; background: #f1f5f9; color: #0369a1; cursor: pointer; }.quantity-stepper button:hover { background: #e0f2fe; }

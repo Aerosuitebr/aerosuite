@@ -8,12 +8,14 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { ISO_COUNTRIES } from '../../shared/countries/iso-countries';
 import { PartsFinderResult, PartsFinderService, PartsRfqItem, PartsRfqResult } from './parts-finder.service';
 
 @Component({
   selector: 'app-parts-finder',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, InputTextModule, InputNumberModule, TableModule, TagModule, DialogModule],
+  imports: [CommonModule, FormsModule, ButtonModule, InputTextModule, InputNumberModule, TableModule, TagModule, DialogModule, DropdownModule],
   templateUrl: './parts-finder.component.html',
   styleUrls: ['./parts-finder.component.scss']
 })
@@ -23,6 +25,7 @@ export class PartsFinderComponent {
   quantity: number | null = 1;
   condition = '';
   country = '';
+  readonly countryOptions = ISO_COUNTRIES;
   certification = '';
   aog = false;
   loading = false;

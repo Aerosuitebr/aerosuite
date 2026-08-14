@@ -28,7 +28,7 @@ public class InternalInventoryPartsConnector implements PartsFinderConnector {
                 .filter(item -> request.quantity == null || item.quantidade == null
                         || item.quantidade.compareTo(request.quantity) >= 0)
                 .map(this::toResult)
-                .filter(result -> containsIgnoreCase(result.country, request.country))
+                .filter(result -> matchesCountry(result.country, request.country))
                 .filter(result -> containsIgnoreCase(result.certification, request.certification))
                 .toList();
     }
@@ -62,5 +62,14 @@ public class InternalInventoryPartsConnector implements PartsFinderConnector {
     private static boolean containsIgnoreCase(String value, String filter) {
         return filter == null || filter.isBlank()
                 || value != null && value.toUpperCase(Locale.ROOT).contains(filter.trim().toUpperCase(Locale.ROOT));
+    }
+
+    static boolean matchesCountry(String value, String filter) {
+        if (filter == null || filter.isBlank()) return true;
+        if (containsIgnoreCase(value, filter)) return true;
+        String code = filter.trim().toUpperCase(Locale.ROOT);
+        if (code.length() != 2) return false;
+        String localizedName = new Locale("", code).getDisplayCountry(Locale.forLanguageTag("pt-BR"));
+        return containsIgnoreCase(value, localizedName);
     }
 }
