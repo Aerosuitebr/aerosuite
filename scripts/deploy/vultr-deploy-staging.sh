@@ -78,6 +78,8 @@ fi
 # Reaplica o perfil administrativo em todos os deploys, inclusive quando o banco já foi inicializado.
 docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e \
   "UPDATE usuario u JOIN perfil p ON p.codigo='ADMIN' SET u.perfil_id=p.id,u.ativo=1,u.tenant_id=1 WHERE u.email IN ('admin.staging@aerosuite.com','admin@aerosuite.com');"
+docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e \
+  "INSERT INTO sistema_empresa_config (id,tenant_id,display_name,tagline,support_email,copyright_entity,browser_title_suffix,logo_url,wordmark_url,primary_color,razao_social,cnpj,endereco_logradouro,endereco_numero,endereco_bairro,cidade,uf,cep,telefone,site_url,onboarding_completo) VALUES (1,1,'AeroSuite','Plataforma MRO','suporte@aerosuite.com.br','AeroSuite','Gestão MRO','assets/LOGO_AERO.png','assets/LOGO_LETRA.png','#0ea5e9','AeroSuite Staging','00000000000191','Ambiente de staging','S/N','Staging','São Paulo','SP','01000-000','(11) 0000-0000','https://staging.aerosuite.com.br',1) ON DUPLICATE KEY UPDATE display_name=VALUES(display_name),tagline=VALUES(tagline),support_email=VALUES(support_email),copyright_entity=VALUES(copyright_entity),browser_title_suffix=VALUES(browser_title_suffix),logo_url=VALUES(logo_url),wordmark_url=VALUES(wordmark_url),primary_color=VALUES(primary_color),razao_social=VALUES(razao_social),cnpj=VALUES(cnpj),endereco_logradouro=VALUES(endereco_logradouro),endereco_numero=VALUES(endereco_numero),endereco_bairro=VALUES(endereco_bairro),cidade=VALUES(cidade),uf=VALUES(uf),cep=VALUES(cep),telefone=VALUES(telefone),site_url=VALUES(site_url),onboarding_completo=1;"
 
 "${COMPOSE[@]}" up -d api web
 
