@@ -81,17 +81,27 @@ if [[ "${SEED_STAGING_FROM_PRODUCTION:-false}" == "true" ]]; then
 
   echo "==> Clonar dados atuais de produção para staging"
   "${COMPOSE[@]}" stop api web >/dev/null 2>&1 || true
+  SANITIZER_CONTAINER="aerosuite-staging-seed-sanitizer"
+  SANITIZER_PASSWORD="$(openssl rand -hex 24)"
+  docker rm -f "${SANITIZER_CONTAINER}" >/dev/null 2>&1 || true
+  docker run --rm -d --name "${SANITIZER_CONTAINER}" \
+    -e MYSQL_ROOT_PASSWORD="${SANITIZER_PASSWORD}" mysql:8.0 >/dev/null
+  for _ in $(seq 1 60); do
+    docker exec "${SANITIZER_CONTAINER}" mysqladmin ping -h 127.0.0.1 -uroot -p"${SANITIZER_PASSWORD}" --silent >/dev/null 2>&1 && break
+    sleep 2
+  done
+  docker exec "${SANITIZER_CONTAINER}" mysqladmin ping -h 127.0.0.1 -uroot -p"${SANITIZER_PASSWORD}" --silent >/dev/null || {
+    docker rm -f "${SANITIZER_CONTAINER}" >/dev/null 2>&1 || true
+    echo "ERRO: banco efêmero de sanitização não ficou pronto"
+    exit 1
+  }
   docker exec "${PROD_CONTAINER}" mysqldump -uroot -p"${PROD_DB_PASSWORD}" \
     --single-transaction --routines --triggers --events --skip-lock-tables \
-    --set-gtid-purged=OFF --databases aerosuite > /tmp/aerosuite-production-full.sql
-  docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" -e \
-    "DROP DATABASE IF EXISTS aerosuite; CREATE DATABASE aerosuite CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
-  docker exec -i aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" < /tmp/aerosuite-production-full.sql
-  rm -f /tmp/aerosuite-production-full.sql
-  touch "${DATA_ROOT}/.schema-cloned"
+    --set-gtid-purged=OFF --databases aerosuite \
+    | docker exec -i "${SANITIZER_CONTAINER}" mysql -uroot -p"${SANITIZER_PASSWORD}"
 
   # Mantém os vínculos e indicadores operacionais, removendo credenciais e PII do ambiente público.
-  docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e \
+  docker exec "${SANITIZER_CONTAINER}" mysql -uroot -p"${SANITIZER_PASSWORD}" aerosuite -e \
     "UPDATE usuario SET ativo=0, email=CONCAT('usuario.',id,'@example.invalid'), nome=CONCAT('Usuário Demonstração ',id), mfa_enabled=0, mfa_totp_secret=NULL;
      UPDATE usuario_externo SET ativo=0, precisa_trocar_senha=1, email=CONCAT('cliente.',id,'@example.invalid'), nome=CONCAT('Contato Demonstração ',id), telefone='(00) 00000-0000';
      UPDATE cliente_proposta SET nome=CONCAT('Cliente Demonstração ',id), cnpj_cpf=NULL, email=CONCAT('cliente.',id,'@example.invalid'), telefone='(00) 00000-0000', contato=CONCAT('Contato ',id), endereco='Endereço sanitizado', cep='00000-000';
@@ -105,6 +115,15 @@ if [[ "${SEED_STAGING_FROM_PRODUCTION:-false}" == "true" ]]; then
      DELETE FROM password_reset_token; DELETE FROM password_reset_token_externo; DELETE FROM bling_oauth_state; DELETE FROM tenant_bling_connection; DELETE FROM tenant_whatsapp_connection; DELETE FROM whatsapp_message_job;
      UPDATE platform_tenant_onboarding SET public_token=NULL;
      UPDATE tenant SET codigo='staging', nome=CONCAT(nome, ' — Staging') WHERE id=(SELECT tenant_id FROM (SELECT MIN(tenant_id) tenant_id FROM usuario) x);"
+  docker exec "${SANITIZER_CONTAINER}" mysqldump -uroot -p"${SANITIZER_PASSWORD}" \
+    --single-transaction --routines --triggers --events --skip-lock-tables \
+    --set-gtid-purged=OFF --databases aerosuite > /tmp/aerosuite-production-sanitized.sql
+  docker rm -f "${SANITIZER_CONTAINER}" >/dev/null
+  docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" -e \
+    "DROP DATABASE IF EXISTS aerosuite; CREATE DATABASE aerosuite CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
+  docker exec -i aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" < /tmp/aerosuite-production-sanitized.sql
+  rm -f /tmp/aerosuite-production-sanitized.sql
+  touch "${DATA_ROOT}/.schema-cloned"
   echo "Backup anterior disponível em ${BACKUP_FILE}"
 fi
 
