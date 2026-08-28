@@ -90,9 +90,21 @@ if [[ "${SEED_STAGING_FROM_PRODUCTION:-false}" == "true" ]]; then
   rm -f /tmp/aerosuite-production-full.sql
   touch "${DATA_ROOT}/.schema-cloned"
 
-  # O conteúdo operacional é real, mas contas internas de produção não devem autenticar no staging.
+  # Mantém os vínculos e indicadores operacionais, removendo credenciais e PII do ambiente público.
   docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e \
-    "UPDATE usuario SET ativo=0; UPDATE tenant SET codigo='staging', nome=CONCAT(nome, ' — Staging') WHERE id=(SELECT tenant_id FROM (SELECT MIN(tenant_id) tenant_id FROM usuario) x);"
+    "UPDATE usuario SET ativo=0, email=CONCAT('usuario.',id,'@example.invalid'), nome=CONCAT('Usuário Demonstração ',id), mfa_enabled=0, mfa_totp_secret=NULL;
+     UPDATE usuario_externo SET ativo=0, precisa_trocar_senha=1, email=CONCAT('cliente.',id,'@example.invalid'), nome=CONCAT('Contato Demonstração ',id), telefone='(00) 00000-0000';
+     UPDATE cliente_proposta SET nome=CONCAT('Cliente Demonstração ',id), cnpj_cpf=NULL, email=CONCAT('cliente.',id,'@example.invalid'), telefone='(00) 00000-0000', contato=CONCAT('Contato ',id), endereco='Endereço sanitizado', cep='00000-000';
+     UPDATE proposta_comercial SET cliente_nome=CONCAT('Cliente Demonstração ',id), cliente_cnpj_cpf=NULL, cliente_email=CONCAT('proposta.',id,'@example.invalid'), cliente_telefone='(00) 00000-0000', cliente_endereco='Endereço sanitizado', cliente_bairro='Centro', cliente_cep='00000-000', cliente_contato=CONCAT('Contato ',id), contato_tecnico=NULL, cliente_decisao_ip=NULL, cliente_decisao_user_agent=NULL;
+     UPDATE proposta_comercial_envio SET destinatario_email=CONCAT('proposta.',id,'@example.invalid'), destinatario_telefone='(00) 00000-0000', destinatario_nome=CONCAT('Contato ',id), remetente_email='staging@aerosuite.com.br', remetente_telefone=NULL;
+     UPDATE fornecedor SET cnpj_cpf=NULL, inscricao_estadual=NULL, endereco='Endereço sanitizado', numero='S/N', complemento=NULL, cep='00000-000', telefone='(00) 00000-0000', email=CONCAT('fornecedor.',id,'@example.invalid'), contato_nome='Contato Comercial', contato_telefone='(00) 00000-0000', contato_email=CONCAT('fornecedor.',id,'@example.invalid');
+     UPDATE os SET cliente_nome=CONCAT('Cliente Demonstração ',id), email_trocas_nao_pagas_enviado=NULL;
+     UPDATE os_notificacao_deficit_troca SET cliente_nome=CONCAT('Cliente Demonstração ',id);
+     UPDATE acesso_auditoria SET email=CONCAT('usuario.',id,'@example.invalid'), ip=NULL;
+     UPDATE log_acesso_externo SET ip_acesso=NULL;
+     DELETE FROM password_reset_token; DELETE FROM password_reset_token_externo; DELETE FROM bling_oauth_state; DELETE FROM tenant_bling_connection; DELETE FROM tenant_whatsapp_connection; DELETE FROM whatsapp_message_job;
+     UPDATE platform_tenant_onboarding SET public_token=NULL;
+     UPDATE tenant SET codigo='staging', nome=CONCAT(nome, ' — Staging') WHERE id=(SELECT tenant_id FROM (SELECT MIN(tenant_id) tenant_id FROM usuario) x);"
   echo "Backup anterior disponível em ${BACKUP_FILE}"
 fi
 
