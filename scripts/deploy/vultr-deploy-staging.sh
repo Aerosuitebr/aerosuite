@@ -96,7 +96,7 @@ if [[ "${SEED_STAGING_FROM_PRODUCTION:-false}" == "true" ]]; then
      UPDATE proposta_comercial SET cliente_nome=CONCAT('Cliente Demonstração ',id), cliente_cnpj_cpf=NULL, cliente_email=CONCAT('proposta.',id,'@example.invalid'), cliente_telefone='(00) 00000-0000', cliente_endereco='Endereço sanitizado', cliente_bairro='Centro', cliente_cep='00000-000', cliente_contato=CONCAT('Contato ',id), contato_tecnico=NULL, cliente_decisao_ip=NULL, cliente_decisao_user_agent=NULL;
      UPDATE proposta_comercial_envio SET destinatario_email=CONCAT('proposta.',id,'@example.invalid'), destinatario_telefone='(00) 00000-0000', destinatario_nome=CONCAT('Contato ',id), remetente_email='staging@aerosuite.com.br', remetente_telefone=NULL;
      UPDATE fornecedor SET cnpj_cpf=NULL, inscricao_estadual=NULL, endereco='Endereço sanitizado', numero='S/N', complemento=NULL, cep='00000-000', telefone='(00) 00000-0000', email=CONCAT('fornecedor.',id,'@example.invalid'), contato_nome='Contato Comercial', contato_telefone='(00) 00000-0000', contato_email=CONCAT('fornecedor.',id,'@example.invalid');
-     UPDATE os SET cliente_nome=CONCAT('Cliente Demonstração ',id), email_trocas_nao_pagas_enviado=NULL;
+     UPDATE os SET cliente_nome=CONCAT('Cliente Demonstração ',id), email_trocas_nao_pagas_enviado=0;
      UPDATE os_notificacao_deficit_troca SET cliente_nome=CONCAT('Cliente Demonstração ',id);
      UPDATE acesso_auditoria SET email=CONCAT('usuario.',id,'@example.invalid'), ip=NULL;
      UPDATE log_acesso_externo SET ip_acesso=NULL;
