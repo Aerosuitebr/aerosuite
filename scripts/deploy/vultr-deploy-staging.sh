@@ -182,4 +182,7 @@ if ! curl -sfI http://127.0.0.1:8181/ >/dev/null; then
   "${COMPOSE[@]}" logs --tail=80 web
   exit 1
 fi
+echo "==> Resumo de dados disponíveis no staging"
+docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -N -e \
+  "SELECT 'fabricantes',COUNT(*) FROM fabricante UNION ALL SELECT 'fcus',COUNT(*) FROM fcu UNION ALL SELECT 'fornecedores',COUNT(*) FROM fornecedor UNION ALL SELECT 'produtos',COUNT(*) FROM product UNION ALL SELECT 'clientes',COUNT(*) FROM cliente_proposta UNION ALL SELECT 'propostas',COUNT(*) FROM proposta_comercial UNION ALL SELECT 'ordens_servico',COUNT(*) FROM os;"
 echo "OK - staging ativo em 127.0.0.1:8181"
