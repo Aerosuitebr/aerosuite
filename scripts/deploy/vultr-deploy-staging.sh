@@ -72,6 +72,30 @@ docker inspect "${PROD_CONTAINER}" >/dev/null 2>&1 || {
 PROD_DB_PASSWORD="$(docker inspect "${PROD_CONTAINER}" --format '{{range .Config.Env}}{{println .}}{{end}}' | sed -n 's/^MYSQL_ROOT_PASSWORD=//p' | head -1)"
 [[ -n "${PROD_DB_PASSWORD}" ]] || { echo "ERRO: MYSQL_ROOT_PASSWORD de produção indisponível"; exit 1; }
 
+if [[ "${SEED_STAGING_FROM_PRODUCTION:-false}" == "true" ]]; then
+  echo "==> Criar backup de segurança do staging"
+  BACKUP_FILE="${DATA_ROOT}/backups/aerosuite-staging-before-prod-seed-$(date +%Y%m%d-%H%M%S).sql.gz"
+  docker exec aerosuite-staging-mysql mysqldump -uroot -p"${DB_PASSWORD}" \
+    --single-transaction --routines --triggers --events --skip-lock-tables --databases aerosuite \
+    | gzip -9 > "${BACKUP_FILE}"
+
+  echo "==> Clonar dados atuais de produção para staging"
+  "${COMPOSE[@]}" stop api web >/dev/null 2>&1 || true
+  docker exec "${PROD_CONTAINER}" mysqldump -uroot -p"${PROD_DB_PASSWORD}" \
+    --single-transaction --routines --triggers --events --skip-lock-tables \
+    --set-gtid-purged=OFF --databases aerosuite > /tmp/aerosuite-production-full.sql
+  docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" -e \
+    "DROP DATABASE IF EXISTS aerosuite; CREATE DATABASE aerosuite CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
+  docker exec -i aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" < /tmp/aerosuite-production-full.sql
+  rm -f /tmp/aerosuite-production-full.sql
+  touch "${DATA_ROOT}/.schema-cloned"
+
+  # O conteúdo operacional é real, mas contas internas de produção não devem autenticar no staging.
+  docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e \
+    "UPDATE usuario SET ativo=0; UPDATE tenant SET codigo='staging', nome=CONCAT(nome, ' — Staging') WHERE id=(SELECT tenant_id FROM (SELECT MIN(tenant_id) tenant_id FROM usuario) x);"
+  echo "Backup anterior disponível em ${BACKUP_FILE}"
+fi
+
 if [[ ! -f "${DATA_ROOT}/.schema-cloned" ]]; then
   echo "==> Clonar somente estrutura e histórico Flyway da produção"
   docker exec "${PROD_CONTAINER}" mysqldump -uroot -p"${PROD_DB_PASSWORD}" \
@@ -102,7 +126,7 @@ rm -f /tmp/aerosuite-production-funcionalidade.sql
 
 # Reaplica o perfil administrativo em todos os deploys, inclusive quando o banco já foi inicializado.
 docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e \
-  "UPDATE usuario u JOIN perfil p ON p.codigo='ADMIN' SET u.perfil_id=p.id,u.ativo=1,u.tenant_id=1 WHERE u.email IN ('admin.staging@aerosuite.com','admin@aerosuite.com');"
+  "INSERT INTO usuario (nome,email,senha,perfil_id,ativo,data_cadastro,tenant_id,precisa_trocar_senha) SELECT 'Administrador Staging','admin.staging@aerosuite.com','admin123',p.id,1,CURDATE(),COALESCE((SELECT MIN(id) FROM tenant),1),0 FROM perfil p WHERE p.codigo='ADMIN' ON DUPLICATE KEY UPDATE perfil_id=VALUES(perfil_id),ativo=1,tenant_id=VALUES(tenant_id),senha=VALUES(senha),precisa_trocar_senha=0; UPDATE usuario u JOIN perfil p ON p.codigo='ADMIN' SET u.perfil_id=p.id,u.ativo=1 WHERE u.email='admin.staging@aerosuite.com';"
 docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite -e \
   "INSERT INTO sistema_empresa_config (id,tenant_id,display_name,tagline,support_email,copyright_entity,browser_title_suffix,logo_url,wordmark_url,primary_color,razao_social,cnpj,endereco_logradouro,endereco_numero,endereco_bairro,cidade,uf,cep,telefone,site_url,onboarding_completo) VALUES (1,1,'AeroSuite','Plataforma MRO','suporte@aerosuite.com.br','AeroSuite','Gestão MRO','assets/LOGO_AERO.png','assets/LOGO_LETRA.png','#0ea5e9','AeroSuite Staging','00000000000191','Ambiente de staging','S/N','Staging','São Paulo','SP','01000-000','(11) 0000-0000','https://staging.aerosuite.com.br',1) ON DUPLICATE KEY UPDATE display_name=VALUES(display_name),tagline=VALUES(tagline),support_email=VALUES(support_email),copyright_entity=VALUES(copyright_entity),browser_title_suffix=VALUES(browser_title_suffix),logo_url=VALUES(logo_url),wordmark_url=VALUES(wordmark_url),primary_color=VALUES(primary_color),razao_social=VALUES(razao_social),cnpj=VALUES(cnpj),endereco_logradouro=VALUES(endereco_logradouro),endereco_numero=VALUES(endereco_numero),endereco_bairro=VALUES(endereco_bairro),cidade=VALUES(cidade),uf=VALUES(uf),cep=VALUES(cep),telefone=VALUES(telefone),site_url=VALUES(site_url),onboarding_completo=1;"
 
