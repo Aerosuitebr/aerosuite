@@ -110,7 +110,7 @@ if [[ "${SEED_STAGING_FROM_PRODUCTION:-false}" == "true" ]]; then
     "DROP DATABASE ${SANITIZER_DB};"
   docker exec aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" -e \
     "DROP DATABASE IF EXISTS aerosuite; CREATE DATABASE aerosuite CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
-  docker exec -i aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" < /tmp/aerosuite-production-sanitized.sql
+  docker exec -i aerosuite-staging-mysql mysql -uroot -p"${DB_PASSWORD}" aerosuite < /tmp/aerosuite-production-sanitized.sql
   rm -f /tmp/aerosuite-production-sanitized.sql
   touch "${DATA_ROOT}/.schema-cloned"
   echo "Backup anterior disponível em ${BACKUP_FILE}"
