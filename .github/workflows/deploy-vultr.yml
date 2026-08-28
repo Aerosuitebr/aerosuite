@@ -27,6 +27,11 @@ on:
         options:
           - production
           - staging
+      seed_from_production:
+        description: Clonar e sanitizar dados de produção no staging
+        required: false
+        type: boolean
+        default: false
 
 concurrency:
   group: deploy-vultr-production
@@ -127,9 +132,10 @@ jobs:
         env:
           HOST: ${{ vars.VULTR_HOST }}
           USER: ${{ vars.VULTR_SSH_USER || 'root' }}
+          SEED_FROM_PRODUCTION: ${{ inputs.seed_from_production || 'false' }}
         run: |
           test -n "${HOST}" || { echo "Configure VULTR_HOST"; exit 1; }
           OPTS="-i ~/.ssh/vultr_staging -o StrictHostKeyChecking=accept-new -o BatchMode=yes"
           scp ${OPTS} /tmp/aerosuite-staging-repo.tgz "${USER}@${HOST}:/tmp/aerosuite-staging-repo.tgz"
           scp ${OPTS} scripts/deploy/vultr-deploy-staging.sh "${USER}@${HOST}:/tmp/vultr-deploy-staging.sh"
-          ssh ${OPTS} "${USER}@${HOST}" "chmod +x /tmp/vultr-deploy-staging.sh && INSTALL_DIR=/opt/aerosuite-staging TARBALL=/tmp/aerosuite-staging-repo.tgz bash /tmp/vultr-deploy-staging.sh"
+          ssh ${OPTS} "${USER}@${HOST}" "chmod +x /tmp/vultr-deploy-staging.sh && INSTALL_DIR=/opt/aerosuite-staging TARBALL=/tmp/aerosuite-staging-repo.tgz SEED_STAGING_FROM_PRODUCTION='${SEED_FROM_PRODUCTION}' bash /tmp/vultr-deploy-staging.sh"
