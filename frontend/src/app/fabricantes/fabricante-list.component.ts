@@ -182,7 +182,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                     <p-badge 
                       [value]="row.id" 
                       severity="info" 
-                      size="small">
+                      badgeSize="small">
                     </p-badge>
                   </div>
                 </td>

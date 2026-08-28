@@ -16,7 +16,7 @@ export interface MenuSection {
   funcionalidades: Funcionalidade[];
 }
 
-const MENU_SESSION_KEY = 'aerosuite_menu_sections_v1';
+const MENU_SESSION_KEY = 'aerosuite_menu_sections_v2';
 
 interface MenuSessionPayload {
   userKey: string;
@@ -134,7 +134,35 @@ export class MenuService {
     merged = this.stripPlatformOpsRoutesFromTenantMenu(merged);
     merged = this.ensureBlingIntegracaoMenuItem(merged);
     merged = this.ensureWhatsAppIntegracaoMenuItem(merged);
+    merged = this.normalizeMenuRoutes(merged);
     return this.organizarFuncionalidadesPorSecao(merged);
+  }
+
+  /** Mantém destinos distintos para itens de suporte que antes levavam à mesma tela. */
+  private normalizeMenuRoutes(funcionalidades: Funcionalidade[]): Funcionalidade[] {
+    return funcionalidades.map(funcionalidade =>
+      this.isSupportTicketsCode(funcionalidade.codigo)
+        && (funcionalidade.rota || '').trim().toLowerCase() === '/suporte'
+        ? { ...funcionalidade, rota: '/suporte/chamados' }
+        : funcionalidade
+    );
+  }
+
+  private isSupportTicketsCode(codigo: string | null | undefined): boolean {
+    const canonical = canonFuncionalidadeCodigo(codigo);
+    return canonical === 'SUPORTE_CHAMADOS' || canonical === 'SUPORTE-CHAMADOS';
+  }
+
+  /** Aplica migrações de rota também a menus serializados em versões anteriores. */
+  private normalizeCachedMenuSections(sections: MenuSection[]): MenuSection[] {
+    const normalized = sections.map(section => {
+      const funcionalidades = this.normalizeMenuRoutes(section.funcionalidades);
+      const changed = funcionalidades.some(
+        (funcionalidade, index) => funcionalidade !== section.funcionalidades[index]
+      );
+      return changed ? { ...section, funcionalidades } : section;
+    });
+    return normalized.some((section, index) => section !== sections[index]) ? normalized : sections;
   }
 
   /** Remove rotas do plano de controle do menu comum (auditoria, backup, organizações). */
@@ -152,7 +180,11 @@ export class MenuService {
       if (parsed.userKey !== userKey || !Array.isArray(parsed.sections) || !parsed.sections.length) {
         return null;
       }
-      return parsed.sections;
+      const sections = this.normalizeCachedMenuSections(parsed.sections);
+      if (sections !== parsed.sections) {
+        this.writeSessionMenu(userKey, sections);
+      }
+      return sections;
     } catch {
       return null;
     }

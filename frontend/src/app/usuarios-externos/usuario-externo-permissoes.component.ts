@@ -2113,6 +2113,9 @@ interface DocumentoOS {
   `]
 })
 export class UsuarioExternoPermissoesComponent implements OnInit {
+  /** Exposto para os parâmetros das traduções no template Angular. */
+  protected readonly String = String;
+
   private usuarioExternoService = inject(UsuarioExternoService);
   private authService = inject(AuthService);
   private messageService = inject(MessageService);

@@ -6,7 +6,9 @@ import { TranslationService } from './translation.service';
 /** Encerra sessão após inatividade (padrão 30 min) — achado A32 homologação UX. */
 @Injectable({ providedIn: 'root' })
 export class SessionIdleService {
-  private readonly idleMs = 30 * 60 * 1000;
+  private readonly idleMs = typeof window !== 'undefined' && window.location.hostname.startsWith('staging.')
+    ? 4 * 60 * 60 * 1000
+    : 30 * 60 * 1000;
   private timer: ReturnType<typeof setTimeout> | null = null;
   private started = false;
   private readonly auth = inject(AuthService);

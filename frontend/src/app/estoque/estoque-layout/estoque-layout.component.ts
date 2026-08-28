@@ -731,6 +731,12 @@ export class EstoqueLayoutComponent implements OnInit, OnDestroy {
       description: 'estoque.nav.itens.desc'
     },
     {
+      label: 'estoque.nav.partsFinder',
+      icon: 'pi pi-globe',
+      route: '/estoque/parts-finder',
+      description: 'estoque.nav.partsFinder.desc'
+    },
+    {
       label: 'estoque.nav.quarentena',
       icon: 'pi pi-shield',
       route: '/estoque/quarentena',

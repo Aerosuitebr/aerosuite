@@ -709,6 +709,10 @@ export const routes: Routes = [
         loadComponent: () => import('./suporte/ticket-list.component').then(m => m.TicketListComponent)
       },
       {
+        path: 'chamados',
+        loadComponent: () => import('./suporte/ticket-list.component').then(m => m.TicketListComponent)
+      },
+      {
         path: 'novo',
         loadComponent: () => import('./suporte/ticket-new.component').then(m => m.TicketNewComponent)
       },
@@ -776,6 +780,10 @@ export const routes: Routes = [
       {
         path: 'itens',
         loadComponent: () => import('./estoque/itens/item-estoque-list.component').then(m => m.ItemEstoqueListComponent)
+      },
+      {
+        path: 'parts-finder',
+        loadComponent: () => import('./estoque/parts-finder/parts-finder.component').then(m => m.PartsFinderComponent)
       },
       {
         path: 'quarentena',
