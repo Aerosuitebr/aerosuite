@@ -1,3 +1,4 @@
+import { fluxoOsGuard, OS_FLUXO_FUNCIONALIDADE as F } from './auth/fluxo-os.guard';
 import { Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthExternoGuard } from './auth/auth-externo.guard';
@@ -201,6 +202,52 @@ export const routes: Routes = [
         loadComponent: () => import('./externo/externo-os/externo-os-detail.component').then(m => m.ExternoOSDetailComponent)
       },
       {
+        path: 'os/carga-mecanicos',
+        loadComponent: () => import('./os/os-carga-mecanicos.component').then(m => m.OsCargaMecanicosComponent)
+      },
+      {
+        path: 'os/fluxo',
+        canActivate: [fluxoOsGuard],
+        data: { funcionalidades: [F.PAINEL] },
+        loadComponent: () => import('./os/fluxo/os-fluxo-painel.component').then(m => m.OsFluxoPainelComponent)
+      },
+      {
+        path: 'os/fluxo/estacao',
+        canActivate: [fluxoOsGuard],
+        data: { funcionalidades: [F.ESTACAO] },
+        loadComponent: () => import('./os/fluxo/os-fluxo-estacao.component').then(m => m.OsFluxoEstacaoComponent)
+      },
+      {
+        path: 'os/fluxo/estacoes',
+        canActivate: [fluxoOsGuard],
+        data: { funcionalidades: [F.ESTACOES] },
+        loadComponent: () => import('./os/fluxo/os-fluxo-estacoes.component').then(m => m.OsFluxoEstacoesComponent)
+      },
+      {
+        path: 'os/fluxo/codigos',
+        canActivate: [fluxoOsGuard],
+        data: { funcionalidades: [F.CODIGOS] },
+        loadComponent: () => import('./os/fluxo/os-fluxo-codigos.component').then(m => m.OsFluxoCodigosComponent)
+      },
+      {
+        path: 'os/fluxo/ajuste',
+        canActivate: [fluxoOsGuard],
+        data: { funcionalidades: [F.AJUSTE] },
+        loadComponent: () => import('./os/fluxo/os-fluxo-ajuste.component').then(m => m.OsFluxoAjusteComponent)
+      },
+      {
+        path: 'os/fluxo/ajuste/:id',
+        canActivate: [fluxoOsGuard],
+        data: { funcionalidades: [F.AJUSTE] },
+        loadComponent: () => import('./os/fluxo/os-fluxo-ajuste.component').then(m => m.OsFluxoAjusteComponent)
+      },
+      {
+        path: 'os/fluxo/os/:id',
+        canActivate: [fluxoOsGuard],
+        data: { funcionalidades: Object.values(F) },
+        loadComponent: () => import('./os/fluxo/os-fluxo-detalhe.component').then(m => m.OsFluxoDetalheComponent)
+      },
+      {
         path: 'capacidade',
         loadComponent: () =>
           import('./externo/externo-capacidade/externo-capacidade.component').then(m => m.ExternoCapacidadeComponent)
@@ -290,6 +337,52 @@ export const routes: Routes = [
         loadComponent: () => import('./os/os-list.component').then(m => m.OSListComponent),
         canActivate: [FuncionalidadeGuard],
         data: { perm: { funcionalidadesAny: ['ORDEM_SERVICO'] } }
+      },
+      {
+        path: 'os/carga-mecanicos',
+        loadComponent: () => import('./os/os-carga-mecanicos.component').then(m => m.OsCargaMecanicosComponent)
+      },
+      {
+        path: 'os/fluxo',
+        canActivate: [fluxoOsGuard],
+        data: { funcionalidades: [F.PAINEL] },
+        loadComponent: () => import('./os/fluxo/os-fluxo-painel.component').then(m => m.OsFluxoPainelComponent)
+      },
+      {
+        path: 'os/fluxo/estacao',
+        canActivate: [fluxoOsGuard],
+        data: { funcionalidades: [F.ESTACAO] },
+        loadComponent: () => import('./os/fluxo/os-fluxo-estacao.component').then(m => m.OsFluxoEstacaoComponent)
+      },
+      {
+        path: 'os/fluxo/estacoes',
+        canActivate: [fluxoOsGuard],
+        data: { funcionalidades: [F.ESTACOES] },
+        loadComponent: () => import('./os/fluxo/os-fluxo-estacoes.component').then(m => m.OsFluxoEstacoesComponent)
+      },
+      {
+        path: 'os/fluxo/codigos',
+        canActivate: [fluxoOsGuard],
+        data: { funcionalidades: [F.CODIGOS] },
+        loadComponent: () => import('./os/fluxo/os-fluxo-codigos.component').then(m => m.OsFluxoCodigosComponent)
+      },
+      {
+        path: 'os/fluxo/ajuste',
+        canActivate: [fluxoOsGuard],
+        data: { funcionalidades: [F.AJUSTE] },
+        loadComponent: () => import('./os/fluxo/os-fluxo-ajuste.component').then(m => m.OsFluxoAjusteComponent)
+      },
+      {
+        path: 'os/fluxo/ajuste/:id',
+        canActivate: [fluxoOsGuard],
+        data: { funcionalidades: [F.AJUSTE] },
+        loadComponent: () => import('./os/fluxo/os-fluxo-ajuste.component').then(m => m.OsFluxoAjusteComponent)
+      },
+      {
+        path: 'os/fluxo/os/:id',
+        canActivate: [fluxoOsGuard],
+        data: { funcionalidades: Object.values(F) },
+        loadComponent: () => import('./os/fluxo/os-fluxo-detalhe.component').then(m => m.OsFluxoDetalheComponent)
       },
       {
         path: 'capacidade',
@@ -601,6 +694,12 @@ export const routes: Routes = [
       {
         path: 'propostas-comerciais/new',
         loadComponent: () => import('./comercial/proposta-comercial.component').then(m => m.PropostaComercialComponent),
+        canActivate: [FuncionalidadeGuard],
+        data: { perm: { funcionalidadesAny: ['propostas-comerciais'] } }
+      },
+      {
+        path: 'propostas-comerciais/cco-emails',
+        loadComponent: () => import('./comercial/proposta-cco-emails.component').then(m => m.PropostaCcoEmailsComponent),
         canActivate: [FuncionalidadeGuard],
         data: { perm: { funcionalidadesAny: ['propostas-comerciais'] } }
       },

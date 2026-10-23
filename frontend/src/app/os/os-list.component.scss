@@ -2178,3 +2178,4 @@ $radius-md: 12px;
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr.os-row-troca-nao-pago > td:first-child {
   box-shadow: inset 3px 0 0 #ef4444;
 }
+.operation-filters { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; margin: .75rem 0; }

@@ -89,7 +89,9 @@ public class OSResource {
             @QueryParam("size") @DefaultValue("10") int size,
             @QueryParam("sort") @DefaultValue("id,asc") String sort,
             @QueryParam("q") String q,
-            @QueryParam("isActive") String isActiveParam) {
+            @QueryParam("isActive") String isActiveParam,
+            @QueryParam("fila") String fila,
+            @QueryParam("statusOperacional") String statusOperacional) {
 
         assertInternalOsAccess();
 
@@ -99,7 +101,7 @@ public class OSResource {
             isActive = Boolean.parseBoolean(isActiveParam);
         }
         try {
-            return service.list(page, size, sort, q, isActive);
+            return service.list(page, size, sort, q, isActive, fila, statusOperacional);
         } catch (Exception e) {
             LOG.warnf(e, "Erro ao listar OS: %s", e.getMessage());
             LOG.warnf(e, "Erro inesperado");

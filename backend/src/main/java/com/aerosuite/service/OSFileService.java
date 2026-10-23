@@ -33,6 +33,10 @@ import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 @ApplicationScoped
 public class OSFileService {
+    @Inject OsAccessPolicy osAccess;
+    private OS requireOsMutacao(Long id) {
+        OS os = tenantDataAccess.requireOS(id); osAccess.arquivos(os); return os;
+    }
 
     private static final Logger LOG = Logger.getLogger(OSFileService.class);
     
@@ -270,7 +274,7 @@ public class OSFileService {
         if (fileNames == null || fileNames.isEmpty()) {
             return new ArrayList<>();
         }
-        registroEncerradoGuard.assertMutacaoPermitida(tenantDataAccess.requireOS(osId));
+        registroEncerradoGuard.assertMutacaoPermitida(requireOsMutacao(osId));
 
         // Criar pasta da OS: os/{osId}
         Path osFolder = getOSFilesRootPath().resolve(osId.toString());
@@ -364,7 +368,7 @@ public class OSFileService {
         if (files == null || files.isEmpty()) {
             return new ArrayList<>();
         }
-        registroEncerradoGuard.assertMutacaoPermitida(tenantDataAccess.requireOS(osId));
+        registroEncerradoGuard.assertMutacaoPermitida(requireOsMutacao(osId));
 
         // Criar pasta da OS: os/{osId}
         Path osFolder = getOSFilesRootPath().resolve(osId.toString());
@@ -461,7 +465,7 @@ public class OSFileService {
      * Lista todos os arquivos associados a uma OS
      */
     public List<OSFileDto> getFilesByOSId(Long osId) {
-        tenantDataAccess.requireOS(osId);
+        osAccess.visualizar(tenantDataAccess.requireOS(osId));
         return OSFile.<OSFile>find("osId = ?1 and isActive = ?2", osId, true)
                 .list()
                 .stream()
@@ -473,7 +477,9 @@ public class OSFileService {
      * Obtém um arquivo específico da OS
      */
     public OSFileDto getFileById(Long fileId) {
-        return mapper.toDto(tenantDataAccess.requireActiveOSFile(fileId));
+        OSFile file = tenantDataAccess.requireActiveOSFile(fileId);
+        if(file.osId != null && file.osId > 0) osAccess.visualizar(tenantDataAccess.requireOS(file.osId));
+        return mapper.toDto(file);
     }
     
     /**
@@ -482,7 +488,7 @@ public class OSFileService {
     @Transactional
     public void removeFileFromOS(Long fileId, AuditoriaUsuarioContext ctx) {
         OSFile file = tenantDataAccess.requireActiveOSFile(fileId);
-        registroEncerradoGuard.assertMutacaoPermitida(tenantDataAccess.requireOS(file.osId));
+        registroEncerradoGuard.assertMutacaoPermitida(requireOsMutacao(file.osId));
         String antes = toJsonArquivo(file, null, Map.of("momento", "antes_soft_delete"));
         file.isActive = false;
         file.updatedAt = LocalDateTime.now();
@@ -505,6 +511,7 @@ public class OSFileService {
      */
     public Path getFilePath(Long fileId) {
         OSFile file = tenantDataAccess.requireActiveOSFile(fileId);
+        if(file.osId != null && file.osId > 0) osAccess.visualizar(tenantDataAccess.requireOS(file.osId));
 
         String storedPath = file.filePath;
         
@@ -695,7 +702,7 @@ public class OSFileService {
         if (files == null || files.isEmpty()) {
             return new ArrayList<>();
         }
-        registroEncerradoGuard.assertMutacaoPermitida(tenantDataAccess.requireOS(osId));
+        registroEncerradoGuard.assertMutacaoPermitida(requireOsMutacao(osId));
 
         // Criar pasta diversos dentro da OS: os/{osId}/diversos
         Path osDiversosFolder = getOSFilesRootPath().resolve(osId.toString()).resolve(DIVERSOS_FOLDER);

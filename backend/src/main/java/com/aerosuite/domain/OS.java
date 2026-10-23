@@ -9,6 +9,16 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "os")
 public class OS extends PanacheEntityBase {
+    public Boolean jaEditada = false;
+    public Integer mecanicoResponsavelId;
+    public String mecanicoResponsavelNome;
+    public Integer mecanicoAtribuidoPorId;
+    public String mecanicoAtribuidoPorNome;
+    public LocalDateTime mecanicoAtribuidoEm;
+    public String statusExecucao;
+    public LocalDateTime execucaoIniciadaEm;
+    public LocalDateTime execucaoPausadaEm;
+    public LocalDateTime execucaoFinalizadaEm;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;

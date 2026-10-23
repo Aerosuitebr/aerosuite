@@ -149,6 +149,7 @@ export interface PropostaItemEmail {
  * Interface para envio de email da proposta
  */
 export interface EnviarPropostaEmailRequest {
+  emailsCco?: string;
   propostaId: number;
   emailDestino: string;
   assunto?: string;

@@ -55,6 +55,7 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class OSService {
+    @Inject OsAccessPolicy osAccess;
 
     private static final Logger LOG = Logger.getLogger(OSService.class);
 
@@ -108,11 +109,15 @@ public class OSService {
     }
 
     private OS requireOS(Long id) {
-        return tenantDataAccess.requireOS(id);
+        OS os = tenantDataAccess.requireOS(id);
+        osAccess.visualizar(os);
+        return os;
     }
 
     private OS requireOSByIdOs(Integer idOs) {
-        return tenantDataAccess.requireOSByIdOs(idOs);
+        OS os = tenantDataAccess.requireOSByIdOs(idOs);
+        osAccess.visualizar(os);
+        return os;
     }
     
     // Contexto do usuário atual (será preenchido pelo Resource)
@@ -215,6 +220,9 @@ public class OSService {
     }
 
     public PageResponse<OSDto> list(int page, int size, String sort, String q, Boolean isActive) {
+        return list(page, size, sort, q, isActive, null, null);
+    }
+    public PageResponse<OSDto> list(int page, int size, String sort, String q, Boolean isActive, String fila, String status) {
         Sort.Direction sortDirection = Sort.Direction.Ascending;
         String sortField = "id";
 
@@ -226,65 +234,32 @@ public class OSService {
             }
         }
 
-        io.quarkus.panache.common.Page panachePage = Page.of(page, size);
-        List<OS> entities;
-        long totalElements;
-        // Filtrar apenas ativos por padrão (se isActive não for especificado ou for true)
-        boolean filterActive = (isActive == null || isActive);
-
-        if (q != null && !q.isEmpty()) {
-            // Tentar converter o parâmetro de busca para número (ID ou ID da OS)
-            Long idSearch = null;
-            Integer idOsSearch = null;
-            try {
-                idSearch = Long.parseLong(q.trim());
-                idOsSearch = Integer.parseInt(q.trim());
-            } catch (NumberFormatException e) {
-                // Não é um número, continuar com busca por texto
-            }
-
-            // Se for número, buscar por id, idOs, serial_number OU clienteNome
-            // Se não for número, buscar por clienteNome OU serial_number
-            if (idSearch != null && idOsSearch != null) {
-                // Busca por ID (chave primária), ID da OS (idOs), serial_number ou nome do cliente (parcial)
-                if (filterActive) {
-                    var query = OS.find("(id = ?1 or idOs = ?2 or clienteNome like ?3 or serialNumber like ?3) and isActive = ?4",
-                            Sort.by(sortField, sortDirection), idSearch, idOsSearch, "%" + q + "%", true);
-                    totalElements = query.count();
-                    entities = query.page(panachePage).list();
-                } else {
-                    var query = OS.find("(id = ?1 or idOs = ?2 or clienteNome like ?3 or serialNumber like ?3)",
-                            Sort.by(sortField, sortDirection), idSearch, idOsSearch, "%" + q + "%");
-                    totalElements = query.count();
-                    entities = query.page(panachePage).list();
-                }
-            } else {
-                // Busca por nome do cliente ou serial_number (parcial)
-                if (filterActive) {
-                    var query = OS.find("(clienteNome like ?1 or serialNumber like ?1) and isActive = ?2",
-                            Sort.by(sortField, sortDirection), "%" + q + "%", true);
-                    totalElements = query.count();
-                    entities = query.page(panachePage).list();
-                } else {
-                    var query = OS.find("(clienteNome like ?1 or serialNumber like ?1)",
-                            Sort.by(sortField, sortDirection), "%" + q + "%");
-                    totalElements = query.count();
-                    entities = query.page(panachePage).list();
-                }
-            }
-        } else {
-            // Sem busca, apenas filtrar por isActive se necessário
-            if (filterActive) {
-                var query = OS.find("isActive = ?1", Sort.by(sortField, sortDirection), true);
-                totalElements = query.count();
-                entities = query.page(panachePage).list();
-            } else {
-                var query = OS.findAll(Sort.by(sortField, sortDirection));
-                totalElements = query.count();
-                entities = query.page(panachePage).list();
-            }
+        if (!Set.of("id", "idOs", "clienteNome", "dtAbertura", "createdAt", "updatedAt", "serialNumber", "partNumber", "numOsOriginal", "dataFechamento", "dataConclusaoServ", "tipoServico", "mecanicoResponsavelNome").contains(sortField)) sortField = "id";
+        io.quarkus.panache.common.Page panachePage = Page.of(Math.max(0,page), Math.max(1,Math.min(200,size)));
+        StringBuilder where = new StringBuilder("1 = 1");
+        Map<String,Object> params = new HashMap<>();
+        if (isActive == null || isActive) where.append(" and isActive = true");
+        if (osAccess.mecanico()) { where.append(" and mecanicoResponsavelId = :mecanico"); params.put("mecanico",internalUser.getUserId()); }
+        if (q != null && !q.isBlank()) {
+            where.append(" and (lower(clienteNome) like :q or lower(serialNumber) like :q or lower(partNumber) like :q or lower(numOsOriginal) like :q or str(id) = :numero or str(idOs) = :numero)");
+            params.put("q","%" + q.trim().toLowerCase(java.util.Locale.ROOT) + "%"); params.put("numero",q.trim());
         }
-
+        if ("SEM_MECANICO".equals(fila) || "ALERTA_5_DIAS".equals(fila)) where.append(" and mecanicoResponsavelId is null and dataConclusaoServ is null");
+        if ("ALERTA_5_DIAS".equals(fila)) { where.append(" and dtAbertura < :limite"); params.put("limite",LocalDate.now().minusDays(5)); }
+        if (status != null && !status.isBlank()) {
+            where.append(switch(status) {
+                case "AGUARDANDO_DISTRIBUICAO" -> " and mecanicoResponsavelId is null and dataConclusaoServ is null and dataFechamento is null";
+                case "ATRIBUIDA" -> " and mecanicoResponsavelId is not null and (statusExecucao is null or statusExecucao = 'NAO_INICIADA') and dataConclusaoServ is null and dataFechamento is null";
+                case "EM_EXECUCAO" -> " and statusExecucao = 'EM_ANDAMENTO' and dataFechamento is null";
+                case "PAUSADA" -> " and statusExecucao = 'PAUSADA' and dataFechamento is null";
+                case "CONCLUIDA" -> " and (execucaoFinalizadaEm is not null or dataConclusaoServ is not null) and dataFechamento is null";
+                case "FECHADA" -> " and dataFechamento is not null";
+                default -> throw new jakarta.ws.rs.BadRequestException("Status operacional inválido.");
+            });
+        }
+        var query = OS.find(where.toString(), Sort.by(sortField, sortDirection), params);
+        long totalElements = query.count();
+        List<OS> entities = query.page(panachePage).list();
         TipoServicoLookup tipoLookup = TipoServicoLookup.loadActive();
 
         List<OSDto> dtos;
@@ -292,6 +267,7 @@ public class OSService {
         try {
             dtos = entities.stream()
                     .map(entity -> {
+                    osAccess.visualizar(entity);
                         OSDto dto = mapper.toDto(entity);
                         fillTipoServicoInfo(dto, entity, tipoLookup);
                         dto.files = Collections.emptyList();
@@ -304,6 +280,7 @@ public class OSService {
         }
 
         attachTrocasBatch(dtos);
+        attachNaoConformidades(dtos);
         marcarOsComDeficitKitFcuListagem(dtos);
 
         int totalPages = (int) Math.ceil((double) totalElements / panachePage.size);
@@ -411,6 +388,7 @@ public class OSService {
         return OS.<OS>find("id = ?1 and isActive = ?2", id, true)
                 .firstResultOptional()
                 .map(entity -> {
+                    osAccess.visualizar(entity);
                     OSDto dto = mapper.toDto(entity);
                     // Preencher tipoServicoId e tipoServicoObj
                     fillTipoServicoInfo(dto, entity);
@@ -437,6 +415,7 @@ public class OSService {
         return OS.<OS>find("idOs = ?1 and isActive = ?2", idOs, true)
                 .firstResultOptional()
                 .map(entity -> {
+                    osAccess.visualizar(entity);
                     OSDto dto = mapper.toDto(entity);
                     // Preencher tipoServicoId e tipoServicoObj
                     fillTipoServicoInfo(dto, entity);
@@ -461,6 +440,7 @@ public class OSService {
 
     @Transactional
     public OSDto create(OSDto dto) {
+        osAccess.criar();
         
         if (dto == null) {
             throw new IllegalArgumentException(ApiI18nMessages.encode(ApiI18nMessages.OS_DTO_NULL));
@@ -676,6 +656,31 @@ public class OSService {
         
         OS entity = requireOS(id);
         registroEncerradoGuard.assertMutacaoPermitida(entity);
+        if (dto == null) throw new jakarta.ws.rs.BadRequestException("Informe os dados da OS.");
+        String escopo = osAccess.escopo(entity);
+        if ("NENHUM".equals(escopo)) throw new jakarta.ws.rs.ForbiddenException("OS disponível somente para consulta neste perfil.");
+        if (!"TOTAL".equals(escopo)) {
+            if (Boolean.FALSE.equals(dto.isActive)) throw new jakarta.ws.rs.ForbiddenException("Sem permissão para excluir OS.");
+            OS anterior = copiarOS(entity);
+            if ("MECANICO".equals(escopo)) {
+                if (dto.tipoServicoId != null) {
+                    TipoServico tipo = TipoServico.find("id = ?1 and isActive = true", dto.tipoServicoId).firstResult();
+                    if (tipo == null) throw new jakarta.ws.rs.BadRequestException("Tipo de serviço inválido.");
+                    entity.tipoServico = tipo.nome;
+                }
+                entity.inicioServico = dto.inicioServico; entity.fimServico = dto.fimServico;
+                entity.dataFechamento = dto.dataFechamento;
+            } else {
+                entity.manualPn = dto.manualPn; entity.numRevisao = dto.numRevisao; entity.dataRevManual = dto.dataRevManual;
+                entity.ataManual = dto.ataManual; entity.tituloAds = dto.tituloAds; entity.tituloAfins = dto.tituloAfins;
+                entity.boletinsServAfins = dto.boletinsServAfins;
+            }
+            entity.updatedAt = LocalDateTime.now(); entity.jaEditada = true;
+            auditoriaService.registrarAlteracao(anterior, entity, currentUserName, currentUserEmail, currentUserId, currentIpOrigem, currentUserAgent);
+            OSDto result = mapper.toDto(entity); fillTipoServicoInfo(result, entity);
+            attachTrocasToDto(result, entity.id); tarefaDadoTecnicoService.attachToDto(result, entity.id);
+            return result;
+        }
         
         
         // Se o DTO contém isActive=false, fazer soft delete (inativar)
@@ -691,6 +696,7 @@ public class OSService {
         // Caso contrário, atualizar normalmente
         // Salvar o valor atual de isActive antes do update
         Boolean currentIsActive = entity.isActive;
+        entity.jaEditada = true;
         mapper.updateEntityFromDto(dto, entity);
         entity.updatedAt = LocalDateTime.now();
         // Restaurar o valor de isActive (não permitir alterar diretamente pelo update normal)
@@ -781,6 +787,7 @@ public class OSService {
     public OSDto delete(Long id) {
 
         OS entity = requireOS(id);
+        if (!"TOTAL".equals(osAccess.escopo(entity))) throw new jakarta.ws.rs.ForbiddenException("Sem permissão para excluir OS.");
         registroEncerradoGuard.assertMutacaoPermitida(entity);
 
 
@@ -913,6 +920,7 @@ public class OSService {
     @Transactional
     public OSDto deleteByIdOs(Integer idOs) {
         OS entity = requireOSByIdOs(idOs);
+        if (!"TOTAL".equals(osAccess.escopo(entity))) throw new jakarta.ws.rs.ForbiddenException("Sem permissão para excluir OS.");
         registroEncerradoGuard.assertMutacaoPermitida(entity);
         
         // Soft delete - inativar ao invés de deletar fisicamente
@@ -1122,6 +1130,18 @@ public class OSService {
         }
         List<OsSolicitacaoTrocaItem> itens = OsSolicitacaoTrocaItem.find("osId = ?1 order by ordem asc, id asc", osId).list();
         dto.solicitacaoTrocasItens = itens.stream().map(this::entityToItemDto).collect(Collectors.toList());
+        attachNaoConformidades(List.of(dto));
+    }
+
+    private void attachNaoConformidades(List<OSDto> dtos) {
+        List<Integer> ids = dtos.stream().filter(d -> d.id != null && d.id <= Integer.MAX_VALUE).map(d -> d.id.intValue()).toList();
+        if (ids.isEmpty()) return;
+        List<Object[]> rows = com.aerosuite.domain.ConformidadeNaoConformidade.getEntityManager()
+                .createQuery("select n.osId, count(n.id) from ConformidadeNaoConformidade n where n.osId in :ids group by n.osId", Object[].class)
+                .setParameter("ids", ids).getResultList();
+        Map<Long,Long> counts = new HashMap<>();
+        rows.forEach(r -> counts.put(((Number)r[0]).longValue(), ((Number)r[1]).longValue()));
+        dtos.forEach(d -> d.naoConformidadesTotal = counts.getOrDefault(d.id,0L));
     }
 
     private void attachTrocasBatch(List<OSDto> dtos) {

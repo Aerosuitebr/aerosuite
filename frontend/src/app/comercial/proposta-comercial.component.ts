@@ -1,4 +1,7 @@
 import { Component, OnInit, inject, ViewChild, ElementRef, effect } from '@angular/core';
+import { PropostaCcoEmailService } from '../core/proposta-cco-email.service';
+import { formatarDocumentoIdentificacao, normalizarDocumento } from '../shared/utils/documento-identificacao.util';
+import { formatPhoneBr } from '../core/br-input.util';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
@@ -768,6 +771,7 @@ import { BRASIL_ESTADOS } from '../core/domain/brazil-states.data';
                     <div class="form-field">
                       <label for="clienteCnpjCpf">{{ 'comercial.proposta.cliente.lblCnpjCpf' | translate }}</label>
                       <input pInputText id="clienteCnpjCpf" formControlName="clienteCnpjCpf" 
+                             (blur)="formatarDocumentoCliente()"
                              [placeholder]="'comercial.proposta.cliente.phCnpj' | translate" class="w-full">
                     </div>
                     
@@ -1315,6 +1319,7 @@ import { BRASIL_ESTADOS } from '../core/domain/brazil-states.data';
         <div class="form-field">
           <label for="contatoTelefone">{{ 'comercial.proposta.cliente.lblTelFld' | translate }}</label>
           <input pInputText id="contatoTelefone" 
+                 (blur)="contatoInfo.telefone = formatarTelefoneContato(contatoInfo.telefone)"
                  [(ngModel)]="contatoInfo.telefone"
                  [placeholder]="'comercial.proposta.contato.phTel' | translate" />
         </div>
@@ -1381,6 +1386,14 @@ import { BRASIL_ESTADOS } from '../core/domain/brazil-states.data';
             </small>
           </div>
 
+          <div class="form-field">
+            <label for="emailsCco">Cópia oculta (CCo)</label>
+            <textarea pInputTextarea id="emailsCco" [(ngModel)]="emailsCco" rows="2" class="w-full"
+                      placeholder="equipe@empresa.com; comercial@empresa.com"></textarea>
+            <small>Separe os endereços por ponto e vírgula, vírgula ou quebra de linha.</small>
+            <small role="alert" *ngIf="ccoInvalidos.length">E-mails inválidos: {{ ccoInvalidos.join('; ') }}</small>
+            <a routerLink="/propostas-comerciais/cco-emails">Configurar destinatários padrão da equipe</a>
+          </div>
           <div class="form-field">
             <label for="assuntoEmail">
               <i class="pi pi-tag"></i>
@@ -1819,6 +1832,22 @@ export class PropostaComercialComponent implements OnInit {
     mensagemAdicional: '',
     tipoEnvio: 'corpo'
   };
+
+  private propostaCcoService = inject(PropostaCcoEmailService);
+  emailsCco = '';
+  formatarTelefoneContato(value: string): string { return formatPhoneBr(value); }
+  formatarDocumentoCliente(): void {
+    const control = this.clienteForm.get('clienteCnpjCpf');
+    const raw = normalizarDocumento(control?.value);
+    if (/^\d{11}$/.test(raw) || /^[0-9A-Z]{12}\d{2}$/.test(raw))
+      control?.setValue(formatarDocumentoIdentificacao(raw));
+  }
+  carregandoCco = false;
+  ccoCarregado = false;
+  get ccoInvalidos(): string[] {
+    return this.emailsCco.split(/[;,\r\n]+/).map(e => e.trim()).filter(e => !!e &&
+      (e.length > 254 || !/^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(e)));
+  }
 
   // Forms
   produtoForm!: FormGroup;
@@ -4184,6 +4213,13 @@ export class PropostaComercialComponent implements OnInit {
   }
 
   continuarEnvioEmail() {
+    this.emailsCco = '';
+    this.carregandoCco = true;
+    this.ccoCarregado = false;
+    this.propostaCcoService.listar().subscribe({
+      next: lista => { this.emailsCco = lista.map(i => i.email).join('; '); this.carregandoCco = false; this.ccoCarregado = true; },
+      error: () => { this.carregandoCco = false; }
+    });
     // Preencher email de destino: formulário do cliente ou proposta já salva
     const emailCliente = this.clienteForm.get('clienteEmail')?.value || '';
     const emailProposta = this.proposta?.clienteEmail || '';
@@ -4268,18 +4304,19 @@ export class PropostaComercialComponent implements OnInit {
   }
 
   canSendEmail(): boolean {
-    if (!this.proposta?.id) return false;
+    if (!this.proposta?.id || this.carregandoCco || this.ccoInvalidos.length) return false;
     const email = (this.emailEnvio.emailDestino || this.clienteForm.get('clienteEmail')?.value || this.proposta?.clienteEmail || '').trim();
     return email.length > 0 && email.includes('@');
   }
 
   enviarEmail() {
-    if (!this.canSendEmail() || !this.proposta?.id) return;
+    if (!this.canSendEmail() || !this.proposta?.id || this.carregandoCco || this.ccoInvalidos.length) return;
 
     this.enviandoEmail = true;
 
     // Montar request de envio
     const request: EnviarPropostaEmailRequest = {
+      emailsCco: this.ccoCarregado || this.emailsCco.trim() ? this.emailsCco : undefined,
       propostaId: this.proposta.id,
       emailDestino: (this.emailEnvio.emailDestino || '').trim() || (this.clienteForm.get('clienteEmail')?.value || '').trim(),
       assunto: this.emailEnvio.assunto || undefined,

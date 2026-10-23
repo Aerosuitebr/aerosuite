@@ -31,6 +31,21 @@ import java.util.stream.Collectors;
  */
 @ApplicationScoped
 public class OsEstoqueSaidaAutomacaoService {
+    private void enriquecerDeficits(List<KitFcuDeficitItemDto> itens) {
+        for (KitFcuDeficitItemDto item : itens) {
+            String pn = item.productPn == null ? "" : item.productPn.trim().toLowerCase(Locale.ROOT);
+            item.cadastradoNoCatalogo = !pn.isBlank() && Product.count("lower(trim(productpn)) = ?1", pn) > 0;
+            item.temEntradaEstoque = !pn.isBlank() && com.aerosuite.domain.ItemEstoque.count("lower(trim(partNumber)) = ?1 and isActive = true", pn) > 0;
+            item.quantidadeEntradaPendente = item.deficit;
+            item.situacaoEstoque = !item.cadastradoNoCatalogo ? "SEM_CADASTRO" : !item.temEntradaEstoque ? "SEM_ENTRADA" : item.quantidadeDisponivel <= 0 ? "SEM_DISPONIVEL" : "INSUFICIENTE";
+            item.situacaoLabel = switch (item.situacaoEstoque) {
+                case "SEM_CADASTRO" -> "Sem cadastro no catálogo";
+                case "SEM_ENTRADA" -> "Cadastrado no catálogo, sem entrada no estoque";
+                case "SEM_DISPONIVEL" -> "Sem unidades disponíveis";
+                default -> "Estoque insuficiente";
+            };
+        }
+    }
 
     private static final Logger LOG = Logger.getLogger(OsEstoqueSaidaAutomacaoService.class);
 
@@ -207,6 +222,7 @@ public class OsEstoqueSaidaAutomacaoService {
             LOG.warnf(e, "OsEstoqueSaidaAutomacaoService - sync deficit falhou (OS %s): %s",
                     os.id, e.getMessage());
         }
+        enriquecerDeficits(deficits);
         return deficits;
     }
 
@@ -317,6 +333,7 @@ public class OsEstoqueSaidaAutomacaoService {
                         agg.idProduto, agg.pn, agg.nome, agg.quantidade, disp, def));
             }
         }
+        enriquecerDeficits(deficits);
         return deficits;
     }
 

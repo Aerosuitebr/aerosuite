@@ -4,6 +4,11 @@ package com.aerosuite.dto;
  * Item de déficit do kit FCU (preview antes de salvar a OS ou detalhe da OS já salva).
  */
 public class KitFcuDeficitItemDto {
+    public boolean cadastradoNoCatalogo;
+    public boolean temEntradaEstoque;
+    public String situacaoEstoque;
+    public String situacaoLabel;
+    public double quantidadeEntradaPendente;
     public Integer produtoCatalogoId;
     public String productPn;
     public String productName;

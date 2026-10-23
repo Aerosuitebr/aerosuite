@@ -81,6 +81,7 @@ public class OSFileResource {
                     "count", uploadedFiles.size()
             )).build();
         } catch (Exception e) {
+            if (e instanceof WebApplicationException http) throw http;
             LOG.warnf(e, "Erro inesperado");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(fileError(ApiI18nMessages.OS_FILE_UPLOAD_FAILED, e))
@@ -98,6 +99,7 @@ public class OSFileResource {
             List<OSFileDto> files = service.listAvailableFiles();
             return Response.ok(files).build();
         } catch (Exception e) {
+            if (e instanceof WebApplicationException http) throw http;
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(fileError(ApiI18nMessages.OS_FILE_LIST_FAILED, e))
                     .build();
@@ -114,6 +116,7 @@ public class OSFileResource {
             List<OSFileDto> files = service.getFilesByOSId(osId);
             return Response.ok(files).build();
         } catch (Exception e) {
+            if (e instanceof WebApplicationException http) throw http;
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(fileError(ApiI18nMessages.OS_FILE_LIST_OS_FAILED, e))
                     .build();
@@ -150,6 +153,7 @@ public class OSFileResource {
                     "count", associatedFiles.size()
             )).build();
         } catch (Exception e) {
+            if (e instanceof WebApplicationException http) throw http;
             LOG.warnf(e, "Erro inesperado");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(fileError(ApiI18nMessages.OS_FILE_ASSOCIATE_FAILED, e))
@@ -180,6 +184,7 @@ public class OSFileResource {
                     .entity(Map.of("error", e.getMessage()))
                     .build();
         } catch (Exception e) {
+            if (e instanceof WebApplicationException http) throw http;
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(fileError(ApiI18nMessages.OS_FILE_REMOVE_FAILED, e))
                     .build();
@@ -205,7 +210,8 @@ public class OSFileResource {
      */
     @GET
     @jakarta.ws.rs.Path("/{fileId}/download")
-    public Response downloadFile(@Parameter(description = OpenApiDescriptions.FILE_ID) @PathParam("fileId") Long fileId) {
+    public Response downloadFile(@Parameter(description = OpenApiDescriptions.FILE_ID) @PathParam("fileId") Long fileId,
+                                 @QueryParam("disposition") @DefaultValue("inline") String disposition) {
         try {
             
             OSFileDto fileDto = service.getFileById(fileId);
@@ -250,7 +256,7 @@ public class OSFileResource {
             // Headers para permitir visualização em iframe e CORS
             // Remover X-Frame-Options ou usar SAMEORIGIN para permitir iframes da mesma origem
             Response.ResponseBuilder responseBuilder = Response.ok(stream)
-                    .header("Content-Disposition", "inline; filename=\"" + fileDto.fileName + "\"")
+                    .header("Content-Disposition", ("attachment".equals(disposition) ? "attachment" : "inline") + "; filename=\"" + fileDto.fileName.replaceAll("[\\r\\n\\\"\\\\]", "_") + "\"")
                     .header("Content-Type", contentType)
                     .header("Access-Control-Allow-Origin", "*")
                     .header("Access-Control-Allow-Methods", "GET, OPTIONS")
@@ -269,6 +275,7 @@ public class OSFileResource {
                     .entity(Map.of("error", e.getMessage()))
                     .build();
         } catch (Exception e) {
+            if (e instanceof WebApplicationException http) throw http;
             LOG.warnf(e, "OSFileResource.downloadFile - ERRO: %s", e.getMessage());
             LOG.warnf(e, "Erro inesperado");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -291,6 +298,7 @@ public class OSFileResource {
                     .entity(Map.of("error", e.getMessage()))
                     .build();
         } catch (Exception e) {
+            if (e instanceof WebApplicationException http) throw http;
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(fileError(ApiI18nMessages.OS_FILE_GET_FAILED, e))
                     .build();
@@ -327,6 +335,7 @@ public class OSFileResource {
                     "count", uploadedFiles.size()
             )).build();
         } catch (Exception e) {
+            if (e instanceof WebApplicationException http) throw http;
             LOG.warnf(e, "Erro inesperado");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(fileError(ApiI18nMessages.OS_FILE_UPLOAD_FAILED, e))
@@ -367,6 +376,7 @@ public class OSFileResource {
                     "count", uploadedFiles.size()
             )).build();
         } catch (Exception e) {
+            if (e instanceof WebApplicationException http) throw http;
             LOG.warnf(e, "Erro inesperado");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(fileError(ApiI18nMessages.OS_FILE_UPLOAD_FAILED, e))
@@ -384,6 +394,7 @@ public class OSFileResource {
             List<OSFileDto> files = service.getFilesByDiversos();
             return Response.ok(files).build();
         } catch (Exception e) {
+            if (e instanceof WebApplicationException http) throw http;
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(fileError(ApiI18nMessages.OS_FILE_LIST_DIVERSOS_FAILED, e))
                     .build();

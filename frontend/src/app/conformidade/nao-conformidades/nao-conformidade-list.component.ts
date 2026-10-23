@@ -1,6 +1,7 @@
 ﻿import { DEFAULT_LIST_PAGE_SIZE, LIST_ROWS_PER_PAGE_OPTIONS } from '../../core/list-pagination.constants';
 import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } from '../../core/lazy-list-pagination.helper';
 import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -550,6 +551,8 @@ export class NaoConformidadeListComponent implements OnInit {
   loading = true;
   search = '';
   filtroStatus: string | null = null;
+  private route = inject(ActivatedRoute);
+  osFiltroId?: number;
   showDialog = false;
   editId: number | null = null;
   salvando = false;
@@ -588,6 +591,8 @@ export class NaoConformidadeListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const osId = Number(this.route.snapshot.queryParamMap.get('osId'));
+    if (Number.isSafeInteger(osId) && osId > 0) this.osFiltroId = osId;
     this.severidadeOptions = ['BAIXA', 'MEDIA', 'ALTA', 'CRITICA'].map(v => ({
       value: v,
       label: this.i18n.translate(`conformidade.nc.sev.${v}`)
@@ -905,7 +910,7 @@ export class NaoConformidadeListComponent implements OnInit {
     const seq = this.requestGuard.bump();
     this.loading = true;
     this.svc.naoConformidades
-      .listar({ page: this.pageIndex, size: this.size, q: this.search.trim() || undefined, status: this.filtroStatus || undefined })
+      .listar({ page: this.pageIndex, size: this.size, q: this.search.trim() || undefined, status: this.filtroStatus || undefined, osId: this.osFiltroId })
       .subscribe({
         next: res => {
           if (this.requestGuard.isStale(seq)) return;
@@ -1022,6 +1027,7 @@ export class NaoConformidadeListComponent implements OnInit {
   abrirNovo(): void {
     this.editId = null;
     this.form = {
+      osId: this.osFiltroId,
       severidade: 'MEDIA',
       capaFase: 'REGISTRO',
       dataAbertura: new Date().toISOString().slice(0, 10)
@@ -1030,6 +1036,7 @@ export class NaoConformidadeListComponent implements OnInit {
     this.anexos = [];
     this.aprovacaoObs = '';
     this.osSelected = null;
+    this.syncOsFromForm();
     this.dragOverAnexo = false;
     this.capaStepIndex = 0;
     this.clearFieldErrors();

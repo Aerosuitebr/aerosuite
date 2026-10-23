@@ -58,6 +58,9 @@ public class PropostaComercialService {
     EmailService emailService;
 
     @Inject
+    PropostaCcoEmailService propostaCcoEmailService;
+
+    @Inject
     CommercialBrandingService commercialBranding;
 
     @Inject
@@ -1078,7 +1081,8 @@ public class PropostaComercialService {
 
             // Enviar email
             LOGGER.info("Enviando email para: " + emailDestino + " (tipo: " + tipoEnvio + ")");
-            boolean enviado = emailService.sendEmail(emailDestino, assunto, htmlBody, textBody, pdfAnexo, nomeAnexo);
+            boolean enviado = emailService.sendEmail(emailDestino, assunto, htmlBody, textBody, pdfAnexo, nomeAnexo,
+                    propostaCcoEmailService.destinatarios(emailDestino, dto.emailsCco));
 
             if (enviado) {
                 // Atualizar status da proposta

@@ -375,13 +375,14 @@ export class ConformidadeSgqService {
   };
 
   naoConformidades = {
-    listar: (p: { page?: number; size?: number; q?: string; status?: string; severidade?: string }) => {
+    listar: (p: { page?: number; size?: number; q?: string; status?: string; severidade?: string; osId?: number }) => {
       let params = new HttpParams();
       if (p.page != null) params = params.set('page', String(p.page));
       if (p.size != null) params = params.set('size', String(p.size));
       if (p.q) params = params.set('q', p.q);
       if (p.status) params = params.set('status', p.status);
       if (p.severidade) params = params.set('severidade', p.severidade);
+      if (p.osId != null) params = params.set('osId', String(p.osId));
       return this.http.get<ConformidadePage<ConformidadeNc>>(`${this.api}/conformidade/nao-conformidades`, { params });
     },
     obter: (id: number) =>

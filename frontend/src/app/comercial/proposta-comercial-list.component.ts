@@ -67,6 +67,8 @@ import { propostaPodeAcaoPortal, propostaTemEmailCliente } from './proposta-port
         titleIcon="pi-file-edit"
         [hasActions]="true">
         <div actions class="header-actions">
+          <button pButton label="Cópia oculta da equipe" icon="pi pi-eye-slash"
+                  class="p-button-outlined" routerLink="/propostas-comerciais/cco-emails"></button>
           <app-page-help></app-page-help>
           <button
             pButton

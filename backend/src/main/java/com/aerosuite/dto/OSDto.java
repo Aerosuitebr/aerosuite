@@ -5,6 +5,25 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class OSDto {
+    public long naoConformidadesTotal;
+    public Boolean jaEditada;
+    public String statusOperacional;
+    public String escopoEdicao;
+    public Boolean podeEditar;
+    public Boolean podeReencaminhar;
+    public Boolean podeControlarExecucao;
+    public Boolean modalSomenteLeitura;
+    public long diasSemAtribuicao;
+    public boolean alertaSemAtribuicao;
+    public Integer mecanicoResponsavelId;
+    public String mecanicoResponsavelNome;
+    public Integer mecanicoAtribuidoPorId;
+    public String mecanicoAtribuidoPorNome;
+    public LocalDateTime mecanicoAtribuidoEm;
+    public String statusExecucao;
+    public LocalDateTime execucaoIniciadaEm;
+    public LocalDateTime execucaoPausadaEm;
+    public LocalDateTime execucaoFinalizadaEm;
     public Long id;
     public Integer idOs;
     public String adsDas;

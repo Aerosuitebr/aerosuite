@@ -263,11 +263,19 @@ public class EmailService {
      * Envia email genérico com anexo (para propostas comerciais)
      */
     public boolean sendEmail(String emailDestino, String assunto, String htmlBody, String textBody, byte[] anexo, String nomeAnexo) {
+        return sendEmail(emailDestino, assunto, htmlBody, textBody, anexo, nomeAnexo, java.util.List.of());
+    }
+
+    public boolean sendEmail(String emailDestino, String assunto, String htmlBody, String textBody, byte[] anexo, String nomeAnexo, java.util.List<String> copiaOculta) {
         try {
             LOG.infof("Enviando email para: %s, assunto: %s, from: %s", emailDestino, assunto, emailRemetente);
 
             Mail mail = criarMailHtml(emailDestino, assunto, htmlBody);
             mail.setText(textBody);
+            if (copiaOculta != null) {
+                copiaOculta.stream().filter(e -> e != null && !e.equalsIgnoreCase(emailDestino))
+                        .distinct().forEach(mail::addBcc);
+            }
 
             if (anexo != null && nomeAnexo != null) {
                 mail.addAttachment(nomeAnexo, anexo, "application/pdf");

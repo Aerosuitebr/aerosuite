@@ -53,6 +53,7 @@ export interface OSFile {
 }
 
 export interface OS {
+  naoConformidadesTotal?: number;
   id?: number;
   idOs: number;
   adsDas?: string;
@@ -116,6 +117,26 @@ export interface OS {
   solicitacaoTrocasItens?: OSSolicitacaoTrocaItem[];
   /** Marca a OS que tem déficit registrado no kit FCU (estoque insuficiente ao salvar). */
   temDeficitKitFcu?: boolean;
+  mecanicoResponsavelId?: number | null;
+  mecanicoResponsavelNome?: string | null;
+  mecanicoAtribuidoPorId?: number | null;
+  mecanicoAtribuidoPorNome?: string | null;
+  mecanicoAtribuidoEm?: string | null;
+  statusOperacional?: string | null;
+  statusExecucao?: string | null;
+  execucaoIniciadaEm?: string | null;
+  execucaoPausadaEm?: string | null;
+  execucaoFinalizadaEm?: string | null;
+  jaEditada?: boolean | null;
+  podeEditar?: boolean | null;
+  /** TOTAL | MECANICO | BIBLIOTECA | NENHUM */
+  escopoEdicao?: string | null;
+  podeReencaminhar?: boolean | null;
+  podeControlarExecucao?: boolean | null;
+  modalSomenteLeitura?: boolean | null;
+  diasSemAtribuicao?: number | null;
+  alertaSemAtribuicao?: boolean | null;
+
   crsEmitido?: boolean;
   crsEmitidoEm?: string;
   crsCertificadoNumero?: string;
@@ -139,6 +160,11 @@ export interface OsTarefaDadoTecnicoVinculo {
 
 /** Item de déficit do kit FCU (preview ou detalhe da OS). */
 export interface KitFcuDeficitItem {
+  cadastradoNoCatalogo?: boolean;
+  temEntradaEstoque?: boolean;
+  situacaoEstoque?: string;
+  situacaoLabel?: string;
+  quantidadeEntradaPendente?: number;
   produtoCatalogoId?: number;
   productPn?: string;
   productName?: string;
@@ -163,6 +189,32 @@ export interface Page<T> {
   size: number; 
   sort?: string; 
 }
+
+export interface MecanicoOption {
+  id: number;
+  nome: string;
+  email?: string;
+}
+
+export interface OSCargaMecanico {
+  mecanicoId: number;
+  mecanicoNome: string;
+  atribuidasPeriodo: number;
+  emAndamentoPeriodo: number;
+  concluidasPeriodo: number;
+  cargaAtual: number;
+}
+
+export interface OSCargaDashboard {
+  periodo: string;
+  dataInicio: string;
+  dataFim: string;
+  totalSemAtribuicao: number;
+  totalAlertaSemAtribuicao5Dias: number;
+  totalEmAndamento: number;
+  mecanicos: OSCargaMecanico[];
+}
+
 
 @Injectable({ providedIn: 'root' })
 export class OSService {
@@ -231,6 +283,62 @@ export class OSService {
   /** Itens de déficit registrados no momento em que a OS foi salva (modal da listagem). */
   listKitFcuDeficit(osId: number) {
     return this.http.get<KitFcuDeficitItem[]>(`${this.base}/${osId}/kit-fcu-deficit`);
+  }
+
+  listarMecanicos() {
+    return this.http.get<MecanicoOption[]>(`${this.base}/mecanicos`);
+  }
+
+  encaminhar(osId: number, mecanicoId: number, motivo?: string) {
+    return this.http.post<OS>(`${this.base}/${osId}/encaminhar`, { mecanicoId, motivo });
+  }
+
+  iniciarExecucao(osId: number, observacao?: string) {
+    return this.http.post<OS>(`${this.base}/${osId}/execucao/iniciar`, { observacao });
+  }
+
+  pausarExecucao(osId: number, observacao?: string) {
+    return this.http.post<OS>(`${this.base}/${osId}/execucao/pausar`, { observacao });
+  }
+
+  retomarExecucao(osId: number, observacao?: string) {
+    return this.http.post<OS>(`${this.base}/${osId}/execucao/retomar`, { observacao });
+  }
+
+  finalizarExecucao(osId: number, observacao?: string) {
+    return this.http.post<OS>(`${this.base}/${osId}/execucao/finalizar`, { observacao });
+  }
+
+  dashboardCarga(periodo: 'DIA' | 'SEMANA' | 'MES' = 'DIA') {
+    return this.http.get<OSCargaDashboard>(`${this.base}/carga-mecanicos`, {
+      params: new HttpParams().set('periodo', periodo)
+    });
+  }
+
+  listarAtribuidasMecanicoPeriodo(mecanicoId: number, periodo: 'DIA' | 'SEMANA' | 'MES' = 'DIA') {
+    return this.listarOsCargaMecanico(mecanicoId, periodo, 'ATRIBUIDAS');
+  }
+
+  listarOsCargaMecanico(
+    mecanicoId: number,
+    periodo: 'DIA' | 'SEMANA' | 'MES' = 'DIA',
+    tipo: 'ATRIBUIDAS' | 'EM_ANDAMENTO' | 'CONCLUIDAS' | 'CARGA_ATUAL' = 'ATRIBUIDAS'
+  ) {
+    return this.http.get<OS[]>(`${this.base}/carga-mecanicos/${mecanicoId}/os`, {
+      params: new HttpParams().set('periodo', periodo).set('tipo', tipo)
+    });
+  }
+
+  alertaSemAtribuicao() {
+    return this.http.get<{ diasLimite: number; total: number }>(`${this.base}/alerta-sem-atribuicao`);
+  }
+
+  listarAlertaSemAtribuicaoOs() {
+    return this.http.get<OS[]>(`${this.base}/alerta-sem-atribuicao/os`);
+  }
+
+  listarSemAtribuicaoOs() {
+    return this.http.get<OS[]>(`${this.base}/sem-atribuicao/os`);
   }
 
   painelResumo() {

@@ -112,9 +112,9 @@ export class OSFileService {
   /**
    * Download de um arquivo
    */
-  downloadFile(fileId: number) {
+  downloadFile(fileId: number, disposition: 'attachment' | 'inline' = 'attachment') {
     return this.http.get(`${this.base}/${fileId}/download`, {
-      responseType: 'blob'
+      responseType: 'blob', params: { disposition }
     });
   }
 
@@ -216,6 +216,14 @@ export class OSFileService {
     return this.uploadFiles(osId, [file]).pipe(
       map(progresses => progresses[0])
     );
+  }
+  uploadDiversos(files: File[]) {
+    const form = new FormData(); files.forEach(f => form.append('files', f, f.name));
+    return this.http.post<{message:string;files:OSFile[];count:number}>(`${this.base}/diversos/upload`,form,{headers:this.headersUsuarioAcao()});
+  }
+  uploadDiversosToOS(osId: number, files: File[]) {
+    const form = new FormData(); files.forEach(f => form.append('files', f, f.name));
+    return this.http.post<{message:string;files:OSFile[];count:number}>(`${this.base}/os/${osId}/diversos/upload`,form,{headers:this.headersUsuarioAcao()});
   }
 }
 

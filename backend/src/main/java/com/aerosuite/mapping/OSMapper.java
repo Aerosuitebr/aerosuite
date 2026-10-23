@@ -17,6 +17,9 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "cdi", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class OSMapper {
+    @Inject com.aerosuite.service.OsAccessPolicy access;
+    @AfterMapping
+    protected void mapAccess(OS entity, @MappingTarget OSDto dto) { access.preencher(entity, dto); }
 
     @Inject
     FabricanteService fabricanteService;
@@ -102,6 +105,16 @@ public abstract class OSMapper {
     @Mapping(target = "crsCertificadoNumero", ignore = true)
     @Mapping(target = "crsObservacoes", ignore = true)
     @Mapping(target = "crsChecklistJson", ignore = true)
+    @Mapping(target = "mecanicoResponsavelId", ignore = true)
+    @Mapping(target = "mecanicoResponsavelNome", ignore = true)
+    @Mapping(target = "mecanicoAtribuidoPorId", ignore = true)
+    @Mapping(target = "mecanicoAtribuidoPorNome", ignore = true)
+    @Mapping(target = "mecanicoAtribuidoEm", ignore = true)
+    @Mapping(target = "statusExecucao", ignore = true)
+    @Mapping(target = "execucaoIniciadaEm", ignore = true)
+    @Mapping(target = "execucaoPausadaEm", ignore = true)
+    @Mapping(target = "execucaoFinalizadaEm", ignore = true)
+    @Mapping(target = "jaEditada", ignore = true)
     public abstract OS toEntity(OSDto dto);
 
     @AfterMapping
@@ -188,6 +201,16 @@ public abstract class OSMapper {
     @Mapping(target = "crsCertificadoNumero", ignore = true)
     @Mapping(target = "crsObservacoes", ignore = true)
     @Mapping(target = "crsChecklistJson", ignore = true)
+    @Mapping(target = "mecanicoResponsavelId", ignore = true)
+    @Mapping(target = "mecanicoResponsavelNome", ignore = true)
+    @Mapping(target = "mecanicoAtribuidoPorId", ignore = true)
+    @Mapping(target = "mecanicoAtribuidoPorNome", ignore = true)
+    @Mapping(target = "mecanicoAtribuidoEm", ignore = true)
+    @Mapping(target = "statusExecucao", ignore = true)
+    @Mapping(target = "execucaoIniciadaEm", ignore = true)
+    @Mapping(target = "execucaoPausadaEm", ignore = true)
+    @Mapping(target = "execucaoFinalizadaEm", ignore = true)
+    @Mapping(target = "jaEditada", ignore = true)
     public abstract void updateEntityFromDto(OSDto dto, @MappingTarget OS entity);
 
     @AfterMapping

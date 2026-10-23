@@ -12,6 +12,8 @@ public class EnviarPropostaEmailDto {
 
     public Long propostaId;
     public String emailDestino;
+    /** Null usa a lista padrão da equipe; vazio desativa CCo somente neste envio. */
+    public String emailsCco;
     public String assunto;
     public String mensagemAdicional;
     public String tipoEnvio; // "corpo" ou "anexo"

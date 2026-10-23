@@ -1,4 +1,6 @@
-import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef, HostListener } from '@angular/core';
+import { OsExecucaoComponent } from './os-execucao.component';
+import { OsEtiquetaDialogComponent, EtiquetaOs } from './fluxo/os-etiqueta-dialog.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -63,6 +65,8 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
   selector: 'app-os-list',
   standalone: true,
   imports: [
+    OsExecucaoComponent,
+    OsEtiquetaDialogComponent,
     ListTableScrollDirective,
     CommonModule,
     FormsModule,
@@ -106,6 +110,8 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
         titleIcon="pi-file-edit"
         [hasActions]="true">
         <div actions class="header-actions">
+            <button pButton type="button" label="Fluxo da oficina" icon="pi pi-chart-line" (click)="abrirFluxoOficina()"></button>
+            <button pButton type="button" label="Carga de mecânicos" icon="pi pi-users" (click)="abrirCargaMecanicos()"></button>
             <app-page-help></app-page-help>
             <button 
               pButton 
@@ -166,6 +172,14 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
             </button>
           </div>
           
+          <div class="operation-filters">
+            <label for="os-fila">Fila</label>
+            <p-dropdown inputId="os-fila" [options]="filtroFilaOptions" optionLabel="label" optionValue="value"
+                        [(ngModel)]="filtroFila" (onChange)="buscar()"></p-dropdown>
+            <label for="os-status">Status operacional</label>
+            <p-dropdown inputId="os-status" [options]="filtroStatusOptions" optionLabel="label" optionValue="value"
+                        [(ngModel)]="filtroStatus" [showClear]="true" placeholder="Todos" (onChange)="buscar()"></p-dropdown>
+          </div>
           <div class="stats-container" [class.stats-container--extended]="dashboardExtendido">
             <div class="stat-item">
               <div class="stat-number">{{ total }}</div>
@@ -294,12 +308,16 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                       (click)="$event.stopPropagation()"></i>
                     <div class="os-id">
                       <strong>{{ formatOSId(row) }}</strong>
+                      <button *ngIf="row.naoConformidadesTotal" pButton type="button" class="p-button-text p-button-sm" icon="pi pi-exclamation-circle"
+                              [label]="'NC: ' + row.naoConformidadesTotal" (click)="$event.stopPropagation(); abrirNaoConformidades(row)"></button>
                     </div>
                   </div>
                 </td>
                 <td>
                   <div class="cliente-nome">
                     {{ row.clienteNome || '-' }}
+                    <small style="display:block">{{ statusOperacionalLabel(row.statusOperacional) }} · {{ row.mecanicoResponsavelNome || 'Sem mecânico' }}</small>
+                    <small *ngIf="row.alertaSemAtribuicao" class="text-orange-600">Sem atribuição há {{ row.diasSemAtribuicao }} dias</small>
                   </div>
                 </td>
                 <td>
@@ -347,7 +365,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                       pButton 
                       type="button" 
                       icon="pi pi-pencil" 
-                      class="p-button-text p-button-sm edit-btn"
+                      class="p-button-text p-button-sm edit-btn" *ngIf="row.podeEditar !== false"
                       [pTooltip]="'os.list.tooltip.edit' | translate"
                       [attr.aria-label]="'os.list.tooltip.edit' | translate"
                       (click)="editOS(row)">
@@ -356,7 +374,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                       pButton 
                       type="button" 
                       icon="pi pi-trash" 
-                      class="p-button-text p-button-sm delete-btn"
+                      class="p-button-text p-button-sm delete-btn" *ngIf="!row.escopoEdicao || row.escopoEdicao === 'TOTAL'"
                       [pTooltip]="'os.list.tooltip.delete' | translate"
                       [attr.aria-label]="'os.list.tooltip.delete' | translate"
                       (click)="confirmDelete(row)">
@@ -382,6 +400,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
         </div>
       </div>
 
+      <app-os-etiqueta-dialog [(visible)]="etiquetaVisivel" [os]="etiquetaOs"></app-os-etiqueta-dialog>
       <!-- OS Modal -->
       <p-dialog 
         styleClass="as-hero-dialog" [(visible)]="showOSModal" 
@@ -450,6 +469,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
             </button>
           </div>
 
+          <app-os-execucao *ngIf="currentOS?.id" [osId]="currentOS!.id!" (osChanged)="onExecucaoChanged($event)"></app-os-execucao>
           <app-os-conformidade-alertas
             *ngIf="isEditing && currentOS?.id"
             [osId]="currentOS!.id!"></app-os-conformidade-alertas>
@@ -1492,7 +1512,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
             <ng-template pTemplate="body" let-item>
               <tr>
                 <td><strong>{{ item.productPn || '-' }}</strong></td>
-                <td>{{ item.productName || '-' }}</td>
+                <td>{{ item.productName || '-' }}<small *ngIf="item.situacaoLabel" style="display:block">{{ item.situacaoLabel }}</small></td>
                 <td class="num-col">{{ item.quantidadeNecessaria }}</td>
                 <td class="num-col">{{ item.quantidadeDisponivel }}</td>
                 <td class="num-col"><strong class="kit-deficit-value-faltante">{{ item.deficit }}</strong></td>
@@ -1501,7 +1521,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
           </p-table>
         </div>
 
-        <ng-template pTemplate="footer">
+        <ng-template pTemplate="footer"><button pButton type="button" label="Copiar lista de conferência" icon="pi pi-copy" (click)="copyKitDeficitChecklist()" [disabled]="!kitDeficitItens.length"></button><button pButton type="button" label="Imprimir lista" icon="pi pi-print" (click)="printKitDeficitChecklist()" [disabled]="!kitDeficitItens.length"></button>
           <button pButton type="button" [label]="'os.form.btn.close' | translate" icon="pi pi-times"
                   class="p-button-text" (click)="closeKitDeficitModal()"></button>
         </ng-template>
@@ -1524,6 +1544,24 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
   styleUrls: ['./os-list.component.scss', '../shared/styles/list-styles.scss']
 })
 export class OSListComponent implements OnInit, OnDestroy {
+  etiquetaVisivel = false;
+  etiquetaOs: EtiquetaOs | null = null;
+  abrirNaoConformidades(os: OS) { this.router.navigate(['/conformidade/nao-conformidades'], {queryParams:{osId:os.id}}); }
+  statusOperacionalLabel(status: string): string { return this.filtroStatusOptions.find(o => o.value === status)?.label || status || 'Aguardando distribuição'; }
+  @HostListener('document:keydown', ['$event'])
+  onAtalhoSalvarOs(event: KeyboardEvent) {
+    if (this.showOSModal && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+      event.preventDefault();
+      if (!this.isReadOnly && !this.registroEncerrado && !this.saving && this.osForm.enabled) this.saveOS();
+    }
+  }
+  filtroFila = 'TODAS';
+  filtroStatus: string | null = null;
+  filtroFilaOptions = [{label:'Todas',value:'TODAS'},{label:'Sem mecânico',value:'SEM_MECANICO'},{label:'Sem atribuição há mais de 5 dias',value:'ALERTA_5_DIAS'}];
+  filtroStatusOptions = [{label:'Aguardando distribuição',value:'AGUARDANDO_DISTRIBUICAO'},{label:'Atribuída',value:'ATRIBUIDA'},{label:'Em execução',value:'EM_EXECUCAO'},{label:'Pausada',value:'PAUSADA'},{label:'Concluída',value:'CONCLUIDA'},{label:'Fechada',value:'FECHADA'}];
+  onExecucaoChanged(os: OS) { this.currentOS = {...this.currentOS, ...os}; this.syncRegistroEncerrado(this.currentOS); this.reload(); }
+  abrirFluxoOficina() { this.router.navigate(['/os/fluxo']); }
+  abrirCargaMecanicos() { this.router.navigate(['/os/carga-mecanicos']); }
   readonly listRowsPerPageOptions = LIST_ROWS_PER_PAGE_OPTIONS;
 
   get osModalHeader(): string {
@@ -1826,7 +1864,9 @@ export class OSListComponent implements OnInit, OnDestroy {
       page: this.pageIndex,
       size: this.size,
       sort: this.sortField + ',' + (this.sortOrder === 1 ? 'asc' : 'desc'),
-      q: this.q.trim() || undefined
+      q: this.q.trim() || undefined,
+      fila: this.filtroFila,
+      statusOperacional: this.filtroStatus
     }).subscribe({
       next: (response) => {
         if (this.requestGuard.isStale(seq)) {
@@ -2291,7 +2331,7 @@ export class OSListComponent implements OnInit, OnDestroy {
   editOS(os: OS) {
     this.ensureOsFormLookupsLoaded();
     this.isEditing = true;
-    this.isReadOnly = false;
+    this.isReadOnly = os.podeEditar === false;
     this.currentOS = os;
     const rawFabricanteId = (os as any).idFabricanteId ?? ((os as any).idFabricante?.id ?? (typeof (os as any).idFabricante?.id === 'function' ? (os as any).idFabricante?.id?.() : null)) ?? ((os as any).fabricante?.id ?? (typeof (os as any).fabricante?.id === 'function' ? (os as any).fabricante?.id?.() : null)) ?? (os as any).fabricanteId ?? null;
     const fabricanteId = rawFabricanteId != null ? Number(rawFabricanteId) : null;
@@ -2435,6 +2475,7 @@ export class OSListComponent implements OnInit, OnDestroy {
       this.api.getById(os.id).subscribe({
         next: (full) => {
           this.currentOS = full as any;
+          this.syncRegistroEncerrado(this.currentOS);
           this.mapTrocasFromOs(full);
           this.cdr.detectChanges();
         },
@@ -2720,6 +2761,13 @@ export class OSListComponent implements OnInit, OnDestroy {
       this.osForm.disable({ emitEvent: false });
     } else if (!this.isReadOnly) {
       this.osForm.enable({ emitEvent: false });
+      const scope = os?.escopoEdicao;
+      if (os?.id && scope && scope !== 'TOTAL') {
+        this.osForm.disable({ emitEvent: false });
+        const fields = scope === 'MECANICO' ? ['tipoServicoId','inicioServico','fimServico','dataFechamento'] :
+          scope === 'BIBLIOTECA' ? ['manualPn','numRevisao','dataRevManual','ataManual','tituloAds','tituloAfins','boletinsServAfins'] : [];
+        fields.forEach(f => this.osForm.get(f)?.enable({emitEvent:false}));
+      }
     }
   }
 
@@ -3245,6 +3293,89 @@ export class OSListComponent implements OnInit, OnDestroy {
   }
 
   // Consult Modal Methods
+  getKitDeficitSituacaoFallback(item: KitFcuDeficitItem): string {
+    if (item.cadastradoNoCatalogo && !item.temEntradaEstoque) {
+      return 'Cadastrado no catálogo, sem entrada no estoque';
+    }
+    if (!item.temEntradaEstoque) {
+      return 'Sem entrada no estoque';
+    }
+    if ((item.quantidadeDisponivel ?? 0) <= 0) {
+      return 'Sem unidades disponíveis';
+    }
+    return 'Estoque insuficiente';
+  }
+
+  getKitDeficitSituacaoSeverity(item: KitFcuDeficitItem): 'warning' | 'danger' | 'info' | 'secondary' {
+    switch (item.situacaoEstoque) {
+      case 'SEM_ENTRADA':
+        return 'warning';
+      case 'SEM_DISPONIVEL':
+      case 'INSUFICIENTE':
+        return 'danger';
+      case 'SEM_CADASTRO':
+        return 'danger';
+      default:
+        return item.cadastradoNoCatalogo && !item.temEntradaEstoque ? 'warning' : 'info';
+    }
+  }
+
+  buildKitDeficitChecklistText(): string {
+    const os = this.kitDeficitOs;
+    const osLabel = os ? this.formatOSId(os) : '-';
+    const cliente = os?.clienteNome?.trim() || '-';
+    const fcuPn = os?.fcuPn || os?.partNumber || '-';
+    const data = new Date().toLocaleString('pt-BR');
+    const linhas = this.kitDeficitItens.map((item, idx) => {
+      const qtd = item.quantidadeEntradaPendente ?? item.deficit;
+      const sit = item.situacaoLabel || this.getKitDeficitSituacaoFallback(item);
+      return `${String(idx + 1).padStart(2, ' ')}. ${(item.productPn || '-').padEnd(14)} | ${(item.productName || '-').padEnd(16).slice(0, 16)} | entrar: ${String(qtd).padStart(3)} | ${sit}`;
+    });
+    return [
+      'LISTA DE CONFERÊNCIA — ENTRADA DE MERCADORIA (KIT FCU)',
+      `OS: ${osLabel}  |  Cliente: ${cliente}  |  FCU: ${fcuPn}`,
+      `Gerado em: ${data}`,
+      '',
+      'P/N            | Produto          | Qtd a entrar | Situação',
+      '─'.repeat(72),
+      ...linhas,
+      '',
+      `Total de itens: ${this.kitDeficitItens.length}`,
+      'Ação: Estoque → Entrada de mercadoria (usar o mesmo P/N do kit FCU).'
+    ].join('\n');
+  }
+
+  copyKitDeficitChecklist(): void {
+    const text = this.buildKitDeficitChecklistText();
+    navigator.clipboard.writeText(text).then(() => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Lista copiada',
+        detail: 'Lista de conferência copiada para a área de transferência.'
+      });
+    }).catch(() => {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Não foi possível copiar',
+        detail: 'Selecione o texto da lista manualmente.'
+      });
+    });
+  }
+
+  printKitDeficitChecklist(): void {
+    const text = this.buildKitDeficitChecklistText();
+    const w = window.open('', '_blank');
+    if (!w) {
+      this.messageService.add({ severity: 'warn', summary: 'Impressão', detail: 'Permita pop-ups para imprimir.' });
+      return;
+    }
+    w.document.write(`<pre style="font-family:Consolas,monospace;font-size:12px;white-space:pre-wrap;padding:24px">${text.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</pre>`);
+    w.document.close();
+    w.focus();
+    w.print();
+  }
+
+
   openOSConsultModal() {
     this.showOSConsultModal = true;
     this.consultSearchQuery = '';
@@ -3620,6 +3751,8 @@ export class OSListComponent implements OnInit, OnDestroy {
     } else {
       this.api.create(formValue).subscribe({
         next: (createdOS) => {
+          this.etiquetaOs = {id:createdOS.id!,codigo:`OS${createdOS.id}`,cliente:createdOS.clienteNome,partNumber:createdOS.partNumber,serialNumber:createdOS.serialNumber,numOsOriginal:createdOS.numOsOriginal};
+          this.etiquetaVisivel = true;
           this.currentOS = createdOS;
           this.saving = false;
           this.toast(
