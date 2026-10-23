@@ -302,6 +302,9 @@ import { OSFileService } from '../core/os-file.service';
   `
 })
 export class HangarJobCardComponent implements OnInit, OnDestroy {
+  /** Exposto para os parâmetros das traduções no template Angular. */
+  protected readonly String = String;
+
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private jobCard = inject(JobCardService);

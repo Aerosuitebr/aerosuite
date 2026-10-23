@@ -379,6 +379,9 @@ import { formatUiDateTime } from '../../core/locale/locale-intl.util';
   `]
 })
 export class OSAuditoriaComponent implements OnInit {
+  /** Exposto para os parâmetros das traduções no template Angular. */
+  protected readonly String = String;
+
   @Input() idOs!: number;
   @Input() numeroOs?: number;
   

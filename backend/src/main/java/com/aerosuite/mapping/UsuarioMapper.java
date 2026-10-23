@@ -3,10 +3,12 @@ package com.aerosuite.mapping;
 import com.aerosuite.model.Perfil;
 import com.aerosuite.domain.Usuario;
 import com.aerosuite.dto.UsuarioDto;
+import com.aerosuite.util.DisplayTextRepair;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "cdi", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UsuarioMapper {
+    @Mapping(target = "nome", expression = "java(com.aerosuite.util.DisplayTextRepair.repair(e.nome))")
     @Mapping(target = "perfilId", source = "perfil.id")
     @Mapping(target = "perfil", source = "perfil")
     UsuarioDto toDto(Usuario e);
@@ -18,7 +20,7 @@ public interface UsuarioMapper {
         }
         return new UsuarioDto.PerfilInfo(
             perfil.getId() != null ? perfil.getId().intValue() : null,
-            perfil.getNome(),
+            DisplayTextRepair.repair(perfil.getNome()),
             perfil.getCodigo()
         );
     }

@@ -45,7 +45,7 @@ export const LISTING_COMERCIAL_PT_BR: TranslationDictionary = {
   'comercial.proposta.status.REJEITADA': 'Rejeitada',
   'comercial.proposta.status.CANCELADA': 'Cancelada',
 
-  'comercial.list.templates.title': 'Templates de Produto/Serviço',
+  'comercial.list.templates.title': 'Templates de Proposta',
   'comercial.list.templates.subtitle': 'Gerencie templates para agilizar a criação de propostas comerciais',
   'comercial.list.templates.banner.badge': 'Comercial',
   'comercial.list.templates.banner.chipReuse': 'Reutilização',
@@ -197,7 +197,7 @@ export const LISTING_COMERCIAL_EN_US: TranslationDictionary = {
   'comercial.proposta.status.REJEITADA': 'Rejected',
   'comercial.proposta.status.CANCELADA': 'Cancelled',
 
-  'comercial.list.templates.title': 'Product / service templates',
+  'comercial.list.templates.title': 'Proposal templates',
   'comercial.list.templates.subtitle': 'Manage templates to speed up commercial proposals',
   'comercial.list.templates.banner.badge': 'Commercial',
   'comercial.list.templates.banner.chipReuse': 'Reuse',
@@ -349,7 +349,7 @@ export const LISTING_COMERCIAL_ES_ES: TranslationDictionary = {
   'comercial.proposta.status.REJEITADA': 'Rechazada',
   'comercial.proposta.status.CANCELADA': 'Cancelada',
 
-  'comercial.list.templates.title': 'Plantillas de producto/servicio',
+  'comercial.list.templates.title': 'Plantillas de propuesta',
   'comercial.list.templates.subtitle': 'Gestione plantillas para agilizar propuestas comerciales',
   'comercial.list.templates.banner.badge': 'Comercial',
   'comercial.list.templates.banner.chipReuse': 'Reutilización',
@@ -500,7 +500,7 @@ export const LISTING_COMERCIAL_FR_FR: TranslationDictionary = {
   'comercial.proposta.status.REJEITADA': 'Rejetée',
   'comercial.proposta.status.CANCELADA': 'Annulée',
 
-  'comercial.list.templates.title': 'Modèles produit / service',
+  'comercial.list.templates.title': 'Modèles de proposition',
   'comercial.list.templates.subtitle': 'Gérez les modèles pour accélérer les propositions commerciales',
   'comercial.list.templates.banner.badge': 'Commercial',
   'comercial.list.templates.banner.chipReuse': 'Réutilisation',

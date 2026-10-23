@@ -456,6 +456,18 @@
   }
 }
 
+/* A navegação por teclado precisa ter o mesmo destaque inequívoco da interação
+ * por mouse, inclusive nos links compactos do cabeçalho e do rodapé. */
+.auth-shell :is(a, button, input, [role='button'], .p-dropdown):focus-visible {
+  outline: 3px solid var(--auth-accent);
+  outline-offset: 3px;
+}
+
+.auth-shell .p-inputtext:focus-visible,
+.auth-shell .p-password-input:focus-visible {
+  outline: none;
+}
+
 .auth-form-actions,
 .form-actions {
   display: flex;

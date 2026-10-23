@@ -145,6 +145,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                 type="text" 
                 pInputText 
                 [(ngModel)]="q" 
+                [attr.aria-label]="'os.list.searchPlaceholder' | translate"
                 [placeholder]="'os.list.searchPlaceholder' | translate" 
                 (input)="onSearchChange($event)"
                 (keyup.enter)="buscar()"
@@ -273,7 +274,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                   {{ 'os.list.col.openDate' | translate }}
                   <p-sortIcon field="dtAbertura"></p-sortIcon>
                 </th>
-                <th style="width: 120px;">{{ 'common.list.col.actions' | translate }}</th>
+                <th class="col-actions" style="width: 120px;">{{ 'common.list.col.actions' | translate }}</th>
               </tr>
             </ng-template>
 
@@ -340,7 +341,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                     {{ row.dtAbertura ? (row.dtAbertura | localeDateTime:'dateNumeric') : '-' }}
                   </div>
                 </td>
-                <td>
+                <td class="col-actions">
                   <div class="action-buttons" (click)="$event.stopPropagation()">
                     <button 
                       pButton 
@@ -889,6 +890,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                           icon="pi pi-eye"
                           class="p-button-sm p-button-text p-button-primary"
                           [pTooltip]="'os.form.files.view' | translate"
+                          [attr.aria-label]="'os.form.files.view' | translate"
                           tooltipPosition="top"
                           (click)="viewFile(file)">
                         </button>
@@ -898,6 +900,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                           icon="pi pi-download"
                           class="p-button-sm p-button-text p-button-primary"
                           [pTooltip]="'os.form.files.download' | translate"
+                          [attr.aria-label]="'os.form.files.download' | translate"
                           tooltipPosition="top"
                           (click)="downloadFile(file)">
                         </button>
@@ -908,6 +911,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                           icon="pi pi-trash"
                           class="p-button-sm p-button-text p-button-danger"
                           [pTooltip]="'os.form.files.remove' | translate"
+                          [attr.aria-label]="'os.form.files.remove' | translate"
                           tooltipPosition="top"
                           (click)="removeFile(file)">
                         </button>
@@ -1126,6 +1130,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                         <td *ngIf="!isReadOnly" class="col-troca-ac">
                           <button *ngIf="podeExcluirItemTroca(item)" pButton type="button" icon="pi pi-trash"
                             class="p-button-text p-button-danger p-button-sm" [pTooltip]="'os.form.troca.remove' | translate"
+                            [attr.aria-label]="'os.form.troca.remove' | translate"
                             (click)="removeTrocasItem(ti)"></button>
                         </td>
                       </tr>
@@ -1333,6 +1338,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                   type="text" 
                   pInputText 
                   [(ngModel)]="consultSearchQuery" 
+                  [attr.aria-label]="'os.form.consult.search' | translate"
                   [placeholder]="'os.form.consult.search' | translate" 
                   (keyup.enter)="searchOSConsult()"
                   class="search-input">
@@ -1344,6 +1350,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                 class="p-button-outlined search-btn"
                 (click)="searchOSConsult()"
                 [pTooltip]="'os.list.tooltip.search' | translate"
+                [attr.aria-label]="'os.list.tooltip.search' | translate"
                 tooltipPosition="top">
               </button>
               <button 
@@ -1353,6 +1360,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                 class="p-button-text clear-btn"
                 (click)="clearOSConsult()"
                 [pTooltip]="'os.form.consult.tooltip.clear' | translate"
+                [attr.aria-label]="'os.form.consult.tooltip.clear' | translate"
                 tooltipPosition="top">
               </button>
             </div>
@@ -1432,6 +1440,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                         class="p-button-success p-button-sm select-btn"
                         (click)="selectOS(os)"
                         [pTooltip]="'os.form.consult.select' | translate"
+                        [attr.aria-label]="'os.form.consult.select' | translate"
                         tooltipPosition="top"
                         [disabled]="isSelectingOS">
                       </button>

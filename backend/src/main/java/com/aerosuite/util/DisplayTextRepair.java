@@ -74,6 +74,10 @@ public final class DisplayTextRepair {
         s = s.replaceAll("(?i)Calibra\\?{1,2}o", "Calibração");
         s = s.replaceAll("(?i)Inspe\\?{1,2}o", "Inspeção");
         s = s.replaceAll("(?i)Servi\\?{1,2}o", "Serviço");
+        s = s.replaceAll("(?i)Homologa\\?{1,4}o", "Homologação");
+        s = s.replaceAll("(?i)Demonstra\\?{1,4}o", "Demonstração");
+        s = s.replaceAll("(?i)Revis\\?{1,2}o", "Revisão");
+        s = s.replaceAll("(?i)Permiss\\?{1,4}es", "Permissões");
         s = s.replaceAll("(?i)N\\?{1,2}o", "Não");
         if (s.toUpperCase(Locale.ROOT).startsWith("?") && s.length() > 1) {
             char next = s.charAt(s.lastIndexOf('?') + 1);
