@@ -33,13 +33,14 @@ interface EdicaoMaquina {
                   label="Painel do fluxo" routerLink="/os/fluxo"></button>
           <p class="fx-eyebrow">Controle de fluxo · Configuração</p>
           <h1>Gerenciar estações</h1>
-          <p class="fx-lead ge-lead">Renomeie as estações de bipagem e defina quais computadores funcionam como estação.</p>
+          <p class="fx-lead ge-lead">Organize as estações, consulte as etapas atendidas e gerencie as máquinas vinculadas.</p>
         </div>
         <div class="fx-hero-actions">
           <button type="button" class="fx-ghost-btn" (click)="carregar()" [disabled]="carregando">
             <i class="pi pi-refresh" [class.pi-spin]="carregando"></i> Atualizar
           </button>
-          <a class="fx-ghost-btn is-primary" routerLink="/os/fluxo/estacao"><i class="pi pi-qrcode"></i> Estação de bipagem</a>
+          <a class="fx-ghost-btn" routerLink="/os/fluxo/estacao"><i class="pi pi-qrcode"></i> Estação de bipagem</a>
+          <button pButton type="button" label="Nova Estação" icon="pi pi-plus" (click)="abrirEstacao()" [disabled]="!dados"></button>
         </div>
       </header>
 
@@ -58,52 +59,23 @@ interface EdicaoMaquina {
         <section class="fx-card">
           <div class="fx-card-head">
             <h2>Estações</h2>
-            <span class="ge-hint">Clique no nome para editar. Apague o nome para voltar ao original.</span>
+            <span class="ge-hint">{{ d.estacoes.length }} estações · Selecione Editar para alterar um nome.</span>
           </div>
           <div class="fx-card-body">
-            <div class="ge-grupos">
-              <article class="ge-grupo" *ngFor="let e of d.estacoes; trackBy: trackEstacao" [style.--stage]="e.cor || '#334155'">
-                <header class="ge-grupo-head">
-                  <span class="ge-grupo-ico"><i class="pi pi-desktop"></i></span>
-                  <div class="ge-grupo-tit">
-                    <h3>{{ e.nome }}</h3>
-                  </div>
-                  <span class="fx-chip ge-chip" [ngClass]="e.maquinas ? 'fx-chip--done' : 'fx-chip--muted'">
-                    <i class="pi pi-server"></i> {{ e.maquinas }} {{ e.maquinas === 1 ? 'máquina' : 'máquinas' }}
-                  </span>
-                </header>
-
-                <div>
-                  <label class="ge-label" [attr.for]="'nome-' + e.codigo">Nome da estação</label>
-                  <div class="ge-nome">
-                    <span class="ge-field">
-                      <i class="pi pi-pencil"></i>
-                      <input pInputText class="ge-input" [id]="'nome-' + e.codigo" [(ngModel)]="nomes[e.codigo]" [placeholder]="e.nomePadrao"
-                             maxlength="120" (keydown.enter)="salvarNome(e)" [disabled]="salvandoNome === e.codigo" />
-                    </span>
-                    <button pButton type="button" icon="pi pi-check" class="p-button-sm" pTooltip="Salvar nome"
-                            *ngIf="nomeAlterado(e) || salvandoNome === e.codigo"
-                            [loading]="salvandoNome === e.codigo" (click)="salvarNome(e)"></button>
-                  </div>
-                  <div class="ge-orig" *ngIf="e.nomePersonalizado">
-                    Original: <b>{{ e.nomePadrao }}</b>
-                    <button type="button" class="ge-link" (click)="restaurarNome(e)" [disabled]="salvandoNome === e.codigo">restaurar</button>
-                  </div>
-                </div>
-
-                <div class="ge-etapas" *ngIf="maquinasDa(e.codigo) as maqs">
-                  <span class="ge-etapas-tit">Máquinas</span>
-                  <span class="ge-etapa ge-maq-chip" *ngFor="let m of maqs" [class.on]="m.ativa">
-                    <i class="pi pi-server"></i> {{ m.apelido || 'Sem nome' }}
-                  </span>
-                  <span class="ge-vazio" *ngIf="!maqs.length">Nenhuma máquina vinculada</span>
-                </div>
-
-                <div class="ge-etapas">
-                  <span class="ge-etapas-tit">Etapas atendidas</span>
-                  <span class="ge-etapa" *ngFor="let et of e.etapas">{{ et }}</span>
-                </div>
-              </article>
+            <div class="ge-search"><i class="pi pi-search"></i><input pInputText [(ngModel)]="buscaEstacao" aria-label="Buscar estações" placeholder="Buscar por estação, setor ou etapa" /></div>
+            <div class="ge-table-wrap">
+              <table class="fx-table ge-table ge-stations">
+                <thead><tr><th>Nome da estação</th><th>Máquinas vinculadas</th><th>Etapas atendidas</th><th class="r">Ações</th></tr></thead>
+                <tbody>
+                  <tr *ngFor="let e of estacoesFiltradas; trackBy: trackEstacao">
+                    <td><strong class="ge-station-name"><span class="ge-stage-dot" [style.background]="e.cor || '#334155'"></span>{{ e.nome }}</strong><small class="ge-sub ge-block">{{ e.setor }}</small></td>
+                    <td><span class="fx-chip ge-chip" [ngClass]="e.maquinas ? 'fx-chip--done' : 'fx-chip--muted'">{{ e.maquinas }} {{ e.maquinas === 1 ? 'máquina' : 'máquinas' }}</span><small class="ge-sub ge-machine-summary" *ngIf="e.maquinas" [title]="nomesMaquinas(e.codigo)">{{ nomesMaquinas(e.codigo) }}</small></td>
+                    <td><details class="ge-stage-details"><summary>{{ e.etapas.length }} {{ e.etapas.length === 1 ? 'etapa atendida' : 'etapas atendidas' }}</summary><ul><li *ngFor="let etapa of e.etapas">{{ etapa }}</li></ul></details></td>
+                    <td><div class="ge-row-actions"><button pButton type="button" label="Editar" icon="pi pi-pencil" class="p-button-text p-button-sm" [attr.aria-label]="'Editar estação ' + e.nome" (click)="abrirEstacao(e)"></button><button pButton type="button" label="Excluir" icon="pi pi-trash" class="p-button-text p-button-danger p-button-sm" [attr.aria-label]="'Excluir estação ' + e.nome" (click)="pedirExclusaoEstacao(e)"></button></div></td>
+                  </tr>
+                  <tr *ngIf="!estacoesFiltradas.length"><td colspan="4" class="ge-empty">{{ d.estacoes.length ? 'Nenhuma estação encontrada para esta busca.' : 'Nenhuma estação cadastrada. Use Nova Estação para começar.' }}</td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </section>
@@ -126,7 +98,7 @@ interface EdicaoMaquina {
             <ul class="ge-ajuda-det" *ngIf="ajudaAberta">
               <li>Na máquina nova, alguém entra no sistema e abre a <b>Estação de Bipagem</b>: aparece um código de 8 números.</li>
               <li>Aqui, clique em <b>Parear máquina</b>, digite o código, escolha a estação e confirme. A tela da máquina abre sozinha.</li>
-              <li>Troque a estação ou dê um nome à máquina e clique em <b>Salvar</b>.</li>
+              <li>Clique em <b>Editar</b> para trocar a estação ou alterar o nome da máquina e depois em <b>Salvar</b>.</li>
               <li><b>Remover</b> faz a máquina deixar de ser estação. Se a Estação de Bipagem for aberta nela de novo, ela mostra um novo código de pareamento.</li>
             </ul>
 
@@ -151,14 +123,7 @@ interface EdicaoMaquina {
                   <ng-container *ngFor="let m of d.maquinas; trackBy: trackMaquina">
                     <tr [class.ge-atual]="m.terminalId === terminalAtual" [class.ge-aberta]="detalhe === m.terminalId">
                       <td class="ge-maq">
-                        <span class="ge-field">
-                          <i class="pi pi-pencil"></i>
-                          <input pInputText class="ge-input" [(ngModel)]="edicao[m.terminalId].apelido" placeholder="Nome (ex.: Bancada 2)"
-                                 maxlength="120" (keydown.enter)="salvarMaquina(m)" [class.ge-input--erro]="!edicao[m.terminalId].apelido.trim()" />
-                        </span>
-                        <small class="ge-aviso" *ngIf="!edicao[m.terminalId].apelido.trim()">
-                          <i class="pi pi-exclamation-triangle"></i> Dê um nome: é ele que diferencia as máquinas da mesma estação
-                        </small>
+                        <strong>{{ m.apelido || 'Sem nome' }}</strong>
                         <div class="ge-maq-meta">
                           <span class="fx-chip fx-chip--accent ge-chip" *ngIf="m.terminalId === terminalAtual"><i class="pi pi-map-marker"></i> esta máquina</span>
                           <span>{{ navegador(m.userAgent) }}</span>
@@ -169,8 +134,7 @@ interface EdicaoMaquina {
                         </div>
                       </td>
                       <td class="ge-est-cell">
-                        <p-dropdown [options]="opcoesEstacao" [(ngModel)]="edicao[m.terminalId].estacaoCodigo" optionLabel="label" optionValue="value"
-                                    appendTo="body" styleClass="ge-dropdown" [style]="{ width: '100%' }" placeholder="Escolha a estação"></p-dropdown>
+                        {{ nomeEstacao(m.estacaoCodigo) || m.estacaoNome || 'Estação indisponível' }}
                         <small class="ge-aviso" *ngIf="!estacaoExiste(m.estacaoCodigo)">
                           <i class="pi pi-exclamation-triangle"></i> A estação "{{ m.estacaoNome || m.estacaoCodigo }}" não existe mais
                         </small>
@@ -185,10 +149,7 @@ interface EdicaoMaquina {
                       <td class="ge-quem">{{ m.usuarioNome || '—' }}</td>
                       <td class="r">
                         <div class="ge-acoes">
-                          <button pButton type="button" icon="pi pi-check" label="Salvar" class="p-button-sm ge-btn-salvar"
-                                  [disabled]="!maquinaAlterada(m) || !edicao[m.terminalId].estacaoCodigo || !edicao[m.terminalId].apelido.trim()"
-                                  [loading]="salvandoMaquina === m.terminalId"
-                                  (click)="salvarMaquina(m)"></button>
+                          <button pButton type="button" icon="pi pi-pencil" label="Editar" class="p-button-sm p-button-text" (click)="abrirMaquina(m)"></button>
                           <button pButton type="button" icon="pi pi-trash" label="Remover" class="p-button-sm ge-btn-remover"
                                   pTooltip="Esta máquina deixa de ser estação" tooltipPosition="left"
                                   [disabled]="salvandoMaquina === m.terminalId" (click)="pedirRemocao(m)"></button>
@@ -214,6 +175,55 @@ interface EdicaoMaquina {
         </section>
       </ng-container>
     </div>
+
+
+    <p-dialog [(visible)]="mostrarEstacao" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body"
+              [closable]="!salvandoEstacao" [closeOnEscape]="!salvandoEstacao" [header]="estacaoEmEdicao ? 'Editar estação' : 'Nova Estação'" [style]="{ width: '520px', maxWidth: '95vw' }">
+      <div class="gp">
+        <label class="ge-label" for="ge-est-nome">Nome da estação</label>
+        <input pInputText id="ge-est-nome" [(ngModel)]="estacaoNome" maxlength="120" placeholder="Ex.: Oficina 6" [disabled]="salvandoEstacao" />
+        <ng-container *ngIf="!estacaoEmEdicao">
+          <label class="ge-label" for="ge-est-setor">Setor</label>
+          <p-dropdown inputId="ge-est-setor" [options]="opcoesSetor" [(ngModel)]="estacaoSetor" appendTo="body" [style]="{ width: '100%' }" placeholder="Selecione o setor" [disabled]="salvandoEstacao"></p-dropdown>
+          <small class="gp-opc">A estação atenderá as etapas do setor selecionado. Após criar, use Parear máquina para vincular os computadores.</small>
+        </ng-container>
+        <p class="ge-dlg-txt fx-muted" *ngIf="estacaoEmEdicao">Setor: {{ estacaoEmEdicao.setor }}. As máquinas vinculadas serão mantidas.</p>
+        <small class="gp-erro" *ngIf="erroEstacao" role="alert">{{ erroEstacao }}</small>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton type="button" label="Cancelar" class="p-button-text" [disabled]="salvandoEstacao" (click)="mostrarEstacao = false"></button>
+        <button pButton type="button" [label]="estacaoEmEdicao ? 'Salvar alterações' : 'Criar estação'" icon="pi pi-check" [loading]="salvandoEstacao" [disabled]="!estacaoNome.trim() || (!estacaoEmEdicao && !estacaoSetor)" (click)="salvarEstacao()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="mostrarExcluirEstacao" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body" header="Excluir estação"
+              [closable]="!excluindoEstacao" [closeOnEscape]="!excluindoEstacao" [style]="{ width: '480px', maxWidth: '95vw' }">
+      <ng-container *ngIf="estacaoParaExcluir as e">
+        <p class="ge-dlg-txt">Deseja excluir a estação <b>{{ e.nome }}</b>?</p>
+        <p class="ge-dlg-txt ge-dlg-warn" *ngIf="e.maquinas">{{ e.maquinas }} {{ e.maquinas === 1 ? 'máquina perderá' : 'máquinas perderão' }} o vínculo e {{ e.maquinas === 1 ? 'precisará' : 'precisarão' }} de um novo pareamento para continuar a bipagem.</p>
+        <p class="ge-dlg-txt fx-muted">As etapas do fluxo e o histórico das OS serão preservados.</p>
+        <small class="gp-erro" *ngIf="erroExclusao" role="alert">{{ erroExclusao }}</small>
+      </ng-container>
+      <ng-template pTemplate="footer">
+        <button pButton type="button" label="Cancelar" class="p-button-text" [disabled]="excluindoEstacao" (click)="mostrarExcluirEstacao = false"></button>
+        <button pButton type="button" label="Excluir estação" icon="pi pi-trash" class="p-button-danger" [loading]="excluindoEstacao" (click)="excluirEstacao()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="mostrarEditarMaquina" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body" header="Editar máquina"
+              [closable]="!salvandoMaquina" [closeOnEscape]="!salvandoMaquina" [style]="{ width: '500px', maxWidth: '95vw' }">
+      <div class="gp" *ngIf="maquinaEmEdicao as m">
+        <label class="ge-label" for="ge-maq-nome">Nome da máquina</label>
+        <input pInputText id="ge-maq-nome" [(ngModel)]="edicao[m.terminalId].apelido" maxlength="120" [disabled]="!!salvandoMaquina" />
+        <label class="ge-label" for="ge-maq-estacao">Estação</label>
+        <p-dropdown inputId="ge-maq-estacao" [options]="opcoesEstacao" [(ngModel)]="edicao[m.terminalId].estacaoCodigo" optionLabel="label" optionValue="value" appendTo="body" [style]="{ width: '100%' }" [disabled]="!!salvandoMaquina"></p-dropdown>
+        <small class="gp-erro" *ngIf="erroMaquina" role="alert">{{ erroMaquina }}</small>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton type="button" label="Cancelar" class="p-button-text" [disabled]="!!salvandoMaquina" (click)="mostrarEditarMaquina = false"></button>
+        <button pButton type="button" label="Salvar" icon="pi pi-check" [loading]="!!salvandoMaquina" [disabled]="!maquinaEmEdicao || !maquinaAlterada(maquinaEmEdicao) || !edicao[maquinaEmEdicao.terminalId].apelido.trim() || !edicao[maquinaEmEdicao.terminalId].estacaoCodigo" (click)="maquinaEmEdicao && salvarMaquina(maquinaEmEdicao)"></button>
+      </ng-template>
+    </p-dialog>
 
     <p-dialog [(visible)]="mostrarPareamento" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body"
               header="Parear máquina" [style]="{ width: '500px', maxWidth: '95vw' }">
@@ -259,7 +269,7 @@ interface EdicaoMaquina {
           <b>{{ m.apelido || navegador(m.userAgent) }}</b> deixará de ser a estação <b>{{ nomeEstacao(m.estacaoCodigo) || m.estacaoNome }}</b>.
         </p>
         <p class="ge-dlg-txt fx-muted">Os registros já feitos nesta máquina continuam no histórico das OS. Se a Estação de Bipagem
-          for aberta nela de novo, a tela volta a perguntar qual é a estação.</p>
+          for aberta nela de novo, a tela exibe um novo código de pareamento.</p>
         <p class="ge-dlg-txt ge-dlg-warn" *ngIf="m.terminalId === terminalAtual">
           <i class="pi pi-exclamation-triangle"></i> Esta é a máquina que você está usando agora.
         </p>
@@ -276,21 +286,19 @@ interface EdicaoMaquina {
     .ge-lead { font-size: 1rem; color: #e2e8f0; }
     .ge-hint { color: #475569; font-size: 0.9rem; }
 
-    .ge-grupos { display: flex; flex-wrap: wrap; gap: 16px; }
-    .ge-grupo {
-      flex: 1 1 320px; position: relative; border: 1px solid #d7e0ea; border-radius: 14px; padding: 16px 16px 14px 20px;
-      background: #fff; overflow: hidden; display: flex; flex-direction: column; gap: 14px;
-    }
-    .ge-grupo::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 5px; background: var(--stage); }
-    .ge-grupo-head { display: flex; align-items: center; gap: 12px; }
-    .ge-grupo-ico {
-      width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; color: #fff; background: var(--stage); flex: 0 0 auto;
-    }
-    .ge-grupo-tit { flex: 1; min-width: 0; }
-    .ge-grupo-tit h3 { margin: 0; font-family: Manrope, sans-serif; font-size: 1.05rem; font-weight: 800; color: #0b1220; }
-    .ge-grupo-tit span { font-size: 0.875rem; color: #475569; }
     .ge-chip { font-size: 0.82rem; }
 
+    .ge-search { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; color: #64748b; }
+    .ge-search input { width: min(100%, 420px); }
+    .ge-stations { min-width: 700px; }
+    .ge-station-name { display: flex; align-items: center; gap: 8px; }
+    .ge-stage-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .ge-block, .ge-machine-summary { display: block; }
+    .ge-machine-summary { max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ge-row-actions { display: flex; justify-content: flex-end; gap: 4px; }
+    .ge-stage-details summary { cursor: pointer; color: #0f766e; font-weight: 600; }
+    .ge-stage-details ul { margin: 8px 0 0; padding-left: 18px; line-height: 1.6; }
+    .ge-empty { padding: 28px; text-align: center; color: #64748b; }
     .ge-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: #334155; font-weight: 700; }
 
     .ge-nome { display: flex; gap: 6px; margin-top: 6px; }
@@ -409,11 +417,24 @@ export class OsFluxoEstacoesComponent implements OnInit {
   carregando = false;
   erro = '';
 
-  nomes: Record<string, string> = {};
+  buscaEstacao = '';
+  mostrarEstacao = false;
+  estacaoEmEdicao: FluxoEstacaoGestao | null = null;
+  estacaoNome = '';
+  estacaoSetor: string | null = null;
+  opcoesSetor: string[] = [];
+  salvandoEstacao = false;
+  erroEstacao = '';
+  mostrarExcluirEstacao = false;
+  estacaoParaExcluir: FluxoEstacaoGestao | null = null;
+  excluindoEstacao = false;
+  erroExclusao = '';
+  mostrarEditarMaquina = false;
+  maquinaEmEdicao: FluxoMaquina | null = null;
+  erroMaquina = '';
   edicao: Record<string, EdicaoMaquina> = {};
   opcoesEstacao: { label: string; value: string }[] = [];
 
-  salvandoNome: string | null = null;
   salvandoMaquina: string | null = null;
   mostrarRemocao = false;
   remover: FluxoMaquina | null = null;
@@ -452,8 +473,7 @@ export class OsFluxoEstacoesComponent implements OnInit {
 
   private aplicar(d: FluxoEstacoesGestao): void {
     this.dados = d;
-    this.nomes = {};
-    for (const e of d.estacoes) this.nomes[e.codigo] = e.nome;
+    this.opcoesSetor = d.setores || [...new Set(d.estacoes.map(e => e.setor).filter((s): s is string => !!s))];
     this.edicao = {};
     for (const m of d.maquinas) this.edicao[m.terminalId] = { estacaoCodigo: m.estacaoCodigo, apelido: m.apelido || '' };
     this.opcoesEstacao = d.estacoes.map(e => ({ label: e.nome, value: e.codigo }));
@@ -475,36 +495,72 @@ export class OsFluxoEstacoesComponent implements OnInit {
     return this.maquinasDa(estacaoCodigo).map(m => m.apelido || 'Sem nome').join(', ');
   }
 
-  nomeAlterado(e: FluxoEstacaoGestao): boolean {
-    const digitado = (this.nomes[e.codigo] || '').trim();
-    if (!digitado) return e.nomePersonalizado;
-    return digitado !== e.nome;
+  get estacoesFiltradas(): FluxoEstacaoGestao[] {
+    const busca = this.buscaEstacao.trim().toLocaleLowerCase('pt-BR');
+    return (this.dados?.estacoes || []).filter(e => !busca || [e.nome, e.setor, ...e.etapas].join(' ').toLocaleLowerCase('pt-BR').includes(busca));
   }
 
-  salvarNome(e: FluxoEstacaoGestao): void {
-    if (!this.nomeAlterado(e) || this.salvandoNome) return;
-    this.renomear(e, (this.nomes[e.codigo] || '').trim());
+  abrirEstacao(e?: FluxoEstacaoGestao): void {
+    this.estacaoEmEdicao = e || null;
+    this.estacaoNome = e?.nome || '';
+    this.estacaoSetor = e?.setor || null;
+    this.erroEstacao = '';
+    this.mostrarEstacao = true;
   }
 
-  restaurarNome(e: FluxoEstacaoGestao): void {
-    if (this.salvandoNome) return;
-    this.renomear(e, '');
-  }
-
-  private renomear(e: FluxoEstacaoGestao, nome: string): void {
-    this.salvandoNome = e.codigo;
-    this.api.renomearEstacao(e.codigo, nome).subscribe({
-      next: (d) => {
-        this.salvandoNome = null;
+  salvarEstacao(): void {
+    const nome = this.estacaoNome.trim();
+    if (this.salvandoEstacao || !nome || (!this.estacaoEmEdicao && !this.estacaoSetor)) return;
+    this.salvandoEstacao = true;
+    this.erroEstacao = '';
+    const requisicao = this.estacaoEmEdicao
+      ? this.api.renomearEstacao(this.estacaoEmEdicao.codigo, nome)
+      : this.api.criarEstacao(nome, this.estacaoSetor!);
+    requisicao.subscribe({
+      next: d => {
+        this.salvandoEstacao = false;
+        this.mostrarEstacao = false;
+        this.buscaEstacao = '';
         this.aplicar(d);
-        const novo = d.estacoes.find(x => x.codigo === e.codigo)?.nome || nome;
-        this.toast.add({ severity: 'success', summary: 'Estação renomeada', detail: `Agora se chama "${novo}".`, life: 3500 });
+        this.toast.add({ severity: 'success', summary: 'Estação salva', detail: nome, life: 3500 });
       },
-      error: (err) => {
-        this.salvandoNome = null;
-        this.toast.add({ severity: 'error', summary: 'Não foi possível renomear', detail: err?.error?.mensagem || 'Tente novamente.', life: 6000 });
+      error: e => {
+        this.salvandoEstacao = false;
+        this.erroEstacao = e?.error?.mensagem || 'Não foi possível salvar a estação. Tente novamente.';
       }
     });
+  }
+
+  pedirExclusaoEstacao(e: FluxoEstacaoGestao): void {
+    this.estacaoParaExcluir = e;
+    this.erroExclusao = '';
+    this.mostrarExcluirEstacao = true;
+  }
+
+  excluirEstacao(): void {
+    if (!this.estacaoParaExcluir || this.excluindoEstacao) return;
+    this.excluindoEstacao = true;
+    this.erroExclusao = '';
+    this.api.excluirEstacao(this.estacaoParaExcluir.codigo).subscribe({
+      next: d => {
+        this.excluindoEstacao = false;
+        this.mostrarExcluirEstacao = false;
+        this.estacaoParaExcluir = null;
+        this.aplicar(d);
+        this.toast.add({ severity: 'success', summary: 'Estação excluída', life: 3500 });
+      },
+      error: e => {
+        this.excluindoEstacao = false;
+        this.erroExclusao = e?.error?.mensagem || 'Não foi possível excluir a estação. Tente novamente.';
+      }
+    });
+  }
+
+  abrirMaquina(m: FluxoMaquina): void {
+    this.maquinaEmEdicao = m;
+    this.edicao[m.terminalId] = { estacaoCodigo: m.estacaoCodigo, apelido: m.apelido || '' };
+    this.erroMaquina = '';
+    this.mostrarEditarMaquina = true;
   }
 
   maquinaAlterada(m: FluxoMaquina): boolean {
@@ -520,11 +576,12 @@ export class OsFluxoEstacoesComponent implements OnInit {
       next: (d) => {
         this.salvandoMaquina = null;
         this.aplicar(d);
+        this.mostrarEditarMaquina = false;
         this.toast.add({ severity: 'success', summary: 'Máquina atualizada', detail: `Estação: ${this.nomeEstacao(ed.estacaoCodigo)}.`, life: 3500 });
       },
       error: (err) => {
         this.salvandoMaquina = null;
-        this.toast.add({ severity: 'error', summary: 'Não foi possível salvar', detail: err?.error?.mensagem || 'Tente novamente.', life: 6000 });
+        this.erroMaquina = err?.error?.mensagem || 'Não foi possível salvar. Tente novamente.';
       }
     });
   }

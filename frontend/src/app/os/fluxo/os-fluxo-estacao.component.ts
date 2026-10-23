@@ -147,7 +147,7 @@ function obterTerminalId(): string {
           <div class="st-bloq-txt">
             <strong>Bipagem bloqueada: esta máquina ainda não é uma estação</strong>
             <span>Peça a um Administrador ou Diretor para pareá-la em Gerenciar Estações{{ pareamento?.codigo ? ' com o código' : '' }}
-              <b class="st-bloq-cod" *ngIf="pareamento?.codigo">{{ pareamento?.codigo }}</b>, ou para entrar com o login dele nesta máquina.</span>
+              <b class="st-bloq-cod" *ngIf="pareamento?.codigo">{{ pareamento?.codigo }}</b>. O cadastro da máquina na estação deve ser efetuado por um administrador.</span>
           </div>
           <button pButton type="button" label="Ver código" icon="pi pi-link" class="p-button-sm" (click)="abrirConfig()"></button>
         </div>
@@ -543,12 +543,14 @@ function obterTerminalId(): string {
     </div>
 
     <p-dialog [(visible)]="mostrarConfig" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body" styleClass="st-dlg"
+              [closable]="!maquinaBloqueada" [closeOnEscape]="!maquinaBloqueada"
               [header]="modoPareamento ? 'Parear esta máquina' : 'Qual é esta estação?'"
               [style]="{ width: modoPareamento ? '560px' : '820px', maxWidth: '96vw' }" (onHide)="focarDepois()">
       <div class="par" *ngIf="modoPareamento">
         <ng-container *ngIf="!pareadaNome; else pareadaOk">
-          <p class="par-txt">Esta máquina ainda não é uma estação de bipagem. Informe o código abaixo a um
-            <b>Administrador ou Diretor</b>; ele vai vinculá-la em <b>Gerenciar Estações</b>.</p>
+          <p class="par-txt">Esta máquina ainda não está pareada. O operador deverá solicitar a um <b>administrador</b>
+            o cadastro desta máquina em uma estação, informando o código de pareamento abaixo.
+            O administrador deverá efetuar o cadastro em <b>Gerenciar Estações</b>.</p>
           <div class="par-cod" *ngIf="pareamento?.codigo as cod; else parCarregando" aria-live="polite">
             <span *ngFor="let d of cod.split('')">{{ d }}</span>
           </div>
@@ -618,7 +620,7 @@ function obterTerminalId(): string {
         <ng-container *ngIf="modoPareamento; else rodapeEscolha">
           <button pButton type="button" label="Gerar novo código" icon="pi pi-refresh" class="p-button-text"
                   *ngIf="erroPareamento && !pareadaNome" (click)="solicitarPareamento()"></button>
-          <button pButton type="button" label="Fechar" class="p-button-text" (click)="mostrarConfig = false"></button>
+          <button pButton type="button" label="Fechar" *ngIf="!maquinaBloqueada" class="p-button-text" (click)="mostrarConfig = false"></button>
         </ng-container>
         <ng-template #rodapeEscolha>
           <button pButton type="button" [label]="config.estacaoCodigo ? 'Cancelar' : 'Escolher depois'" class="p-button-text" (click)="mostrarConfig = false"></button>
@@ -1519,6 +1521,7 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
   erroEstacao = '';
   private readonly terminalId = obterTerminalId();
 
+  private pareamentoConfirmado = false;
   pareamento: FluxoPareamento | null = null;
   erroPareamento = '';
   pareadaNome = '';
@@ -1703,7 +1706,8 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
           this.salvarConfig();
         }
         this.carregarEstacoes();
-      }
+      },
+      error: () => this.carregarEstacoes()
     });
     this.timerFilaOs = setInterval(() => {
       if (!this.mostrarOsBip && !this.mostrarForcar && !this.enviando) this.carregarFila();
@@ -1929,7 +1933,7 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
         this.piscar('err');
         this.tocar(false);
         this.focarDepois();
-        if (e.codigo === 'MAQUINA_NAO_PAREADA') {
+        if (e.codigo === 'MAQUINA_NAO_PAREADA' || (err.status === 403 && e.mensagem.includes('Máquina não pareada'))) {
           this.filaLeituras = [];
           this.carregarEstacoes();
           return;
@@ -2292,9 +2296,9 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
     if (this.modoPareamento && !this.timerPareamento) this.iniciarPareamento();
   }
 
-  /** Máquina sem estação só bipa com Administrador ou Diretor logado (quem pode escolher a estação). */
+  /** O vínculo deve ser confirmado pelo servidor, independentemente do perfil logado. */
   get maquinaBloqueada(): boolean {
-    return !this.podeTrocarEstacao && !this.config.estacaoCodigo;
+    return !this.pareamentoConfirmado;
   }
 
   private bloquearSemPareamento(): boolean {
@@ -2306,9 +2310,9 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  /** Sem a permissão de escolher a estação, a máquina nova mostra um código e espera ser pareada pela gestão. */
+  /** Toda máquina sem vínculo aguarda o cadastro por um administrador. */
   get modoPareamento(): boolean {
-    return !this.podeTrocarEstacao && (!this.config.estacaoCodigo || !!this.pareadaNome);
+    return this.maquinaBloqueada || !!this.pareadaNome;
   }
 
   private iniciarPareamento(): void {
@@ -2398,7 +2402,7 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
       },
       error: () => {
         this.carregandoEstacoes = false;
-        if (resolver) this.carregarFila();
+        if (resolver) this.resolverEstacao(null, null);
       }
     });
   }
@@ -2410,27 +2414,18 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
       this.carregarFila();
       return;
     }
-    if (this.config.estacaoCodigo) {
-      // Já foi estação e o servidor não a reconhece mais: foi removida na tela Gerenciar Estações.
-      this.config = { ...this.config, nome: '', estacaoCodigo: null, maquina: null, etapaIds: [], modo: 'AUTO' };
-      this.salvarConfig();
-      this.atualizarOpcoesBip();
-      this.limparPendencias(false);
-    } else {
-      const candidatas = this.config.etapaIds.length
-        ? this.estacoes.filter(e => this.config.etapaIds.every(id => e.etapaIds.includes(id)))
-        : [];
-      if (candidatas.length === 1 && this.podeTrocarEstacao) {
-        this.vincular(candidatas[0], undefined, false);
-        return;
-      }
-    }
-    this.carregarFila();
+    this.pareamentoConfirmado = false;
+    this.config = { ...this.config, nome: '', estacaoCodigo: null, maquina: null, etapaIds: [], modo: 'AUTO' };
+    this.salvarConfig();
+    this.atualizarOpcoesBip();
+    this.limparPendencias(false);
+    this.filaOs = [];
     this.abrirConfig();
   }
 
   /** `maquina` indefinida preserva o nome da máquina já conhecido. */
   private aplicarEstacao(est: FluxoEstacao, modo?: ModoEstacao, maquina?: string | null): void {
+    this.pareamentoConfirmado = true;
     const etapaIds = this.etapas.filter(e => est.etapaIds.includes(e.id)).map(e => e.id);
     const mudouEtapa = etapaIds.join(',') !== this.config.etapaIds.join(',');
     this.config = {
@@ -2494,6 +2489,7 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
   }
 
   carregarFila(): void {
+    if (this.maquinaBloqueada) { this.filaOs = []; return; }
     if (this.carregandoFila) return;
     this.carregandoFila = true;
     this.api.fila(this.config.etapaIds, 60, this.terminalId).subscribe({
@@ -2502,9 +2498,10 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
         this.carregandoFila = false;
         this.erroFila = false;
       },
-      error: () => {
+      error: (err: HttpErrorResponse) => {
         this.carregandoFila = false;
         this.erroFila = true;
+        if (err.status === 403) this.carregarEstacoes();
       }
     });
   }

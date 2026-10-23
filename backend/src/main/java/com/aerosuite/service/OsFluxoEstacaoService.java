@@ -31,13 +31,22 @@ public class OsFluxoEstacaoService {
                 String codigo=en.getKey().toUpperCase(Locale.ROOT).replaceAll("[^A-Z0-9]", "")+"-"+n;
                 list.add(new Estacao(codigo,en.getKey()+(quantidade>1?" "+n:""),en.getKey(),++ordem,en.getValue().get(0).cor,en.getValue().stream().map(e->e.id).toList()));
             }
-        }return list;
+        }
+        List<OsFluxoEstacaoNome> configuradas=OsFluxoEstacaoNome.listAll();
+        for(OsFluxoEstacaoNome e:configuradas) {
+            if(Boolean.FALSE.equals(e.ativa)) {list.removeIf(s->s.codigo.equals(e.codigo));continue;}
+            if(e.setor!=null&&setores.containsKey(e.setor)) {
+                List<OsFluxoEtapa> etapas=setores.get(e.setor);
+                list.add(new Estacao(e.codigo,e.nome,e.setor,++ordem,etapas.get(0).cor,etapas.stream().map(et->et.id).toList()));
+            }
+        }
+        return list;
     }
     private Estacao estacao(String codigo) {return catalogo().stream().filter(e->e.codigo.equals(codigo)).findFirst().orElseThrow(()->new BadRequestException("Estação inválida."));}
     private String nome(Estacao e) {OsFluxoEstacaoNome custom=OsFluxoEstacaoNome.find("codigo",e.codigo).firstResult();return custom==null?e.nome:custom.nome;}
     private void validarTerminal(String terminal) {if(terminal==null||!terminal.matches("[A-Za-z0-9-]{8,64}"))throw new BadRequestException("Terminal inválido.");}
     private OsFluxoTerminal terminal(String id) {validarTerminal(id);return OsFluxoTerminal.find("terminalId",id).firstResult();}
-    public void exigirPareada(String terminal) {OsFluxoTerminal t=terminal(terminal);if(t==null||!Boolean.TRUE.equals(t.ativa)||t.estacaoCodigo==null)throw new ForbiddenException("Máquina não pareada. Solicite o pareamento à gestão.");}
+    public void exigirPareada(String terminal) {OsFluxoTerminal t=terminal(terminal);if(t==null||!Boolean.TRUE.equals(t.ativa)||t.estacaoCodigo==null||catalogo().stream().noneMatch(e->e.codigo.equals(t.estacaoCodigo)))throw new ForbiddenException("Máquina não pareada. Solicite o pareamento à gestão.");}
     public boolean atende(String terminal,String setor) {OsFluxoTerminal t=terminal(terminal);return t!=null&&Boolean.TRUE.equals(t.ativa)&&Objects.equals(estacao(t.estacaoCodigo).setor,setor);}
     public void exigirEtapa(String terminal,String setor) {if(!atende(terminal,setor))throw new ForbiddenException("Etapa não atendida por esta estação.");}
     @Transactional
@@ -56,16 +65,36 @@ public class OsFluxoEstacaoService {
     }
     public Map<String,Object> gestaoEstacoes() {
         gestao();List<OsFluxoTerminal> ts=OsFluxoTerminal.list("ativa = true order by estacaoCodigo, apelido");
-        return map("estacoes",catalogo().stream().map(e->map("codigo",e.codigo,"nome",nome(e),"nomePadrao",e.nome,"nomePersonalizado",!nome(e).equals(e.nome),
+        return map("setores",fluxo.etapas().stream().map(e->e.setor).distinct().toList(),"estacoes",catalogo().stream().map(e->map("codigo",e.codigo,"nome",nome(e),"nomePadrao",e.nome,"nomePersonalizado",!nome(e).equals(e.nome),
                 "setor",e.setor,"cor",e.cor,"etapas",fluxo.etapas().stream().filter(et->e.etapas.contains(et.id)).map(et->et.nome).toList(),"maquinas",ts.stream().filter(t->e.codigo.equals(t.estacaoCodigo)).count())).toList(),
                 "maquinas",ts.stream().map(t->map("terminalId",t.terminalId,"apelido",t.apelido,"estacaoCodigo",t.estacaoCodigo,"estacaoNome",nome(estacao(t.estacaoCodigo)),
                         "usuarioNome",t.usuarioNome,"ip",t.ip,"userAgent",t.userAgent,"vinculadoEm",t.vinculadoEm,"ultimoAcesso",t.ultimoAcesso,"ativa",t.ativa)).toList());
     }
     @Transactional
     public Map<String,Object> renomear(String codigo,String nome) {
-        gestao();estacao(codigo);if(nome==null||nome.isBlank()||nome.length()>120)throw new BadRequestException("Informe um nome de até 120 caracteres.");
+        gestao();Estacao original=estacao(codigo);if(nome==null||nome.length()>120)throw new BadRequestException("Informe um nome de até 120 caracteres.");
+        if(nome.isBlank())nome=original.nome;
         OsFluxoEstacaoNome e=OsFluxoEstacaoNome.find("codigo",codigo).firstResult();
         if(e==null){e=new OsFluxoEstacaoNome();e.tenantId=tenants.currentTenantIdStr();e.codigo=codigo;e.persist();}e.nome=nome.trim();return gestaoEstacoes();
+    }
+    @Transactional
+    public Map<String,Object> criar(String nome,String setor) {
+        gestao();
+        if(nome==null||nome.isBlank()||nome.trim().length()>120)throw new BadRequestException("Informe um nome de até 120 caracteres.");
+        if(setor==null||fluxo.etapas().stream().noneMatch(e->setor.equals(e.setor)))throw new BadRequestException("Escolha um setor válido.");
+        OsFluxoEstacaoNome e=new OsFluxoEstacaoNome();e.tenantId=tenants.currentTenantIdStr();
+        e.codigo="CUSTOM-"+UUID.randomUUID();e.nome=nome.trim();e.setor=setor;e.ativa=true;e.persist();
+        return gestaoEstacoes();
+    }
+    @Transactional
+    public Map<String,Object> excluirEstacao(String codigo) {
+        gestao();Estacao original=estacao(codigo);
+        OsFluxoEstacaoNome e=OsFluxoEstacaoNome.find("codigo",codigo).firstResult();
+        if(e==null){e=new OsFluxoEstacaoNome();e.tenantId=tenants.currentTenantIdStr();e.codigo=codigo;e.nome=original.nome;e.persist();}
+        e.ativa=false;
+        List<OsFluxoTerminal> maquinas=OsFluxoTerminal.list("estacaoCodigo = ?1 and ativa = true",codigo);
+        for(OsFluxoTerminal t:maquinas){t.ativa=false;t.codigoPareamento=null;t.expiraEm=null;}
+        return gestaoEstacoes();
     }
     private void vincular(OsFluxoTerminal t,String codigo,String apelido) {
         estacao(codigo);if(apelido!=null&&apelido.length()>120)throw new BadRequestException("Apelido muito longo.");

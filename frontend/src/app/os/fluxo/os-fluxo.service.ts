@@ -325,6 +325,7 @@ export interface FluxoMaquina {
 }
 
 export interface FluxoEstacoesGestao {
+  setores?: string[];
   estacoes: FluxoEstacaoGestao[];
   maquinas: FluxoMaquina[];
 }
@@ -422,6 +423,14 @@ export class OsFluxoService {
 
   renomearEstacao(codigo: string, nome: string) {
     return this.http.put<FluxoEstacoesGestao>(`${this.base}/estacoes/${encodeURIComponent(codigo)}/nome`, { nome });
+  }
+
+  criarEstacao(nome: string, setor: string) {
+    return this.http.post<FluxoEstacoesGestao>(`${this.base}/estacoes`, { nome, setor });
+  }
+
+  excluirEstacao(codigo: string) {
+    return this.http.delete<FluxoEstacoesGestao>(`${this.base}/estacoes/${encodeURIComponent(codigo)}`);
   }
 
   atualizarMaquina(terminalId: string, estacaoCodigo: string, apelido: string) {

@@ -9,4 +9,6 @@ public class OsFluxoEstacaoNome extends PanacheEntityBase {
     @TenantId @Column(name = "tenant_id", nullable = false) public String tenantId;
     public String codigo;
     public String nome;
+    public String setor;
+    public Boolean ativa = true;
 }

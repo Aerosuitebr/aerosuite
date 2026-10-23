@@ -1,0 +1,3 @@
+ALTER TABLE os_fluxo_estacao_nome
+    ADD COLUMN setor VARCHAR(255) NULL,
+    ADD COLUMN ativa BOOLEAN NOT NULL DEFAULT TRUE;

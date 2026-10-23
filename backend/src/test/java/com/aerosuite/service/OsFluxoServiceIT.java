@@ -70,4 +70,43 @@ class OsFluxoServiceIT {
         assertFalse(cco.listar().stream().anyMatch(e->e.email().equals("outro@empresa.com")));
         assertEquals(List.of("time@empresa.com"),cco.destinatarios("cliente@empresa.com"));
     }
+    @SuppressWarnings("unchecked")
+    private List<Map<String,Object>> catalogo(Map<String,Object> resposta) {
+        return (List<Map<String,Object>>)resposta.get("estacoes");
+    }
+    @Test @TestTransaction void estacaoPersonalizadaAtendeSetorERemoveVinculosSemApagarHistorico() {
+        criar();
+        var criadas=catalogo(estacoes.criar("Bancada adicional","Recebimento"));
+        String codigo=(String)criadas.stream().filter(e->"Bancada adicional".equals(e.get("nome"))).findFirst().orElseThrow().get("codigo");
+        estacoes.vincularEstacao("terminal-nova-estacao",codigo);
+        assertTrue(estacoes.atende("terminal-nova-estacao","Recebimento"));
+        assertFalse(estacoes.atende("terminal-nova-estacao","Oficina"));
+        estacoes.renomear(codigo,"Bancada renomeada");
+        assertTrue(catalogo(estacoes.gestaoEstacoes()).stream().anyMatch(e->"Bancada renomeada".equals(e.get("nome"))));
+        long registros=OsFluxoRegistro.count();
+        assertFalse(catalogo(estacoes.excluirEstacao(codigo)).stream().anyMatch(e->codigo.equals(e.get("codigo"))));
+        assertThrows(ForbiddenException.class,()->estacoes.exigirPareada("terminal-nova-estacao"));
+        assertNotNull(estacoes.solicitar("terminal-nova-estacao",null,"Teste").get("codigo"));
+        assertEquals(registros,OsFluxoRegistro.count());
+        assertFalse(catalogo(estacoes.gestaoEstacoes()).stream().anyMatch(e->codigo.equals(e.get("codigo"))));
+    }
+    @Test @TestTransaction void exclusaoDeEstacaoGeradaPersisteERespeitaTenant() {
+        criar();fluxo.etapas();
+        OsFluxoEstacaoNome.getEntityManager().createNativeQuery("insert into os_fluxo_estacao_nome (tenant_id,codigo,nome,ativa) values ('2','RECEBIMENTO-1','Outro tenant',false)").executeUpdate();
+        assertTrue(catalogo(estacoes.gestaoEstacoes()).stream().anyMatch(e->"RECEBIMENTO-1".equals(e.get("codigo"))));
+        estacoes.vincularEstacao("terminal-estacao-excluida","RECEBIMENTO-1");
+        estacoes.excluirEstacao("RECEBIMENTO-1");
+        OsFluxoEstacaoNome.getEntityManager().flush();
+        OsFluxoEstacaoNome.getEntityManager().clear();
+        assertFalse(catalogo(estacoes.gestaoEstacoes()).stream().anyMatch(e->"RECEBIMENTO-1".equals(e.get("codigo"))));
+        assertThrows(BadRequestException.class,()->estacoes.vincularEstacao("terminal-outro-123","RECEBIMENTO-1"));
+    }
+    @Test @TestTransaction void cadastroDeEstacaoValidaDadosEPermissoes() {
+        criar();fluxo.etapas();
+        assertThrows(BadRequestException.class,()->estacoes.criar(" ","Recebimento"));
+        assertThrows(BadRequestException.class,()->estacoes.criar("Bancada","Inexistente"));
+        user.applyPermissionSnapshot("MECANICO",Set.of("OS_FLUXO_ESTACAO"));
+        assertThrows(ForbiddenException.class,()->estacoes.criar("Bancada","Recebimento"));
+        assertThrows(ForbiddenException.class,()->estacoes.excluirEstacao("RECEBIMENTO-1"));
+    }
 }
