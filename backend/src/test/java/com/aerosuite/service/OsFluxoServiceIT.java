@@ -84,6 +84,8 @@ class OsFluxoServiceIT {
         estacoes.renomear(codigo,"Bancada renomeada");
         assertTrue(catalogo(estacoes.gestaoEstacoes()).stream().anyMatch(e->"Bancada renomeada".equals(e.get("nome"))));
         long registros=OsFluxoRegistro.count();
+        assertThrows(ClientErrorException.class,()->estacoes.excluirEstacao(codigo));
+        estacoes.remover("terminal-nova-estacao");
         assertFalse(catalogo(estacoes.excluirEstacao(codigo)).stream().anyMatch(e->codigo.equals(e.get("codigo"))));
         assertThrows(ForbiddenException.class,()->estacoes.exigirPareada("terminal-nova-estacao"));
         assertNotNull(estacoes.solicitar("terminal-nova-estacao",null,"Teste").get("codigo"));
@@ -95,6 +97,8 @@ class OsFluxoServiceIT {
         OsFluxoEstacaoNome.getEntityManager().createNativeQuery("insert into os_fluxo_estacao_nome (tenant_id,codigo,nome,ativa) values ('2','RECEBIMENTO-1','Outro tenant',false)").executeUpdate();
         assertTrue(catalogo(estacoes.gestaoEstacoes()).stream().anyMatch(e->"RECEBIMENTO-1".equals(e.get("codigo"))));
         estacoes.vincularEstacao("terminal-estacao-excluida","RECEBIMENTO-1");
+        assertThrows(ClientErrorException.class,()->estacoes.excluirEstacao("RECEBIMENTO-1"));
+        estacoes.remover("terminal-estacao-excluida");
         estacoes.excluirEstacao("RECEBIMENTO-1");
         OsFluxoEstacaoNome.getEntityManager().flush();
         OsFluxoEstacaoNome.getEntityManager().clear();

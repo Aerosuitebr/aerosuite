@@ -89,6 +89,8 @@ public class OsFluxoEstacaoService {
     @Transactional
     public Map<String,Object> excluirEstacao(String codigo) {
         gestao();Estacao original=estacao(codigo);
+        if(OsFluxoTerminal.count("estacaoCodigo = ?1 and ativa = true",codigo)>0)
+            throw new ClientErrorException("Reatribua ou remova as máquinas vinculadas antes de excluir a estação.",409);
         OsFluxoEstacaoNome e=OsFluxoEstacaoNome.find("codigo",codigo).firstResult();
         if(e==null){e=new OsFluxoEstacaoNome();e.tenantId=tenants.currentTenantIdStr();e.codigo=codigo;e.nome=original.nome;e.persist();}
         e.ativa=false;

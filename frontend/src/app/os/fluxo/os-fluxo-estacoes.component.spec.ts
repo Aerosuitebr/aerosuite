@@ -17,6 +17,59 @@ function tela(): any {
 }
 
 describe('Gestão de estações', () => {
+  it('edita o nome em um rascunho e permite cancelar sem salvar', () => {
+    const c = tela();
+    c.editarNome(estacao);
+    c.nomeRascunho = 'Outra bancada';
+    expect(estacao.nome).toBe('Oficina 1');
+    c.cancelarNome();
+    expect(c.editandoNome).toBeNull();
+    expect(c.api.renomearEstacao).not.toHaveBeenCalled();
+  });
+
+  it('mantém o rascunho e a edição abertos quando salvar o nome falha', () => {
+    const c = tela();
+    c.editarNome(estacao);
+    c.nomeRascunho = ' Nova bancada ';
+    c.api.renomearEstacao.mockReturnValue(throwError(() => ({ error: { mensagem: 'Sem conexão' } })));
+    c.salvarNome(estacao);
+    expect(c.api.renomearEstacao).toHaveBeenCalledWith('OFICINA-1', 'Nova bancada');
+    expect(c.editandoNome).toBe('OFICINA-1');
+    expect(c.nomeRascunho).toBe(' Nova bancada ');
+    expect(c.erroNome).toBe('Sem conexão');
+    expect(c.salvandoNome).toBe(false);
+  });
+
+  it('fecha a edição depois da confirmação do servidor e ignora nomes inalterados', () => {
+    const c = tela();
+    c.editarNome(estacao);
+    c.salvarNome(estacao);
+    expect(c.api.renomearEstacao).not.toHaveBeenCalled();
+    c.editarNome(estacao);
+    c.nomeRascunho = 'Nome novo';
+    c.salvarNome(estacao);
+    expect(c.editandoNome).toBeNull();
+    expect(c.salvandoNome).toBe(false);
+  });
+
+  it('abre o pareamento com a estação escolhida e limpa a seleção na abertura geral', () => {
+    const c = tela();
+    c.abrirPareamento(estacao.codigo);
+    expect(c.parEstacao).toBe(estacao.codigo);
+    expect(c.mostrarPareamento).toBe(true);
+    c.abrirPareamento();
+    expect(c.parEstacao).toBeNull();
+  });
+
+  it('o menu pede confirmação para excluir e não envia exclusão diretamente', () => {
+    const c = tela();
+    c.prepararAcoes(estacao);
+    c.acoesEstacao.find((a: any) => a.icon === 'pi pi-trash').command();
+    expect(c.mostrarExcluirEstacao).toBe(true);
+    expect(c.estacaoParaExcluir).toBe(estacao);
+    expect(c.api.excluirEstacao).not.toHaveBeenCalled();
+  });
+
   it('cria uma estação com setor e atualiza a lista após salvar', () => {
     const c = tela();
     c.abrirEstacao();
@@ -40,14 +93,31 @@ describe('Gestão de estações', () => {
 
   it('solicita confirmação antes de excluir e mantém a modal aberta em falhas', () => {
     const c = tela();
-    c.pedirExclusaoEstacao(estacao);
+    c.pedirExclusaoEstacao({ ...estacao, maquinas: 0 });
     expect(c.api.excluirEstacao).not.toHaveBeenCalled();
-    expect(c.estacaoParaExcluir.maquinas).toBe(1);
+    expect(c.exclusaoConfirmada).toBe(false);
+    c.confirmacaoExclusao = estacao.nome;
     c.api.excluirEstacao.mockReturnValue(throwError(() => ({ error: { mensagem: 'Falha ao excluir' } })));
     c.excluirEstacao();
     expect(c.mostrarExcluirEstacao).toBe(true);
     expect(c.erroExclusao).toBe('Falha ao excluir');
     expect(c.excluindoEstacao).toBe(false);
+  });
+
+  it('bloqueia exclusão com máquinas mesmo quando o nome foi confirmado', () => {
+    const c = tela();
+    c.pedirExclusaoEstacao(estacao);
+    c.confirmacaoExclusao = estacao.nome;
+    c.excluirEstacao();
+    expect(c.exclusaoConfirmada).toBe(false);
+    expect(c.api.excluirEstacao).not.toHaveBeenCalled();
+  });
+
+  it('omite setores redundantes e mantém o setor de nomes personalizados', () => {
+    const c = tela();
+    expect(c.mostrarSetor(estacao)).toBe(false);
+    expect(c.mostrarSetor({ ...estacao, nome: ' OFICINA ' })).toBe(false);
+    expect(c.mostrarSetor({ ...estacao, nome: 'Bancada de motores' })).toBe(true);
   });
 
   it('busca por nome, setor e etapa sem alterar a lista original', () => {
