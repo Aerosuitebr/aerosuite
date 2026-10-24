@@ -1,14 +1,45 @@
-# Staging: mesma stack do docker-compose.yml, com variáveis sobrescritas por .env.staging
-#
-# 1) cp .env.example .env   (ajuste o que for comum)
-# 2) cp .env.staging.example .env.staging   (JDBC de staging, MAIL_MOCK, etc.)
-# 3) docker compose -f docker-compose.yml -f docker-compose.staging.yml up --build -d
-#
-# Ordem dos env_file: depois sobrescreve antes (valores de .env.staging vencem).
+# Stack isolado de staging para coexistir com produção no mesmo Vultr.
+# Uso: docker compose --env-file .env.staging -p aerosuite-staging \
+#   -f docker-compose.yml -f docker-compose.local-mysql.yml -f docker-compose.staging.yml up -d --build
 
 services:
   api:
-    env_file:
-      - .env
-      - path: .env.staging
-        required: false
+    container_name: aerosuite-staging-backend
+    env_file: !override
+      - .env.staging
+    ports: !override
+      - "127.0.0.1:${STAGING_API_PORT:-8180}:8080"
+    environment:
+      QUARKUS_PROFILE: prod
+      FRONTEND_URL: ${STAGING_PUBLIC_URL:-https://staging.aerosuite.app}
+      MAIL_MOCK: "true"
+      QUARKUS_FLYWAY_REPAIR_AT_START: "true"
+      AERO_SUITE_MARKETING_WHATSAPP_ENABLED: "false"
+      HTTP_UPDATE_ENABLED: "false"
+      AERO_SUITE_PARTS_FINDER_DEMO_ENABLED: "true"
+      AERO_SUITE_DATA_ROOT: /var/aerosuite-staging
+    volumes: !override
+      - ${AEROSUITE_STAGING_DATA_ROOT:-/var/aerosuite-staging}/os:/app/os:rw
+      - ${AEROSUITE_STAGING_DATA_ROOT:-/var/aerosuite-staging}/empresa-assets:/app/empresa-assets:rw
+      - ${AEROSUITE_STAGING_DATA_ROOT:-/var/aerosuite-staging}/biblioteca:/biblioteca:ro
+      - ${AEROSUITE_STAGING_DATA_ROOT:-/var/aerosuite-staging}/manuals:/app/manuals:ro
+      - ${AEROSUITE_STAGING_DATA_ROOT:-/var/aerosuite-staging}/vitrine-videos:/app/vitrine-videos:ro
+      - ${AEROSUITE_STAGING_DATA_ROOT:-/var/aerosuite-staging}/backups:/mnt/backups:rw
+
+  web:
+    container_name: aerosuite-staging-frontend
+    ports: !override
+      - "127.0.0.1:${STAGING_WEB_PORT:-8181}:80"
+    volumes: !override
+      - ${AEROSUITE_STAGING_DATA_ROOT:-/var/aerosuite-staging}/nginx-maintenance:/etc/nginx/maintenance:rw
+
+  mysql:
+    container_name: aerosuite-staging-mysql
+    ports: !override []
+    volumes: !override
+      - ${AEROSUITE_STAGING_DATA_ROOT:-/var/aerosuite-staging}/mysql:/var/lib/mysql
+      - ./backend/EstruturaBanco/aerosuite_funcionalidade.sql:/docker-entrypoint-initdb.d/01_funcionalidade.sql:ro
+      - ./backend/EstruturaBanco/aerosuite_funcionalidade_migration.sql:/docker-entrypoint-initdb.d/02_funcionalidade_migration.sql:ro
+      - ./backend/EstruturaBanco/aerosuite_perfil.sql:/docker-entrypoint-initdb.d/03_perfil.sql:ro
+      - ./backend/EstruturaBanco/aerosuite_funcionalidade_seed.sql:/docker-entrypoint-initdb.d/04_funcionalidade_seed.sql:ro
+      - ./docker/mysql/init/05_usuario.sql:/docker-entrypoint-initdb.d/05_usuario.sql:ro

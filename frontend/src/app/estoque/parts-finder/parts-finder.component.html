@@ -1,0 +1,101 @@
+<section class="finder">
+  <header class="hero">
+    <div><span class="eyebrow">AEROSUITE PARTS FINDER</span><h2>Localizador de Peças</h2>
+      <p>Consulte disponibilidades internas agora. Marketplaces licenciados serão conectados à mesma busca.</p></div>
+    <div class="hero-actions"><button type="button" class="rfq-center-button" (click)="openRfqCenter()" title="Abrir central de RFQs"><i class="pi pi-file-edit"></i><span>RFQs</span></button><span class="source-status"><i class="pi pi-database"></i> Estoque interno ativo</span></div>
+  </header>
+
+  <form class="search-panel" (ngSubmit)="search()">
+    <label class="field pn-field"><span>P/N</span><input pInputText name="partNumber" [(ngModel)]="partNumber" placeholder="Ex.: 23064518" autocomplete="off"></label>
+    <label class="field quantity-field"><span>Quantidade</span>
+      <span class="quantity-stepper">
+        <button type="button" aria-label="Diminuir quantidade" (click)="decreaseQuantity()"><i class="pi pi-minus"></i></button>
+        <input type="number" name="quantity" [(ngModel)]="quantity" min="1" aria-label="Quantidade">
+        <button type="button" aria-label="Aumentar quantidade" (click)="increaseQuantity()"><i class="pi pi-plus"></i></button>
+      </span>
+    </label>
+    <label class="field condition-field"><span>Condição</span>
+      <select name="condition" [(ngModel)]="condition">
+        <option value="">Todas</option><option>NEW</option><option>NE</option><option>NS</option><option>OH</option><option>SV</option><option>AR</option>
+      </select>
+    </label>
+    <label class="field country-field"><span>País (ISO)</span><p-dropdown name="country" [(ngModel)]="country" [options]="countryOptions" optionLabel="label" optionValue="code" [filter]="true" filterBy="label,code,name" [showClear]="true" filterPlaceholder="Digite o país ou código" placeholder="Selecione" appendTo="body" styleClass="country-select"><ng-template pTemplate="item" let-option><div class="country-option" [title]="option.name"><strong>{{ option.code }}</strong><span>{{ option.name }}</span></div></ng-template><ng-template pTemplate="selectedItem" let-option><div class="country-selected" *ngIf="option" [title]="option.name"><strong>{{ option.code }}</strong><span>{{ option.name }}</span></div></ng-template></p-dropdown></label>
+    <label class="field certification-field"><span>Certificação</span><input pInputText name="certification" [(ngModel)]="certification" placeholder="FAA 8130-3"></label>
+    <label class="aog-toggle" title="Prioriza fornecedores com resposta e expedição imediatas; não altera as fontes pesquisadas"><input type="checkbox" name="aog" [(ngModel)]="aog"><span class="toggle-track"></span><span>AOG urgente</span></label>
+    <button pButton class="search-button" type="submit" icon="pi pi-search" label="Pesquisar" [loading]="loading" [disabled]="!partNumber.trim()"></button>
+  </form>
+
+  <div class="notice"><i class="pi pi-info-circle"></i> A disponibilidade deve ser confirmada por RFQ antes da compra.</div>
+  <div class="aog-notice" *ngIf="aog"><i class="pi pi-bolt"></i> Modo AOG: as mesmas fontes são pesquisadas, com prioridade para resposta e expedição imediatas.</div>
+  <div class="demo-notice" *ngIf="hasDemoResults"><i class="pi pi-info-circle"></i> Catálogo demonstrativo de staging — fornecedores, preços e disponibilidade não são reais.</div>
+  <div class="error" *ngIf="error">{{ error }}</div>
+
+  <p-table [value]="results" [loading]="loading" styleClass="p-datatable-sm" [tableStyle]="{'min-width':'960px'}">
+    <ng-template pTemplate="caption"><div class="table-caption"><div class="table-title">Resultados <span>{{ results.length }}</span></div><div class="selection-actions" *ngIf="selected.length"><span>{{ selected.length }} selecionado(s)</span><button type="button" (click)="comparisonVisible = !comparisonVisible"><i class="pi pi-clone"></i> Comparar</button><button type="button" class="rfq-button" (click)="createRfq()"><i class="pi pi-send"></i> Criar RFQ</button></div></div></ng-template>
+    <ng-template pTemplate="header"><tr><th class="select-column"></th><th>P/N</th><th>Descrição</th><th>Fornecedor</th><th>País</th><th>Qtd.</th><th>Preço</th><th>Prazo</th><th>Certificação</th><th>ASL</th><th>Fonte</th></tr></ng-template>
+    <ng-template pTemplate="body" let-r><tr>
+      <td class="select-column"><input type="checkbox" [checked]="isSelected(r)" (change)="toggleSelection(r, $any($event.target).checked)" [attr.aria-label]="'Selecionar ' + r.partNumber"></td>
+      <td><strong>{{ r.partNumber }}</strong></td><td>{{ r.description || '—' }}</td><td>{{ r.supplier || 'Estoque próprio' }}</td>
+      <td>{{ r.country || '—' }}</td><td>{{ r.quantity ?? '—' }}</td><td>{{ r.unitPrice != null ? (r.currency + ' ' + r.unitPrice) : 'Sob consulta' }}</td>
+      <td><p-tag *ngIf="r.aogAvailable" value="AOG" severity="danger"></p-tag> {{ r.estimatedLeadTimeHours != null ? (r.estimatedLeadTimeHours + 'h') : '—' }}</td>
+      <td>{{ r.certification || '—' }}</td><td><p-tag [value]="r.supplierAslStatus || 'N/A'" [severity]="r.supplierAslStatus === 'APROVADO' ? 'success' : 'warning'"></p-tag></td>
+      <td><p-tag [value]="r.source === 'STAGING_DEMO' ? 'Demonstração' : 'AeroSuite'" [severity]="r.source === 'STAGING_DEMO' ? 'warning' : 'info'"></p-tag></td>
+    </tr></ng-template>
+    <ng-template pTemplate="emptymessage"><tr><td colspan="11" class="empty">{{ searched ? 'Nenhuma disponibilidade encontrada para este P/N.' : 'Informe o P/N para iniciar a busca.' }}</td></tr></ng-template>
+  </p-table>
+
+  <section class="comparison" *ngIf="comparisonVisible && selected.length">
+    <header class="comparison-header"><div><span class="eyebrow">ANÁLISE COMPARATIVA</span><h3>Decisão apoiada por dados</h3><p>Os destaques consideram disponibilidade, conformidade, prazo e preço entre as ofertas selecionadas.</p></div><button type="button" aria-label="Fechar comparação" (click)="comparisonVisible = false"><i class="pi pi-times"></i></button></header>
+
+    <div class="recommendation" *ngIf="recommendedOffer as recommended">
+      <div class="recommendation-icon"><i class="pi pi-sparkles"></i></div>
+      <div class="recommendation-copy"><span>OPÇÃO RECOMENDADA</span><strong>{{ recommended.supplier || 'Estoque próprio' }}</strong><p>Melhor equilíbrio nos critérios disponíveis, com {{ offerScore(recommended) }} pontos na análise.</p></div>
+      <div class="recommendation-reasons"><span *ngFor="let reason of offerReasons(recommended)"><i class="pi pi-check"></i>{{ reason }}</span></div>
+      <button type="button" class="recommendation-action" (click)="createRfq()"><i class="pi pi-send"></i> Solicitar cotação</button>
+    </div>
+
+    <div class="comparison-legend"><span><i class="legend-dot best"></i> Melhor resultado no critério</span><span><i class="legend-dot attention"></i> Requer validação</span><small>A recomendação é um subsídio à decisão e deve ser confirmada por RFQ.</small></div>
+    <div class="comparison-grid">
+      <article class="offer-card" *ngFor="let item of selected; let index = index" [class.recommended-card]="isRecommended(item)">
+        <div class="offer-card-top"><span class="offer-index">OPÇÃO {{ index + 1 }}</span><span class="recommended-badge" *ngIf="isRecommended(item)"><i class="pi pi-star-fill"></i> Recomendada</span></div>
+        <div class="offer-identity"><div class="offer-source">{{ item.source === 'STAGING_DEMO' ? 'Demonstração' : item.source === 'AEROSUITE_INTERNAL' ? 'AeroSuite' : item.source }}</div><h4>{{ item.supplier || 'Estoque próprio' }}</h4><p>{{ item.partNumber }} · {{ item.description || 'Descrição não informada' }}</p></div>
+        <div class="score-row"><span>Pontuação da análise</span><strong>{{ offerScore(item) }}</strong><div class="score-track"><span [style.width.%]="offerScore(item)"></span></div></div>
+        <dl class="criteria-list">
+          <div [class.criterion-best]="isLowestPrice(item)"><dt><i class="pi pi-dollar"></i> Preço</dt><dd>{{ item.unitPrice != null ? (item.currency + ' ' + (item.unitPrice | number:'1.2-2')) : 'Sob consulta' }}<small *ngIf="isLowestPrice(item)">MENOR PREÇO</small></dd></div>
+          <div [class.criterion-best]="isFastest(item)"><dt><i class="pi pi-clock"></i> Prazo</dt><dd>{{ item.estimatedLeadTimeHours != null ? (item.estimatedLeadTimeHours + 'h') : 'Não informado' }}<small *ngIf="isFastest(item)">MAIS RÁPIDO</small></dd></div>
+          <div [class.criterion-best]="item.quantity != null && item.quantity >= (quantity || 1)"><dt><i class="pi pi-box"></i> Quantidade</dt><dd>{{ item.quantity ?? 'Não informada' }}<small *ngIf="item.quantity != null && item.quantity >= (quantity || 1)">ATENDE A DEMANDA</small></dd></div>
+          <div [class.criterion-best]="item.supplierAslStatus === 'APROVADO'" [class.criterion-attention]="item.supplierAslStatus !== 'APROVADO'"><dt><i class="pi pi-verified"></i> Status ASL</dt><dd>{{ item.supplierAslStatus || 'Não avaliado' }}<small>{{ item.supplierAslStatus === 'APROVADO' ? 'FORNECEDOR APROVADO' : 'VALIDAÇÃO NECESSÁRIA' }}</small></dd></div>
+          <div [class.criterion-best]="aog && item.aogAvailable"><dt><i class="pi pi-bolt"></i> Atendimento AOG</dt><dd>{{ item.aogAvailable ? 'Disponível' : 'Não confirmado' }}<small *ngIf="aog && item.aogAvailable">PRONTO PARA AOG</small></dd></div>
+          <div><dt><i class="pi pi-file-check"></i> Certificação</dt><dd>{{ item.certification || 'Não informada' }}</dd></div>
+          <div><dt><i class="pi pi-map-marker"></i> Localização</dt><dd>{{ item.location || item.country || 'Não informada' }}</dd></div>
+          <div><dt><i class="pi pi-tag"></i> Condição</dt><dd>{{ item.condition || 'Não informada' }}</dd></div>
+        </dl>
+        <div class="decision-reasons"><strong>Subsídios desta opção</strong><span *ngFor="let reason of offerReasons(item)"><i class="pi pi-check-circle"></i>{{ reason }}</span><span class="no-evidence" *ngIf="!offerReasons(item).length"><i class="pi pi-exclamation-circle"></i>Dados insuficientes para destacar esta opção</span></div>
+      </article>
+    </div>
+  </section>
+
+  <p-dialog [(visible)]="rfqVisible" [modal]="true" [draggable]="false" [resizable]="false" [style]="{width:'min(1180px,96vw)'}" styleClass="rfq-dialog" header="RFQ inteligente">
+    <div class="rfq-success" *ngIf="createdRfq as rfq"><i class="pi pi-check-circle"></i><div><span>RFQ CRIADA COM SUCESSO</span><strong>{{ rfq.number }}</strong><p>{{ rfq.items.length }} item(ns) incorporados e valores recalculados pelo servidor.</p></div></div>
+    <ng-container *ngIf="!createdRfq">
+      <div class="rfq-heading"><div><span class="eyebrow">SOLICITAÇÃO DE COTAÇÃO</span><h3>Revise os produtos selecionados</h3><p>Quantidades e valores podem ser ajustados. Os totais são recalculados automaticamente.</p></div><span class="rfq-aog" *ngIf="aog"><i class="pi pi-bolt"></i> PRIORIDADE AOG</span></div>
+      <div class="rfq-meta"><label><span>Título da RFQ</span><input pInputText [(ngModel)]="rfqTitle" maxlength="180"></label><label><span>Observações ao fornecedor</span><input pInputText [(ngModel)]="rfqNotes" placeholder="Prazo, documentação e condições comerciais esperadas"></label></div>
+      <div class="rfq-table-wrap">
+        <table class="rfq-table"><thead><tr><th>#</th><th>Produto</th><th>Fornecedor</th><th>Condição / Certificação</th><th class="numeric">Qtd.</th><th>Moeda</th><th class="numeric">Valor unitário</th><th class="numeric">Total</th><th>Prazo</th><th></th></tr></thead>
+          <tbody><tr *ngFor="let item of rfqItems; let index = index"><td class="line-number">{{ index + 1 }}</td><td class="product-cell"><strong>{{ item.partNumber }}</strong><span>{{ item.description || 'Descrição não informada' }}</span></td><td><strong>{{ item.supplier || 'Estoque próprio' }}</strong><span>{{ item.country || 'País não informado' }}</span></td><td><strong>{{ item.condition || '—' }}</strong><span>{{ item.certification || 'Certificação a confirmar' }}</span></td><td class="numeric"><input class="rfq-number" type="number" min="0.001" step="1" [(ngModel)]="item.requestedQuantity" (ngModelChange)="updateRfqLine(item)"></td><td><select class="rfq-currency" [(ngModel)]="item.currency" (ngModelChange)="updateRfqLine(item)"><option>USD</option><option>BRL</option><option>EUR</option></select></td><td class="numeric"><input class="rfq-price" type="number" min="0" step="0.01" [(ngModel)]="item.unitPrice" (ngModelChange)="updateRfqLine(item)" placeholder="Sob consulta"></td><td class="numeric line-total"><strong *ngIf="item.unitPrice != null">{{ item.currency || 'USD' }} {{ item.lineTotal | number:'1.2-2' }}</strong><span *ngIf="item.unitPrice == null">Sob consulta</span></td><td><strong>{{ item.estimatedLeadTimeHours != null ? item.estimatedLeadTimeHours + 'h' : 'A confirmar' }}</strong><span *ngIf="item.aogAvailable" class="mini-aog">AOG</span></td><td><button class="remove-line" type="button" (click)="removeRfqLine(item)" aria-label="Remover item"><i class="pi pi-trash"></i></button></td></tr></tbody>
+        </table>
+      </div>
+      <div class="rfq-footer"><div class="rfq-summary"><span>{{ rfqItems.length }} produto(s)</span><span>{{ rfqItems.length }} linha(s) de cotação</span><span>Valores sem impostos e frete</span></div><div class="rfq-totals"><div *ngFor="let total of rfqTotals()"><span>TOTAL {{ total.currency }}</span><strong>{{ total.currency }} {{ total.total | number:'1.2-2' }}</strong></div><div *ngIf="!rfqTotals().length"><span>TOTAL</span><strong>Sob consulta</strong></div></div></div>
+      <div class="rfq-actions"><button type="button" class="secondary-action" (click)="rfqVisible = false">Cancelar</button><button pButton type="button" icon="pi pi-save" label="Criar RFQ" [loading]="rfqSaving" [disabled]="!rfqItems.length || !rfqTitle.trim()" (click)="saveRfq()"></button></div>
+    </ng-container>
+  </p-dialog>
+
+  <p-dialog [(visible)]="rfqCenterVisible" (onHide)="closeRfqCenter()" [modal]="true" [draggable]="false" [resizable]="false" [style]="{width:'min(1320px,97vw)'}" styleClass="rfq-center-dialog" header="Central de RFQs">
+    <div class="rfq-center-shell">
+      <aside class="rfq-browser"><div class="rfq-browser-head"><div><span class="eyebrow">HISTÓRICO INTELIGENTE</span><h3>RFQs salvas</h3></div><span class="rfq-count">{{ rfqs.length }}</span></div><div class="rfq-smart-search"><i class="pi pi-search"></i><input pInputText [(ngModel)]="rfqQuery" (input)="loadRfqs()" placeholder="Número, P/N, fornecedor, país ou status"></div><div class="rfq-loading" *ngIf="rfqCenterLoading"><i class="pi pi-spin pi-spinner"></i> Buscando RFQs...</div><div class="rfq-list" *ngIf="!rfqCenterLoading"><button type="button" *ngFor="let rfq of rfqs" (click)="selectRfq(rfq)" [class.active]="activeRfq?.id === rfq.id"><span class="rfq-list-top"><strong>{{ rfq.number }}</strong><small [class.sent]="rfq.status === 'SENT'">{{ rfq.status === 'SENT' ? 'ENVIADA' : 'RASCUNHO' }}</small></span><span class="rfq-list-title">{{ rfq.title }}</span><span class="rfq-list-meta"><i class="pi pi-box"></i>{{ rfq.items.length }} itens <i class="pi pi-calendar"></i>{{ rfq.createdAt | date:'dd/MM/yyyy HH:mm' }}</span></button><div class="rfq-list-empty" *ngIf="!rfqs.length"><i class="pi pi-inbox"></i><strong>Nenhuma RFQ encontrada</strong><span>Tente outros termos de busca.</span></div></div></aside>
+      <main class="rfq-detail" *ngIf="activeRfq as rfq; else noRfqSelected"><header><div><span class="eyebrow">REQUEST FOR QUOTATION</span><h2>{{ rfq.number }}</h2><p>{{ rfq.title }}</p></div><div class="rfq-detail-actions"><button type="button" (click)="downloadRfqPdf(rfq)"><i class="pi pi-file-pdf"></i> PDF</button><button type="button" (click)="openSend('EMAIL')"><i class="pi pi-envelope"></i> E-mail</button><button type="button" class="whatsapp" (click)="openSend('WHATSAPP')"><i class="pi pi-whatsapp"></i> WhatsApp</button></div></header><div class="rfq-kpis"><div><span>STATUS</span><strong>{{ rfq.status === 'SENT' ? 'Enviada' : 'Rascunho' }}</strong></div><div><span>ITENS</span><strong>{{ rfq.items.length }}</strong></div><div *ngFor="let total of rfq.totalsByCurrency | keyvalue"><span>TOTAL {{ total.key }}</span><strong>{{ total.key }} {{ total.value | number:'1.2-2' }}</strong></div></div><div class="rfq-detail-table"><table><thead><tr><th>P/N</th><th>Descrição</th><th>Fornecedor</th><th>Qtd.</th><th>Unitário</th><th>Total</th><th>Prazo</th></tr></thead><tbody><tr *ngFor="let item of rfq.items"><td><strong>{{ item.partNumber }}</strong></td><td>{{ item.description || '—' }}</td><td>{{ item.supplier || 'Estoque próprio' }}</td><td>{{ item.quantity }}</td><td>{{ item.unitPrice != null ? ((item.currency || 'USD') + ' ' + (item.unitPrice | number:'1.2-2')) : 'Sob consulta' }}</td><td><strong>{{ item.lineTotal != null ? ((item.currency || 'USD') + ' ' + (item.lineTotal | number:'1.2-2')) : '—' }}</strong></td><td>{{ item.estimatedLeadTimeHours != null ? item.estimatedLeadTimeHours + 'h' : '—' }}</td></tr></tbody></table></div>
+        <section class="send-console" *ngIf="sendChannel"><header><div><span>ENVIO {{ sendChannel === 'EMAIL' ? 'POR E-MAIL' : 'POR WHATSAPP' }}</span><strong>{{ sendState === 'CONNECTING' ? 'Conectando dispositivo' : sendState === 'READY' ? 'Pronto para enviar' : sendState === 'SENDING' ? 'Enviando RFQ' : sendState === 'SUCCESS' ? 'Envio concluído' : sendState === 'ERROR' ? 'Falha no envio' : 'Preparando' }}</strong></div><button type="button" (click)="sendChannel = null"><i class="pi pi-times"></i></button></header><div class="send-progress"><span [style.width.%]="sendProgress"></span></div><div class="whatsapp-connect" *ngIf="sendChannel === 'WHATSAPP' && sendState === 'CONNECTING'"><div class="qr-frame"><img *ngIf="whatsappQr" [src]="whatsappQrSrc" alt="QR Code para conectar o WhatsApp"><i *ngIf="!whatsappQr" class="pi pi-spin pi-spinner"></i></div><div><strong>Escaneie com o WhatsApp</strong><p>Abra Aparelhos conectados › Conectar aparelho. A sessão será encerrada automaticamente após o envio.</p><dl><div><dt>Instância</dt><dd>{{ whatsappConnection?.instanceName || 'Preparando...' }}</dd></div><div><dt>Status</dt><dd>{{ whatsappConnection?.status || 'CONNECTING' }}</dd></div><div><dt>Segurança</dt><dd>Sessão temporária</dd></div></dl></div></div><div class="send-form" *ngIf="sendState === 'READY' || sendState === 'SENDING'"><label><span>{{ sendChannel === 'EMAIL' ? 'E-mail do destinatário' : 'WhatsApp com DDI' }}</span><input pInputText [(ngModel)]="sendDestination" [placeholder]="sendChannel === 'EMAIL' ? 'compras@fornecedor.com' : '+55 11 99999-9999'"></label><label><span>Mensagem</span><textarea [(ngModel)]="sendMessage" rows="3" placeholder="Mensagem que acompanhará a RFQ"></textarea></label><button pButton type="button" [icon]="sendState === 'SENDING' ? 'pi pi-spin pi-spinner' : 'pi pi-send'" label="Enviar RFQ com PDF" [disabled]="sendState === 'SENDING' || !sendDestination.trim()" (click)="sendActiveRfq()"></button></div><div class="send-result success" *ngIf="sendState === 'SUCCESS'"><i class="pi pi-check-circle"></i><div><strong>RFQ entregue ao canal de envio</strong><p>O registro foi atualizado para “Enviada”. A conexão temporária do WhatsApp foi encerrada.</p></div></div><div class="send-result error" *ngIf="sendState === 'ERROR'"><i class="pi pi-times-circle"></i><div><strong>Não foi possível concluir</strong><p>{{ sendError }}</p></div></div></section>
+      </main><ng-template #noRfqSelected><main class="rfq-detail-empty"><i class="pi pi-file-edit"></i><strong>Selecione uma RFQ</strong><p>Consulte os itens, gere o PDF ou inicie um envio acompanhado.</p></main></ng-template>
+    </div>
+  </p-dialog>
+</section>

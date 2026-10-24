@@ -1,0 +1,40 @@
+CREATE TABLE IF NOT EXISTS parts_rfq (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    tenant_id VARCHAR(64) NOT NULL,
+    rfq_number VARCHAR(40) NOT NULL,
+    user_id BIGINT NULL,
+    status VARCHAR(24) NOT NULL DEFAULT 'DRAFT',
+    title VARCHAR(180) NOT NULL,
+    aog BOOLEAN NOT NULL DEFAULT FALSE,
+    notes TEXT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_parts_rfq_tenant_number (tenant_id, rfq_number),
+    INDEX idx_parts_rfq_tenant_created (tenant_id, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS parts_rfq_item (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    tenant_id VARCHAR(64) NOT NULL,
+    rfq_id BIGINT NOT NULL,
+    inventory_item_id BIGINT NULL,
+    line_number INT NOT NULL,
+    part_number VARCHAR(100) NOT NULL,
+    description VARCHAR(500) NULL,
+    item_condition VARCHAR(32) NULL,
+    quantity DECIMAL(15,3) NOT NULL,
+    currency VARCHAR(3) NULL,
+    unit_price DECIMAL(19,4) NULL,
+    line_total DECIMAL(19,4) NULL,
+    supplier VARCHAR(255) NULL,
+    supplier_email VARCHAR(255) NULL,
+    certification VARCHAR(255) NULL,
+    country VARCHAR(100) NULL,
+    source VARCHAR(60) NULL,
+    estimated_lead_time_hours INT NULL,
+    aog_available BOOLEAN NULL,
+    PRIMARY KEY (id),
+    INDEX idx_parts_rfq_item_rfq (tenant_id, rfq_id),
+    CONSTRAINT fk_parts_rfq_item_rfq FOREIGN KEY (rfq_id) REFERENCES parts_rfq(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

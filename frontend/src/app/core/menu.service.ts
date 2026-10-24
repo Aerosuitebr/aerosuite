@@ -16,7 +16,7 @@ export interface MenuSection {
   funcionalidades: Funcionalidade[];
 }
 
-const MENU_SESSION_KEY = 'aerosuite_menu_sections_v1';
+const MENU_SESSION_KEY = 'aerosuite_menu_sections_v2';
 
 interface MenuSessionPayload {
   userKey: string;

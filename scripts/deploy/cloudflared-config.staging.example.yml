@@ -1,0 +1,11 @@
+# Substitua TUNNEL_ID pelo túnel de staging e instale como serviço cloudflared.
+tunnel: TUNNEL_ID
+credentials-file: /etc/cloudflared/TUNNEL_ID.json
+
+ingress:
+  - hostname: staging.aerosuite.app
+    service: http://127.0.0.1:8181
+    originRequest:
+      noHappyEyeballs: true
+      httpHostHeader: staging.aerosuite.app
+  - service: http_status:404
