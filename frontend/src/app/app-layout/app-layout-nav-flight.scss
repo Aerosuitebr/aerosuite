@@ -491,7 +491,7 @@ $sidebar-flight-collapsed: 76px;
     padding 0.28s ease;
 
   &.is-expanded {
-    max-height: 1200px;
+    max-height: none;
     opacity: 1;
     padding-bottom: 0.55rem;
   }
@@ -755,3 +755,16 @@ $sidebar-flight-collapsed: 76px;
   background: rgba(245, 158, 11, 0.2);
   border-color: rgba(245, 158, 11, 0.45);
 }
+
+// Keep long modules independently scrollable instead of stretching the whole deck.
+.sidebar--flight-deck:not(.collapsed) .nav-flight-list.is-expanded {
+  max-height: min(56dvh, 640px);
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-width: auto;
+  scrollbar-color: #67c8e8 #17283d;
+  &::-webkit-scrollbar { width: 9px; }
+  &::-webkit-scrollbar-track { background: #17283d; border-radius: 6px; }
+  &::-webkit-scrollbar-thumb { background: #67c8e8; border-radius: 6px; border: 2px solid #17283d; }
+}
+.nav-list-scroll-hint { margin: 0 14px 8px; padding: 7px 10px; color: #d9e9f6; background: #ffffff0a; border-radius: 6px; font-size: 12px; line-height: 1.5; }

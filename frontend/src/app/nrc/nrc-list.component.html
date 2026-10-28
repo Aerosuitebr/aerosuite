@@ -1,0 +1,101 @@
+<section class="nrc-top">
+  <div>
+    <h2>{{ (presetStatus ? 'nrc.list.title.' + presetStatus : 'nrc.list.title') | translate }}</h2>
+    <p>{{ 'nrc.list.lead' | translate }}</p>
+  </div>
+</section>
+
+@if (error) { <div class="notice error" role="alert">{{ error }}</div> }
+
+<form class="filters list-filters" (ngSubmit)="apply()">
+  <label class="search">
+    <span>{{ 'nrc.filter.search' | translate }}</span>
+    <input name="q" [(ngModel)]="q" (ngModelChange)="searchChanged()" [placeholder]="'nrc.filter.searchPh' | translate" />
+  </label>
+  <label class="field">
+    <span>{{ 'nrc.field.status' | translate }}</span>
+    <select name="status" [(ngModel)]="status" (ngModelChange)="apply()">
+      <option value="">{{ 'nrc.filter.all' | translate }}</option>
+      @for (item of statuses; track item.value) {
+        <option [value]="item.value">{{ label('status', item.value) }}</option>
+      }
+    </select>
+  </label>
+  <label class="field">
+    <span>{{ 'nrc.field.severity' | translate }}</span>
+    <select name="severidade" [(ngModel)]="severidade" (ngModelChange)="apply()">
+      <option value="">{{ 'nrc.filter.all' | translate }}</option>
+      @for (item of severities; track item.value) {
+        <option [value]="item.value">{{ label('severity', item.value) }}</option>
+      }
+    </select>
+  </label>
+  <label class="field check">
+    <input type="checkbox" name="vencidas" [(ngModel)]="vencidas" (ngModelChange)="apply()" />
+    <span>{{ 'nrc.filter.overdue' | translate }}</span>
+  </label>
+  @if (hasFilters) {
+    <button class="btn" type="button" (click)="clearFilters()">{{ 'nrc.filter.clear' | translate }}</button>
+  }
+</form>
+
+@if (osId) {
+  <div class="notice ok">
+    {{ 'nrc.list.osScope' | translate:{ id: '' + osId } }}
+    <button class="btn" type="button" (click)="clearOs()">{{ 'nrc.filter.clearOs' | translate }}</button>
+  </div>
+}
+
+@if (loading) {
+  <div class="empty" role="status"><p>{{ 'nrc.loading' | translate }}</p></div>
+} @else if (!error && !items.length) {
+  <div class="empty list-empty" role="status">
+    <i class="pi pi-inbox empty-icon" aria-hidden="true"></i>
+    <h2>{{ 'nrc.list.emptyTitle' | translate }}</h2>
+    <p>{{ 'nrc.list.empty' | translate }}</p>
+    <div class="actions">
+      @if (hasFilters) {
+        <button class="btn" type="button" (click)="clearFilters()">{{ 'nrc.filter.clear' | translate }}</button>
+      }
+      @if (canOpen) {
+        <a class="btn" routerLink="/nrc/nova" [queryParams]="{ osId: osId }">{{ 'nrc.list.create' | translate }}</a>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="cards">
+    @for (item of items; track item.id) {
+      <a class="card" [class.late]="item.vencida" [routerLink]="['/nrc', item.id]">
+        <div class="card-top">
+          <strong>{{ item.numero }}</strong>
+          <span [attr.class]="'chip ' + chip(item.status)">{{ label('status', item.status) }}</span>
+          <span [attr.class]="'chip ' + chip(item.severidade)">{{ label('severity', item.severidade) }}</span>
+          @if (item.vencida) { <span class="chip late">{{ 'nrc.overdue' | translate }}</span> }
+        </div>
+        <p>{{ label('step', item.etapaAtual) }}</p>
+        <div class="facts">
+          @if (item.osNumero) { <span>OS {{ item.osNumero }}</span> }
+          @if (item.clienteNome) { <span>{{ item.clienteNome }}</span> }
+          @if (item.responsavelTratamentoNome) { <span>{{ item.responsavelTratamentoNome }}</span> }
+        </div>
+        <div class="facts">
+          @if (item.prazoTratamento) {
+            <span [class.late-text]="(days(item) ?? 1) < 0">
+              {{ 'nrc.field.deadline' | translate }}: {{ item.prazoTratamento }}
+            </span>
+          }
+          @if (item.aprovacaoStatus) {
+            <span class="chip wait">{{ label('approval', item.aprovacaoStatus) }}</span>
+          }
+        </div>
+      </a>
+    }
+  </div>
+  <div class="pager">
+    <span>{{ total }}</span>
+    <div class="actions">
+      <button class="btn" type="button" (click)="prev()" [disabled]="page === 0">{{ 'nrc.page.prev' | translate }}</button>
+      <button class="btn" type="button" (click)="next()" [disabled]="(page + 1) * size >= total">{{ 'nrc.page.next' | translate }}</button>
+    </div>
+  </div>
+}

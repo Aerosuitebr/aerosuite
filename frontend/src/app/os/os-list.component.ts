@@ -10,6 +10,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
+import { MenuModule, Menu } from 'primeng/menu';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { BadgeModule } from 'primeng/badge';
@@ -20,7 +21,7 @@ import { ToastModule } from 'primeng/toast';
 import { AccordionModule } from 'primeng/accordion';
 import { PaginatorModule } from 'primeng/paginator';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService, MenuItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { OSService, OS, OsPainelResumo, OSSolicitacaoTrocaItem, KitFcuDeficitItem, KitFcuDeficitPreview } from '../core/os.service';
@@ -77,6 +78,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
     InputTextareaModule,
     DropdownModule,
     ButtonModule,
+    MenuModule,
     CardModule,
     TagModule,
     BadgeModule,
@@ -173,7 +175,9 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
             </button>
           </div>
           
-          <div class="operation-filters">
+          <details class="advanced-filters">
+            <summary>{{ 'os.list.advancedFilters' | translate }}<span *ngIf="activeAdvancedFilters"> · {{ activeAdvancedFilters }}</span></summary>
+            <div class="operation-filters">
             <label for="os-fila">Fila</label>
             <p-dropdown inputId="os-fila" [options]="filtroFilaOptions" optionLabel="label" optionValue="value"
                         [(ngModel)]="filtroFila" (onChange)="buscar()"></p-dropdown>
@@ -181,6 +185,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
             <p-dropdown inputId="os-status" [options]="filtroStatusOptions" optionLabel="label" optionValue="value"
                         [(ngModel)]="filtroStatus" [showClear]="true" placeholder="Todos" (onChange)="buscar()"></p-dropdown>
           </div>
+          </details>
           <div class="stats-container" [class.stats-container--extended]="dashboardExtendido">
             <div class="stat-item">
               <div class="stat-number">{{ total }}</div>
@@ -246,7 +251,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
             [showCurrentPageReport]="true"
             [currentPageReportTemplate]="'os.list.pageReport' | translate"
             [rowsPerPageOptions]="listRowsPerPageOptions"
-            styleClass="p-datatable-sm">
+            styleClass="p-datatable-sm os-main-table">
             
             <ng-template pTemplate="header">
               <tr>
@@ -308,9 +313,8 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                       tooltipPosition="top"
                       (click)="$event.stopPropagation()"></i>
                     <div class="os-id">
-                      <strong>{{ formatOSId(row) }}</strong>
-                      <button *ngIf="row.naoConformidadesTotal" pButton type="button" class="p-button-text p-button-sm" icon="pi pi-exclamation-circle"
-                              [label]="'NC: ' + row.naoConformidadesTotal" (click)="$event.stopPropagation(); abrirNaoConformidades(row)"></button>
+                      <button type="button" class="os-record-link" (click)="$event.stopPropagation(); viewOS(row)"
+                        [attr.aria-label]="('os.list.tooltip.readOnly' | translate) + ': ' + formatOSId(row)">{{ formatOSId(row) }}</button>
                     </div>
                   </div>
                 </td>
@@ -343,43 +347,12 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                 </td>
                 <td class="col-actions">
                   <div class="action-buttons" (click)="$event.stopPropagation()">
-                    <button 
-                      pButton 
-                      type="button" 
-                      icon="pi pi-eye" 
-                      class="p-button-text p-button-sm"
-                      [pTooltip]="'os.list.tooltip.readOnly' | translate"
-                      [attr.aria-label]="'os.list.tooltip.readOnly' | translate"
-                      tooltipPosition="top"
-                      (click)="viewOS(row)">
-                    </button>
-                    <button 
-                      pButton 
-                      type="button" 
-                      icon="pi pi-print" 
-                      class="p-button-text p-button-sm print-btn"
-                      [pTooltip]="'os.list.tooltip.print' | translate"
-                      [attr.aria-label]="'os.list.tooltip.print' | translate"
-                      (click)="printOS(row)">
-                    </button>
-                    <button 
-                      pButton 
-                      type="button" 
-                      icon="pi pi-pencil" 
-                      class="p-button-text p-button-sm edit-btn" *ngIf="row.podeEditar !== false"
-                      [pTooltip]="'os.list.tooltip.edit' | translate"
-                      [attr.aria-label]="'os.list.tooltip.edit' | translate"
-                      (click)="editOS(row)">
-                    </button>
-                    <button 
-                      pButton 
-                      type="button" 
-                      icon="pi pi-trash" 
-                      class="p-button-text p-button-sm delete-btn" *ngIf="!row.escopoEdicao || row.escopoEdicao === 'TOTAL'"
-                      [pTooltip]="'os.list.tooltip.delete' | translate"
-                      [attr.aria-label]="'os.list.tooltip.delete' | translate"
-                      (click)="confirmDelete(row)">
-                    </button>
+                    <button pButton type="button" icon="pi pi-eye" class="p-button-text p-button-sm"
+                      [pTooltip]="'os.list.tooltip.readOnly' | translate" [attr.aria-label]="'os.list.tooltip.readOnly' | translate"
+                      (click)="viewOS(row)"></button>
+                    <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-text p-button-sm"
+                      [pTooltip]="'os.list.moreActions' | translate" [attr.aria-label]="('os.list.moreActions' | translate) + ': ' + formatOSId(row)"
+                      aria-haspopup="menu" (click)="openRowActions($event, row, rowActionsMenu)"></button>
                   </div>
                 </td>
               </tr>
@@ -1367,7 +1340,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
           </div>
 
           <!-- OS List Table -->
-          <div class="consult-table-container">
+          <div class="consult-table-container" *ngIf="showOSConsultModal">
             <p-table
               [value]="consultOSList" 
               [loading]="consultLoading"
@@ -1545,6 +1518,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
 
       <!-- Toast Messages -->
       <p-toast></p-toast>
+    <p-menu #rowActionsMenu [popup]="true" [model]="rowActions" appendTo="body" styleClass="ops-row-action-menu"></p-menu>
       
       <!-- Confirmation Dialog -->
       <p-confirmDialog [closeOnEscape]="true" [dismissableMask]="false"></p-confirmDialog>
@@ -1555,7 +1529,12 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
 export class OSListComponent implements OnInit, OnDestroy {
   etiquetaVisivel = false;
   etiquetaOs: EtiquetaOs | null = null;
-  abrirNaoConformidades(os: OS) { this.router.navigate(['/conformidade/nao-conformidades'], {queryParams:{osId:os.id}}); }
+  abrirNaoConformidades(os: OS) { this.router.navigate(['/nrc'], {queryParams:{osId:os.id}}); }
+  podeNrc(): boolean {
+    return (this.authService.getCurrentUser()?.funcionalidadeCodigos || [])
+      .some((code) => (code || '').toUpperCase().startsWith('NRC_'));
+  }
+  abrirNrc(os: OS) { this.router.navigate(['/nrc'], { queryParams: { osId: os.id } }); }
   statusOperacionalLabel(status: string): string { return this.filtroStatusOptions.find(o => o.value === status)?.label || status || 'Aguardando distribuição'; }
   @HostListener('document:keydown', ['$event'])
   onAtalhoSalvarOs(event: KeyboardEvent) {
@@ -1564,6 +1543,29 @@ export class OSListComponent implements OnInit, OnDestroy {
       if (!this.isReadOnly && !this.registroEncerrado && !this.saving && this.osForm.enabled) this.saveOS();
     }
   }
+  rowActions: MenuItem[] = [];
+
+  get activeAdvancedFilters(): number {
+    return Number(this.filtroFila !== 'TODAS') + Number(!!this.filtroStatus);
+  }
+
+  openRowActions(event: Event, row: OS, menu: Menu): void {
+    this.rowActions = this.actionsFor(row);
+    menu.toggle(event);
+  }
+
+  actionsFor(row: OS): MenuItem[] {
+    const items: MenuItem[] = [];
+    if (row.podeEditar !== false) items.push({ label: this.i18n.translate('os.list.tooltip.edit'), icon: 'pi pi-pencil', command: () => this.editOS(row) });
+    items.push({ label: this.i18n.translate('os.list.tooltip.print'), icon: 'pi pi-print', command: () => this.printOS(row) });
+    if (this.podeNrc()) items.push({ label: this.i18n.translate('nrc.nav.list'), icon: 'pi pi-clipboard', command: () => this.abrirNrc(row) });
+    else if (row.naoConformidadesTotal) items.push({ label: this.i18n.translate('nrc.nav.list'), icon: 'pi pi-clipboard', command: () => this.abrirNaoConformidades(row) });
+    if (!row.escopoEdicao || row.escopoEdicao === 'TOTAL') {
+      items.push({ separator: true }, { label: this.i18n.translate('os.list.tooltip.delete'), icon: 'pi pi-trash', styleClass: 'os-delete-action', command: () => this.confirmDelete(row) });
+    }
+    return items;
+  }
+
   filtroFila = 'TODAS';
   filtroStatus: string | null = null;
   filtroFilaOptions = [{label:'Todas',value:'TODAS'},{label:'Sem mecânico',value:'SEM_MECANICO'},{label:'Sem atribuição há mais de 5 dias',value:'ALERTA_5_DIAS'}];
@@ -1884,7 +1886,8 @@ export class OSListComponent implements OnInit, OnDestroy {
         // Mapear os dados para garantir que idOs seja preenchido corretamente
         // Se idOs não existir ou for 0, usar o id do banco
         // Também mapear dados do Fabricante e FCU que vêm do backend
-        this.rows = response.items.map((os: any) => {
+        const items = response?.items ?? [];
+        this.rows = items.map((os: any) => {
           // Extrair ID do Fabricante de diferentes fontes
           const fabricanteId = os.idFabricanteId || (os.idFabricante?.id) || (os.fabricante?.id) || os.fabricanteId;
           // Extrair ID do FCU de diferentes fontes
@@ -3415,7 +3418,8 @@ export class OSListComponent implements OnInit, OnDestroy {
         }
         // Mapear os dados para garantir que idOs seja preenchido corretamente
         // Se idOs não existir ou for 0, usar o id do banco
-        this.consultOSList = response.items.map((os: any) => ({
+        const items = response?.items ?? [];
+        this.consultOSList = items.map((os: any) => ({
           ...os,
           idOs: os.idOs && os.idOs !== 0 ? os.idOs : (os.id || 0)
         }));

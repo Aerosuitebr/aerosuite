@@ -1,3 +1,4 @@
+import { SystemPageLayoutDirective } from './shared/page-hero/system-page-layout.directive';
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -15,12 +16,12 @@ import { DeploymentBannerComponent } from './shared/deployment-banner/deployment
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, ToastModule, DeploymentBannerComponent],
+  imports: [SystemPageLayoutDirective, RouterOutlet, CommonModule, ToastModule, DeploymentBannerComponent],
   template: `
     <app-deployment-banner></app-deployment-banner>
     <p-toast position="top-right"></p-toast>
     <!-- Área principal do app -->
-    <router-outlet></router-outlet>
+    <router-outlet systemPageLayout></router-outlet>
   `
 })
 export class AppComponent implements OnInit {

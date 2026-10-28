@@ -1,0 +1,73 @@
+<section class="nrc-top">
+  <div><h2>{{ 'nrc.nav.dashboard' | translate }}</h2><p>{{ 'nrc.dash.scope' | translate }}</p></div>
+</section>
+<div class="dashboard-period" [attr.aria-label]="'nrc.dash.period' | translate">
+  <label class="field"><span>{{ 'nrc.dash.period' | translate }}</span>
+    <select [(ngModel)]="period" (ngModelChange)="changePeriod()">
+      <option value="1">{{ 'nrc.dash.month' | translate }}</option>
+      <option value="3">{{ 'nrc.dash.quarter' | translate }}</option>
+      <option value="6">{{ 'nrc.dash.sixMonths' | translate }}</option>
+      <option value="12">{{ 'nrc.dash.year' | translate }}</option>
+      <option value="custom">{{ 'nrc.dash.custom' | translate }}</option>
+    </select>
+  </label>
+  <label class="field"><span>{{ 'nrc.dash.from' | translate }}</span><input type="date" [(ngModel)]="dataInicio" [max]="dataFim" (ngModelChange)="datesChanged()" /></label>
+  <label class="field"><span>{{ 'nrc.dash.to' | translate }}</span><input type="date" [(ngModel)]="dataFim" [min]="dataInicio" (ngModelChange)="datesChanged()" /></label>
+</div>
+@if (!validRange) { <p class="notice error" role="alert">{{ 'nrc.dash.invalidRange' | translate }}</p> }
+@if (error) { <div class="notice error" role="alert">{{ error }} <button class="btn" type="button" (click)="load()">{{ 'nrc.dash.retry' | translate }}</button></div> }
+@if (loading) {
+  <div class="dashboard-skeleton" role="status"><p>{{ 'nrc.loading' | translate }}</p><div aria-hidden="true"><span></span><span></span><span></span><span></span></div></div>
+} @else if (data && validRange && !error) {
+  @if (empty) {
+    <div class="dashboard-empty" role="status">
+      <i class="pi pi-chart-bar" aria-hidden="true"></i>
+      <div><h3>{{ 'nrc.dash.emptyTitle' | translate }}</h3><p>{{ 'nrc.dash.emptyHelp' | translate }}</p></div>
+      <button class="btn" type="button" (click)="period = '12'; changePeriod()">{{ 'nrc.dash.expand' | translate }}</button>
+    </div>
+  }
+  <section class="metrics dashboard-metrics">
+    <button type="button" (click)="open({ status: 'ABERTA' })"><span>{{ 'nrc.dash.open' | translate }}</span><strong>{{ data.abertas }}</strong>@if (!data.abertas) { <small>{{ 'nrc.dash.noPending' | translate }}</small> }</button>
+    <button type="button" (click)="open({ emTratamento: 'true' })"><span>{{ 'nrc.dash.treating' | translate }}</span><strong>{{ data.emTratamento }}</strong>@if (!data.emTratamento) { <small>{{ 'nrc.dash.noPending' | translate }}</small> }</button>
+    <button type="button" (click)="open({ vencidas: 'true' })"><span>{{ 'nrc.dash.overdue' | translate }}</span><strong>{{ data.vencidas }}</strong><small>{{ (data.vencidas ? 'nrc.dash.soon' : 'nrc.dash.noOverdue') | translate }}@if (data.vencidas) { : {{ data.proximasVencimento }} }</small></button>
+    <article><span>{{ 'nrc.dash.closedMonth' | translate }}</span><strong>{{ data.encerradasMes }}</strong><small>{{ 'nrc.dash.efficacy' | translate }}: {{ data.taxaEficacia == null ? '—' : (data.taxaEficacia | number:'1.0-0') + '%' }}</small></article>
+  </section>
+  <section class="panel dashboard-stages">
+    <h2>{{ 'nrc.dash.byStep' | translate }}</h2>
+    <div class="stage-grid">
+      @for (step of steps; track step.key) {
+        <button type="button" (click)="open({ etapaAtual: step.key })" [class.has-pending]="data[step.field] > 0">
+          <i [class]="'pi ' + step.icon" aria-hidden="true"></i><span>{{ ('nrc.step.' + step.key) | translate }}</span><strong>{{ data[step.field] }}</strong>
+          <small>{{ (data[step.field] ? 'nrc.dash.viewRecords' : 'nrc.dash.noPending') | translate }}</small>
+        </button>
+      }
+    </div>
+  </section>
+  <div class="dashboard-charts">
+    <section class="panel trend-panel">
+      <h2>{{ 'nrc.dash.trend' | translate }}</h2>
+      @if (hasTrend) {
+        <div class="chart-legend"><span><i></i>{{ 'nrc.dash.opened' | translate }}</span><span><i class="closed"></i>{{ 'nrc.status.ENCERRADA' | translate }}</span></div>
+        <div class="bars">
+          @for (point of data.tendenciaMensal || []; track point.mes) {
+            <div class="trend-row"><span>{{ point.mes }}</span><div class="trend-series"><div class="series-line"><div class="bar"><i [style.width.%]="point.abertas / trendMax * 100"></i></div><strong>{{ point.abertas }}</strong></div><div class="series-line"><div class="bar"><i class="closed" [style.width.%]="point.encerradas / trendMax * 100"></i></div><strong>{{ point.encerradas }}</strong></div></div></div>
+          }
+        </div>
+      } @else {
+        <div class="chart-empty"><div class="ghost-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><p>{{ 'nrc.dash.noTrend' | translate }}</p><small>{{ 'nrc.dash.illustration' | translate }}</small></div>
+      }
+    </section>
+    @for (chart of [{ title: 'nrc.dash.severity', group: 'severity', items: data.porSeveridade }, { title: 'nrc.dash.origin', group: 'origin', items: data.porOrigem }]; track chart.group) {
+      <section class="panel"><h2>{{ chart.title | translate }}</h2>
+        @if (chart.items?.length) {
+          <div class="bars">@for (item of chart.items || []; track item.chave) { <div class="bar-row"><span>{{ label(chart.group, item.chave) }}</span><div class="bar"><i [style.width.%]="item.total / maxCount(chart.items) * 100"></i></div><strong>{{ item.total }}</strong></div> }</div>
+        } @else {
+          <div class="chart-empty"><div class="ghost-bars horizontal" aria-hidden="true"><i></i><i></i><i></i></div><p>{{ 'nrc.dash.noDistribution' | translate }}</p><small>{{ 'nrc.dash.illustration' | translate }}</small></div>
+        }
+      </section>
+    }
+  </div>
+  @if (data.leadTimeMedioDias != null || data.custoConsolidado != null) {
+    <p class="dashboard-summary">{{ 'nrc.dash.lead' | translate }}: {{ data.leadTimeMedioDias == null ? '—' : (data.leadTimeMedioDias | number:'1.0-1') }} {{ 'nrc.dash.days' | translate }}@if (data.custoConsolidado != null) { · {{ 'nrc.dash.cost' | translate }}: {{ data.custoConsolidado | number:'1.2-2' }} }</p>
+  }
+}

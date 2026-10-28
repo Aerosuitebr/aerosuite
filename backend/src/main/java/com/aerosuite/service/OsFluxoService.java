@@ -239,14 +239,60 @@ public class OsFluxoService {
             return map("os",resumoOs(o,rs),"etapa",aberto(rs)==null?proxima(rs):etapa(aberto(rs).etapaId),"dtAbertura",o.dtAbertura,"tipoServico",o.tipoServico,"marcasMatricula",o.marcasMatricula,"campoEncontrado","CODIGO");}).toList();
     }
     public List<Map<String,Object>> fila(Set<Long> ids,int limite,String terminal) {
-        estacoes.exigirPareada(terminal);List<Map<String,Object>> fila=new ArrayList<>();
-        for(OS o:pesquisar(null)) {
-            List<OsFluxoRegistro> rs=registros(o.id);OsFluxoRegistro r=aberto(rs);OsFluxoEtapa e=r==null?proxima(rs):etapa(r.etapaId);
-            if(e==null||(!ids.isEmpty()&&!ids.contains(e.id))||!estacoes.atende(terminal,e.setor)) continue;
-            LocalDateTime desde=r!=null?r.entradaEm:rs.isEmpty()?o.createdAt:rs.get(rs.size()-1).saidaEm;
-            fila.add(map("os",resumoOs(o,rs),"etapa",e,"acao",r==null?"ENTRADA":"SAIDA","dtAbertura",o.dtAbertura,"tipoServico",o.tipoServico,"marcasMatricula",o.marcasMatricula,"desdeSegundos",seg(desde,LocalDateTime.now())));
-            if(fila.size()>=Math.max(1,Math.min(200,limite))) break;
-        }return fila;
+        estacoes.exigirPareada(terminal);
+        String setor=estacoes.setorAtendido(terminal);
+        List<OsFluxoEtapa> catalogo=etapas();
+        Map<Long,OsFluxoEtapa> porEtapa=new HashMap<>();
+        Set<Long> elegiveis=new HashSet<>();
+        for(OsFluxoEtapa e:catalogo) {
+            porEtapa.put(e.id,e);
+            if(Objects.equals(e.setor,setor)&&(ids==null||ids.isEmpty()||ids.contains(e.id))) elegiveis.add(e.id);
+        }
+        int cap=Math.max(1,Math.min(200,limite));
+        if(elegiveis.isEmpty()) return List.of();
+        // A fila só precisa das OS desta estação. Carregar cada OS ativa (e os registros dela)
+        // estoura o tempo quando a base tem milhares de ordens.
+        List<Long> osIds=OS.getEntityManager().createQuery("select o.id from OS o where o.isActive = true order by o.id desc",Long.class).getResultList();
+        Map<Long,List<OsFluxoRegistro>> porOs=new HashMap<>();
+        for(OsFluxoRegistro r:OsFluxoRegistro.<OsFluxoRegistro>list("anulado = false order by osId, sequencia, id"))
+            porOs.computeIfAbsent(r.osId,k->new ArrayList<>()).add(r);
+        List<Long> escolhidos=new ArrayList<>();
+        Map<Long,OsFluxoEtapa> etapaAtual=new HashMap<>();
+        Map<Long,String> acao=new HashMap<>();
+        for(Long osId:osIds) {
+            List<OsFluxoRegistro> rs=porOs.getOrDefault(osId,List.of());
+            OsFluxoRegistro abertoReg=aberto(rs);
+            OsFluxoEtapa e=abertoReg!=null?porEtapa.get(abertoReg.etapaId):proximaEm(catalogo,porEtapa,rs);
+            if(e==null||!elegiveis.contains(e.id)) continue;
+            escolhidos.add(osId);
+            etapaAtual.put(osId,e);
+            acao.put(osId,abertoReg==null?"ENTRADA":"SAIDA");
+            if(escolhidos.size()>=cap) break;
+        }
+        if(escolhidos.isEmpty()) return List.of();
+        Map<Long,OS> osPorId=new HashMap<>();
+        for(OS o:OS.<OS>list("id in ?1",escolhidos)) osPorId.put(o.id,o);
+        LocalDateTime agora=LocalDateTime.now();
+        List<Map<String,Object>> fila=new ArrayList<>();
+        for(Long osId:escolhidos) {
+            OS o=osPorId.get(osId);
+            if(o==null) continue;
+            List<OsFluxoRegistro> rs=porOs.getOrDefault(osId,List.of());
+            OsFluxoRegistro abertoReg=aberto(rs);
+            LocalDateTime desde=abertoReg!=null?abertoReg.entradaEm:rs.isEmpty()?o.createdAt:rs.get(rs.size()-1).saidaEm;
+            fila.add(map("os",resumoOs(o,rs),"etapa",etapaAtual.get(osId),"acao",acao.get(osId),"dtAbertura",o.dtAbertura,"tipoServico",o.tipoServico,"marcasMatricula",o.marcasMatricula,"desdeSegundos",seg(desde,agora)));
+        }
+        return fila;
+    }
+    private OsFluxoEtapa proximaEm(List<OsFluxoEtapa> catalogo,Map<Long,OsFluxoEtapa> porEtapa,List<OsFluxoRegistro> rs) {
+        int ordem=0;
+        if(!rs.isEmpty()) {
+            OsFluxoEtapa ultima=porEtapa.get(rs.get(rs.size()-1).etapaId);
+            if(ultima==null||ultima.ordem==null) return null;
+            ordem=ultima.ordem;
+        }
+        for(OsFluxoEtapa e:catalogo) if(e.ordem!=null&&e.ordem>ordem) return e;
+        return null;
     }
     public List<Map<String,Object>> eventos(LocalDate de,LocalDate ate,Boolean sucesso,int limite) {
         return eventosPeriodo(de,ate).stream().filter(e->sucesso==null||sucesso.equals(e.sucesso)).limit(Math.max(1,Math.min(2000,limite))).map(this::eventoDto).toList();

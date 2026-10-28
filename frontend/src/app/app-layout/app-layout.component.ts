@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, inject, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild, HostBinding } from '@angular/core';
+import { SystemPageLayoutDirective } from '../shared/page-hero/system-page-layout.directive';
+import { ChangeDetectorRef, Component, inject, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild, HostBinding, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet, RouterLink, Router, NavigationEnd } from '@angular/router';
@@ -23,6 +24,8 @@ import { ChatIconComponent } from '../shared/chat-icon/chat-icon.component';
 import { ChatNotificationComponent } from '../shared/chat-notification/chat-notification.component';
 import { ContextualOnboardingBannerComponent } from '../shared/contextual-onboarding-banner/contextual-onboarding-banner.component';
 import { MenuService, MenuSection } from '../core/menu.service';
+import { activeMenuSection } from '../core/menu-organization';
+import { MenuSugestao, buscarFuncionalidades } from './menu-busca';
 import { Funcionalidade } from '../core/funcionalidade.service';
 import { AuthService, User } from '../auth/auth.service';
 import { DEFAULT_USUARIO_AVATAR, usuarioAvatarInitials } from '../core/usuario-foto.util';
@@ -46,12 +49,13 @@ import { ThermalPrintSetupDialogComponent } from '../core/print/thermal-print-se
 import { RouteLoadingBarComponent } from '../shared/route-loading-bar/route-loading-bar.component';
 import { PlatformOpsEligibilityService } from '../platform-ops/platform-ops-eligibility.service';
 import { PlatformOpsAuthService } from '../platform-ops/platform-ops-auth.service';
+import { PLATFORM_OPS_NAV } from '../platform-ops/platform-ops-nav.config';
 import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
 
 @Component({
   standalone: true,
   selector: 'app-layout',
-  imports: [
+  imports: [SystemPageLayoutDirective, 
     CommonModule,
     FormsModule,
     RouterOutlet, 
@@ -412,33 +416,88 @@ import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
 
           <!-- Navigation Menu — flight deck -->
           <nav id="primary-navigation" class="sidebar-nav sidebar-nav--flight-deck" [attr.aria-label]="'layout.menu' | translate">
-            <div class="nav-deck-toolbar" *ngIf="!sidebarCollapsed || isCompactNav()">
-              <div class="nav-deck-toolbar-head">
-                <span class="nav-deck-kicker"><i class="pi pi-compass"></i> {{ 'layout.navFlightDeck' | translate }}</span>
-                <span class="nav-deck-hint">{{ 'layout.navFlightDeckHint' | translate }}</span>
-              </div>
-              <label class="nav-deck-search" for="nav-deck-search-input">
-                <i class="pi pi-search" aria-hidden="true"></i>
+            <div class="menu-busca" *ngIf="!sidebarCollapsed || isCompactNav()">
+              <div class="mb-campo" [class.mb-campo--ativo]="buscaFocada">
+                <i class="pi pi-search mb-lupa"></i>
                 <input
-                  id="nav-deck-search-input"
+                  #buscaInput
                   type="text"
-                  [(ngModel)]="menuSearchQuery"
-                  (ngModelChange)="onMenuSearchChange()"
-                  [placeholder]="'layout.navSearch' | translate"
+                  class="mb-input"
+                  placeholder="Buscar funcionalidade…"
                   autocomplete="off"
-                  spellcheck="false" />
+                  spellcheck="false"
+                  role="combobox"
+                  aria-label="Buscar funcionalidade no menu"
+                  aria-controls="menu-busca-lista"
+                  [attr.aria-expanded]="buscaAberta"
+                  [attr.aria-activedescendant]="buscaAberta && sugestoesVisiveis.length ? 'mb-opt-' + buscaIndice : null"
+                  [value]="buscaTermo"
+                  (input)="onBuscaInput($any($event.target).value)"
+                  (focus)="onBuscaFocus()"
+                  (blur)="onBuscaBlur()"
+                  (keydown)="onBuscaKeydown($event)">
                 <button
-                  *ngIf="menuSearchQuery"
+                  *ngIf="buscaTermo"
                   type="button"
-                  class="nav-deck-search-clear"
-                  (click)="clearMenuSearch()"
-                  [attr.aria-label]="'layout.navSearchClear' | translate">
+                  class="mb-limpar"
+                  aria-label="Limpar busca"
+                  (mousedown)="$event.preventDefault()"
+                  (click)="limparBusca(true)">
                   <i class="pi pi-times"></i>
                 </button>
-              </label>
-            </div>
+                <kbd class="mb-atalho" *ngIf="!buscaTermo && !buscaFocada && !isCompactNav()">Ctrl K</kbd>
+              </div>
 
-            <div class="nav-deck-scroll">
+              <div
+                class="mb-painel"
+                id="menu-busca-lista"
+                role="listbox"
+                *ngIf="buscaAberta"
+                (mousedown)="$event.preventDefault()">
+                <div class="mb-cab" *ngIf="!buscaTermo && sugestoesVisiveis.length">
+                  <i class="pi pi-history"></i> Acessadas recentemente
+                </div>
+                <div
+                  class="mb-opt"
+                  role="option"
+                  *ngFor="let s of sugestoesVisiveis; let i = index; trackBy: trackBySugestao"
+                  [id]="'mb-opt-' + i"
+                  [attr.aria-selected]="i === buscaIndice"
+                  [class.mb-opt--ativa]="i === buscaIndice"
+                  (mouseenter)="buscaIndice = i"
+                  (click)="escolherSugestao(s)">
+                  <span class="mb-opt-ico"><i [class]="s.func.icone || 'pi pi-circle'"></i></span>
+                  <span class="mb-opt-txt">
+                    <span class="mb-opt-nome"><ng-container *ngFor="let p of s.nome"><mark *ngIf="p.destaque; else semMarca">{{ p.texto }}</mark><ng-template #semMarca>{{ p.texto }}</ng-template></ng-container></span>
+                    <span class="mb-opt-desc" *ngIf="s.descricao"><ng-container *ngFor="let p of s.descricao"><mark *ngIf="p.destaque; else semMarcaD">{{ p.texto }}</mark><ng-template #semMarcaD>{{ p.texto }}</ng-template></ng-container></span>
+                    <span class="mb-opt-secao"><i [class]="s.secao.icone"></i>{{ s.secao.titulo }}</span>
+                  </span>
+                  <i class="pi pi-arrow-right mb-opt-ir"></i>
+                </div>
+                <div class="mb-vazio" *ngIf="buscaTermo && !sugestoesVisiveis.length">
+                  <i class="pi pi-compass"></i>
+                  <span>Nenhuma funcionalidade encontrada para <strong>“{{ buscaTermo }}”</strong></span>
+                  <small>Tente outra palavra, parte do nome ou a seção.</small>
+                </div>
+                <div class="mb-rodape" *ngIf="sugestoesVisiveis.length && !isCompactNav()">
+                  <span><kbd>↑</kbd><kbd>↓</kbd> navegar</span>
+                  <span><kbd>Enter</kbd> abrir</span>
+                  <span><kbd>Esc</kbd> fechar</span>
+                </div>
+              </div>
+            </div>
+            <button
+              *ngIf="sidebarCollapsed && !isCompactNav()"
+              type="button"
+              class="menu-busca-recolhida"
+              pTooltip="Buscar funcionalidade (Ctrl K)"
+              tooltipPosition="right"
+              aria-label="Buscar funcionalidade"
+              (click)="abrirBusca()">
+              <i class="pi pi-search"></i>
+            </button>
+
+            <div class="nav-deck-scroll" #navScroll>
             <div
               class="nav-section-card"
               *ngFor="let secao of menuSectionsFiltradas; trackBy: trackBySecaoId; let si = index"
@@ -446,7 +505,7 @@ import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
                 getSecaoAccentClass(secao.id),
                 sidebarCollapsed && !isCompactNav() ? 'nav-section-card--collapsed' : ''
               ]"
-              [style.--nav-stagger]="si">
+              [style.--nav-stagger]="si" [attr.data-secao]="secao.id" [class.nav-section--foco]="secaoEmFoco === secao.id">
               <button
                 type="button"
                 class="nav-section-flight-header"
@@ -481,6 +540,9 @@ import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
                 </span>
               </button>
 
+              <p class="nav-list-scroll-hint" *ngIf="isSecaoExpanded(secao.id) && secao.funcionalidades.length > 8 && (!sidebarCollapsed || isCompactNav())">
+                <i class="pi pi-arrow-down" aria-hidden="true"></i> {{ secao.funcionalidades.length }} itens · role a lista para ver todos
+              </p>
               <ul
                 class="nav-flight-list"
                 [class.is-expanded]="isSecaoExpanded(secao.id)"
@@ -493,7 +555,7 @@ import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
                     [routerLink]="getRouterLink(funcionalidade)"
                     routerLinkActive="active"
                     [routerLinkActiveOptions]="{ exact: funcionalidade.tipo === 'secao' }"
-                    class="nav-flight-link"
+                    class="nav-flight-link" [class.nav-link--destaque]="destaqueFuncId === funcionalidade.id"
                     [pTooltip]="sidebarCollapsed && !isCompactNav() ? i18n.translateMenuFunc(funcionalidade.codigo, funcionalidade.nome) : ''"
                     tooltipPosition="right"
                     (click)="navigateToRoute($event, funcionalidade); isCompactNav() && closeMobileMenu()">
@@ -534,11 +596,14 @@ import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
                 <i class="pi pi-lock" aria-hidden="true"></i>
                 <span>{{ 'platformOps.layout.menuCta' | translate }}</span>
               </a>
+              <a *ngFor="let item of platformOpsMenuItems" class="nav-platform-ops-link"
+                [routerLink]="item.route" routerLinkActive="active"
+                (click)="isCompactNav() && closeMobileMenu()">
+                <i [class]="item.icon" aria-hidden="true"></i>
+                <span>{{ item.labelKey | translate }}</span>
+              </a>
             </section>
 
-            <p class="nav-deck-empty" *ngIf="!menuLoading && menuSearchQuery && menuSectionsFiltradas.length === 0">
-              {{ 'layout.navNoResults' | translate }}
-            </p>
 
             <!-- Fallback: Menu Estático (caso o dinâmico falhe) -->
             <div class="nav-section" *ngIf="menuSections.length === 0 && !menuLoading">
@@ -594,7 +659,7 @@ import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
         <div class="main-content" [class.main-content--immersive]="mainContentImmersive">
           <app-route-loading-bar></app-route-loading-bar>
           <app-contextual-onboarding-banner></app-contextual-onboarding-banner>
-          <router-outlet></router-outlet>
+          <router-outlet systemPageLayout></router-outlet>
         </div>
         <app-footer></app-footer>
       </main>
@@ -826,6 +891,11 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.platformOpsAuth.isAuthenticated() ? '/plataforma' : '/plataforma/acesso';
   }
 
+  get platformOpsMenuItems() {
+    const collator = new Intl.Collator(this.i18n.getCurrentLanguage(), { sensitivity: 'base' });
+    return [...PLATFORM_OPS_NAV].sort((a, b) => collator.compare(this.i18n.translate(a.labelKey), this.i18n.translate(b.labelKey)));
+  }
+
   private refreshPlatformOpsEligibility(): void {
     if (!this.authService.getCurrentUser()) {
       this.platformOpsEligible = false;
@@ -844,7 +914,19 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
   // Menu dinâmico
   menuSections: MenuSection[] = [];
   menuSectionsFiltradas: MenuSection[] = [];
-  menuSearchQuery = '';
+  @ViewChild('buscaInput') buscaInputRef?: ElementRef<HTMLInputElement>;
+  @ViewChild('navScroll') navScrollRef?: ElementRef<HTMLElement>;
+  buscaTermo = '';
+  buscaFocada = false;
+  buscaAberta = false;
+  buscaIndice = 0;
+  sugestoesVisiveis: MenuSugestao[] = [];
+  secaoEmFoco: string | null = null;
+  destaqueFuncId: number | null = null;
+  private timerDestaque: any;
+  
+
+
   menuLoading = false;
   platformOpsEligible = false;
   secoesExpanded = new Map<string, boolean>();
@@ -1219,6 +1301,7 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    clearTimeout(this.timerDestaque);
     this.destroy$.next();
     this.destroy$.complete();
     if (typeof document !== 'undefined') {
@@ -1240,23 +1323,10 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
     return ac === bc;
   }
 
-  onMenuSearchChange(): void {
-    this.recomputeMenuFiltrado();
-    this.cdr.markForCheck();
-  }
 
   private recomputeMenuFiltrado(): void {
-    const q = this.menuSearchQuery.trim().toLowerCase();
-    if (!q) {
-      this.menuSectionsFiltradas = this.menuSections;
-      return;
-    }
-    this.menuSectionsFiltradas = this.menuSections
-      .map(secao => ({
-        ...secao,
-        funcionalidades: secao.funcionalidades.filter(f => this.funcionalidadeMatchesSearch(f, secao))
-      }))
-      .filter(secao => secao.funcionalidades.length > 0);
+    this.menuSectionsFiltradas = this.menuSections;
+    this.atualizarSugestoes();
   }
 
   /** Drawer navigation on phones and tablets (< 1024px). */
@@ -1333,6 +1403,11 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.menuService || !this.currentUser) {
       return;
     }
+    if (this.menuService.catalogNeedsRefresh()) {
+      this.menuService.invalidateMenuCache();
+      this.carregarMenuDinamico(true);
+      return;
+    }
     if (this.menuSections.length > 0 && !forceRefresh) {
       return;
     }
@@ -1351,7 +1426,7 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private applyMenuSections(secoes: MenuSection[]): void {
-    this.menuSections = secoes;
+    this.menuSections = this.menuService.ordenarSecoesMenu(secoes);
     secoes.forEach((secao) => {
       if (!this.secoesExpanded.has(secao.id)) {
         this.secoesExpanded.set(secao.id, false);
@@ -1398,32 +1473,15 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * Verifica se uma seção está expandida
    */
-  clearMenuSearch(): void {
-    this.menuSearchQuery = '';
-    this.recomputeMenuFiltrado();
-    this.cdr.markForCheck();
-  }
+
 
   getSecaoAccentClass(secaoId: string): string {
     const slug = (secaoId || 'default').toLowerCase().replace(/[^a-z0-9_-]/g, '');
     return `nav-section-card--${slug || 'default'}`;
   }
 
-  private funcionalidadeMatchesSearch(f: Funcionalidade, secao: MenuSection): boolean {
-    const q = this.menuSearchQuery.trim().toLowerCase();
-    if (!q) {
-      return true;
-    }
-    const label = this.i18n.translateMenuFunc(f.codigo, f.nome).toLowerCase();
-    const secaoLabel = this.i18n.translateMenuSecao(secao.titulo).toLowerCase();
-    const codigo = (f.codigo || '').toLowerCase();
-    return label.includes(q) || secaoLabel.includes(q) || codigo.includes(q);
-  }
 
   isSecaoExpanded(secaoId: string): boolean {
-    if (this.menuSearchQuery.trim()) {
-      return true;
-    }
     return this.secoesExpanded.get(secaoId) ?? false;
   }
 
@@ -1432,25 +1490,16 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   toggleSecao(secaoId: string): void {
     const currentState = this.secoesExpanded.get(secaoId) ?? false;
-    this.secoesExpanded.set(secaoId, !currentState);
+    this.menuSections.forEach(secao => this.secoesExpanded.set(secao.id, secao.id === secaoId && !currentState));
   }
 
   /** Mantém o módulo ativo visível sem reabrir toda a navegação. */
   private expandCurrentRouteSection(): void {
     const currentPath = this.normalizeMenuRoute(this.router.url);
-    const activeSection = this.menuSections.find((secao) =>
-      secao.funcionalidades.some((funcionalidade) => {
-        const routerLink = this.getRouterLink(funcionalidade);
-        if (!routerLink) {
-          return false;
-        }
-        const route = this.normalizeMenuRoute(routerLink);
-        return route === '/'
-          ? currentPath === route
-          : currentPath === route || currentPath.startsWith(`${route}/`);
-      })
-    );
-
+    const activeId = activeMenuSection(currentPath, this.menuSections.map(secao=>({
+      id:secao.id, funcionalidades:secao.funcionalidades.map(f=>({rota:this.getRouterLink(f)}))
+    })));
+    const activeSection = this.menuSections.find(secao=>secao.id===activeId);
     if (activeSection) {
       this.secoesExpanded.set(activeSection.id, true);
       this.cdr.markForCheck();
@@ -1466,6 +1515,193 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * TrackBy function para seções do menu
    */
+  trackBySugestao(_: number, s: MenuSugestao): string {
+    return `${s.secao.id}:${s.func.id}`;
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onAtalhoBuscaMenu(ev: KeyboardEvent): void {
+    const ctrlK = (ev.ctrlKey || ev.metaKey) && !ev.altKey && !ev.shiftKey && ev.key?.toLowerCase() === 'k';
+    if (!ctrlK || ev.defaultPrevented) return;
+    ev.preventDefault();
+    const focoAntes = document.activeElement;
+    // Telas com busca própria (ex.: Painel do fluxo) tratam o Ctrl+K no mesmo evento; nesse caso o menu cede.
+    setTimeout(() => {
+      const focoAgora = document.activeElement;
+      if (focoAgora !== focoAntes && focoAgora !== this.buscaInputRef?.nativeElement) return;
+      this.abrirBusca();
+    });
+  }
+
+  abrirBusca(): void {
+    if (this.isCompactNav()) {
+      this.mobileMenuOpen = true;
+    } else if (this.sidebarCollapsed) {
+      this.sidebarCollapsed = false;
+      localStorage.setItem('sidebarCollapsed', 'false');
+    }
+    setTimeout(() => {
+      const input = this.buscaInputRef?.nativeElement;
+      input?.focus();
+      input?.select();
+    });
+  }
+
+  onBuscaInput(valor: string): void {
+    this.buscaTermo = valor;
+    this.atualizarSugestoes();
+    this.buscaAberta = true;
+  }
+
+  onBuscaFocus(): void {
+    this.buscaFocada = true;
+    this.atualizarSugestoes();
+    this.buscaAberta = !!this.buscaTermo || this.sugestoesVisiveis.length > 0;
+  }
+
+  onBuscaBlur(): void {
+    this.buscaFocada = false;
+    this.buscaAberta = false;
+  }
+
+  onBuscaKeydown(ev: KeyboardEvent): void {
+    const total = this.sugestoesVisiveis.length;
+    switch (ev.key) {
+      case 'ArrowDown':
+        ev.preventDefault();
+        if (!this.buscaAberta) this.onBuscaFocus();
+        else if (total) this.buscaIndice = (this.buscaIndice + 1) % total;
+        this.rolarOpcaoAtiva();
+        break;
+      case 'ArrowUp':
+        ev.preventDefault();
+        if (total) this.buscaIndice = (this.buscaIndice - 1 + total) % total;
+        this.rolarOpcaoAtiva();
+        break;
+      case 'Enter': {
+        const s = this.sugestoesVisiveis[this.buscaIndice];
+        if (this.buscaAberta && s) {
+          ev.preventDefault();
+          this.escolherSugestao(s);
+        }
+        break;
+      }
+      case 'Escape':
+        ev.preventDefault();
+        if (this.buscaTermo) {
+          this.limparBusca(true);
+        } else {
+          this.buscaAberta = false;
+          this.buscaInputRef?.nativeElement.blur();
+        }
+        break;
+    }
+  }
+
+  limparBusca(manterFoco = false): void {
+    this.buscaTermo = '';
+    this.buscaIndice = 0;
+    if (manterFoco) {
+      this.atualizarSugestoes();
+      this.buscaAberta = this.sugestoesVisiveis.length > 0;
+      this.buscaInputRef?.nativeElement.focus();
+    } else {
+      this.sugestoesVisiveis = [];
+      this.buscaAberta = false;
+    }
+  }
+
+  escolherSugestao(s: MenuSugestao): void {
+    this.registrarRecente(s.func.id);
+    this.limparBusca();
+    this.buscaInputRef?.nativeElement.blur();
+    this.focarSecao(s.secao.id, s.func.id);
+    this.navigateToRoute(null as unknown as Event, s.func);
+    if (this.isCompactNav()) {
+      this.closeMobileMenu();
+    }
+  }
+
+  /** Abre só a seção da funcionalidade escolhida, rola até ela e destaca o item. */
+  private focarSecao(secaoId: string, funcId: number): void {
+    this.menuSections.forEach((sec) => this.definirSecaoExpandida(sec.id, sec.id === secaoId));
+    this.secaoEmFoco = secaoId;
+    this.destaqueFuncId = funcId;
+    clearTimeout(this.timerDestaque);
+    this.timerDestaque = setTimeout(() => {
+      this.destaqueFuncId = null;
+      this.secaoEmFoco = null;
+      this.cdr.markForCheck();
+    }, 2800);
+
+    setTimeout(() => {
+      const cont = this.navScrollRef?.nativeElement;
+      const alvo = cont?.querySelector<HTMLElement>(`[data-secao="${secaoId}"]`);
+      if (!cont || !alvo) return;
+      const topo = cont.scrollTop + alvo.getBoundingClientRect().top - cont.getBoundingClientRect().top - 6;
+      cont.scrollTo({ top: Math.max(0, topo), behavior: 'smooth' });
+    });
+  }
+
+  private definirSecaoExpandida(secaoId: string, aberta: boolean): void {
+    this.secoesExpanded.set(secaoId, aberta);
+  }
+
+  private atualizarSugestoes(): void {
+    this.sugestoesVisiveis = this.buscaTermo.trim()
+      ? buscarFuncionalidades(this.buscaTermo, this.secoesParaBusca())
+      : this.sugestoesRecentes();
+    this.buscaIndice = 0;
+  }
+
+  private sugestoesRecentes(): MenuSugestao[] {
+    const ids = this.lerRecentes();
+    const lista: MenuSugestao[] = [];
+    for (const id of ids) {
+      for (const secao of this.secoesParaBusca()) {
+        const func = secao.funcionalidades.find((f) => f.id === id);
+        if (func) {
+          lista.push({ func, secao, score: 0, nome: [{ texto: func.nome, destaque: false }] });
+          break;
+        }
+      }
+    }
+    return lista.slice(0, 5);
+  }
+
+  private lerRecentes(): number[] {
+    try {
+      const v = JSON.parse(localStorage.getItem(this.chaveRecentesMenu()) || '[]');
+      return Array.isArray(v) ? v.filter((x) => typeof x === 'number') : [];
+    } catch {
+      return [];
+    }
+  }
+
+  private registrarRecente(id: number): void {
+    const ids = [id, ...this.lerRecentes().filter((x) => x !== id)].slice(0, 8);
+    try { localStorage.setItem(this.chaveRecentesMenu(), JSON.stringify(ids)); } catch { /* Storage unavailable. */ }
+  }
+
+  private rolarOpcaoAtiva(): void {
+    setTimeout(() => document.getElementById('mb-opt-' + this.buscaIndice)?.scrollIntoView({ block: 'nearest' }));
+  }
+
+  private secoesParaBusca(): MenuSection[] {
+    return this.menuSections.map(secao => ({
+      ...secao, titulo: this.i18n.translateMenuSecao(secao.titulo),
+      funcionalidades: secao.funcionalidades.map(func => ({
+        ...func, nome: this.i18n.translateMenuFunc(func.codigo, func.nome),
+        descricao: func.descricao || ''
+      }))
+    }));
+  }
+
+  private chaveRecentesMenu(): string {
+    const user = this.authService.getCurrentUser();
+    return 'aerosuite_menu_recentes:' + (user?.tenantId ?? '') + ':' + (user?.id ?? '');
+  }
+
   trackBySecaoId(index: number, secao: MenuSection): string {
     return secao.id;
   }

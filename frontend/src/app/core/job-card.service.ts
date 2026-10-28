@@ -5,6 +5,10 @@ import { environment } from '../../environments/environment';
 import { OSFile } from './os-file.service';
 
 export interface JobCardListItem {
+  prioridadeFila?: string;
+  dataPrevistaConclusao?: string;
+  prazoVencido?: boolean;
+  destinosPermitidos?: JobCardFase[];
   osId: number;
   numeroOs: number;
   clienteNome?: string;
@@ -32,6 +36,7 @@ export interface JobCardApontamento {
 }
 
 export interface JobCardAssinatura {
+  assinaturaPngBase64?: string;
   id?: number;
   papel: string;
   assinadoEm?: string;
@@ -81,6 +86,10 @@ export class JobCardService {
     return this.http.get<JobCard>(`${this.base}/${osId}`);
   }
 
+  moverFase(item: JobCardListItem, faseDestino: JobCardFase): Observable<JobCard> {
+    return this.http.put<JobCard>(`${this.base}/${item.osId}/fase`, { faseOrigem: item.faseJob || 'A_FAZER', faseDestino });
+  }
+
   registrarApontamento(
     osId: number,
     body: { trabalhoEm: string; horas: number; descricao?: string; ferramentaIdentificador?: string }
@@ -95,7 +104,7 @@ export class JobCardService {
     return this.http.put<JobCard>(`${this.base}/${osId}/execucao`, body);
   }
 
-  salvarAssinatura(osId: number, body: { papel: string; assinaturaPngBase64: string }): Observable<JobCardAssinatura> {
+  salvarAssinatura(osId: number, body: { papel: string; assinaturaPngBase64: string; substituir?: boolean; assinaturaAnteriorSha256?: string | null }): Observable<JobCardAssinatura> {
     return this.http.post<JobCardAssinatura>(`${this.base}/${osId}/assinatura`, body);
   }
 }

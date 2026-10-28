@@ -5,6 +5,7 @@ public class OsJobCardAssinaturaDto {
     public String papel;
     public String assinadoEm;
     public String usuarioNome;
+    public String assinaturaPngBase64;
     public boolean presente;
     public String assinaturaSha256;
     public String assinaturaTimestampServer;

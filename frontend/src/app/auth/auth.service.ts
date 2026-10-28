@@ -251,6 +251,17 @@ export class AuthService {
     return c === 'ADMIN' || c === 'DIRETOR' || c === 'SUPRIMENTO' || c === 'COMERCIAL' || c === 'MECANICO';
   }
 
+  /** Grava o menu vindo de /meu-menu por cima do payload antigo do login. */
+  replaceStoredMenu(menuFuncionalidades: User['menuFuncionalidades']): void {
+    const prev = this.getCurrentUser();
+    if (!prev) {
+      return;
+    }
+    const next = { ...prev, menuFuncionalidades };
+    this.currentUserSubject.next(next);
+    localStorage.setItem(this.USER_KEY, JSON.stringify(next));
+  }
+
   updateCurrentUser(user: User): void {
     const normalized = this.withNormalizedFoto(user);
     const prev = this.currentUserSubject.value;

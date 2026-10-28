@@ -1,7 +1,39 @@
 .funcionalidade-container {
   padding: 2rem;
   background: #ffffff;
-  min-height: 100vh;
+  min-height: 0;
+}
+
+.filters-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 1rem;
+  flex-wrap: wrap;
+}
+
+.func-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1 1 16rem;
+  max-width: 28rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+
+  input {
+    border: 0;
+    width: 100%;
+    outline: none;
+    background: transparent;
+  }
+}
+
+.func-nav-hint {
+  color: #64748b;
+  font-size: 0.85rem;
 }
 
 .table-container {
@@ -30,6 +62,12 @@
 
       &:hover {
         background: #f8fafc;
+      }
+
+      &.is-active {
+        background: #e0f2fe;
+        outline: 2px solid #0284c7;
+        outline-offset: -2px;
       }
 
       > td {

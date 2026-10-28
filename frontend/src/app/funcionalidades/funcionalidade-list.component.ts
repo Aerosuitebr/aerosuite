@@ -1,5 +1,5 @@
-import { DEFAULT_LIST_PAGE_SIZE, LIST_ROWS_PER_PAGE_OPTIONS } from '../core/list-pagination.constants';
-import { Component, OnInit } from '@angular/core';
+import { LIST_ROWS_PER_PAGE_OPTIONS } from '../core/list-pagination.constants';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -18,6 +18,7 @@ import { FuncionalidadeService, Funcionalidade } from '../core/funcionalidade.se
 import { TranslationService } from '../core/translation.service';
 import { toastKey } from '../core/toast-i18n.util';
 import { TranslatePipe } from '../core/translate.pipe';
+import { DisplayTextPipe } from '../core/display-text.pipe';
 import { PageHeroComponent } from '../shared/page-hero/page-hero.component';
 import { ListTableScrollDirective } from '../shared/list-table-scroll/list-table-scroll.directive';
 import { ListDataStatesComponent } from '../shared/list-data-states/list-data-states.component';
@@ -42,6 +43,7 @@ import { FUNC_MENU_SECTION_VALUES } from '../core/domain/func-menu-sections.data
     TagModule,
     TooltipModule,
     TranslatePipe,
+    DisplayTextPipe,
     PageHeroComponent,
     ListDataStatesComponent
   ],
@@ -49,7 +51,7 @@ import { FUNC_MENU_SECTION_VALUES } from '../core/domain/func-menu-sections.data
     <p-toast></p-toast>
     <p-confirmDialog></p-confirmDialog>
 
-    <div class="funcionalidade-container">
+    <div class="funcionalidade-container list-container as-page">
       <app-page-hero
         variant="navy"
         titleKey="funcionalidades.list.title"
@@ -68,20 +70,38 @@ import { FUNC_MENU_SECTION_VALUES } from '../core/domain/func-menu-sections.data
         </div>
       </app-page-hero>
 
+      <div class="filters-section">
+        <label class="func-search" for="func-search-input">
+          <i class="pi pi-search" aria-hidden="true"></i>
+          <input
+            id="func-search-input"
+            pInputText
+            type="search"
+            [(ngModel)]="busca"
+            (ngModelChange)="onBusca()"
+            [placeholder]="'funcionalidades.list.searchPlaceholder' | translate"
+            [attr.aria-label]="'funcionalidades.list.search' | translate"
+            autocomplete="off" />
+        </label>
+        <span class="func-nav-hint">{{ 'funcionalidades.list.navHint' | translate }}</span>
+      </div>
+
       <!-- Tabela -->
       <div class="table-container">
         <app-list-data-states
           [loading]="loading"
-          [itemCount]="funcionalidades.length"
+          [itemCount]="lista.length"
           [skeletonRows]="8"
           [skeletonCols]="9"
           emptyTitleKey="ui.empty.title"
           emptyDescriptionKey="ui.empty.description">
-        <p-table appListScroll 
-          [value]="funcionalidades" 
+        <p-table appListScroll
+          [value]="lista"
           [loading]="loading"
-          [paginator]="true" 
-          [rows]="listPageSize"
+          [paginator]="true"
+          [rows]="linhas"
+          [first]="first"
+          (onPage)="onPage($event)"
           [showCurrentPageReport]="true"
           [currentPageReportTemplate]="'funcionalidades.list.pageReport' | translate"
           [rowsPerPageOptions]="listRowsPerPageOptions"
@@ -101,19 +121,19 @@ import { FUNC_MENU_SECTION_VALUES } from '../core/domain/func-menu-sections.data
             </tr>
           </ng-template>
           
-          <ng-template pTemplate="body" let-funcionalidade>
-            <tr>
+          <ng-template pTemplate="body" let-funcionalidade let-rowIndex="rowIndex">
+            <tr [class.is-active]="linhaAtiva(rowIndex)" (click)="indiceAtivo = first + rowIndex">
               <td>
                 <div class="funcionalidade-info">
-                  <strong>{{ funcionalidade.nome }}</strong>
-                  <small *ngIf="funcionalidade.descricao" class="descricao">{{ funcionalidade.descricao }}</small>
+                  <strong>{{ funcionalidade.nome | displayText }}</strong>
+                  <small *ngIf="funcionalidade.descricao" class="descricao">{{ funcionalidade.descricao | displayText }}</small>
                 </div>
               </td>
               <td>
                 <span class="codigo">{{ funcionalidade.codigo }}</span>
               </td>
               <td>
-                <span class="secao">{{ funcionalidade.secao || '-' }}</span>
+                <span class="secao">{{ (funcionalidade.secao | displayText) || '-' }}</span>
               </td>
               <td>
                 <span class="tipo">{{ funcionalidade.tipo || '-' }}</span>
@@ -322,10 +342,13 @@ import { FUNC_MENU_SECTION_VALUES } from '../core/domain/func-menu-sections.data
   styleUrls: ['./funcionalidade-list.component.scss']
 })
 export class FuncionalidadeListComponent implements OnInit {
-  readonly listPageSize = DEFAULT_LIST_PAGE_SIZE;
   readonly listRowsPerPageOptions = LIST_ROWS_PER_PAGE_OPTIONS;
 
   funcionalidades: Funcionalidade[] = [];
+  busca = '';
+  first = 0;
+  linhas = 50;
+  indiceAtivo = 0;
   loading = true;
   dialogVisible = false;
   editando = false;
@@ -361,6 +384,21 @@ export class FuncionalidadeListComponent implements OnInit {
     return this.i18n.buildTranslatedOptions('func.tipo', this.tipoDefs);
   }
 
+  get lista(): Funcionalidade[] {
+    const q = this.busca.trim().toLowerCase();
+    const rows = [...this.funcionalidades].sort((a, b) => this.compararFluxo(a, b));
+    if (!q) {
+      return rows;
+    }
+    return rows.filter((f) =>
+      [f.nome, f.codigo, f.secao, f.rota, f.descricao]
+        .filter((v) => !!v)
+        .join(' ')
+        .toLowerCase()
+        .includes(q)
+    );
+  }
+
   constructor(
     private funcionalidadeService: FuncionalidadeService,
     private messageService: MessageService,
@@ -370,6 +408,96 @@ export class FuncionalidadeListComponent implements OnInit {
 
   ngOnInit() {
     this.carregarFuncionalidades();
+  }
+
+  onBusca() {
+    this.first = 0;
+    this.indiceAtivo = 0;
+  }
+
+  onPage(event: { first?: number; rows?: number }) {
+    this.first = event.first ?? 0;
+    this.linhas = event.rows ?? this.linhas;
+  }
+
+  linhaAtiva(rowIndex: number): boolean {
+    return rowIndex === this.indiceAtivo;
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onListaKey(ev: KeyboardEvent) {
+    if (this.dialogVisible) {
+      return;
+    }
+    const tag = (ev.target as HTMLElement | null)?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') {
+      return;
+    }
+    const rows = this.lista;
+    if (!rows.length) {
+      return;
+    }
+    if (ev.key === 'Enter') {
+      ev.preventDefault();
+      const atual = rows[this.indiceAtivo];
+      if (atual) {
+        this.editar(atual);
+      }
+      return;
+    }
+    if (ev.key !== 'ArrowDown' && ev.key !== 'ArrowUp' && ev.key !== 'Home' && ev.key !== 'End') {
+      return;
+    }
+    ev.preventDefault();
+    if (ev.key === 'Home') {
+      this.indiceAtivo = 0;
+    } else if (ev.key === 'End') {
+      this.indiceAtivo = rows.length - 1;
+    } else if (ev.key === 'ArrowDown') {
+      this.indiceAtivo = Math.min(rows.length - 1, this.indiceAtivo + 1);
+    } else {
+      this.indiceAtivo = Math.max(0, this.indiceAtivo - 1);
+    }
+    const pagina = Math.floor(this.indiceAtivo / this.linhas);
+    const novoFirst = pagina * this.linhas;
+    if (novoFirst !== this.first) {
+      this.first = novoFirst;
+    }
+    setTimeout(() => {
+      document.querySelector('app-funcionalidade-list tr.is-active')
+        ?.scrollIntoView({ block: 'nearest' });
+    });
+  }
+
+  private compararFluxo(a: Funcionalidade, b: Funcionalidade): number {
+    const sa = this.ordemSecao(a.secao);
+    const sb = this.ordemSecao(b.secao);
+    if (sa !== sb) {
+      return sa - sb;
+    }
+    const pos = (a.posicao ?? 0) - (b.posicao ?? 0);
+    if (pos !== 0) {
+      return pos;
+    }
+    return (a.ordem ?? 0) - (b.ordem ?? 0);
+  }
+
+  private ordemSecao(secao?: string): number {
+    const ordem = [
+      'Cadastro',
+      'Comercial',
+      'Ordem de serviço',
+      'Oficina',
+      'Estoque',
+      'Operacional',
+      'Conformidade Técnica',
+      'Documentos',
+      'Publicações Técnicas',
+      'Go-live',
+      'Vitrine'
+    ];
+    const i = ordem.indexOf(secao || '');
+    return i === -1 ? 500 : i;
   }
 
   carregarFuncionalidades() {

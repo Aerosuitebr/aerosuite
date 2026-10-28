@@ -1,6 +1,10 @@
 package com.aerosuite.dto;
 
 public class OsJobCardListaItemDto {
+    public String prioridadeFila;
+    public String dataPrevistaConclusao;
+    public boolean prazoVencido;
+    public java.util.List<String> destinosPermitidos;
     public Long osId;
     public Integer numeroOs;
     public String clienteNome;

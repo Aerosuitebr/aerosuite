@@ -4,6 +4,8 @@ import { FuncionalidadeService, Funcionalidade } from './funcionalidade.service'
 import { AuthService, User } from '../auth/auth.service';
 import { canonFuncionalidadeCodigo } from '../auth/permissao.util';
 import { MenuItem } from 'primeng/api';
+import { menuOrganization, uniqueMenuDestinations } from './menu-organization';
+import { completeMenuRoutes } from './menu-route-entries';
 import { slugifyMenuSection } from './i18n/menu-i18n.util';
 import { TranslationService } from './translation.service';
 import { isPlatformOpsRestrictedRoute } from '../platform-ops/platform-ops-nav.config';
@@ -16,7 +18,9 @@ export interface MenuSection {
   funcionalidades: Funcionalidade[];
 }
 
-const MENU_SESSION_KEY = 'aerosuite_menu_sections_v1';
+const MENU_SESSION_KEY = 'aerosuite_menu_sections_v2';
+const MENU_CATALOG_REV = 'menu-coverage-v6';
+const MENU_CATALOG_REV_KEY = 'aerosuite_menu_catalog_rev';
 
 interface MenuSessionPayload {
   userKey: string;
@@ -34,6 +38,15 @@ export class MenuService {
 
   private cachedMenu$?: Observable<MenuSection[]>;
   private cachedMenuUserKey = '';
+
+  /** Catálogo do servidor mudou desde o login guardado neste browser. */
+  catalogNeedsRefresh(): boolean {
+    try {
+      return localStorage.getItem(MENU_CATALOG_REV_KEY) !== MENU_CATALOG_REV;
+    } catch {
+      return false;
+    }
+  }
 
   /** Limpa cache (logout / mudança de permissões). */
   invalidateMenuCache(): void {
@@ -86,6 +99,9 @@ export class MenuService {
     }
 
     const userKey = this.buildUserMenuKey(currentUser);
+    if (this.catalogNeedsRefresh()) {
+      forceRefresh = true;
+    }
     if (!forceRefresh && this.cachedMenu$ && this.cachedMenuUserKey === userKey) {
       return this.cachedMenu$;
     }
@@ -105,6 +121,14 @@ export class MenuService {
     }
 
     const remote$ = this.carregarFuncionalidadesPorUsuario(currentUser).pipe(
+      tap((funcionalidades) => {
+        this.authService.replaceStoredMenu(funcionalidades);
+        try {
+          localStorage.setItem(MENU_CATALOG_REV_KEY, MENU_CATALOG_REV);
+        } catch {
+          /* privacy mode */
+        }
+      }),
       map((funcionalidades) => this.buildMenuSections(funcionalidades)),
       tap((sections) => this.writeSessionMenu(userKey, sections)),
       shareReplay({ bufferSize: 1, refCount: false })
@@ -135,17 +159,25 @@ export class MenuService {
     merged = this.ensureBlingIntegracaoMenuItem(merged);
     merged = this.ensureWhatsAppIntegracaoMenuItem(merged);
     merged = this.normalizeMenuRoutes(merged);
+    merged = completeMenuRoutes(merged, this.authService?.getCurrentUser() ?? null);
     return this.organizarFuncionalidadesPorSecao(merged);
   }
 
   /** Mantém destinos distintos para itens de suporte que antes levavam à mesma tela. */
   private normalizeMenuRoutes(funcionalidades: Funcionalidade[]): Funcionalidade[] {
-    return funcionalidades.map(funcionalidade =>
+    return funcionalidades.map(funcionalidade => {
+      const code = canonFuncionalidadeCodigo(funcionalidade.codigo);
+      if (code === 'CONFIGURACOES') return { ...funcionalidade, rota: '/configuracoes' };
+      if ((funcionalidade.rota || '').replace(/\/$/, '') === '/publicacoes-tecnicas') {
+        return { ...funcionalidade, rota: '/publicacoes-tecnicas/cadastro' };
+      }
+      return (
       this.isSupportTicketsCode(funcionalidade.codigo)
         && (funcionalidade.rota || '').trim().toLowerCase() === '/suporte'
         ? { ...funcionalidade, rota: '/suporte/chamados' }
         : funcionalidade
-    );
+      );
+    });
   }
 
   private isSupportTicketsCode(codigo: string | null | undefined): boolean {
@@ -155,14 +187,7 @@ export class MenuService {
 
   /** Aplica migrações de rota também a menus serializados em versões anteriores. */
   private normalizeCachedMenuSections(sections: MenuSection[]): MenuSection[] {
-    const normalized = sections.map(section => {
-      const funcionalidades = this.normalizeMenuRoutes(section.funcionalidades);
-      const changed = funcionalidades.some(
-        (funcionalidade, index) => funcionalidade !== section.funcionalidades[index]
-      );
-      return changed ? { ...section, funcionalidades } : section;
-    });
-    return normalized.some((section, index) => section !== sections[index]) ? normalized : sections;
+    return this.buildMenuSections(sections.flatMap(section => section.funcionalidades));
   }
 
   /** Remove rotas do plano de controle do menu comum (auditoria, backup, organizações). */
@@ -341,15 +366,17 @@ export class MenuService {
         f.ativo &&
         f.visivel &&
         tipo !== 'secao' &&
-        codigo !== 'DASHBOARD' &&
         codigo !== 'VIEW_DASHBOARD' &&
-        rota !== '/' &&
-        canonFuncionalidadeCodigo(f.codigo) !== 'TPFILES' &&
-        (f.rota == null || f.rota.toLowerCase() !== '/tpfiles')
+        codigo !== 'CONFORMIDADE_NC' &&
+        !/^\/?conformidade\/nao-conformidades(?:\/|\?|#|$)/.test(rota) &&
+        !codigo.includes('STUDIO') &&
+        !/^\/?studio(?:\/|\?|#|$)/.test(rota) &&
+        !!rota
       );
     });
 
-    funcionalidadesAtivas.forEach(funcionalidade => {
+    uniqueMenuDestinations(funcionalidadesAtivas).forEach(original => {
+      const funcionalidade = { ...original, secao: menuOrganization(original).section };
       const secaoSlug = slugifyMenuSection(funcionalidade.secao || 'Sistema');
 
       if (!secoesMap.has(secaoSlug)) {
@@ -366,21 +393,15 @@ export class MenuService {
     });
 
     const secoes = Array.from(secoesMap.values()).filter((s) => s.funcionalidades.length > 0);
-    this.sortSecoesAlfabeticamente(secoes);
-    secoes.forEach(secao => this.sortFuncionalidadesAlfabeticamente(secao.funcionalidades));
+    this.sortSecoesPorNome(secoes);
+    secoes.forEach(secao => this.sortFuncionalidadesMenu(secao.funcionalidades));
 
     return secoes;
   }
 
-  /** Reaplica ordem alfabética de secções e itens (ex.: após mudança de idioma). */
+  /** Reagrupa caches e ordena pelos nomes exibidos no idioma atual. */
   ordenarSecoesMenu(secoes: MenuSection[]): MenuSection[] {
-    const ordenadas = secoes.map(secao => ({
-      ...secao,
-      funcionalidades: [...secao.funcionalidades]
-    }));
-    this.sortSecoesAlfabeticamente(ordenadas);
-    ordenadas.forEach(secao => this.sortFuncionalidadesAlfabeticamente(secao.funcionalidades));
-    return ordenadas;
+    return this.organizarFuncionalidadesPorSecao(secoes.flatMap(secao => secao.funcionalidades));
   }
 
   private menuCollator(): Intl.Collator {
@@ -390,24 +411,20 @@ export class MenuService {
     });
   }
 
-  private sortSecoesAlfabeticamente(secoes: MenuSection[]): void {
+  private sortSecoesPorNome(secoes: MenuSection[]): void {
     const collator = this.menuCollator();
-    secoes.sort((a, b) =>
-      collator.compare(
-        this.i18n.translateMenuSecao(a.titulo),
-        this.i18n.translateMenuSecao(b.titulo)
-      )
-    );
+    secoes.sort((a, b) => collator.compare(
+      this.i18n.translateMenuSecao(a.titulo), this.i18n.translateMenuSecao(b.titulo)
+    ));
   }
 
-  private sortFuncionalidadesAlfabeticamente(funcionalidades: Funcionalidade[]): void {
+  private sortFuncionalidadesMenu(funcionalidades: Funcionalidade[]): void {
     const collator = this.menuCollator();
-    funcionalidades.sort((a, b) =>
-      collator.compare(
-        this.i18n.translateMenuFunc(a.codigo, a.nome),
-        this.i18n.translateMenuFunc(b.codigo, b.nome)
-      )
-    );
+    funcionalidades.sort((a, b) => {
+      return collator.compare(
+        this.i18n.translateMenuFunc(a.codigo, a.nome), this.i18n.translateMenuFunc(b.codigo, b.nome)
+      );
+    });
   }
 
   converterParaMenuItem(secoes: MenuSection[]): MenuItem[] {
@@ -426,6 +443,10 @@ export class MenuService {
 
   private getIconeSecaoPorSlug(secaoSlug: string): string {
     const iconesMap: Record<string, string> = {
+      OS: 'pi pi-file-edit',
+      RNC: 'pi pi-clipboard',
+      TECNICA_DOCUMENTOS: 'pi pi-book',
+      AJUDA_COMUNICACAO: 'pi pi-question-circle',
       PRINCIPAL: 'pi pi-home',
       CADASTRO: 'pi pi-building',
       DOCUMENTOS: 'pi pi-file',
@@ -440,6 +461,11 @@ export class MenuService {
       OPERACIONAL: 'pi pi-list-check',
       GESTAO: 'pi pi-briefcase',
       ESTOQUE: 'pi pi-box',
+      OFICINA: 'pi pi-wrench',
+      ORDEM_DE_SERVICO: 'pi pi-file-edit',
+      CONFORMIDADE_TECNICA: 'pi pi-verified',
+      GO_LIVE: 'pi pi-flag',
+      PORTAL_EXTERNO: 'pi pi-external-link',
       ACOES_RAPIDAS: 'pi pi-bolt',
       COMUNICACAO: 'pi pi-comments',
       VITRINE: 'pi pi-video'

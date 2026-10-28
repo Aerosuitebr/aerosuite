@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class EstoqueService {
+    @jakarta.inject.Inject OperacaoReservaGuard operacaoReservas;
 
     private static final Logger LOG = Logger.getLogger(EstoqueService.class);
 
@@ -1016,6 +1017,9 @@ public class EstoqueService {
     @Transactional
     public ItemEstoqueDto atualizarItemEstoque(Long id, ItemEstoqueDto dto, Long usuarioId, String usuarioNome) {
         ItemEstoque item = requireItemEstoque(id);
+        ItemEstoque.getEntityManager().lock(item, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
+        ItemEstoque.getEntityManager().refresh(item);
+        operacaoReservas.conferirEdicao(item, dto);
         if (!Boolean.TRUE.equals(item.isActive)) {
             throw new IllegalStateException(ApiI18nMessages.encode("estoque.error.item_excluido_nao_alteravel"));
         }
@@ -1118,6 +1122,9 @@ public class EstoqueService {
     @Transactional
     public ItemEstoqueDto excluirItemEstoque(Long id, Long usuarioId, String usuarioNome, String motivo) {
         ItemEstoque item = requireItemEstoque(id);
+        ItemEstoque.getEntityManager().lock(item, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
+        ItemEstoque.getEntityManager().refresh(item);
+        operacaoReservas.conferirExclusao(item);
         if (!Boolean.TRUE.equals(item.isActive)) {
             throw new IllegalStateException(ApiI18nMessages.encode("estoque.error.item_ja_excluido"));
         }
@@ -1338,6 +1345,12 @@ public class EstoqueService {
             throw new IllegalStateException(ApiI18nMessages.encode("estoque.error.saida_quantidade_maior_saldo"));
         }
         
+        ItemEstoque.getEntityManager().lock(item, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
+        ItemEstoque.getEntityManager().refresh(item);
+        if (item.status != ItemEstoque.StatusItemEstoque.DISPONIVEL) throw new jakarta.ws.rs.BadRequestException("O item não está mais disponível. Atualize a operação.");
+        estoqueQuarentenaService.assertDisponivelParaSaida(item);
+        operacaoReservas.consumir(item, osId, quantidade);
+
         // Registrar movimentação de saída
         MovimentacaoEstoque mov = MovimentacaoEstoque.criarSaida(
             item, quantidade, osId, usuarioId, usuarioNome, motivo);
@@ -2073,7 +2086,11 @@ public class EstoqueService {
             if (item.quantidade == null || item.quantidade.compareTo(BigDecimal.ZERO) <= 0) {
                 continue;
             }
-            BigDecimal usar = remaining.min(item.quantidade);
+            ItemEstoque.getEntityManager().lock(item, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
+            ItemEstoque.getEntityManager().refresh(item);
+            BigDecimal livre = operacaoReservas.livreParaOs(item, osPk);
+            if (livre.signum() <= 0) continue;
+            BigDecimal usar = remaining.min(livre);
             saidaEstoque(item.id, osPk, usar, uid, unome, motivo, origemSaida, idProdutoCatalogo, chaveFatia);
             chaveFatia = null;
             remaining = remaining.subtract(usar);

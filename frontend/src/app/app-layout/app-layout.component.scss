@@ -848,6 +848,53 @@ $layout-compact-max: 1023px;
   background: #f1f5f9;
 }
 
+// Estações e auditoria do fluxo: conteúdo longo rola acima do rodapé
+.main-content:has(app-os-fluxo-estacoes), .main-content:has(app-os-fluxo-estacao), .main-content:has(app-os-fluxo-detalhe) {
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+
+  app-os-fluxo-estacoes, app-os-fluxo-estacao, app-os-fluxo-detalhe {
+    flex: 1 0 auto;
+    min-height: min-content;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+.main-content.main-content:has(app-os-fluxo-estacoes) > app-os-fluxo-estacoes, .main-content.main-content:has(app-os-fluxo-estacao) > app-os-fluxo-estacao, .main-content.main-content:has(app-os-fluxo-detalhe) > app-os-fluxo-detalhe {
+  flex: 1 0 auto;
+  min-height: min-content;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+.main-content:has(app-funcionalidade-list) {
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+
+  app-funcionalidade-list {
+    flex: 1 0 auto;
+    min-height: min-content;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+.main-content.main-content:has(app-funcionalidade-list) > app-funcionalidade-list {
+  flex: 1 0 auto;
+  min-height: min-content;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+}
+
 // Configurações: conteúdo longo — scroll no main-content (desktop + mobile)
 .main-content:has(app-configuracoes) {
   overflow-x: hidden;
@@ -4244,3 +4291,366 @@ $layout-compact-max: 1023px;
     box-shadow: 0 0 0 0 rgba(34, 211, 238, 0);
   }
 }
+.menu-busca {
+  position: relative;
+  flex-shrink: 0;
+  padding: 0 1rem 0.85rem;
+  z-index: 30;
+
+  .mb-campo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    border-radius: 11px;
+    background: rgba(15, 23, 42, 0.45);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+
+    &:hover {
+      border-color: rgba(148, 163, 184, 0.32);
+    }
+
+    &.mb-campo--ativo {
+      background: rgba(15, 23, 42, 0.7);
+      border-color: rgba(14, 165, 233, 0.75);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.18), inset 0 1px 2px rgba(0, 0, 0, 0.25);
+
+      .mb-lupa {
+        color: #38bdf8;
+      }
+    }
+  }
+
+  .mb-lupa {
+    position: absolute;
+    left: 0.8rem;
+    font-size: 0.85rem;
+    color: #64748b;
+    pointer-events: none;
+    transition: color 0.18s ease;
+  }
+
+  .mb-input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0 2.6rem 0 2.2rem;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #f1f5f9;
+    font-size: 0.86rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+
+    &::placeholder {
+      color: #7c8aa0;
+      font-weight: 400;
+    }
+  }
+
+  .mb-limpar {
+    position: absolute;
+    right: 0.45rem;
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    border: none;
+    border-radius: 7px;
+    background: rgba(148, 163, 184, 0.14);
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    i {
+      font-size: 0.68rem;
+    }
+
+    &:hover {
+      background: rgba(248, 113, 113, 0.2);
+      color: #fecaca;
+    }
+  }
+
+  .mb-atalho {
+    position: absolute;
+    right: 0.55rem;
+    padding: 2px 6px;
+    border-radius: 5px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    background: rgba(148, 163, 184, 0.08);
+    color: #7c8aa0;
+    font: 600 0.62rem/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    pointer-events: none;
+  }
+
+  .mb-painel {
+    position: absolute;
+    top: calc(100% - 0.35rem);
+    left: 0.6rem;
+    right: 0.6rem;
+    max-height: min(62vh, 470px);
+    overflow-y: auto;
+    padding: 0.4rem;
+    border-radius: 13px;
+    background: linear-gradient(180deg, #1e293b 0%, #172033 100%);
+    border: 1px solid rgba(56, 189, 248, 0.22);
+    box-shadow: 0 18px 44px rgba(2, 6, 23, 0.6), 0 2px 8px rgba(2, 6, 23, 0.4);
+    animation: mb-surgir 0.16s ease-out;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.25);
+      border-radius: 6px;
+    }
+  }
+
+  .mb-cab {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.6rem 0.35rem;
+    color: #7c8aa0;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    i {
+      font-size: 0.7rem;
+    }
+  }
+
+  .mb-opt {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.55rem 0.6rem;
+    border-radius: 9px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background 0.12s ease, border-color 0.12s ease;
+
+    &.mb-opt--ativa {
+      background: rgba(14, 165, 233, 0.14);
+      border-color: rgba(56, 189, 248, 0.3);
+
+      .mb-opt-ico {
+        background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(14, 165, 233, 0.35);
+      }
+
+      .mb-opt-ir {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+  }
+
+  .mb-opt-ico {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: rgba(148, 163, 184, 0.12);
+    color: #93c5fd;
+    transition: background 0.12s ease, color 0.12s ease;
+
+    i {
+      font-size: 0.9rem;
+    }
+  }
+
+  .mb-opt-txt {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .mb-opt-nome {
+    color: #e2e8f0;
+    font-size: 0.84rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .mb-opt-desc {
+    color: #94a3b8;
+    font-size: 0.7rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  mark {
+    background: rgba(250, 204, 21, 0.2);
+    color: #fde68a;
+    border-radius: 3px;
+    padding: 0 1px;
+  }
+
+  .mb-opt-secao {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    align-self: flex-start;
+    margin-top: 1px;
+    padding: 1px 7px 1px 6px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.1);
+    color: #94a3b8;
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+
+    i {
+      font-size: 0.6rem;
+    }
+  }
+
+  .mb-opt-ir {
+    flex-shrink: 0;
+    font-size: 0.72rem;
+    color: #38bdf8;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.12s ease, transform 0.12s ease;
+  }
+
+  .mb-vazio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 1.1rem 0.8rem 1rem;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.78rem;
+
+    i {
+      font-size: 1.4rem;
+      color: #475569;
+      margin-bottom: 0.15rem;
+    }
+
+    strong {
+      color: #e2e8f0;
+      word-break: break-word;
+    }
+
+    small {
+      color: #64748b;
+      font-size: 0.7rem;
+    }
+  }
+
+  .mb-rodape {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.8rem;
+    margin-top: 0.3rem;
+    padding: 0.5rem 0.55rem 0.2rem;
+    border-top: 1px solid rgba(148, 163, 184, 0.12);
+    color: #64748b;
+    font-size: 0.66rem;
+
+    kbd {
+      display: inline-block;
+      min-width: 16px;
+      margin-right: 2px;
+      padding: 0 4px;
+      border-radius: 4px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(148, 163, 184, 0.08);
+      color: #94a3b8;
+      font: 600 0.62rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-align: center;
+    }
+  }
+}
+
+.menu-busca-recolhida {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 0.75rem;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(15, 23, 42, 0.4);
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.18s ease;
+
+  &:hover {
+    border-color: rgba(14, 165, 233, 0.7);
+    color: #38bdf8;
+    background: rgba(14, 165, 233, 0.12);
+  }
+}
+
+.sidebar-nav .nav-section.nav-section--foco .nav-section-title {
+  color: #7dd3fc;
+}
+
+.sidebar-nav .nav-section .nav-list .nav-item .nav-link.nav-link--destaque {
+  color: #fff;
+  border-left-color: #facc15;
+  animation: mb-destaque 2.6s ease-out;
+}
+
+@keyframes mb-surgir {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes mb-destaque {
+  0%,
+  35% {
+    background: rgba(250, 204, 21, 0.24);
+    box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.45);
+  }
+  100% {
+    background: rgba(250, 204, 21, 0);
+    box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0);
+  }
+}
+/* Reserve space for search results inside the sidebar scroll area. */
+.menu-busca .mb-painel { position: relative; top: auto; left: auto; right: auto; margin-top: 8px; max-height: min(45dvh, 380px); }
+.menu-busca { min-height: 0; max-height: 58dvh; overflow-y: auto; }
+.nav-section--foco .nav-section-flight-title { color: #7dd3fc; }
+.nav-flight-link.nav-link--destaque { animation: mb-destaque 2.6s ease-out; }
+
+
+// Workflow menu: only six main sections, with administrative subheadings.
+.nav-subgroup-title { margin: 12px 12px 5px; padding: 8px 4px 5px; border-top: 1px solid #66809b44; color: #c6d9ec; font-size: 11px; font-weight: 700; letter-spacing: .04em; line-height: 1.5; text-transform: uppercase; }
+.nav-flight-item:first-child .nav-subgroup-title { margin-top: 3px; border-top: 0; }
+.nav-section-card--os { --nav-accent: #38bdf8; }
+.nav-section-card--rnc { --nav-accent: #fb7185; }
+.nav-section-card--tecnica_documentos { --nav-accent: #a5b4fc; }
+.nav-section-card--ajuda_comunicacao { --nav-accent: #5eead4; }
+
+// Long administrative groups must remain fully reachable in the sidebar scroll area.
+.sidebar--flight-deck .nav-flight-list.is-expanded { max-height: none; }
+.nav-section-card--administracao .nav-flight-item { animation-delay: 0ms; }

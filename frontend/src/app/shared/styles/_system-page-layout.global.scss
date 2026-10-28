@@ -1,0 +1,132 @@
+// Banner e largura disponível para todas as páginas do sistema.
+.main-content {
+  > :not(router-outlet):not(app-contextual-onboarding-banner):not(app-route-loading-bar) {
+    max-width: none;
+    min-width: 0;
+  }
+
+  :is(.as-page, .list-container, .templates-page, .nrc-page, .proposta-container,
+      .home-container, .usuario-new-container, .fabricante-new-container, .tipo-servico-new-container) {
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box;
+  }
+
+  :is(.as-page-hero, .page-header .header-content, .page-header:not(:has(.header-content))) {
+    padding: 20px clamp(16px, 2.4vw, 40px) 16px !important;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 45%, #0c4a6e 100%) !important;
+    color: #fff !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+
+    &::after { display: none; }
+  }
+
+  .as-page-hero__inner { align-items: flex-end; }
+
+  :is(.as-page-hero__title, .page-header h1, .page-header .page-title) {
+    margin: 0 0 4px;
+    font-size: clamp(24px, 2.2vw, 32px) !important;
+    letter-spacing: -0.6px;
+    line-height: 1.15;
+    color: #fff !important;
+    i { color: inherit !important; }
+  }
+
+  :is(.as-page-hero__subtitle, .page-header .page-subtitle, .page-header p) {
+    font-size: 13px !important;
+    line-height: 1.55;
+    color: #e0eaf3 !important;
+    opacity: 1;
+  }
+
+  .as-page-hero__kicker { color: #e0eaf3; }
+
+  :is(.as-page-hero__actions, .page-header .header-actions) {
+    .p-button:is(.p-button-outlined, .p-button-text):not(:disabled) {
+      color: #fff !important;
+      :is(.p-button-label, .p-button-icon, .pi) { color: inherit !important; }
+      &:hover { background: #ffffff1a !important; }
+    }
+
+    .p-button:not(.p-button-outlined):not(.p-button-text):not(:disabled) {
+      background: #0369a1 !important;
+      border-color: #0369a1 !important;
+      color: #fff !important;
+    }
+  }
+}
+
+// RNC utiliza o banner compartilhado com a identidade visual navy do sistema.
+.main-content .nrc-banner .as-page-hero {
+  padding: 28px clamp(16px, 2.4vw, 40px) !important;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 45%, #0c4a6e 100%) !important;
+  color: #fff !important;
+
+  .as-page-hero__title { color: #fff !important; }
+  .as-page-hero__subtitle { color: #e0eaf3 !important; }
+}
+
+// Contrato comum aplicado nos outlets principal, estoque, suporte, portal e plano de controle.
+.system-page-route.system-page-route {
+  display: flex !important;
+  flex-direction: column;
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0;
+  min-height: 0 !important;
+  overflow: auto !important;
+  box-sizing: border-box;
+}
+.system-page-route > .system-page-surface.system-page-surface {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0;
+  box-sizing: border-box;
+  flex: 1 0 auto;
+  margin-inline: 0 !important;
+}
+.system-page-route .system-page-banner.system-page-banner,
+.system-generated-banner .as-page-hero.as-page-hero {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 28px clamp(16px, 2.4vw, 40px) !important;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 45%, #0c4a6e 100%) !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  flex-shrink: 0;
+
+  :is(h1, h2, .as-page-hero__title, .page-title) { color: #fff !important; }
+  :is(p, .as-page-hero__subtitle, .as-page-hero__kicker, .page-subtitle) { color: #e0eaf3 !important; }
+  .as-page-hero__title { font-size: clamp(24px, 2.2vw, 32px) !important; }
+  .as-page-hero__subtitle { font-size: 14px !important; line-height: 1.6; }
+  .p-button:is(.p-button-outlined, .p-button-text):not(:disabled) { color: #fff !important; }
+}
+.system-generated-banner { display: block; width: 100%; flex-shrink: 0; }
+.system-page-original-title { display: none !important; }
+@media print {
+  .system-generated-banner { display: none !important; }
+  .system-page-route.system-page-route { overflow: visible !important; }
+  .system-page-original-title { display: block !important; }
+}
+
+// O banner encosta no topo da área de conteúdo; o respiro fica abaixo dele.
+.system-page-route.system-page-route,
+.system-page-route > .system-page-surface.system-page-surface {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+.system-page-route > .system-page-surface.system-page-surface {
+  animation: none !important;
+}
+.system-page-route app-page-hero,
+.system-page-route .system-page-banner.system-page-banner {
+  margin-top: 0 !important;
+}
+:is(.main-content, .estoque-content, .suporte-main, .content-wrapper, .ops-main):has(> .system-page-route) {
+  padding-top: 0 !important;
+}

@@ -66,6 +66,19 @@ public class OsJobCardResource {
     }
 
     @PUT
+    @Path("/{osId}/fase")
+    public Response moverFase(@PathParam("osId") Long osId, OsJobCardFaseRequest body,
+            @HeaderParam("X-Forwarded-For") String forwardedFor,
+            @HeaderParam("X-Real-IP") String realIp, @Context HttpHeaders headers) {
+        try {
+            return Response.ok(jobCardService.moverFase(osId, body,
+                    AuditoriaUsuarioContext.from(headers, forwardedFor, realIp))).build();
+        } catch (BadRequestException | NotFoundException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorBody(e.getMessage(), e.getMessage())).build();
+        }
+    }
+
+    @PUT
     @Path("/{osId}/execucao")
     public Response execucao(
             @PathParam("osId") Long osId,

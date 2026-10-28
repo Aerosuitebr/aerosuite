@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -10,6 +10,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
+import { TranslatePipe } from '../../core/translate.pipe';
+import { TranslationService } from '../../core/translation.service';
 import { FluxoEstacaoGestao, FluxoEstacoesGestao, FluxoMaquina, FluxoPareamentoInfo, OsFluxoService } from './os-fluxo.service';
 
 const STORAGE_TERMINAL = 'osFluxo.terminalId';
@@ -22,152 +24,229 @@ interface EdicaoMaquina {
 @Component({
   standalone: true,
   selector: 'app-os-fluxo-estacoes',
-  imports: [CommonModule, FormsModule, RouterLink, ButtonModule, DialogModule, DropdownModule, InputTextModule, TooltipModule, ToastModule, MenuModule],
+  imports: [CommonModule, FormsModule, RouterLink, ButtonModule, DialogModule, DropdownModule, InputTextModule, TooltipModule, ToastModule, MenuModule, TranslatePipe],
   providers: [MessageService],
-  styleUrls: ['./fluxo-shared.css'],
+  styleUrls: ['./fluxo-shared.css', './os-fluxo-estacoes.component.css'],
   template: `
     <p-toast></p-toast>
-    <p-menu #acoes [model]="acoesEstacao" [popup]="true" [baseZIndex]="12000" appendTo="body"></p-menu>
-    <div class="fx-shell">
-      <header class="fx-hero">
+    <p-menu #acoes styleClass="ge-station-menu" [model]="acoesEstacao" [popup]="true" [baseZIndex]="12000" appendTo="body"></p-menu>
+    <div class="fx-shell ge-page">
+      <header class="fx-hero ge-hero">
         <div>
           <button pButton type="button" icon="pi pi-arrow-left" class="p-button-text p-button-sm fx-back"
-                  label="Painel do fluxo" routerLink="/os/fluxo"></button>
-          <p class="fx-eyebrow">Controle de fluxo · Configuração</p>
-          <h1>Gerenciar estações</h1>
-          <p class="fx-lead ge-lead">Organize as estações, consulte as etapas atendidas e gerencie as máquinas vinculadas.</p>
+                  [label]="'fluxo.estacoes.back' | translate" routerLink="/os/fluxo"></button>
+          <p class="fx-eyebrow">{{ 'fluxo.estacoes.eyebrow' | translate }}</p>
+          <h1>{{ 'fluxo.estacoes.title' | translate }}</h1>
+          <p class="fx-lead ge-lead">{{ 'fluxo.estacoes.lead' | translate }}</p>
         </div>
-        <div class="fx-hero-actions">
-          <button type="button" class="fx-ghost-btn" (click)="carregar()" [disabled]="carregando">
-            <i class="pi pi-refresh" [class.pi-spin]="carregando"></i> Atualizar
+        <div class="fx-hero-actions ge-actions">
+          <button type="button" class="fx-ghost-btn ge-ghost" (click)="carregar()" [disabled]="carregando" [attr.aria-busy]="carregando">
+            <i class="pi pi-refresh" [class.pi-spin]="carregando"></i> {{ 'fluxo.estacoes.refresh' | translate }}
           </button>
-          <a class="fx-ghost-btn" routerLink="/os/fluxo/estacao"><i class="pi pi-qrcode"></i> Estação de bipagem</a>
-          <button pButton type="button" label="Nova Estação" icon="pi pi-plus" (click)="abrirEstacao()" [disabled]="!dados"></button>
+          <a class="fx-ghost-btn ge-ghost" routerLink="/os/fluxo/estacao"><i class="pi pi-qrcode"></i> {{ 'fluxo.estacoes.openStation' | translate }}</a>
+          <button type="button" class="ge-primary" (click)="abrirEstacao()" [disabled]="!dados">
+            <i class="pi pi-plus"></i> {{ 'fluxo.estacoes.newStation' | translate }}
+          </button>
         </div>
       </header>
 
-      <div class="fx-loading" *ngIf="carregando && !dados"><i class="pi pi-spin pi-spinner" style="font-size: 1.6rem"></i></div>
+      <div class="ge-skel" *ngIf="carregando && !dados" role="status">
+        <span class="sr-only">{{ 'fluxo.estacoes.loading' | translate }}</span>
+        <div class="ge-skel-kpis" aria-hidden="true"><span class="ge-skel-bar"></span><span class="ge-skel-bar"></span><span class="ge-skel-bar"></span></div>
+        <div class="ge-skel-card" aria-hidden="true"></div>
+      </div>
 
       <div class="fx-card ge-erro" *ngIf="erro && !dados">
         <div class="fx-empty-state">
           <span class="ico"><i class="pi pi-exclamation-triangle"></i></span>
-          <strong>Não foi possível carregar as estações</strong>
-          <span>{{ erro }}</span>
-          <button pButton type="button" label="Tentar de novo" icon="pi pi-refresh" class="p-button-sm" (click)="carregar()"></button>
+          <strong>{{ 'fluxo.estacoes.loadError' | translate }}</strong>
+          <span role="alert">{{ erro }}</span>
+          <button pButton type="button" [label]="'fluxo.estacoes.retry' | translate" icon="pi pi-refresh" class="p-button-sm" (click)="carregar()"></button>
         </div>
       </div>
 
       <ng-container *ngIf="dados as d">
-        <section class="fx-card">
+        <p class="ge-refreshing" *ngIf="carregando" role="status"><i class="pi pi-spin pi-spinner"></i> {{ 'fluxo.estacoes.refreshing' | translate }}</p>
+        <section class="ge-kpis ge-rise" [attr.aria-label]="'fluxo.estacoes.summary' | translate">
+          <button type="button" class="ge-kpi" (click)="abrirResumo('estacoes')">
+            <span>{{ 'fluxo.estacoes.kpi.stations' | translate }}</span>
+            <strong>{{ d.estacoes.length }}</strong>
+            <em>{{ 'fluxo.estacoes.kpi.open' | translate }}</em>
+          </button>
+          <button type="button" class="ge-kpi ge-kpi--green" (click)="abrirResumo('maquinas')">
+            <span>{{ 'fluxo.estacoes.kpi.machines' | translate }}</span>
+            <strong>{{ d.maquinas.length }}</strong>
+            <em>{{ 'fluxo.estacoes.kpi.open' | translate }}</em>
+          </button>
+          <button type="button" class="ge-kpi" [class.ge-kpi--amber]="estacoesSemVinculo > 0" (click)="abrirResumo('sem')">
+            <span>{{ 'fluxo.estacoes.kpi.unpaired' | translate }}</span>
+            <strong>{{ estacoesSemVinculo }}</strong>
+            <small *ngIf="estacoesSemVinculo">{{ 'fluxo.estacoes.kpi.unpairedHint' | translate }}</small>
+            <em>{{ 'fluxo.estacoes.kpi.open' | translate }}</em>
+          </button>
+        </section>
+
+        <section class="fx-card ge-rise">
           <div class="fx-card-head">
-            <h2>Estações</h2>
-            <span class="ge-hint">{{ d.estacoes.length }} {{ d.estacoes.length === 1 ? 'estação' : 'estações' }}</span>
+            <h2>{{ 'fluxo.estacoes.kpi.stations' | translate }}</h2>
+            <span class="ge-count">{{ d.estacoes.length === 1 ? ('fluxo.estacoes.stationOne' | translate) : ('fluxo.estacoes.stationMany' | translate:{ n: '' + d.estacoes.length }) }}</span>
           </div>
           <div class="fx-card-body">
             <div class="ge-setup" *ngIf="d.estacoes.length && !d.maquinas.length">
-              <i class="pi pi-desktop" aria-hidden="true"></i>
-              <div><strong>Conecte a primeira máquina</strong><p>Abra a Estação de Bipagem no computador que será usado e informe o código em Parear máquina.</p></div>
-              <button pButton type="button" label="Parear máquina" icon="pi pi-link" class="p-button-outlined p-button-sm" (click)="abrirPareamento()"></button>
+              <span class="ge-setup-mark" aria-hidden="true"><i class="pi pi-desktop"></i></span>
+              <div>
+                <h3>{{ 'fluxo.estacoes.setup.title' | translate }}</h3>
+                <ol>
+                  <li>{{ 'fluxo.estacoes.setup.1' | translate }}</li>
+                  <li>{{ 'fluxo.estacoes.setup.2' | translate }}</li>
+                  <li>{{ 'fluxo.estacoes.setup.3' | translate }}</li>
+                  <li>{{ 'fluxo.estacoes.setup.4' | translate }}</li>
+                </ol>
+              </div>
+              <button type="button" class="ge-primary" (click)="abrirPareamento()"><i class="pi pi-link"></i> {{ 'fluxo.estacoes.pairTitle' | translate }}</button>
             </div>
-            <div class="ge-search"><i class="pi pi-search"></i><input pInputText [(ngModel)]="buscaEstacao" aria-label="Buscar estações" placeholder="Buscar por estação, setor ou etapa" /></div>
+            <div class="ge-search">
+              <label class="ge-search-field">
+                <i class="pi pi-search" aria-hidden="true"></i>
+                <input pInputText [(ngModel)]="buscaEstacao" [attr.aria-label]="'fluxo.estacoes.searchLabel' | translate" [placeholder]="'fluxo.estacoes.searchPlaceholder' | translate" />
+                <button *ngIf="buscaEstacao" type="button" class="ge-clear" (click)="limparBusca()" [attr.aria-label]="'fluxo.estacoes.clearSearch' | translate"><i class="pi pi-times"></i></button>
+              </label>
+            </div>
             <div class="ge-table-wrap">
-              <table class="fx-table ge-table ge-stations">
-                <thead><tr><th>Nome da estação <i class="pi pi-pencil" aria-hidden="true"></i><small class="ge-column-hint">Clique no nome para editar</small></th><th>Máquinas vinculadas</th><th>Etapas atendidas</th><th class="r">Ações</th></tr></thead>
+              <p class="sr-only" id="ge-lista-nav">{{ 'fluxo.estacoes.listNav' | translate }}</p>
+              <table class="fx-table ge-table ge-stations" aria-describedby="ge-lista-nav">
+                <thead>
+                  <tr>
+                    <th>{{ 'fluxo.estacoes.col.name' | translate }}<small class="ge-column-hint">{{ 'fluxo.estacoes.col.hint' | translate }}</small></th>
+                    <th>{{ 'fluxo.estacoes.col.machines' | translate }}</th>
+                    <th>{{ 'fluxo.estacoes.col.stages' | translate }}</th>
+                    <th class="r"><span class="sr-only">{{ 'fluxo.estacoes.col.actions' | translate }}</span></th>
+                  </tr>
+                </thead>
                 <tbody>
-                  <tr *ngFor="let e of estacoesFiltradas; trackBy: trackEstacao">
-                    <td>
+                  <tr #linhaEstacao *ngFor="let e of estacoesFiltradas; let i = index; trackBy: trackEstacao"
+                      [attr.tabindex]="linhaAtiva(i) ? 0 : -1" (keydown)="navegarLinha($event, i)">
+                    <td [attr.data-label]="'fluxo.estacoes.col.name' | translate">
                       <div *ngIf="editandoNome === e.codigo; else nomeEstacao" class="ge-inline">
-                        <input #nomeInline pInputText [(ngModel)]="nomeRascunho" maxlength="120" [attr.aria-label]="'Nome da estação ' + e.nome" [disabled]="salvandoNome" (keydown.enter)="salvarNome(e)" (keydown.escape)="cancelarNome()" [attr.aria-invalid]="!!erroNome" [attr.aria-describedby]="erroNome ? 'ge-erro-nome' : null" />
-                        <button pButton type="button" icon="pi pi-check" class="p-button-text p-button-sm" aria-label="Salvar nome" [loading]="salvandoNome" [disabled]="!nomeRascunho.trim()" (click)="salvarNome(e)"></button>
-                        <button pButton type="button" icon="pi pi-times" class="p-button-text p-button-sm" aria-label="Cancelar edição do nome" [disabled]="salvandoNome" (click)="cancelarNome()"></button>
+                        <input #nomeInline pInputText [(ngModel)]="nomeRascunho" maxlength="120" [attr.aria-label]="'fluxo.estacoes.nameLabel' | translate:{ name: e.nome }" [disabled]="salvandoNome" (keydown.enter)="salvarNome(e)" (keydown.escape)="cancelarNome()" [attr.aria-invalid]="!!erroNome" [attr.aria-describedby]="erroNome ? 'ge-erro-nome' : null" />
+                        <button type="button" class="ge-icon-btn ge-icon-btn--ok" [attr.aria-label]="'fluxo.estacoes.saveName' | translate" [disabled]="salvandoNome || !nomeRascunho.trim()" (click)="salvarNome(e)"><i class="pi" [ngClass]="salvandoNome ? 'pi-spin pi-spinner' : 'pi-check'"></i></button>
+                        <button type="button" class="ge-icon-btn" [attr.aria-label]="'fluxo.estacoes.cancelEdit' | translate" [disabled]="salvandoNome" (click)="cancelarNome()"><i class="pi pi-times"></i></button>
                         <small *ngIf="erroNome" id="ge-erro-nome" class="gp-erro" role="alert">{{ erroNome }}</small>
                       </div>
-                      <ng-template #nomeEstacao><button type="button" class="ge-station-name ge-name-button" [attr.aria-label]="'Editar nome da estação ' + e.nome" [disabled]="salvandoNome" (click)="editarNome(e)"><span class="ge-stage-dot" [style.background]="e.cor || '#64748b'"></span>{{ e.nome }}<i class="pi pi-pencil" aria-hidden="true"></i></button></ng-template>
-                      <small class="ge-sub ge-block" *ngIf="mostrarSetor(e)">Setor: {{ e.setor }}</small>
+                      <ng-template #nomeEstacao>
+                        <button type="button" class="ge-name" [attr.aria-label]="'fluxo.estacoes.editNameAria' | translate:{ name: e.nome }" [disabled]="salvandoNome" (click)="editarNome(e)">
+                          <span class="ge-dot" [style.background]="e.cor || '#64748b'" aria-hidden="true"></span>{{ e.nome }}<i class="pi pi-pencil" aria-hidden="true"></i>
+                        </button>
+                      </ng-template>
+                      <small class="ge-sector" *ngIf="mostrarSetor(e)">{{ 'fluxo.estacoes.sector' | translate:{ name: e.setor || '' } }}</small>
                     </td>
-                    <td><span *ngIf="e.maquinas" class="ge-machine-count"><span class="ge-status-dot" aria-hidden="true"></span>{{ e.maquinas }} {{ e.maquinas === 1 ? 'máquina vinculada' : 'máquinas vinculadas' }}</span><button *ngIf="!e.maquinas" type="button" class="ge-pair-link" [attr.aria-label]="'Parear máquina à estação ' + e.nome" (click)="abrirPareamento(e.codigo)"><span class="ge-status-dot ge-status-dot--empty" aria-hidden="true"></span>Parear máquina <i class="pi pi-plus" aria-hidden="true"></i></button><small class="ge-sub ge-machine-summary" *ngIf="e.maquinas" [title]="nomesMaquinas(e.codigo)">{{ nomesMaquinas(e.codigo) }}</small></td>
-                    <td><details class="ge-stage-details"><summary><span class="sr-only">Ver etapas de {{ e.nome }}: </span>{{ e.etapas.length }} {{ e.etapas.length === 1 ? 'etapa' : 'etapas' }}</summary><ul><li *ngFor="let etapa of e.etapas">{{ etapa }}</li></ul></details></td>
-                    <td class="r"><button pButton type="button" icon="pi pi-ellipsis-h" class="p-button-text p-button-rounded p-button-sm" [attr.aria-label]="'Ações da estação ' + e.nome" aria-haspopup="menu" [disabled]="salvandoNome" (click)="prepararAcoes(e); acoes.toggle($event)"></button></td>
+                    <td [attr.data-label]="'fluxo.estacoes.col.machines' | translate">
+                      <span *ngIf="e.maquinas" class="ge-pair"><span class="ge-status" aria-hidden="true"></span>{{ e.maquinas === 1 ? ('fluxo.estacoes.machineOne' | translate) : ('fluxo.estacoes.machineMany' | translate:{ n: '' + e.maquinas }) }}</span>
+                      <button *ngIf="!e.maquinas" type="button" class="ge-pair" [attr.aria-label]="'fluxo.estacoes.pairAria' | translate:{ name: e.nome }" [pTooltip]="'fluxo.estacoes.noMachinesTip' | translate" tooltipPosition="top" (click)="abrirPareamento(e.codigo)">
+                        <span class="ge-status ge-status--empty" aria-hidden="true"></span>{{ 'fluxo.estacoes.pairShortcut' | translate }}
+                      </button>
+                      <span class="ge-machine-summary" *ngIf="e.maquinas" tabindex="0" [pTooltip]="nomesMaquinas(e.codigo)" tooltipPosition="top">{{ nomesMaquinas(e.codigo) }}</span>
+                    </td>
+                    <td [attr.data-label]="'fluxo.estacoes.col.stages' | translate">
+                      <details class="ge-stages">
+                        <summary>
+                          <span class="sr-only">{{ 'fluxo.estacoes.viewStages' | translate:{ name: e.nome } }}</span>
+                          {{ e.etapas.length === 1 ? ('fluxo.estacoes.stageOne' | translate) : ('fluxo.estacoes.stageMany' | translate:{ n: '' + e.etapas.length }) }}
+                          <i class="pi pi-chevron-down" aria-hidden="true"></i>
+                        </summary>
+                        <ul><li *ngFor="let etapa of e.etapas">{{ etapa }}</li></ul>
+                      </details>
+                    </td>
+                    <td class="r" [attr.data-label]="'fluxo.estacoes.col.actions' | translate">
+                      <button type="button" class="ge-icon-btn" [attr.aria-label]="'fluxo.estacoes.actionsAria' | translate:{ name: e.nome }" aria-haspopup="menu" [disabled]="salvandoNome" (click)="prepararAcoes(e); acoes.toggle($event)"><i class="pi pi-ellipsis-h"></i></button>
+                    </td>
                   </tr>
-                  <tr *ngIf="!estacoesFiltradas.length"><td colspan="4" class="ge-empty">{{ d.estacoes.length ? 'Nenhuma estação encontrada para esta busca.' : 'Nenhuma estação cadastrada. Use Nova Estação para começar.' }}</td></tr>
+                  <tr *ngIf="!estacoesFiltradas.length">
+                    <td colspan="4" class="ge-empty">
+                      <strong>{{ d.estacoes.length ? ('fluxo.estacoes.emptySearch' | translate) : ('fluxo.estacoes.emptyStations' | translate) }}</strong>
+                      <p>{{ d.estacoes.length ? ('fluxo.estacoes.emptySearchHint' | translate) : ('fluxo.estacoes.emptyStationsHint' | translate) }}</p>
+                      <button *ngIf="d.estacoes.length" type="button" class="ge-text-btn" (click)="limparBusca()">{{ 'fluxo.estacoes.clearSearch' | translate }}</button>
+                      <button *ngIf="!d.estacoes.length" type="button" class="ge-primary" (click)="abrirEstacao()">{{ 'fluxo.estacoes.newStation' | translate }}</button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </section>
 
-        <section class="fx-card">
+        <section class="fx-card ge-rise ge-rise-late">
           <div class="fx-card-head">
-            <div class="ge-head-tit">
-              <h2>Máquinas</h2>
-              <span class="ge-hint">{{ d.maquinas.length }} {{ d.maquinas.length === 1 ? 'máquina vinculada' : 'máquinas vinculadas' }}</span>
+            <div class="ge-head-copy">
+              <h2>{{ 'fluxo.estacoes.machinesTitle' | translate }}</h2>
+              <span class="ge-count">{{ d.maquinas.length === 1 ? ('fluxo.estacoes.machineOne' | translate) : ('fluxo.estacoes.machineMany' | translate:{ n: '' + d.maquinas.length }) }}</span>
+              <p>{{ 'fluxo.estacoes.machinesLead' | translate }}</p>
             </div>
-            <button pButton type="button" icon="pi pi-link" label="Parear máquina" (click)="abrirPareamento()"></button>
+            <button type="button" class="ge-primary" (click)="abrirPareamento()"><i class="pi pi-link"></i> {{ 'fluxo.estacoes.pairTitle' | translate }}</button>
           </div>
           <div class="fx-card-body">
             <div class="ge-ajuda">
-              <span>Para incluir uma máquina, abra a <b>Estação de Bipagem</b> nela e digite aqui o código que aparecer na tela.</span>
               <button type="button" class="ge-ajuda-btn" (click)="ajudaAberta = !ajudaAberta" [attr.aria-expanded]="ajudaAberta">
-                <i class="pi pi-question-circle"></i> Como funciona?
+                <i class="pi pi-question-circle"></i> {{ 'fluxo.estacoes.how' | translate }}
               </button>
             </div>
-            <ul class="ge-ajuda-det" *ngIf="ajudaAberta">
-              <li>Na máquina nova, alguém entra no sistema e abre a <b>Estação de Bipagem</b>: aparece um código de 8 números.</li>
-              <li>Aqui, clique em <b>Parear máquina</b>, digite o código, escolha a estação e confirme. A tela da máquina abre sozinha.</li>
-              <li>Clique em <b>Editar</b> para trocar a estação ou alterar o nome da máquina e depois em <b>Salvar</b>.</li>
-              <li><b>Remover</b> faz a máquina deixar de ser estação. Se a Estação de Bipagem for aberta nela de novo, ela mostra um novo código de pareamento.</li>
-            </ul>
+            <ol class="ge-ajuda-det" *ngIf="ajudaAberta">
+              <li>{{ 'fluxo.estacoes.how.1' | translate }}</li>
+              <li>{{ 'fluxo.estacoes.how.2' | translate }}</li>
+              <li>{{ 'fluxo.estacoes.how.3' | translate }}</li>
+              <li>{{ 'fluxo.estacoes.how.4' | translate }}</li>
+            </ol>
 
             <div class="fx-empty-state" *ngIf="!d.maquinas.length">
               <span class="ico"><i class="pi pi-desktop"></i></span>
-              <strong>Nenhuma máquina vinculada</strong>
-              <span>Abra a Estação de Bipagem no computador da estação e use <b>Parear máquina</b> com o código que aparecer nele.</span>
+              <strong>{{ 'fluxo.estacoes.machinesEmptyTitle' | translate }}</strong>
+              <span>{{ 'fluxo.estacoes.machinesEmpty' | translate }}</span>
             </div>
 
             <div class="ge-table-wrap" *ngIf="d.maquinas.length">
               <table class="fx-table ge-table">
                 <thead>
                   <tr>
-                    <th>Máquina</th>
-                    <th>Estação</th>
-                    <th>Situação</th>
-                    <th>Vinculada por</th>
-                    <th class="r"><span class="sr-only">Ações</span></th>
+                    <th>{{ 'fluxo.estacoes.col.machine' | translate }}</th>
+                    <th>{{ 'fluxo.estacoes.col.station' | translate }}</th>
+                    <th>{{ 'fluxo.estacoes.col.status' | translate }}</th>
+                    <th>{{ 'fluxo.estacoes.col.by' | translate }}</th>
+                    <th class="r"><span class="sr-only">{{ 'fluxo.estacoes.col.actions' | translate }}</span></th>
                   </tr>
                 </thead>
                 <tbody>
                   <ng-container *ngFor="let m of d.maquinas; trackBy: trackMaquina">
                     <tr [class.ge-atual]="m.terminalId === terminalAtual" [class.ge-aberta]="detalhe === m.terminalId">
-                      <td class="ge-maq">
-                        <strong>{{ m.apelido || 'Sem nome' }}</strong>
+                      <td class="ge-maq" [attr.data-label]="'fluxo.estacoes.col.machine' | translate">
+                        <strong>{{ m.apelido || ('fluxo.estacoes.unnamed' | translate) }}</strong>
                         <div class="ge-maq-meta">
-                          <span class="fx-chip fx-chip--accent ge-chip" *ngIf="m.terminalId === terminalAtual"><i class="pi pi-map-marker"></i> esta máquina</span>
+                          <span class="fx-chip fx-chip--accent ge-chip" *ngIf="m.terminalId === terminalAtual"><i class="pi pi-map-marker"></i> {{ 'fluxo.estacoes.thisMachine' | translate }}</span>
                           <span>{{ navegador(m.userAgent) }}</span>
-                          <button type="button" class="ge-link ge-det-btn" (click)="alternarDetalhe(m)" [attr.aria-expanded]="detalhe === m.terminalId">
-                            {{ detalhe === m.terminalId ? 'ocultar detalhes' : 'detalhes' }}
+                          <button type="button" class="ge-det-btn" (click)="alternarDetalhe(m)" [attr.aria-expanded]="detalhe === m.terminalId">
+                            {{ detalhe === m.terminalId ? ('fluxo.estacoes.hideDetails' | translate) : ('fluxo.estacoes.details' | translate) }}
                             <i class="pi" [ngClass]="detalhe === m.terminalId ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
                           </button>
                         </div>
                       </td>
-                      <td class="ge-est-cell">
-                        {{ nomeEstacao(m.estacaoCodigo) || m.estacaoNome || 'Estação indisponível' }}
+                      <td class="ge-est-cell" [attr.data-label]="'fluxo.estacoes.col.station' | translate">
+                        {{ nomeEstacao(m.estacaoCodigo) || m.estacaoNome || ('fluxo.estacoes.stationUnavailable' | translate) }}
                         <small class="ge-aviso" *ngIf="!estacaoExiste(m.estacaoCodigo)">
-                          <i class="pi pi-exclamation-triangle"></i> A estação "{{ m.estacaoNome || m.estacaoCodigo }}" não existe mais
+                          <i class="pi pi-exclamation-triangle"></i> {{ 'fluxo.estacoes.stationMissing' | translate:{ name: m.estacaoNome || m.estacaoCodigo } }}
                         </small>
                       </td>
-                      <td class="ge-sit">
+                      <td class="ge-sit" [attr.data-label]="'fluxo.estacoes.col.status' | translate">
                         <span class="fx-chip ge-chip" [ngClass]="m.ativa ? 'fx-chip--done' : 'fx-chip--muted'">
-                          <span class="dot"></span> {{ m.ativa ? 'Em uso agora' : 'Inativa' }}
+                          <span class="dot"></span> {{ m.ativa ? ('fluxo.estacoes.linkActive' | translate) : ('fluxo.estacoes.linkInactive' | translate) }}
                         </span>
-                        <div class="ge-sub" *ngIf="m.ultimoAcesso" [pTooltip]="'Último acesso: ' + (m.ultimoAcesso | date:'dd/MM/yyyy HH:mm')"
-                             tooltipPosition="top">{{ relativo(m.ultimoAcesso) }}</div>
+                        <div class="ge-sub" *ngIf="m.ultimoAcesso" [pTooltip]="'fluxo.estacoes.lastAccess' | translate:{ when: (m.ultimoAcesso | date:'dd/MM/yyyy HH:mm') || '' }"
+                             tooltipPosition="top">{{ relativo(m.ultimoAcesso) }}<span class="sr-only"> {{ m.ultimoAcesso | date:'dd/MM/yyyy HH:mm' }}</span></div>
                       </td>
-                      <td class="ge-quem">{{ m.usuarioNome || '—' }}</td>
-                      <td class="r">
+                      <td class="ge-quem" [attr.data-label]="'fluxo.estacoes.col.by' | translate">{{ m.usuarioNome || '—' }}</td>
+                      <td class="r" [attr.data-label]="'fluxo.estacoes.col.actions' | translate">
                         <div class="ge-acoes">
-                          <button pButton type="button" icon="pi pi-pencil" label="Editar" class="p-button-sm p-button-text" (click)="abrirMaquina(m)"></button>
-                          <button pButton type="button" icon="pi pi-trash" label="Remover" class="p-button-sm ge-btn-remover"
-                                  pTooltip="Esta máquina deixa de ser estação" tooltipPosition="left"
+                          <button pButton type="button" icon="pi pi-pencil" [label]="'fluxo.estacoes.edit' | translate" class="p-button-sm p-button-text" (click)="abrirMaquina(m)"></button>
+                          <button pButton type="button" icon="pi pi-trash" [label]="'fluxo.estacoes.remove' | translate" class="p-button-sm p-button-text ge-remove"
+                                  [pTooltip]="'fluxo.estacoes.removeTip' | translate" tooltipPosition="left"
                                   [disabled]="salvandoMaquina === m.terminalId" (click)="pedirRemocao(m)"></button>
                         </div>
                       </td>
@@ -175,11 +254,11 @@ interface EdicaoMaquina {
                     <tr class="ge-det" *ngIf="detalhe === m.terminalId">
                       <td colspan="5">
                         <dl>
-                          <div><dt>Vinculada em</dt><dd>{{ m.vinculadoEm ? (m.vinculadoEm | date:'dd/MM/yyyy HH:mm') : '—' }}</dd></div>
-                          <div><dt>Último acesso</dt><dd>{{ m.ultimoAcesso ? (m.ultimoAcesso | date:'dd/MM/yyyy HH:mm') : '—' }}</dd></div>
-                          <div><dt>Endereço IP</dt><dd class="fx-mono">{{ m.ip || '—' }}</dd></div>
-                          <div><dt>Identificador</dt><dd class="fx-mono">{{ m.terminalId }}</dd></div>
-                          <div class="ge-det-ua"><dt>Navegador</dt><dd>{{ m.userAgent || '—' }}</dd></div>
+                          <div><dt>{{ 'fluxo.estacoes.linkedAt' | translate }}</dt><dd>{{ m.vinculadoEm ? (m.vinculadoEm | date:'dd/MM/yyyy HH:mm') : '—' }}</dd></div>
+                          <div><dt>{{ 'fluxo.estacoes.lastAccessLabel' | translate }}</dt><dd>{{ m.ultimoAcesso ? (m.ultimoAcesso | date:'dd/MM/yyyy HH:mm') : '—' }}</dd></div>
+                          <div><dt>{{ 'fluxo.estacoes.ip' | translate }}</dt><dd class="fx-mono">{{ m.ip || '—' }}</dd></div>
+                          <div><dt>{{ 'fluxo.estacoes.terminalId' | translate }}</dt><dd class="fx-mono">{{ m.terminalId }}</dd></div>
+                          <div class="ge-det-ua"><dt>{{ 'fluxo.estacoes.browser' | translate }}</dt><dd>{{ m.userAgent || '—' }}</dd></div>
                         </dl>
                       </td>
                     </tr>
@@ -193,268 +272,181 @@ interface EdicaoMaquina {
     </div>
 
 
-    <p-dialog [(visible)]="mostrarEstacao" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body"
-              [closable]="!salvandoEstacao" [closeOnEscape]="!salvandoEstacao" [header]="estacaoEmEdicao ? 'Editar estação' : 'Nova Estação'" [style]="{ width: '520px', maxWidth: '95vw' }">
-      <div class="gp">
-        <label class="ge-label" for="ge-est-nome">Nome da estação</label>
-        <input pInputText id="ge-est-nome" [(ngModel)]="estacaoNome" maxlength="120" placeholder="Ex.: Oficina 6" [disabled]="salvandoEstacao" />
-        <ng-container *ngIf="!estacaoEmEdicao">
-          <label class="ge-label" for="ge-est-setor">Setor</label>
-          <p-dropdown inputId="ge-est-setor" [options]="opcoesSetor" [(ngModel)]="estacaoSetor" appendTo="body" [style]="{ width: '100%' }" placeholder="Selecione o setor" [disabled]="salvandoEstacao"></p-dropdown>
-          <small class="gp-opc">A estação atenderá as etapas do setor selecionado. Após criar, use Parear máquina para vincular os computadores.</small>
-        </ng-container>
-        <p class="ge-dlg-txt fx-muted" *ngIf="estacaoEmEdicao">Setor: {{ estacaoEmEdicao.setor }}. As máquinas vinculadas serão mantidas.</p>
-        <small class="gp-erro" *ngIf="erroEstacao" role="alert">{{ erroEstacao }}</small>
-      </div>
-      <ng-template pTemplate="footer">
-        <button pButton type="button" label="Cancelar" class="p-button-text" [disabled]="salvandoEstacao" (click)="mostrarEstacao = false"></button>
-        <button pButton type="button" [label]="estacaoEmEdicao ? 'Salvar alterações' : 'Criar estação'" icon="pi pi-check" [loading]="salvandoEstacao" [disabled]="!estacaoNome.trim() || (!estacaoEmEdicao && !estacaoSetor)" (click)="salvarEstacao()"></button>
+    <p-dialog styleClass="ge-dialog ge-dialog--detail" [(visible)]="resumoAberto" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body"
+              [closable]="true" [closeOnEscape]="true" [header]="tituloResumo()" [style]="{ width: '720px', maxWidth: '95vw' }">
+      <p class="ge-detail-lead">{{ leadResumo() }}</p>
+      <label class="ge-detail-search">
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <input pInputText [(ngModel)]="buscaResumo" [attr.aria-label]="'fluxo.estacoes.detail.searchLabel' | translate"
+               [placeholder]="resumo === 'maquinas' ? ('fluxo.estacoes.detail.searchMachines' | translate) : ('fluxo.estacoes.detail.searchStations' | translate)" />
+        <button *ngIf="buscaResumo" type="button" class="ge-detail-clear" (click)="buscaResumo = ''" [attr.aria-label]="'fluxo.estacoes.clearSearch' | translate"><i class="pi pi-times"></i></button>
+      </label>
+      <ul class="ge-detail-list" tabindex="0" *ngIf="resumo === 'maquinas'; else listaEstacoes">
+        <li *ngIf="!maquinasDoResumo.length" class="ge-detail-item">{{ buscaResumo ? ('fluxo.estacoes.detail.emptySearch' | translate) : ('fluxo.estacoes.detail.emptyMachines' | translate) }}</li>
+        <li class="ge-detail-item" *ngFor="let m of maquinasDoResumo; trackBy: trackMaquina">
+          <strong>{{ m.apelido || ('fluxo.estacoes.unnamed' | translate) }}</strong>
+          <div class="ge-detail-meta">
+            <span class="ge-detail-sector">{{ nomeEstacao(m.estacaoCodigo) || m.estacaoNome || ('fluxo.estacoes.stationUnavailable' | translate) }}</span>
+            <span class="ge-detail-link" [class.ge-detail-link--on]="m.ativa">
+              <span class="ge-link-dot" [class.ge-link-dot--on]="m.ativa" aria-hidden="true"></span>
+              {{ m.ativa ? ('fluxo.estacoes.linkActive' | translate) : ('fluxo.estacoes.linkInactive' | translate) }}
+            </span>
+          </div>
+          <div class="ge-detail-meta ge-detail-meta--quiet">
+            <span>{{ navegador(m.userAgent) }}</span>
+            <span *ngIf="m.usuarioNome">{{ m.usuarioNome }}</span>
+            <span *ngIf="m.ultimoAcesso">{{ 'fluxo.estacoes.lastAccess' | translate:{ when: (m.ultimoAcesso | date:'dd/MM/yyyy HH:mm') || '' } }}</span>
+            <span *ngIf="m.ip" class="fx-mono">{{ m.ip }}</span>
+          </div>
+        </li>
+      </ul>
+      <ng-template #listaEstacoes>
+        <ul class="ge-detail-list" tabindex="0">
+          <li *ngIf="!estacoesDoResumo.length" class="ge-detail-item">
+            {{ buscaResumo ? ('fluxo.estacoes.detail.emptySearch' | translate) : (resumo === 'sem' ? ('fluxo.estacoes.detail.emptyUnpaired' | translate) : ('fluxo.estacoes.emptyStations' | translate)) }}
+          </li>
+          <li class="ge-detail-item" *ngFor="let e of estacoesDoResumo; trackBy: trackEstacao">
+            <strong>{{ e.nome }}</strong>
+            <div class="ge-detail-meta">
+              <span class="ge-detail-sector" *ngIf="e.setor">{{ 'fluxo.estacoes.sector' | translate:{ name: e.setor } }}</span>
+              <span class="ge-detail-count"><b>{{ e.maquinas || 0 }}</b> {{ (e.maquinas === 1 ? 'fluxo.estacoes.detail.machineUnit' : 'fluxo.estacoes.detail.machinesUnit') | translate }}</span>
+              <span class="ge-detail-count"><b>{{ e.etapas.length }}</b> {{ (e.etapas.length === 1 ? 'fluxo.estacoes.detail.stageUnit' : 'fluxo.estacoes.detail.stagesUnit') | translate }}</span>
+            </div>
+            <ol class="ge-detail-stages" *ngIf="e.etapas.length" [attr.aria-label]="'fluxo.estacoes.detail.stageOrder' | translate">
+              <li *ngFor="let etapa of e.etapas; let last = last">
+                <span>{{ etapa }}</span>
+                <i *ngIf="!last" class="pi pi-arrow-right" aria-hidden="true"></i>
+              </li>
+            </ol>
+            <ul class="ge-detail-links" *ngIf="maquinasDa(e.codigo).length">
+              <li *ngFor="let m of maquinasDa(e.codigo); trackBy: trackMaquina">
+                <span class="ge-link-dot" [class.ge-link-dot--on]="m.ativa" aria-hidden="true"></span>
+                <span>{{ m.apelido || ('fluxo.estacoes.unnamed' | translate) }}</span>
+                <small>{{ m.ativa ? ('fluxo.estacoes.linkActive' | translate) : ('fluxo.estacoes.linkInactive' | translate) }}</small>
+              </li>
+            </ul>
+            <button *ngIf="!e.maquinas" type="button" class="ge-text-btn" (click)="parearDoResumo(e.codigo)">{{ 'fluxo.estacoes.pairShortcut' | translate }}</button>
+          </li>
+        </ul>
       </ng-template>
     </p-dialog>
 
-    <p-dialog [(visible)]="mostrarExcluirEstacao" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body" header="Excluir estação"
+    <p-dialog styleClass="ge-dialog" [(visible)]="mostrarEstacao" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body"
+              [closable]="!salvandoEstacao" [closeOnEscape]="!salvandoEstacao" [header]="estacaoEmEdicao ? ('fluxo.estacoes.editStation' | translate) : ('fluxo.estacoes.newStation' | translate)" [style]="{ width: '520px', maxWidth: '95vw' }">
+      <div class="gp">
+        <label class="ge-label" for="ge-est-nome">{{ 'fluxo.estacoes.field.name' | translate }}</label>
+        <input pInputText id="ge-est-nome" [(ngModel)]="estacaoNome" maxlength="120" [placeholder]="'fluxo.estacoes.field.nameExample' | translate" [disabled]="salvandoEstacao" />
+        <ng-container *ngIf="!estacaoEmEdicao">
+          <label class="ge-label" for="ge-est-setor">{{ 'fluxo.estacoes.field.section' | translate }}</label>
+          <p-dropdown inputId="ge-est-setor" [options]="opcoesSetor" [(ngModel)]="estacaoSetor" appendTo="body" [style]="{ width: '100%' }" [placeholder]="'fluxo.estacoes.field.sectionPlaceholder' | translate" [disabled]="salvandoEstacao"></p-dropdown>
+          <small class="gp-opc">{{ 'fluxo.estacoes.field.sectionHelp' | translate }}</small>
+        </ng-container>
+        <p class="ge-dlg-txt fx-muted" *ngIf="estacaoEmEdicao">{{ 'fluxo.estacoes.editKeep' | translate:{ name: estacaoEmEdicao.setor || '' } }}</p>
+        <small class="gp-erro" *ngIf="erroEstacao" role="alert">{{ erroEstacao }}</small>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton type="button" [label]="'fluxo.estacoes.cancel' | translate" class="p-button-text" [disabled]="salvandoEstacao" (click)="mostrarEstacao = false"></button>
+        <button pButton type="button" [label]="estacaoEmEdicao ? ('fluxo.estacoes.saveChanges' | translate) : ('fluxo.estacoes.create' | translate)" icon="pi pi-check" [loading]="salvandoEstacao" [disabled]="!estacaoNome.trim() || (!estacaoEmEdicao && !estacaoSetor)" (click)="salvarEstacao()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog styleClass="ge-dialog ge-dialog--danger" [(visible)]="mostrarExcluirEstacao" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body" [header]="'fluxo.estacoes.deleteTitle' | translate"
               [closable]="!excluindoEstacao" [closeOnEscape]="!excluindoEstacao" [style]="{ width: '480px', maxWidth: '95vw' }">
       <ng-container *ngIf="estacaoParaExcluir as e">
-        <p class="ge-dlg-txt">Deseja excluir a estação <b>{{ e.nome }}</b>?</p>
-        <p class="ge-dlg-txt ge-dlg-warn" *ngIf="e.maquinas" role="alert">Não é possível excluir: {{ e.maquinas }} {{ e.maquinas === 1 ? 'máquina está vinculada' : 'máquinas estão vinculadas' }}. Reatribua ou remova esses vínculos na seção Máquinas antes de prosseguir.</p>
-        <p class="ge-dlg-txt fx-muted">As {{ e.etapas.length }} etapas herdadas do setor e o histórico das OS serão preservados.</p>
+        <p class="ge-dlg-txt">{{ 'fluxo.estacoes.deleteAsk' | translate:{ name: e.nome } }}</p>
+        <p class="ge-dlg-txt ge-dlg-warn" *ngIf="e.maquinas" role="alert">{{ e.maquinas === 1 ? ('fluxo.estacoes.deleteBlockedOne' | translate) : ('fluxo.estacoes.deleteBlockedMany' | translate:{ n: '' + e.maquinas }) }}</p>
+        <p class="ge-dlg-txt fx-muted">{{ 'fluxo.estacoes.deleteKeep' | translate:{ n: '' + e.etapas.length } }}</p>
         <ng-container *ngIf="!e.maquinas">
-          <label class="ge-label" for="ge-confirmar-exclusao">Digite o nome da estação para confirmar</label>
+          <label class="ge-label" for="ge-confirmar-exclusao">{{ 'fluxo.estacoes.deleteConfirmLabel' | translate }}</label>
           <input pInputText id="ge-confirmar-exclusao" [(ngModel)]="confirmacaoExclusao" autocomplete="off" [placeholder]="e.nome" [disabled]="excluindoEstacao" />
         </ng-container>
         <small class="gp-erro" *ngIf="erroExclusao" role="alert">{{ erroExclusao }}</small>
       </ng-container>
       <ng-template pTemplate="footer">
-        <button pButton type="button" label="Cancelar" class="p-button-text" [disabled]="excluindoEstacao" (click)="mostrarExcluirEstacao = false"></button>
-        <button pButton type="button" label="Excluir estação" icon="pi pi-trash" class="p-button-danger" [loading]="excluindoEstacao" [disabled]="!exclusaoConfirmada" (click)="excluirEstacao()"></button>
+        <button pButton type="button" [label]="'fluxo.estacoes.cancel' | translate" class="p-button-text" [disabled]="excluindoEstacao" (click)="mostrarExcluirEstacao = false"></button>
+        <button pButton type="button" [label]="'fluxo.estacoes.deleteAction' | translate" icon="pi pi-trash" class="p-button-danger" [loading]="excluindoEstacao" [disabled]="!exclusaoConfirmada" (click)="excluirEstacao()"></button>
       </ng-template>
     </p-dialog>
 
-    <p-dialog [(visible)]="mostrarEditarMaquina" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body" header="Editar máquina"
+    <p-dialog styleClass="ge-dialog" [(visible)]="mostrarEditarMaquina" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body" [header]="'fluxo.estacoes.editMachine' | translate"
               [closable]="!salvandoMaquina" [closeOnEscape]="!salvandoMaquina" [style]="{ width: '500px', maxWidth: '95vw' }">
       <div class="gp" *ngIf="maquinaEmEdicao as m">
-        <label class="ge-label" for="ge-maq-nome">Nome da máquina</label>
+        <label class="ge-label" for="ge-maq-nome">{{ 'fluxo.estacoes.field.machineName' | translate }}</label>
         <input pInputText id="ge-maq-nome" [(ngModel)]="edicao[m.terminalId].apelido" maxlength="120" [disabled]="!!salvandoMaquina" />
-        <label class="ge-label" for="ge-maq-estacao">Estação</label>
+        <label class="ge-label" for="ge-maq-estacao">{{ 'fluxo.estacoes.field.station' | translate }}</label>
         <p-dropdown inputId="ge-maq-estacao" [options]="opcoesEstacao" [(ngModel)]="edicao[m.terminalId].estacaoCodigo" optionLabel="label" optionValue="value" appendTo="body" [style]="{ width: '100%' }" [disabled]="!!salvandoMaquina"></p-dropdown>
         <small class="gp-erro" *ngIf="erroMaquina" role="alert">{{ erroMaquina }}</small>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton type="button" label="Cancelar" class="p-button-text" [disabled]="!!salvandoMaquina" (click)="mostrarEditarMaquina = false"></button>
-        <button pButton type="button" label="Salvar" icon="pi pi-check" [loading]="!!salvandoMaquina" [disabled]="!maquinaEmEdicao || !maquinaAlterada(maquinaEmEdicao) || !edicao[maquinaEmEdicao.terminalId].apelido.trim() || !edicao[maquinaEmEdicao.terminalId].estacaoCodigo" (click)="maquinaEmEdicao && salvarMaquina(maquinaEmEdicao)"></button>
+        <button pButton type="button" [label]="'fluxo.estacoes.cancel' | translate" class="p-button-text" [disabled]="!!salvandoMaquina" (click)="mostrarEditarMaquina = false"></button>
+        <button pButton type="button" [label]="'fluxo.estacoes.save' | translate" icon="pi pi-check" [loading]="!!salvandoMaquina" [disabled]="!maquinaEmEdicao || !maquinaAlterada(maquinaEmEdicao) || !edicao[maquinaEmEdicao.terminalId].apelido.trim() || !edicao[maquinaEmEdicao.terminalId].estacaoCodigo" (click)="maquinaEmEdicao && salvarMaquina(maquinaEmEdicao)"></button>
       </ng-template>
     </p-dialog>
 
-    <p-dialog [(visible)]="mostrarPareamento" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body"
-              header="Parear máquina" [style]="{ width: '500px', maxWidth: '95vw' }">
+    <p-dialog styleClass="ge-dialog" [(visible)]="mostrarPareamento" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body"
+              [header]="'fluxo.estacoes.pairTitle' | translate" [style]="{ width: '500px', maxWidth: '95vw' }">
       <div class="gp">
-        <label class="ge-label" for="gp-codigo">Código mostrado na máquina</label>
+        <label class="ge-label" for="gp-codigo">{{ 'fluxo.estacoes.pairCode' | translate }}</label>
         <input id="gp-codigo" class="gp-codigo" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="00000000"
                [(ngModel)]="parCodigo" (ngModelChange)="codigoPareamentoMudou($event)" />
-        <div class="gp-info" *ngIf="consultandoPar"><i class="pi pi-spin pi-spinner"></i> Procurando a máquina…</div>
+        <div class="gp-info" *ngIf="consultandoPar" role="status"><i class="pi pi-spin pi-spinner"></i> {{ 'fluxo.estacoes.pairLooking' | translate }}</div>
         <div class="gp-info gp-info--ok" *ngIf="parInfo as info">
           <i class="pi pi-desktop"></i>
           <div>
             <strong>{{ navegador(info.userAgent) }}</strong>
-            <span>{{ info.usuarioNome ? 'Usuário na máquina: ' + info.usuarioNome : 'Usuário não identificado' }}</span>
+            <span>{{ info.usuarioNome ? ('fluxo.estacoes.pairUser' | translate:{ name: info.usuarioNome }) : ('fluxo.estacoes.pairUserUnknown' | translate) }}</span>
             <span class="fx-mono" *ngIf="info.ip">IP {{ info.ip }}</span>
+            <span *ngIf="info.expiraEm">{{ 'fluxo.estacoes.pairExpires' | translate:{ when: (info.expiraEm | date:'dd/MM/yyyy HH:mm') || '' } }}</span>
           </div>
         </div>
-        <small class="gp-erro" *ngIf="erroPar"><i class="pi pi-times-circle"></i> {{ erroPar }}</small>
+        <small class="gp-erro" *ngIf="erroPar" role="alert"><i class="pi pi-times-circle"></i> {{ erroPar }}</small>
 
         <ng-container *ngIf="parInfo">
-          <label class="ge-label" for="gp-estacao">Estação</label>
+          <label class="ge-label" for="gp-estacao">{{ 'fluxo.estacoes.field.station' | translate }}</label>
           <p-dropdown inputId="gp-estacao" [options]="opcoesEstacao" [(ngModel)]="parEstacao" optionLabel="label" optionValue="value"
-                      appendTo="body" styleClass="ge-dropdown" [style]="{ width: '100%' }" placeholder="Escolha a estação"></p-dropdown>
-          <label class="ge-label" for="gp-apelido">Nome da máquina</label>
+                      appendTo="body" styleClass="ge-dropdown" [style]="{ width: '100%' }" [placeholder]="'fluxo.estacoes.pairChoose' | translate"></p-dropdown>
+          <label class="ge-label" for="gp-apelido">{{ 'fluxo.estacoes.field.machineName' | translate }}</label>
           <span class="ge-field">
             <i class="pi pi-pencil"></i>
-            <input pInputText id="gp-apelido" class="ge-input" [(ngModel)]="parApelido" maxlength="120" placeholder="Ex.: Bancada 2" />
+            <input pInputText id="gp-apelido" class="ge-input" [(ngModel)]="parApelido" maxlength="120" [placeholder]="'fluxo.estacoes.pairNameExample' | translate" />
           </span>
-          <small class="gp-opc">É pelo nome que as máquinas da mesma estação se diferenciam.<ng-container
-            *ngIf="parEstacao && maquinasDa(parEstacao).length"> Já vinculadas: {{ nomesMaquinas(parEstacao) }}.</ng-container></small>
+          <small class="gp-opc">{{ 'fluxo.estacoes.pairNameHelp' | translate }}<ng-container
+            *ngIf="parEstacao && maquinasDa(parEstacao).length"> {{ 'fluxo.estacoes.pairAlready' | translate:{ names: nomesMaquinas(parEstacao) } }}</ng-container></small>
         </ng-container>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton type="button" label="Cancelar" class="p-button-text" (click)="mostrarPareamento = false"></button>
-        <button pButton type="button" label="Parear máquina" icon="pi pi-link" [disabled]="!parInfo || !parEstacao || !parApelido.trim()"
+        <button pButton type="button" [label]="'fluxo.estacoes.cancel' | translate" class="p-button-text" (click)="mostrarPareamento = false"></button>
+        <button pButton type="button" [label]="'fluxo.estacoes.pairTitle' | translate" icon="pi pi-link" [disabled]="!parInfo || !parEstacao || !parApelido.trim()"
                 [loading]="pareando" (click)="confirmarPareamento()"></button>
       </ng-template>
     </p-dialog>
 
-    <p-dialog [(visible)]="mostrarRemocao" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body"
-              header="Remover máquina da estação" [style]="{ width: '460px', maxWidth: '95vw' }">
+    <p-dialog styleClass="ge-dialog ge-dialog--danger" [(visible)]="mostrarRemocao" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body"
+              [header]="'fluxo.estacoes.removeTitle' | translate" [style]="{ width: '460px', maxWidth: '95vw' }">
       <ng-container *ngIf="remover as m">
-        <p class="ge-dlg-txt">
-          <b>{{ m.apelido || navegador(m.userAgent) }}</b> deixará de ser a estação <b>{{ nomeEstacao(m.estacaoCodigo) || m.estacaoNome }}</b>.
-        </p>
-        <p class="ge-dlg-txt fx-muted">Os registros já feitos nesta máquina continuam no histórico das OS. Se a Estação de Bipagem
-          for aberta nela de novo, a tela exibe um novo código de pareamento.</p>
+        <p class="ge-dlg-txt">{{ 'fluxo.estacoes.removeAsk' | translate:{ machine: m.apelido || navegador(m.userAgent), station: nomeEstacao(m.estacaoCodigo) || m.estacaoNome || '' } }}</p>
+        <p class="ge-dlg-txt fx-muted">{{ 'fluxo.estacoes.removeHelp' | translate }}</p>
         <p class="ge-dlg-txt ge-dlg-warn" *ngIf="m.terminalId === terminalAtual">
-          <i class="pi pi-exclamation-triangle"></i> Esta é a máquina que você está usando agora.
+          <i class="pi pi-exclamation-triangle"></i> {{ 'fluxo.estacoes.removeSelf' | translate }}
         </p>
       </ng-container>
       <ng-template pTemplate="footer">
-        <button pButton type="button" label="Cancelar" class="p-button-text" (click)="mostrarRemocao = false"></button>
-        <button pButton type="button" label="Remover máquina" icon="pi pi-trash" class="p-button-danger"
+        <button pButton type="button" [label]="'fluxo.estacoes.cancel' | translate" class="p-button-text" (click)="mostrarRemocao = false"></button>
+        <button pButton type="button" [label]="'fluxo.estacoes.removeAction' | translate" icon="pi pi-trash" class="p-button-danger"
                 [loading]="!!remover && salvandoMaquina === remover.terminalId" (click)="confirmarRemocao()"></button>
       </ng-template>
     </p-dialog>
   `,
-  styles: [`
-    .fx-card { margin-top: 18px; }
-    .ge-lead { font-size: 1rem; color: #e2e8f0; }
-    .ge-hint { color: #475569; font-size: 0.9rem; }
-
-    .ge-chip { font-size: 0.82rem; }
-
-    .ge-search { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; color: #64748b; }
-    .ge-search input { width: min(100%, 420px); }
-    .ge-stations { min-width: 700px; }
-    .ge-station-name { display: flex; align-items: center; gap: 8px; }
-    .ge-name-button { border: 0; background: none; color: inherit; font: inherit; font-weight: 700; padding: 6px 0; text-align: left; cursor: pointer; }
-    .ge-name-button > i { font-size: .75rem; color: #64748b; }
-    .ge-name-button:hover { text-decoration: underline; text-underline-offset: 4px; }
-    .ge-name-button:focus-visible, .ge-pair-link:focus-visible { outline: 2px solid #0f766e; outline-offset: 4px; border-radius: 4px; }
-    .ge-column-hint { display: block; margin-top: 5px; font-size: .75rem; font-weight: 400; text-transform: none; letter-spacing: normal; }
-    .ge-inline { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; max-width: 420px; }
-    .ge-inline input { min-width: 120px; width: 180px; flex: 1; }
-    .ge-inline .gp-erro { flex-basis: 100%; }
-    .ge-machine-count, .ge-pair-link { display: inline-flex; align-items: center; gap: 8px; }
-    .ge-pair-link { border: 0; background: none; color: #475569; padding: 6px 0; font: inherit; cursor: pointer; }
-    .ge-pair-link:hover { color: #0f766e; text-decoration: underline; }
-    .ge-pair-link > i { font-size: .7rem; }
-    .ge-status-dot { width: 6px; height: 6px; border-radius: 50%; background: #0f766e; flex-shrink: 0; }
-    .ge-status-dot--empty { background: #94a3b8; }
-    .ge-setup { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; padding: 16px; margin-bottom: 20px; border: 1px solid #cbd5e1; border-radius: 10px; background: #f8fafc; color: #334155; }
-    .ge-setup > div { flex: 1; min-width: 220px; }
-    .ge-setup p { margin: 5px 0 0; font-size: .875rem; line-height: 1.5; }
-    :host-context([data-theme="dark"]) .ge-setup, :host-context(.dark-theme) .ge-setup { background: #172033; border-color: #334155; color: #e2e8f0; }
-    :host-context([data-theme="dark"]) .ge-pair-link, :host-context(.dark-theme) .ge-pair-link { color: #cbd5e1; }
-    :host-context([data-theme="dark"]) .ge-name-button > i, :host-context(.dark-theme) .ge-name-button > i { color: #94a3b8; }
-    .ge-stage-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-    .ge-block, .ge-machine-summary { display: block; }
-    .ge-machine-summary { max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .ge-row-actions { display: flex; justify-content: flex-end; gap: 4px; }
-    .ge-stage-details summary { cursor: pointer; color: inherit; font-weight: 400; }
-    .ge-stage-details summary { list-style: none; display: flex; align-items: center; gap: 8px; }
-    .ge-stage-details summary::-webkit-details-marker { display: none; }
-    .ge-stage-details summary::after { content: '\\e902'; font-family: primeicons; font-size: .7rem; transition: transform .15s; }
-    .ge-stage-details[open] summary::after { transform: rotate(180deg); }
-    .ge-stage-details ul { margin: 8px 0 0; padding-left: 18px; line-height: 1.6; }
-    .ge-empty { padding: 28px; text-align: center; color: #64748b; }
-    .ge-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: #334155; font-weight: 700; }
-
-    .ge-nome { display: flex; gap: 6px; margin-top: 6px; }
-    .ge-field { position: relative; flex: 1; min-width: 0; display: block; }
-    .ge-field > i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.8rem; pointer-events: none; }
-    .ge-field input.ge-input {
-      width: 100%; font-size: 0.95rem; color: #0b1220; background: #fff; padding: 8px 10px 8px 32px;
-      border: 1.5px solid #94a3b8; border-radius: 8px; transition: border-color .15s ease, box-shadow .15s ease;
-    }
-    .ge-field input.ge-input::placeholder { color: #64748b; opacity: 1; }
-    .ge-field input.ge-input:enabled:hover { border-color: #475569; }
-    .ge-field input.ge-input:enabled:focus { border-color: #0f766e; box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.2); outline: none; }
-    .ge-field:focus-within > i { color: #0f766e; }
-    .ge-nome .ge-input { font-weight: 700; }
-
-    .ge-orig { margin-top: 6px; font-size: 0.875rem; color: #475569; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-    .ge-link { border: 0; background: none; color: #0f766e; font: inherit; font-weight: 700; cursor: pointer; padding: 0; text-decoration: underline; }
-    .ge-link:disabled { opacity: .5; cursor: default; }
-
-    .ge-etapas { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding-top: 12px; border-top: 1px dashed #e2e8f0; }
-    .ge-etapas-tit { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: #475569; font-weight: 700; margin-right: 4px; }
-    .ge-etapa { font-size: 0.875rem; padding: 3px 10px; border-radius: 999px; background: #f1f5f9; color: #1e293b; border: 1px solid #e2e8f0; }
-    .ge-maq-chip { display: inline-flex; gap: 6px; align-items: center; font-weight: 600; }
-    .ge-maq-chip i { font-size: 0.75rem; color: #94a3b8; }
-    .ge-maq-chip.on { background: #ecfdf5; border-color: #a7f3d0; color: #065f46; }
-    .ge-maq-chip.on i { color: #047857; }
-    .ge-vazio { font-size: 0.875rem; color: #64748b; }
-    .ge-field input.ge-input.ge-input--erro { border-color: #f59e0b; }
-
-    .ge-ajuda { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;
-      font-size: 0.95rem; color: #1e293b; }
-    .ge-ajuda-btn {
-      display: inline-flex; align-items: center; gap: 6px; border: 1px solid #99f6e4; background: #f0fdfa; color: #0f766e; font: inherit;
-      font-size: 0.875rem; font-weight: 700; padding: 6px 12px; border-radius: 999px; cursor: pointer;
-    }
-    .ge-ajuda-btn:hover { background: #ccfbf1; }
-    .ge-ajuda-det {
-      margin: 0 0 14px; padding: 12px 14px 12px 32px; border-radius: 10px; background: #f0fdfa; border: 1px solid #99f6e4;
-      color: #134e4a; font-size: 0.9rem; line-height: 1.55;
-    }
-
-    .ge-table-wrap { overflow-x: auto; container-type: inline-size; }
-    .ge-table { font-size: 0.95rem; }
-    .ge-table th { font-size: 0.78rem; color: #334155; }
-    .ge-table td { vertical-align: top; color: #0b1220; }
-    .ge-table tr.ge-atual td { background: #f0fdfa; }
-    .ge-table tr.ge-aberta td { border-bottom-color: transparent; }
-    .ge-maq { min-width: 230px; }
-    .ge-maq-meta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 6px; font-size: 0.875rem; color: #475569; }
-    .ge-det-btn { font-size: 0.875rem; display: inline-flex; gap: 4px; align-items: center; text-decoration: none; }
-    .ge-det-btn i { font-size: 0.7rem; }
-    .ge-est-cell { min-width: 210px; }
-    .ge-est-cell ::ng-deep .ge-dropdown { border: 1.5px solid #94a3b8; border-radius: 8px; }
-    .ge-est-cell ::ng-deep .ge-dropdown:not(.p-disabled):hover { border-color: #475569; }
-    .ge-est-cell ::ng-deep .ge-dropdown.p-focus { border-color: #0f766e; box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.2); }
-    .ge-est-cell ::ng-deep .ge-dropdown .p-dropdown-label { font-size: 0.95rem; }
-    .ge-aviso { display: block; margin-top: 4px; color: #b45309; font-size: 0.85rem; }
-    .ge-sit { white-space: nowrap; }
-    .ge-sub { font-size: 0.875rem; margin-top: 6px; color: #475569; cursor: default; }
-    .ge-quem { font-weight: 600; min-width: 170px; }
-    .ge-table th { white-space: nowrap; }
-
-    .ge-acoes { display: flex; justify-content: flex-end; align-items: center; white-space: nowrap; }
-    .ge-acoes .ge-btn-remover { margin-left: 18px; position: relative; }
-    .ge-acoes .ge-btn-remover::before {
-      content: ''; position: absolute; left: -10px; top: 15%; bottom: 15%; width: 1px; background: #e2e8f0;
-    }
-    @container (max-width: 1080px) {
-      .ge-acoes { flex-direction: column; align-items: stretch; gap: 10px; }
-      .ge-acoes .ge-btn-remover { margin-left: 0; }
-      .ge-acoes .ge-btn-remover::before { left: 15%; right: 15%; top: -6px; bottom: auto; width: auto; height: 1px; }
-      .ge-maq { min-width: 210px; }
-      .ge-est-cell { min-width: 180px; }
-      .ge-quem { min-width: 150px; }
-    }
-    .p-button.ge-btn-salvar:disabled { background: #f1f5f9; border-color: #e2e8f0; color: #94a3b8; opacity: 1; }
-    .p-button.ge-btn-remover { background: #fff; color: #b91c1c; border: 1.5px solid #f87171; }
-    .p-button.ge-btn-remover:enabled:hover { background: #dc2626; border-color: #dc2626; color: #fff; }
-    .p-button.ge-btn-remover:enabled:focus { box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.25); }
-
-    .ge-det td { background: #f8fafc; padding-top: 4px; }
-    .ge-det dl { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px 20px; }
-    .ge-det dt { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: #475569; font-weight: 700; }
-    .ge-det dd { margin: 2px 0 0; font-size: 0.9rem; color: #0b1220; word-break: break-all; }
-    .ge-det .ge-det-ua { grid-column: 1 / -1; }
-    .ge-det .ge-det-ua dd { word-break: normal; color: #475569; font-size: 0.85rem; }
-
-    .ge-head-tit { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-    .gp { display: flex; flex-direction: column; gap: 8px; }
-    .gp .ge-label { margin-top: 6px; }
-    .gp-opc { text-transform: none; letter-spacing: 0; font-weight: 500; color: #64748b; }
-    .gp-codigo {
-      width: 100%; text-align: center; font-family: 'IBM Plex Mono', Consolas, monospace; font-size: 2.2rem; font-weight: 600;
-      letter-spacing: 0.5em; padding: 10px 0 10px 0.5em; border: 1.5px solid #94a3b8; border-radius: 12px; color: #0b1220; background: #fff;
-    }
-    .gp-codigo::placeholder { color: #cbd5e1; }
-    .gp-codigo:focus { outline: none; border-color: #0f766e; box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.2); }
-    .gp-info { display: flex; gap: 10px; align-items: center; color: #475569; font-size: 0.9rem; }
-    .gp-info--ok { align-items: flex-start; padding: 10px 12px; border-radius: 10px; background: #f0fdfa; border: 1px solid #99f6e4; color: #134e4a; }
-    .gp-info--ok i { margin-top: 3px; }
-    .gp-info--ok div { display: flex; flex-direction: column; gap: 2px; }
-    .gp-erro { color: #b91c1c; font-size: 0.9rem; display: flex; gap: 6px; align-items: center; }
-    .gp ::ng-deep .ge-dropdown { border: 1.5px solid #94a3b8; border-radius: 8px; }
-    .gp ::ng-deep .ge-dropdown.p-focus { border-color: #0f766e; box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.2); }
-    .ge-dlg-txt { margin: 0 0 10px; line-height: 1.5; }
-    .ge-dlg-warn { color: #b45309; font-weight: 600; }
-    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-  `]
 })
 export class OsFluxoEstacoesComponent implements OnInit {
   private api = inject(OsFluxoService);
   private toast = inject(MessageService);
+  private i18n = inject(TranslationService);
+
+  private tx(key: string, fallback: string, params?: Record<string, string>): string {
+    const value = this.i18n?.translate(key, params);
+    return value && value !== key ? value : fallback;
+  }
 
   dados: FluxoEstacoesGestao | null = null;
   private maquinasPorEstacao: Record<string, FluxoMaquina[]> = {};
@@ -470,6 +462,10 @@ export class OsFluxoEstacoesComponent implements OnInit {
   @ViewChild('nomeInline') set campoNome(campo: ElementRef<HTMLInputElement> | undefined) {
     if (campo) { campo.nativeElement.focus(); campo.nativeElement.select(); }
   }
+  @ViewChildren('linhaEstacao') linhasEstacao?: QueryList<ElementRef<HTMLTableRowElement>>;
+  linhaFocada = 0;
+  resumo: 'estacoes' | 'maquinas' | 'sem' | null = null;
+  buscaResumo = '';
   mostrarEstacao = false;
   estacaoEmEdicao: FluxoEstacaoGestao | null = null;
   estacaoNome = '';
@@ -519,7 +515,7 @@ export class OsFluxoEstacoesComponent implements OnInit {
       },
       error: (e) => {
         this.carregando = false;
-        this.erro = e?.error?.mensagem || 'Verifique a conexão e tente novamente.';
+        this.erro = e?.error?.mensagem || this.tx('fluxo.estacoes.loadErrorDetail', 'Verifique a conexão e tente novamente.');
       }
     });
   }
@@ -545,7 +541,118 @@ export class OsFluxoEstacoesComponent implements OnInit {
   }
 
   nomesMaquinas(estacaoCodigo: string): string {
-    return this.maquinasDa(estacaoCodigo).map(m => m.apelido || 'Sem nome').join(', ');
+    return this.maquinasDa(estacaoCodigo).map(m => m.apelido || this.tx('fluxo.estacoes.unnamed', 'Sem nome')).join(', ');
+  }
+
+  get estacoesSemVinculo(): number {
+    return (this.dados?.estacoes || []).filter(e => !e.maquinas).length;
+  }
+
+  get resumoAberto(): boolean {
+    return this.resumo !== null;
+  }
+
+  set resumoAberto(aberto: boolean) {
+    if (!aberto) {
+      this.resumo = null;
+      this.buscaResumo = '';
+    }
+  }
+
+  get estacoesDoResumo(): FluxoEstacaoGestao[] {
+    const estacoes = (this.dados?.estacoes || []).filter(e => this.resumo !== 'sem' || !e.maquinas);
+    return estacoes.filter(e => this.combinaResumo([e.nome, e.setor, ...e.etapas, this.nomesMaquinas(e.codigo)].join(' ')));
+  }
+
+  get maquinasDoResumo(): FluxoMaquina[] {
+    return (this.dados?.maquinas || []).filter(m => this.combinaResumo([m.apelido, m.estacaoNome, this.nomeEstacao(m.estacaoCodigo), m.usuarioNome, this.navegador(m.userAgent)].join(' ')));
+  }
+
+  abrirResumo(tipo: 'estacoes' | 'maquinas' | 'sem'): void {
+    this.buscaResumo = '';
+    this.resumo = tipo;
+    setTimeout(() => document.querySelector<HTMLElement>('.ge-dialog--detail .ge-detail-search input')?.focus(), 120);
+  }
+
+  private combinaResumo(texto: string): boolean {
+    const busca = this.buscaResumo.trim().toLocaleLowerCase('pt-BR');
+    return !busca || texto.toLocaleLowerCase('pt-BR').includes(busca);
+  }
+
+  tituloResumo(): string {
+    if (this.resumo === 'maquinas') return this.tx('fluxo.estacoes.kpi.machines', 'Máquinas vinculadas');
+    if (this.resumo === 'sem') return this.tx('fluxo.estacoes.kpi.unpaired', 'Estações sem máquinas');
+    return this.tx('fluxo.estacoes.kpi.stations', 'Estações');
+  }
+
+  leadResumo(): string {
+    if (this.resumo === 'maquinas') return this.tx('fluxo.estacoes.detail.machinesLead', 'Todos os computadores vinculados, com estação, situação e último acesso.');
+    if (this.resumo === 'sem') return this.tx('fluxo.estacoes.detail.unpairedLead', 'Estações que ainda não têm computador associado.');
+    return this.tx('fluxo.estacoes.detail.stationsLead', 'Todas as estações cadastradas, com setor, etapas e máquinas.');
+  }
+
+  parearDoResumo(codigo: string): void {
+    this.resumo = null;
+    this.buscaResumo = '';
+    this.abrirPareamento(codigo);
+  }
+
+  linhaAtiva(indice: number): boolean {
+    const total = this.estacoesFiltradas.length;
+    if (!total) return false;
+    return Math.min(this.linhaFocada, total - 1) === indice;
+  }
+
+  navegarLinha(event: KeyboardEvent, indice: number): void {
+    const alvo = event.target as HTMLElement | null;
+    if (alvo?.closest('input, textarea, select')) return;
+    const total = this.estacoesFiltradas.length;
+    if (!total) return;
+    let proximo = indice;
+    if (event.key === 'ArrowDown') proximo = Math.min(total - 1, indice + 1);
+    else if (event.key === 'ArrowUp') proximo = Math.max(0, indice - 1);
+    else if (event.key === 'Home') proximo = 0;
+    else if (event.key === 'End') proximo = total - 1;
+    else if (event.key === 'Enter' && alvo === event.currentTarget) {
+      const estacao = this.estacoesFiltradas[indice];
+      if (estacao) this.editarNome(estacao);
+      event.preventDefault();
+      return;
+    } else return;
+    if (proximo === indice) return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.linhaFocada = proximo;
+    queueMicrotask(() => {
+      const el = this.linhasEstacao?.get(proximo)?.nativeElement;
+      el?.focus();
+      el?.scrollIntoView({ block: 'nearest' });
+    });
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  rolarComSetas(event: KeyboardEvent): void {
+    if (event.defaultPrevented || this.dialogoAberto) return;
+    const alvo = event.target as HTMLElement | null;
+    if (!alvo || alvo.closest('input, textarea, select, [contenteditable="true"], .p-dialog, .p-menu, .p-dropdown-panel, .sidebar, nav')) return;
+    const scroller = document.querySelector('app-layout .main-content');
+    if (!(scroller instanceof HTMLElement) || scroller.scrollHeight <= scroller.clientHeight + 1) return;
+    const passo = Math.max(56, Math.round(scroller.clientHeight * 0.15));
+    if (event.key === 'ArrowDown') scroller.scrollBy({ top: passo });
+    else if (event.key === 'ArrowUp') scroller.scrollBy({ top: -passo });
+    else if (event.key === 'PageDown') scroller.scrollBy({ top: Math.round(scroller.clientHeight * 0.85) });
+    else if (event.key === 'PageUp') scroller.scrollBy({ top: -Math.round(scroller.clientHeight * 0.85) });
+    else return;
+    event.preventDefault();
+  }
+
+  private get dialogoAberto(): boolean {
+    return !!(this.resumo || this.mostrarEstacao || this.mostrarExcluirEstacao || this.mostrarEditarMaquina || this.mostrarPareamento || this.mostrarRemocao);
+  }
+
+  limparBusca(): void {
+    this.buscaEstacao = '';
+    this.linhaFocada = 0;
   }
 
   get estacoesFiltradas(): FluxoEstacaoGestao[] {
@@ -570,10 +677,10 @@ export class OsFluxoEstacoesComponent implements OnInit {
 
   prepararAcoes(e: FluxoEstacaoGestao): void {
     this.acoesEstacao = [
-      { label: 'Editar nome', icon: 'pi pi-pencil', command: () => this.editarNome(e) },
-      { label: 'Parear máquina', icon: 'pi pi-link', command: () => this.abrirPareamento(e.codigo) },
+      { label: this.tx('fluxo.estacoes.menu.edit', 'Editar nome'), icon: 'pi pi-pencil', command: () => this.editarNome(e) },
+      { label: this.tx('fluxo.estacoes.menu.pair', 'Parear máquina'), icon: 'pi pi-link', command: () => this.abrirPareamento(e.codigo) },
       { separator: true },
-      { label: 'Excluir estação…', icon: 'pi pi-trash', command: () => this.pedirExclusaoEstacao(e) }
+      { label: this.tx('fluxo.estacoes.menu.delete', 'Excluir estação…'), icon: 'pi pi-trash', command: () => this.pedirExclusaoEstacao(e) }
     ];
   }
 
@@ -602,11 +709,11 @@ export class OsFluxoEstacoesComponent implements OnInit {
         this.salvandoNome = false;
         this.cancelarNome();
         this.aplicar(d);
-        this.toast.add({ severity: 'success', summary: 'Nome atualizado', detail: nome, life: 3500 });
+        this.toast.add({ severity: 'success', summary: this.tx('fluxo.estacoes.nameUpdated', 'Nome atualizado'), detail: nome, life: 3500 });
       },
       error: err => {
         this.salvandoNome = false;
-        this.erroNome = err?.error?.mensagem || 'Não foi possível salvar. Tente novamente.';
+        this.erroNome = err?.error?.mensagem || this.tx('fluxo.estacoes.nameFailed', 'Não foi possível salvar. Tente novamente.');
       }
     });
   }
@@ -625,11 +732,11 @@ export class OsFluxoEstacoesComponent implements OnInit {
         this.mostrarEstacao = false;
         this.buscaEstacao = '';
         this.aplicar(d);
-        this.toast.add({ severity: 'success', summary: 'Estação salva', detail: nome, life: 3500 });
+        this.toast.add({ severity: 'success', summary: this.tx('fluxo.estacoes.stationSaved', 'Estação salva'), detail: nome, life: 3500 });
       },
       error: e => {
         this.salvandoEstacao = false;
-        this.erroEstacao = e?.error?.mensagem || 'Não foi possível salvar a estação. Tente novamente.';
+        this.erroEstacao = e?.error?.mensagem || this.tx('fluxo.estacoes.saveFailed', 'Não foi possível salvar a estação. Tente novamente.');
       }
     });
   }
@@ -656,11 +763,11 @@ export class OsFluxoEstacoesComponent implements OnInit {
         this.mostrarExcluirEstacao = false;
         this.estacaoParaExcluir = null;
         this.aplicar(d);
-        this.toast.add({ severity: 'success', summary: 'Estação excluída', life: 3500 });
+        this.toast.add({ severity: 'success', summary: this.tx('fluxo.estacoes.deleted', 'Estação excluída'), life: 3500 });
       },
       error: e => {
         this.excluindoEstacao = false;
-        this.erroExclusao = e?.error?.mensagem || 'Não foi possível excluir a estação. Tente novamente.';
+        this.erroExclusao = e?.error?.mensagem || this.tx('fluxo.estacoes.deleteFailed', 'Não foi possível excluir a estação. Tente novamente.');
       }
     });
   }
@@ -686,11 +793,11 @@ export class OsFluxoEstacoesComponent implements OnInit {
         this.salvandoMaquina = null;
         this.aplicar(d);
         this.mostrarEditarMaquina = false;
-        this.toast.add({ severity: 'success', summary: 'Máquina atualizada', detail: `Estação: ${this.nomeEstacao(ed.estacaoCodigo)}.`, life: 3500 });
+        this.toast.add({ severity: 'success', summary: this.tx('fluxo.estacoes.machineUpdated', 'Máquina atualizada'), detail: this.tx('fluxo.estacoes.machineStation', `Estação: ${this.nomeEstacao(ed.estacaoCodigo)}.`, { name: this.nomeEstacao(ed.estacaoCodigo) }), life: 3500 });
       },
       error: (err) => {
         this.salvandoMaquina = null;
-        this.erroMaquina = err?.error?.mensagem || 'Não foi possível salvar. Tente novamente.';
+        this.erroMaquina = err?.error?.mensagem || this.tx('fluxo.estacoes.nameFailed', 'Não foi possível salvar. Tente novamente.');
       }
     });
   }
@@ -710,11 +817,11 @@ export class OsFluxoEstacoesComponent implements OnInit {
         this.mostrarRemocao = false;
         this.remover = null;
         this.aplicar(d);
-        this.toast.add({ severity: 'success', summary: 'Máquina removida', detail: 'Ela não é mais uma estação.', life: 3500 });
+        this.toast.add({ severity: 'success', summary: this.tx('fluxo.estacoes.removed', 'Máquina removida'), detail: this.tx('fluxo.estacoes.removedDetail', 'Ela não opera mais como estação autorizada.'), life: 3500 });
       },
       error: (err) => {
         this.salvandoMaquina = null;
-        this.toast.add({ severity: 'error', summary: 'Não foi possível remover', detail: err?.error?.mensagem || 'Tente novamente.', life: 6000 });
+        this.toast.add({ severity: 'error', summary: this.tx('fluxo.estacoes.removeFailed', 'Não foi possível remover'), detail: err?.error?.mensagem || this.tx('fluxo.estacoes.tryAgain', 'Tente novamente.'), life: 6000 });
       }
     });
   }
@@ -744,7 +851,7 @@ export class OsFluxoEstacoesComponent implements OnInit {
       },
       error: (e) => {
         this.consultandoPar = false;
-        this.erroPar = e?.error?.mensagem || 'Não foi possível consultar o código.';
+        this.erroPar = e?.error?.mensagem || this.tx('fluxo.estacoes.pairLookupFailed', 'Não foi possível consultar o código.');
       }
     });
   }
@@ -760,11 +867,11 @@ export class OsFluxoEstacoesComponent implements OnInit {
         this.pareando = false;
         this.mostrarPareamento = false;
         this.aplicar(d);
-        this.toast.add({ severity: 'success', summary: 'Máquina pareada', detail: `Agora ela é a estação ${this.nomeEstacao(estacao)}.`, life: 4000 });
+        this.toast.add({ severity: 'success', summary: this.tx('fluxo.estacoes.paired', 'Máquina pareada'), detail: this.tx('fluxo.estacoes.pairedDetail', `Agora ela é a estação ${this.nomeEstacao(estacao)}.`, { name: this.nomeEstacao(estacao) }), life: 4000 });
       },
       error: (e) => {
         this.pareando = false;
-        this.erroPar = e?.error?.mensagem || 'Não foi possível parear a máquina.';
+        this.erroPar = e?.error?.mensagem || this.tx('fluxo.estacoes.pairFailed', 'Não foi possível parear a máquina.');
       }
     });
   }
@@ -776,14 +883,14 @@ export class OsFluxoEstacoesComponent implements OnInit {
   relativo(data: string | Date | null | undefined): string {
     if (!data) return '';
     const min = Math.floor((Date.now() - new Date(data).getTime()) / 60000);
-    if (min < 1) return 'agora mesmo';
-    if (min < 60) return `há ${min} min`;
+    if (min < 1) return this.tx('fluxo.estacoes.justNow', 'agora mesmo');
+    if (min < 60) return this.tx('fluxo.estacoes.minutesAgo', `há ${min} min`, { n: String(min) });
     const h = Math.floor(min / 60);
-    if (h < 24) return `há ${h} h`;
+    if (h < 24) return this.tx('fluxo.estacoes.hoursAgo', `há ${h} h`, { n: String(h) });
     const dias = Math.floor(h / 24);
-    if (dias < 30) return dias === 1 ? 'há 1 dia' : `há ${dias} dias`;
+    if (dias < 30) return dias === 1 ? this.tx('fluxo.estacoes.dayAgo', 'há 1 dia') : this.tx('fluxo.estacoes.daysAgo', `há ${dias} dias`, { n: String(dias) });
     const meses = Math.floor(dias / 30);
-    return meses === 1 ? 'há 1 mês' : `há ${meses} meses`;
+    return meses === 1 ? this.tx('fluxo.estacoes.monthAgo', 'há 1 mês') : this.tx('fluxo.estacoes.monthsAgo', `há ${meses} meses`, { n: String(meses) });
   }
 
   estacaoExiste(codigo: string): boolean {
@@ -795,8 +902,8 @@ export class OsFluxoEstacoesComponent implements OnInit {
   }
 
   navegador(ua?: string | null): string {
-    if (!ua) return 'Navegador desconhecido';
-    const nav = /Edg\//.test(ua) ? 'Edge' : /Firefox\//.test(ua) ? 'Firefox' : /Chrome\//.test(ua) ? 'Chrome' : /Safari\//.test(ua) ? 'Safari' : 'Navegador';
+    if (!ua) return this.tx('fluxo.estacoes.unknownBrowser', 'Navegador desconhecido');
+    const nav = /Edg\//.test(ua) ? 'Edge' : /Firefox\//.test(ua) ? 'Firefox' : /Chrome\//.test(ua) ? 'Chrome' : /Safari\//.test(ua) ? 'Safari' : this.tx('fluxo.estacoes.browserGeneric', 'Navegador');
     const so = /Windows/.test(ua) ? 'Windows' : /Android/.test(ua) ? 'Android' : /iPhone|iPad/.test(ua) ? 'iOS' : /Mac OS/.test(ua) ? 'macOS' : /Linux/.test(ua) ? 'Linux' : '';
     return so ? `${nav} · ${so}` : nav;
   }

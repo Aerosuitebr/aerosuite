@@ -2,6 +2,8 @@ import type { TranslationDictionary } from '../translation.service';
 
 /** Listagens e ecrãs adicionais (perfis, estoque, suporte, etc.). */
 export const LISTINGS_EXTENDED_PT_BR: TranslationDictionary = {
+  'os.list.advancedFilters': "Filtros avançados",
+  'os.list.moreActions': "Mais ações",
   'perfis.list.title': 'Gerenciar Perfis',
   'perfis.list.subtitle': 'Configure os perfis de acesso do sistema',
   'perfis.list.btnNew': 'Novo Perfil',
@@ -11,6 +13,9 @@ export const LISTINGS_EXTENDED_PT_BR: TranslationDictionary = {
   'perfis.list.dialog.edit': 'Editar Perfil',
 
   'funcionalidades.list.title': 'Gerenciar Funcionalidades',
+  'funcionalidades.list.search': 'Buscar',
+  'funcionalidades.list.searchPlaceholder': 'Nome, código, seção ou rota',
+  'funcionalidades.list.navHint': 'Setas movem a linha. Enter edita.',
   'funcionalidades.list.subtitle': 'Configure as funcionalidades disponíveis no sistema',
   'funcionalidades.list.btnNew': 'Nova Funcionalidade',
   'funcionalidades.list.pageReport': 'Mostrando {first} a {last} de {totalRecords} funcionalidades',
@@ -489,6 +494,8 @@ export const LISTINGS_EXTENDED_PT_BR: TranslationDictionary = {
 };
 
 export const LISTINGS_EXTENDED_EN_US: TranslationDictionary = {
+  'os.list.advancedFilters': "Advanced filters",
+  'os.list.moreActions': "More actions",
   'perfis.list.title': 'Manage profiles',
   'perfis.list.subtitle': 'Configure system access profiles',
   'perfis.list.btnNew': 'New profile',
@@ -498,6 +505,9 @@ export const LISTINGS_EXTENDED_EN_US: TranslationDictionary = {
   'perfis.list.dialog.edit': 'Edit profile',
 
   'funcionalidades.list.title': 'Manage features',
+  'funcionalidades.list.search': 'Search',
+  'funcionalidades.list.searchPlaceholder': 'Name, code, section or route',
+  'funcionalidades.list.navHint': 'Arrows move the row. Enter edits.',
   'funcionalidades.list.subtitle': 'Configure available system features',
   'funcionalidades.list.btnNew': 'New feature',
   'funcionalidades.list.pageReport': 'Showing {first} to {last} of {totalRecords} features',
@@ -976,6 +986,8 @@ export const LISTINGS_EXTENDED_EN_US: TranslationDictionary = {
 };
 
 export const LISTINGS_EXTENDED_ES_ES: TranslationDictionary = {
+  'os.list.advancedFilters': "Filtros avanzados",
+  'os.list.moreActions': "Más acciones",
   'associacao.usuarioPerfil.toast.createSuccessDetail': 'Asociación usuario-perfil creada con éxito',
   'associacao.usuarioPerfil.toast.createSuccessSummary': 'Asociación creada',
   'associacao.usuarioPerfil.toast.loadProfilesError': 'Error al cargar perfiles',
@@ -1199,6 +1211,9 @@ export const LISTINGS_EXTENDED_ES_ES: TranslationDictionary = {
   'funcionalidades.list.pageReport': 'Mostrando {first} a {last} de {totalRecords} funcionalidads',
   'funcionalidades.list.subtitle': 'Configure las funcionalidades del sistema',
   'funcionalidades.list.title': 'Gestionar funcionalidades',
+  'funcionalidades.list.search': 'Buscar',
+  'funcionalidades.list.searchPlaceholder': 'Nombre, código, sección o ruta',
+  'funcionalidades.list.navHint': 'Las flechas mueven la fila. Enter edita.',
   'funcionalidades.list.toast.createError': 'Error al crear funcionalidad',
   'funcionalidades.list.toast.createSuccess': 'Funcionalidad creada con éxito',
   'funcionalidades.list.toast.inactivateError': 'Error al desactivar funcionalidad',
@@ -1435,6 +1450,8 @@ export const LISTINGS_EXTENDED_ES_ES: TranslationDictionary = {
 };;
 
 export const LISTINGS_EXTENDED_FR_FR: TranslationDictionary = {
+  'os.list.advancedFilters': "Filtres avancés",
+  'os.list.moreActions': "Plus d’actions",
   'associacao.usuarioPerfil.toast.createSuccessDetail': 'Association utilisateur–profil créée avec succès',
   'associacao.usuarioPerfil.toast.createSuccessSummary': 'Association créée',
   'associacao.usuarioPerfil.toast.loadProfilesError': 'Impossible de charger les profils',
@@ -1658,6 +1675,9 @@ export const LISTINGS_EXTENDED_FR_FR: TranslationDictionary = {
   'funcionalidades.list.pageReport': 'Affichage de {first} à {last} sur {totalRecords} fonctionnalités',
   'funcionalidades.list.subtitle': 'Configurez les fonctionnalités du système',
   'funcionalidades.list.title': 'Gérer les fonctionnalités',
+  'funcionalidades.list.search': 'Rechercher',
+  'funcionalidades.list.searchPlaceholder': 'Nom, code, section ou route',
+  'funcionalidades.list.navHint': 'Les flèches déplacent la ligne. Entrée modifie.',
   'funcionalidades.list.toast.createError': 'Impossible de créer la fonctionnalité',
   'funcionalidades.list.toast.createSuccess': 'Fonctionnalité créée avec succès',
   'funcionalidades.list.toast.inactivateError': 'Impossible de désactiver la fonctionnalité',

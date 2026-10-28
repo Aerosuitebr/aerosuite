@@ -385,6 +385,15 @@ export const routes: Routes = [
         loadComponent: () => import('./os/fluxo/os-fluxo-detalhe.component').then(m => m.OsFluxoDetalheComponent)
       },
       {
+        path: 'operacoes', pathMatch: 'full', redirectTo: 'operacoes/impedimentos'
+      },
+      {
+        path: 'operacoes/:modulo',
+        loadComponent: () => import('./operacoes/operacoes.component').then(m => m.OperacoesComponent),
+        canActivate: [FuncionalidadeGuard],
+        data: { perm: { funcionalidadesAny: ['CENTRAL_OPERACIONAL', 'CUSTOS_OPERACIONAIS'] } }
+      },
+      {
         path: 'capacidade',
         loadComponent: () =>
           import('./capacidade/capacidade-quadro.component').then(m => m.CapacidadeQuadroComponent),
@@ -409,6 +418,49 @@ export const routes: Routes = [
         loadComponent: () => import('./hangar/hangar-job-card.component').then(m => m.HangarJobCardComponent),
         canActivate: [FuncionalidadeGuard],
         data: { perm: { funcionalidadesAny: ['HANGAR_JOB_CARD', 'ORDEM_SERVICO'] } }
+      },
+      {
+        path: 'nrc',
+        loadComponent: () => import('./nrc/nrc-shell.component').then(m => m.NrcShellComponent),
+        canActivate: [FuncionalidadeGuard],
+        data: { perm: { funcionalidadesAny: ['NRC_LIST', 'NRC_ABRIR', 'NRC_ANALISAR', 'NRC_ENCERRAR', 'NRC_DASHBOARD', 'NRC_RELATORIO'] } },
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./nrc/nrc-list.component').then(m => m.NrcListComponent)
+          },
+          {
+            path: 'dashboard',
+            loadComponent: () => import('./nrc/nrc-dashboard.component').then(m => m.NrcDashboardComponent),
+            canActivate: [FuncionalidadeGuard],
+            data: { perm: { funcionalidadesAny: ['NRC_DASHBOARD', 'NRC_ENCERRAR'] } }
+          },
+          {
+            path: 'nova',
+            loadComponent: () => import('./nrc/nrc-form.component').then(m => m.NrcFormComponent),
+            canActivate: [FuncionalidadeGuard],
+            data: { perm: { funcionalidadesAny: ['NRC_ABRIR'] } }
+          },
+          {
+            path: 'tratar',
+            loadComponent: () => import('./nrc/nrc-list.component').then(m => m.NrcListComponent),
+            data: { nrcStatus: 'EM_ANALISE' }
+          },
+          {
+            path: 'encerrar',
+            loadComponent: () => import('./nrc/nrc-list.component').then(m => m.NrcListComponent),
+            data: { nrcStatus: 'EM_TRATAMENTO' }
+          },
+          {
+            path: 'relatorio',
+            loadComponent: () => import('./nrc/nrc-list.component').then(m => m.NrcListComponent),
+            data: { nrcStatus: 'ENCERRADA' }
+          },
+          {
+            path: ':id',
+            loadComponent: () => import('./nrc/nrc-detail.component').then(m => m.NrcDetailComponent)
+          }
+        ]
       },
       {
         path: 'aero/diretrizes',
@@ -465,10 +517,8 @@ export const routes: Routes = [
       },
       {
         path: 'conformidade/nao-conformidades',
-        loadComponent: () =>
-          import('./conformidade/nao-conformidades/nao-conformidade-list.component').then(m => m.NaoConformidadeListComponent),
-        canActivate: [FuncionalidadeGuard],
-        data: { perm: { funcionalidadesAny: ['CONFORMIDADE_NC', 'GERENCIAR_PERMISSOES', 'DOSSIE_AUDITORIA'] } }
+        redirectTo: '/nrc',
+        pathMatch: 'full'
       },
       {
         path: 'conformidade/subcontratacao',
@@ -600,9 +650,8 @@ export const routes: Routes = [
       },
       {
         path: 'studio',
-        loadComponent: () => import('./studio/aero-studio.component').then(m => m.AeroStudioComponent),
-        canActivate: [FuncionalidadeGuard],
-        data: { perm: { funcionalidadesAny: ['STUDIO_MARCA', 'CONFIGURACOES', 'GERENCIAR_PERMISSOES'] } }
+        redirectTo: '/propostas-comerciais',
+        pathMatch: 'prefix'
       },
       {
         path: 'organizacoes',

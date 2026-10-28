@@ -1,3 +1,4 @@
+import { SystemPageLayoutDirective } from '../../shared/page-hero/system-page-layout.directive';
 import { Component, OnInit, OnDestroy, inject, HostBinding } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, Router } from '@angular/router';
@@ -20,7 +21,7 @@ import { RouteLoadingBarComponent } from '../../shared/route-loading-bar/route-l
 @Component({
   standalone: true,
   selector: 'app-externo-layout',
-  imports: [
+  imports: [SystemPageLayoutDirective, 
     CommonModule,
     RouterOutlet,
     RouterLink,
@@ -179,7 +180,7 @@ import { RouteLoadingBarComponent } from '../../shared/route-loading-bar/route-l
           </div>
         </header>
         <div class="content-wrapper">
-          <router-outlet></router-outlet>
+          <router-outlet systemPageLayout></router-outlet>
         </div>
         
         <!-- Footer -->

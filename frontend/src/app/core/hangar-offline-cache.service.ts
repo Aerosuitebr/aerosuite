@@ -32,6 +32,8 @@ export interface HangarOfflineFotoPayload {
 }
 
 export interface HangarOfflineAssinaturaPayload {
+  substituir?: boolean;
+  assinaturaAnteriorSha256?: string | null;
   papel: string;
   assinaturaPngBase64: string;
 }

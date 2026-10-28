@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { PLATFORM_OPS_NAV } from './platform-ops-nav.config';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
@@ -38,6 +39,12 @@ export class PlatformOpsLoginComponent implements OnInit, AfterViewInit {
   private opsAuth = inject(PlatformOpsAuthService);
   private appAuth = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
+  private get destination(): string {
+    const requested = this.route.snapshot.queryParamMap.get('returnUrl');
+    return PLATFORM_OPS_NAV.some(item => item.route === requested) ? requested! : '/plataforma';
+  }
   private messages = inject(MessageService);
   private i18n = inject(TranslationService);
 
@@ -171,7 +178,7 @@ export class PlatformOpsLoginComponent implements OnInit, AfterViewInit {
   }
 
   onEnrollmentCompleted(): void {
-    void this.router.navigate(['/plataforma']);
+    void this.router.navigateByUrl(this.destination);
   }
 
   onEnrollmentCancelled(): void {
@@ -183,7 +190,7 @@ export class PlatformOpsLoginComponent implements OnInit, AfterViewInit {
 
   private onSuccess(): void {
     this.loading = false;
-    void this.router.navigate(['/plataforma']);
+    void this.router.navigateByUrl(this.destination);
   }
 
   private onAuthError(err: unknown): void {

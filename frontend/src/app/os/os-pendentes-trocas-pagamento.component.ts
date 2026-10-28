@@ -20,7 +20,7 @@ import { ListDataStatesComponent } from '../shared/list-data-states/list-data-st
     <p-toast></p-toast>
     <div class="page-wrap">
       <app-page-hero
-        variant="gold"
+        variant="navy"
         titleKey="os.pendentesTrocas.title"
         subtitleKey="os.pendentesTrocas.subtitle"
         titleIcon="pi-list"
@@ -65,7 +65,7 @@ import { ListDataStatesComponent } from '../shared/list-data-states/list-data-st
     </div>
   `,
   styles: [`
-    .page-wrap { padding: 1.25rem; max-width: 960px; margin: 0 auto; }
+    .page-wrap { width: 100%; min-height: 100%; box-sizing: border-box; }
     .empty { text-align: center; padding: 1.5rem; color: #94a3b8; }
   `]
 })

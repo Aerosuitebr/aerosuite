@@ -1,0 +1,87 @@
+<form class="panel" (ngSubmit)="save()">
+  <div class="nrc-top">
+    <div>
+      <h2>{{ 'nrc.form.title' | translate }}</h2>
+      <p>{{ 'nrc.form.lead' | translate }}</p>
+    </div>
+    <a class="btn" routerLink="/nrc">{{ 'nrc.back' | translate }}</a>
+  </div>
+  @if (error) { <div class="notice error" role="alert">{{ error }}</div> }
+  @if (model.osNumero) {
+    <div class="notice ok">{{ 'nrc.form.linkedOs' | translate:{ os: model.osNumero || '' } }}</div>
+  }
+  <div class="grid">
+    <label class="field">
+      <span>{{ 'nrc.field.origin' | translate }}</span>
+      <select name="origem" [(ngModel)]="model.origem" required>
+        @for (item of origins; track item) { <option [value]="item">{{ label('origin', item) }}</option> }
+      </select>
+    </label>
+    <label class="field">
+      <span>{{ 'nrc.field.type' | translate }}</span>
+      <select name="tipo" [(ngModel)]="model.tipoNc" required>
+        @for (item of types; track item.value) { <option [value]="item.value">{{ label('type', item.value) }}</option> }
+      </select>
+    </label>
+    <label class="field">
+      <span>{{ 'nrc.field.severity' | translate }}</span>
+      <select name="severidade" [(ngModel)]="model.severidade" (ngModelChange)="onSeverity()" required>
+        @for (item of severities; track item.value) { <option [value]="item.value">{{ label('severity', item.value) }}</option> }
+      </select>
+    </label>
+    <label class="field">
+      <span>{{ 'nrc.field.owner' | translate }}</span>
+      <select name="responsavel" [(ngModel)]="model.responsavelTratamentoId" required>
+        <option [ngValue]="undefined">{{ 'nrc.form.pickOwner' | translate }}</option>
+        @for (user of users; track user.id) { <option [ngValue]="user.id">{{ user.nome }}</option> }
+      </select>
+    </label>
+    <label class="field">
+      <span>{{ 'nrc.field.deadline' | translate }}</span>
+      <input name="prazo" type="date" [(ngModel)]="model.prazoTratamento" />
+    </label>
+    <label class="field">
+      <span>{{ 'nrc.field.occurredAt' | translate }}</span>
+      <input name="quando" type="datetime-local" [(ngModel)]="model.dataOcorrencia" />
+    </label>
+    <label class="field span2">
+      <span>{{ 'nrc.field.what' | translate }}</span>
+      <textarea name="descricao" [(ngModel)]="model.descricaoOcorrido" required rows="5"></textarea>
+    </label>
+    <label class="field">
+      <span>{{ 'nrc.field.requirement' | translate }}</span>
+      <textarea name="requisito" [(ngModel)]="model.requisitoNaoAtendido" rows="3"></textarea>
+    </label>
+    <label class="field">
+      <span>{{ 'nrc.field.document' | translate }}</span>
+      <textarea name="documento" [(ngModel)]="model.documentoEnvolvido" rows="3"></textarea>
+    </label>
+    <label class="field">
+      <span>{{ 'nrc.field.place' | translate }}</span>
+      <input name="local" [(ngModel)]="model.localOcorrencia" />
+    </label>
+    <label class="field">
+      <span>{{ 'nrc.field.customer' | translate }}</span>
+      <input name="cliente" [(ngModel)]="model.clienteNome" />
+    </label>
+    <label class="field">
+      <span>P/N</span>
+      <input name="pn" [(ngModel)]="model.partNumber" />
+    </label>
+    <label class="field">
+      <span>S/N</span>
+      <input name="sn" [(ngModel)]="model.serialNumber" />
+    </label>
+    <label class="field">
+      <span>FCU</span>
+      <input name="fcu" [(ngModel)]="model.fcuCodigo" />
+    </label>
+    <label class="field">
+      <span>{{ 'nrc.field.cost' | translate }}</span>
+      <input name="custo" type="number" min="0" step="0.01" [(ngModel)]="model.custoNaoConformidade" />
+    </label>
+  </div>
+  <div class="actions" style="margin-top:16px">
+    <button class="btn primary" type="submit" [disabled]="saving">{{ 'nrc.form.save' | translate }}</button>
+  </div>
+</form>

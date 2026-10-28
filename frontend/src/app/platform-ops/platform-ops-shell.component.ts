@@ -1,3 +1,4 @@
+import { SystemPageLayoutDirective } from '../shared/page-hero/system-page-layout.directive';
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
@@ -15,7 +16,7 @@ import { PlatformOpsRevalidateComponent } from './platform-ops-revalidate.compon
 @Component({
   selector: 'app-platform-ops-shell',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, ButtonModule, TranslatePipe, BrandStackComponent, PlatformOpsRevalidateComponent],
+  imports: [SystemPageLayoutDirective, CommonModule, RouterOutlet, RouterLink, RouterLinkActive, ButtonModule, TranslatePipe, BrandStackComponent, PlatformOpsRevalidateComponent],
   templateUrl: './platform-ops-shell.component.html',
   styleUrls: ['./platform-ops-shell.component.scss']
 })

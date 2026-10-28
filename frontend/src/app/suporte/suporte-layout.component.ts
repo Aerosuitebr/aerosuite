@@ -1,3 +1,4 @@
+import { SystemPageLayoutDirective } from '../shared/page-hero/system-page-layout.directive';
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
@@ -11,7 +12,7 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-suporte-layout',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule, TooltipModule, TranslatePipe, RouteLoadingBarComponent],
+  imports: [SystemPageLayoutDirective, CommonModule, RouterModule, ButtonModule, TooltipModule, TranslatePipe, RouteLoadingBarComponent],
   template: `
     <div class="suporte-layout" [class.agent-mode]="agentMode">
       <aside class="suporte-sidebar" [class.collapsed]="sidebarCollapsed">
@@ -155,7 +156,7 @@ import { filter } from 'rxjs/operators';
 
       <main class="suporte-main" [class.sidebar-collapsed]="sidebarCollapsed">
         <app-route-loading-bar></app-route-loading-bar>
-        <router-outlet></router-outlet>
+        <router-outlet systemPageLayout></router-outlet>
       </main>
     </div>
   `,

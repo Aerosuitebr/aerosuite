@@ -28,6 +28,7 @@ import java.util.Map;
 
 @ApplicationScoped
 public class OsCrsService {
+    @jakarta.inject.Inject OperacaoProntidaoGuard operacaoProntidao;
 
     private static final DateTimeFormatter DT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -103,6 +104,7 @@ public class OsCrsService {
                 null);
         habilitacaoService.assertHabilitacaoValidaParaCrs(
                 internalUser.getUserId(), internalUser.getPerfilCodigo());
+        operacaoProntidao.conferir(os.id, "ENTREGA");
         os.crsEmitidoEm = LocalDateTime.now();
         os.crsLiberadoPorUsuarioId =
                 internalUser.isAuthenticated() && internalUser.getUserId() != null

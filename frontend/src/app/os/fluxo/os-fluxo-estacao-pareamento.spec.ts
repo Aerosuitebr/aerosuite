@@ -29,6 +29,15 @@ describe('Pareamento obrigatório da máquina', () => {
     expect(tela.carregarFila).not.toHaveBeenCalled();
   });
 
+  it('deixa a máquina sem vínculo sair da tela', () => {
+    const tela = estacao(false);
+    tela.mostrarConfig = true;
+    tela.router = { navigate: vi.fn() };
+    tela.sairDaEstacao();
+    expect(tela.mostrarConfig).toBe(false);
+    expect(tela.router.navigate).toHaveBeenCalledWith(['/os/fluxo']);
+  });
+
   it('libera a máquina quando o servidor confirma a estação', () => {
     const tela = estacao(false);
     tela.resolverEstacao('ESTACAO', 'Computador 01');

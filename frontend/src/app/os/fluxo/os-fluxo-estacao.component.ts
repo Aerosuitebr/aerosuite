@@ -1,7 +1,8 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { TranslatePipe } from '../../core/translate.pipe';
 import { SharedModule } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
@@ -85,7 +86,7 @@ function obterTerminalId(): string {
   standalone: true,
   selector: 'app-os-fluxo-estacao',
   imports: [
-    CommonModule, FormsModule, RouterLink, ButtonModule, DropdownModule, DialogModule,
+    CommonModule, FormsModule, RouterLink, TranslatePipe, ButtonModule, DropdownModule, DialogModule,
     InputTextModule, InputTextareaModule, TooltipModule, SharedModule, FluxoBarcodeComponent
   ],
   styleUrls: ['./fluxo-shared.css'],
@@ -448,6 +449,41 @@ function obterTerminalId(): string {
                           aria-label="Limpar OS"><i class="pi pi-times"></i></button>
                 </div>
 
+
+              </div>
+              <div class="st-field">
+                <label>Etapa</label>
+                <p-dropdown *ngIf="podeEscolherEtapa; else etapaManualTerminal" [options]="opcoesEtapaBip" [(ngModel)]="manualEtapaId"
+                            optionLabel="label" optionValue="value" optionDisabled="disabled" appendTo="body" panelStyleClass="st-dd-panel" placeholder="Selecione"
+                            [style]="{ width: '100%' }"></p-dropdown>
+                <ng-template #etapaManualTerminal>
+                  <p-dropdown *ngIf="multiEtapa; else etapaUnicaTerminal" [options]="opcoesEtapaBip" [(ngModel)]="manualEtapaId"
+                              optionLabel="label" optionValue="value" optionDisabled="disabled" appendTo="body" panelStyleClass="st-dd-panel" placeholder="Etapa do terminal"
+                              [style]="{ width: '100%' }"></p-dropdown>
+                </ng-template>
+                <ng-template #etapaUnicaTerminal>
+                  <button type="button" class="st-locked" [class.warn]="!etapaFixa" [style.--stage]="etapaFixa?.cor || null"
+                          (click)="etapaFixa ? null : abrirConfig()"
+                          [pTooltip]="etapaFixa ? 'Etapa definida no cadastro do terminal' : 'Clique para definir a etapa deste terminal'">
+                    <ng-container *ngIf="etapaFixa; else semEtapaTerminal">
+                      <span class="sw"></span><span class="txt">{{ etapaFixa.ordem }}. {{ etapaFixa.nome }}</span><i class="pi pi-lock"></i>
+                    </ng-container>
+                    <ng-template #semEtapaTerminal>
+                      <i class="pi pi-exclamation-triangle"></i><span class="txt">Sem etapa</span><i class="pi pi-cog"></i>
+                    </ng-template>
+                  </button>
+                </ng-template>
+              </div>
+              <div class="st-manual-btns">
+                <button type="button" class="st-act st-act--in" [class.is-sugerida]="acaoSugerida === 'ENTRADA'"
+                        [disabled]="!manualOs || !etapaManualId || enviando || acaoBloqueada('ENTRADA')" (click)="registrarManual('ENTRADA')">
+                  <i class="pi pi-arrow-circle-down"></i> Entrada
+                </button>
+                <button type="button" class="st-act st-act--out" [class.is-sugerida]="acaoSugerida === 'SAIDA'"
+                        [disabled]="!manualOs || !etapaManualId || enviando || acaoBloqueada('SAIDA')" (click)="registrarManual('SAIDA')">
+                  <i class="pi pi-arrow-circle-up"></i> Saída
+                </button>
+              </div>
                 <div class="st-sug" *ngIf="painelOsAberto" (mousedown)="$event.preventDefault()">
                   <div class="st-sug-head">
                     <span>{{ buscandoOs && !sugestoesOs.length ? 'Buscando…' : sugestoesOs.length + (sugestoesOs.length === 1 ? ' OS encontrada' : ' OS encontradas') }}</span>
@@ -492,40 +528,6 @@ function obterTerminalId(): string {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="st-field">
-                <label>Etapa</label>
-                <p-dropdown *ngIf="podeEscolherEtapa; else etapaManualTerminal" [options]="opcoesEtapaBip" [(ngModel)]="manualEtapaId"
-                            optionLabel="label" optionValue="value" optionDisabled="disabled" appendTo="body" panelStyleClass="st-dd-panel" placeholder="Selecione"
-                            [style]="{ width: '100%' }"></p-dropdown>
-                <ng-template #etapaManualTerminal>
-                  <p-dropdown *ngIf="multiEtapa; else etapaUnicaTerminal" [options]="opcoesEtapaBip" [(ngModel)]="manualEtapaId"
-                              optionLabel="label" optionValue="value" optionDisabled="disabled" appendTo="body" panelStyleClass="st-dd-panel" placeholder="Etapa do terminal"
-                              [style]="{ width: '100%' }"></p-dropdown>
-                </ng-template>
-                <ng-template #etapaUnicaTerminal>
-                  <button type="button" class="st-locked" [class.warn]="!etapaFixa" [style.--stage]="etapaFixa?.cor || null"
-                          (click)="etapaFixa ? null : abrirConfig()"
-                          [pTooltip]="etapaFixa ? 'Etapa definida no cadastro do terminal' : 'Clique para definir a etapa deste terminal'">
-                    <ng-container *ngIf="etapaFixa; else semEtapaTerminal">
-                      <span class="sw"></span><span class="txt">{{ etapaFixa.ordem }}. {{ etapaFixa.nome }}</span><i class="pi pi-lock"></i>
-                    </ng-container>
-                    <ng-template #semEtapaTerminal>
-                      <i class="pi pi-exclamation-triangle"></i><span class="txt">Sem etapa</span><i class="pi pi-cog"></i>
-                    </ng-template>
-                  </button>
-                </ng-template>
-              </div>
-              <div class="st-manual-btns">
-                <button type="button" class="st-act st-act--in" [class.is-sugerida]="acaoSugerida === 'ENTRADA'"
-                        [disabled]="!manualOs || !etapaManualId || enviando || acaoBloqueada('ENTRADA')" (click)="registrarManual('ENTRADA')">
-                  <i class="pi pi-arrow-circle-down"></i> Entrada
-                </button>
-                <button type="button" class="st-act st-act--out" [class.is-sugerida]="acaoSugerida === 'SAIDA'"
-                        [disabled]="!manualOs || !etapaManualId || enviando || acaoBloqueada('SAIDA')" (click)="registrarManual('SAIDA')">
-                  <i class="pi pi-arrow-circle-up"></i> Saída
-                </button>
-              </div>
               <div class="st-sel" *ngIf="manualSel as ms" [style.--stage]="ms.etapa?.cor || null">
                 <i class="pi pi-file"></i>
                 <div class="st-sel-body">
@@ -543,7 +545,7 @@ function obterTerminalId(): string {
     </div>
 
     <p-dialog [(visible)]="mostrarConfig" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body" styleClass="st-dlg"
-              [closable]="!maquinaBloqueada" [closeOnEscape]="!maquinaBloqueada"
+              [closable]="true" [closeOnEscape]="true" [dismissableMask]="modoPareamento && !pareadaNome"
               [header]="modoPareamento ? 'Parear esta máquina' : 'Qual é esta estação?'"
               [style]="{ width: modoPareamento ? '560px' : '820px', maxWidth: '96vw' }" (onHide)="focarDepois()">
       <div class="par" *ngIf="modoPareamento">
@@ -620,7 +622,8 @@ function obterTerminalId(): string {
         <ng-container *ngIf="modoPareamento; else rodapeEscolha">
           <button pButton type="button" label="Gerar novo código" icon="pi pi-refresh" class="p-button-text"
                   *ngIf="erroPareamento && !pareadaNome" (click)="solicitarPareamento()"></button>
-          <button pButton type="button" label="Fechar" *ngIf="!maquinaBloqueada" class="p-button-text" (click)="mostrarConfig = false"></button>
+          <button pButton type="button" [label]="'fluxo.estacao.leave' | translate" icon="pi pi-sign-out" class="p-button-text" (click)="sairDaEstacao()"></button>
+          <button pButton type="button" [label]="'fluxo.estacao.close' | translate" class="p-button-text" (click)="mostrarConfig = false"></button>
         </ng-container>
         <ng-template #rodapeEscolha>
           <button pButton type="button" [label]="config.estacaoCodigo ? 'Cancelar' : 'Escolher depois'" class="p-button-text" (click)="mostrarConfig = false"></button>
@@ -643,8 +646,8 @@ function obterTerminalId(): string {
     </p-dialog>
 
     <p-dialog [(visible)]="mostrarOsBip" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body" styleClass="st-dlg st-bip-dlg"
-              [header]="terminalSemEtapa ? 'Terminal sem etapa definida' : 'Bipe o código da OS na tela'" [style]="{ width: '620px', maxWidth: '96vw' }"
-              (onShow)="focarBip()" (onHide)="fecharOsBip()">
+              [header]="terminalSemEtapa ? 'Terminal sem etapa definida' : 'Bipe o código da OS na tela'" [style]="{ width: '760px', maxWidth: '96vw' }"
+              [closeOnEscape]="!codigoAmpliado" (onShow)="focarBip()" (onHide)="fecharOsBip()">
       <ng-container *ngIf="manualSel as ms">
         <div class="bip-os" [style.--stage]="ms.etapa?.cor || null">
           <div class="bip-os-top">
@@ -664,8 +667,11 @@ function obterTerminalId(): string {
 
         <ng-container *ngIf="!terminalSemEtapa; else avisoTerminal">
           <div class="bip-barcode">
-            <app-fluxo-barcode [valor]="codigoBarrasSel" [altura]="120" [largura]="3.2" [tamanhoFonte]="18"></app-fluxo-barcode>
+            <app-fluxo-barcode [valor]="codigoBarrasSel" [paraTela]="true" [altura]="160" [tamanhoFonte]="22"></app-fluxo-barcode>
           </div>
+          <button type="button" class="bip-zoom-btn" (click)="ampliarCodigo()">
+            <i class="pi pi-search-plus" aria-hidden="true"></i> {{ 'fluxo.estacao.enlarge' | translate }}
+          </button>
 
           <div class="bip-plan">
             <ng-container *ngIf="podeEscolherEtapa; else etapaDoTerminal">
@@ -779,6 +785,19 @@ function obterTerminalId(): string {
           <button pButton type="button" label="Configurar este terminal" icon="pi pi-cog" (click)="configurarTerminalPeloBip()"></button>
         </ng-template>
       </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="codigoAmpliado" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body" styleClass="st-dlg st-bip-zoom"
+              [header]="'fluxo.estacao.enlarge' | translate" [style]="{ width: '96vw', maxWidth: '1100px' }"
+              (onShow)="focarBip()" (onHide)="focarBip()">
+      <div class="bip-zoom-slot">
+        <app-fluxo-barcode *ngIf="codigoAmpliado" [valor]="codigoBarrasSel" [paraTela]="true" [altura]="280" [tamanhoFonte]="32"></app-fluxo-barcode>
+      </div>
+      <p class="bip-zoom-hint">{{ 'fluxo.estacao.scanHint' | translate }}</p>
+      <input #bipZoomInput class="bip-zoom-input" [(ngModel)]="entradaBip" (keydown)="onBipKeydown($event)"
+             autocomplete="off" spellcheck="false" aria-label="Leitura do código da OS"
+             placeholder="Aponte o leitor para o código acima…" />
+      <p class="bip-err" *ngIf="erroBip" role="alert"><i class="pi pi-times-circle"></i> {{ erroBip }}</p>
     </p-dialog>
   `,
   styles: [`
@@ -1200,8 +1219,9 @@ function obterTerminalId(): string {
     .st-combo-x:hover { background: #f1f5f9; color: #0f172a; }
 
     .st-sug {
-      position: absolute; top: calc(100% + 6px); left: 0; z-index: 30;
-      width: max(100%, 620px); max-width: calc(100vw - 48px);
+      /* Keep results in the scrollable page instead of behind the footer. */
+      position: relative; grid-column: 1 / -1; min-width: 0;
+      width: 100%; max-width: 100%;
       background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;
       box-shadow: 0 24px 50px rgba(15,23,42,0.16); animation: rise .15s ease;
     }
@@ -1293,7 +1313,13 @@ function obterTerminalId(): string {
     .bip-code { font-family: 'IBM Plex Mono', Consolas, monospace; font-size: 1.5rem; font-weight: 800; color: #0f172a; }
     .bip-os-meta { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; font-size: 0.82rem; color: #475569; }
     .bip-os-meta b { color: #0f172a; font-weight: 600; }
-    .bip-barcode { margin: 14px 0; padding: 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; display: flex; justify-content: center; }
+    .bip-barcode { margin: 12px 0 4px; padding: 8px 0 0; background: #fff; display: block; }
+    .bip-zoom-btn { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 10px; padding: 0; border: 0; background: transparent; color: #1d4ed8; font: inherit; font-weight: 700; cursor: pointer; }
+    .bip-zoom-btn:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 3px; }
+    .bip-zoom-slot { width: 100%; }
+    .bip-zoom-hint { margin: 14px 0 0; text-align: center; color: #334155; line-height: 1.45; }
+    .bip-zoom-input { display: block; width: min(520px, 100%); margin: 14px auto 0; text-align: center; font: inherit; font-size: 1.05rem; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 12px; color: #0f172a; background: #fff; }
+    ::ng-deep .p-dialog.st-bip-zoom .p-dialog-content { background: #fff; padding-top: 8px; padding-bottom: 22px; }
     .bip-plan { display: flex; flex-direction: column; gap: 8px; }
     .bip-plan label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #475569; font-weight: 700; }
     .bip-preview {
@@ -1469,6 +1495,7 @@ function obterTerminalId(): string {
   `]
 })
 export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
   private api = inject(OsFluxoService);
   readonly podeEscolherEtapa = inject(OsFluxoPermissaoService).has(OS_FLUXO_FUNCIONALIDADE.AJUSTE);
   readonly podeTrocarEstacao = this.podeEscolherEtapa || inject(OsFluxoPermissaoService).has(OS_FLUXO_FUNCIONALIDADE.ESTACOES);
@@ -1476,6 +1503,7 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
 
   @ViewChild('scanInput', { static: true }) scanInput!: ElementRef<HTMLInputElement>;
   @ViewChild('bipInput') bipInput?: ElementRef<HTMLInputElement>;
+  @ViewChild('bipZoomInput') bipZoomInput?: ElementRef<HTMLInputElement>;
 
   etapas: FluxoEtapa[] = [];
   /** Etapas da combo de registro pela tela, já bloqueando as que a OS escolhida não pode registrar agora. */
@@ -1544,6 +1572,7 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
   painelOsAberto = false;
   private manualOsFocado = false;
   mostrarOsBip = false;
+  codigoAmpliado = false;
   entradaBip = '';
   erroBip = '';
   bipFocado = false;
@@ -1993,14 +2022,24 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
     this.entradaBip = '';
     this.erroBip = '';
     this.teclasBip = [];
+    this.codigoAmpliado = false;
     this.mostrarOsBip = true;
   }
 
+  ampliarCodigo(): void {
+    this.codigoAmpliado = true;
+    this.focarBip();
+  }
+
   focarBip(): void {
-    setTimeout(() => this.bipInput?.nativeElement.focus({ preventScroll: true }), 30);
+    setTimeout(() => {
+      const alvo = this.codigoAmpliado ? this.bipZoomInput?.nativeElement : this.bipInput?.nativeElement;
+      (alvo || this.bipInput?.nativeElement)?.focus({ preventScroll: true });
+    }, this.codigoAmpliado ? 80 : 30);
   }
 
   fecharOsBip(): void {
+    this.codigoAmpliado = false;
     this.bipFocado = false;
     this.focarDepois();
   }
@@ -2283,6 +2322,13 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
       case 'MAQUINA_NAO_PAREADA': return 'Máquina não pareada';
       default: return 'Não foi possível registrar';
     }
+  }
+
+  /** Sai da estação sem parear. A bipagem continua bloqueada até um administrador vincular a máquina. */
+  sairDaEstacao(): void {
+    this.mostrarConfig = false;
+    this.pararPareamento();
+    void this.router?.navigate(['/os/fluxo']);
   }
 
   abrirConfig(): void {

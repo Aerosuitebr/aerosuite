@@ -1182,3 +1182,7 @@ body.as-ui-premium {
 .p-confirm-dialog-message {
   white-space: pre-line;
 }
+
+@import './app/shared/styles/system-page-layout.global';
+
+@import './app/shared/styles/os-page-layout.global';

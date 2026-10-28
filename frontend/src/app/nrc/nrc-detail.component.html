@@ -1,0 +1,266 @@
+@if (error) { <div class="notice error" role="alert">{{ error }}</div> }
+@if (ok) { <div class="notice ok" role="status">{{ ok }}</div> }
+@if (!record) {
+  <div class="empty"><p>{{ busy ? ('nrc.loading' | translate) : ('nrc.detail.missing' | translate) }}</p></div>
+} @else {
+  <section class="hero">
+    <div class="panel identity">
+      <div class="chip-row">
+        <span [attr.class]="'chip ' + (record.status || '').toLowerCase()">{{ label('status', record.status) }}</span>
+        <span [attr.class]="'chip ' + (record.severidade || '').toLowerCase()">{{ label('severity', record.severidade) }}</span>
+        @if (record.vencida) { <span class="chip late">{{ 'nrc.overdue' | translate }}</span> }
+        @if (days != null) { <span class="chip">{{ 'nrc.detail.days' | translate:{ days: '' + days } }}</span> }
+      </div>
+      <h1>{{ record.numero }}</h1>
+      <p>{{ record.descricaoOcorrido }}</p>
+      <div class="actions">
+        <a class="btn" routerLink="/nrc">{{ 'nrc.back' | translate }}</a>
+        @if (record.osId) { <a class="btn" [routerLink]="['/nrc']" [queryParams]="{ osId: record.osId }">{{ 'nrc.detail.sameOs' | translate }}</a> }
+        <button class="btn" type="button" (click)="print()">{{ 'nrc.detail.report' | translate }}</button>
+      </div>
+    </div>
+    <aside class="panel">
+      <dl class="context">
+        <div><dt>OS</dt><dd>{{ record.osNumero || '—' }}</dd></div>
+        <div><dt>{{ 'nrc.field.customer' | translate }}</dt><dd>{{ record.clienteNome || '—' }}</dd></div>
+        <div><dt>P/N</dt><dd>{{ record.partNumber || '—' }}</dd></div>
+        <div><dt>S/N</dt><dd>{{ record.serialNumber || '—' }}</dd></div>
+        <div><dt>FCU</dt><dd>{{ record.fcuCodigo || '—' }}</dd></div>
+        <div><dt>{{ 'nrc.field.owner' | translate }}</dt><dd>{{ record.responsavelTratamentoNome || '—' }}</dd></div>
+        <div><dt>{{ 'nrc.field.deadline' | translate }}</dt><dd>{{ record.prazoTratamento || '—' }}</dd></div>
+        <div><dt>{{ 'nrc.field.detectedBy' | translate }}</dt><dd>{{ record.detectadoPorNome || '—' }}</dd></div>
+      </dl>
+      @if (canTreat && !closed) {
+        <div class="actions" style="margin-top:12px">
+          <button class="btn" type="button" (click)="assume()" [disabled]="busy">{{ 'nrc.detail.assume' | translate }}</button>
+          <select [(ngModel)]="delegateId">
+            <option [ngValue]="undefined">{{ 'nrc.form.pickOwner' | translate }}</option>
+            @for (user of users; track user.id) { <option [ngValue]="user.id">{{ user.nome }}</option> }
+          </select>
+          <button class="btn" type="button" (click)="delegate()" [disabled]="busy || !delegateId">{{ 'nrc.detail.delegate' | translate }}</button>
+        </div>
+      }
+    </aside>
+  </section>
+
+  <div class="steps" role="tablist">
+    @for (item of steps; track item) {
+      <button type="button" role="tab" [class.current]="step === item" [disabled]="!accessible(item)" (click)="select(item)">
+        <small>{{ label('step', item) }}</small>
+        <strong>{{ 'nrc.step.hint.' + item | translate }}</strong>
+      </button>
+    }
+  </div>
+
+  <div class="split">
+    <section class="panel">
+      @if (step === 'REGISTRO') {
+        <h2>{{ 'nrc.step.REGISTRO' | translate }}</h2>
+        <div class="grid">
+          <label class="field span2"><span>{{ 'nrc.field.what' | translate }}</span><textarea [(ngModel)]="record.descricaoOcorrido" [disabled]="closed || !canTreat"></textarea></label>
+          <label class="field"><span>{{ 'nrc.field.requirement' | translate }}</span><textarea [(ngModel)]="record.requisitoNaoAtendido" [disabled]="closed || !canTreat"></textarea></label>
+          <label class="field"><span>{{ 'nrc.field.document' | translate }}</span><textarea [(ngModel)]="record.documentoEnvolvido" [disabled]="closed || !canTreat"></textarea></label>
+          <label class="field"><span>{{ 'nrc.field.place' | translate }}</span><input [(ngModel)]="record.localOcorrencia" [disabled]="closed || !canTreat" /></label>
+          <label class="field"><span>{{ 'nrc.field.cost' | translate }}</span><input type="number" min="0" step="0.01" [(ngModel)]="record.custoNaoConformidade" [disabled]="closed || !canTreat" /></label>
+        </div>
+        @if (canTreat && !closed) { <button class="btn primary" type="button" (click)="saveOpening()" [disabled]="busy">{{ 'nrc.form.save' | translate }}</button> }
+      }
+
+      @if (step === 'CONTENCAO') {
+        <h2>{{ 'nrc.step.CONTENCAO' | translate }}</h2>
+        <p class="muted">{{ 'nrc.detail.containmentLead' | translate }}</p>
+        @if (record.contencaoAprovacaoStatus) { <span class="chip wait">{{ label('approval', record.contencaoAprovacaoStatus) }}</span> }
+        @if (record.contencaoRejeicaoObservacoes) { <div class="notice error">{{ record.contencaoRejeicaoObservacoes }}</div> }
+        <div class="grid">
+          <label class="field span2"><span>{{ 'nrc.w.what' | translate }}</span><textarea [(ngModel)]="record.contencaoOque" [disabled]="closed || !canTreat"></textarea></label>
+          <label class="field"><span>{{ 'nrc.w.who' | translate }}</span><input [(ngModel)]="record.contencaoQuem" [disabled]="closed || !canTreat" /></label>
+          <label class="field"><span>{{ 'nrc.w.when' | translate }}</span><input [(ngModel)]="record.contencaoQuando" [disabled]="closed || !canTreat" /></label>
+          <label class="field span2"><span>{{ 'nrc.field.action' | translate }}</span><textarea [(ngModel)]="record.contencaoAcao" [disabled]="closed || !canTreat"></textarea></label>
+        </div>
+        @if (canTreat && !closed) {
+          <div class="actions">
+            <button class="btn" type="button" (click)="saveContainment()" [disabled]="busy">{{ 'nrc.form.save' | translate }}</button>
+            <button class="btn primary" type="button" (click)="askContainment()" [disabled]="busy">{{ 'nrc.detail.askQuality' | translate }}</button>
+          </div>
+        }
+        @if (quality && record.contencaoAprovacaoStatus === 'PENDENTE_APROVACAO') {
+          <label class="field"><span>{{ 'nrc.detail.rejectNote' | translate }}</span><textarea [(ngModel)]="note"></textarea></label>
+          <div class="actions">
+            <button class="btn good" type="button" (click)="approveContainment()" [disabled]="busy">{{ 'nrc.detail.approve' | translate }}</button>
+            <button class="btn danger" type="button" (click)="rejectContainment()" [disabled]="busy || !note.trim()">{{ 'nrc.detail.reject' | translate }}</button>
+          </div>
+        }
+      }
+
+      @if (step === 'CAUSA') {
+        <h2>{{ 'nrc.step.CAUSA' | translate }}</h2>
+        @if (record.analiseCausaStatus) { <span class="chip wait">{{ label('approval', record.analiseCausaStatus) }}</span> }
+        @if (record.analiseCausaRejeicaoObservacoes) { <div class="notice error">{{ record.analiseCausaRejeicaoObservacoes }}</div> }
+        <div class="grid">
+          <label class="field">
+            <span>{{ 'nrc.field.method' | translate }}</span>
+            <select [(ngModel)]="record.metodoCausa" [disabled]="closed || !canTreat">
+              <option value="CINCO_PORQUES">{{ 'nrc.method.CINCO_PORQUES' | translate }}</option>
+              <option value="ISHIKAWA">{{ 'nrc.method.ISHIKAWA' | translate }}</option>
+              <option value="TEXTO_LIVRE">{{ 'nrc.method.TEXTO_LIVRE' | translate }}</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>{{ 'nrc.field.disposition' | translate }}</span>
+            <select [(ngModel)]="record.disposicao" [disabled]="closed || !canTreat">
+              <option value="">—</option>
+              <option value="RETRABALHO">{{ 'nrc.disposition.RETRABALHO' | translate }}</option>
+              <option value="REPARO">{{ 'nrc.disposition.REPARO' | translate }}</option>
+              <option value="SUCATEAMENTO">{{ 'nrc.disposition.SUCATEAMENTO' | translate }}</option>
+              <option value="DEVOLUCAO">{{ 'nrc.disposition.DEVOLUCAO' | translate }}</option>
+              <option value="CONCESSAO">{{ 'nrc.disposition.CONCESSAO' | translate }}</option>
+            </select>
+          </label>
+          @if (record.metodoCausa === 'CINCO_PORQUES') {
+            <label class="field span2"><span>1</span><textarea [(ngModel)]="record.porque1" [disabled]="closed || !canTreat"></textarea></label>
+            <label class="field span2"><span>2</span><textarea [(ngModel)]="record.porque2" [disabled]="closed || !canTreat"></textarea></label>
+            <label class="field span2"><span>3</span><textarea [(ngModel)]="record.porque3" [disabled]="closed || !canTreat"></textarea></label>
+            <label class="field span2"><span>4</span><textarea [(ngModel)]="record.porque4" [disabled]="closed || !canTreat"></textarea></label>
+            <label class="field span2"><span>5</span><textarea [(ngModel)]="record.porque5" [disabled]="closed || !canTreat"></textarea></label>
+          }
+          @if (record.metodoCausa === 'ISHIKAWA') {
+            <label class="field span2"><span>{{ 'nrc.field.ishikawa' | translate }}</span><textarea [(ngModel)]="record.ishikawaMaterial" [disabled]="closed || !canTreat"></textarea></label>
+          }
+          <label class="field span2"><span>{{ 'nrc.field.root' | translate }}</span><textarea [(ngModel)]="record.causaRaiz" [disabled]="closed || !canTreat"></textarea></label>
+          <label class="field span2"><span>{{ 'nrc.field.dispositionNote' | translate }}</span><textarea [(ngModel)]="record.disposicaoObservacao" [disabled]="closed || !canTreat"></textarea></label>
+        </div>
+        @if (canTreat && !closed) {
+          <div class="actions">
+            <button class="btn" type="button" (click)="saveCause()" [disabled]="busy">{{ 'nrc.form.save' | translate }}</button>
+            <button class="btn primary" type="button" (click)="askCause()" [disabled]="busy">{{ 'nrc.detail.askQuality' | translate }}</button>
+          </div>
+        }
+        @if (quality && record.analiseCausaStatus === 'AGUARDANDO_APROVACAO') {
+          <label class="field"><span>{{ 'nrc.detail.rejectNote' | translate }}</span><textarea [(ngModel)]="note"></textarea></label>
+          <div class="actions">
+            <button class="btn good" type="button" (click)="approveCause()" [disabled]="busy">{{ 'nrc.detail.approve' | translate }}</button>
+            <button class="btn danger" type="button" (click)="rejectCause()" [disabled]="busy || !note.trim()">{{ 'nrc.detail.reject' | translate }}</button>
+          </div>
+        }
+      }
+
+      @if (step === 'ACOES') {
+        <h2>{{ 'nrc.step.ACOES' | translate }}</h2>
+        @if (record.acoesPlanoStatus) { <span class="chip wait">{{ label('approval', record.acoesPlanoStatus) }}</span> }
+        @if (record.acoesPlanoRejeicaoObservacoes) { <div class="notice error">{{ record.acoesPlanoRejeicaoObservacoes }}</div> }
+        @for (action of actions; track $index) {
+          <article class="action-card">
+            <div class="chip-row">
+              <strong>#{{ $index + 1 }}</strong>
+              <span class="chip">{{ label('actionStatus', action.status) }}</span>
+            </div>
+            <div class="grid">
+              <label class="field span2"><span>{{ 'nrc.w.what' | translate }}</span><input [(ngModel)]="action.oQue" [disabled]="closed || action.status === 'CONCLUIDA'" /></label>
+              <label class="field"><span>{{ 'nrc.w.why' | translate }}</span><input [(ngModel)]="action.porQue" [disabled]="closed || action.status === 'CONCLUIDA'" /></label>
+              <label class="field"><span>{{ 'nrc.w.where' | translate }}</span><input [(ngModel)]="action.onde" [disabled]="closed || action.status === 'CONCLUIDA'" /></label>
+              <label class="field"><span>{{ 'nrc.w.when' | translate }}</span><input type="date" [(ngModel)]="action.quandoAcao" [disabled]="closed || action.status === 'CONCLUIDA'" /></label>
+              <label class="field"><span>{{ 'nrc.w.how' | translate }}</span><input [(ngModel)]="action.como" [disabled]="closed || action.status === 'CONCLUIDA'" /></label>
+              <label class="field"><span>{{ 'nrc.w.cost' | translate }}</span><input [(ngModel)]="action.quantoCusto" [disabled]="closed || action.status === 'CONCLUIDA'" /></label>
+              <label class="field">
+                <span>{{ 'nrc.field.owner' | translate }}</span>
+                <select [(ngModel)]="action.responsavelId" [disabled]="closed || action.status === 'CONCLUIDA'">
+                  <option [ngValue]="undefined">—</option>
+                  @for (user of users; track user.id) { <option [ngValue]="user.id">{{ user.nome }}</option> }
+                </select>
+              </label>
+              <label class="field"><span>{{ 'nrc.field.deadline' | translate }}</span><input type="date" [(ngModel)]="action.prazo" [disabled]="closed || action.status === 'CONCLUIDA'" /></label>
+            </div>
+            @if (action.status === 'CONCLUIDA') { <p class="muted">{{ action.evidenciaConclusao }}</p> }
+            @if (action.id && action.status !== 'CONCLUIDA' && canTreat && record.acoesPlanoStatus === 'APROVADO') {
+              <label class="field"><span>{{ 'nrc.field.evidence' | translate }}</span><input [(ngModel)]="evidence" /></label>
+              <button class="btn good" type="button" (click)="finishAction(action)" [disabled]="busy">{{ 'nrc.detail.complete' | translate }}</button>
+            }
+            @if (!action.id && canTreat && !closed) { <button class="btn" type="button" (click)="removeAction($index)">{{ 'nrc.detail.remove' | translate }}</button> }
+          </article>
+        }
+        @if (canTreat && !closed && record.acoesPlanoStatus !== 'APROVADO') {
+          <div class="actions">
+            <button class="btn" type="button" (click)="addAction()">{{ 'nrc.detail.addAction' | translate }}</button>
+            <button class="btn" type="button" (click)="saveActions()" [disabled]="busy">{{ 'nrc.form.save' | translate }}</button>
+            <button class="btn primary" type="button" (click)="askActions()" [disabled]="busy">{{ 'nrc.detail.askQuality' | translate }}</button>
+          </div>
+        }
+        @if (quality && record.acoesPlanoStatus === 'AGUARDANDO_APROVACAO') {
+          <label class="field"><span>{{ 'nrc.detail.rejectNote' | translate }}</span><textarea [(ngModel)]="note"></textarea></label>
+          <div class="actions">
+            <button class="btn good" type="button" (click)="approveActions()" [disabled]="busy">{{ 'nrc.detail.approve' | translate }}</button>
+            <button class="btn danger" type="button" (click)="rejectActions()" [disabled]="busy || !note.trim()">{{ 'nrc.detail.reject' | translate }}</button>
+          </div>
+        }
+      }
+
+      @if (step === 'EFICACIA') {
+        <h2>{{ 'nrc.step.EFICACIA' | translate }}</h2>
+        <p class="muted">{{ 'nrc.detail.efficacyLead' | translate }}</p>
+        <div class="grid">
+          <label class="field span2"><span>{{ 'nrc.field.efficacy' | translate }}</span><textarea [(ngModel)]="record.verificacaoEficacia" [disabled]="closed || !quality"></textarea></label>
+          <label class="field">
+            <span>{{ 'nrc.field.decision' | translate }}</span>
+            <select [(ngModel)]="record.eficaciaDecisao" [disabled]="closed || !quality">
+              <option value="">—</option>
+              <option value="EFICAZ">{{ 'nrc.decision.EFICAZ' | translate }}</option>
+              <option value="INEFICAZ">{{ 'nrc.decision.INEFICAZ' | translate }}</option>
+            </select>
+          </label>
+          <label class="field check"><input type="checkbox" [(ngModel)]="record.eficaciaAtualizarRiscos" [disabled]="closed || !quality" /><span>{{ 'nrc.field.updateRisks' | translate }}</span></label>
+          <label class="field span2"><span>{{ 'nrc.field.sgq' | translate }}</span><textarea [(ngModel)]="record.eficaciaMudancasSgq" [disabled]="closed || !quality"></textarea></label>
+        </div>
+        @if (quality && !closed) {
+          <div class="actions">
+            <button class="btn" type="button" (click)="saveEfficacy()" [disabled]="busy">{{ 'nrc.form.save' | translate }}</button>
+            <button class="btn primary" type="button" (click)="closeRecord()" [disabled]="busy">{{ 'nrc.detail.close' | translate }}</button>
+          </div>
+        }
+      }
+    </section>
+
+    <aside>
+      <section class="panel">
+        <h2>{{ 'nrc.detail.files' | translate }}</h2>
+        @if (canTreat && !closed) {
+          <label class="field">
+            <span>{{ 'nrc.field.fileKind' | translate }}</span>
+            <select [(ngModel)]="category">
+              <option value="EVIDENCIA">{{ 'nrc.file.EVIDENCIA' | translate }}</option>
+              <option value="DOCUMENTO_ENVOLVIDO">{{ 'nrc.file.DOCUMENTO_ENVOLVIDO' | translate }}</option>
+              <option value="EFICACIA">{{ 'nrc.file.EFICACIA' | translate }}</option>
+            </select>
+          </label>
+          <input type="file" (change)="onFile($event)" />
+          <button class="btn" type="button" (click)="upload()" [disabled]="busy || !file">{{ 'nrc.detail.upload' | translate }}</button>
+        }
+        <div class="files">
+          @for (file of record.anexos || []; track file.id) {
+            <div class="file">
+              <div>
+                <strong>{{ file.nomeOriginal || file.nomeArquivo }}</strong>
+                <div class="muted">{{ label('file', file.categoria) }}</div>
+              </div>
+              <div class="actions">
+                <button class="btn" type="button" (click)="download(file)">{{ 'nrc.detail.download' | translate }}</button>
+                @if (canTreat && !closed) { <button class="btn danger" type="button" (click)="removeFile(file)">{{ 'nrc.detail.remove' | translate }}</button> }
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+      <section class="panel" style="margin-top:14px">
+        <h2>{{ 'nrc.detail.trail' | translate }}</h2>
+        <ol class="timeline">
+          @for (event of record.auditorias || []; track event.id) {
+            <li>
+              <strong>{{ label('audit', event.acao) }}</strong>
+              <span>{{ event.usuarioNome || '—' }} · {{ event.dataHora }}</span>
+              @if (event.valorNovo) { <span>{{ event.valorNovo }}</span> }
+            </li>
+          }
+        </ol>
+      </section>
+    </aside>
+  </div>
+}

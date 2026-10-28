@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable, catchError, map, of } from 'rxjs';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -21,7 +22,7 @@ export class FuncionalidadeGuard implements CanActivate {
     private i18n: TranslationService
   ) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> {
     const perm = route.data['perm'] as PermissaoRota | undefined;
     if (
       !perm ||
@@ -39,8 +40,21 @@ export class FuncionalidadeGuard implements CanActivate {
     }
 
     if (!passesPermissaoRota(user, perm)) {
-      this.negar(state.url);
-      return false;
+      // O menu pode ter sido atualizado depois do login. Revalida a autorização
+      // no servidor antes de negar por um snapshot antigo; nunca libera pelo menu.
+      return this.authService.refreshCurrentUserFromServer().pipe(
+        map((currentUser) => {
+          if (passesPermissaoRota(currentUser, perm)) {
+            return true;
+          }
+          this.negar(state.url);
+          return false;
+        }),
+        catchError(() => {
+          this.negar(state.url);
+          return of(false);
+        })
+      );
     }
 
     return true;

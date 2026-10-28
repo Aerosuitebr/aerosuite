@@ -19,7 +19,7 @@ import { OsEtiquetaDialogComponent } from './fluxo/os-etiqueta-dialog.component'
         <strong>Execução:</strong> {{ labels[os.statusExecucao || 'NAO_INICIADA'] || os.statusExecucao }}</p>
       <div class="acoes">
         <a pButton label="Histórico do fluxo" icon="pi pi-history" [routerLink]="['/os/fluxo/os', os.id]"></a>
-        <a pButton label="Não conformidades da OS" icon="pi pi-exclamation-triangle" routerLink="/conformidade/nao-conformidades" [queryParams]="{osId: os.id}"></a>
+        <a pButton label="Não conformidades da OS" icon="pi pi-exclamation-triangle" routerLink="/nrc" [queryParams]="{osId: os.id}"></a>
         <button pButton type="button" label="Etiqueta" icon="pi pi-print" (click)="etiqueta = true"></button>
       </div>
       <div *ngIf="podeGerir" class="atribuicao">

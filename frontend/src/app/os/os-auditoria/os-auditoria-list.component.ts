@@ -456,7 +456,7 @@ interface FriendlyLabel {
 
     .filters-grid {
       display: grid;
-      grid-template-columns: 7rem 1.35fr 10.5rem 10.5rem minmax(8rem, 1fr) auto;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
       gap: 0.65rem 1rem;
       align-items: end;
     }
@@ -493,10 +493,11 @@ interface FriendlyLabel {
     }
 
     .filter-actions {
+      grid-column: 1 / -1;
       display: flex;
       gap: 0.55rem;
       justify-content: flex-end;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       margin-left: 0.75rem;
       padding-left: 0.35rem;
     }

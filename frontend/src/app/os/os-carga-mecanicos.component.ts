@@ -15,6 +15,7 @@ import { OSService, OS, OSCargaDashboard, OSCargaMecanico } from '../core/os.ser
 import { AuthService } from '../auth/auth.service';
 import { ListFontScaleControlComponent } from '../shared/list-font-scale/list-font-scale-control.component';
 import { ListFontScaleService } from '../shared/list-font-scale/list-font-scale.service';
+import { PageHeroComponent } from '../shared/page-hero/page-hero.component';
 
 type TipoCarga = 'ATRIBUIDAS' | 'EM_ANDAMENTO' | 'CONCLUIDAS' | 'CARGA_ATUAL' | 'ALERTA_5_DIAS' | 'SEM_ATRIBUICAO';
 
@@ -33,21 +34,18 @@ type TipoCarga = 'ATRIBUIDAS' | 'EM_ANDAMENTO' | 'CONCLUIDAS' | 'CARGA_ATUAL' | 
     TooltipModule,
     InputTextModule,
     ProgressSpinnerModule,
-    ListFontScaleControlComponent
+    ListFontScaleControlComponent,
+    PageHeroComponent
   ],
   providers: [MessageService],
   template: `
     <p-toast></p-toast>
     <div class="carga-shell">
-      <header class="hero">
-        <div class="hero-copy">
-          <button pButton type="button" icon="pi pi-arrow-left" class="p-button-text p-button-sm back-btn"
+      <app-page-hero variant="navy" title="Carga de mecânicos" titleIcon="pi-calendar"
+        subtitle="Acompanhe atribuições, execução e conclusão por período. Clique em qualquer quantidade para detalhar as OS." [hasActions]="true">
+        <div actions class="hero-controls">
+          <button pButton type="button" icon="pi pi-arrow-left" class="p-button-outlined p-button-sm"
                   label="Ordens de serviço" routerLink="/os"></button>
-          <p class="eyebrow">Operação · Oficina</p>
-          <h1>Carga de mecânicos</h1>
-          <p class="lead">Acompanhe atribuições, execução e conclusão por período. Clique em qualquer quantidade para detalhar as OS.</p>
-        </div>
-        <div class="hero-controls">
           <span class="periodo-label">Período</span>
           <p-selectButton
             [options]="periodos"
@@ -57,7 +55,7 @@ type TipoCarga = 'ATRIBUIDAS' | 'EM_ANDAMENTO' | 'CONCLUIDAS' | 'CARGA_ATUAL' | 
             (onChange)="carregar()">
           </p-selectButton>
         </div>
-      </header>
+      </app-page-hero>
 
       <section class="kpi-row" *ngIf="dashboard">
         <button type="button" class="kpi kpi--alert kpi--click"
@@ -395,7 +393,7 @@ type TipoCarga = 'ATRIBUIDAS' | 'EM_ANDAMENTO' | 'CONCLUIDAS' | 'CARGA_ATUAL' | 
     .kpi--click:hover:not(:disabled) {
       border-color: #99f6e4;
       box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-      transform: translateY(-1px);
+      transform: none;
     }
     .kpi--alert.kpi--click:hover:not(:disabled) {
       border-color: #fca5a5;
@@ -460,7 +458,7 @@ type TipoCarga = 'ATRIBUIDAS' | 'EM_ANDAMENTO' | 'CONCLUIDAS' | 'CARGA_ATUAL' | 
     .mech-card:hover {
       border-color: #c5d4e2;
       box-shadow: 0 10px 24px rgba(15, 23, 42, 0.07);
-      transform: translateY(-1px);
+      transform: none;
     }
     @media (max-width: 860px) {
       .mech-card { grid-template-columns: 1fr; }
@@ -500,7 +498,7 @@ type TipoCarga = 'ATRIBUIDAS' | 'EM_ANDAMENTO' | 'CONCLUIDAS' | 'CARGA_ATUAL' | 
       transition: background .15s ease, border-color .15s ease, transform .15s ease;
     }
     .metric:hover:not(:disabled) {
-      border-color: #99f6e4; background: var(--accent-soft); transform: translateY(-1px);
+      border-color: #99f6e4; background: var(--accent-soft); transform: none;
     }
     .metric--live:hover:not(:disabled) { border-color: #fdba74; background: #fff7ed; }
     .metric--done:hover:not(:disabled) { border-color: #6ee7b7; background: #ecfdf5; }
@@ -624,7 +622,7 @@ type TipoCarga = 'ATRIBUIDAS' | 'EM_ANDAMENTO' | 'CONCLUIDAS' | 'CARGA_ATUAL' | 
     .os-card:hover {
       border-color: #67e8f9;
       box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
-      transform: translateY(-1px);
+      transform: none;
     }
     .os-card-main {
       display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px;

@@ -55,6 +55,7 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class OSService {
+    @Inject OperacaoProntidaoGuard operacaoProntidao;
     @Inject OsAccessPolicy osAccess;
 
     private static final Logger LOG = Logger.getLogger(OSService.class);
@@ -669,6 +670,7 @@ public class OSService {
                     entity.tipoServico = tipo.nome;
                 }
                 entity.inicioServico = dto.inicioServico; entity.fimServico = dto.fimServico;
+                if (dto.dataFechamento != null) operacaoProntidao.conferir(entity.id, "ENTREGA");
                 entity.dataFechamento = dto.dataFechamento;
             } else {
                 entity.manualPn = dto.manualPn; entity.numRevisao = dto.numRevisao; entity.dataRevManual = dto.dataRevManual;
@@ -697,6 +699,7 @@ public class OSService {
         // Salvar o valor atual de isActive antes do update
         Boolean currentIsActive = entity.isActive;
         entity.jaEditada = true;
+        if (dto.dataFechamento != null) operacaoProntidao.conferir(entity.id, "ENTREGA");
         mapper.updateEntityFromDto(dto, entity);
         entity.updatedAt = LocalDateTime.now();
         // Restaurar o valor de isActive (não permitir alterar diretamente pelo update normal)

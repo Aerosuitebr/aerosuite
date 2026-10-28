@@ -48,6 +48,12 @@ public class OsFluxoEstacaoService {
     private OsFluxoTerminal terminal(String id) {validarTerminal(id);return OsFluxoTerminal.find("terminalId",id).firstResult();}
     public void exigirPareada(String terminal) {OsFluxoTerminal t=terminal(terminal);if(t==null||!Boolean.TRUE.equals(t.ativa)||t.estacaoCodigo==null||catalogo().stream().noneMatch(e->e.codigo.equals(t.estacaoCodigo)))throw new ForbiddenException("Máquina não pareada. Solicite o pareamento à gestão.");}
     public boolean atende(String terminal,String setor) {OsFluxoTerminal t=terminal(terminal);return t!=null&&Boolean.TRUE.equals(t.ativa)&&Objects.equals(estacao(t.estacaoCodigo).setor,setor);}
+    /** Setor da estação pareada neste terminal, ou null se a máquina não estiver pareada. */
+    public String setorAtendido(String terminal) {
+        OsFluxoTerminal t=terminal(terminal);
+        if(t==null||!Boolean.TRUE.equals(t.ativa)||t.estacaoCodigo==null) return null;
+        return estacao(t.estacaoCodigo).setor;
+    }
     public void exigirEtapa(String terminal,String setor) {if(!atende(terminal,setor))throw new ForbiddenException("Etapa não atendida por esta estação.");}
     @Transactional
     public Map<String,Object> listar(String terminalId) {

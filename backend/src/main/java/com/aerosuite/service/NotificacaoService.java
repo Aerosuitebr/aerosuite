@@ -130,6 +130,21 @@ public class NotificacaoService {
     }
 
     @Transactional
+    public Notificacao criar(
+            Long usuarioId,
+            String tipo,
+            String titulo,
+            String mensagem,
+            String link,
+            String referenciaTipo,
+            Long referenciaId) {
+        Notificacao notif = criar(usuarioId, tipo, titulo, mensagem, link);
+        notif.referenciaTipo = referenciaTipo;
+        notif.referenciaId = referenciaId;
+        return notif;
+    }
+
+    @Transactional
     public void deletar(Long notificacaoId) {
         Notificacao notif = Notificacao.findById(notificacaoId);
         if (notif != null) {

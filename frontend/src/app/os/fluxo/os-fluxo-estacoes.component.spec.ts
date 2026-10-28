@@ -120,6 +120,13 @@ describe('Gestão de estações', () => {
     expect(c.mostrarSetor({ ...estacao, nome: 'Bancada de motores' })).toBe(true);
   });
 
+  it('conta estações sem máquina a partir dos dados reais', () => {
+    const c = tela();
+    expect(c.estacoesSemVinculo).toBe(0);
+    c.dados = { ...dados, estacoes: [{ ...estacao, maquinas: 0 }, estacao] };
+    expect(c.estacoesSemVinculo).toBe(1);
+  });
+
   it('busca por nome, setor e etapa sem alterar a lista original', () => {
     const c = tela();
     c.buscaEstacao = 'montagem';

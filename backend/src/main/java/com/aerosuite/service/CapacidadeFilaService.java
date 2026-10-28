@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class CapacidadeFilaService {
+    @Inject OperacaoProntidaoGuard operacaoProntidao;
 
     private static final Logger LOG = Logger.getLogger(CapacidadeFilaService.class);
 
@@ -143,6 +144,7 @@ public class CapacidadeFilaService {
             if (!ESTAGIOS_ORDEM.contains(e)) {
                 throw new BadRequestException(ApiI18nMessages.domain("capacidade.error.estagio_invalido"));
             }
+            if ("EM_EXECUCAO".equals(e)) operacaoProntidao.conferir(os.id, "EXECUCAO");
             os.filaEstagio = e;
             os.filaEstagioTravada = true;
         }

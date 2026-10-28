@@ -4,7 +4,7 @@ import { MessageService } from 'primeng/api';
 import { PlatformOpsAuthService } from './platform-ops-auth.service';
 import { TranslationService } from '../core/translation.service';
 
-export const platformOpsGuard: CanActivateFn = () => {
+export const platformOpsGuard: CanActivateFn = (_route, state) => {
   const auth = inject(PlatformOpsAuthService);
   const router = inject(Router);
   const messages = inject(MessageService);
@@ -15,6 +15,6 @@ export const platformOpsGuard: CanActivateFn = () => {
   }
 
   i18n.addToast(messages, 'warn', 'common.toast.warn', 'platformOps.guard.required');
-  void router.navigate(['/plataforma/acesso']);
+  void router.navigate(['/plataforma/acesso'], { queryParams: { returnUrl: state.url } });
   return false;
 };

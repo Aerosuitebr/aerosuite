@@ -169,6 +169,12 @@ import {
   FOOTER_HEALTH_I18N_PT_BR
 } from './i18n/footer-health-i18n';
 import {
+  FLUXO_ESTACOES_I18N_EN_US,
+  FLUXO_ESTACOES_I18N_ES_ES,
+  FLUXO_ESTACOES_I18N_FR_FR,
+  FLUXO_ESTACOES_I18N_PT_BR
+} from './i18n/fluxo-estacoes-i18n';
+import {
   ESTOQUE_CONSULTA_QR_EN_US,
   ESTOQUE_CONSULTA_QR_ES_ES,
   ESTOQUE_CONSULTA_QR_FR_FR,
@@ -266,6 +272,7 @@ import {
   HANGAR_JOB_CARD_FR_FR,
   HANGAR_JOB_CARD_PT_BR
 } from './i18n/hangar-job-card-i18n';
+import { NRC_EN_US, NRC_ES_ES, NRC_FR_FR, NRC_PT_BR } from './i18n/nrc-i18n';
 import {
   TIPOS_SERVICO_EN_US,
   TIPOS_SERVICO_ES_ES,
@@ -2192,6 +2199,7 @@ export class TranslationService {
       ESTOQUE_QUARENTENA_PT_BR,
       CONFORMIDADE_RETENCAO_PT_BR,
       HANGAR_JOB_CARD_PT_BR,
+      NRC_PT_BR,
       TIPOS_SERVICO_PT_BR,
       FORMS_MISC_PT_BR,
       CAPACIDADE_QUADRO_PT_BR,
@@ -2217,6 +2225,7 @@ export class TranslationService {
       TENANT_FEATURES_I18N_PT_BR,
       P1_I18N_PT_BR,
       FOOTER_HEALTH_I18N_PT_BR,
+      FLUXO_ESTACOES_I18N_PT_BR,
       EXTERNO_PROPOSTAS_PT_BR,
       EXTERNO_OS_DETAIL_I18N_PT_BR,
       GO_LIVE_MIGRACAO_PT_BR,
@@ -2254,6 +2263,7 @@ export class TranslationService {
       ESTOQUE_QUARENTENA_EN_US,
       CONFORMIDADE_RETENCAO_EN_US,
       HANGAR_JOB_CARD_EN_US,
+      NRC_EN_US,
       TIPOS_SERVICO_EN_US,
       FORMS_MISC_EN_US,
       CAPACIDADE_QUADRO_EN_US,
@@ -2279,6 +2289,7 @@ export class TranslationService {
       TENANT_FEATURES_I18N_EN_US,
       P1_I18N_EN_US,
       FOOTER_HEALTH_I18N_EN_US,
+      FLUXO_ESTACOES_I18N_EN_US,
       EXTERNO_PROPOSTAS_EN_US,
       EXTERNO_OS_DETAIL_I18N_EN_US,
       GO_LIVE_MIGRACAO_EN_US,
@@ -2317,6 +2328,7 @@ export class TranslationService {
       ESTOQUE_QUARENTENA_ES_ES,
       CONFORMIDADE_RETENCAO_ES_ES,
       HANGAR_JOB_CARD_ES_ES,
+      NRC_ES_ES,
       TIPOS_SERVICO_ES_ES,
       FORMS_MISC_ES_ES,
       CAPACIDADE_QUADRO_ES_ES,
@@ -2352,7 +2364,8 @@ export class TranslationService {
       ONBOARDING_PUBLIC_I18N_ES_ES,
       TENANT_FEATURES_I18N_ES_ES,
       P1_I18N_ES_ES,
-      FOOTER_HEALTH_I18N_ES_ES
+      FOOTER_HEALTH_I18N_ES_ES,
+      FLUXO_ESTACOES_I18N_ES_ES
     );
     Object.assign(
       this.translations['fr-FR'],
@@ -2381,6 +2394,7 @@ export class TranslationService {
       ESTOQUE_QUARENTENA_FR_FR,
       CONFORMIDADE_RETENCAO_FR_FR,
       HANGAR_JOB_CARD_FR_FR,
+      NRC_FR_FR,
       TIPOS_SERVICO_FR_FR,
       FORMS_MISC_FR_FR,
       CAPACIDADE_QUADRO_FR_FR,
@@ -2416,7 +2430,8 @@ export class TranslationService {
       ONBOARDING_PUBLIC_I18N_FR_FR,
       TENANT_FEATURES_I18N_FR_FR,
       P1_I18N_FR_FR,
-      FOOTER_HEALTH_I18N_FR_FR
+      FOOTER_HEALTH_I18N_FR_FR,
+      FLUXO_ESTACOES_I18N_FR_FR
     );
 
     // Carregar idioma salvo

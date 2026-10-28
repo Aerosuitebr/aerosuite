@@ -1,9 +1,25 @@
 /** Section values stored in the funcionalidades table (domain codes). */
 export const FUNC_MENU_SECTION_VALUES = [
-  'Principal',
-  'Documentos',
   'Cadastro',
-  'Sistema',
+  'Comercial',
+  'Ordem de serviço',
+  'Oficina',
+  'Estoque',
+  'Operacional',
+  'Conformidade Técnica',
+  'Documentos',
+  'Publicações Técnicas',
+  'Go-live',
+  'Vitrine',
+  'Suporte',
+  'Comunicação',
+  'Portal externo',
   'Controle de Acesso',
-  'Ações Rápidas'
+  'Administração',
+  'Gestão',
+  'Sistema',
+  'Ações Rápidas',
+  'Relatórios',
+  'Configurações',
+  'Principal'
 ] as const;

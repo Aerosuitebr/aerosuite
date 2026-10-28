@@ -1,0 +1,59 @@
+// Padrão visual das telas da seção OS; não altera diálogos ou folhas de impressão.
+.main-content.main-content > :is(app-os-list, app-os-carga-mecanicos, app-hangar-job-card,
+    app-capacidade-quadro, app-operacoes, app-os-fluxo-painel, app-os-fluxo-estacao,
+    app-os-fluxo-codigos, app-os-consulta-trocas-eventuais, app-os-pendentes-trocas-pagamento) {
+  display: flex !important;
+  flex-direction: column;
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0;
+  min-height: 0 !important;
+  overflow: auto !important;
+  box-sizing: border-box;
+  background: var(--as-bg-page, #f4f6fb);
+
+  > :is(.as-page, .carga-shell, .hangar-shell, .capacidade-shell, .ops-page, .fx-shell, .st-shell, .page-wrap) {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0;
+    min-height: 100%;
+    flex: 1 0 auto;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  :is(.as-page-hero, .fx-hero, .st-top) {
+    padding: 28px clamp(16px, 2.4vw, 40px) !important;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 45%, #0c4a6e 100%) !important;
+    color: #fff !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin: 0 0 20px !important;
+    flex-shrink: 0;
+
+    :is(.as-page-hero__title, h1, .st-brand h1) {
+      color: #fff !important;
+      font-size: clamp(24px, 2.2vw, 32px) !important;
+      line-height: 1.2;
+    }
+    :is(.as-page-hero__subtitle, .as-page-hero__kicker, .fx-lead, .fx-eyebrow, .st-eyebrow, .periodo-label) {
+      color: #e0eaf3 !important;
+      font-size: 14px !important;
+      line-height: 1.6;
+    }
+    :is(.p-button.p-button-outlined, .p-button.p-button-text):not(:disabled) {
+      color: #fff !important;
+      border-color: #9eb5cc !important;
+      &:hover { background: #ffffff1a !important; }
+    }
+    .st-back { color: #e0eaf3 !important; }
+  }
+
+  .as-page-hero__inner { align-items: center; }
+  .ops-page, .carga-shell, .hangar-shell, .capacidade-shell, .st-shell { padding-top: 0 !important; }
+  .ops-banner { margin-bottom: 0; }
+  .st-top { flex-wrap: wrap; }
+  .page-wrap > .p-element:not(app-page-hero) { margin-inline: clamp(16px, 2.4vw, 40px); }
+}

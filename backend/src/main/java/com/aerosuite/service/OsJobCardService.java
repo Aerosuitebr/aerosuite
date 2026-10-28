@@ -108,12 +108,37 @@ public class OsJobCardService {
             item.dtAbertura = os.dtAbertura != null ? os.dtAbertura.format(D) : null;
             item.tipoServico = os.tipoServico;
             item.faseJob = computeFaseJob(os, assinaturas, crs);
+            item.prioridadeFila = os.prioridadeFila;
+            item.dataPrevistaConclusao = os.dataPrevistaConclusao != null ? os.dataPrevistaConclusao.format(D) : null;
+            item.prazoVencido = !"CONCLUIDO".equals(item.faseJob) && os.dataPrevistaConclusao != null
+                    && os.dataPrevistaConclusao.isBefore(LocalDate.now());
+            item.destinosPermitidos = com.aerosuite.util.JobCardBoardRules.allowedTargets(item.faseJob, assinaturas);
             item.progressPct = computeProgressPct(os, assinaturas, crs);
             item.assinaturasConcluidas = assinaturas;
             item.crsEmitido = crs;
             out.add(item);
         }
         return out;
+    }
+
+    @Transactional
+    public OsJobCardDto moverFase(Long osId, OsJobCardFaseRequest body, AuditoriaUsuarioContext ctx) {
+        OS os = requireOs(osId);
+        OS.getEntityManager().refresh(os, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
+        assertOsMutavel(os);
+        int assinaturas = contarAssinaturas(List.of(os.id)).getOrDefault(os.id, 0);
+        String fase = computeFaseJob(os, assinaturas, os.crsEmitidoEm != null);
+        if (body == null || body.faseDestino() == null || !fase.equals(body.faseOrigem())) {
+            throw new BadRequestException("A OS foi alterada. Atualize o quadro antes de mover novamente.");
+        }
+        if (!com.aerosuite.util.JobCardBoardRules.allowedTargets(fase, assinaturas).contains(body.faseDestino())) {
+            throw new BadRequestException("Transição indisponível. Verifique execução, pendências de peças e assinaturas no detalhe da OS.");
+        }
+        OsJobCardExecucaoRequest request = new OsJobCardExecucaoRequest();
+        String agora = java.time.LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        if ("EM_ANDAMENTO".equals(body.faseDestino())) request.inicioServico = agora;
+        if ("CONCLUIDO".equals(body.faseDestino())) request.fimServico = agora;
+        return atualizarExecucao(osId, request, ctx);
     }
 
     private Map<Long, Integer> contarAssinaturas(List<Long> osIds) {
@@ -270,6 +295,7 @@ public class OsJobCardService {
     public OsJobCardAssinaturaDto salvarAssinatura(
             Long osId, OsJobCardAssinaturaRequest body, AuditoriaUsuarioContext ctx) {
         OS os = requireOs(osId);
+        OS.getEntityManager().refresh(os, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
         assertOsMutavel(os);
         conformidadeEnforcement.assertOperacaoOsConformidade(
                 os.idOs,
@@ -297,6 +323,9 @@ public class OsJobCardService {
         OsJobCardAssinatura row =
                 OsJobCardAssinatura.find("tenantId = ?1 and osId = ?2 and papel = ?3", tid, osId, papel)
                         .firstResult();
+        com.aerosuite.util.JobCardSignatureRules.assertReplacementAllowed(
+                row != null && row.assinaturaPng != null && row.assinaturaPng.length > 0,
+                body.substituir, row != null ? row.assinaturaSha256 : null, body.assinaturaAnteriorSha256);
         if (row == null) {
             row = new OsJobCardAssinatura();
             row.osId = osId;
@@ -381,6 +410,7 @@ public class OsJobCardService {
             dto.assinadoEm = row.assinadoEm != null ? row.assinadoEm.toString() : null;
             dto.usuarioNome = row.usuarioNome;
             dto.presente = row.assinaturaPng != null && row.assinaturaPng.length > 0;
+            dto.assinaturaPngBase64 = dto.presente ? Base64.getEncoder().encodeToString(row.assinaturaPng) : null;
             dto.assinaturaSha256 = row.assinaturaSha256;
             dto.assinaturaTimestampServer =
                     row.assinaturaTimestampServer != null ? row.assinaturaTimestampServer.toString() : null;

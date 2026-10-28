@@ -1426,20 +1426,6 @@ export class ConformidadePainelComponent implements OnInit, OnDestroy {
 
       {
 
-        id: 'nc',
-
-        route: '/conformidade/nao-conformidades',
-
-        primary: p.totalNcAbertas,
-
-        primaryLabelKey: 'conformidade.painel.nc.abertas',
-
-        highlight: p.totalNcAbertas > 0 ? 'warn' : 'none'
-
-      },
-
-      {
-
         id: 'asl',
 
         route: '/estoque/fornecedores',

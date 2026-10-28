@@ -1,0 +1,25 @@
+<div class="nrc-page">
+  <app-page-hero class="nrc-banner" variant="navy" titleIcon="pi-verified"
+    titleKey="nrc.title" subtitleKey="nrc.subtitle" [hasActions]="showOpen">
+    @if (showOpen) {
+      <a actions class="btn primary" routerLink="/nrc/nova" [queryParams]="{ osId: route.snapshot.queryParamMap.get('osId') }">
+        <i class="pi pi-plus" aria-hidden="true"></i>{{ 'nrc.nav.open' | translate }}
+      </a>
+    }
+  </app-page-hero>
+  <div class="nrc-content">
+  <nav class="nav" [attr.aria-label]="'nrc.nav' | translate">
+    @if (showList) {
+      <a routerLink="/nrc" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="pi pi-list"></i>{{ 'nrc.nav.list' | translate }}
+      </a>
+    }
+    @if (showDashboard) {
+      <a routerLink="/nrc/dashboard" routerLinkActive="active">
+        <i class="pi pi-chart-pie"></i>{{ 'nrc.nav.dashboard' | translate }}
+      </a>
+    }
+  </nav>
+  <router-outlet></router-outlet>
+  </div>
+</div>

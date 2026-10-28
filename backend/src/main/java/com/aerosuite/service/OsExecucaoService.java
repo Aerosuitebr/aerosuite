@@ -15,6 +15,7 @@ import java.util.*;
 
 @ApplicationScoped
 public class OsExecucaoService {
+    @Inject OperacaoProntidaoGuard operacaoProntidao;
     @Inject TenantDataAccess tenants;
     @Inject InternalUserContext user;
     @Inject OSMapper mapper;
@@ -62,7 +63,7 @@ public class OsExecucaoService {
         String atual = Objects.toString(os.statusExecucao, "NAO_INICIADA");
         String destino = transicao(atual, acao);
         LocalDateTime agora = LocalDateTime.now();
-        if (acao.equals("iniciar")) os.execucaoIniciadaEm = agora;
+        if (acao.equals("iniciar")) { operacaoProntidao.conferir(os.id, "EXECUCAO"); os.execucaoIniciadaEm = agora; }
         if (acao.equals("pausar")) os.execucaoPausadaEm = agora;
         if (acao.equals("retomar")) os.execucaoPausadaEm = null;
         if (acao.equals("finalizar")) os.execucaoFinalizadaEm = agora;

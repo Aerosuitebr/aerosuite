@@ -1,3 +1,4 @@
+import { SystemPageLayoutDirective } from '../../shared/page-hero/system-page-layout.directive';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
@@ -34,7 +35,7 @@ interface NavMenuItem {
   selector: 'app-estoque-layout',
   standalone: true,
   styleUrls: ['./estoque-page-hero-overrides.scss'],
-  imports: [
+  imports: [SystemPageLayoutDirective, 
     CommonModule,
     RouterModule,
     ButtonModule,
@@ -141,7 +142,7 @@ interface NavMenuItem {
       <!-- Conteúdo Principal -->
       <main class="estoque-content">
         <app-route-loading-bar></app-route-loading-bar>
-        <router-outlet></router-outlet>
+        <router-outlet systemPageLayout></router-outlet>
       </main>
 
       <!-- Footer do Módulo -->
