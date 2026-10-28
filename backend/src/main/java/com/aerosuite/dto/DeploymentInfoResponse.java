@@ -10,4 +10,7 @@ public class DeploymentInfoResponse {
     public String kind;
 
     public boolean showBanner;
+
+    /** Commit Git incorporado ao artefato pela esteira de publicação. */
+    public String commitSha;
 }

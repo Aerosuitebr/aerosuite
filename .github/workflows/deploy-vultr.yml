@@ -39,6 +39,7 @@ jobs:
 
       - name: Bundle repository
         run: |
+          git rev-parse HEAD > backend/src/main/resources/deployment-sha.txt
           tar -czf /tmp/aerosuite-repo.tgz \
             --exclude=./node_modules \
             --exclude=./frontend/node_modules \
