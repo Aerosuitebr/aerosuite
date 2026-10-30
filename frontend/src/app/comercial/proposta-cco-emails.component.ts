@@ -117,85 +117,67 @@ interface EmailItem extends PropostaCcoEmail {
       </header>
 
       <div class="board" [class.busy]="busy">
-        <section class="pane pane-source">
+        <section class="pane pane-source" [class.drop-ready]="dragTarget === 'disponivel'"
+                 (dragover)="onDragOver($event, 'disponivel')" (dragleave)="onDragLeave($event)" (drop)="onDropDisponiveis($event)">
           <div class="pane-head">
-            <div>
-              <h2>Usuários do sistema</h2>
-              <p>{{ filtradosDisponiveis().length }} disponíveis</p>
-            </div>
+            <div><h2>Usuários do sistema</h2><p>{{ filtradosDisponiveis().length }} disponíveis</p></div>
+            <button *ngIf="selectionFrom === 'disponivel' && selecionados.length > 1"
+                    type="button" class="cco-bulk-transfer" [disabled]="busy" (click)="moverSelecionados()"
+                    [attr.aria-label]="'Enviar todos os ' + selecionados.length + ' selecionados para a Lista CCo'">
+              Enviar {{ selecionados.length }} selecionados <span aria-hidden="true">→</span>
+            </button>
           </div>
           <div class="filters">
-            <span class="search-wrap">
-              <i class="pi pi-search"></i>
+            <span class="search-wrap"><i class="pi pi-search"></i>
               <input pInputText [(ngModel)]="busca" placeholder="Buscar nome, e-mail ou perfil..." />
             </span>
-            <p-dropdown
-              [(ngModel)]="perfilFiltro"
-              [options]="perfilOptions"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Todos os perfis"
-              [showClear]="true"
-              styleClass="perfil-dd">
-            </p-dropdown>
+            <p-dropdown [(ngModel)]="perfilFiltro" [options]="perfilOptions" optionLabel="label" optionValue="value"
+                        placeholder="Todos os perfis" [showClear]="true" styleClass="perfil-dd"></p-dropdown>
           </div>
-          <div class="list" (dragover)="onDragOver($event)" (drop)="onDropDisponiveis($event)">
-            <label class="row"
-                   *ngFor="let item of filtradosDisponiveis()"
-                   draggable="true"
-                   (dragstart)="onDragStart($event, item, 'disponivel')"
-                   [class.checked]="item.selected">
-              <input type="checkbox" [(ngModel)]="item.selected">
-              <div class="avatar">{{ iniciais(item.usuarioNome || item.email) }}</div>
-              <div class="meta">
-                <strong>{{ item.usuarioNome || item.email }}</strong>
-                <span>{{ item.email }}</span>
-              </div>
-              <em *ngIf="item.perfilNome">{{ item.perfilNome }}</em>
-            </label>
-            <div class="empty" *ngIf="filtradosDisponiveis().length === 0">
-              Nenhum e-mail nesta coluna
+          <div class="list">
+            <div class="row" *ngFor="let item of filtradosDisponiveis()" [draggable]="!busy"
+                 (dragstart)="onDragStart($event, item, 'disponivel')" (dragend)="onDragEnd()" [class.checked]="item.selected">
+              <label class="cco-row-content">
+                <input type="checkbox" [ngModel]="item.selected" (ngModelChange)="selecionar(item, 'disponivel', $event)" [disabled]="busy">
+                <div class="avatar">{{ iniciais(item.usuarioNome || item.email) }}</div>
+                <div class="meta"><strong>{{ item.usuarioNome || item.email }}</strong><span>{{ item.email }}</span></div>
+                <em *ngIf="item.perfilNome">{{ item.perfilNome }}</em>
+              </label>
+              <button *ngIf="item.selected" type="button" class="cco-row-transfer" [disabled]="busy" draggable="false"
+                      [attr.aria-label]="'Enviar ' + (item.usuarioNome || item.email) + ' para a Lista CCo'"
+                      title="Enviar este registro para a Lista CCo" (click)="moverItem(item, 'disponivel')">
+                <span aria-hidden="true">→</span>
+              </button>
             </div>
+            <div class="empty" *ngIf="filtradosDisponiveis().length === 0">Nenhum e-mail nesta coluna</div>
           </div>
         </section>
-
-        <div class="bridge">
-          <button pButton type="button" icon="pi pi-angle-right"
-                  class="p-button-rounded transfer"
-                  [disabled]="!temSelecao(disponiveis) || busy"
-                  pTooltip="Enviar para CCo"
-                  (click)="enviarSelecionados()"></button>
-          <button pButton type="button" icon="pi pi-angle-left"
-                  class="p-button-rounded p-button-outlined transfer"
-                  [disabled]="!temSelecao(cco) || busy"
-                  pTooltip="Retirar do CCo"
-                  (click)="retirarSelecionados()"></button>
-        </div>
-
-        <section class="pane pane-target">
+        <section class="pane pane-target" [class.drop-ready]="dragTarget === 'cco'"
+                 (dragover)="onDragOver($event, 'cco')" (dragleave)="onDragLeave($event)" (drop)="onDropCco($event)">
           <div class="pane-head">
-            <div>
-              <h2>Lista CCo</h2>
-              <p>Enviados em todas as propostas</p>
-            </div>
+            <div><h2>Lista CCo</h2><p>Enviados em todas as propostas</p></div>
+            <button *ngIf="selectionFrom === 'cco' && selecionados.length > 1"
+                    type="button" class="cco-bulk-transfer" [disabled]="busy" (click)="moverSelecionados()"
+                    [attr.aria-label]="'Retirar todos os ' + selecionados.length + ' selecionados da Lista CCo'">
+              <span aria-hidden="true">←</span> Retirar {{ selecionados.length }} selecionados
+            </button>
           </div>
-          <div class="list target-list" (dragover)="onDragOver($event)" (drop)="onDropCco($event)">
-            <label class="row"
-                   *ngFor="let item of cco"
-                   draggable="true"
-                   (dragstart)="onDragStart($event, item, 'cco')"
-                   [class.checked]="item.selected">
-              <input type="checkbox" [(ngModel)]="item.selected">
-              <div class="avatar target">{{ iniciais(item.usuarioNome || item.email) }}</div>
-              <div class="meta">
-                <strong>{{ item.usuarioNome || item.email }}</strong>
-                <span>{{ item.email }}</span>
-              </div>
-              <em *ngIf="item.perfilNome">{{ item.perfilNome }}</em>
-            </label>
-            <div class="empty" *ngIf="cco.length === 0">
-              Arraste e-mails para cá ou clique na seta
+          <div class="list target-list">
+            <div class="row" *ngFor="let item of cco" [draggable]="!busy"
+                 (dragstart)="onDragStart($event, item, 'cco')" (dragend)="onDragEnd()" [class.checked]="item.selected">
+              <label class="cco-row-content">
+                <input type="checkbox" [ngModel]="item.selected" (ngModelChange)="selecionar(item, 'cco', $event)" [disabled]="busy">
+                <div class="avatar target">{{ iniciais(item.usuarioNome || item.email) }}</div>
+                <div class="meta"><strong>{{ item.usuarioNome || item.email }}</strong><span>{{ item.email }}</span></div>
+                <em *ngIf="item.perfilNome">{{ item.perfilNome }}</em>
+              </label>
+              <button *ngIf="item.selected" type="button" class="cco-row-transfer" [disabled]="busy" draggable="false"
+                      [attr.aria-label]="'Retirar ' + (item.usuarioNome || item.email) + ' da Lista CCo'"
+                      title="Devolver este registro aos usuários disponíveis" (click)="moverItem(item, 'cco')">
+                <span aria-hidden="true">←</span>
+              </button>
             </div>
+            <div class="empty" *ngIf="cco.length === 0">Selecione um usuário e use a seta da linha ou arraste para cá.</div>
           </div>
         </section>
       </div>
@@ -529,7 +511,7 @@ interface EmailItem extends PropostaCcoEmail {
 
     .board {
       display: grid;
-      grid-template-columns: 1fr 72px 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
       align-items: stretch;
       min-height: 560px;
@@ -574,7 +556,7 @@ interface EmailItem extends PropostaCcoEmail {
     }
     .row {
       display: grid;
-      grid-template-columns: auto auto 1fr auto;
+      grid-template-columns: minmax(0, 1fr) auto;
       gap: 10px;
       align-items: center;
       padding: 10px 12px;
@@ -615,21 +597,31 @@ interface EmailItem extends PropostaCcoEmail {
       padding: 48px 16px;
       font-size: 14px;
     }
-    .bridge {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
+    .pane-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .cco-row-content { min-width: 0; display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 10px; align-items: center; cursor: pointer; }
+    .cco-row-transfer, .cco-bulk-transfer {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      border: 1px solid #0f766e; border-radius: 6px; background: #0f766e; color: #fff; cursor: pointer;
     }
-    :host ::ng-deep .transfer {
-      width: 46px;
-      height: 46px;
-    }
+    .cco-row-transfer { width: 38px; height: 38px; font: 700 26px/1 system-ui, sans-serif; opacity: 0; pointer-events: none; }
+    .row.checked:hover .cco-row-transfer, .row.checked:focus-within .cco-row-transfer { opacity: 1; pointer-events: auto; }
+    .pane-target .cco-row-transfer { grid-column: 1; grid-row: 1; }
+    .pane-target .cco-row-content { grid-column: 2; grid-row: 1; }
+    .pane-target .row { grid-template-columns: auto minmax(0, 1fr); }
+    .pane-target .row:not(.checked) .cco-row-content { grid-column: 1 / -1; }
+    .cco-bulk-transfer { min-height: 40px; padding: 8px 12px; font-size: 12px; font-weight: 600; }
+    .cco-bulk-transfer span { font-size: 24px; line-height: 1; }
+    .cco-row-transfer:hover, .cco-bulk-transfer:hover { background: #115e59; }
+    .cco-row-transfer:focus-visible, .cco-bulk-transfer:focus-visible { outline: 3px solid #0284c7; outline-offset: 3px; }
+    .cco-row-transfer:disabled, .cco-bulk-transfer:disabled { cursor: wait; opacity: .55; }
+    @media (hover: none) { .row.checked .cco-row-transfer { opacity: 1; pointer-events: auto; } }
+    .pane.drop-ready { outline: 3px solid #0f766e; outline-offset: -3px; background: #e5f7ef; }
     @media (max-width: 960px) {
       .hero-main { grid-template-columns: 1fr; }
       .board { grid-template-columns: 1fr; }
-      .bridge { flex-direction: row; padding: 8px 0; }
+      .pane-head { flex-wrap: wrap; }
+
+      .cco-row-transfer span, .cco-bulk-transfer span { transform: rotate(90deg); }
       .hero-topbar { flex-direction: column; align-items: flex-start; }
       .cco-page { padding: 16px; }
     }
@@ -646,7 +638,9 @@ export class PropostaCcoEmailsComponent implements OnInit {
   perfilOptions: { label: string; value: string }[] = [];
   busy = false;
   heroReady = false;
-  private dragItem: EmailItem | null = null;
+  selectionFrom: 'disponivel' | 'cco' | null = null;
+  dragTarget: 'disponivel' | 'cco' | null = null;
+  private dragItems: EmailItem[] = [];
   private dragFrom: 'disponivel' | 'cco' | null = null;
 
   get ccoPreview(): EmailItem[] {
@@ -661,16 +655,23 @@ export class PropostaCcoEmailsComponent implements OnInit {
   }
 
   recarregar() {
+    const previousSide = this.selectionFrom;
+    const selectedEmails = new Set(this.selecionados.map(item => item.email.toLowerCase()));
     this.busy = true;
     forkJoin({
       disponiveis: this.api.disponiveis(),
       cco: this.api.listar()
     }).subscribe({
       next: ({ disponiveis, cco }) => {
+        this.selectionFrom = null;
+        this.onDragEnd();
         this.disponiveis = this.ordenar(disponiveis || []);
         this.perfilOptions = [...new Set((disponiveis || []).map(i => i.perfilNome).filter((n): n is string => !!n))]
           .sort().map(nome => ({label:nome,value:nome}));
         this.cco = this.ordenar(cco || []);
+        const remaining = previousSide === 'disponivel' ? this.disponiveis : previousSide === 'cco' ? this.cco : [];
+        remaining.forEach(item => item.selected = selectedEmails.has(item.email.toLowerCase()));
+        this.selectionFrom = remaining.some(item => item.selected) ? previousSide : null;
         this.busy = false;
       },
       error: () => {
@@ -692,49 +693,81 @@ export class PropostaCcoEmailsComponent implements OnInit {
     });
   }
 
-  temSelecao(lista: EmailItem[]): boolean {
-    return lista.some(i => i.selected);
+  get selecionados(): EmailItem[] {
+    const lista = this.selectionFrom === 'disponivel' ? this.disponiveis : this.selectionFrom === 'cco' ? this.cco : [];
+    return lista.filter(item => item.selected);
   }
 
-  enviarSelecionados() {
-    const escolhidos = this.disponiveis.filter(i => i.selected);
-    this.adicionarVarios(escolhidos);
+  selecionar(item: EmailItem, from: 'disponivel' | 'cco', selected: boolean) {
+    if (this.busy) return;
+    const outraLista = from === 'disponivel' ? this.cco : this.disponiveis;
+    outraLista.forEach(outro => outro.selected = false);
+    item.selected = selected;
+    this.selectionFrom = from;
+    if (!this.selecionados.length) this.selectionFrom = null;
   }
 
-  retirarSelecionados() {
-    const escolhidos = this.cco.filter(i => i.selected);
-    this.removerVarios(escolhidos);
+  moverItem(item: EmailItem, from: 'disponivel' | 'cco') {
+    if (this.busy || !item.selected) return;
+    const source = from === 'disponivel' ? this.disponiveis : this.cco;
+    if (!source.includes(item)) return;
+    if (from === 'disponivel') this.adicionarVarios([item]);
+    else this.removerVarios([item]);
   }
+  moverSelecionados() {
+    if (this.busy) return;
+    if (this.selectionFrom === 'disponivel') this.enviarSelecionados();
+    else if (this.selectionFrom === 'cco') this.retirarSelecionados();
+  }
+
+  enviarSelecionados() { this.adicionarVarios(this.disponiveis.filter(item => item.selected)); }
+  retirarSelecionados() { this.removerVarios(this.cco.filter(item => item.selected)); }
 
   onDragStart(event: DragEvent, item: EmailItem, from: 'disponivel' | 'cco') {
-    this.dragItem = item;
+    if (this.busy) { event.preventDefault(); return; }
+    if (!item.selected) {
+      this.disponiveis.forEach(outro => outro.selected = false);
+      this.cco.forEach(outro => outro.selected = false);
+    }
+    this.selecionar(item, from, true);
     this.dragFrom = from;
-    event.dataTransfer?.setData('text/plain', item.email);
+    this.dragItems = [...this.selecionados];
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', this.dragItems.map(row => row.email).join('\n'));
+    }
   }
 
-  onDragOver(event: DragEvent) {
+  onDragOver(event: DragEvent, target: 'disponivel' | 'cco') {
+    if (this.busy || !this.dragFrom || this.dragFrom === target) return;
     event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+    this.dragTarget = target;
   }
+
+  onDragLeave(event: DragEvent) {
+    const pane = event.currentTarget as HTMLElement;
+    if (!event.relatedTarget || !pane.contains(event.relatedTarget as Node)) this.dragTarget = null;
+  }
+
+  onDragEnd() { this.dragItems = []; this.dragFrom = null; this.dragTarget = null; }
 
   onDropCco(event: DragEvent) {
     event.preventDefault();
-    if (this.dragFrom === 'disponivel' && this.dragItem) {
-      this.adicionarVarios([this.dragItem]);
-    }
-    this.dragItem = null;
-    this.dragFrom = null;
+    const items = this.dragFrom === 'disponivel' && !this.busy ? [...this.dragItems] : [];
+    this.onDragEnd();
+    this.adicionarVarios(items);
   }
 
   onDropDisponiveis(event: DragEvent) {
     event.preventDefault();
-    if (this.dragFrom === 'cco' && this.dragItem) {
-      this.removerVarios([this.dragItem]);
-    }
-    this.dragItem = null;
-    this.dragFrom = null;
+    const items = this.dragFrom === 'cco' && !this.busy ? [...this.dragItems] : [];
+    this.onDragEnd();
+    this.removerVarios(items);
   }
 
   private adicionarVarios(itens: EmailItem[]) {
+    if (this.busy) return;
     const unicos = this.dedupe(itens);
     if (unicos.length === 0) return;
     this.busy = true;
@@ -766,6 +799,7 @@ export class PropostaCcoEmailsComponent implements OnInit {
   }
 
   private removerVarios(itens: EmailItem[]) {
+    if (this.busy) return;
     const comId = itens.filter(i => i.id);
     if (comId.length === 0) return;
     this.busy = true;

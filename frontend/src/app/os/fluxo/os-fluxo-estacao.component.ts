@@ -557,8 +557,10 @@ function obterTerminalId(): string {
             <span *ngFor="let d of cod.split('')">{{ d }}</span>
           </div>
           <ng-template #parCarregando>
-            <div class="par-cod par-cod--load" *ngIf="!erroPareamento"><i class="pi pi-spin pi-spinner"></i></div>
+            <div class="par-cod par-cod--load" *ngIf="!erroPareamento && !pareamentoRecusado"><i class="pi pi-spin pi-spinner"></i></div>
           </ng-template>
+          <small class="est-erro" *ngIf="pareamentoRecusado"><i class="pi pi-times-circle"></i> {{ 'fluxo.estacoes.discovery.cancelledOnStation' | translate }}</small>
+          <button *ngIf="pareamentoRecusado" pButton type="button" class="par-retry" (click)="pedirOutroCodigo()" [label]="'fluxo.estacoes.discovery.requestAgain' | translate"></button>
           <div class="par-espera" *ngIf="pareamento?.codigo">
             <i class="pi pi-spin pi-spinner"></i> Aguardando o pareamento… a tela abre sozinha quando a máquina for vinculada.
           </div>
@@ -2361,7 +2363,10 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
     return this.maquinaBloqueada || !!this.pareadaNome;
   }
 
+  pareamentoRecusado = false;
+  pedirOutroCodigo(): void { this.iniciarPareamento(); }
   private iniciarPareamento(): void {
+    this.pareamentoRecusado = false;
     this.pararPareamento();
     this.solicitarPareamento();
     this.timerPareamento = setInterval(() => this.verificarPareamento(), 3000);
@@ -2390,7 +2395,7 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
   private verificarPareamento(): void {
     if (this.verificandoPareamento || this.pareadaNome) return;
     const p = this.pareamento;
-    if (p?.codigo) {
+    if (p?.codigo && !this.pareamentoRecusado) {
       const restante = p.segundosRestantes - (Date.now() - this.pareamentoRecebidoEm) / 1000;
       if (restante < 110) this.solicitarPareamento();
     }
@@ -2400,6 +2405,12 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
         this.verificandoPareamento = false;
         this.estacoes = r?.estacoes || this.estacoes;
         const est = r?.estacaoDesteTerminal ? this.estacoes.find(e => e.codigo === r.estacaoDesteTerminal) : null;
+        if (!est && this.pareamento?.codigo && r?.solicitacaoAberta === false) {
+          this.pareamento = null;
+          this.pareamentoRecusado = true;
+          this.pararPareamento();
+          return;
+        }
         if (!est || !this.timerPareamento) return;
         this.pararPareamento();
         this.pareamento = null;

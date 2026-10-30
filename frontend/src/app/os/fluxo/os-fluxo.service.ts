@@ -298,9 +298,12 @@ export interface FluxoEstacoes {
   estacoes: FluxoEstacao[];
   estacaoDesteTerminal?: string | null;
   maquinaDesteTerminal?: string | null;
+  solicitacaoAberta?: boolean;
 }
 
 export interface FluxoEstacaoGestao {
+  monitoradoDesde?: string | null;
+  semVinculoDesde?: string | null;
   codigo: string;
   nome: string;
   nomePadrao: string;
@@ -325,11 +328,14 @@ export interface FluxoMaquina {
 }
 
 export interface FluxoEstacoesGestao {
+  pendentes?: FluxoMaquinaPendente[];
   setores?: string[];
   estacoes: FluxoEstacaoGestao[];
   maquinas: FluxoMaquina[];
 }
 
+export interface FluxoMaquinaPendente { terminalId: string; usuarioNome?: string; userAgent?: string; ip?: string | null; ultimoAcesso?: string; expiraEm?: string; }
+export interface FluxoVinculoEvento { acao: string; terminalId: string; apelido?: string; estacaoAnterior?: string; estacaoNova?: string; responsavel?: string; ocorridoEm: string; }
 export interface FluxoPareamento {
   codigo: string | null;
   expiraEm: string | null;
@@ -417,6 +423,8 @@ export class OsFluxoService {
     return this.http.put<FluxoEstacoes>(`${this.base}/estacoes/vinculo`, { terminalId, estacaoCodigo });
   }
 
+  aprovarMaquina(terminalId: string,estacaoCodigo: string,apelido: string) { return this.http.post<FluxoEstacoesGestao>(`${this.base}/maquinas/${encodeURIComponent(terminalId)}/aprovar`,{estacaoCodigo,apelido}); }
+  historicoEstacao(codigo: string) { return this.http.get<FluxoVinculoEvento[]>(`${this.base}/estacoes/${encodeURIComponent(codigo)}/historico`); }
   gestaoEstacoes() {
     return this.http.get<FluxoEstacoesGestao>(`${this.base}/estacoes/gestao`);
   }
@@ -439,6 +447,10 @@ export class OsFluxoService {
 
   removerMaquina(terminalId: string) {
     return this.http.delete<FluxoEstacoesGestao>(`${this.base}/maquinas/${encodeURIComponent(terminalId)}`);
+  }
+
+  cancelarSolicitacao(terminalId: string) {
+    return this.http.delete<FluxoEstacoesGestao>(`${this.base}/maquinas/${encodeURIComponent(terminalId)}/solicitacao`);
   }
 
   solicitarPareamento(terminalId: string) {

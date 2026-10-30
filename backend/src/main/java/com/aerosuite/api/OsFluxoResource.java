@@ -28,7 +28,8 @@ public class OsFluxoResource {
     @GET @Path("/etapas") public Object etapas(){return service.etapas();}
     @PUT @Path("/etapas/{id}/meta") public Object meta(@PathParam("id")Long id,Meta body){return service.meta(id,body==null?null:body.metaMinutos());}
     @POST @Path("/bipar") @RequiresFuncionalidades(allOf={"OS_FLUXO_ESTACAO"})
-    public Response bipar(BiparRequest body){
+    public Response bipar(BiparRequest body, @Context HttpHeaders headers, @Context io.vertx.core.http.HttpServerRequest request){
+        if(body!=null) estacoes.anotarOrigem(body.terminalId, clientIp(headers, request), headers.getHeaderString("User-Agent"));
         try{return Response.ok(service.bipar(body)).build();}
         catch(WebApplicationException e){
             if(body!=null)service.registrarRejeicao(body,e.getMessage());
@@ -46,12 +47,15 @@ public class OsFluxoResource {
     @POST @Path("/os/{id}/estornar") public Object estornar(@PathParam("id")Long id,Motivo body){return service.estornar(id,body==null?null:body.motivo());}
     @POST @Path("/os/{id}/ajuste/simular") public Object simular(@PathParam("id")Long id,AjusteRequest body){return service.simular(id,body);}
     @POST @Path("/os/{id}/ajuste") public Object ajustar(@PathParam("id")Long id,AjusteRequest body){return service.ajustar(id,body);}
-    @GET @Path("/fila") public Object fila(@QueryParam("etapaIds")String ids,@QueryParam("limite")@DefaultValue("60")int limite,@QueryParam("terminal")String terminal){
+    @GET @Path("/fila") public Object fila(@QueryParam("etapaIds")String ids,@QueryParam("limite")@DefaultValue("60")int limite,@QueryParam("terminal")String terminal,@Context HttpHeaders headers,@Context io.vertx.core.http.HttpServerRequest request){
         Set<Long> etapas=new HashSet<>();
         if(ids!=null&&!ids.isBlank())try{for(String id:ids.split(","))etapas.add(Long.valueOf(id.trim()));}catch(NumberFormatException e){throw new BadRequestException("Etapas inválidas.");}
+        estacoes.registrarPresenca(terminal, clientIp(headers, request), headers.getHeaderString("User-Agent"));
         return service.fila(etapas,limite,terminal);
     }
-    @GET @Path("/estacoes") public Object estacoes(@QueryParam("terminal")String terminal){return estacoes.listar(terminal);}
+    @GET @Path("/estacoes") public Object estacoes(@QueryParam("terminal")String terminal,@Context HttpHeaders headers,@Context io.vertx.core.http.HttpServerRequest request){return estacoes.listar(terminal,clientIp(headers,request),headers.getHeaderString("User-Agent"));}
+    @GET @Path("/estacoes/{codigo}/historico") public Object historicoEstacao(@PathParam("codigo")String codigo){return estacoes.historico(codigo);}
+    @POST @Path("/maquinas/{id}/aprovar") public Object aprovarMaquina(@PathParam("id")String id,Terminal body){if(body==null)throw new BadRequestException();return estacoes.aprovar(id,body.estacaoCodigo(),body.apelido());}
     @GET @Path("/estacoes/gestao") public Object gestao(){return estacoes.gestaoEstacoes();}
     @POST @Path("/estacoes") public Object criarEstacao(NovaEstacao body){if(body==null)throw new BadRequestException();return estacoes.criar(body.nome(),body.setor());}
     @DELETE @Path("/estacoes/{codigo}") public Object excluirEstacao(@PathParam("codigo")String codigo){return estacoes.excluirEstacao(codigo);}
@@ -59,7 +63,16 @@ public class OsFluxoResource {
     @PUT @Path("/estacoes/{codigo}/nome") public Object renomear(@PathParam("codigo")String codigo,Nome body){if(body==null)throw new BadRequestException();return estacoes.renomear(codigo,body.nome());}
     @PUT @Path("/maquinas/{id}") public Object atualizar(@PathParam("id")String id,Terminal body){if(body==null)throw new BadRequestException();return estacoes.atualizar(id,body.estacaoCodigo(),body.apelido());}
     @DELETE @Path("/maquinas/{id}") public Object remover(@PathParam("id")String id){return estacoes.remover(id);}
-    @POST @Path("/estacoes/pareamento") public Object solicitar(Terminal body,@Context HttpHeaders headers){if(body==null)throw new BadRequestException();return estacoes.solicitar(body.terminalId(),null,headers.getHeaderString("User-Agent"));}
+    @DELETE @Path("/maquinas/{id}/solicitacao") public Object cancelarSolicitacao(@PathParam("id")String id){return estacoes.cancelarSolicitacao(id);}
+    @POST @Path("/estacoes/pareamento") public Object solicitar(Terminal body,@Context HttpHeaders headers,@Context io.vertx.core.http.HttpServerRequest request){if(body==null)throw new BadRequestException();return estacoes.solicitar(body.terminalId(),clientIp(headers,request),headers.getHeaderString("User-Agent"));}
+    private static String clientIp(HttpHeaders headers, io.vertx.core.http.HttpServerRequest request) {
+        String ip = headers == null ? null : headers.getHeaderString("X-Forwarded-For");
+        if (ip == null || ip.isBlank()) ip = headers == null ? null : headers.getHeaderString("X-Real-IP");
+        if (ip != null && ip.contains(",")) ip = ip.split(",")[0].trim();
+        if ((ip == null || ip.isBlank()) && request != null && request.remoteAddress() != null) ip = request.remoteAddress().host();
+        if ("::1".equals(ip) || "0:0:0:0:0:0:0:1".equals(ip)) ip = "127.0.0.1";
+        return ip == null || ip.isBlank() ? null : ip;
+    }
     @GET @Path("/estacoes/pareamento/{codigo}") public Object consultar(@PathParam("codigo")String codigo){return estacoes.consultar(codigo);}
     @POST @Path("/estacoes/pareamento/{codigo}") public Object concluir(@PathParam("codigo")String codigo,Terminal body){if(body==null)throw new BadRequestException();return estacoes.concluir(codigo,body.estacaoCodigo(),body.apelido());}
 }
