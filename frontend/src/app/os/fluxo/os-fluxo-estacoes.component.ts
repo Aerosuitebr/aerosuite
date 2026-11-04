@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToastModule } from 'primeng/toast';
@@ -26,7 +27,7 @@ type NivelEstacao = 'linked' | 'stale' | 'fault' | 'fresh' | 'watch' | 'hour' | 
 @Component({
   standalone: true,
   selector: 'app-os-fluxo-estacoes',
-  imports: [CommonModule, FormsModule, RouterLink, ButtonModule, DialogModule, DropdownModule, InputTextModule, TooltipModule, ToastModule, MenuModule, TranslatePipe],
+  imports: [CommonModule, FormsModule, RouterLink, ButtonModule, DialogModule, DropdownModule, MultiSelectModule, InputTextModule, TooltipModule, ToastModule, MenuModule, TranslatePipe],
   providers: [MessageService],
   styleUrls: ['./fluxo-shared.css', './os-fluxo-estacoes.component.css'],
   template: `
@@ -440,19 +441,21 @@ type NivelEstacao = 'linked' | 'stale' | 'fault' | 'fresh' | 'watch' | 'hour' | 
 
     <p-dialog styleClass="ge-dialog ge-drawer" [(visible)]="mostrarEstacao" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body"
               [closable]="!salvandoEstacao" [closeOnEscape]="!salvandoEstacao" [header]="estacaoEmEdicao ? ('fluxo.estacoes.editStation' | translate) : ('fluxo.estacoes.newStation' | translate)" [style]="{ width: '640px', maxWidth: '95vw' }">
-      <div class="gp"><section class="ge-drawer-context" *ngIf="estacaoEmEdicao as e"><h3>Monitoramento do vínculo</h3><p *ngIf="!e.maquinas">Sem vínculo há {{ tempoSemVinculo(e) }}. Alerta crítico a partir de 24 horas.</p><p *ngIf="e.monitoradoDesde">Histórico acompanhado desde {{ e.monitoradoDesde|date:'dd/MM/yyyy HH:mm' }}. Períodos anteriores não foram reconstruídos.</p><h3>Etapas atendidas</h3><ol><li *ngFor="let etapa of e.etapas">{{ etapa }}</li></ol><p>As etapas seguem o setor cadastrado da estação.</p><h3>Máquinas vinculadas</h3><div *ngFor="let m of maquinasDa(e.codigo)"><button type="button" class="ge-text-btn" (click)="abrirMaquina(m)">{{ m.apelido || 'Sem nome' }}</button><p>{{ m.ativa?'Vínculo ativo':'Vínculo inativo' }} · {{ 'fluxo.estacoes.col.ip' | translate }}: {{ m.ip || ('fluxo.estacoes.ipMissing' | translate) }} · Último acesso: {{ m.ultimoAcesso?(m.ultimoAcesso|date:'dd/MM/yyyy HH:mm'):'Não informado' }}</p></div><button type="button" class="ge-fast-pair" (click)="abrirPareamento(e.codigo)">Parear máquina por código</button><h3>Histórico de vínculos (últimos 100 eventos)</h3><p *ngIf="carregandoHistorico">Carregando…</p><p *ngIf="erroHistorico" role="alert">{{ erroHistorico }}</p><p *ngIf="!carregandoHistorico && !erroHistorico && !eventosVinculo.length">Nenhum evento registrado desde o início do monitoramento.</p><ol class="ge-history"><li *ngFor="let evento of eventosVinculo"><strong>{{ evento.acao }} · {{ evento.apelido || evento.terminalId }}</strong><span>{{ evento.estacaoAnterior || 'Sem vínculo' }} → {{ evento.estacaoNova || 'Sem vínculo' }}</span><span>{{ evento.responsavel }} · {{ evento.ocorridoEm|date:'dd/MM/yyyy HH:mm:ss' }}</span></li></ol></section><label class="ge-label" for="ge-est-nome">{{ 'fluxo.estacoes.field.name' | translate }}</label>
+      <div class="gp"><section class="ge-drawer-context" *ngIf="estacaoEmEdicao as e"><h3>Monitoramento do vínculo</h3><p *ngIf="!e.maquinas">Sem vínculo há {{ tempoSemVinculo(e) }}. Alerta crítico a partir de 24 horas.</p><p *ngIf="e.monitoradoDesde">Histórico acompanhado desde {{ e.monitoradoDesde|date:'dd/MM/yyyy HH:mm' }}. Períodos anteriores não foram reconstruídos.</p><h3>Etapas atendidas</h3><ol><li *ngFor="let etapa of e.etapas">{{ etapa }}</li></ol><p>As etapas são definidas no cadastro da estação.</p><h3>Máquinas vinculadas</h3><div *ngFor="let m of maquinasDa(e.codigo)"><button type="button" class="ge-text-btn" (click)="abrirMaquina(m)">{{ m.apelido || 'Sem nome' }}</button><p>{{ m.ativa?'Vínculo ativo':'Vínculo inativo' }} · {{ 'fluxo.estacoes.col.ip' | translate }}: {{ m.ip || ('fluxo.estacoes.ipMissing' | translate) }} · Último acesso: {{ m.ultimoAcesso?(m.ultimoAcesso|date:'dd/MM/yyyy HH:mm'):'Não informado' }}</p></div><button type="button" class="ge-fast-pair" (click)="abrirPareamento(e.codigo)">Parear máquina por código</button><h3>Histórico de vínculos (últimos 100 eventos)</h3><p *ngIf="carregandoHistorico">Carregando…</p><p *ngIf="erroHistorico" role="alert">{{ erroHistorico }}</p><p *ngIf="!carregandoHistorico && !erroHistorico && !eventosVinculo.length">Nenhum evento registrado desde o início do monitoramento.</p><ol class="ge-history"><li *ngFor="let evento of eventosVinculo"><strong>{{ evento.acao }} · {{ evento.apelido || evento.terminalId }}</strong><span>{{ evento.estacaoAnterior || 'Sem vínculo' }} → {{ evento.estacaoNova || 'Sem vínculo' }}</span><span>{{ evento.responsavel }} · {{ evento.ocorridoEm|date:'dd/MM/yyyy HH:mm:ss' }}</span></li></ol></section><label class="ge-label" for="ge-est-nome">{{ 'fluxo.estacoes.field.name' | translate }}</label>
         <input pInputText id="ge-est-nome" [(ngModel)]="estacaoNome" maxlength="120" [placeholder]="'fluxo.estacoes.field.nameExample' | translate" [disabled]="salvandoEstacao" />
         <ng-container *ngIf="!estacaoEmEdicao">
           <label class="ge-label" for="ge-est-setor">{{ 'fluxo.estacoes.field.section' | translate }}</label>
-          <p-dropdown inputId="ge-est-setor" [options]="opcoesSetor" [(ngModel)]="estacaoSetor" appendTo="body" [style]="{ width: '100%' }" [placeholder]="'fluxo.estacoes.field.sectionPlaceholder' | translate" [disabled]="salvandoEstacao"></p-dropdown>
-          <small class="gp-opc">{{ 'fluxo.estacoes.field.sectionHelp' | translate }}</small>
+          <p-dropdown inputId="ge-est-setor" [options]="opcoesSetor" [(ngModel)]="estacaoSetor" (ngModelChange)="estacaoEtapaIds = []" appendTo="body" [style]="{ width: '100%' }" [placeholder]="'fluxo.estacoes.field.sectionPlaceholder' | translate" [disabled]="salvandoEstacao"></p-dropdown>
+          <label class="ge-label" for="ge-est-etapas">{{ 'fluxo.estacoes.field.stages' | translate }}</label>
+          <p-multiSelect inputId="ge-est-etapas" [options]="etapasDoSetor" [(ngModel)]="estacaoEtapaIds" optionLabel="nome" optionValue="id" appendTo="body" display="chip" [style]="{ width: '100%' }" [placeholder]="'fluxo.estacoes.field.stagesPlaceholder' | translate" [disabled]="salvandoEstacao || !estacaoSetor"></p-multiSelect>
+          <small class="gp-opc">{{ 'fluxo.estacoes.field.stagesHelp' | translate }}</small>
         </ng-container>
         <p class="ge-dlg-txt fx-muted" *ngIf="estacaoEmEdicao">{{ 'fluxo.estacoes.editKeep' | translate:{ name: estacaoEmEdicao.setor || '' } }}</p>
         <small class="gp-erro" *ngIf="erroEstacao" role="alert">{{ erroEstacao }}</small>
       </div>
       <ng-template pTemplate="footer">
         <button pButton type="button" [label]="'fluxo.estacoes.cancel' | translate" class="p-button-text" [disabled]="salvandoEstacao" (click)="mostrarEstacao = false"></button>
-        <button pButton type="button" [label]="estacaoEmEdicao ? ('fluxo.estacoes.saveChanges' | translate) : ('fluxo.estacoes.create' | translate)" icon="pi pi-check" [loading]="salvandoEstacao" [disabled]="!estacaoNome.trim() || (!estacaoEmEdicao && !estacaoSetor)" (click)="salvarEstacao()"></button>
+        <button pButton type="button" [label]="estacaoEmEdicao ? ('fluxo.estacoes.saveChanges' | translate) : ('fluxo.estacoes.create' | translate)" icon="pi pi-check" [loading]="salvandoEstacao" [disabled]="!estacaoNome.trim() || (!estacaoEmEdicao && (!estacaoSetor || !estacaoEtapaIds.length))" (click)="salvarEstacao()"></button>
       </ng-template>
     </p-dialog>
 
@@ -746,6 +749,8 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
   estacaoEmEdicao: FluxoEstacaoGestao | null = null;
   estacaoNome = '';
   estacaoSetor: string | null = null;
+  estacaoEtapaIds: number[] = [];
+  get etapasDoSetor() { return (this.dados?.etapasDisponiveis || []).filter(e => e.setor === this.estacaoSetor); }
   opcoesSetor: string[] = [];
   salvandoEstacao = false;
   erroEstacao = '';
@@ -963,6 +968,7 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
     this.estacaoEmEdicao = e || null;
     this.estacaoNome = e?.nome || '';
     this.estacaoSetor = e?.setor || null;
+    this.estacaoEtapaIds = [];
     this.erroEstacao = '';
     this.mostrarEstacao = true;
   }
@@ -1012,12 +1018,12 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
 
   salvarEstacao(): void {
     const nome = this.estacaoNome.trim();
-    if (this.salvandoEstacao || !nome || (!this.estacaoEmEdicao && !this.estacaoSetor)) return;
+    if (this.salvandoEstacao || !nome || (!this.estacaoEmEdicao && (!this.estacaoSetor || !this.estacaoEtapaIds.length))) return;
     this.salvandoEstacao = true;
     this.erroEstacao = '';
     const requisicao = this.estacaoEmEdicao
       ? this.api.renomearEstacao(this.estacaoEmEdicao.codigo, nome)
-      : this.api.criarEstacao(nome, this.estacaoSetor!);
+      : this.api.criarEstacao(nome, this.estacaoSetor!, this.estacaoEtapaIds);
     requisicao.subscribe({
       next: d => {
         this.salvandoEstacao = false;

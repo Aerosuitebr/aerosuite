@@ -36,7 +36,8 @@ public class OsFluxoEstacaoService {
         for(OsFluxoEstacaoNome e:configuradas) {
             if(Boolean.FALSE.equals(e.ativa)) {list.removeIf(s->s.codigo.equals(e.codigo));continue;}
             if(e.setor!=null&&setores.containsKey(e.setor)) {
-                List<OsFluxoEtapa> etapas=setores.get(e.setor);
+                List<OsFluxoEtapa> etapas=setores.get(e.setor).stream().filter(et->e.etapaIds==null||Arrays.asList(e.etapaIds.split(",")).contains(et.id.toString())).toList();
+                if(etapas.isEmpty()) continue;
                 list.add(new Estacao(e.codigo,e.nome,e.setor,++ordem,etapas.get(0).cor,etapas.stream().map(et->et.id).toList()));
             }
         }
@@ -68,7 +69,8 @@ public class OsFluxoEstacaoService {
         if(t==null||!Boolean.TRUE.equals(t.ativa)||t.estacaoCodigo==null) return null;
         return estacao(t.estacaoCodigo).setor;
     }
-    public void exigirEtapa(String terminal,String setor) {if(!atende(terminal,setor))throw new ForbiddenException("Etapa não atendida por esta estação.");}
+    public List<Long> etapasAtendidas(String terminal) {OsFluxoTerminal t=terminal(terminal);return t!=null&&Boolean.TRUE.equals(t.ativa)&&t.estacaoCodigo!=null?estacao(t.estacaoCodigo).etapas:List.of();}
+    public void exigirEtapa(String terminal,Long etapaId) {if(!etapasAtendidas(terminal).contains(etapaId))throw new ForbiddenException("Etapa não atendida por esta estação.");}
     @Transactional
     public Map<String,Object> listar(String terminalId) { return listar(terminalId, null, null); }
     @Transactional
@@ -89,7 +91,7 @@ public class OsFluxoEstacaoService {
     @Transactional
     public Map<String,Object> gestaoEstacoes() {
         gestao();catalogo().forEach(e->monitor(e.codigo));List<OsFluxoTerminal> ts=OsFluxoTerminal.list("ativa = true order by estacaoCodigo, apelido");
-        return map("setores",fluxo.etapas().stream().map(e->e.setor).distinct().toList(),"estacoes",catalogo().stream().map(e->map("codigo",e.codigo,"nome",nome(e),"nomePadrao",e.nome,"nomePersonalizado",!nome(e).equals(e.nome),
+        return map("etapasDisponiveis",fluxo.etapas().stream().map(et->map("id",et.id,"nome",et.nome,"setor",et.setor)).toList(),"setores",fluxo.etapas().stream().map(e->e.setor).distinct().toList(),"estacoes",catalogo().stream().map(e->map("codigo",e.codigo,"nome",nome(e),"nomePadrao",e.nome,"nomePersonalizado",!nome(e).equals(e.nome),
                 "monitoradoDesde",monitor(e.codigo).monitoradoDesde,"semVinculoDesde",monitor(e.codigo).semVinculoDesde,"setor",e.setor,"cor",e.cor,"etapas",fluxo.etapas().stream().filter(et->e.etapas.contains(et.id)).map(et->et.nome).toList(),"maquinas",ts.stream().filter(t->e.codigo.equals(t.estacaoCodigo)).count())).toList(),
                 "pendentes",OsFluxoTerminal.<OsFluxoTerminal>list("ativa = false and expiraEm > ?1",LocalDateTime.now()).stream().map(t->map("terminalId",t.terminalId,"usuarioNome",t.usuarioNome,"userAgent",t.userAgent,"ip",t.ip,"ultimoAcesso",t.ultimoAcesso,"expiraEm",t.expiraEm)).toList(),"maquinas",ts.stream().map(t->map("terminalId",t.terminalId,"apelido",t.apelido,"estacaoCodigo",t.estacaoCodigo,"estacaoNome",nome(estacao(t.estacaoCodigo)),
                         "usuarioNome",t.usuarioNome,"ip",t.ip,"userAgent",t.userAgent,"vinculadoEm",t.vinculadoEm,"ultimoAcesso",t.ultimoAcesso,"ativa",t.ativa)).toList());
@@ -102,13 +104,20 @@ public class OsFluxoEstacaoService {
         if(e==null){e=new OsFluxoEstacaoNome();e.tenantId=tenants.currentTenantIdStr();e.codigo=codigo;e.persist();}e.nome=nome.trim();return gestaoEstacoes();
     }
     @Transactional
-    public Map<String,Object> criar(String nome,String setor) {
+    public Map<String,Object> criar(String nome,String setor,List<Long> etapaIds) {
         gestao();
         if(nome==null||nome.isBlank()||nome.trim().length()>120)throw new BadRequestException("Informe um nome de até 120 caracteres.");
         if(setor==null||fluxo.etapas().stream().noneMatch(e->setor.equals(e.setor)))throw new BadRequestException("Escolha um setor válido.");
+        List<Long> validas=validarEtapas(setor,etapaIds,fluxo.etapas());
         OsFluxoEstacaoNome e=new OsFluxoEstacaoNome();e.tenantId=tenants.currentTenantIdStr();
-        e.codigo="CUSTOM-"+UUID.randomUUID();e.nome=nome.trim();e.setor=setor;e.ativa=true;e.persist();
+        e.codigo="CUSTOM-"+UUID.randomUUID();e.nome=nome.trim();e.setor=setor;e.etapaIds=validas.stream().map(String::valueOf).collect(java.util.stream.Collectors.joining(","));e.ativa=true;e.persist();
         return gestaoEstacoes();
+    }
+    static List<Long> validarEtapas(String setor,List<Long> ids,List<OsFluxoEtapa> catalogo) {
+        List<Long> permitidas=catalogo.stream().filter(e->Objects.equals(setor,e.setor)).map(e->e.id).toList();
+        if(ids==null) return permitidas;
+        if(ids.isEmpty()||!permitidas.containsAll(ids)) throw new BadRequestException("Selecione ao menos uma etapa válida do setor.");
+        return permitidas.stream().filter(ids::contains).toList();
     }
     @Transactional
     public Map<String,Object> excluirEstacao(String codigo) {

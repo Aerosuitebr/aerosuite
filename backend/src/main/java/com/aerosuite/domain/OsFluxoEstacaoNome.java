@@ -10,5 +10,6 @@ public class OsFluxoEstacaoNome extends PanacheEntityBase {
     public String codigo;
     public String nome;
     public String setor;
+    @Column(name="etapa_ids", columnDefinition="TEXT") public String etapaIds;
     public Boolean ativa = true;
 }

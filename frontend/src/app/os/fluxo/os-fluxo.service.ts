@@ -328,6 +328,7 @@ export interface FluxoMaquina {
 }
 
 export interface FluxoEstacoesGestao {
+  etapasDisponiveis?: { id: number; nome: string; setor: string }[];
   pendentes?: FluxoMaquinaPendente[];
   setores?: string[];
   estacoes: FluxoEstacaoGestao[];
@@ -433,8 +434,8 @@ export class OsFluxoService {
     return this.http.put<FluxoEstacoesGestao>(`${this.base}/estacoes/${encodeURIComponent(codigo)}/nome`, { nome });
   }
 
-  criarEstacao(nome: string, setor: string) {
-    return this.http.post<FluxoEstacoesGestao>(`${this.base}/estacoes`, { nome, setor });
+  criarEstacao(nome: string, setor: string, etapaIds: number[]) {
+    return this.http.post<FluxoEstacoesGestao>(`${this.base}/estacoes`, { nome, setor, etapaIds });
   }
 
   excluirEstacao(codigo: string) {

@@ -152,6 +152,9 @@ function dict(lang: 'pt' | 'en' | 'es' | 'fr'): TranslationDictionary {
     'fluxo.estacoes.field.nameExample': L('Ex.: Oficina 6', 'E.g. Shop 6', 'Ej.: Taller 6', 'Ex. : Atelier 6', lang),
     'fluxo.estacoes.field.section': L('Setor', 'Section', 'Sector', 'Secteur', lang),
     'fluxo.estacoes.field.sectionPlaceholder': L('Selecione o setor', 'Select the section', 'Seleccione el sector', 'Sélectionnez le secteur', lang),
+    'fluxo.estacoes.field.stages': L('Etapas atendidas', 'Covered stages', 'Etapas atendidas', 'Étapes couvertes', lang),
+    'fluxo.estacoes.field.stagesPlaceholder': L('Selecione as etapas', 'Select stages', 'Seleccione las etapas', 'Sélectionnez les étapes', lang),
+    'fluxo.estacoes.field.stagesHelp': L('Selecione uma ou mais etapas do setor que esta estação atende.', 'Select one or more stages covered by this station within the section.', 'Seleccione una o más etapas del sector atendidas por esta estación.', 'Sélectionnez une ou plusieurs étapes du secteur couvertes par ce poste.', lang),
     'fluxo.estacoes.field.sectionHelp': L(
       'A estação atenderá as etapas do setor escolhido. Depois de criar, use Parear máquina para vincular os computadores.',
       'The station will cover the stages of the chosen section. After creating it, use Pair machine to link computers.',

@@ -74,9 +74,21 @@ class OsFluxoServiceIT {
     private List<Map<String,Object>> catalogo(Map<String,Object> resposta) {
         return (List<Map<String,Object>>)resposta.get("estacoes");
     }
+    @Test @TestTransaction void estacaoRestringeAsEtapasSelecionadas() {
+        criar();
+        var etapas=fluxo.etapas();
+        var escolhida=etapas.get(0);
+        var criadas=catalogo(estacoes.criar("Estação restrita",escolhida.setor,List.of(escolhida.id)));
+        String codigo=(String)criadas.stream().filter(e->"Estação restrita".equals(e.get("nome"))).findFirst().orElseThrow().get("codigo");
+        estacoes.vincularEstacao("terminal-etapa-restrita",codigo);
+        assertEquals(List.of(escolhida.id),estacoes.etapasAtendidas("terminal-etapa-restrita"));
+        estacoes.exigirEtapa("terminal-etapa-restrita",escolhida.id);
+        for(var outra:etapas) if(!outra.id.equals(escolhida.id))
+            assertThrows(ForbiddenException.class,()->estacoes.exigirEtapa("terminal-etapa-restrita",outra.id));
+    }
     @Test @TestTransaction void estacaoPersonalizadaAtendeSetorERemoveVinculosSemApagarHistorico() {
         criar();
-        var criadas=catalogo(estacoes.criar("Bancada adicional","Recebimento"));
+        var criadas=catalogo(estacoes.criar("Bancada adicional","Recebimento",null));
         String codigo=(String)criadas.stream().filter(e->"Bancada adicional".equals(e.get("nome"))).findFirst().orElseThrow().get("codigo");
         estacoes.vincularEstacao("terminal-nova-estacao",codigo);
         assertTrue(estacoes.atende("terminal-nova-estacao","Recebimento"));
@@ -107,10 +119,10 @@ class OsFluxoServiceIT {
     }
     @Test @TestTransaction void cadastroDeEstacaoValidaDadosEPermissoes() {
         criar();fluxo.etapas();
-        assertThrows(BadRequestException.class,()->estacoes.criar(" ","Recebimento"));
-        assertThrows(BadRequestException.class,()->estacoes.criar("Bancada","Inexistente"));
+        assertThrows(BadRequestException.class,()->estacoes.criar(" ","Recebimento",null));
+        assertThrows(BadRequestException.class,()->estacoes.criar("Bancada","Inexistente",null));
         user.applyPermissionSnapshot("MECANICO",Set.of("OS_FLUXO_ESTACAO"));
-        assertThrows(ForbiddenException.class,()->estacoes.criar("Bancada","Recebimento"));
+        assertThrows(ForbiddenException.class,()->estacoes.criar("Bancada","Recebimento",null));
         assertThrows(ForbiddenException.class,()->estacoes.excluirEstacao("RECEBIMENTO-1"));
     }
 }

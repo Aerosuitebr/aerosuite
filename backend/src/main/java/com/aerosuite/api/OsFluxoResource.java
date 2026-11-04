@@ -20,7 +20,7 @@ public class OsFluxoResource {
     public record Motivo(String motivo) {}
     public record Terminal(String terminalId, String estacaoCodigo, String apelido) {}
     public record Nome(String nome) {}
-    public record NovaEstacao(String nome,String setor) {}
+    public record NovaEstacao(String nome,String setor,java.util.List<Long> etapaIds) {}
     private static LocalDate data(String value) {
         if(value==null||value.isBlank())return null;
         try{return LocalDate.parse(value);}catch(Exception e){throw new BadRequestException("Data inválida.");}
@@ -57,7 +57,7 @@ public class OsFluxoResource {
     @GET @Path("/estacoes/{codigo}/historico") public Object historicoEstacao(@PathParam("codigo")String codigo){return estacoes.historico(codigo);}
     @POST @Path("/maquinas/{id}/aprovar") public Object aprovarMaquina(@PathParam("id")String id,Terminal body){if(body==null)throw new BadRequestException();return estacoes.aprovar(id,body.estacaoCodigo(),body.apelido());}
     @GET @Path("/estacoes/gestao") public Object gestao(){return estacoes.gestaoEstacoes();}
-    @POST @Path("/estacoes") public Object criarEstacao(NovaEstacao body){if(body==null)throw new BadRequestException();return estacoes.criar(body.nome(),body.setor());}
+    @POST @Path("/estacoes") public Object criarEstacao(NovaEstacao body){if(body==null)throw new BadRequestException();return estacoes.criar(body.nome(),body.setor(),body.etapaIds());}
     @DELETE @Path("/estacoes/{codigo}") public Object excluirEstacao(@PathParam("codigo")String codigo){return estacoes.excluirEstacao(codigo);}
     @PUT @Path("/estacoes/vinculo") public Object vincular(Terminal body){if(body==null)throw new BadRequestException();return estacoes.vincularEstacao(body.terminalId(),body.estacaoCodigo());}
     @PUT @Path("/estacoes/{codigo}/nome") public Object renomear(@PathParam("codigo")String codigo,Nome body){if(body==null)throw new BadRequestException();return estacoes.renomear(codigo,body.nome());}

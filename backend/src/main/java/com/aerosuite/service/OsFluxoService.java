@@ -118,7 +118,7 @@ public class OsFluxoService {
                     .findFirst().orElseThrow(()->new BadRequestException("Código de etapa inválido."));
         } else e=r!=null?etapa(r.etapaId):proxima(rs);
         if(e==null) throw new BadRequestException("Fluxo já concluído.");
-        estacoes.exigirEtapa(req.terminalId,e.setor);
+        estacoes.exigirEtapa(req.terminalId,e.id);
         String acao=Objects.toString(req.acao,"AUTO").toUpperCase(Locale.ROOT);
         if(acao.equals("AUTO")) acao=r!=null&&r.etapaId.equals(e.id)?"SAIDA":"ENTRADA";
         if(!Set.of("ENTRADA","SAIDA").contains(acao)) throw new BadRequestException("Ação inválida.");
@@ -240,13 +240,13 @@ public class OsFluxoService {
     }
     public List<Map<String,Object>> fila(Set<Long> ids,int limite,String terminal) {
         estacoes.exigirPareada(terminal);
-        String setor=estacoes.setorAtendido(terminal);
+        List<Long> atendidas=estacoes.etapasAtendidas(terminal);
         List<OsFluxoEtapa> catalogo=etapas();
         Map<Long,OsFluxoEtapa> porEtapa=new HashMap<>();
         Set<Long> elegiveis=new HashSet<>();
         for(OsFluxoEtapa e:catalogo) {
             porEtapa.put(e.id,e);
-            if(Objects.equals(e.setor,setor)&&(ids==null||ids.isEmpty()||ids.contains(e.id))) elegiveis.add(e.id);
+            if(atendidas.contains(e.id)&&(ids==null||ids.isEmpty()||ids.contains(e.id))) elegiveis.add(e.id);
         }
         int cap=Math.max(1,Math.min(200,limite));
         if(elegiveis.isEmpty()) return List.of();

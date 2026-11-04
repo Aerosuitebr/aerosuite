@@ -75,10 +75,22 @@ describe('Gestão de estações', () => {
     c.abrirEstacao();
     c.estacaoNome = ' Nova bancada ';
     c.estacaoSetor = 'Oficina';
+    c.estacaoEtapaIds = [3];
     c.salvarEstacao();
-    expect(c.api.criarEstacao).toHaveBeenCalledWith('Nova bancada', 'Oficina');
+    expect(c.api.criarEstacao).toHaveBeenCalledWith('Nova bancada', 'Oficina', [3]);
     expect(c.mostrarEstacao).toBe(false);
     expect(c.opcoesSetor).toEqual(['Oficina', 'Recebimento']);
+  });
+
+  it('exige selecionar etapas antes de criar e filtra pelo setor', () => {
+    const c = tela();
+    c.dados = { ...dados, etapasDisponiveis: [{ id: 3, nome: 'Montagem', setor: 'Oficina' }, { id: 1, nome: 'Entrada', setor: 'Recebimento' }] };
+    c.abrirEstacao();
+    c.estacaoNome = 'Bancada';
+    c.estacaoSetor = 'Oficina';
+    expect(c.etapasDoSetor.map((e: any) => e.id)).toEqual([3]);
+    c.salvarEstacao();
+    expect(c.api.criarEstacao).not.toHaveBeenCalled();
   });
 
   it('isola o rascunho de edição e salva apenas ao confirmar', () => {
