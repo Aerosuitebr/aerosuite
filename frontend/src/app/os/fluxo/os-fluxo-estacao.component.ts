@@ -2183,6 +2183,7 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
   /** Em etapa: a própria etapa (para saída). Aguardando: a próxima. Fora do fluxo: a primeira. */
   private etapaSugerida(s: FluxoSugestaoOs): FluxoEtapa | null {
     if (!this.etapas.length || s.os.fluxoSituacao === 'CONCLUIDO') return null;
+    if (s.etapa) return this.etapas.find(e => e.id === s.etapa!.id) || null;
     const atual = s.os.fluxoEtapaId != null ? this.etapas.find(e => e.id === s.os.fluxoEtapaId) : null;
     if (!atual) return this.etapas[0];
     if (s.os.fluxoSituacao === 'EM_ETAPA') return atual;

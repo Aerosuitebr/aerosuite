@@ -1,0 +1,53 @@
+::ng-deep .flow-editor.p-dialog{max-height:calc(100dvh - 24px);border-radius:20px;overflow:hidden;background:#f8fafc;color:#334155}
+::ng-deep .flow-editor .p-dialog-header{background:linear-gradient(120deg,#0f172a,#0e7490);color:white;flex:0 0 auto}
+::ng-deep .flow-editor .p-dialog-header-icon{color:white}
+::ng-deep .flow-editor .p-dialog-content{padding:24px;min-height:0;overflow-y:auto;overscroll-behavior-y:contain;background:#f8fafc;color:#334155}
+::ng-deep .flow-editor .p-dialog-footer{flex:0 0 auto;border-top:1px solid #e2e8f0;padding:16px 24px;background:white}
+.flow-editor-intro>span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#0369a1;font-weight:700}
+.flow-editor-intro h3{margin:10px 0;font-size:24px;color:#0f172a}
+.flow-editor-intro p,.flow-impact p{font-size:13px;line-height:1.7;margin:0}
+.flow-impact{display:flex;gap:12px;background:#e0f2fe;border:1px solid #bae6fd;border-radius:12px;padding:14px;margin:20px 0;color:#075985}
+.flow-impact>i{padding-top:4px}
+.flow-toolbar,.flow-row-top,.flow-row-actions,.flow-footer,.flow-removed>div{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.flow-toolbar{margin-bottom:12px;font-size:13px}
+.flow-list{display:grid;gap:12px}
+.flow-row{background:#fff;border:1px solid #dbe3ed;border-left:4px solid var(--stage-color);border-radius:12px;padding:12px 16px;min-width:0}
+.flow-row-top{justify-content:flex-start;margin-bottom:12px}
+.flow-drag{cursor:grab;touch-action:none}
+.flow-drag:active{cursor:grabbing}
+.flow-position{display:grid;place-items:center;width:28px;height:28px;flex-shrink:0;background:#e0f2fe;color:#0369a1;border-radius:8px;font-size:12px;font-weight:800}
+.flow-row-name{flex:1;font-size:13px;font-weight:700;overflow-wrap:anywhere}
+.flow-new{color:#047857;background:#d1fae5;font-size:10px;border-radius:6px;padding:4px;white-space:nowrap}
+.flow-row button,.flow-link{border:0;background:none;color:#0369a1;cursor:pointer}
+.flow-row-top button{padding:8px;border-radius:8px;min-width:32px;min-height:32px}
+.flow-row-top button:hover{background:#f1f5f9}
+.flow-row-top button.flow-delete{color:#be123c}
+.flow-row-actions{gap:2px}
+.flow-fields{display:grid;grid-template-columns:minmax(160px,2fr) minmax(120px,1.3fr) 60px 110px;gap:12px}
+.flow-fields>div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.flow-fields label{font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#64748b}
+.flow-fields input,.flow-fields select{width:100%;height:40px;border:1px solid #cbd5e1;border-radius:8px;padding:8px;font-size:13px;color:#334155;background:white}
+.flow-fields input[type=color]{padding:4px}
+.flow-insert{display:flex;align-items:center;gap:7px;margin-top:12px;font-size:11px;padding:5px}
+.flow-removed{border:1px solid #fecdd3;background:#fff1f2;border-radius:12px;padding:16px;margin-top:20px;font-size:13px}
+.flow-removed h4{margin:0 0 8px;color:#9f1239}
+.flow-removed p{font-size:12px;line-height:1.7}
+.flow-removed>div{border-top:1px solid #fecdd3;padding:9px 0}
+.flow-review{padding:8px 0;font-size:13px;line-height:1.7}
+.flow-review h3{color:#0f172a}
+.flow-review ol{padding-left:24px}
+.flow-review li{padding:8px;border-bottom:1px solid #e2e8f0}
+.flow-review li>span{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:10px}
+.flow-review li small{margin-left:12px;color:#64748b}
+.flow-delete-note,.flow-error{color:#9f1239;background:#fff1f2;border-radius:10px;padding:12px}
+.flow-error{font-size:13px;line-height:1.7;margin:12px 0}
+.flow-validation{font-size:12px;color:#92400e;line-height:1.7}
+.flow-footer>span{font-size:12px;color:#64748b;text-align:left}
+.flow-footer>div{display:flex;gap:8px}
+button:disabled{opacity:.4;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}
+::ng-deep .flow-row.cdk-drag-preview{box-shadow:0 12px 36px #0f172a33;font-family:inherit}
+.cdk-drag-placeholder{opacity:.25}
+.cdk-drag-animating{transition:transform 180ms ease}
+.cdk-drop-list-dragging .flow-row:not(.cdk-drag-placeholder){transition:transform 180ms ease}
+@media(max-width:700px){.flow-fields{grid-template-columns:1fr 1fr}.flow-row{padding:12px}.flow-row-name{font-size:12px}.flow-row-actions button{padding:6px}.flow-footer{align-items:stretch;flex-direction:column}.flow-footer>div{justify-content:flex-end;flex-wrap:wrap}::ng-deep .flow-editor .p-dialog-content{padding:16px}.flow-editor-intro h3{font-size:20px}}

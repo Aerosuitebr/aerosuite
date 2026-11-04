@@ -74,6 +74,48 @@ class OsFluxoServiceIT {
     private List<Map<String,Object>> catalogo(Map<String,Object> resposta) {
         return (List<Map<String,Object>>)resposta.get("estacoes");
     }
+    private OsFluxoRegistro passagem(OS os,OsFluxoEtapa etapa,int sequencia,boolean concluida) {
+        OsFluxoRegistro r=new OsFluxoRegistro();r.tenantId="1";r.osId=os.id;r.etapaId=etapa.id;r.sequencia=sequencia;
+        r.entradaEm=java.time.LocalDateTime.now().minusMinutes(10);if(concluida)r.saidaEm=java.time.LocalDateTime.now();r.persistAndFlush();return r;
+    }
+    private List<OsFluxoEstacaoService.EtapaEdicao> edicoes(List<OsFluxoEtapa> etapas) {
+        return etapas.stream().map(e->new OsFluxoEstacaoService.EtapaEdicao(e.id,e.nome,e.setor,e.cor,e.metaMinutos)).collect(java.util.stream.Collectors.toCollection(ArrayList::new));
+    }
+    @Test @TestTransaction void editaFluxoMantemHistoricoCodigosEConcluidas() {
+        OS andamento=criar();var etapas=fluxo.etapas();var primeira=etapas.get(0);
+        passagem(andamento,primeira,1,true);
+        OS concluida=new OS();concluida.idOs=918724;concluida.dtAbertura=LocalDate.now();concluida.clienteNome="Concluída";concluida.persistAndFlush();
+        int seq=0;for(var etapa:etapas)passagem(concluida,etapa,++seq,true);
+        String codigo=primeira.codigoBarrasEntrada;
+        var novos=edicoes(etapas);var removida=novos.remove(1);
+        novos.add(0,new OsFluxoEstacaoService.EtapaEdicao(null,"Etapa inserida","Oficina","#112233",15));
+        Collections.swap(novos,1,2);
+        novos.set(2,new OsFluxoEstacaoService.EtapaEdicao(primeira.id,"Recebimento revisado",primeira.setor,primeira.cor,null));
+        var resposta=estacoes.salvarFluxo(OsFluxoEstacaoService.versaoFluxo(etapas),novos);
+        assertNotNull(resposta.get("versaoFluxo"));assertEquals(codigo,primeira.codigoBarrasEntrada);
+        assertFalse(OsFluxoEtapa.<OsFluxoEtapa>findById(removida.id()).ativo);
+        assertEquals("CONCLUIDO",((Map<?,?>)fluxo.detalhe(concluida.id).get("os")).get("fluxoSituacao"));
+        assertEquals("Etapa inserida",((OsFluxoEtapa)fluxo.detalhe(andamento.id).get("proximaEtapa")).nome);
+        assertEquals(etapas.size(),((List<?>)fluxo.detalhe(concluida.id).get("registros")).size());
+        assertEquals(etapas.size(),((List<?>)fluxo.detalhe(concluida.id).get("etapas")).size());
+        assertEquals(etapas.size(),((Map<?,?>)fluxo.detalhe(concluida.id).get("resumo")).get("totalEtapas"));
+        assertEquals("Recebimento revisado",((List<Map<String,Object>>)fluxo.detalhe(andamento.id).get("registros")).get(0).get("etapaNome"));
+        assertTrue(catalogo(estacoes.gestaoEstacoes()).stream().anyMatch(e->"RECEBIMENTO-1".equals(e.get("codigo"))));
+    }
+    @Test @TestTransaction void bloqueiaExcluirEtapaAbertaEConflitoDeVersao() {
+        OS os=criar();var etapas=fluxo.etapas();passagem(os,etapas.get(0),1,false);
+        var novos=edicoes(etapas);novos.remove(0);
+        assertThrows(ClientErrorException.class,()->estacoes.salvarFluxo(OsFluxoEstacaoService.versaoFluxo(etapas),novos));
+        assertTrue(etapas.get(0).ativo);
+        assertThrows(ClientErrorException.class,()->estacoes.salvarFluxo("versao-antiga",edicoes(etapas)));
+    }
+    @Test @TestTransaction void rejeitaConfiguracaoInvalidaSemAlterarFluxo() {
+        criar();var etapas=fluxo.etapas();String versao=OsFluxoEstacaoService.versaoFluxo(etapas);
+        assertThrows(BadRequestException.class,()->estacoes.salvarFluxo(versao,List.of()));
+        var novos=edicoes(etapas);novos.add(novos.get(0));
+        assertThrows(BadRequestException.class,()->estacoes.salvarFluxo(versao,novos));
+        assertEquals(versao,OsFluxoEstacaoService.versaoFluxo(fluxo.etapas()));
+    }
     @Test @TestTransaction void gestaoCriaSetorEtapaEEditaEstacaoPadrao() {
         criar();
         var etapas=fluxo.etapas();

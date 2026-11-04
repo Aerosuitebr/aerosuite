@@ -24,13 +24,13 @@ public class OsFluxoEstacaoService {
     }
     private List<Estacao> catalogo() {
         List<OsFluxoEtapa> todasEtapas=fluxo.etapas();
-        Map<String,List<OsFluxoEtapa>> setores=new LinkedHashMap<>();todasEtapas.forEach(e->setores.computeIfAbsent(e.setor,k->new ArrayList<>()).add(e));
+        Map<String,List<OsFluxoEtapa>> setores=new LinkedHashMap<>();OsFluxoEtapa.<OsFluxoEtapa>list("order by ordem, id").forEach(e->setores.computeIfAbsent(e.setor,k->new ArrayList<>()).add(e));
         List<Estacao> list=new ArrayList<>();int ordem=0;
         for(var en:setores.entrySet()) {
             int quantidade="Oficina".equals(en.getKey())?5:1;
             for(int n=1;n<=quantidade;n++) {
                 String codigo=en.getKey().toUpperCase(Locale.ROOT).replaceAll("[^A-Z0-9]", "")+"-"+n;
-                list.add(new Estacao(codigo,en.getKey()+(quantidade>1?" "+n:""),en.getKey(),++ordem,en.getValue().get(0).cor,en.getValue().stream().map(e->e.id).toList()));
+                list.add(new Estacao(codigo,en.getKey()+(quantidade>1?" "+n:""),en.getKey(),++ordem,en.getValue().get(0).cor,en.getValue().stream().filter(e->Boolean.TRUE.equals(e.ativo)).map(e->e.id).toList()));
             }
         }
         List<OsFluxoEstacaoNome> configuradas=OsFluxoEstacaoNome.listAll();
@@ -39,7 +39,7 @@ public class OsFluxoEstacaoService {
             Estacao padrao=list.stream().filter(st->st.codigo.equals(e.codigo)).findFirst().orElse(null);
             String setor=e.setor!=null?e.setor:padrao==null?null:padrao.setor;
             if(e.etapaIds!=null||setores.containsKey(setor)) {
-                List<OsFluxoEtapa> etapas=e.etapaIds==null?setores.get(setor):todasEtapas.stream()
+                List<OsFluxoEtapa> etapas=e.etapaIds==null?setores.get(setor).stream().filter(et->Boolean.TRUE.equals(et.ativo)).toList():todasEtapas.stream()
                     .filter(et->Arrays.asList(e.etapaIds.split(",")).contains(et.id.toString())).toList();
                 list.removeIf(st->st.codigo.equals(e.codigo));
                 list.add(new Estacao(e.codigo,padrao==null?e.nome:padrao.nome,setor,padrao==null?++ordem:padrao.ordem,
@@ -96,7 +96,7 @@ public class OsFluxoEstacaoService {
     @Transactional
     public Map<String,Object> gestaoEstacoes() {
         gestao();catalogo().forEach(e->monitor(e.codigo));List<OsFluxoTerminal> ts=OsFluxoTerminal.list("ativa = true order by estacaoCodigo, apelido");
-        return map("etapasDisponiveis",fluxo.etapas().stream().map(et->map("id",et.id,"nome",et.nome,"setor",et.setor,"ordem",et.ordem,"cor",et.cor)).toList(),"setores",setores(),"estacoes",catalogo().stream().map(e->map("codigo",e.codigo,"nome",nome(e),"nomePadrao",e.nome,"nomePersonalizado",!nome(e).equals(e.nome),
+        return map("versaoFluxo",versaoFluxo(fluxo.etapas()),"etapasDisponiveis",fluxo.etapas().stream().map(et->map("id",et.id,"nome",et.nome,"setor",et.setor,"ordem",et.ordem,"cor",et.cor,"metaMinutos",et.metaMinutos)).toList(),"setores",setores(),"estacoes",catalogo().stream().map(e->map("codigo",e.codigo,"nome",nome(e),"nomePadrao",e.nome,"nomePersonalizado",!nome(e).equals(e.nome),
                 "monitoradoDesde",monitor(e.codigo).monitoradoDesde,"semVinculoDesde",monitor(e.codigo).semVinculoDesde,"setor",e.setor,"cor",e.cor,"etapaIds",e.etapas,"etapas",fluxo.etapas().stream().filter(et->e.etapas.contains(et.id)).map(et->et.nome).toList(),"maquinas",ts.stream().filter(t->e.codigo.equals(t.estacaoCodigo)).count())).toList(),
                 "pendentes",OsFluxoTerminal.<OsFluxoTerminal>list("ativa = false and expiraEm > ?1",LocalDateTime.now()).stream().map(t->map("terminalId",t.terminalId,"usuarioNome",t.usuarioNome,"userAgent",t.userAgent,"ip",t.ip,"ultimoAcesso",t.ultimoAcesso,"expiraEm",t.expiraEm)).toList(),"maquinas",ts.stream().map(t->map("terminalId",t.terminalId,"apelido",t.apelido,"estacaoCodigo",t.estacaoCodigo,"estacaoNome",nome(estacao(t.estacaoCodigo)),
                         "usuarioNome",t.usuarioNome,"ip",t.ip,"userAgent",t.userAgent,"vinculadoEm",t.vinculadoEm,"ultimoAcesso",t.ultimoAcesso,"ativa",t.ativa)).toList());
@@ -134,7 +134,8 @@ public class OsFluxoEstacaoService {
     }
     public List<String> setores() {
         Set<String> nomes=new LinkedHashSet<>();
-        fluxo.etapas().stream().map(e->e.setor).filter(Objects::nonNull).forEach(nomes::add);
+        fluxo.etapas();
+        OsFluxoEtapa.<OsFluxoEtapa>list("order by ordem, id").stream().map(e->e.setor).filter(Objects::nonNull).forEach(nomes::add);
         OsFluxoSetor.<OsFluxoSetor>list("order by nome").forEach(e->nomes.add(e.nome));
         return new ArrayList<>(nomes);
     }
@@ -142,7 +143,7 @@ public class OsFluxoEstacaoService {
         if(nome==null||nome.isBlank()||nome.trim().length()>120) throw new BadRequestException("Informe um nome de até 120 caracteres.");
         return nome.trim();
     }
-    private void bloquearCatalogo() {
+    public void bloquearCatalogo() {
         Tenant tenant=Tenant.findById(tenants.currentTenantId());
         if(tenant==null) throw new NotFoundException("Empresa não encontrada.");
         Tenant.getEntityManager().lock(tenant,jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
@@ -163,11 +164,55 @@ public class OsFluxoEstacaoService {
         if(metaMinutos!=null&&(metaMinutos<1||metaMinutos>525600)) throw new BadRequestException("Meta inválida.");
         String novoNome=nome;
         if(OsFluxoEtapa.<OsFluxoEtapa>listAll().stream().anyMatch(e->e.nome.equalsIgnoreCase(novoNome))) throw new BadRequestException("Já existe uma etapa com esse nome.");
+        fluxo.preservarConcluidas();
         int ordem=OsFluxoEtapa.<OsFluxoEtapa>listAll().stream().mapToInt(e->e.ordem).max().orElse(0)+1;
         OsFluxoEtapa e=new OsFluxoEtapa();e.tenantId=tenants.currentTenantIdStr();e.nome=nome;e.setor=setor;e.cor=cor;
         e.codigo="CUSTOM-"+UUID.randomUUID();e.ordem=ordem;e.icone="pi pi-cog";e.metaMinutos=metaMinutos;
-        e.codigoBarrasEntrada="E"+ordem;e.codigoBarrasSaida="S"+ordem;e.persist();
+        int numero=proximoCodigoBarras();e.codigoBarrasEntrada="E"+numero;e.codigoBarrasSaida="S"+numero;e.persist();
         Map<String,Object> resultado=gestaoEstacoes();resultado.put("etapaCriadaId",e.id);return resultado;
+    }
+    public record EtapaEdicao(Long id,String nome,String setor,String cor,Integer metaMinutos) {}
+    static String versaoFluxo(List<OsFluxoEtapa> etapas) {
+        String dados=etapas.stream().map(e->Arrays.asList(e.id,e.nome,e.setor,e.ordem,Objects.toString(e.cor,""),Objects.toString(e.metaMinutos,"")).toString()).toList().toString();
+        try{return HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(dados.getBytes(java.nio.charset.StandardCharsets.UTF_8)));}
+        catch(java.security.NoSuchAlgorithmException ex){throw new IllegalStateException(ex);}
+    }
+    private int proximoCodigoBarras() {
+        return OsFluxoEtapa.<OsFluxoEtapa>listAll().stream().map(e->Objects.toString(e.codigoBarrasEntrada,""))
+            .filter(c->c.matches("E[0-9]{1,8}")).mapToInt(c->Integer.parseInt(c.substring(1))).max().orElse(0)+1;
+    }
+    @Transactional
+    public Map<String,Object> salvarFluxo(String versao,List<EtapaEdicao> edicoes) {
+        gestao();bloquearCatalogo();List<OsFluxoEtapa> atuais=fluxo.etapas();
+        if(!Objects.equals(versao,versaoFluxo(atuais))) throw new ClientErrorException("O fluxo foi alterado por outro usuário. Reabra o editor antes de salvar.",409);
+        if(edicoes==null||edicoes.isEmpty()) throw new BadRequestException("O fluxo precisa ter ao menos uma etapa.");
+        Map<Long,OsFluxoEtapa> porId=new HashMap<>();atuais.forEach(e->porId.put(e.id,e));
+        Set<Long> ids=new HashSet<>();Set<String> nomes=new HashSet<>();List<String> setores=setores();
+        for(EtapaEdicao item:edicoes) {
+            if(item==null) throw new BadRequestException("Etapa inválida.");
+            String nome=validarNome(item.nome());
+            if(!nomes.add(nome.toLowerCase(Locale.ROOT))) throw new BadRequestException("Existem etapas com nomes repetidos.");
+            if(item.id()!=null&&(!porId.containsKey(item.id())||!ids.add(item.id()))) throw new BadRequestException("Etapa inválida ou repetida.");
+            if(!setores.contains(item.setor())) throw new BadRequestException("Escolha um setor válido para cada etapa.");
+            if(item.cor()==null||!item.cor().matches("#[0-9a-fA-F]{6}")) throw new BadRequestException("Escolha uma cor válida.");
+            if(item.metaMinutos()!=null&&(item.metaMinutos()<1||item.metaMinutos()>525600)) throw new BadRequestException("Meta inválida.");
+        }
+        atuais.forEach(e->OsFluxoEtapa.getEntityManager().refresh(e,jakarta.persistence.LockModeType.PESSIMISTIC_WRITE));
+        for(OsFluxoEtapa removida:atuais) if(!ids.contains(removida.id)&&!OsFluxoRegistro.find("etapaId = ?1 and anulado = false and saidaEm is null",removida.id).withLock(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE).list().isEmpty())
+            throw new ClientErrorException("A etapa “"+removida.nome+"” tem OS em andamento. Registre a saída antes de excluí-la.",409);
+        fluxo.preservarConcluidas();
+        int ordem=0,numero=proximoCodigoBarras();
+        for(EtapaEdicao item:edicoes) {
+            OsFluxoEtapa etapa=item.id()==null?new OsFluxoEtapa():porId.get(item.id());
+            if(item.id()==null){etapa.tenantId=tenants.currentTenantIdStr();etapa.codigo="CUSTOM-"+UUID.randomUUID();etapa.codigoBarrasEntrada="E"+numero;etapa.codigoBarrasSaida="S"+numero++;etapa.icone="pi pi-cog";}
+            etapa.nome=item.nome().trim();etapa.setor=item.setor();etapa.cor=item.cor();etapa.metaMinutos=item.metaMinutos();etapa.ordem=++ordem;
+            if(!etapa.isPersistent()) etapa.persist();
+        }
+        atuais.stream().filter(e->!ids.contains(e.id)).forEach(e->e.ativo=false);
+        OsFluxoEvento evento=new OsFluxoEvento();evento.tenantId=tenants.currentTenantIdStr();evento.acao="CONFIGURACAO_FLUXO";evento.sucesso=true;
+        evento.usuarioId=user.getUserId();evento.usuarioNome=user.getNome();evento.ocorridoEm=LocalDateTime.now();
+        evento.mensagem="Fluxo atualizado: "+edicoes.size()+" etapas; "+atuais.stream().filter(e->!ids.contains(e.id)).count()+" excluídas. Versão anterior: "+versao;evento.persist();
+        return gestaoEstacoes();
     }
     static List<Long> validarEtapas(String setor,List<Long> ids,List<OsFluxoEtapa> catalogo) {
         List<Long> permitidas=catalogo.stream().filter(e->Objects.equals(setor,e.setor)).map(e->e.id).toList();

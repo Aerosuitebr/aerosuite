@@ -21,6 +21,12 @@ class OsFluxoEstacaoEtapasTest {
   assertThrows(jakarta.ws.rs.ForbiddenException.class,()->service.criarEtapa("Pintura","Oficina","#112233",null));
   assertThrows(jakarta.ws.rs.ForbiddenException.class,()->service.atualizarEstacao("OFICINA-1","Posto","Oficina",List.of(1L)));
  }
+ @Test void reordenarNaoRepeteEtapasRealizadasEPreservaConclusao(){
+  var etapas=catalogo();var r=new com.aerosuite.domain.OsFluxoRegistro();r.etapaId=1L;r.saidaEm=java.time.LocalDateTime.now();
+  assertEquals(3L,OsFluxoService.proximaPendente(List.of(etapas.get(2),etapas.get(0),etapas.get(1)),List.of(r)).id);
+  r.conclusaoFluxo=true;assertNull(OsFluxoService.proximaPendente(etapas,List.of(r)));
+ }
+ @Test void edicaoDoFluxoExigeGestao(){var service=new OsFluxoEstacaoService();service.user=new com.aerosuite.security.InternalUserContext();service.user.applyPermissionSnapshot("MECANICO",java.util.Set.of());assertThrows(jakarta.ws.rs.ForbiddenException.class,()->service.salvarFluxo("v1",List.of()));}
  @Test void validaNomes(){assertEquals("Pintura",OsFluxoEstacaoService.validarNome(" Pintura "));for(String nome:new String[]{null," ","x".repeat(121)})assertThrows(BadRequestException.class,()->OsFluxoEstacaoService.validarNome(nome));}
  @Test void preservaClientesAntigos(){assertEquals(List.of(1L,2L),OsFluxoEstacaoService.validarEtapas("Oficina",null,catalogo()));}
 }

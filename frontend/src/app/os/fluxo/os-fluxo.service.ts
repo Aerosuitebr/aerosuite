@@ -328,9 +328,12 @@ export interface FluxoMaquina {
   ativa: boolean;
 }
 
+export interface FluxoEtapaEdicao { id: number | null; nome: string; setor: string; cor: string; metaMinutos: number | null; }
+
 export interface FluxoEstacoesGestao {
+  versaoFluxo?: string;
   etapaCriadaId?: number;
-  etapasDisponiveis?: { id: number; nome: string; setor: string; ordem?: number; cor?: string }[];
+  etapasDisponiveis?: { id: number; nome: string; setor: string; ordem?: number; cor?: string; metaMinutos?: number | null }[];
   pendentes?: FluxoMaquinaPendente[];
   setores?: string[];
   estacoes: FluxoEstacaoGestao[];
@@ -438,6 +441,10 @@ export class OsFluxoService {
 
   atualizarEstacao(codigo: string, nome: string, setor: string, etapaIds: number[]) {
     return this.http.put<FluxoEstacoesGestao>(this.base + '/estacoes/' + encodeURIComponent(codigo), { nome, setor, etapaIds });
+  }
+
+  salvarFluxo(versao: string, etapas: FluxoEtapaEdicao[]) {
+    return this.http.put<FluxoEstacoesGestao>(this.base + '/etapas/configuracao', { versao, etapas });
   }
 
   criarSetor(nome: string) {

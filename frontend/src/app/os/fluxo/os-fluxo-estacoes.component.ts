@@ -14,6 +14,8 @@ import { TranslatePipe } from '../../core/translate.pipe';
 import { TranslationService } from '../../core/translation.service';
 import { FluxoEstacaoGestao, FluxoEstacoesGestao, FluxoMaquina, FluxoPareamentoInfo, FluxoMaquinaPendente, FluxoVinculoEvento, OsFluxoService } from './os-fluxo.service';
 
+import { OsFluxoEditorEtapasComponent } from './os-fluxo-editor-etapas.component';
+
 const STORAGE_TERMINAL = 'osFluxo.terminalId';
 
 interface EdicaoMaquina {
@@ -26,11 +28,12 @@ type NivelEstacao = 'linked' | 'stale' | 'fault' | 'fresh' | 'watch' | 'hour' | 
 @Component({
   standalone: true,
   selector: 'app-os-fluxo-estacoes',
-  imports: [CommonModule, FormsModule, RouterLink, ButtonModule, DialogModule, DropdownModule, InputTextModule, TooltipModule, ToastModule, MenuModule, TranslatePipe],
+  imports: [CommonModule, FormsModule, RouterLink, ButtonModule, DialogModule, DropdownModule, InputTextModule, TooltipModule, ToastModule, MenuModule, TranslatePipe, OsFluxoEditorEtapasComponent],
   providers: [MessageService],
   styleUrls: ['./fluxo-shared.css', './os-fluxo-estacoes.component.css'],
   template: `
     <p-toast></p-toast>
+    <app-os-fluxo-editor-etapas *ngIf="mostrarEditorFluxo && dados" [dados]="dados" (fechar)="mostrarEditorFluxo = false" (salvo)="aplicarFluxoEditado($event)"></app-os-fluxo-editor-etapas>
     <p-menu #acoes styleClass="ge-station-menu" [model]="acoesEstacao" [popup]="true" [baseZIndex]="12000" appendTo="body"></p-menu>
     <div class="fx-shell ge-page" [class.ge-machines-focus]="focoMaquinas">
       <header class="fx-hero ge-hero">
@@ -42,6 +45,7 @@ type NivelEstacao = 'linked' | 'stale' | 'fault' | 'fresh' | 'watch' | 'hour' | 
           <p class="fx-lead ge-lead">{{ 'fluxo.estacoes.lead' | translate }}</p>
         </div>
         <div class="fx-hero-actions ge-actions">
+          <button type="button" class="ge-primary" (click)="mostrarEditorFluxo = true" [disabled]="!dados"><i class="pi pi-sort-alt" aria-hidden="true"></i> Editar fluxo</button>
           <button type="button" class="fx-ghost-btn ge-ghost" (click)="carregar()" [disabled]="carregando" [attr.aria-busy]="carregando">
             <i class="pi pi-refresh" [class.pi-spin]="carregando"></i> {{ 'fluxo.estacoes.refresh' | translate }}
           </button>
@@ -465,6 +469,7 @@ type NivelEstacao = 'linked' | 'stale' | 'fault' | 'fresh' | 'watch' | 'hour' | 
           </section>
           <section class="station-step" [attr.aria-label]="'fluxo.estacoes.field.stages' | translate">
             <div class="station-section-title"><span class="station-step-number">02</span><div><h3>{{ 'fluxo.estacoes.field.stages' | translate }}</h3><p>{{ 'fluxo.estacoes.editor.stagesHelp' | translate }}</p></div><button type="button" class="ge-text-btn" (click)="abrirCadastroCatalogo('etapa')" [disabled]="salvandoEstacao || salvandoCatalogo"><i class="pi pi-plus" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.newStage' | translate }}</button></div>
+            <button type="button" class="ge-text-btn" (click)="mostrarEditorFluxo = true" [disabled]="salvandoEstacao || salvandoCatalogo"><i class="pi pi-sort-alt" aria-hidden="true"></i> Editar nomes, excluir ou reordenar etapas</button>
             <div class="station-stage-tools"><label class="station-search" for="ge-etapas-busca"><i class="pi pi-search" aria-hidden="true"></i><input pInputText id="ge-etapas-busca" [(ngModel)]="buscaEtapas" [placeholder]="'fluxo.estacoes.editor.searchStages' | translate" /></label><label class="station-selected-filter"><input type="checkbox" [(ngModel)]="somenteSelecionadas" /> {{ 'fluxo.estacoes.editor.selectedOnly' | translate }}</label></div>
             <div class="station-stage-actions"><span aria-live="polite">{{ estacaoEtapaIds.length }} / {{ dados?.etapasDisponiveis?.length || 0 }} {{ 'fluxo.estacoes.editor.selected' | translate }}</span><div><button type="button" class="ge-text-btn" [disabled]="salvandoEstacao || salvandoCatalogo || !etapasCadastroVisiveis.length" (click)="selecionarEtapas(etapasCadastroVisiveis)">{{ 'fluxo.estacoes.editor.selectVisible' | translate }}</button><button type="button" class="ge-text-btn" [disabled]="salvandoEstacao || salvandoCatalogo || !estacaoEtapaIds.length" (click)="estacaoEtapaIds = []">{{ 'fluxo.estacoes.editor.clear' | translate }}</button></div></div>
             <div class="station-stage-list">
@@ -775,6 +780,13 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
   linhaFocada = 0;
   resumo: 'estacoes' | 'maquinas' | 'sem' | null = null;
   buscaResumo = '';
+  mostrarEditorFluxo = false;
+  aplicarFluxoEditado(d: FluxoEstacoesGestao): void {
+    this.aplicar(d);
+    const ids = new Set((d.etapasDisponiveis || []).map(e => e.id));
+    this.estacaoEtapaIds = (this.estacaoEtapaIds || []).filter(id => ids.has(id));
+    this.toast.add({ severity: 'success', summary: 'Fluxo atualizado', life: 3500 });
+  }
   mostrarEstacao = false;
   estacaoEmEdicao: FluxoEstacaoGestao | null = null;
   estacaoNome = '';

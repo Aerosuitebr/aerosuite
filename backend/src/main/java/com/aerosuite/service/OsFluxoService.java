@@ -30,7 +30,7 @@ public class OsFluxoService {
     @Transactional
     public List<OsFluxoEtapa> etapas() {
         List<OsFluxoEtapa> etapas = OsFluxoEtapa.list("ativo = true order by ordem, id");
-        if (etapas.isEmpty()) {
+        if (etapas.isEmpty() && OsFluxoEtapa.count()==0) {
             Tenant tenant = Tenant.findById(tenants.currentTenantId());
             if (tenant == null) throw new NotFoundException("Empresa não encontrada.");
             Tenant.getEntityManager().lock(tenant, LockModeType.PESSIMISTIC_WRITE);
@@ -58,18 +58,36 @@ public class OsFluxoService {
     }
     @Transactional
     public OsFluxoEtapa meta(Long id, Integer minutos) {
-        exigirGestao(); if (minutos != null && (minutos < 1 || minutos > 525600)) throw new BadRequestException("Meta inválida.");
+        exigirGestao(); estacoes.bloquearCatalogo(); if (minutos != null && (minutos < 1 || minutos > 525600)) throw new BadRequestException("Meta inválida.");
         OsFluxoEtapa e=etapa(id); e.metaMinutos=minutos; evento(null,id,"META",true,"Meta alterada para " + minutos, null); return e;
     }
     private OsFluxoEtapa etapa(Long id) {
         OsFluxoEtapa e = id == null ? null : OsFluxoEtapa.findById(id);
-        if(e == null || !Boolean.TRUE.equals(e.ativo)) throw new BadRequestException("Etapa inválida."); return e;
+        if(e == null) throw new BadRequestException("Etapa inválida."); return e;
     }
     private List<OsFluxoRegistro> registros(Long id) { return OsFluxoRegistro.list("osId = ?1 and anulado = false order by sequencia, id",id); }
     private OsFluxoRegistro aberto(List<OsFluxoRegistro> rs) { return rs.stream().filter(r->r.saidaEm==null).findFirst().orElse(null); }
     private OsFluxoEtapa proxima(List<OsFluxoRegistro> rs) {
-        int ordem = rs.isEmpty() ? 0 : etapa(rs.get(rs.size()-1).etapaId).ordem;
-        return etapas().stream().filter(e->e.ordem > ordem).findFirst().orElse(null);
+        return proximaPendente(etapas(),rs);
+    }
+    static OsFluxoEtapa proximaPendente(List<OsFluxoEtapa> catalogo,List<OsFluxoRegistro> rs) {
+        if(!rs.isEmpty()&&Boolean.TRUE.equals(rs.get(rs.size()-1).conclusaoFluxo)) return null;
+        Set<Long> realizadas=new HashSet<>();rs.forEach(r->realizadas.add(r.etapaId));
+        return catalogo.stream().filter(e->!realizadas.contains(e.id)).findFirst().orElse(null);
+    }
+    public void preservarConcluidas() {
+        Map<Long,List<OsFluxoRegistro>> porOs=new LinkedHashMap<>();
+        OsFluxoRegistro.<OsFluxoRegistro>find("anulado = false order by osId, sequencia, id").withLock(LockModeType.PESSIMISTIC_WRITE).list()
+            .forEach(r->porOs.computeIfAbsent(r.osId,k->new ArrayList<>()).add(r));
+        List<OsFluxoEtapa> catalogo=etapas();
+        for(var rs:porOs.values()) if(aberto(rs)==null&&proximaPendente(catalogo,rs)==null) rs.get(rs.size()-1).conclusaoFluxo=true;
+    }
+    private List<OsFluxoEtapa> etapasDaOs(List<OsFluxoRegistro> rs) {
+        Map<Long,OsFluxoEtapa> lista=new LinkedHashMap<>();
+        boolean concluida=!rs.isEmpty()&&Boolean.TRUE.equals(rs.get(rs.size()-1).conclusaoFluxo);
+        if(!concluida) etapas().forEach(e->lista.put(e.id,e));
+        rs.forEach(r->lista.computeIfAbsent(r.etapaId,this::etapa));
+        return new ArrayList<>(lista.values());
     }
     private long concluidas(List<OsFluxoRegistro> rs) { return rs.stream().filter(r->r.saidaEm!=null).map(r->r.etapaId).distinct().count(); }
     private String situacao(List<OsFluxoRegistro> rs) { return aberto(rs)!=null ? "EM_ETAPA" : rs.isEmpty() ? null : proxima(rs)==null ? "CONCLUIDO" : "AGUARDANDO"; }
@@ -92,7 +110,7 @@ public class OsFluxoService {
     private Map<String,Object> estado(OS os) {
         List<OsFluxoRegistro> rs=registros(os.id); OsFluxoRegistro r=aberto(rs);
         return map("os",resumoOs(os,rs),"etapaAtual",r==null?null:etapa(r.etapaId),"registroAberto",r==null?null:registroDto(r),
-                "proximaEtapa",proxima(rs),"etapasConcluidas",concluidas(rs),"totalEtapas",etapas().size(),"podeGerir",podeGerir());
+                "proximaEtapa",proxima(rs),"etapasConcluidas",concluidas(rs),"totalEtapas",etapasDaOs(rs).size(),"podeGerir",podeGerir());
     }
     private Map<String,Object> registroDto(OsFluxoRegistro r) {
         OsFluxoEtapa e=etapa(r.etapaId);
@@ -118,6 +136,8 @@ public class OsFluxoService {
                     .findFirst().orElseThrow(()->new BadRequestException("Código de etapa inválido."));
         } else e=r!=null?etapa(r.etapaId):proxima(rs);
         if(e==null) throw new BadRequestException("Fluxo já concluído.");
+        OsFluxoEtapa.getEntityManager().refresh(e,LockModeType.PESSIMISTIC_WRITE);
+        if(!Boolean.TRUE.equals(e.ativo)) throw new BadRequestException("Etapa excluída do fluxo.");
         estacoes.exigirEtapa(req.terminalId,e.id);
         String acao=Objects.toString(req.acao,"AUTO").toUpperCase(Locale.ROOT);
         if(acao.equals("AUTO")) acao=r!=null&&r.etapaId.equals(e.id)?"SAIDA":"ENTRADA";
@@ -133,8 +153,9 @@ public class OsFluxoService {
         }
         evento(os.id,e.id,acao,true,req.forcar?req.motivo:"Leitura registrada",req);
         rs=registros(os.id);
+        if(aberto(rs)==null&&proxima(rs)==null&&!rs.isEmpty()) rs.get(rs.size()-1).conclusaoFluxo=true;
         return map("sucesso",true,"acao",acao,"mensagem","Leitura registrada com sucesso.","os",resumoOs(os,rs),"etapa",e,"registro",registroDto(r),
-                "proximaEtapa",proxima(rs),"situacao",situacao(rs),"forcado",req.forcar,"etapasConcluidas",concluidas(rs),"totalEtapas",etapas().size());
+                "proximaEtapa",proxima(rs),"situacao",situacao(rs),"forcado",req.forcar,"etapasConcluidas",concluidas(rs),"totalEtapas",etapasDaOs(rs).size());
     }
     private OsFluxoRegistro novo(Long osId,Long etapaId,int seq,boolean forcado,String obs) {
         if(obs!=null&&obs.length()>2000) throw new BadRequestException("Observação muito longa.");
@@ -159,7 +180,7 @@ public class OsFluxoService {
         OS os=tenants.requireOS(id); List<OsFluxoRegistro> validos=registros(id);
         List<OsFluxoRegistro> todos=OsFluxoRegistro.list("osId = ?1 order by sequencia, id",id);
         List<OsFluxoEvento> eventos=OsFluxoEvento.list("osId = ?1 order by ocorridoEm desc, id desc",id);
-        List<Map<String,Object>> statuses=etapas().stream().map(e->{
+        List<Map<String,Object>> statuses=etapasDaOs(validos).stream().map(e->{
             List<OsFluxoRegistro> rs=validos.stream().filter(r->r.etapaId.equals(e.id)).toList();
             long total=rs.stream().mapToLong(r->seg(r.entradaEm,r.saidaEm==null?LocalDateTime.now():r.saidaEm)).sum();
             return map("etapa",e,"status",rs.isEmpty()?"PENDENTE":aberto(rs)!=null?"EM_ANDAMENTO":"CONCLUIDA","passagens",rs.size(),"totalSeg",total,
@@ -172,7 +193,7 @@ public class OsFluxoService {
         long trabalho=validos.stream().mapToLong(r->seg(r.entradaEm,r.saidaEm==null?LocalDateTime.now():r.saidaEm)).sum();
         return map("os",resumoOs(os,validos),"etapas",statuses,"registros",todos.stream().map(this::registroDto).toList(),"eventos",eventos.stream().map(this::eventoDto).toList(),
                 "resumo",map("inicioEm",inicio,"fimEm",fim,"cicloSeg",ciclo,"tempoEmEtapasSeg",trabalho,"tempoEsperaSeg",Math.max(0,ciclo-trabalho),
-                        "eficienciaPct",ciclo==0?null:100.0*trabalho/ciclo,"etapasConcluidas",concluidas(validos),"totalEtapas",etapas().size(),
+                        "eficienciaPct",ciclo==0?null:100.0*trabalho/ciclo,"etapasConcluidas",concluidas(validos),"totalEtapas",etapasDaOs(validos).size(),
                         "forcados",todos.stream().filter(r->Boolean.TRUE.equals(r.forcado)).count(),"anulados",todos.stream().filter(r->Boolean.TRUE.equals(r.anulado)).count(),
                         "rejeicoes",eventos.stream().filter(e->!Boolean.TRUE.equals(e.sucesso)).count()),
                 "proximaEtapa",proxima(validos),"podeGerir",podeGerir(),"geradoEm",LocalDateTime.now());
@@ -192,6 +213,7 @@ public class OsFluxoService {
     public Map<String,Object> simular(Long id,AjusteRequest req) {
         exigirGestao(); tenants.requireOS(id); if(req==null||!Set.of("ZERAR","POSICIONAR").contains(Objects.toString(req.tipo,""))) throw new BadRequestException("Ajuste inválido.");
         OsFluxoEtapa destino="ZERAR".equals(req.tipo)?null:etapa(req.etapaId);
+        if(destino!=null&&!Boolean.TRUE.equals(destino.ativo)) throw new BadRequestException("Etapa excluída do fluxo.");
         if(destino!=null&&!Set.of("EM_ETAPA","CONCLUIDA").contains(Objects.toString(req.situacao,""))) throw new BadRequestException("Situação inválida.");
         List<OsFluxoRegistro> rs=registros(id);List<Map<String,Object>> efeitos=new ArrayList<>();
         for(OsFluxoRegistro r:rs) efeitos.add(map("tipo","ANULAR","etapaId",r.etapaId,"etapaNome",etapa(r.etapaId).nome,"registroId",r.id,"descricao","Anular passagem anterior"));
@@ -210,7 +232,10 @@ public class OsFluxoService {
         bloquear(id);simular(id,req);motivo(req.motivo);List<OsFluxoRegistro> rs=registros(id);
         rs.forEach(r->anular(r,req.motivo));
         if(!"ZERAR".equals(req.tipo)) {
-            OsFluxoEtapa destino=etapa(req.etapaId); int seq=rs.size()+1;
+            OsFluxoEtapa destino=etapa(req.etapaId);
+            OsFluxoEtapa.getEntityManager().refresh(destino,LockModeType.PESSIMISTIC_WRITE);
+            if(!Boolean.TRUE.equals(destino.ativo)) throw new BadRequestException("Etapa excluída do fluxo.");
+            int seq=rs.size()+1;
             for(OsFluxoEtapa e:etapas()) if(e.id.equals(destino.id)||(req.preencherIntermediarias&&e.ordem<destino.ordem)) {
                 OsFluxoRegistro r=novo(id,e.id,seq++,true,req.motivo); if(!e.id.equals(destino.id)||"CONCLUIDA".equals(req.situacao)) fechar(r);
             }
@@ -224,7 +249,7 @@ public class OsFluxoService {
             if(situacao!=null&&!situacao.isBlank()&&!situacao.equals(situacao(rs))) continue;
             if(etapaId!=null&&(e==null||!etapaId.equals(e.id))) continue;
             LocalDateTime desde=r!=null?r.entradaEm:rs.isEmpty()?null:rs.get(rs.size()-1).saidaEm;
-            list.add(map("os",resumoOs(o,rs),"etapa",e,"etapasConcluidas",concluidas(rs),"totalEtapas",etapas().size(),"desdeSeg",seg(desde,LocalDateTime.now()),"inicioFluxoEm",rs.isEmpty()?null:rs.get(0).entradaEm));
+            list.add(map("os",resumoOs(o,rs),"etapa",e,"etapasConcluidas",concluidas(rs),"totalEtapas",etapasDaOs(rs).size(),"desdeSeg",seg(desde,LocalDateTime.now()),"inicioFluxoEm",rs.isEmpty()?null:rs.get(0).entradaEm));
         }
         int from=(int)Math.min((long)p*s,list.size());return map("items",list.subList(from,Math.min(from+s,list.size())),"total",list.size(),"page",p,"size",s);
     }
@@ -285,14 +310,7 @@ public class OsFluxoService {
         return fila;
     }
     private OsFluxoEtapa proximaEm(List<OsFluxoEtapa> catalogo,Map<Long,OsFluxoEtapa> porEtapa,List<OsFluxoRegistro> rs) {
-        int ordem=0;
-        if(!rs.isEmpty()) {
-            OsFluxoEtapa ultima=porEtapa.get(rs.get(rs.size()-1).etapaId);
-            if(ultima==null||ultima.ordem==null) return null;
-            ordem=ultima.ordem;
-        }
-        for(OsFluxoEtapa e:catalogo) if(e.ordem!=null&&e.ordem>ordem) return e;
-        return null;
+        return proximaPendente(catalogo,rs);
     }
     public List<Map<String,Object>> eventos(LocalDate de,LocalDate ate,Boolean sucesso,int limite) {
         return eventosPeriodo(de,ate).stream().filter(e->sucesso==null||sucesso.equals(e.sucesso)).limit(Math.max(1,Math.min(2000,limite))).map(this::eventoDto).toList();

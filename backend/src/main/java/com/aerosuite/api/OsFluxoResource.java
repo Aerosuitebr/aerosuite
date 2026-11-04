@@ -20,12 +20,14 @@ public class OsFluxoResource {
     public record Motivo(String motivo) {}
     public record Terminal(String terminalId, String estacaoCodigo, String apelido) {}
     public record Nome(String nome) {}
+    public record EdicaoFluxo(String versao,java.util.List<OsFluxoEstacaoService.EtapaEdicao> etapas) {}
     public record NovaEtapa(String nome,String setor,String cor,Integer metaMinutos) {}
     public record NovaEstacao(String nome,String setor,java.util.List<Long> etapaIds) {}
     private static LocalDate data(String value) {
         if(value==null||value.isBlank())return null;
         try{return LocalDate.parse(value);}catch(Exception e){throw new BadRequestException("Data inválida.");}
     }
+    @PUT @Path("/etapas/configuracao") public Object salvarFluxo(EdicaoFluxo body){if(body==null)throw new BadRequestException();return estacoes.salvarFluxo(body.versao(),body.etapas());}
     @GET @Path("/etapas") public Object etapas(){return service.etapas();}
     @PUT @Path("/etapas/{id}/meta") public Object meta(@PathParam("id")Long id,Meta body){return service.meta(id,body==null?null:body.metaMinutos());}
     @POST @Path("/bipar") @RequiresFuncionalidades(allOf={"OS_FLUXO_ESTACAO"})

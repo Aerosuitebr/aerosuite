@@ -23,6 +23,7 @@ public class OsFluxoRegistro extends PanacheEntityBase {
     public Boolean forcado = false;
     @Column(length = 2000) public String observacao;
     public Boolean anulado = false;
+    public Boolean conclusaoFluxo = false;
     public LocalDateTime anuladoEm;
     public String anuladoUsuarioNome;
     @Column(length = 2000) public String anuladoMotivo;
