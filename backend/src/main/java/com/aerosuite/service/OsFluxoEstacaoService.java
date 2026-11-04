@@ -25,12 +25,13 @@ public class OsFluxoEstacaoService {
     private List<Estacao> catalogo() {
         List<OsFluxoEtapa> todasEtapas=fluxo.etapas();
         Map<String,List<OsFluxoEtapa>> setores=new LinkedHashMap<>();OsFluxoEtapa.<OsFluxoEtapa>list("order by ordem, id").forEach(e->setores.computeIfAbsent(e.setor,k->new ArrayList<>()).add(e));
+        OsFluxoSetor.<OsFluxoSetor>list("order by nome").forEach(e->setores.computeIfAbsent(e.nome,k->new ArrayList<>()));
         List<Estacao> list=new ArrayList<>();int ordem=0;
         for(var en:setores.entrySet()) {
             int quantidade="Oficina".equals(en.getKey())?5:1;
             for(int n=1;n<=quantidade;n++) {
                 String codigo=en.getKey().toUpperCase(Locale.ROOT).replaceAll("[^A-Z0-9]", "")+"-"+n;
-                list.add(new Estacao(codigo,en.getKey()+(quantidade>1?" "+n:""),en.getKey(),++ordem,en.getValue().get(0).cor,en.getValue().stream().filter(e->Boolean.TRUE.equals(e.ativo)).map(e->e.id).toList()));
+                list.add(new Estacao(codigo,en.getKey()+(quantidade>1?" "+n:""),en.getKey(),++ordem,en.getValue().isEmpty()?"#334155":en.getValue().get(0).cor,en.getValue().stream().filter(e->Boolean.TRUE.equals(e.ativo)).map(e->e.id).toList()));
             }
         }
         List<OsFluxoEstacaoNome> configuradas=OsFluxoEstacaoNome.listAll();

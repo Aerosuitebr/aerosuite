@@ -102,6 +102,16 @@ class OsFluxoServiceIT {
         assertEquals("Recebimento revisado",((List<Map<String,Object>>)fluxo.detalhe(andamento.id).get("registros")).get(0).get("etapaNome"));
         assertTrue(catalogo(estacoes.gestaoEstacoes()).stream().anyMatch(e->"RECEBIMENTO-1".equals(e.get("codigo"))));
     }
+    @Test @TestTransaction void mudarSetorDaEtapaPreservaEstacoesPareadas() {
+        criar();var etapas=fluxo.etapas();
+        OsFluxoSetor setor=new OsFluxoSetor();setor.tenantId="1";setor.nome="Recebimento";setor.persist();
+        estacoes.vincularEstacao("terminal-muda-setor","RECEBIMENTO-1");
+        var novas=edicoes(etapas);var primeira=novas.get(0);
+        novas.set(0,new OsFluxoEstacaoService.EtapaEdicao(primeira.id(),primeira.nome(),"Oficina",primeira.cor(),null));
+        var resposta=estacoes.salvarFluxo(OsFluxoEstacaoService.versaoFluxo(etapas),novas);
+        assertTrue(catalogo(resposta).stream().anyMatch(e->"RECEBIMENTO-1".equals(e.get("codigo"))));
+        estacoes.exigirPareada("terminal-muda-setor");
+    }
     @Test @TestTransaction void bloqueiaExcluirEtapaAbertaEConflitoDeVersao() {
         OS os=criar();var etapas=fluxo.etapas();passagem(os,etapas.get(0),1,false);
         var novos=edicoes(etapas);novos.remove(0);
