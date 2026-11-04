@@ -5,7 +5,6 @@ import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToastModule } from 'primeng/toast';
@@ -27,7 +26,7 @@ type NivelEstacao = 'linked' | 'stale' | 'fault' | 'fresh' | 'watch' | 'hour' | 
 @Component({
   standalone: true,
   selector: 'app-os-fluxo-estacoes',
-  imports: [CommonModule, FormsModule, RouterLink, ButtonModule, DialogModule, DropdownModule, MultiSelectModule, InputTextModule, TooltipModule, ToastModule, MenuModule, TranslatePipe],
+  imports: [CommonModule, FormsModule, RouterLink, ButtonModule, DialogModule, DropdownModule, InputTextModule, TooltipModule, ToastModule, MenuModule, TranslatePipe],
   providers: [MessageService],
   styleUrls: ['./fluxo-shared.css', './os-fluxo-estacoes.component.css'],
   template: `
@@ -439,24 +438,55 @@ type NivelEstacao = 'linked' | 'stale' | 'fault' | 'fresh' | 'watch' | 'hour' | 
       </ng-template>
     </p-dialog>
 
-    <p-dialog styleClass="ge-dialog ge-drawer" [(visible)]="mostrarEstacao" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body"
-              [closable]="!salvandoEstacao" [closeOnEscape]="!salvandoEstacao" [header]="estacaoEmEdicao ? ('fluxo.estacoes.editStation' | translate) : ('fluxo.estacoes.newStation' | translate)" [style]="{ width: '640px', maxWidth: '95vw' }">
-      <div class="gp"><section class="ge-drawer-context" *ngIf="estacaoEmEdicao as e"><h3>Monitoramento do vínculo</h3><p *ngIf="!e.maquinas">Sem vínculo há {{ tempoSemVinculo(e) }}. Alerta crítico a partir de 24 horas.</p><p *ngIf="e.monitoradoDesde">Histórico acompanhado desde {{ e.monitoradoDesde|date:'dd/MM/yyyy HH:mm' }}. Períodos anteriores não foram reconstruídos.</p><h3>Etapas atendidas</h3><ol><li *ngFor="let etapa of e.etapas">{{ etapa }}</li></ol><p>As etapas são definidas no cadastro da estação.</p><h3>Máquinas vinculadas</h3><div *ngFor="let m of maquinasDa(e.codigo)"><button type="button" class="ge-text-btn" (click)="abrirMaquina(m)">{{ m.apelido || 'Sem nome' }}</button><p>{{ m.ativa?'Vínculo ativo':'Vínculo inativo' }} · {{ 'fluxo.estacoes.col.ip' | translate }}: {{ m.ip || ('fluxo.estacoes.ipMissing' | translate) }} · Último acesso: {{ m.ultimoAcesso?(m.ultimoAcesso|date:'dd/MM/yyyy HH:mm'):'Não informado' }}</p></div><button type="button" class="ge-fast-pair" (click)="abrirPareamento(e.codigo)">Parear máquina por código</button><h3>Histórico de vínculos (últimos 100 eventos)</h3><p *ngIf="carregandoHistorico">Carregando…</p><p *ngIf="erroHistorico" role="alert">{{ erroHistorico }}</p><p *ngIf="!carregandoHistorico && !erroHistorico && !eventosVinculo.length">Nenhum evento registrado desde o início do monitoramento.</p><ol class="ge-history"><li *ngFor="let evento of eventosVinculo"><strong>{{ evento.acao }} · {{ evento.apelido || evento.terminalId }}</strong><span>{{ evento.estacaoAnterior || 'Sem vínculo' }} → {{ evento.estacaoNova || 'Sem vínculo' }}</span><span>{{ evento.responsavel }} · {{ evento.ocorridoEm|date:'dd/MM/yyyy HH:mm:ss' }}</span></li></ol></section><label class="ge-label" for="ge-est-nome">{{ 'fluxo.estacoes.field.name' | translate }}</label>
-        <input pInputText id="ge-est-nome" [(ngModel)]="estacaoNome" maxlength="120" [placeholder]="'fluxo.estacoes.field.nameExample' | translate" [disabled]="salvandoEstacao" />
-        <ng-container *ngIf="!estacaoEmEdicao">
-          <label class="ge-label" for="ge-est-setor">{{ 'fluxo.estacoes.field.section' | translate }}</label>
-          <p-dropdown inputId="ge-est-setor" [options]="opcoesSetor" [(ngModel)]="estacaoSetor" (ngModelChange)="estacaoEtapaIds = []" appendTo="body" [style]="{ width: '100%' }" [placeholder]="'fluxo.estacoes.field.sectionPlaceholder' | translate" [disabled]="salvandoEstacao"></p-dropdown>
-          <label class="ge-label" for="ge-est-etapas">{{ 'fluxo.estacoes.field.stages' | translate }}</label>
-          <p-multiSelect inputId="ge-est-etapas" [options]="etapasDoSetor" [(ngModel)]="estacaoEtapaIds" optionLabel="nome" optionValue="id" appendTo="body" display="chip" [style]="{ width: '100%' }" [placeholder]="'fluxo.estacoes.field.stagesPlaceholder' | translate" [disabled]="salvandoEstacao || !estacaoSetor"></p-multiSelect>
-          <small class="gp-opc">{{ 'fluxo.estacoes.field.stagesHelp' | translate }}</small>
-        </ng-container>
-        <p class="ge-dlg-txt fx-muted" *ngIf="estacaoEmEdicao">{{ 'fluxo.estacoes.editKeep' | translate:{ name: estacaoEmEdicao.setor || '' } }}</p>
-        <small class="gp-erro" *ngIf="erroEstacao" role="alert">{{ erroEstacao }}</small>
+    <p-dialog styleClass="ge-dialog ge-station-editor" [(visible)]="mostrarEstacao" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body"
+              [closable]="!salvandoEstacao && !salvandoCatalogo" [closeOnEscape]="!salvandoEstacao && !salvandoCatalogo" [header]="estacaoEmEdicao ? ('fluxo.estacoes.editStation' | translate) : ('fluxo.estacoes.newStation' | translate)" [style]="{ width: '1080px', maxWidth: '96vw' }">
+      <div class="station-editor">
+        <main class="station-editor-main">
+          <section class="station-step" [attr.aria-label]="'fluxo.estacoes.editor.identity' | translate">
+            <div class="station-section-title"><span class="station-step-number">01</span><div><h3>{{ 'fluxo.estacoes.editor.identity' | translate }}</h3><p>{{ 'fluxo.estacoes.editor.identityHelp' | translate }}</p></div></div>
+            <label class="ge-label" for="ge-est-nome">{{ 'fluxo.estacoes.field.name' | translate }}</label>
+            <input pInputText id="ge-est-nome" [(ngModel)]="estacaoNome" maxlength="120" [placeholder]="'fluxo.estacoes.field.nameExample' | translate" [disabled]="salvandoEstacao || salvandoCatalogo" />
+            <div class="station-field-heading"><label class="ge-label" for="ge-est-setor">{{ 'fluxo.estacoes.field.section' | translate }}</label><button type="button" class="ge-text-btn" (click)="abrirCadastroCatalogo('setor')" [disabled]="salvandoEstacao || salvandoCatalogo"><i class="pi pi-plus" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.newSector' | translate }}</button></div>
+            <p-dropdown inputId="ge-est-setor" [options]="opcoesSetor" [(ngModel)]="estacaoSetor" [filter]="true" appendTo="body" [style]="{ width: '100%' }" [placeholder]="'fluxo.estacoes.field.sectionPlaceholder' | translate" [disabled]="salvandoEstacao || salvandoCatalogo"></p-dropdown>
+            <small class="gp-opc">{{ 'fluxo.estacoes.editor.sectorHelp' | translate }}</small>
+          </section>
+          <section class="station-inline-create" *ngIf="cadastroCatalogo" [attr.aria-label]="(cadastroCatalogo === 'setor' ? 'fluxo.estacoes.editor.newSector' : 'fluxo.estacoes.editor.newStage') | translate">
+            <div class="station-field-heading"><h3>{{ (cadastroCatalogo === 'setor' ? 'fluxo.estacoes.editor.newSector' : 'fluxo.estacoes.editor.newStage') | translate }}</h3><button type="button" class="ge-text-btn" [disabled]="salvandoCatalogo" (click)="cadastroCatalogo = null">{{ 'fluxo.estacoes.cancel' | translate }}</button></div>
+            <label class="ge-label" for="ge-catalogo-nome">{{ 'fluxo.estacoes.editor.catalogName' | translate }}</label>
+            <input #catalogoNomeInput pInputText id="ge-catalogo-nome" [(ngModel)]="catalogoNome" maxlength="120" [disabled]="salvandoCatalogo" />
+            <ng-container *ngIf="cadastroCatalogo === 'etapa'">
+              <label class="ge-label" for="ge-etapa-setor">{{ 'fluxo.estacoes.field.section' | translate }}</label>
+              <p-dropdown inputId="ge-etapa-setor" [options]="opcoesSetor" [(ngModel)]="catalogoSetor" appendTo="body" [style]="{ width: '100%' }" [disabled]="salvandoCatalogo"></p-dropdown>
+              <div class="station-stage-options"><div><label class="ge-label" for="ge-etapa-cor">{{ 'fluxo.estacoes.editor.color' | translate }}</label><input type="color" id="ge-etapa-cor" [(ngModel)]="catalogoCor" [disabled]="salvandoCatalogo" /></div><div><label class="ge-label" for="ge-etapa-meta">{{ 'fluxo.estacoes.editor.target' | translate }}</label><input pInputText type="number" id="ge-etapa-meta" [(ngModel)]="catalogoMeta" min="1" max="525600" [disabled]="salvandoCatalogo" /></div></div>
+              <p class="station-stage-notice"><i class="pi pi-info-circle" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.appendStage' | translate }}</p>
+            </ng-container>
+            <p class="gp-erro" role="alert" *ngIf="erroCatalogo">{{ erroCatalogo }}</p>
+            <button pButton type="button" icon="pi pi-plus" [label]="'fluxo.estacoes.editor.addAndSelect' | translate" [loading]="salvandoCatalogo" [disabled]="!catalogoNome.trim() || (cadastroCatalogo === 'etapa' && (!catalogoSetor || (catalogoMeta !== null && (catalogoMeta < 1 || catalogoMeta > 525600))))" (click)="salvarCatalogo()"></button>
+          </section>
+          <section class="station-step" [attr.aria-label]="'fluxo.estacoes.field.stages' | translate">
+            <div class="station-section-title"><span class="station-step-number">02</span><div><h3>{{ 'fluxo.estacoes.field.stages' | translate }}</h3><p>{{ 'fluxo.estacoes.editor.stagesHelp' | translate }}</p></div><button type="button" class="ge-text-btn" (click)="abrirCadastroCatalogo('etapa')" [disabled]="salvandoEstacao || salvandoCatalogo"><i class="pi pi-plus" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.newStage' | translate }}</button></div>
+            <div class="station-stage-tools"><label class="station-search" for="ge-etapas-busca"><i class="pi pi-search" aria-hidden="true"></i><input pInputText id="ge-etapas-busca" [(ngModel)]="buscaEtapas" [placeholder]="'fluxo.estacoes.editor.searchStages' | translate" /></label><label class="station-selected-filter"><input type="checkbox" [(ngModel)]="somenteSelecionadas" /> {{ 'fluxo.estacoes.editor.selectedOnly' | translate }}</label></div>
+            <div class="station-stage-actions"><span aria-live="polite">{{ estacaoEtapaIds.length }} / {{ dados?.etapasDisponiveis?.length || 0 }} {{ 'fluxo.estacoes.editor.selected' | translate }}</span><div><button type="button" class="ge-text-btn" [disabled]="salvandoEstacao || salvandoCatalogo || !etapasCadastroVisiveis.length" (click)="selecionarEtapas(etapasCadastroVisiveis)">{{ 'fluxo.estacoes.editor.selectVisible' | translate }}</button><button type="button" class="ge-text-btn" [disabled]="salvandoEstacao || salvandoCatalogo || !estacaoEtapaIds.length" (click)="estacaoEtapaIds = []">{{ 'fluxo.estacoes.editor.clear' | translate }}</button></div></div>
+            <div class="station-stage-list">
+              <section class="station-stage-group" *ngFor="let grupo of gruposEtapas">
+                <div class="station-group-heading"><h4>{{ grupo.setor }}</h4><button type="button" class="ge-text-btn" [disabled]="salvandoEstacao || salvandoCatalogo" (click)="alternarGrupo(grupo.etapas)">{{ (grupoSelecionado(grupo.etapas) ? 'fluxo.estacoes.editor.deselectGroup' : 'fluxo.estacoes.editor.selectGroup') | translate }}</button></div>
+                <label class="station-stage-card" *ngFor="let etapa of grupo.etapas" [class.is-selected]="estacaoEtapaIds.includes(etapa.id)" [style.--stage-color]="etapa.cor || '#2563eb'">
+                  <input type="checkbox" [checked]="estacaoEtapaIds.includes(etapa.id)" (change)="alternarEtapa(etapa.id)" [disabled]="salvandoEstacao || salvandoCatalogo" />
+                  <span class="station-stage-order">{{ etapa.ordem }}</span><span class="station-stage-name">{{ etapa.nome }}</span><i *ngIf="estacaoEtapaIds.includes(etapa.id)" class="pi pi-check" aria-hidden="true"></i>
+                </label>
+              </section>
+              <div class="station-empty" *ngIf="!etapasCadastroVisiveis.length"><i class="pi pi-search" aria-hidden="true"></i><p>{{ 'fluxo.estacoes.editor.noStages' | translate }}</p><button type="button" class="ge-text-btn" (click)="buscaEtapas = ''; somenteSelecionadas = false">{{ 'fluxo.estacoes.editor.resetFilters' | translate }}</button></div>
+            </div>
+          </section>
+        </main>
+        <aside class="station-editor-aside">
+          <div class="station-preview"><span class="station-preview-eyebrow"><i class="pi pi-desktop" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.preview' | translate }}</span><h3>{{ estacaoNome.trim() || ('fluxo.estacoes.newStation' | translate) }}</h3><p>{{ estacaoSetor || ('fluxo.estacoes.field.sectionPlaceholder' | translate) }}</p><div class="station-preview-count"><strong>{{ estacaoEtapaIds.length }}</strong><span>{{ 'fluxo.estacoes.field.stages' | translate }}</span></div><ol class="station-preview-stages"><li *ngFor="let etapa of etapasSelecionadas"><span [style.background]="etapa.cor || '#2563eb'"></span>{{ etapa.nome }}</li></ol><p class="station-preview-hint" *ngIf="!estacaoEtapaIds.length">{{ 'fluxo.estacoes.editor.chooseStages' | translate }}</p></div>
+          <p class="station-save-note"><i class="pi pi-check-circle" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.saveNote' | translate }}</p>
+          <details class="station-link-details" *ngIf="estacaoEmEdicao as e"><summary>{{ 'fluxo.estacoes.editor.links' | translate }} ({{ e.maquinas }})</summary><p *ngIf="!e.maquinas">{{ 'fluxo.estacoes.editor.noMachines' | translate }}</p><p *ngFor="let m of maquinasDa(e.codigo)">{{ m.apelido || m.terminalId }}</p><button type="button" class="ge-text-btn" (click)="abrirPareamento(e.codigo)">{{ 'fluxo.estacoes.menu.pair' | translate }}</button><p *ngIf="e.monitoradoDesde">{{ e.monitoradoDesde | date:'dd/MM/yyyy HH:mm' }}</p><p *ngIf="erroHistorico" role="alert">{{ erroHistorico }}</p><ol class="ge-history"><li *ngFor="let evento of eventosVinculo"><strong>{{ evento.acao }} · {{ evento.apelido || evento.terminalId }}</strong><span>{{ evento.responsavel }} · {{ evento.ocorridoEm | date:'dd/MM/yyyy HH:mm' }}</span></li></ol></details>
+        </aside>
       </div>
-      <ng-template pTemplate="footer">
-        <button pButton type="button" [label]="'fluxo.estacoes.cancel' | translate" class="p-button-text" [disabled]="salvandoEstacao" (click)="mostrarEstacao = false"></button>
-        <button pButton type="button" [label]="estacaoEmEdicao ? ('fluxo.estacoes.saveChanges' | translate) : ('fluxo.estacoes.create' | translate)" icon="pi pi-check" [loading]="salvandoEstacao" [disabled]="!estacaoNome.trim() || (!estacaoEmEdicao && (!estacaoSetor || !estacaoEtapaIds.length))" (click)="salvarEstacao()"></button>
-      </ng-template>
+      <p class="gp-erro station-editor-error" *ngIf="erroEstacao" role="alert">{{ erroEstacao }}</p>
+      <ng-template pTemplate="footer"><div class="station-editor-footer"><span><i class="pi pi-info-circle" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.required' | translate }}</span><div><button pButton type="button" [label]="'fluxo.estacoes.cancel' | translate" class="p-button-text" [disabled]="salvandoEstacao || salvandoCatalogo" (click)="mostrarEstacao = false"></button><button pButton type="button" [label]="estacaoEmEdicao ? ('fluxo.estacoes.saveChanges' | translate) : ('fluxo.estacoes.create' | translate)" icon="pi pi-check" [loading]="salvandoEstacao" [disabled]="!estacaoNome.trim() || !estacaoSetor || !estacaoEtapaIds.length || salvandoCatalogo || !!cadastroCatalogo" (click)="salvarEstacao()"></button></div></div></ng-template>
     </p-dialog>
 
     <p-dialog styleClass="ge-dialog ge-dialog--danger" [(visible)]="mostrarExcluirEstacao" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body" [header]="'fluxo.estacoes.deleteTitle' | translate"
@@ -750,7 +780,54 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
   estacaoNome = '';
   estacaoSetor: string | null = null;
   estacaoEtapaIds: number[] = [];
-  get etapasDoSetor() { return (this.dados?.etapasDisponiveis || []).filter(e => e.setor === this.estacaoSetor); }
+  buscaEtapas = '';
+  somenteSelecionadas = false;
+  @ViewChild('catalogoNomeInput') set campoCatalogo(campo: ElementRef<HTMLInputElement> | undefined) {
+    if (campo) setTimeout(() => { campo.nativeElement.focus(); campo.nativeElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); });
+  }
+  cadastroCatalogo: 'setor' | 'etapa' | null = null;
+  catalogoNome = '';
+  catalogoSetor: string | null = null;
+  catalogoCor = '#2563eb';
+  catalogoMeta: number | null = null;
+  salvandoCatalogo = false;
+  erroCatalogo = '';
+  get etapasSelecionadas() { return (this.dados?.etapasDisponiveis || []).filter(e => this.estacaoEtapaIds.includes(e.id)); }
+  get etapasCadastroVisiveis() {
+    const normalizar = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const busca = normalizar(this.buscaEtapas || '');
+    return (this.dados?.etapasDisponiveis || []).filter(e => (!this.somenteSelecionadas || this.estacaoEtapaIds.includes(e.id)) && normalizar(e.nome + ' ' + e.setor).includes(busca));
+  }
+  get gruposEtapas() {
+    const grupos = new Map<string, typeof this.etapasCadastroVisiveis>();
+    for (const e of this.etapasCadastroVisiveis) grupos.set(e.setor, [...(grupos.get(e.setor) || []), e]);
+    return [...grupos].map(([setor, etapas]) => ({ setor, etapas }));
+  }
+  alternarEtapa(id: number): void { this.estacaoEtapaIds = this.estacaoEtapaIds.includes(id) ? this.estacaoEtapaIds.filter(e => e !== id) : [...this.estacaoEtapaIds, id]; }
+  selecionarEtapas(etapas: { id: number }[]): void { this.estacaoEtapaIds = [...new Set([...this.estacaoEtapaIds, ...etapas.map(e => e.id)])]; }
+  grupoSelecionado(etapas: { id: number }[]): boolean { return etapas.every(e => this.estacaoEtapaIds.includes(e.id)); }
+  alternarGrupo(etapas: { id: number }[]): void {
+    if (this.grupoSelecionado(etapas)) this.estacaoEtapaIds = this.estacaoEtapaIds.filter(id => !etapas.some(e => e.id === id));
+    else this.selecionarEtapas(etapas);
+  }
+  abrirCadastroCatalogo(tipo: 'setor' | 'etapa'): void {
+    this.cadastroCatalogo = tipo; this.catalogoNome = ''; this.erroCatalogo = '';
+    this.catalogoSetor = this.estacaoSetor; this.catalogoCor = '#2563eb'; this.catalogoMeta = null;
+  }
+  salvarCatalogo(): void {
+    const tipo = this.cadastroCatalogo;
+    const nome = this.catalogoNome.trim();
+    if (!tipo || !nome || this.salvandoCatalogo || (tipo === 'etapa' && !this.catalogoSetor)) return;
+    this.salvandoCatalogo = true; this.erroCatalogo = '';
+    const req = tipo === 'setor' ? this.api.criarSetor(nome) : this.api.criarEtapa(nome, this.catalogoSetor!, this.catalogoCor, this.catalogoMeta);
+    req.subscribe({ next: d => {
+      this.aplicar(d);
+      if (tipo === 'setor') this.estacaoSetor = nome;
+      else if (d.etapaCriadaId != null) { this.selecionarEtapas([{ id: d.etapaCriadaId }]); this.buscaEtapas = ''; }
+      this.salvandoCatalogo = false; this.cadastroCatalogo = null;
+      this.toast.add({ severity: 'success', summary: this.tx('fluxo.estacoes.editor.catalogSaved', 'Cadastro criado e selecionado'), detail: nome, life: 3500 });
+    }, error: e => { this.salvandoCatalogo = false; this.erroCatalogo = e?.error?.mensagem || this.tx('fluxo.estacoes.saveFailed', 'Não foi possível salvar.'); } });
+  }
   opcoesSetor: string[] = [];
   salvandoEstacao = false;
   erroEstacao = '';
@@ -968,14 +1045,15 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
     this.estacaoEmEdicao = e || null;
     this.estacaoNome = e?.nome || '';
     this.estacaoSetor = e?.setor || null;
-    this.estacaoEtapaIds = [];
+    this.estacaoEtapaIds = [...(e?.etapaIds || [])];
+    this.buscaEtapas = ''; this.somenteSelecionadas = false; this.cadastroCatalogo = null; this.erroCatalogo = '';
     this.erroEstacao = '';
     this.mostrarEstacao = true;
   }
 
   prepararAcoes(e: FluxoEstacaoGestao): void {
     this.acoesEstacao = [
-      { label: this.tx('fluxo.estacoes.menu.edit', 'Editar nome'), icon: 'pi pi-pencil', command: () => this.abrirEstacao(e) },
+      { label: this.tx('fluxo.estacoes.menu.edit', 'Editar estação'), icon: 'pi pi-pencil', command: () => this.abrirEstacao(e) },
       { label: this.tx('fluxo.estacoes.menu.pair', 'Parear máquina'), icon: 'pi pi-link', command: () => this.abrirPareamento(e.codigo) },
       { separator: true },
       { label: this.tx('fluxo.estacoes.menu.delete', 'Excluir estação…'), icon: 'pi pi-trash', command: () => this.pedirExclusaoEstacao(e) }
@@ -1018,11 +1096,11 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
 
   salvarEstacao(): void {
     const nome = this.estacaoNome.trim();
-    if (this.salvandoEstacao || !nome || (!this.estacaoEmEdicao && (!this.estacaoSetor || !this.estacaoEtapaIds.length))) return;
+    if (this.salvandoEstacao || this.salvandoCatalogo || this.cadastroCatalogo || !nome || !this.estacaoSetor || !this.estacaoEtapaIds.length) return;
     this.salvandoEstacao = true;
     this.erroEstacao = '';
     const requisicao = this.estacaoEmEdicao
-      ? this.api.renomearEstacao(this.estacaoEmEdicao.codigo, nome)
+      ? this.api.atualizarEstacao(this.estacaoEmEdicao.codigo, nome, this.estacaoSetor!, this.estacaoEtapaIds)
       : this.api.criarEstacao(nome, this.estacaoSetor!, this.estacaoEtapaIds);
     requisicao.subscribe({
       next: d => {

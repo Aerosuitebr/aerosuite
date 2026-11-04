@@ -74,6 +74,32 @@ class OsFluxoServiceIT {
     private List<Map<String,Object>> catalogo(Map<String,Object> resposta) {
         return (List<Map<String,Object>>)resposta.get("estacoes");
     }
+    @Test @TestTransaction void gestaoCriaSetorEtapaEEditaEstacaoPadrao() {
+        criar();
+        var etapas=fluxo.etapas();
+        assertTrue(((List<?>)estacoes.criarSetor("Pintura").get("setores")).contains("Pintura"));
+        assertThrows(BadRequestException.class,()->estacoes.criarSetor(" pintura "));
+        var resposta=estacoes.criarEtapa("Pintura especial","Pintura","#112233",30);
+        Long novaId=(Long)resposta.get("etapaCriadaId");assertNotNull(novaId);
+        var nova=OsFluxoEtapa.<OsFluxoEtapa>findById(novaId);
+        assertTrue(nova.ordem>etapas.get(etapas.size()-1).ordem);
+        var ids=List.of(etapas.get(0).id,novaId);
+        var atualizadas=catalogo(estacoes.atualizarEstacao("OFICINA-1","Posto completo","Pintura",ids));
+        assertEquals(1L,atualizadas.stream().filter(e->"OFICINA-1".equals(e.get("codigo"))).count());
+        assertEquals(ids,atualizadas.stream().filter(e->"OFICINA-1".equals(e.get("codigo"))).findFirst().orElseThrow().get("etapaIds"));
+        estacoes.vincularEstacao("terminal-nova-etapa","OFICINA-1");
+        assertEquals(ids,estacoes.etapasAtendidas("terminal-nova-etapa"));
+        estacoes.renomear("OFICINA-1","Posto renomeado");
+        assertEquals(ids,estacoes.etapasAtendidas("terminal-nova-etapa"));
+    }
+    @Test @TestTransaction void cadastroRapidoRejeitaDadosInvalidos() {
+        criar();fluxo.etapas();
+        assertThrows(BadRequestException.class,()->estacoes.criarEtapa("Pintura","Inexistente","#112233",30));
+        assertThrows(BadRequestException.class,()->estacoes.criarEtapa("Pintura","Oficina","red",30));
+        assertThrows(BadRequestException.class,()->estacoes.criarEtapa("Pintura","Oficina","#112233",0));
+        assertThrows(BadRequestException.class,()->estacoes.atualizarEstacao("OFICINA-1","Posto","Oficina",List.of()));
+        assertThrows(BadRequestException.class,()->estacoes.atualizarEstacao("OFICINA-1","Posto","Oficina",null));
+    }
     @Test @TestTransaction void estacaoRestringeAsEtapasSelecionadas() {
         criar();
         var etapas=fluxo.etapas();

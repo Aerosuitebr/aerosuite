@@ -302,6 +302,7 @@ export interface FluxoEstacoes {
 }
 
 export interface FluxoEstacaoGestao {
+  etapaIds?: number[];
   monitoradoDesde?: string | null;
   semVinculoDesde?: string | null;
   codigo: string;
@@ -328,7 +329,8 @@ export interface FluxoMaquina {
 }
 
 export interface FluxoEstacoesGestao {
-  etapasDisponiveis?: { id: number; nome: string; setor: string }[];
+  etapaCriadaId?: number;
+  etapasDisponiveis?: { id: number; nome: string; setor: string; ordem?: number; cor?: string }[];
   pendentes?: FluxoMaquinaPendente[];
   setores?: string[];
   estacoes: FluxoEstacaoGestao[];
@@ -432,6 +434,18 @@ export class OsFluxoService {
 
   renomearEstacao(codigo: string, nome: string) {
     return this.http.put<FluxoEstacoesGestao>(`${this.base}/estacoes/${encodeURIComponent(codigo)}/nome`, { nome });
+  }
+
+  atualizarEstacao(codigo: string, nome: string, setor: string, etapaIds: number[]) {
+    return this.http.put<FluxoEstacoesGestao>(this.base + '/estacoes/' + encodeURIComponent(codigo), { nome, setor, etapaIds });
+  }
+
+  criarSetor(nome: string) {
+    return this.http.post<FluxoEstacoesGestao>(this.base + '/setores', { nome });
+  }
+
+  criarEtapa(nome: string, setor: string, cor: string, metaMinutos: number | null) {
+    return this.http.post<FluxoEstacoesGestao>(this.base + '/etapas', { nome, setor, cor, metaMinutos });
   }
 
   criarEstacao(nome: string, setor: string, etapaIds: number[]) {

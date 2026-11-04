@@ -3,14 +3,14 @@ import { describe, expect, it, vi } from 'vitest';
 import { of, throwError } from 'rxjs';
 import { OsFluxoEstacoesComponent } from './os-fluxo-estacoes.component';
 
-const estacao = { codigo: 'OFICINA-1', nome: 'Oficina 1', setor: 'Oficina', etapas: ['Montagem'], maquinas: 1 };
+const estacao = { codigo: 'OFICINA-1', nome: 'Oficina 1', setor: 'Oficina', etapas: ['Montagem'], etapaIds: [3], maquinas: 1 };
 const dados = { setores: ['Oficina', 'Recebimento'], estacoes: [estacao], maquinas: [] };
 
 function tela(): any {
   const componente = Object.create(OsFluxoEstacoesComponent.prototype);
   Object.assign(componente, {
     buscaEstacao: '', dados, toast: { add: vi.fn() },
-    api: { historicoEstacao: vi.fn(()=>of([])), criarEstacao: vi.fn(() => of(dados)), renomearEstacao: vi.fn(() => of(dados)), excluirEstacao: vi.fn(() => of(dados)) },
+    api: { historicoEstacao: vi.fn(()=>of([])), criarEstacao: vi.fn(() => of(dados)), renomearEstacao: vi.fn(() => of(dados)), atualizarEstacao: vi.fn(() => of(dados)), criarSetor: vi.fn(() => of(dados)), criarEtapa: vi.fn(() => of(dados)), excluirEstacao: vi.fn(() => of(dados)) },
     salvandoEstacao: false, excluindoEstacao: false
   });
   return componente;
@@ -82,13 +82,13 @@ describe('Gestão de estações', () => {
     expect(c.opcoesSetor).toEqual(['Oficina', 'Recebimento']);
   });
 
-  it('exige selecionar etapas antes de criar e filtra pelo setor', () => {
+  it('exige selecionar etapas e oferece todas independentemente do setor', () => {
     const c = tela();
     c.dados = { ...dados, etapasDisponiveis: [{ id: 3, nome: 'Montagem', setor: 'Oficina' }, { id: 1, nome: 'Entrada', setor: 'Recebimento' }] };
     c.abrirEstacao();
     c.estacaoNome = 'Bancada';
     c.estacaoSetor = 'Oficina';
-    expect(c.etapasDoSetor.map((e: any) => e.id)).toEqual([3]);
+    expect(c.etapasCadastroVisiveis.map((e: any) => e.id)).toEqual([3, 1]);
     c.salvarEstacao();
     expect(c.api.criarEstacao).not.toHaveBeenCalled();
   });
@@ -100,7 +100,49 @@ describe('Gestão de estações', () => {
     expect(estacao.nome).toBe('Oficina 1');
     expect(c.api.renomearEstacao).not.toHaveBeenCalled();
     c.salvarEstacao();
-    expect(c.api.renomearEstacao).toHaveBeenCalledWith('OFICINA-1', 'Novo nome');
+    expect(c.api.atualizarEstacao).toHaveBeenCalledWith('OFICINA-1', 'Novo nome', 'Oficina', [3]);
+  });
+
+  it('carrega a seleção sem alterar a estação original ao editar ou cancelar', () => {
+    const c = tela(); c.abrirEstacao(estacao);
+    expect(c.estacaoEtapaIds).toEqual([3]);
+    c.alternarEtapa(3); c.alternarEtapa(1);
+    expect(estacao.etapaIds).toEqual([3]);
+    c.abrirEstacao(estacao); expect(c.estacaoEtapaIds).toEqual([3]);
+  });
+
+  it('seleciona grupos sem duplicatas e busca sem distinguir acentos', () => {
+    const c = tela(); c.abrirEstacao();
+    c.dados = { ...dados, etapasDisponiveis: [{ id: 1, nome: 'Inspeção', setor: 'Oficina' }, { id: 3, nome: 'Montagem', setor: 'Oficina' }, { id: 4, nome: 'Saída', setor: 'Expedição' }] };
+    c.alternarGrupo([{ id: 1 }, { id: 3 }]); c.selecionarEtapas([{ id: 1 }]);
+    expect(c.estacaoEtapaIds).toEqual([1, 3]);
+    c.buscaEtapas = 'inspecao'; expect(c.etapasCadastroVisiveis.map((e: any) => e.id)).toEqual([1]);
+    c.alternarGrupo([{ id: 1 }, { id: 3 }]); expect(c.estacaoEtapaIds).toEqual([]);
+  });
+
+  it('cria setor atualizando as opções e preserva o rascunho e as etapas', () => {
+    const c = tela(); c.abrirEstacao(estacao); c.estacaoNome = 'Rascunho';
+    c.api.criarSetor.mockReturnValue(of({ ...dados, setores: [...dados.setores, 'Pintura'] }));
+    c.abrirCadastroCatalogo('setor'); c.catalogoNome = ' Pintura '; c.salvarCatalogo();
+    expect(c.api.criarSetor).toHaveBeenCalledWith('Pintura');
+    expect(c.opcoesSetor).toContain('Pintura'); expect(c.estacaoSetor).toBe('Pintura');
+    expect(c.estacaoNome).toBe('Rascunho'); expect(c.estacaoEtapaIds).toEqual([3]);
+  });
+
+  it('cria etapa e a seleciona sem perder as anteriores', () => {
+    const c = tela(); c.abrirEstacao(estacao);
+    c.api.criarEtapa.mockReturnValue(of({ ...dados, etapaCriadaId: 9, etapasDisponiveis: [{ id: 9, nome: 'Pintura', setor: 'Oficina' }] }));
+    c.abrirCadastroCatalogo('etapa'); c.catalogoNome = 'Pintura'; c.salvarCatalogo();
+    expect(c.api.criarEtapa).toHaveBeenCalledWith('Pintura', 'Oficina', '#2563eb', null);
+    expect(c.estacaoEtapaIds).toEqual([3, 9]); expect(c.cadastroCatalogo).toBeNull();
+  });
+
+  it('preserva o cadastro rápido e o rascunho em falhas', () => {
+    const c = tela(); c.abrirEstacao(estacao); c.abrirCadastroCatalogo('setor'); c.catalogoNome = 'Oficina';
+    c.api.criarSetor.mockReturnValue(throwError(() => ({ error: { mensagem: 'Setor duplicado' } })));
+    c.salvarCatalogo(); expect(c.erroCatalogo).toBe('Setor duplicado');
+    expect(c.cadastroCatalogo).toBe('setor'); expect(c.estacaoEtapaIds).toEqual([3]);
+    expect(c.salvandoCatalogo).toBe(false);
   });
 
   it('solicita confirmação antes de excluir e mantém a modal aberta em falhas', () => {

@@ -12,6 +12,15 @@ class OsFluxoEstacaoEtapasTest {
   return List.of(a,b,c);
  }
  @Test void selecionaSubconjuntoNaOrdemDoFluxo(){assertEquals(List.of(2L),OsFluxoEstacaoService.validarEtapas("Oficina",List.of(2L,2L),catalogo()));}
- @Test void rejeitaVazioEtapaInexistenteEOutroSetor(){for(var ids:List.of(List.<Long>of(),List.of(99L),List.of(3L)))assertThrows(BadRequestException.class,()->OsFluxoEstacaoService.validarEtapas("Oficina",ids,catalogo()));}
+ @Test void rejeitaVazioEEtapaInexistente(){for(var ids:List.of(List.<Long>of(),List.of(99L)))assertThrows(BadRequestException.class,()->OsFluxoEstacaoService.validarEtapas("Oficina",ids,catalogo()));}
+ @Test void permiteEtapasDeSetoresDiferentes(){assertEquals(List.of(1L,3L),OsFluxoEstacaoService.validarEtapas("Oficina",List.of(3L,1L),catalogo()));}
+ @Test void cadastroRapidoEEdicaoExigemGestaoAntesDeAcessarDados(){
+  var service=new OsFluxoEstacaoService();service.user=new com.aerosuite.security.InternalUserContext();
+  service.user.applyPermissionSnapshot("MECANICO",java.util.Set.of());
+  assertThrows(jakarta.ws.rs.ForbiddenException.class,()->service.criarSetor("Pintura"));
+  assertThrows(jakarta.ws.rs.ForbiddenException.class,()->service.criarEtapa("Pintura","Oficina","#112233",null));
+  assertThrows(jakarta.ws.rs.ForbiddenException.class,()->service.atualizarEstacao("OFICINA-1","Posto","Oficina",List.of(1L)));
+ }
+ @Test void validaNomes(){assertEquals("Pintura",OsFluxoEstacaoService.validarNome(" Pintura "));for(String nome:new String[]{null," ","x".repeat(121)})assertThrows(BadRequestException.class,()->OsFluxoEstacaoService.validarNome(nome));}
  @Test void preservaClientesAntigos(){assertEquals(List.of(1L,2L),OsFluxoEstacaoService.validarEtapas("Oficina",null,catalogo()));}
 }
