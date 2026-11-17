@@ -1,5 +1,5 @@
 <p-toast></p-toast>
-<div class="as-page acesso-matriz">
+<div class="as-page list-container acesso-matriz">
   <app-page-hero variant="navy" [titleKey]="key + 'title'" [subtitleKey]="key + 'matrix.subtitle'"
                  titleIcon="pi-shield" [hasActions]="podeEditar">
     <button actions *ngIf="podeEditar" pButton type="button" icon="pi pi-plus"
@@ -43,6 +43,8 @@
                          [skeletonRows]="5" [skeletonCols]="4" [emptyTitleKey]="key + 'empty'">
       <p-table [value]="linhas" dataKey="id" [paginator]="true" [rows]="listPageSize" [first]="primeiraLinha"
                (onPage)="primeiraLinha = $event.first ?? 0" [rowsPerPageOptions]="pageSizes"
+               paginatorPosition="top" [showCurrentPageReport]="true"
+               [currentPageReportTemplate]="'common.list.pageReport' | translate"
                [tableStyle]="{ 'min-width': '46rem' }" styleClass="matriz-tabela">
         <ng-template pTemplate="header">
           <tr>

@@ -83,6 +83,7 @@ const MOCK_USER = {
     'propostas-comerciais',
     'CONFIGURACOES',
     'ADMIN',
+    'USUARIOS',
     'HANGAR_JOB_CARD',
     'FCU_ASSEMBLY',
     'FCU',
@@ -128,6 +129,18 @@ function mockApiBody(url, method) {
 
   if (u.includes('/auth/me')) {
     return { status: 200, body: JSON.stringify(MOCK_USER) };
+  }
+
+  if (u.endsWith('/controle-acesso/vinculos') && method === 'GET') {
+    const usuarios = Array.from({ length: 25 }, (_, index) => ({
+      id: index + 1,
+      nome: `Usuário teste ${String(index + 1).padStart(2, '0')}`,
+      email: `usuario${index + 1}@aerosuite.test`,
+      ativo: true,
+      revisao: 0,
+      perfis: [],
+    }));
+    return { status: 200, body: JSON.stringify(usuarios) };
   }
 
   if (u.includes('sistema-empresa') && u.includes('status')) {
@@ -640,6 +653,21 @@ async function testF6(page) {
   return 'confirm dialog com título e botões i18n; Esc fecha';
 }
 
+async function testMatrizPaginacao(page) {
+  await page.setViewport({ width: 1280, height: 650 });
+  await page.goto(`${BASE_URL}associacao-usuario-perfil`, { waitUntil: 'networkidle0', timeout: 90000 });
+  const tabela = '.matriz-tabela';
+  const proxima = `${tabela} .p-paginator-next`;
+  await page.waitForSelector(`${proxima}:enabled`, { visible: true, timeout: 15000 });
+  await page.click(proxima);
+  await page.waitForFunction(sel => document.querySelector(sel)?.textContent.includes('Usuário teste 11'), {}, tabela);
+  await page.click(`${tabela} .p-paginator-last`);
+  await page.waitForFunction(sel => document.querySelector(sel)?.textContent.includes('Usuário teste 25'), {}, tabela);
+  await page.type('#buscaAcesso', 'Usuário teste 03');
+  await page.waitForFunction(sel => document.querySelector(sel)?.textContent.includes('Usuário teste 03'), {}, tabela);
+  return 'segunda e última páginas acessíveis e busca retorna à primeira página';
+}
+
 async function testF12(page) {
   if (process.env.A11Y_DEBUG) {
     page.on('console', msg => console.log(`F12 console: ${msg.text()}`));
@@ -967,6 +995,7 @@ async function main() {
     ['F10', testF10],
     ['F11', testF11],
     ['F12', testF12],
+    ['matriz-paginacao', testMatrizPaginacao],
   ];
   const flowFilter = (process.env.A11Y_FLOW_IDS || '')
     .split(',')
