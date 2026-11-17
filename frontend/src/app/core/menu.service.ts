@@ -19,7 +19,7 @@ export interface MenuSection {
 }
 
 const MENU_SESSION_KEY = 'aerosuite_menu_sections_v2';
-const MENU_CATALOG_REV = 'menu-coverage-v7';
+const MENU_CATALOG_REV = 'menu-coverage-v8';
 const MENU_CATALOG_REV_KEY = 'aerosuite_menu_catalog_rev';
 
 interface MenuSessionPayload {

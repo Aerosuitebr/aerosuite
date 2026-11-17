@@ -44,13 +44,13 @@ describe('Menu organizado por fluxo de trabalho',()=>{
  it('ordena seções pelo título traduzido exibido',()=>{
   const s=service();
   s.i18n.translateMenuSecao=(key:string)=>({OS:'Z Ordens',CADASTRO:'Á Cadastros',RNC:'B Não conformidades'}[key]||key);
-  const out=s.organizarFuncionalidadesPorSecao([item('/os'),item('/usuarios'),item('/nrc')]);
+  const out=s.organizarFuncionalidadesPorSecao([item('/os'),item('/products'),item('/nrc')]);
   expect(out.map((section:any)=>section.titulo)).toEqual(['CADASTRO','RNC','OS']);
  });
  it('ordena nomes traduzidos mesmo entre os antigos subgrupos',()=>{
   const s=service();
   s.i18n.translateMenuFunc=(code:string)=>({PESSOAS:'Á Pessoas',PRODUTOS:'Z Produtos'}[code]||code);
-  const out=s.organizarFuncionalidadesPorSecao([item('/products','Cadastro','PRODUTOS'),item('/usuarios','Cadastro','PESSOAS')]);
+  const out=s.organizarFuncionalidadesPorSecao([item('/products','Cadastro','PRODUTOS'),item('/os/fluxo/estacoes','Cadastro','PESSOAS')]);
   expect(out[0].funcionalidades.map((f:any)=>f.codigo)).toEqual(['PESSOAS','PRODUTOS']);
  });
  it('abre Administração para rotas específicas dentro do prefixo OS',()=>{
@@ -65,10 +65,24 @@ it('normaliza rotas legadas sem barra inicial',()=>{
 });
 describe("Cadastros centralizados",()=>{
  it.each(['/products', '/products/new', '/fabricantes', '/fcu', '/associacao-fcu', '/tipos-servico', '/estoque/fornecedores', '/estoque/lotes'])("agrupa %s em Cadastros",r=>expect(menuOrganization(item(r))).toMatchObject({section:"CADASTRO",group:"CADASTROS_PRODUTOS"}));
- it.each(['/usuarios', '/usuarios-externos', '/perfis', '/funcionalidades'])("agrupa %s em Cadastros",r=>expect(menuOrganization(item(r))).toMatchObject({section:"CADASTRO",group:"CADASTROS_PESSOAS"}));
  it.each(['/os/fluxo/estacoes', '/capacidade/hangares'])("agrupa %s em Cadastros",r=>expect(menuOrganization(item(r))).toMatchObject({section:"CADASTRO",group:"CADASTROS_ESTRUTURA"}));
  it.each(['/publicacoes-tecnicas/cadastro', '/publicacoes-tecnicas/associar-pn'])("agrupa %s em Cadastros",r=>expect(menuOrganization(item(r))).toMatchObject({section:"CADASTRO",group:"CADASTROS_DOCUMENTOS"}));
- it("mantém controle de acesso em Administração",()=>expect(menuOrganization(item("/controle-acesso")).section).toBe("ADMINISTRACAO"));
+});
+
+describe('Controle de Acesso', () => {
+ it.each([
+  '/usuarios', '/usuarios/edit/7', '/usuarios-externos', '/usuarios-externos/7/permissoes',
+  '/perfis', '/funcionalidades', '/controle-acesso',
+  '/associacao-usuario-perfil', '/consulta-funcionalidades-usuario',
+ ])('agrupa %s em Controle de Acesso independentemente da seção anterior', route => {
+  expect(menuOrganization(item(route, 'Cadastro')).section).toBe('CONTROLE_DE_ACESSO');
+ });
+ it('reagrupa usuários e permissões de menus armazenados', () => {
+  const out = service().normalizeCachedMenuSections([
+   { funcionalidades: [item('/usuarios', 'Cadastro'), item('/controle-acesso', 'Administração')] }
+  ]);
+  expect(out.map((section:any) => section.titulo)).toEqual(['CONTROLE_DE_ACESSO']);
+ });
 });
 
 describe('Comercial sem Aero Studio', () => {

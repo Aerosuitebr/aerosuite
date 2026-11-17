@@ -1,7 +1,7 @@
 import type { Funcionalidade } from './funcionalidade.service';
 import { slugifyMenuSection } from './i18n/menu-i18n.util';
 
-export const MENU_SECTIONS = ['OS','RNC','ESTOQUE','FERRAMENTARIA','COMERCIAL','CADASTRO','TECNICA_DOCUMENTOS','ADMINISTRACAO','AJUDA_COMUNICACAO'] as const;
+export const MENU_SECTIONS = ['OS','RNC','ESTOQUE','FERRAMENTARIA','COMERCIAL','CADASTRO','TECNICA_DOCUMENTOS','CONTROLE_DE_ACESSO','ADMINISTRACAO','AJUDA_COMUNICACAO'] as const;
 type Section = typeof MENU_SECTIONS[number];
 export interface MenuOrganization { section: Section; group: string; order: number; }
 const OS_ORDER: Record<string,number> = {
@@ -22,10 +22,6 @@ const REGISTRATIONS: Record<string,[string,number]> = {
  '/tpfiles':['CADASTROS_PRODUTOS',10],
  '/estoque/fornecedores':['CADASTROS_PRODUTOS',10],
  '/estoque/lotes':['CADASTROS_PRODUTOS',10],
- '/usuarios':['CADASTROS_PESSOAS',20],
- '/usuarios-externos':['CADASTROS_PESSOAS',20],
- '/perfis':['CADASTROS_PESSOAS',20],
- '/funcionalidades':['CADASTROS_PESSOAS',20],
  '/os/fluxo/estacoes':['CADASTROS_ESTRUTURA',30],
  '/capacidade/hangares':['CADASTROS_ESTRUTURA',30],
  '/publicacoes-tecnicas/cadastro':['CADASTROS_DOCUMENTOS',40],
@@ -33,7 +29,10 @@ const REGISTRATIONS: Record<string,[string,number]> = {
 };
 const ADMIN_REPORTS = new Set(['/relatorios','/os-auditoria','/dossie-auditoria','/operacoes/custos','/auditoria-acesso']);
 const ADMIN_CONFIG = new Set(['/configuracoes','/go-live-migracao','/os/fluxo/ajuste']);
-const ADMIN_ACCESS = new Set(['/controle-acesso','/associacao-usuario-perfil','/consulta-funcionalidades-usuario']);
+const ACCESS_ROUTES = [
+ '/usuarios', '/usuarios-externos', '/perfis', '/funcionalidades',
+ '/controle-acesso', '/associacao-usuario-perfil', '/consulta-funcionalidades-usuario',
+];
 const TECHNICAL = new Set(['/fcu-assembly','/biblioteca','/aero/diretrizes']);
 export function menuOrganization(f: Pick<Funcionalidade,'rota'|'codigo'|'secao'>): MenuOrganization {
  const rawRoute=(f.rota||'').trim().split('?')[0].split('#')[0];
@@ -41,11 +40,11 @@ export function menuOrganization(f: Pick<Funcionalidade,'rota'|'codigo'|'secao'>
  const code=(f.codigo||'').trim().toUpperCase();
  const old=slugifyMenuSection(f.secao||'');
  const item=(section:Section,group='',order=500):MenuOrganization=>({section,group,order});
+ if(ACCESS_ROUTES.some(prefix=>route===prefix||route.startsWith(prefix+'/')))return item('CONTROLE_DE_ACESSO');
  if(route==='/ferramentas'||route.startsWith('/ferramentas/')||route==='/operacoes/ferramentas'||route==='/conformidade/calibracao'||code.startsWith('FERRAMENTAS_')||old==='FERRAMENTARIA')return item('FERRAMENTARIA');
  if(REGISTRATIONS[route])return item('CADASTRO',...REGISTRATIONS[route]);
  if(code.startsWith('NRC_')||route==='/nrc'||route.startsWith('/nrc/'))return item('RNC','',RNC_ORDER[route]??80);
  if(ADMIN_REPORTS.has(route))return item('ADMINISTRACAO','AUDITORIAS_RELATORIOS',10);
- if(ADMIN_ACCESS.has(route))return item('ADMINISTRACAO','ACESSOS',40);
  if(ADMIN_CONFIG.has(route)||code==='CONFIGURACOES'||route.startsWith('/integracoes/'))return item('ADMINISTRACAO','CONFIGURACAO_INTEGRACOES',30);
  if(route.startsWith('/conformidade/'))return item('TECNICA_DOCUMENTOS','CONTROLES_TECNICOS',20);
  if(route in OS_ORDER)return item('OS','',OS_ORDER[route]);
@@ -60,6 +59,7 @@ export function menuOrganization(f: Pick<Funcionalidade,'rota'|'codigo'|'secao'>
  if(old==='ESTOQUE')return item('ESTOQUE');
  if(old==='COMERCIAL')return item('COMERCIAL');
  if(old==='CADASTRO')return item('CADASTRO','CADASTROS_PRODUTOS',10);
+ if(old==='CONTROLE_DE_ACESSO')return item('CONTROLE_DE_ACESSO');
  if(['CONFORMIDADE_TECNICA','DOCUMENTOS','PUBLICACOES_TECNICAS','TECNICA_DOCUMENTOS'].includes(old))return item('TECNICA_DOCUMENTOS');
  if(['SUPORTE','VITRINE','COMUNICACAO','AJUDA_COMUNICACAO'].includes(old))return item('AJUDA_COMUNICACAO');
  if(old==='RELATORIOS'||/AUDITOR|RELATOR|CUSTOS_OPERACIONAIS/.test(code))return item('ADMINISTRACAO','AUDITORIAS_RELATORIOS',10);
