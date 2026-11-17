@@ -1,0 +1,23 @@
+{
+  "capturedFrom": "http://localhost:8081",
+  "date": "2026-11-08",
+  "images": {
+    "dashboard": "https://aerosuite.com.br/wp-content/uploads/2026/11/aerosuite-atual-dashboard-20261108.jpg",
+    "os-list": "https://aerosuite.com.br/wp-content/uploads/2026/11/aerosuite-atual-os-list-20261108.jpg",
+    "estoque-itens": "https://aerosuite.com.br/wp-content/uploads/2026/11/aerosuite-atual-estoque-itens-20261108.jpg",
+    "propostas-comerciais": "https://aerosuite.com.br/wp-content/uploads/2026/11/aerosuite-atual-propostas-comerciais-20261108.jpg",
+    "conformidade-painel": "https://aerosuite.com.br/wp-content/uploads/2026/11/aerosuite-atual-conformidade-painel-20261108.jpg",
+    "fluxo-etapas": "https://aerosuite.com.br/wp-content/uploads/2026/11/aerosuite-atual-fluxo-etapas-20261108.jpg",
+    "central-bipagem": "https://aerosuite.com.br/wp-content/uploads/2026/11/aerosuite-atual-central-bipagem-20261108.jpg",
+    "gestao-estacoes": "https://aerosuite.com.br/wp-content/uploads/2026/11/aerosuite-atual-gestao-estacoes-20261108.jpg",
+    "editor-etapas": "https://aerosuite.com.br/wp-content/uploads/2026/11/aerosuite-atual-editor-etapas-20261108.jpg"
+  },
+  "publishedPage": "https://aerosuite.com.br/",
+  "featureAnchor": "fluxo-os-home",
+  "verified": [
+    "desktop",
+    "mobile",
+    "feature-panels",
+    "interactive-tour"
+  ]
+}

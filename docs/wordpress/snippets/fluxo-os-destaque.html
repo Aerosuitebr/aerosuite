@@ -1,0 +1,52 @@
+<!-- wp:html -->
+<section class="as-flow-feature" id="fluxo-os-home" aria-labelledby="as-flow-feature-title">
+  <header class="as-flow-feature__intro">
+    <p class="as-flow-feature__eyebrow">Conheça o controle de fluxo da OS</p>
+    <h2 id="as-flow-feature-title">Cada OS na etapa certa.<br>Uma visão de toda a oficina.</h2>
+    <p>Organize a sequência de trabalho, registre as passagens por código de barras e acompanhe as estações, as filas e os tempos da operação.</p>
+  </header>
+  <div class="as-flow-feature__screens">
+    <details name="as-flow-preview" open>
+      <summary><span>01</span><div><strong>Fluxo das ordens de serviço</strong><p>Esteira de etapas, filas, permanência e vazão para identificar onde a operação precisa de atenção.</p></div></summary>
+      <figure><img src="{{FLUXO_ETAPAS}}" alt="Painel atual do fluxo de OS da Aero Suite, com esteira de etapas e indicadores operacionais" width="1440" height="1000" loading="lazy" decoding="async"><figcaption>Visão do andamento da oficina, da entrada à última etapa do fluxo.</figcaption></figure>
+    </details>
+    <details name="as-flow-preview">
+      <summary><span>02</span><div><strong>Etapas adaptadas à sua rotina</strong><p>Edite nomes, setores, cores e metas. Insira e reordene as etapas para representar o caminho de cada OS.</p></div></summary>
+      <figure><img src="{{EDITOR_ETAPAS}}" alt="Editor atual das etapas do fluxo, com sequência, setor responsável, cor e meta em minutos" width="1440" height="1000" loading="lazy" decoding="async"><figcaption>Ajustes nas etapas pendentes preservam as etapas já realizadas e as OS concluídas.</figcaption></figure>
+    </details>
+    <details name="as-flow-preview">
+      <summary><span>03</span><div><strong>Central de Bipagem</strong><p>Registre entradas e saídas por código de barras, consulte a fila da estação e receba o resultado de cada leitura.</p></div></summary>
+      <figure><img src="{{CENTRAL_BIPAGEM}}" alt="Estação de bipagem atual da Aero Suite, com leitor ativo, etapas atendidas e fila de ordens de serviço" width="1440" height="1000" loading="lazy" decoding="async"><figcaption>Postos com uma ou várias etapas, seleção automática conforme a situação da OS e histórico de leituras na sessão.</figcaption></figure>
+    </details>
+    <details name="as-flow-preview">
+      <summary><span>04</span><div><strong>Controle e gestão de estações</strong><p>Organize os postos por setor, associe etapas e computadores e acompanhe cobertura, vínculos e máquinas sem sinal recente.</p></div></summary>
+      <figure><img src="{{GESTAO_ESTACOES}}" alt="Gerenciamento atual de estações da Aero Suite, com filtros por setor, etapas e computadores vinculados" width="1440" height="1000" loading="lazy" decoding="async"><figcaption>Uma visão central das estações, com filtros, visualização em cards ou tabela e aprovação das máquinas.</figcaption></figure>
+    </details>
+  </div>
+  <div class="as-flow-feature__cta"><p>Veja como conectar as etapas e os postos da sua oficina.</p><a class="as-inline-conversion__cta as-track-demo" href="https://aerosuite.com.br/contato/#agendar-demo" data-as-event="cta_demo" data-as-location="home_fluxo_os">Agendar demo do fluxo de OS</a></div>
+</section>
+<style id="aerosuite-flow-feature-css">
+body.home .as-flow-feature{box-sizing:border-box;width:calc(100% - 48px);max-width:1240px!important;margin:4rem auto;padding:clamp(1.25rem,3vw,3rem);border:1px solid #d7e4ee;border-radius:28px;background:linear-gradient(155deg,#fff,#eef6fc);color:#10273e;scroll-margin-top:120px}
+body.home .as-flow-feature__intro{max-width:850px;margin:0 auto 2rem;text-align:center}
+body.home .as-flow-feature__eyebrow{display:inline-block;margin:0 0 1rem;padding:.5rem 1rem;border-radius:999px;background:#dff4f3;color:#075d5b;font-size:.9rem;font-weight:750;line-height:1.5}
+body.home .as-flow-feature h2{margin:0 0 1rem!important;color:#10273e!important;font-size:clamp(1.9rem,3.5vw,3rem);line-height:1.15;letter-spacing:-.035em}
+body.home .as-flow-feature__intro>p:last-child{color:#40576c;font-size:1.1rem;line-height:1.7}
+body.home .as-flow-feature details{margin:0 0 1rem;overflow:hidden;border:1px solid #ccdce8;border-radius:18px;background:#fff}
+body.home .as-flow-feature summary{display:flex;gap:1rem;align-items:center;padding:1.3rem;cursor:pointer;list-style:none}
+body.home .as-flow-feature summary::-webkit-details-marker{display:none}
+body.home .as-flow-feature summary>span{display:grid;place-items:center;flex:0 0 44px;height:44px;border-radius:12px;background:#e9f2fb;color:#164b76;font-size:1rem;font-weight:800}
+body.home .as-flow-feature summary>div{flex:1;min-width:0}
+body.home .as-flow-feature summary::after{content:'+';flex-shrink:0;color:#164b76;font-size:1.7rem}
+body.home .as-flow-feature details[open] summary::after{content:'−'}
+body.home .as-flow-feature details[open] summary{background:#edf6fc}
+body.home .as-flow-feature summary strong{color:#10273e;font-size:1.2rem;line-height:1.4}
+body.home .as-flow-feature summary p{margin:.3rem 0 0;color:#40576c;font-size:1rem;line-height:1.6}
+body.home .as-flow-feature summary:focus-visible{outline:3px solid #087f8c;outline-offset:-4px}
+body.home .as-flow-feature figure{margin:0;padding:0;background:#082641}
+body.home .as-flow-feature figure img{display:block;width:100%;height:auto}
+body.home .as-flow-feature figcaption{padding:1rem 1.25rem;color:#e1ebf3;font-size:1rem;line-height:1.6}
+body.home .as-flow-feature__cta{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;margin-top:2rem}
+body.home .as-flow-feature__cta p{flex:1 1 300px;margin:0;color:#40576c;font-size:1.05rem;line-height:1.65}
+@media(max-width:600px){body.home .as-flow-feature{width:calc(100% - 24px);max-width:calc(100% - 24px)!important;margin:2rem auto;border-radius:20px}body.home .as-flow-feature summary{padding:1rem;gap:.7rem;align-items:flex-start}body.home .as-flow-feature summary>span{flex-basis:32px;height:32px;border-radius:9px;font-size:.85rem}body.home .as-flow-feature summary strong{font-size:1.05rem}body.home .as-flow-feature__cta a{width:100%}}
+</style>
+<!-- /wp:html -->
