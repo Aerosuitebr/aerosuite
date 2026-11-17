@@ -1,7 +1,7 @@
 import type { Funcionalidade } from './funcionalidade.service';
 import { slugifyMenuSection } from './i18n/menu-i18n.util';
 
-export const MENU_SECTIONS = ['OS','RNC','ESTOQUE','COMERCIAL','CADASTRO','TECNICA_DOCUMENTOS','ADMINISTRACAO','AJUDA_COMUNICACAO'] as const;
+export const MENU_SECTIONS = ['OS','RNC','ESTOQUE','FERRAMENTARIA','COMERCIAL','CADASTRO','TECNICA_DOCUMENTOS','ADMINISTRACAO','AJUDA_COMUNICACAO'] as const;
 type Section = typeof MENU_SECTIONS[number];
 export interface MenuOrganization { section: Section; group: string; order: number; }
 const OS_ORDER: Record<string,number> = {
@@ -19,6 +19,7 @@ const REGISTRATIONS: Record<string,[string,number]> = {
  '/fcu':['CADASTROS_PRODUTOS',10],
  '/associacao-fcu':['CADASTROS_PRODUTOS',10],
  '/tipos-servico':['CADASTROS_PRODUTOS',10],
+ '/tpfiles':['CADASTROS_PRODUTOS',10],
  '/estoque/fornecedores':['CADASTROS_PRODUTOS',10],
  '/estoque/lotes':['CADASTROS_PRODUTOS',10],
  '/usuarios':['CADASTROS_PESSOAS',20],
@@ -30,27 +31,28 @@ const REGISTRATIONS: Record<string,[string,number]> = {
  '/publicacoes-tecnicas/cadastro':['CADASTROS_DOCUMENTOS',40],
  '/publicacoes-tecnicas/associar-pn':['CADASTROS_DOCUMENTOS',40],
 };
-const ADMIN_REPORTS = new Set(['/relatorios','/os-auditoria','/dossie-auditoria','/operacoes/custos','/estoque/dashboard','/estoque/movimentacoes','/conformidade/painel']);
-const ADMIN_CONFIG = new Set(['/configuracoes','/go-live-migracao','/os/fluxo/estacoes','/os/fluxo/ajuste','/capacidade/hangares','/estoque/estoque-minimo-lote']);
-const ADMIN_ACCESS = new Set(['/usuarios','/usuarios-externos','/perfis','/funcionalidades','/controle-acesso']);
-const TECHNICAL = new Set(['/fabricantes','/tipos-servico','/fcu','/associacao-fcu','/fcu-assembly','/biblioteca','/aero/diretrizes']);
+const ADMIN_REPORTS = new Set(['/relatorios','/os-auditoria','/dossie-auditoria','/operacoes/custos','/auditoria-acesso']);
+const ADMIN_CONFIG = new Set(['/configuracoes','/go-live-migracao','/os/fluxo/ajuste']);
+const ADMIN_ACCESS = new Set(['/controle-acesso','/associacao-usuario-perfil','/consulta-funcionalidades-usuario']);
+const TECHNICAL = new Set(['/fcu-assembly','/biblioteca','/aero/diretrizes']);
 export function menuOrganization(f: Pick<Funcionalidade,'rota'|'codigo'|'secao'>): MenuOrganization {
  const rawRoute=(f.rota||'').trim().split('?')[0].split('#')[0];
  const route=rawRoute?'/'+rawRoute.replace(/^\/+|\/+$/g,'').toLowerCase():'';
  const code=(f.codigo||'').trim().toUpperCase();
  const old=slugifyMenuSection(f.secao||'');
  const item=(section:Section,group='',order=500):MenuOrganization=>({section,group,order});
+ if(route==='/ferramentas'||route.startsWith('/ferramentas/')||route==='/operacoes/ferramentas'||route==='/conformidade/calibracao'||code.startsWith('FERRAMENTAS_')||old==='FERRAMENTARIA')return item('FERRAMENTARIA');
  if(REGISTRATIONS[route])return item('CADASTRO',...REGISTRATIONS[route]);
  if(code.startsWith('NRC_')||route==='/nrc'||route.startsWith('/nrc/'))return item('RNC','',RNC_ORDER[route]??80);
- // Administrative exceptions take precedence over the operational route prefix.
- if(ADMIN_REPORTS.has(route)||/AUDITOR|RELATOR|CUSTOS_OPERACIONAIS/.test(code))return item('ADMINISTRACAO','AUDITORIAS_RELATORIOS',10);
+ if(ADMIN_REPORTS.has(route))return item('ADMINISTRACAO','AUDITORIAS_RELATORIOS',10);
  if(ADMIN_ACCESS.has(route))return item('ADMINISTRACAO','ACESSOS',40);
  if(ADMIN_CONFIG.has(route)||code==='CONFIGURACOES'||route.startsWith('/integracoes/'))return item('ADMINISTRACAO','CONFIGURACAO_INTEGRACOES',30);
- if(route.startsWith('/conformidade/'))return item('ADMINISTRACAO','CONTROLES_TECNICOS',20);
+ if(route.startsWith('/conformidade/'))return item('TECNICA_DOCUMENTOS','CONTROLES_TECNICOS',20);
  if(route in OS_ORDER)return item('OS','',OS_ORDER[route]);
  if(route.startsWith('/os/')||route.startsWith('/operacoes/')||route.startsWith('/capacidade/'))return item('OS');
- if(route.startsWith('/estoque')||route.startsWith('/products'))return item('ESTOQUE');
- if(['/propostas-comerciais','/templates-proposta'].includes(route))return item('COMERCIAL');
+ if(route==='/estoque'||route.startsWith('/estoque/'))return item('ESTOQUE');
+ if(route.startsWith('/products/'))return item('CADASTRO','CADASTROS_PRODUTOS',10);
+ if(route==='/propostas-comerciais'||route.startsWith('/propostas-comerciais/')||route==='/templates-proposta')return item('COMERCIAL');
  if(TECHNICAL.has(route)||route.startsWith('/publicacoes-tecnicas/'))return item('TECNICA_DOCUMENTOS');
  if(route.startsWith('/suporte')||route.startsWith('/vitrine')||route==='/chat')return item('AJUDA_COMUNICACAO');
  // Preserve new/legacy entries even before their route is explicitly catalogued.
@@ -58,8 +60,9 @@ export function menuOrganization(f: Pick<Funcionalidade,'rota'|'codigo'|'secao'>
  if(old==='ESTOQUE')return item('ESTOQUE');
  if(old==='COMERCIAL')return item('COMERCIAL');
  if(old==='CADASTRO')return item('CADASTRO','CADASTROS_PRODUTOS',10);
- if(['DOCUMENTOS','PUBLICACOES_TECNICAS','TECNICA_DOCUMENTOS'].includes(old))return item('TECNICA_DOCUMENTOS');
+ if(['CONFORMIDADE_TECNICA','DOCUMENTOS','PUBLICACOES_TECNICAS','TECNICA_DOCUMENTOS'].includes(old))return item('TECNICA_DOCUMENTOS');
  if(['SUPORTE','VITRINE','COMUNICACAO','AJUDA_COMUNICACAO'].includes(old))return item('AJUDA_COMUNICACAO');
+ if(old==='RELATORIOS'||/AUDITOR|RELATOR|CUSTOS_OPERACIONAIS/.test(code))return item('ADMINISTRACAO','AUDITORIAS_RELATORIOS',10);
  return item('ADMINISTRACAO','OUTROS_CONTROLES',50);
 }
 export function uniqueMenuDestinations(items:Funcionalidade[]):Funcionalidade[] {

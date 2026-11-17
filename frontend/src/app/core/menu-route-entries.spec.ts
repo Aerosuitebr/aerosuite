@@ -29,7 +29,9 @@ walk(source);
 describe('Menu coverage', () => {
   it('every added destination exists in the router', () => {
     for (const entry of MENU_ROUTE_ENTRIES) {
-      const route = tenantRoutes.get(entry.route) || (entry.route.startsWith('/operacoes/') ? tenantRoutes.get('/operacoes/:modulo') : undefined);
+      const route = tenantRoutes.get(entry.route) ??
+        (entry.route.startsWith('/operacoes/') ? tenantRoutes.get('/operacoes/:modulo') : undefined) ??
+        (entry.route.startsWith('/ferramentas/') ? tenantRoutes.get('/ferramentas/:visao') : undefined);
       expect(route, entry.route).toBeTruthy();
       for (const code of entry.perm?.funcionalidadesAny || []) expect(route, entry.route).toContain(code);
       for (const code of entry.perm?.funcionalidadesPrefix || []) expect(tenantRoutes.get('/' + entry.route.split('/')[1]), entry.route).toContain(code);
@@ -54,6 +56,16 @@ describe('Menu coverage', () => {
   it('covers every operational submodule', () => {
     const menu = completeMenuRoutes([], user(['CENTRAL_OPERACIONAL']));
     for (const slug of ['impedimentos','materiais','compras','prontidao','planejamento','ferramentas','retornos']) expect(menu.some(f => f.rota === `/operacoes/${slug}`)).toBe(true);
+  });
+  it('adds pending tool transactions only for tool-room operators', () => {
+    const management = { codigo: 'FERRAMENTAS_GESTAO', ativo: true } as Funcionalidade;
+    const personal = { codigo: 'FERRAMENTAS_MECANICO', ativo: true } as Funcionalidade;
+    const hasPending = (items: Funcionalidade[], profile = 'OPERADOR') =>
+      completeMenuRoutes(items, user([], profile)).some(f => f.rota === '/ferramentas/pendencias');
+    expect(hasPending([management])).toBe(true);
+    expect(hasPending([personal])).toBe(false);
+    expect(hasPending([{ ...management, ativo: false }])).toBe(false);
+    expect(hasPending([], 'ADMIN')).toBe(false);
   });
   it('keeps onboarding discoverable in the control-plane menu and every link valid', () => {
     expect(PLATFORM_OPS_NAV.some(item => item.route === '/plataforma/boas-vindas')).toBe(true);

@@ -19,7 +19,7 @@ export interface MenuSection {
 }
 
 const MENU_SESSION_KEY = 'aerosuite_menu_sections_v2';
-const MENU_CATALOG_REV = 'menu-coverage-v6';
+const MENU_CATALOG_REV = 'menu-coverage-v7';
 const MENU_CATALOG_REV_KEY = 'aerosuite_menu_catalog_rev';
 
 interface MenuSessionPayload {
@@ -461,6 +461,7 @@ export class MenuService {
       OPERACIONAL: 'pi pi-list-check',
       GESTAO: 'pi pi-briefcase',
       ESTOQUE: 'pi pi-box',
+      FERRAMENTARIA: 'pi pi-wrench',
       OFICINA: 'pi pi-wrench',
       ORDEM_DE_SERVICO: 'pi pi-file-edit',
       CONFORMIDADE_TECNICA: 'pi pi-verified',

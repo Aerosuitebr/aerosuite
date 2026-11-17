@@ -11,7 +11,10 @@ describe('Menu organizado por fluxo de trabalho',()=>{
   const entradas:[string,string,number][]=[['/nrc','NRC_LIST',10],['/nrc/nova','NRC_ABRIR',20],['/nrc/tratar','NRC_ANALISAR',30],['/nrc/encerrar','NRC_ENCERRAR',40],['/nrc/relatorio','NRC_RELATORIO',50],['/nrc/dashboard','NRC_DASHBOARD',60]];
   for(const [rota,codigo,order] of entradas)expect(menuOrganization(item(rota,'Gestão',codigo))).toEqual({section:'RNC',group:'',order});
  });
- it.each(['/relatorios','/os-auditoria','/operacoes/custos','/estoque/dashboard','/estoque/movimentacoes','/dossie-auditoria'])('mantém %s em auditorias e relatórios',r=>expect(menuOrganization(item(r)).group).toBe('AUDITORIAS_RELATORIOS'));
+ it.each(['/relatorios','/os-auditoria','/operacoes/custos','/dossie-auditoria'])('mantém %s em auditorias e relatórios',r=>expect(menuOrganization(item(r)).group).toBe('AUDITORIAS_RELATORIOS'));
+ it.each(['/estoque/dashboard','/estoque/movimentacoes','/estoque/estoque-minimo-lote'])('reúne %s em Estoque',r=>expect(menuOrganization(item(r)).section).toBe('ESTOQUE'));
+ it.each(['/conformidade/painel','/conformidade/documentos','/conformidade/treinamentos'])('reúne %s em Técnica e documentos',r=>expect(menuOrganization(item(r)).section).toBe('TECNICA_DOCUMENTOS'));
+ it.each(['/ferramentas','/ferramentas/operacoes','/ferramentas/acervo','/ferramentas/calibracao','/ferramentas/minhas','/ferramentas/pendencias','/operacoes/ferramentas','/conformidade/calibracao'])('reúne %s em Ferramentaria',r=>expect(menuOrganization(item(r,'Oficina')).section).toBe('FERRAMENTARIA'));
  it.each(['/os/fluxo/ajuste','/integracoes/bling','/go-live-migracao'])('separa a configuração %s da operação diária',r=>expect(menuOrganization(item(r)).section).toBe('ADMINISTRACAO'));
  it('preserva rotas, códigos e objetos recebidos; não cria funcionalidades na organização',()=>{
   const s=service(),entrada=[item('/os','Cadastro'),item('/estoque/entrada','Estoque','OUTRO',2),item('/usuarios','Cadastro','USUARIOS',3)];
@@ -28,7 +31,7 @@ describe('Menu organizado por fluxo de trabalho',()=>{
  });
  it('não exibe itens inativos ou ocultos e não cria seções vazias',()=>{
   const out=service().organizarFuncionalidadesPorSecao([item('/os'),{...item('/relatorios'),visivel:false},{...item('/usuarios'),ativo:false}]);
-  expect(out.map((s:any)=>s.titulo)).toEqual(['OS']);expect(MENU_SECTIONS).toHaveLength(8);
+  expect(out.map((s:any)=>s.titulo)).toEqual(['OS']);expect(MENU_SECTIONS).toContain('FERRAMENTARIA');
  });
  it('ordena funcionalidades pelo nome, sem prioridade de fluxo ou subgrupo',()=>{
   const out=service().organizarFuncionalidadesPorSecao([
@@ -88,7 +91,7 @@ describe('Comercial sem Aero Studio', () => {
   expect(out.flatMap((section:any) => section.funcionalidades).map((f:any) => f.rota)).toEqual(['/nrc']);
  });
  it('reúne propostas e templates em Comercial', () => {
-  for (const route of ['/propostas-comerciais', '/templates-proposta']) {
+  for (const route of ['/propostas-comerciais', '/propostas-comerciais/cco-emails', '/templates-proposta']) {
    expect(menuOrganization(item(route, 'Cadastro')).section).toBe('COMERCIAL');
   }
  });

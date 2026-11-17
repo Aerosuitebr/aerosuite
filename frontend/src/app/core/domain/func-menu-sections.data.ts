@@ -5,6 +5,7 @@ export const FUNC_MENU_SECTION_VALUES = [
   'Ordem de serviço',
   'Oficina',
   'Estoque',
+  'Ferramentaria',
   'Operacional',
   'Conformidade Técnica',
   'Documentos',

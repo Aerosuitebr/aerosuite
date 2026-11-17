@@ -1,6 +1,9 @@
 import type { User } from '../auth/auth.service';
 import { passesPermissaoRota, type PermissaoRota } from '../auth/permissao.util';
 import type { Funcionalidade } from './funcionalidade.service';
+import { podeAcessarFerramentaria } from '../ferramentas/ferramentas-acesso';
+
+const FERRAMENTARIA_PENDENCIAS = '/ferramentas/pendencias';
 
 /** Entradas de telas sem cadastro próprio; usam exatamente as permissões de suas rotas. */
 export const MENU_ROUTE_ENTRIES: { route: string; code: string; name: string; section: string; icon: string; perm?: PermissaoRota }[] = [
@@ -19,15 +22,21 @@ export const MENU_ROUTE_ENTRIES: { route: string; code: string; name: string; se
   ...[
     ['impedimentos', 'Impedimentos', 'pi pi-bolt'], ['materiais', 'Materiais e reservas', 'pi pi-box'],
     ['compras', 'Compras operacionais', 'pi pi-shopping-cart'], ['prontidao', 'Prontidão da OS', 'pi pi-check-circle'],
-    ['planejamento', 'Planejamento operacional', 'pi pi-calendar'], ['ferramentas', 'Ferramentas', 'pi pi-wrench'],
+    ['planejamento', 'Planejamento operacional', 'pi pi-calendar'], ['ferramentas', 'Retiradas operacionais', 'pi pi-wrench'],
     ['retornos', 'Reincidências e retornos', 'pi pi-history']
-  ].map(([slug, name, icon]) => ({ route: `/operacoes/${slug}`, code: `MENU_OPERACOES_${slug.toUpperCase()}`, name, icon, section: 'Oficina', perm: { funcionalidadesAny: ['CENTRAL_OPERACIONAL', 'CUSTOS_OPERACIONAIS'] } }))
+  ].map(([slug, name, icon]) => ({ route: `/operacoes/${slug}`, code: `MENU_OPERACOES_${slug.toUpperCase()}`, name, icon, section: slug === 'ferramentas' ? 'Ferramentaria' : 'Oficina', perm: { funcionalidadesAny: ['CENTRAL_OPERACIONAL', 'CUSTOS_OPERACIONAIS'] } })),
+  { route: FERRAMENTARIA_PENDENCIAS, code: 'MENU_FERRAMENTARIA_PENDENCIAS', name: 'Pendências de ferramentas', section: 'Ferramentaria', icon: 'pi pi-inbox' }
 ];
 
 export function completeMenuRoutes(items: Funcionalidade[], user: User | null): Funcionalidade[] {
   if (!user) return items;
   const routes = new Set(items.filter(item => item.ativo && item.visivel).map(item => (item.rota || '').replace(/\/+$/, '') || '/'));
-  const additions = MENU_ROUTE_ENTRIES.filter(entry => !routes.has(entry.route.replace(/\/+$/, '') || '/') && passesPermissaoRota(user, entry.perm));
+  const activeCodes = new Set(items.filter(item => item.ativo).map(item => item.codigo));
+  const additions = MENU_ROUTE_ENTRIES.filter(entry =>
+    !routes.has(entry.route) && (entry.route === FERRAMENTARIA_PENDENCIAS
+      ? podeAcessarFerramentaria(user, activeCodes)
+      : passesPermissaoRota(user, entry.perm))
+  );
   return [...items, ...additions.map(entry => ({
     id: -920000 - MENU_ROUTE_ENTRIES.indexOf(entry), codigo: entry.code, nome: entry.name, rota: entry.route,
     secao: entry.section, icone: entry.icon, ativo: true, visivel: true, tipo: 'funcionalidade' as const,

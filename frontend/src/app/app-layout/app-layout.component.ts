@@ -554,7 +554,7 @@ import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
                   <a
                     [routerLink]="getRouterLink(funcionalidade)"
                     routerLinkActive="active"
-                    [routerLinkActiveOptions]="{ exact: funcionalidade.tipo === 'secao' }"
+                    [routerLinkActiveOptions]="secao.id === 'ferramentaria' ? ferramentasLinkMatch : { exact: funcionalidade.tipo === 'secao' }"
                     class="nav-flight-link" [class.nav-link--destaque]="destaqueFuncId === funcionalidade.id"
                     [pTooltip]="sidebarCollapsed && !isCompactNav() ? i18n.translateMenuFunc(funcionalidade.codigo, funcionalidade.nome) : ''"
                     tooltipPosition="right"
@@ -913,6 +913,7 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Menu dinâmico
   menuSections: MenuSection[] = [];
+  readonly ferramentasLinkMatch = { paths: 'exact', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' } as const;
   menuSectionsFiltradas: MenuSection[] = [];
   @ViewChild('buscaInput') buscaInputRef?: ElementRef<HTMLInputElement>;
   @ViewChild('navScroll') navScrollRef?: ElementRef<HTMLElement>;
