@@ -43,7 +43,7 @@
                          [skeletonRows]="5" [skeletonCols]="4" [emptyTitleKey]="key + 'empty'">
       <p-table [value]="linhas" dataKey="id" [paginator]="true" [rows]="listPageSize" [first]="primeiraLinha"
                (onPage)="primeiraLinha = $event.first ?? 0" [rowsPerPageOptions]="pageSizes"
-               paginatorPosition="top" [showCurrentPageReport]="true"
+               [showCurrentPageReport]="true"
                [currentPageReportTemplate]="'common.list.pageReport' | translate"
                [tableStyle]="{ 'min-width': '46rem' }" styleClass="matriz-tabela">
         <ng-template pTemplate="header">

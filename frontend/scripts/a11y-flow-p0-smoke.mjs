@@ -659,6 +659,10 @@ async function testMatrizPaginacao(page) {
   const tabela = '.matriz-tabela';
   const proxima = `${tabela} .p-paginator-next`;
   await page.waitForSelector(`${proxima}:enabled`, { visible: true, timeout: 15000 });
+  const paginacaoAbaixo = await page.$eval(tabela, el =>
+    Boolean(el.querySelector('table')?.compareDocumentPosition(el.querySelector('.p-paginator')) & Node.DOCUMENT_POSITION_FOLLOWING)
+  );
+  if (!paginacaoAbaixo) throw new Error('Paginação deve ficar abaixo da tabela');
   await page.click(proxima);
   await page.waitForFunction(sel => document.querySelector(sel)?.textContent.includes('Usuário teste 11'), {}, tabela);
   await page.click(`${tabela} .p-paginator-last`);
