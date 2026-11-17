@@ -631,7 +631,7 @@ public class OSService {
         replaceTarefasDadosTecnicos(entity.id, dto);
         // Kit FCU em modo tolerante: faltas são sinalizadas pela notificação de déficit (logo abaixo),
         // não devem bloquear a criação da OS.
-        try {
+        if (!Boolean.TRUE.equals(dto.naoAtualizarEstoque)) try {
             osEstoqueSaidaAutomacaoService.registrarKitFcuAposSalvarOs(entity, currentUserId, currentUserName);
         } catch (Exception e) {
             LOG.warnf(e, "OSService.create - kit FCU não baixado totalmente (OS %s, FCU %s): %s",
@@ -684,7 +684,8 @@ public class OSService {
                 if (dto.dataFechamento != null) conferirFechamento(entity);
                 entity.dataFechamento = dto.dataFechamento;
             } else {
-                entity.manualPn = dto.manualPn; entity.numRevisao = dto.numRevisao; entity.dataRevManual = dto.dataRevManual;
+                entity.manualPn = dto.manualPn;
+            entity.tipoManual = dto.tipoManual; entity.numRevisao = dto.numRevisao; entity.dataRevManual = dto.dataRevManual;
                 entity.ataManual = dto.ataManual; entity.tituloAds = dto.tituloAds; entity.tituloAfins = dto.tituloAfins;
                 entity.boletinsServAfins = dto.boletinsServAfins;
             }
@@ -767,9 +768,10 @@ public class OSService {
         // Kit FCU só dispara no update quando o FCU é DEFINIDO AGORA (estava nulo/zero antes).
         // Edição de OS que já tinha FCU não deve voltar a tentar consumir o kit (evita falhas em OS
         // legadas e duplo débito; idempotência por chave já protege casos dentro do mesmo fluxo).
+        boolean pularKitEstoqueUpd = Boolean.TRUE.equals(dto.naoAtualizarEstoque);
         boolean fcuRecemAdicionada = (osAnterior == null || osAnterior.idFcu == null || osAnterior.idFcu <= 0)
                 && entity != null && entity.idFcu != null && entity.idFcu > 0;
-        if (fcuRecemAdicionada) {
+        if (fcuRecemAdicionada && !pularKitEstoqueUpd) {
             try {
                 osEstoqueSaidaAutomacaoService.registrarKitFcuAposSalvarOs(entity, currentUserId, currentUserName);
             } catch (Exception e) {
@@ -860,6 +862,7 @@ public class OSService {
         copia.motor = original.motor;
         copia.snMotor = original.snMotor;
         copia.manualPn = original.manualPn;
+        copia.tipoManual = original.tipoManual;
         copia.numOsOriginal = original.numOsOriginal;
         copia.numRevisao = original.numRevisao;
         copia.obsConclusaoServ = original.obsConclusaoServ;

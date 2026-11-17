@@ -59,6 +59,96 @@ public class PropostaComercial extends PanacheEntityBase {
     @Column(name = "tipo_servico_nome", length = 200)
     public String tipoServicoNome;
 
+    // ========== SOLICITAÇÃO DE SERVIÇOS (FORM-MNT-045) ==========
+    @Column(name = "tsn", length = 50)
+    public String tsn;
+
+    @Column(name = "tso", length = 50)
+    public String tso;
+
+    @Column(name = "csn", length = 50)
+    public String csn;
+
+    @Column(name = "cso", length = 50)
+    public String cso;
+
+    @Column(name = "pn_motor", length = 100)
+    public String pnMotor;
+
+    @Column(name = "modelo_motor", length = 100)
+    public String modeloMotor;
+
+    @Column(name = "tempo_desde_hsi", length = 50)
+    public String tempoDesdeHsi;
+
+    /** JSON: inspecao1800, revisaoGeral, hsi, teste, pesquisaPane */
+    @Column(name = "servicos_flags", length = 500)
+    public String servicosFlags;
+
+    @Column(name = "reporte_cliente", columnDefinition = "TEXT")
+    public String reporteCliente;
+
+    @Column(name = "incidente_acidente")
+    public Boolean incidenteAcidente;
+
+    @Column(name = "submerso_agua")
+    public Boolean submersoAgua;
+
+    @Column(name = "descricao_incidente", columnDefinition = "TEXT")
+    public String descricaoIncidente;
+
+    @Column(name = "solicitante_nome", length = 200)
+    public String solicitanteNome;
+
+    @Column(name = "solicitante_empresa", length = 200)
+    public String solicitanteEmpresa;
+
+    @Column(name = "solicitante_cargo", length = 150)
+    public String solicitanteCargo;
+
+    @Column(name = "solicitante_data")
+    public LocalDate solicitanteData;
+
+    // ========== ACEITE DIGITAL DO CLIENTE ==========
+    @Column(name = "aceite_token", length = 64, unique = true)
+    public String aceiteToken;
+
+    @Column(name = "aceite_token_expira_em")
+    public LocalDateTime aceiteTokenExpiraEm;
+
+    @Column(name = "aceite_status", length = 20)
+    public String aceiteStatus; // PENDENTE, PREENCHIDA, ACEITA, RECUSADA, EXPIRADA
+
+    @Column(name = "aceito_em")
+    public LocalDateTime aceitoEm;
+
+    @Column(name = "aceito_ip", length = 255)
+    public String aceitoIp;
+
+    @Column(name = "aceito_user_agent", length = 500)
+    public String aceitoUserAgent;
+
+    @Column(name = "aceite_nome", length = 200)
+    public String aceiteNome;
+
+    @Column(name = "aceite_email", length = 150)
+    public String aceiteEmail;
+
+    @Column(name = "aceite_cargo", length = 150)
+    public String aceiteCargo;
+
+    @Column(name = "aceite_empresa", length = 200)
+    public String aceiteEmpresa;
+
+    @Column(name = "aceite_declaracao")
+    public Boolean aceiteDeclaracao;
+
+    @Column(name = "aceite_autorizacao")
+    public Boolean aceiteAutorizacao;
+
+    @Column(name = "recusa_motivo", columnDefinition = "TEXT")
+    public String recusaMotivo;
+
     // ========== DADOS DO CLIENTE ==========
     @Column(name = "cliente_nome", length = 200)
     public String clienteNome;

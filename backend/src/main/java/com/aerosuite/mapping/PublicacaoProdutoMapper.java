@@ -13,6 +13,7 @@ public interface PublicacaoProdutoMapper {
     @Mapping(target = "publicacaoAtaManual", source = "publicacao.ataManual")
     @Mapping(target = "publicacaoNumeroRevisao", source = "publicacao.numeroRevisao")
     @Mapping(target = "publicacaoTipoManual", source = "publicacao.tipoManual")
+    @Mapping(target = "publicacaoPnManual", source = "publicacao.pnManual")
     @Mapping(target = "fabricanteNome", source = "publicacao.fabricante.nome")
     @Mapping(target = "fcuCodigo", source = "fcu.fcuCodigo")
     @Mapping(target = "fcuDescription", source = "fcu.fcuDescription")

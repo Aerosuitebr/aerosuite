@@ -47,7 +47,7 @@ public class OSAuditoria extends PanacheEntityBase {
     @Column(name = "usuario_email", length = 200)
     public String usuarioEmail;
 
-    @Column(name = "ip_origem", length = 50)
+    @Column(name = "ip_origem", length = 255)
     public String ipOrigem;
 
     @Column(name = "user_agent", length = 500)

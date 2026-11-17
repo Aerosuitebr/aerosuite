@@ -73,6 +73,10 @@ public class OS extends PanacheEntityBase {
     @Column(name = "manual_pn", length = 5000)
     public String manualPn;
 
+    /** Tipo de Manual (ex.: Component Maintenance Manual), preenchido a partir da publicação. */
+    @Column(name = "tipo_manual", length = 1000)
+    public String tipoManual;
+
     @Column(name = "num_os_original", length = 100)
     public String numOsOriginal;
 

@@ -88,6 +88,7 @@ export interface OS {
   motor?: string;
   snMotor?: string;
   manualPn?: string;
+  tipoManual?: string;
   numOsOriginal?: string;
   numRevisao?: string;
   obsConclusaoServ?: string;
@@ -117,6 +118,11 @@ export interface OS {
   solicitacaoTrocasItens?: OSSolicitacaoTrocaItem[];
   /** Marca a OS que tem déficit registrado no kit FCU (estoque insuficiente ao salvar). */
   temDeficitKitFcu?: boolean;
+  /**
+   * Flag transitória: quando true, não debita o kit FCU no estoque ao salvar a OS.
+   * Default na abertura: true ("Não atualizar Estoque").
+   */
+  naoAtualizarEstoque?: boolean;
   mecanicoResponsavelId?: number | null;
   mecanicoResponsavelNome?: string | null;
   mecanicoAtribuidoPorId?: number | null;

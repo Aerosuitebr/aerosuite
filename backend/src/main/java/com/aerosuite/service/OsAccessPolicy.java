@@ -16,7 +16,7 @@ public class OsAccessPolicy {
     public void visualizar(OS os){if(mecanico()&&!dono(os))throw new ForbiddenException("OS não atribuída ao mecânico atual.");}
     public void criar(){if(Set.of("MECANICO","BIBLIOTECA").contains(perfil()))throw new ForbiddenException("Perfil sem permissão para criar OS.");}
     public void arquivos(OS os){
-        if("TOTAL".equals(escopo(os)) || Set.of("ADMIN","ADMINISTRADOR","COORDENADOR","DIRETOR","CTM","SUPRIMENTO").contains(perfil()) || (mecanico()&&dono(os))) return;
+        if("TOTAL".equals(escopo(os)) || Set.of("ADMIN","ADMINISTRADOR","COORDENADOR","DIRETOR","CTM","SUPRIMENTO","BIBLIOTECA").contains(perfil()) || (mecanico()&&dono(os))) return;
         throw new ForbiddenException("Sem permissão para gerenciar arquivos desta OS.");
     }
     public String escopo(OS os){
@@ -31,7 +31,7 @@ public class OsAccessPolicy {
         dto.modalSomenteLeitura=!dto.podeEditar;
         dto.podeReencaminhar=Set.of("ADMIN","ADMINISTRADOR","COORDENADOR","DIRETOR").contains(perfil());
         dto.podeControlarExecucao=dono(os)||Set.of("ADMIN","ADMINISTRADOR").contains(perfil());
-        dto.diasSemAtribuicao=os.mecanicoResponsavelId==null&&os.dtAbertura!=null?Math.max(0,java.time.temporal.ChronoUnit.DAYS.between(os.dtAbertura,LocalDate.now())):0;
+        dto.diasSemAtribuicao=os.dataFechamento==null&&os.mecanicoResponsavelId==null&&os.dtAbertura!=null?Math.max(0,java.time.temporal.ChronoUnit.DAYS.between(os.dtAbertura,LocalDate.now())):0;
         dto.alertaSemAtribuicao=dto.diasSemAtribuicao>5&&os.dataConclusaoServ==null;
         dto.statusOperacional=os.dataFechamento!=null?"FECHADA":os.execucaoFinalizadaEm!=null||os.dataConclusaoServ!=null?"CONCLUIDA":
                 "EM_ANDAMENTO".equals(os.statusExecucao)?"EM_EXECUCAO":"PAUSADA".equals(os.statusExecucao)?"PAUSADA":os.mecanicoResponsavelId==null?"AGUARDANDO_DISTRIBUICAO":"ATRIBUIDA";

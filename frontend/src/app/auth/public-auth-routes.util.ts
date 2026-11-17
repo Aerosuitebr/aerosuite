@@ -13,6 +13,8 @@ const PUBLIC_APP_ROUTE_PREFIXES = [
   '/plataforma/acesso',
   '/plataforma',
   '/rastreio',
+  '/p',
+  '/proposta-aceite',
   '/externo/login',
   '/externo/forgot-password',
   '/externo/reset-password',

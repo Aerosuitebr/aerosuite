@@ -45,4 +45,26 @@ public final class AuditoriaUsuarioContext {
         return CDI.current().select(JwtTokenService.class).get()
                 .auditoriaFromHeaders(headers, forwardedFor, realIp, authorization, xUserId, xUserName, xUserEmail);
     }
+
+    /**
+     * Cloudflare/gateway enviam cadeia em X-Forwarded-For; grava só o IP do cliente
+     * e limita o tamanho para caber em {@code os_auditoria.ip_origem}.
+     */
+    static String normalizarIp(String forwardedFor, String realIp) {
+        String raw = forwardedFor != null && !forwardedFor.isBlank()
+                ? forwardedFor
+                : (realIp != null && !realIp.isBlank() ? realIp : "IP não identificado");
+        String first = raw.split(",")[0].trim();
+        if (first.isBlank()) {
+            first = "IP não identificado";
+        }
+        return truncar(first, 255);
+    }
+
+    static String truncar(String value, int max) {
+        if (value == null) {
+            return null;
+        }
+        return value.length() > max ? value.substring(0, max) : value;
+    }
 }

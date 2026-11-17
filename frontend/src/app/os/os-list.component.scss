@@ -2212,3 +2212,14 @@ app-page-hero .header-actions > * { flex-shrink: 0; }
 @media (max-width: 640px) {
   app-page-hero .header-actions { justify-content: flex-start; gap: 10px; }
 }
+
+/* Confirm de déficit do kit precisa ficar ACIMA do modal Editar OS (appendTo=body). */
+::ng-deep .p-confirm-dialog.os-confirm-dialog,
+::ng-deep .p-dialog.p-confirm-dialog.os-confirm-dialog {
+  z-index: 12050 !important;
+}
+::ng-deep .p-confirm-dialog-mask,
+::ng-deep body > .p-dialog-mask.p-component-overlay:has(+ .os-confirm-dialog),
+::ng-deep .p-component-overlay.p-confirm-dialog-mask {
+  z-index: 12040 !important;
+}

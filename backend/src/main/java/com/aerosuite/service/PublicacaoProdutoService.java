@@ -109,6 +109,7 @@ public class PublicacaoProdutoService {
                             dto.publicacaoAtaManual = entity.publicacao.ataManual;
                             dto.publicacaoNumeroRevisao = entity.publicacao.numeroRevisao;
                             dto.publicacaoTipoManual = entity.publicacao.tipoManual;
+                            dto.publicacaoPnManual = entity.publicacao.pnManual;
                             if (entity.publicacao.fabricante != null) {
                                 dto.fabricanteNome = entity.publicacao.fabricante.nome;
                             }
@@ -289,6 +290,7 @@ public class PublicacaoProdutoService {
                 dto.publicacaoAtaManual = associacao.publicacao.ataManual;
                 dto.publicacaoNumeroRevisao = associacao.publicacao.numeroRevisao;
                 dto.publicacaoTipoManual = associacao.publicacao.tipoManual;
+                dto.publicacaoPnManual = associacao.publicacao.pnManual;
                 // Adicionar data de revisão da publicação
                 if (associacao.publicacao.dataRevisaoManual != null) {
                     dto.fcuDataRevManual = associacao.publicacao.dataRevisaoManual;

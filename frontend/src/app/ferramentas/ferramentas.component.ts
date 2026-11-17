@@ -7,9 +7,11 @@ import { AuthService } from '../auth/auth.service';
 import { Calibracao, Contexto, Evento, Ferramenta, FerramentasService, ItemFerramenta, Pendente } from './ferramentas.service';
 import { criterioProvisorio } from './criterio-aceitacao';
 import { TerminalFerramentaria, PareamentoFerramentaria } from './ferramentas.service';
+import { FullscreenToggleComponent } from '../shared/fullscreen-toggle/fullscreen-toggle.component';
+import { VinculosFerramentasPnComponent } from './vinculos-ferramentas-pn.component';
 
 @Component({
-  selector: 'app-ferramentas', standalone: true, imports: [CommonModule, FormsModule, RouterModule],
+  selector: 'app-ferramentas', standalone: true, imports: [CommonModule, FormsModule, RouterModule, FullscreenToggleComponent, VinculosFerramentasPnComponent],
   templateUrl: './ferramentas.component.html', styleUrls: ['../os/fluxo/fluxo-shared.css', './ferramentas.component.scss', './ferramentas-theme.scss']
 })
 export class FerramentasComponent implements OnInit, OnDestroy {
@@ -41,7 +43,7 @@ export class FerramentasComponent implements OnInit, OnDestroy {
   pareamento?: PareamentoFerramentaria;
   terminalErro=''; verificandoTerminal=false;
   get terminalPronto(){return !!this.terminal?.ferramentaria;}
-  get exigeTerminalModal(){return ['devolver','enviar','receber'].includes(this.modal) || (this.modal==='confirmar' && !['CANCELAR','RECUSAR'].includes(this.form.etapa));}
+  get exigeTerminalModal(){return ['devolver','enviar','receber','prepararPn'].includes(this.modal) || (this.modal==='confirmar' && !['CANCELAR','RECUSAR'].includes(this.form.etapa));}
   async atualizarTerminal(){
     if(!this.auth.isAuthenticated() || this.verificandoTerminal)return;
     this.verificandoTerminal=true;
@@ -66,7 +68,6 @@ export class FerramentasComponent implements OnInit, OnDestroy {
   }
   modal = ''; form: any = {}; selecionado?: ItemFerramenta; pendente?: Pendente; ciclo?: Calibracao;
   detalhes?: ItemFerramenta; eventos: Evento[] = []; impactos: any[] = []; de = ''; ate = ''; detalheCarregando = false;
-  telaCheia = false;
   readonly criterioProvisorio = criterioProvisorio;
   certificadosBaixando = new Set<number>();
   certificadoDownloadIniciado?: number;
@@ -181,6 +182,7 @@ export class FerramentasComponent implements OnInit, OnDestroy {
     this.form=modal==='cadastro'?{codigo:'',descricao:'',tipo:'',marca:'',modelo:'',serie:'',posicao:'',exigeCalibracao:false,intervalo:6,unidade:'MESES',alertas:'30,15,7',criterio:''}:
       modal==='editar'?{...i!.ferramenta,justificativa:''}:
       modal==='confirmar'?{etapa,justificativa:'',retornoPrevisto:p?.movimento.retornoPrevisto?.slice(0,16)}:
+      modal==='prepararPn'?{localizacao:p?.movimento.localizacao,retornoPrevisto:p?.movimento.retornoPrevisto?.slice(0,16)}:
       modal==='enviar'?{laboratorioId:null,enviadaEm:this.hoje(),retornoPrevisto:'',condicaoEnvio:''}:
       modal==='receber'?{realizadaEm:this.hoje(),certificado:'',arquivoNome:'',arquivoBase64:'',resultados:'',conferenciaFisica:false}:
       modal==='analisar'?{aprovada:true,justificativa:''}:
@@ -195,7 +197,7 @@ export class FerramentasComponent implements OnInit, OnDestroy {
     const surface=this.modal?this.dialog:this.detalhes?this.drawer:undefined;
     if(e.key==='Tab' && surface){const elements=Array.from(surface.nativeElement.querySelectorAll<HTMLElement>('button:not([disabled]),input:not([disabled]),select,textarea,[tabindex="0"]'));const first=elements[0],last=elements[elements.length-1];if(e.shiftKey && document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey && document.activeElement===last){e.preventDefault();first?.focus();}}
   }
-  get modalTitulo(){return ({cadastro:'Novo exemplar',editar:'Editar cadastro',devolver:'Conferir devolução',previsao:'Atualizar previsão',ocorrencia:'Registrar ocorrência',enviar:'Enviar para calibração',receber:'Receber e documentar',analisar:'Análise e decisão técnica',laboratorio:'Novo laboratório',confirmar:this.form.etapa==='REGISTRAR'?'Conferir e registrar movimentação':`Confirmar ${this.rotulo(this.form.etapa)}`} as any)[this.modal] || 'Confirmar operação';}
+  get modalTitulo(){return ({cadastro:'Novo exemplar',editar:'Editar cadastro',devolver:'Conferir devolução',previsao:'Atualizar previsão',ocorrencia:'Registrar ocorrência',enviar:'Enviar para calibração',receber:'Receber e documentar',analisar:'Análise e decisão técnica',laboratorio:'Novo laboratório',prepararPn:'Preparar retirada solicitada',confirmar:this.form.etapa==='REGISTRAR'?'Conferir e registrar movimentação':`Confirmar ${this.rotulo(this.form.etapa)}`} as any)[this.modal] || 'Confirmar operação';}
   async salvar(){
     if(this.exigeTerminalModal && !this.terminalPronto){this.erro='Use uma máquina pareada à Ferramentaria para registrar esta operação física.';return;}
     if(this.ocupado || (this.modal==='receber' && (this.lendoArquivo || !this.form.arquivoBase64 || this.arquivoErro)))return;this.ocupado=true;this.erro='';
@@ -207,6 +209,7 @@ export class FerramentasComponent implements OnInit, OnDestroy {
       if(this.modal==='editar')await firstValueFrom(this.api.put(`/${id}`,{ferramenta:this.form,justificativa:this.form.justificativa}));
       if(['devolver','previsao','ocorrencia'].includes(this.modal))await firstValueFrom(this.api.post(`/${id}/${this.modal}`,this.form));
       if(this.modal==='confirmar')await firstValueFrom(this.api.post(`/movimentos/${this.pendente!.movimento.id}/confirmar`,this.form));
+      if(this.modal==='prepararPn')await firstValueFrom(this.api.post(`/movimentos/${this.pendente!.movimento.id}/preparar-solicitacao-pn`,this.form));
       if(this.modal==='enviar')await firstValueFrom(this.api.post(`/${id}/calibracoes`,this.form));
       if(this.modal==='receber')await firstValueFrom(this.api.post(`/calibracoes/${this.ciclo!.id}/receber`,this.form));
       if(this.modal==='analisar')await firstValueFrom(this.api.post(`/calibracoes/${this.ciclo!.id}/analisar`,this.form));
@@ -243,7 +246,6 @@ export class FerramentasComponent implements OnInit, OnDestroy {
   itemDoCiclo(c: Calibracao){return this.itens.find(i=>i.ferramenta.id===c.ferramentaId);}
   laboratorioNome(id: number){return this.contexto.laboratorios.find(l=>l.id===id)?.nome || 'Laboratório';}
   cicloAtrasado(c: Calibracao){return c.status==='EM_LABORATORIO' && c.retornoPrevisto<this.hoje();}
-  async fullscreen(){try{if(!document.fullscreenElement){await document.documentElement.requestFullscreen();this.telaCheia=true;}else{await document.exitFullscreen();this.telaCheia=false;}}catch{this.notificar('Seu navegador não permitiu a tela cheia.',true);}}
   async etiqueta(i: ItemFerramenta){
     try{const {default: JsBarcode}=await import('jsbarcode');const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');JsBarcode(svg,i.ferramenta.codigo,{format:'CODE128',height:55,width:2,fontSize:16,margin:12});const win=window.open('','_blank','width=600,height=400');if(!win){this.notificar('Permita a janela de impressão no navegador.',true);return;}win.document.title=`Etiqueta ${i.ferramenta.codigo}`;const style=win.document.createElement('style');style.textContent='@page{size:70mm 40mm;margin:2mm}body{font:12px Arial;text-align:center;margin:8px}svg{max-width:100%;height:90px}p{margin:4px}';win.document.head.append(style);win.document.body.append(svg);const p=win.document.createElement('p');p.textContent=i.ferramenta.descricao;win.document.body.append(p);win.focus();setTimeout(()=>win.print(),250);}catch{this.notificar('Não foi possível gerar a etiqueta. Verifique o código.',true);}
   }

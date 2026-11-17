@@ -417,6 +417,13 @@ export class UsuarioExternoService {
     return this.http.get<PropostaExternaResumo[]>(`${apiUrl}/auth-externo/me/${user.id}/propostas`);
   }
 
+  abrirSolicitacaoProposta(propostaId: number): Observable<{ aceiteToken: string }> {
+    const user = this.getCurrentUser();
+    if (!user) return throwError(() => new Error(EXTERNO_AUTH_REQUIRED));
+    const apiUrl = environment.getApiUrl ? environment.getApiUrl() : environment.apiUrl;
+    return this.http.post<{ aceiteToken: string }>(`${apiUrl}/auth-externo/me/${user.id}/propostas/${propostaId}/solicitacao`, {});
+  }
+
   getPropostaExterna(propostaId: number): Observable<PropostaExternaResumo> {
     const user = this.getCurrentUser();
     if (!user) return throwError(() => new Error(EXTERNO_AUTH_REQUIRED));

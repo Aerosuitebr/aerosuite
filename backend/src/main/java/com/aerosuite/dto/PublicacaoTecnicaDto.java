@@ -10,6 +10,7 @@ public class PublicacaoTecnicaDto {
     public LocalDate dataRevisaoManual;
     public String numeroRevisao;
     public String tipoManual;
+    public String pnManual;
     public Boolean isActive;
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;

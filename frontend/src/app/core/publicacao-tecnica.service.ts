@@ -11,6 +11,7 @@ export interface PublicacaoTecnica {
   dataRevisaoManual?: string;
   numeroRevisao?: string;
   tipoManual?: string;
+  pnManual?: string;
   isActive?: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -30,6 +31,7 @@ export interface PublicacaoFcu {
   publicacaoAtaManual?: string;
   publicacaoNumeroRevisao?: string;
   publicacaoTipoManual?: string;
+  publicacaoPnManual?: string;
   fabricanteNome?: string;
   // Campos do FCU (Produto Aeronáutico)
   fcuCodigo?: string;

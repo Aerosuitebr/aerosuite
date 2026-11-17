@@ -53,6 +53,33 @@ export interface PropostaComercial {
   idTipoServico?: number;
   tipoServicoNome?: string;
   
+  // FORM-MNT-045 / aceite
+  tsn?: string;
+  tso?: string;
+  csn?: string;
+  cso?: string;
+  pnMotor?: string;
+  modeloMotor?: string;
+  tempoDesdeHsi?: string;
+  servicosFlags?: string;
+  reporteCliente?: string;
+  incidenteAcidente?: boolean | null;
+  submersoAgua?: boolean | null;
+  descricaoIncidente?: string;
+  solicitanteNome?: string;
+  solicitanteEmpresa?: string;
+  solicitanteCargo?: string;
+  solicitanteData?: string;
+  aceiteToken?: string;
+  aceiteTokenExpiraEm?: string;
+  aceiteStatus?: string;
+  aceitoEm?: string;
+  aceiteNome?: string;
+  aceiteEmail?: string;
+  aceiteCargo?: string;
+  aceiteEmpresa?: string;
+  aceiteUrl?: string;
+
   // Dados do Cliente
   clienteNome?: string;
   clienteCnpjCpf?: string;
@@ -273,8 +300,8 @@ export class PropostaComercialService {
   /**
    * Envia proposta por email
    */
-  enviarPorEmail(request: EnviarPropostaEmailRequest): Observable<{ success: boolean; message: string }> {
-    return this.http.post<{ success: boolean; message: string }>(
+  enviarPorEmail(request: EnviarPropostaEmailRequest): Observable<{ success: boolean; message: string; aceiteUrl?: string }> {
+    return this.http.post<{ success: boolean; message: string; aceiteUrl?: string }>(
       `${this.base}/${request.propostaId}/enviar-email`,
       request
     );
@@ -318,6 +345,97 @@ export class PropostaComercialService {
     });
   }
 
+  startWhatsAppSession(request: {
+    propostaId: number;
+    telefoneDestino: string;
+    mensagemAdicional?: string;
+  }): Observable<{
+    sessionId: string;
+    status: string;
+    fallback?: boolean;
+    qrcodeBase64?: string | null;
+    mensagemPreview?: string;
+    whatsappUrl?: string;
+    pdfBase64?: string;
+    pdfNome?: string;
+    aceiteUrl?: string;
+    errorMessage?: string;
+    apiConfigured?: boolean;
+  }> {
+    return this.http.post<{
+      sessionId: string;
+      status: string;
+      fallback?: boolean;
+      qrcodeBase64?: string | null;
+      mensagemPreview?: string;
+      whatsappUrl?: string;
+      pdfBase64?: string;
+      pdfNome?: string;
+      aceiteUrl?: string;
+      errorMessage?: string;
+      apiConfigured?: boolean;
+    }>(`${this.base}/${request.propostaId}/whatsapp-session/start`, {
+      telefoneDestino: request.telefoneDestino,
+      mensagemAdicional: request.mensagemAdicional
+    });
+  }
+
+  whatsAppSessionStatus(sessionId: string): Observable<{
+    sessionId: string;
+    status: string;
+    fallback?: boolean;
+    qrcodeBase64?: string | null;
+    mensagemPreview?: string;
+    whatsappUrl?: string;
+    pdfBase64?: string;
+    pdfNome?: string;
+    errorMessage?: string;
+  }> {
+    return this.http.get<{
+      sessionId: string;
+      status: string;
+      fallback?: boolean;
+      qrcodeBase64?: string | null;
+      mensagemPreview?: string;
+      whatsappUrl?: string;
+      pdfBase64?: string;
+      pdfNome?: string;
+      errorMessage?: string;
+    }>(`${this.base}/whatsapp-session/${sessionId}/status`);
+  }
+
+  whatsAppSessionSend(sessionId: string, signature?: SignatureData): Observable<{
+    success: boolean;
+    status: string;
+    fallback?: boolean;
+    message?: string;
+    whatsappUrl?: string;
+    pdfBase64?: string;
+    pdfNome?: string;
+    mensagemPreview?: string;
+    aceiteUrl?: string;
+    errorMessage?: string;
+  }> {
+    return this.http.post<{
+      success: boolean;
+      status: string;
+      fallback?: boolean;
+      message?: string;
+      whatsappUrl?: string;
+      pdfBase64?: string;
+      pdfNome?: string;
+      mensagemPreview?: string;
+      aceiteUrl?: string;
+      errorMessage?: string;
+    }>(`${this.base}/whatsapp-session/${sessionId}/send`, { signature });
+  }
+
+  whatsAppSessionDisconnect(sessionId: string): Observable<{ sessionId: string; status: string }> {
+    return this.http.delete<{ sessionId: string; status: string }>(
+      `${this.base}/whatsapp-session/${sessionId}`
+    );
+  }
+
   /**
    * Salva assinatura na proposta
    */
@@ -353,6 +471,17 @@ export class PropostaComercialService {
   disponibilizarPortal(id: number, body?: PropostaDisponibilizarPortalRequest): Observable<PropostaDisponibilizarPortalResult> {
     return this.http.post<PropostaDisponibilizarPortalResult>(`${this.base}/${id}/disponibilizar-portal`, body ?? {});
   }
+
+gerarLinkAceite(id: number): Observable<{ aceiteUrl: string; aceiteToken: string; aceiteStatus?: string }> {
+    return this.http.post<{ aceiteUrl: string; aceiteToken: string; aceiteStatus?: string }>(
+      `${this.base}/${id}/gerar-link-aceite`, {}
+    );
+  }
+
+payloadOs(id: number): Observable<Record<string, unknown>> {
+    return this.http.get<Record<string, unknown>>(`${this.base}/${id}/payload-os`);
+  }
+
 }
 
 export interface PropostaAditivo {
@@ -413,4 +542,5 @@ export interface PropostaDisponibilizarPortalResult {
   jaEstavaVisivel: boolean;
   osGeradaId?: number;
   emailNotificacaoEnviado?: boolean;
+
 }

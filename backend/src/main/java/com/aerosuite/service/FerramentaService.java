@@ -44,10 +44,14 @@ public class FerramentaService {
     public void exigir(Usuario u,String... codes) {
         if (Arrays.stream(codes).noneMatch(permissoes(u)::contains)) throw new ForbiddenException("Seu perfil não permite esta operação.");
     }
-    public Usuario autenticar() {
+    public Usuario autenticarSessao() {
         if (!currentUser.isAuthenticated() || currentUser.isPlatformOpsElevated() || currentUser.getTenantId() == null)
             throw new ForbiddenException("Entre com uma conta da organização.");
         Usuario u = usuarioNoTenant(currentUser.getUserId());
+        return u;
+    }
+    public Usuario autenticar() {
+        Usuario u = autenticarSessao();
         exigir(u, ESTACAO, GESTAO, CAL, MEC);
         return u;
     }
@@ -90,6 +94,202 @@ public class FerramentaService {
         if(id==null)throw new BadRequestException("Selecione a OS.");
         OS o=bloqueado(OS.class,id);
         if(o==null || !Boolean.TRUE.equals(o.isActive) || o.dataFechamento!=null || o.dataConclusaoServ!=null || "FINALIZADA".equals(o.statusExecucao)) throw new BadRequestException("OS encerrada ou indisponível.");return o;
+    }
+    private boolean ordemAberta(OS os) {
+        return os != null && Boolean.TRUE.equals(os.isActive) && os.dataFechamento == null
+            && os.dataConclusaoServ == null && !"FINALIZADA".equals(os.statusExecucao);
+    }
+
+    public record FerramentaPrevista(Long id, String codigo, String descricao, String situacao,
+                                    String disponibilidade) {}
+    public record PlanoPn(String pn, boolean podeSolicitar, List<FerramentaPrevista> ferramentas) {}
+    public record PedidoPn(String pn, String localizacao, LocalDateTime retornoPrevisto) {}
+    public record PreparacaoPn(String localizacao, LocalDateTime retornoPrevisto) {}
+    public record ResultadoPedidoPn(int criadas, PlanoPn plano) {}
+    public record SugestaoPn(String pn, String descricao, boolean temFerramentas) {}
+    public record FerramentaVinculada(Long id, String codigo, String descricao) {}
+    public record ResumoVinculoPn(String pn, List<FerramentaVinculada> ferramentas) {}
+    public record AlteracaoVinculosPn(String pn, List<Long> adicionar, List<Long> remover) {}
+
+    public List<SugestaoPn> buscarPns(String termo, Usuario u) {
+        exigir(u, GESTAO);
+        if (termo == null || termo.isBlank()) return List.of();
+        String busca = normalizarPn(termo);
+        String compacto = busca.replaceAll("[^\\p{L}\\p{N}]", "");
+        String filtro = "%" + busca.replace("!", "!!").replace("%", "!%").replace("_", "!_").replaceAll("\\s+", "%") + "%";
+        List<?> linhas = em.createNativeQuery("""
+            SELECT pn, MAX(descricao) AS descricao_artigo,
+                   EXISTS(SELECT 1 FROM ferramenta_pn v WHERE v.pn = candidatos.pn AND v.tenant_id = :tid) AS tem_ferramentas
+            FROM (
+                SELECT CONVERT(UPPER(TRIM(pn)) USING utf8mb4) COLLATE utf8mb4_bin AS pn,
+                       CONVERT(CONCAT_WS(' · ', NULLIF(fcu_description, ''), NULLIF(modelo, '')) USING utf8mb4) AS descricao
+                FROM fcu WHERE tenant_id = :tid AND pn IS NOT NULL AND TRIM(pn) <> ''
+                UNION ALL
+                SELECT CONVERT(UPPER(TRIM(part_number)) USING utf8mb4) COLLATE utf8mb4_bin, NULL FROM os
+                WHERE tenant_id = :tid AND is_active = 1 AND part_number IS NOT NULL AND TRIM(part_number) <> ''
+                UNION ALL
+                SELECT pn, NULL FROM ferramenta_pn WHERE tenant_id = :tid
+            ) candidatos
+            WHERE CONVERT(CONCAT_WS(' ', pn, descricao) USING utf8mb4) COLLATE utf8mb4_0900_ai_ci LIKE :filtro ESCAPE '!'
+               OR (:compacto <> '' AND REGEXP_REPLACE(pn, '[^[:alnum:]]', '') LIKE CONCAT('%', :compacto, '%'))
+            GROUP BY pn ORDER BY (pn = :busca) DESC, (pn LIKE CONCAT(:busca, '%')) DESC, pn LIMIT 20
+            """).setParameter("filtro", filtro).setParameter("compacto", compacto)
+            .setParameter("busca", busca).setParameter("tid", tenants.currentTenantIdStr()).getResultList();
+        return linhas.stream().map(linha -> {
+            Object[] campos = (Object[]) linha;
+            return new SugestaoPn((String) campos[0], (String) campos[1], ((Number) campos[2]).intValue() != 0);
+        }).toList();
+    }
+
+    public List<ResumoVinculoPn> listarVinculosPn(Usuario u) {
+        exigirOperador(u);
+        List<Object[]> linhas = em.createQuery("""
+            select v.pn, f.id, f.codigo, f.descricao from FerramentaPn v join v.ferramenta f
+            order by v.pn, f.codigo
+            """, Object[].class).getResultList();
+        Map<String, List<FerramentaVinculada>> porPn = new LinkedHashMap<>();
+        for (Object[] linha : linhas) {
+            porPn.computeIfAbsent((String) linha[0], ignorado -> new ArrayList<>())
+                .add(new FerramentaVinculada((Long) linha[1], (String) linha[2], (String) linha[3]));
+        }
+        return porPn.entrySet().stream().map(v -> new ResumoVinculoPn(v.getKey(), v.getValue())).toList();
+    }
+
+    private String normalizarPn(String pn) {
+        if (pn == null || pn.isBlank()) return "";
+        String normalizado = pn.strip().toUpperCase(Locale.ROOT);
+        if (normalizado.length() > 100) throw new BadRequestException("O PN deve ter até 100 caracteres.");
+        return normalizado;
+    }
+
+    private List<Ferramenta> ferramentasDoPn(String pn) {
+        return em.createQuery("""
+            select f from FerramentaPn vinculo join vinculo.ferramenta f
+            where vinculo.pn = :pn order by f.codigo
+            """, Ferramenta.class).setParameter("pn", pn).getResultList();
+    }
+
+    private String pnDaOs(OS os) {
+        if (os.partNumber != null && !os.partNumber.isBlank()) return normalizarPn(os.partNumber);
+        Fcu fcu = os.idFcu == null ? null : Fcu.findById(os.idFcu);
+        return normalizarPn(fcu == null ? null : fcu.pn);
+    }
+
+    @Transactional
+    public PlanoPn vincularPn(String pnInformado, Long ferramentaId, boolean vincular, Usuario u) {
+        exigir(u, GESTAO);
+        String pn = normalizarPn(pnInformado);
+        if (pn.isEmpty()) throw new BadRequestException("Informe o PN do artigo.");
+        alterarVinculo(pn, ferramentaId, vincular, u);
+        return planoPn(pn, null, u);
+    }
+
+    @Transactional
+    public PlanoPn atualizarVinculosPn(AlteracaoVinculosPn pedido, Usuario u) {
+        exigir(u, GESTAO);
+        if (pedido == null) throw new BadRequestException("Informe os vínculos a alterar.");
+        String pn = normalizarPn(pedido.pn());
+        if (pn.isEmpty()) throw new BadRequestException("Informe o PN do artigo.");
+        Map<Long, Boolean> mudancas = new TreeMap<>();
+        registrarMudancas(mudancas, pedido.adicionar(), true);
+        registrarMudancas(mudancas, pedido.remover(), false);
+        mudancas.forEach((id, adicionar) -> alterarVinculo(pn, id, adicionar, u));
+        return planoPn(pn, null, u);
+    }
+
+    private void registrarMudancas(Map<Long, Boolean> mudancas, List<Long> ids, boolean adicionar) {
+        if (ids == null) return;
+        for (Long id : ids) {
+            if (id == null || id <= 0 || mudancas.putIfAbsent(id, adicionar) != null) {
+                throw new BadRequestException("Há ferramentas inválidas ou repetidas na alteração.");
+            }
+        }
+    }
+
+    private void alterarVinculo(String pn, Long ferramentaId, boolean vincular, Usuario u) {
+        Ferramenta f = ferramenta(ferramentaId);
+        FerramentaPn vinculo = FerramentaPn.find("pn = ?1 and ferramenta.id = ?2", pn, f.id).firstResult();
+        if (vincular && vinculo == null) {
+            vinculo = new FerramentaPn();
+            vinculo.pn = pn;
+            vinculo.ferramenta = f;
+            vinculo.persist();
+            evento(f, null, u, "VINCULO_PN", pn);
+        } else if (!vincular && vinculo != null) {
+            vinculo.delete();
+            evento(f, null, u, "DESVINCULO_PN", pn);
+        }
+    }
+
+    public PlanoPn planoPn(String pnInformado, Long osId, Usuario u) {
+        OS os = osId == null ? null : OS.findById(osId);
+        if (osId != null && (os == null || !Objects.equals(os.mecanicoResponsavelId, u.id))) {
+            throw new ForbiddenException("O acompanhamento da solicitação está disponível para o mecânico responsável.");
+        }
+        String pn = os == null ? normalizarPn(pnInformado) : pnDaOs(os);
+        boolean podeSolicitar = ordemAberta(os) && permissoes(u).contains(MEC);
+        List<FerramentaPrevista> itens = ferramentasDoPn(pn).stream()
+            .map(f -> situacaoPn(f, os, pn)).toList();
+        return new PlanoPn(pn, podeSolicitar, itens);
+    }
+
+    private FerramentaPrevista situacaoPn(Ferramenta f, OS os, String pn) {
+        FerramentaCustodia custodia = ativa(f.id);
+        String restricao = restricao(f, null, agora());
+        FerramentaMovimento preparo = FerramentaMovimento.find(
+            "ferramentaId = ?1 and status = 'PENDENTE' and tipo <> 'INTERESSE'", f.id).firstResult();
+        FerramentaMovimento pedido = os == null ? null : FerramentaMovimento.find("""
+            osId = ?1 and ferramentaId = ?2 and mecanicoId = ?3 and pnSolicitacao = ?4
+            and status = 'PENDENTE' and tipo = 'INTERESSE'
+            """, os.id, f.id, os.mecanicoResponsavelId, pn).firstResult();
+        String disponibilidade = restricao != null ? restricao
+            : custodia != null ? "Em uso" : preparo != null ? "Retirada ou transferência em preparação" : "Disponível";
+        String situacao = "A_SOLICITAR";
+        if (os != null && custodia != null && Objects.equals(custodia.osId, os.id)) {
+            situacao = "EM_CUSTODIA";
+        } else if (os != null && preparo != null && Objects.equals(preparo.osId, os.id)
+            && Objects.equals(preparo.mecanicoId, os.mecanicoResponsavelId)) {
+            situacao = "PREPARADA";
+        } else if (pedido != null) {
+            situacao = "SOLICITADA";
+        }
+        return new FerramentaPrevista(f.id, f.codigo, f.descricao, situacao, disponibilidade);
+    }
+
+    @Transactional
+    public ResultadoPedidoPn solicitarPn(Long osId, PedidoPn pedido, Usuario u) {
+        exigir(u, MEC);
+        OS os = ordem(osId);
+        if (!Objects.equals(os.mecanicoResponsavelId, u.id)) {
+            throw new ForbiddenException("Somente o mecânico responsável pode solicitar ferramentas desta OS.");
+        }
+        String pn = pnDaOs(os);
+        if (pedido == null || pn.isEmpty() || !pn.equals(normalizarPn(pedido.pn()))) {
+            throw new BadRequestException("O PN da OS mudou ou está vazio. Atualize a consulta.");
+        }
+        String localizacao = texto(pedido.localizacao(), "Localização", 255);
+        if (pedido.retornoPrevisto() == null || !pedido.retornoPrevisto().isAfter(agora())) {
+            throw new BadRequestException("Informe uma previsão de retorno futura (horário de Brasília).");
+        }
+        int criadas = 0;
+        for (Long id : ferramentasDoPn(pn).stream().map(f -> f.id).sorted().toList()) {
+            Ferramenta f = ferramenta(id);
+            if (!"A_SOLICITAR".equals(situacaoPn(f, os, pn).situacao())) continue;
+            FerramentaMovimento movimento = new FerramentaMovimento();
+            movimento.ferramentaId = f.id;
+            movimento.osId = os.id;
+            movimento.mecanicoId = u.id;
+            movimento.solicitanteId = u.id;
+            movimento.tipo = "INTERESSE";
+            movimento.pnSolicitacao = pn;
+            movimento.localizacao = localizacao;
+            movimento.retornoPrevisto = pedido.retornoPrevisto();
+            movimento.criadoEm = agora();
+            movimento.persist();
+            evento(f, os.id, u, "SOLICITACAO_PN", "PN " + pn + ", solicitação #" + movimento.id);
+            criadas++;
+        }
+        return new ResultadoPedidoPn(criadas, planoPn(pn, osId, u));
     }
     private Usuario mecanico(Integer id) { Usuario u=id==null?null:usuarioNoTenant(id);if(u==null || !Boolean.TRUE.equals(u.ativo))throw new BadRequestException("Mecânico inativo ou inválido.");exigir(u,MEC);return u; }
     private void usavel(Ferramenta f,LocalDateTime retorno) {String r=restricao(f,retorno,agora());if(r!=null)throw new BadRequestException(f.codigo+": "+r);}
@@ -156,6 +356,39 @@ public class FerramentaService {
             .filter(m->balcao || Objects.equals(m.mecanicoId,u.id) || Objects.equals(m.solicitanteId,u.id) || (m.custodiaOrigemId!=null && Objects.equals(((FerramentaCustodia)FerramentaCustodia.find("id", m.custodiaOrigemId).firstResult()).mecanicoId,u.id)))
             .map(m->{Ferramenta f=Ferramenta.find("id", m.ferramentaId).firstResult();Map<String,Object> out=new LinkedHashMap<>();out.put("movimento",m);out.put("codigo",f.codigo);out.put("descricao",f.descricao);out.put("mecanico",nome(m.mecanicoId));out.put("osNumero",numero(m.osId));out.put("origem",m.custodiaOrigemId==null?null:nome(((FerramentaCustodia)FerramentaCustodia.find("id", m.custodiaOrigemId).firstResult()).mecanicoId));return out;}).toList();
     }
+    @Transactional
+    public FerramentaMovimento prepararSolicitacaoPn(Long id, PreparacaoPn pedido, Usuario u) {
+        exigir(u, ESTACAO);
+        terminal.exigir();
+        FerramentaMovimento referencia = FerramentaMovimento.findById(id);
+        if (referencia == null) throw new NotFoundException("Solicitação não encontrada.");
+        OS os = ordem(referencia.osId);
+        Ferramenta f = ferramenta(referencia.ferramentaId);
+        FerramentaMovimento solicitacao = em.find(FerramentaMovimento.class, id, LockModeType.PESSIMISTIC_WRITE);
+        em.refresh(solicitacao, LockModeType.PESSIMISTIC_WRITE);
+        if (solicitacao.pnSolicitacao == null || !"INTERESSE".equals(solicitacao.tipo)
+                || !"PENDENTE".equals(solicitacao.status)) {
+            throw new BadRequestException("Esta solicitação por PN já foi processada ou está indisponível.");
+        }
+        validarVinculoDaSolicitacao(solicitacao, os);
+        if (pedido == null) throw new BadRequestException("Informe os dados da retirada.");
+        MovimentoRequest retirada = new MovimentoRequest(List.of(f.id), os.id, solicitacao.mecanicoId,
+            pedido.localizacao(), pedido.retornoPrevisto(), "RETIRADA");
+        FerramentaMovimento preparado = preparar(retirada, u).getFirst();
+        preparado.pnSolicitacao = solicitacao.pnSolicitacao;
+        preparado.solicitacaoOrigemId = solicitacao.id;
+        solicitacao.status = "CONCLUIDO";
+        evento(f, os.id, u, "SOLICITACAO_PN_ATENDIDA", "Solicitação #" + id + " preparada na retirada #" + preparado.id);
+        return preparado;
+    }
+
+    private void validarVinculoDaSolicitacao(FerramentaMovimento movimento, OS os) {
+        if (!Objects.equals(os.mecanicoResponsavelId, movimento.mecanicoId)
+                || !Objects.equals(pnDaOs(os), movimento.pnSolicitacao)) {
+            throw new BadRequestException("O PN ou o responsável da OS mudou. Cancele este movimento e solicite novamente pela OS.");
+        }
+    }
+
     @Transactional public FerramentaMovimento confirmar(Long id,Confirmacao r,Usuario sessao) {
         exigir(sessao,ESTACAO);
         if(r==null)throw new BadRequestException("Confirmação inválida.");
@@ -174,7 +407,8 @@ public class FerramentaService {
             m.status=r.etapa();evento(f,m.osId,u,m.status,texto(r.justificativa(),"Justificativa",2000));return m;
         }
         if("INTERESSE".equals(m.tipo))throw new BadRequestException("Interesse deve ser atendido por uma nova retirada ou transferência após liberar o exemplar.");
-        ordem(m.osId);
+        OS os = ordem(m.osId);
+        if (m.solicitacaoOrigemId != null) validarVinculoDaSolicitacao(m, os);
         mecanico(m.mecanicoId);
         LocalDateTime previsao=Set.of("RECEBIMENTO","REGISTRAR").contains(Objects.toString(r.etapa(),"")) && r.retornoPrevisto()!=null?r.retornoPrevisto():m.retornoPrevisto;
         usavel(f,previsao);

@@ -357,6 +357,11 @@ import { BRASIL_ESTADOS } from '../core/domain/brazil-states.data';
                           <span>{{ 'comercial.proposta.currency.eurLbl' | translate }}</span>
                         </label>
                       </div>
+                      <span class="currency-lock-hint"
+                            [class.is-brl]="selectedCurrency === 'BRL'"
+                            [class.is-usd]="selectedCurrency === 'USD'">
+                        Exibição única: {{ selectedCurrency === 'EUR' ? 'Euro (EUR)' : selectedCurrency === 'BRL' ? 'Real (BRL)' : 'Dólar (USD)' }}
+                      </span>
                     </div>
                     <button pButton 
                             type="button"
@@ -680,6 +685,28 @@ import { BRASIL_ESTADOS } from '../core/domain/brazil-states.data';
                 </form>
               </div>
               
+              <div class="form-section">
+                <h3><i class="pi pi-file"></i> Solicitação de Serviços (FORM-MNT-045)</h3>
+                <p class="field-hint" style="margin-top:-6px;margin-bottom:12px;">Pré-preenchido para o cliente confirmar no link de aceite. Ajuste aqui o que já souber.</p>
+                <form [formGroup]="produtoForm">
+                  <div class="form-grid">
+                    <div class="form-field"><label>TSN</label><input pInputText formControlName="tsn" class="w-full"></div>
+                    <div class="form-field"><label>TSO</label><input pInputText formControlName="tso" class="w-full"></div>
+                    <div class="form-field"><label>CSN</label><input pInputText formControlName="csn" class="w-full"></div>
+                    <div class="form-field"><label>CSO</label><input pInputText formControlName="cso" class="w-full"></div>
+                    <div class="form-field"><label>Modelo do motor</label><input pInputText formControlName="modeloMotor" class="w-full"></div>
+                    <div class="form-field"><label>P/N do motor</label><input pInputText formControlName="pnMotor" class="w-full"></div>
+                    <div class="form-field"><label>Tempo desde último HSI</label><input pInputText formControlName="tempoDesdeHsi" class="w-full"></div>
+                    <div class="form-field full-width"><label>Reporte do cliente</label>
+                      <textarea pInputTextarea formControlName="reporteCliente" rows="3" class="w-full"></textarea>
+                    </div>
+                    <div class="form-field"><label>Solicitante</label><input pInputText formControlName="solicitanteNome" class="w-full"></div>
+                    <div class="form-field"><label>Cargo</label><input pInputText formControlName="solicitanteCargo" class="w-full"></div>
+                    <div class="form-field"><label>Empresa solicitante</label><input pInputText formControlName="solicitanteEmpresa" class="w-full"></div>
+                  </div>
+                </form>
+              </div>
+
               <div class="tab-actions">
                 <button pButton [label]="'comercial.proposta.btn.salvarTemplate' | translate" icon="pi pi-bookmark"
                         (click)="abrirDialogSalvarTemplate()" class="p-button-outlined p-button-secondary"
@@ -1121,13 +1148,13 @@ import { BRASIL_ESTADOS } from '../core/domain/brazil-states.data';
                     <h3><i class="pi pi-money-bill"></i> {{ 'comercial.proposta.sidebar.secCond' | translate }}</h3>
                     <div class="form-field">
                       <label for="prazoEntrega">{{ 'comercial.proposta.sidebar.lblPrazo' | translate }}</label>
-                      <input pInputText id="prazoEntrega" formControlName="prazoEntrega" 
-                             [placeholder]="'comercial.proposta.cond.phPrazo' | translate" class="w-full">
+                      <p-dropdown inputId="prazoEntregaSelect" [options]="prazoOpcoes" [(ngModel)]="prazoSelecionado" [ngModelOptions]="{standalone: true}" (onChange)="onPrazoPresetChange($event.value)" optionLabel="label" optionValue="value" styleClass="w-full" appendTo="body"></p-dropdown>
+                      <input *ngIf="prazoSelecionado === '__custom__'" pInputText id="prazoEntrega" formControlName="prazoEntrega" class="w-full">
                     </div>
                     <div class="form-field">
                       <label for="formaPagamento">{{ 'comercial.proposta.sidebar.lblPgto' | translate }}</label>
-                      <input pInputText id="formaPagamento" formControlName="formaPagamento" 
-                             [placeholder]="'comercial.proposta.cond.phPgto' | translate" class="w-full">
+                      <p-dropdown inputId="formaPagamentoSelect" [options]="pagamentoOpcoes" [(ngModel)]="pagamentoSelecionado" [ngModelOptions]="{standalone: true}" (onChange)="onPagamentoPresetChange($event.value)" optionLabel="label" optionValue="value" styleClass="w-full" appendTo="body"></p-dropdown>
+                      <input *ngIf="pagamentoSelecionado === '__custom__'" pInputText id="formaPagamento" formControlName="formaPagamento" class="w-full">
                     </div>
                     <div class="form-field form-field-observacao">
                       <label for="observacoesProposta">{{ 'comercial.proposta.sidebar.lblObs' | translate }}</label>
@@ -1190,7 +1217,7 @@ import { BRASIL_ESTADOS } from '../core/domain/brazil-states.data';
                         (click)="abrirDialogPortal()" class="p-button-outlined p-button-info"
                         [disabled]="!isProdutoValid || !isClienteValid"></button>
                 <button pButton [label]="'comercial.proposta.btn.enviar' | translate" icon="pi pi-send"
-                        (click)="abrirDialogEnvioEmail()" class="p-button-success"
+                        (click)="abrirModalFinalizarEnvio()" class="p-button-success"
                         [disabled]="!isProdutoValid || !isClienteValid"></button>
               </div>
             </div>
@@ -1960,7 +1987,20 @@ export class PropostaComercialComponent implements OnInit {
       aeronavePrefixo: [''],
       idTipoServico: [null],
       tipoServicoNome: [''],
-      servicoExecutado: ['', Validators.maxLength(1000)]
+      servicoExecutado: ['', Validators.maxLength(1000)],
+      tsn: [''],
+      tso: [''],
+      csn: [''],
+      cso: [''],
+      pnMotor: [''],
+      modeloMotor: [''],
+      tempoDesdeHsi: [''],
+      servicosFlags: [''],
+      reporteCliente: [''],
+      solicitanteNome: [''],
+      solicitanteEmpresa: [''],
+      solicitanteCargo: [''],
+      solicitanteData: [null]
     });
 
     this.clienteForm = this.fb.group({
@@ -1987,6 +2027,67 @@ export class PropostaComercialComponent implements OnInit {
       contatoTecnico: [''],
       centroCusto: ['']
     });
+    this.syncCondicoesPresetsFromForm();
+  }
+
+  private isPresetValue(opcoes: { value: string }[], value: string | null | undefined): boolean {
+    if (!value) return false;
+    return opcoes.some(o => o.value !== '__custom__' && o.value === value);
+  }
+
+  syncCondicoesPresetsFromForm() {
+    const prazo = (this.propostaForm.get('prazoEntrega')?.value || '').trim();
+    this.prazoSelecionado = this.isPresetValue(this.prazoOpcoes, prazo) ? prazo : (prazo ? '__custom__' : this.prazoOpcoes[1].value);
+
+    const pag = (this.propostaForm.get('formaPagamento')?.value || '').trim();
+    this.pagamentoSelecionado = this.isPresetValue(this.pagamentoOpcoes, pag) ? pag : (pag ? '__custom__' : this.pagamentoOpcoes[1].value);
+  }
+
+  onPrazoPresetChange(value: string) {
+    if (value === '__custom__') {
+      const atual = (this.propostaForm.get('prazoEntrega')?.value || '').trim();
+      if (this.isPresetValue(this.prazoOpcoes, atual) || !atual) {
+        this.propostaForm.patchValue({ prazoEntrega: '' });
+      }
+      return;
+    }
+    this.propostaForm.patchValue({ prazoEntrega: value });
+  }
+
+  onPagamentoPresetChange(value: string) {
+    if (value === '__custom__') {
+      const atual = (this.propostaForm.get('formaPagamento')?.value || '').trim();
+      if (this.isPresetValue(this.pagamentoOpcoes, atual) || !atual) {
+        this.propostaForm.patchValue({ formaPagamento: '' });
+      }
+      return;
+    }
+    this.propostaForm.patchValue({ formaPagamento: value });
+  }
+
+  abrirModalFinalizarEnvio() {
+    if (!this.isProdutoValid || !this.isClienteValid) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'Preencha produto e cliente antes de enviar'
+      });
+      return;
+    }
+    this.showFinalizarEnvioDialog = true;
+  }
+
+  escolherCanalEnvio(canal: 'email' | 'whatsapp' | 'link') {
+    this.showFinalizarEnvioDialog = false;
+    if (canal === 'email') {
+      this.abrirDialogEnvioEmail();
+      return;
+    }
+    if (canal === 'whatsapp') {
+      this.abrirDialogEnvioWhatsApp();
+      return;
+    }
+    this.copiarLinkAceite();
   }
 
   loadTiposServico() {
@@ -2105,7 +2206,20 @@ export class PropostaComercialComponent implements OnInit {
       aeronavePrefixo: proposta.aeronavePrefixo,
       idTipoServico: proposta.idTipoServico,
       tipoServicoNome: proposta.tipoServicoNome,
-      servicoExecutado: proposta.servicoExecutado
+      servicoExecutado: proposta.servicoExecutado,
+      tsn: proposta.tsn,
+      tso: proposta.tso,
+      csn: proposta.csn,
+      cso: proposta.cso,
+      pnMotor: proposta.pnMotor,
+      modeloMotor: proposta.modeloMotor || proposta.aplicacaoMotor,
+      tempoDesdeHsi: proposta.tempoDesdeHsi,
+      servicosFlags: proposta.servicosFlags,
+      reporteCliente: proposta.reporteCliente,
+      solicitanteNome: proposta.solicitanteNome || proposta.clienteContato,
+      solicitanteEmpresa: proposta.solicitanteEmpresa || proposta.clienteNome,
+      solicitanteCargo: proposta.solicitanteCargo,
+      solicitanteData: proposta.solicitanteData || null
     });
 
     this.clienteForm.patchValue({
@@ -2133,6 +2247,7 @@ export class PropostaComercialComponent implements OnInit {
       contatoTecnico: proposta.contatoTecnico,
       centroCusto: proposta.centroCusto
     });
+    this.syncCondicoesPresetsFromForm();
 
     // Carregar itens da proposta se existirem
     if (proposta.itens && proposta.itens.length > 0) {
@@ -2350,6 +2465,7 @@ export class PropostaComercialComponent implements OnInit {
       condicoesGerais: '',
       observacoes: template.observacaoPadrao || ''
     });
+    this.syncCondicoesPresetsFromForm();
 
     if (template.validadeDias) {
       this.propostaForm.patchValue({
@@ -3533,7 +3649,7 @@ export class PropostaComercialComponent implements OnInit {
   }
 
   continuarEnvioWhatsApp() {
-    this.enviarWhatsApp();
+    this.abrirDialogEnvioWhatsApp();
   }
 
   getTelefoneWhatsAppDestino(): string {
@@ -4109,6 +4225,14 @@ export class PropostaComercialComponent implements OnInit {
       next: (cotacao) => {
         this.cotacaoDolar = cotacao;
         this.carregandoCotacao = false;
+        if ((cotacao.fonte || '').toLowerCase().includes('estimado')) {
+          this.cotacaoDolar = null;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Cotação inválida',
+            detail: 'Não use cotação estimada. Atualize pela PTAX do Banco Central.'
+          });
+        }
       },
       error: (err) => {
         console.error('Failed to load exchange rate:', err);
@@ -4120,7 +4244,27 @@ export class PropostaComercialComponent implements OnInit {
 
   atualizarCotacao() {
     this.cotacaoService.clearCache();
-    this.carregarCotacao();
+    this.carregandoCotacao = true;
+    this.cotacaoService.getCotacaoDolar(true).subscribe({
+      next: (cotacao) => {
+        this.cotacaoDolar = cotacao;
+        this.carregandoCotacao = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Cotação PTAX',
+          detail: `US$ 1 = R$ ${Number(cotacao.cotacaoVenda).toFixed(4)} (${cotacao.fonte})`
+        });
+        this.agendarSalvamentoAutomatico();
+      },
+      error: (err) => {
+        this.carregandoCotacao = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Cotação PTAX indisponível',
+          detail: err?.error?.message || 'Não foi possível atualizar a cotação oficial.'
+        });
+      }
+    });
   }
 
   onCostChange() {
@@ -4811,5 +4955,398 @@ export class PropostaComercialComponent implements OnInit {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+
+  showFinalizarEnvioDialog = false;
+
+  readonly prazoOpcoes: { label: string; value: string }[] = [
+    { label: '15 dias úteis após aceite', value: '15 dias úteis após aceite' },
+    { label: '30 dias úteis após recebimento do material', value: '30 dias úteis após recebimento do material' },
+    { label: '45 dias úteis após recebimento do material', value: '45 dias úteis após recebimento do material' },
+    { label: 'A combinar', value: 'A combinar' },
+    { label: 'Personalizado...', value: '__custom__' }
+  ];
+
+  readonly pagamentoOpcoes: { label: string; value: string }[] = [
+    { label: '50% no aceite / 50% na entrega', value: '50% no aceite / 50% na entrega' },
+    { label: '50% na aprovação + 50% na entrega', value: '50% na aprovação + 50% na entrega' },
+    { label: '100% na entrega', value: '100% na entrega' },
+    { label: '100% no aceite', value: '100% no aceite' },
+    { label: 'A combinar', value: 'A combinar' },
+    { label: 'Personalizado...', value: '__custom__' }
+  ];
+
+  prazoSelecionado = '30 dias úteis após recebimento do material';
+
+  pagamentoSelecionado = '50% na aprovação + 50% na entrega';
+
+  showEnvioWhatsAppDialog = false;
+
+  waStep: 'form' | 'qr' | 'connecting' | 'sending' | 'sent' | 'fallback' = 'form';
+
+  waSessionId: string | null = null;
+
+  waQrDataUri: string | null = null;
+
+  waMensagemPreview = '';
+
+  waWhatsappUrl: string | null = null;
+
+  waPdfBase64: string | null = null;
+
+  waPdfNome: string | null = null;
+
+  private waPollTimer: any = null;
+
+  private waPollStartedAt = 0;
+
+  private waSendTriggered = false;
+
+  whatsAppEnvio: {
+    telefoneDestino: string;
+    mensagemAdicional: string;
+  } = {
+    telefoneDestino: '',
+    mensagemAdicional: ''
+  };
+
+  get currentStatus(): string {
+    return this.proposta?.status || '';
+  }
+
+  copiarLinkAceite() {
+    const id = this.propostaId;
+    if (!id) return;
+    this.propostaService.gerarLinkAceite(id).subscribe({
+      next: async (r) => {
+        const url = r.aceiteUrl;
+        try {
+          await navigator.clipboard.writeText(url);
+          this.messageService.add({ severity: 'success', summary: 'Link copiado', detail: url });
+        } catch {
+          this.messageService.add({ severity: 'info', summary: 'Link de aceite', detail: url });
+        }
+        if (this.proposta) {
+          this.proposta.aceiteUrl = url;
+          this.proposta.aceiteToken = r.aceiteToken;
+          this.proposta.aceiteStatus = r.aceiteStatus;
+        }
+      },
+      error: (e) => this.messageService.add({
+        severity: 'error', summary: 'Erro',
+        detail: e?.error?.message || 'Não foi possível gerar o link de aceite'
+      })
+    });
+  }
+
+  abrirOsApartirProposta() {
+    const id = this.propostaId;
+    if (!id) return;
+    this.propostaService.payloadOs(id).subscribe({
+      next: (payload) => {
+        this.router.navigate(['/os'], { state: { fromProposta: payload } });
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Abrir OS',
+          detail: 'Dados da proposta preparados. Conclua a abertura da OS na tela de Ordens de Serviço.'
+        });
+      },
+      error: (e) => this.messageService.add({
+        severity: 'error', summary: 'Erro',
+        detail: e?.error?.message || 'Não foi possível montar os dados da OS'
+      })
+    });
+  }
+
+  private mensagemErroSalvarProposta(err: any): string {
+    const raw = err?.error?.message || err?.error?.detail || err?.message || '';
+    const text = typeof raw === 'string' ? raw : '';
+    if (/cliente_cnpj_cpf|Data too long|documento|CNPJ|CPF/i.test(text) && text.length < 220) {
+      return text;
+    }
+    if (text && text.length < 220 && !/Internal Server Error|Http failure/i.test(text)) {
+      return text;
+    }
+    return 'Não foi possível salvar a proposta';
+  }
+
+  formatTelefoneMask(value: string): string {
+    const digits = (value || '').replace(/\D/g, '').slice(0, 11);
+    if (digits.length === 0) return '';
+    if (digits.length <= 2) return `(${digits}`;
+    if (digits.length <= 7) return `(${digits.slice(0, 2)})${digits.slice(2)}`;
+    return `(${digits.slice(0, 2)})${digits.slice(2, 7)}-${digits.slice(7)}`;
+  }
+
+  private salvarParaEnvioWhatsApp() {
+    if (this.clienteForm.get('clienteCnpjCpf')?.invalid) {
+      this.clienteForm.get('clienteCnpjCpf')?.markAsTouched();
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'CNPJ / CPF',
+        detail: this.clienteForm.get('clienteCnpjCpf')?.errors?.['documentoIdentificacao']
+          || 'Informe um único CPF ou CNPJ válido'
+      });
+      return;
+    }
+    this.saving = true;
+    let proposta: PropostaComercial;
+    try {
+      proposta = this.buildPropostaBasePayload('RASCUNHO');
+    } catch {
+      this.saving = false;
+      return;
+    }
+
+    const request = this.deveUsarUpdate && this.propostaId
+      ? this.propostaService.update(this.propostaId, proposta)
+      : this.propostaService.create({ ...proposta, numeroProposta: undefined });
+
+    request.subscribe({
+      next: (result) => {
+        this.saving = false;
+        this.proposta = result;
+        this.isEditMode = true;
+        if (!this.deveUsarUpdate && result.id) {
+          this.router.navigate(['/propostas-comerciais', result.id], { replaceUrl: true });
+        }
+        this.abrirDialogEnvioWhatsApp();
+      },
+      error: (err) => {
+        this.saving = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: this.mensagemErroSalvarProposta(err)
+        });
+      }
+    });
+  }
+
+  private resetWhatsAppUiState() {
+    this.stopWhatsAppPoll();
+    this.enviandoWhatsApp = false;
+    this.waStep = 'form';
+    this.waSessionId = null;
+    this.waQrDataUri = null;
+    this.waMensagemPreview = '';
+    this.waWhatsappUrl = null;
+    this.waPdfBase64 = null;
+    this.waPdfNome = null;
+    this.waSendTriggered = false;
+  }
+
+  fecharDialogWhatsApp() {
+    const sessionId = this.waSessionId;
+    this.showEnvioWhatsAppDialog = false;
+    if (sessionId && this.waStep !== 'sent' && this.waStep !== 'fallback') {
+      this.propostaService.whatsAppSessionDisconnect(sessionId).subscribe({ error: () => {} });
+    }
+    this.resetWhatsAppUiState();
+  }
+
+  onWhatsAppDialogHide() {
+    if (this.showEnvioWhatsAppDialog) return;
+    const sessionId = this.waSessionId;
+    if (sessionId && this.waStep !== 'sent' && this.waStep !== 'fallback') {
+      this.propostaService.whatsAppSessionDisconnect(sessionId).subscribe({ error: () => {} });
+    }
+    this.resetWhatsAppUiState();
+  }
+
+  private stopWhatsAppPoll() {
+    if (this.waPollTimer) {
+      clearInterval(this.waPollTimer);
+      this.waPollTimer = null;
+    }
+  }
+
+  iniciarSessaoWhatsApp() {
+    if (!this.canSendWhatsApp() || !this.proposta?.id) return;
+    this.enviandoWhatsApp = true;
+    this.waSendTriggered = false;
+    this.propostaService.startWhatsAppSession({
+      propostaId: this.proposta.id,
+      telefoneDestino: this.whatsAppEnvio.telefoneDestino,
+      mensagemAdicional: this.whatsAppEnvio.mensagemAdicional || undefined
+    }).subscribe({
+      next: (res) => {
+        this.enviandoWhatsApp = false;
+        this.waSessionId = res.sessionId;
+        this.waMensagemPreview = res.mensagemPreview || '';
+        if (res.fallback || res.status === 'fallback') {
+          this.applyWhatsAppFallback(res);
+          return;
+        }
+        this.waStep = 'qr';
+        this.waQrDataUri = res.qrcodeBase64 || null;
+        this.startWhatsAppPoll();
+      },
+      error: (err) => {
+        this.enviandoWhatsApp = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'WhatsApp',
+          detail: err?.error?.message || err?.message || 'Falha ao iniciar sessão'
+        });
+      }
+    });
+  }
+
+  private startWhatsAppPoll() {
+    this.stopWhatsAppPoll();
+    this.waPollStartedAt = Date.now();
+    this.waPollTimer = setInterval(() => this.pollWhatsAppSession(), 2500);
+  }
+
+  private pollWhatsAppSession() {
+    if (!this.waSessionId) return;
+    // Timeout ~25s sem QR/conexão → fallback visual
+    if (Date.now() - this.waPollStartedAt > 25000 && !this.waSendTriggered) {
+      this.usarFallbackWhatsApp();
+      return;
+    }
+    this.propostaService.whatsAppSessionStatus(this.waSessionId).subscribe({
+      next: (res) => {
+        if (res.fallback || res.status === 'fallback') {
+          this.applyWhatsAppFallback(res);
+          return;
+        }
+        if (res.qrcodeBase64) {
+          this.waQrDataUri = res.qrcodeBase64;
+          this.waStep = 'qr';
+        }
+        if (res.status === 'connected' && !this.waSendTriggered) {
+          this.waStep = 'connecting';
+          this.enviarAposConexaoWhatsApp();
+        }
+      },
+      error: () => {}
+    });
+  }
+
+  private enviarAposConexaoWhatsApp() {
+    if (!this.waSessionId || this.waSendTriggered) return;
+    this.waSendTriggered = true;
+    this.stopWhatsAppPoll();
+    this.waStep = 'sending';
+
+    let signature: any;
+    if (this.signatureData) {
+      signature = {
+        name: this.signatureData.name,
+        styleId: this.signatureData.styleId,
+        fontFamily: this.signatureData.style.fontFamily,
+        fontWeight: this.signatureData.style.fontWeight,
+        fontSize: this.signatureData.style.fontSize,
+        color: this.signatureData.style.color,
+        letterSpacing: this.signatureData.style.letterSpacing
+      };
+    }
+
+    this.propostaService.whatsAppSessionSend(this.waSessionId, signature).subscribe({
+      next: (res) => {
+        this.atualizarPropostaStatusEnviada();
+        if (res.fallback || res.status === 'fallback') {
+          this.applyWhatsAppFallback(res);
+          return;
+        }
+        this.waStep = 'sent';
+        this.waSessionId = null;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'WhatsApp',
+          detail: res.message || 'Proposta enviada. Sessão desconectada.',
+          life: 6000
+        });
+      },
+      error: (err) => {
+        this.waStep = 'fallback';
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'WhatsApp',
+          detail: err?.error?.message || 'Falha no envio automático. Use o fallback manual.'
+        });
+        this.usarFallbackWhatsApp();
+      }
+    });
+  }
+
+  usarFallbackWhatsApp() {
+    this.stopWhatsAppPoll();
+    if (!this.waSessionId) {
+      // Sem sessão: usa endpoint legado para montar PDF + wa.me limpo
+      this.enviarWhatsAppLegadoFallback();
+      return;
+    }
+    this.waStep = 'sending';
+    this.propostaService.whatsAppSessionSend(this.waSessionId, undefined).subscribe({
+      next: (res) => {
+        this.atualizarPropostaStatusEnviada();
+        this.applyWhatsAppFallback(res);
+      },
+      error: () => this.enviarWhatsAppLegadoFallback()
+    });
+  }
+
+  private applyWhatsAppFallback(res: {
+    mensagemPreview?: string;
+    whatsappUrl?: string;
+    pdfBase64?: string;
+    pdfNome?: string;
+    message?: string;
+  }) {
+    this.stopWhatsAppPoll();
+    this.waStep = 'fallback';
+    this.waMensagemPreview = res.mensagemPreview || this.waMensagemPreview;
+    this.waWhatsappUrl = res.whatsappUrl || null;
+    this.waPdfBase64 = res.pdfBase64 || null;
+    this.waPdfNome = res.pdfNome || `Proposta_${this.proposta?.numeroProposta || 'comercial'}.pdf`;
+    this.waSessionId = null;
+    this.waQrDataUri = null;
+  }
+
+  private enviarWhatsAppLegadoFallback() {
+    if (!this.proposta?.id) return;
+    this.enviandoWhatsApp = true;
+    this.propostaService.enviarPorWhatsApp(this.proposta.id, {
+      telefoneDestino: this.whatsAppEnvio.telefoneDestino,
+      mensagemAdicional: this.whatsAppEnvio.mensagemAdicional || undefined
+    }).subscribe({
+      next: (response) => {
+        this.enviandoWhatsApp = false;
+        if (!response.success) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro no WhatsApp',
+            detail: response.message || 'Não foi possível preparar o envio'
+          });
+          return;
+        }
+        this.atualizarPropostaStatusEnviada();
+        this.applyWhatsAppFallback(response);
+      },
+      error: (err) => {
+        this.enviandoWhatsApp = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro no WhatsApp',
+          detail: err?.error?.message || err?.message || 'Falha ao preparar o WhatsApp'
+        });
+      }
+    });
+  }
+
+  baixarPdfFallbackWhatsApp() {
+    if (!this.waPdfBase64) return;
+    this.baixarPdfBase64(
+      this.waPdfBase64,
+      this.waPdfNome || `Proposta_${this.proposta?.numeroProposta || 'comercial'}.pdf`
+    );
+  }
+
+  abrirWaMeFallback() {
+    if (this.waPdfBase64) this.baixarPdfFallbackWhatsApp();
+    if (this.waWhatsappUrl) window.open(this.waWhatsappUrl, '_blank');
   }
 }

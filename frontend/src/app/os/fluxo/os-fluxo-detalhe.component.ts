@@ -10,6 +10,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
 import { MessageService, SharedModule } from 'primeng/api';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../../auth/auth.service';
+import { PlanoFerramentasOsComponent } from '../../ferramentas/plano-ferramentas-os.component';
 import { OsEtiquetaDialogComponent } from './os-etiqueta-dialog.component';
 import { OS_FLUXO_FUNCIONALIDADE } from '../../auth/fluxo-os.guard';
 import { OsFluxoPermissaoService } from './os-fluxo-permissao.service';
@@ -40,7 +42,7 @@ interface GanttLinha {
   standalone: true,
   selector: 'app-os-fluxo-detalhe',
   imports: [CommonModule, FormsModule, RouterLink, ButtonModule, DialogModule, InputTextareaModule, TooltipModule,
-    ProgressSpinnerModule, ToastModule, SharedModule, OsEtiquetaDialogComponent],
+    ProgressSpinnerModule, ToastModule, SharedModule, OsEtiquetaDialogComponent, PlanoFerramentasOsComponent],
   providers: [MessageService],
   styleUrls: ['./fluxo-shared.css'],
   template: `
@@ -90,6 +92,9 @@ interface GanttLinha {
             <button type="button" class="fx-ghost-btn" (click)="carregar()" pTooltip="Atualizar"><i class="pi pi-refresh" [class.pi-spin]="loading"></i></button>
           </div>
         </header>
+
+        <app-plano-ferramentas-os [pn]="d.os.partNumber || ''" [osId]="osIdParaFerramentaria">
+        </app-plano-ferramentas-os>
 
         <section class="fx-kpis">
           <div class="fx-kpi" style="--kpi-color:#0e7490">
@@ -407,6 +412,12 @@ interface GanttLinha {
 })
 export class OsFluxoDetalheComponent implements OnInit, OnDestroy {
   private api = inject(OsFluxoService);
+  private auth = inject(AuthService);
+  get osIdParaFerramentaria(): number | null {
+    const os = this.det?.os;
+    const usuarioId = this.auth.getCurrentUser()?.id;
+    return os && usuarioId && os.mecanicoResponsavelId === usuarioId ? os.id : null;
+  }
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private messages = inject(MessageService);

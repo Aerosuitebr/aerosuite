@@ -46,7 +46,7 @@ public class PublicacaoTecnicaService {
         }
 
         if (q != null && !q.isBlank()) {
-            where.add("(lower(ataManual) like :q or lower(numeroRevisao) like :q or lower(tipoManual) like :q or lower(fabricante.nome) like :q)");
+            where.add("(lower(ataManual) like :q or lower(numeroRevisao) like :q or lower(tipoManual) like :q or lower(pnManual) like :q or lower(fabricante.nome) like :q)");
             params.put("q", "%" + q.toLowerCase() + "%");
         }
 
@@ -81,8 +81,23 @@ public class PublicacaoTecnicaService {
         if (entity.isActive == null) {
             entity.isActive = true;
         }
+        entity.pnManual = normalizarPnManual(dto.pnManual);
         entity.persist();
         return mapper.toDto(entity);
+    }
+
+    /** Alfanumérico até 20; vazio vira null. */
+    static String normalizarPnManual(String value) {
+        if (value == null) return null;
+        String v = value.trim();
+        if (v.isEmpty()) return null;
+        if (v.length() > 20) {
+            throw new IllegalArgumentException("PN do Manual deve ter no máximo 20 caracteres.");
+        }
+        if (!v.matches("(?i)[A-Z0-9._/-]+")) {
+            throw new IllegalArgumentException("PN do Manual deve ser alfanumérico (letras, números, ponto, hífen, barra ou underscore).");
+        }
+        return v;
     }
 
     @Transactional
@@ -97,6 +112,7 @@ public class PublicacaoTecnicaService {
         entity.dataRevisaoManual = dto.dataRevisaoManual;
         entity.numeroRevisao = dto.numeroRevisao;
         entity.tipoManual = dto.tipoManual;
+        entity.pnManual = normalizarPnManual(dto.pnManual);
         
         return mapper.toDto(entity);
     }

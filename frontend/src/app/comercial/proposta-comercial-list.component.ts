@@ -375,7 +375,13 @@ import { propostaPodeAcaoPortal, propostaTemEmailCliente } from './proposta-port
       background: #fff;
       border-radius: 16px;
       border: 1px solid #e2e8f0;
-      overflow: hidden;
+      overflow: visible;
+    }
+
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td.actions-cell {
+      overflow: visible;
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
 
     .numero-badge {

@@ -44,7 +44,8 @@ public class OSAuditoriaDto {
             case "marcasMatricula": return "Marcas/Matrícula";
             case "motor": return "Motor";
             case "snMotor": return "S/N Motor";
-            case "manualPn": return "Manual P/N";
+            case "manualPn": return "PN do Manual";
+            case "tipoManual": return "Tipo de Manual";
             case "ataManual": return "ATA Manual";
             case "dataRevManual": return "Data Rev. Manual";
             case "numRevisao": return "Número Revisão";

@@ -28,6 +28,41 @@ public class PropostaComercialDto {
     public Integer idTipoServico;
     public String tipoServicoNome;
 
+    // ========== SOLICITAÇÃO DE SERVIÇOS (FORM-MNT-045) ==========
+    public String tsn;
+    public String tso;
+    public String csn;
+    public String cso;
+    public String pnMotor;
+    public String modeloMotor;
+    public String tempoDesdeHsi;
+    public String servicosFlags;
+    public String reporteCliente;
+    public Boolean incidenteAcidente;
+    public Boolean submersoAgua;
+    public String descricaoIncidente;
+    public String solicitanteNome;
+    public String solicitanteEmpresa;
+    public String solicitanteCargo;
+    public LocalDate solicitanteData;
+
+    // ========== ACEITE DIGITAL ==========
+    public String aceiteToken;
+    public LocalDateTime aceiteTokenExpiraEm;
+    public String aceiteStatus;
+    public LocalDateTime aceitoEm;
+    public String aceitoIp;
+    public String aceitoUserAgent;
+    public String aceiteNome;
+    public String aceiteEmail;
+    public String aceiteCargo;
+    public String aceiteEmpresa;
+    public Boolean aceiteDeclaracao;
+    public Boolean aceiteAutorizacao;
+    public String recusaMotivo;
+    /** URL pública para o cliente (preenchida no envio / gerar link). */
+    public String aceiteUrl;
+
     // ========== DADOS DO CLIENTE ==========
     public String clienteNome;
     public String clienteCnpjCpf;

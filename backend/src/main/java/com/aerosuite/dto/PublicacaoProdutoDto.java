@@ -16,6 +16,7 @@ public class PublicacaoProdutoDto {
     public String publicacaoAtaManual;
     public String publicacaoNumeroRevisao;
     public String publicacaoTipoManual;
+    public String publicacaoPnManual;
     public String fabricanteNome;
     
     // Campos do FCU (Produto Aeronáutico) para exibição

@@ -188,6 +188,7 @@ import { ListDataStatesComponent } from '../shared/list-data-states/list-data-st
                     <p-sortIcon field="numeroRevisao"></p-sortIcon>
                   </div>
                 </th>
+                <th><div class="header-cell"><span>PN do Manual</span></div></th>
                 <th class="col-tipo-manual">
                   <div class="header-cell">
                     <span>{{ 'publicacoes.list.col.tipoManual' | translate }}</span>
@@ -232,6 +233,7 @@ import { ListDataStatesComponent } from '../shared/list-data-states/list-data-st
                     <span>{{ row.numeroRevisao || '-' }}</span>
                   </div>
                 </td>
+                <td>{{ row.pnManual || '-' }}</td>
                 <td class="col-tipo-manual">
                   <span
                     class="tipo-manual-text"
@@ -332,6 +334,10 @@ import { ListDataStatesComponent } from '../shared/list-data-states/list-data-st
             class="w-full">
         </div>
 
+        <div class="form-group">
+          <label for="pnManual">PN do Manual</label>
+          <input pInputText id="pnManual" [(ngModel)]="publicacao.pnManual" maxlength="20" (input)="onPnManualInput($event)" class="w-full">
+        </div>
         <div class="form-group">
           <label for="tipoManual">{{ 'publicacoes.dialog.tipoManual' | translate }}</label>
           <textarea 
@@ -493,6 +499,15 @@ export class PublicacaoTecnicaListComponent implements OnInit {
     if (!text) return '-';
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
+  }
+
+  onPnManualInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const sanitized = (input.value || '').toUpperCase().replace(/[^A-Z0-9.\-\/_]/g, '').slice(0, 20);
+    this.publicacao.pnManual = sanitized;
+    if (input.value !== sanitized) {
+      input.value = sanitized;
+    }
   }
 
   openNewDialog() {

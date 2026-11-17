@@ -3,6 +3,7 @@ package com.aerosuite.api;
 import com.aerosuite.i18n.ApiI18nMessages;
 
 import com.aerosuite.dto.*;
+import com.aerosuite.service.PropostaAceiteService;
 import com.aerosuite.security.AuthExternoAccessGuard;
 import com.aerosuite.security.RequiresFuncionalidades;
 import com.aerosuite.service.AccessAuditService;
@@ -50,6 +51,8 @@ public class AuthExternoResource {
 
     @Inject
     PropostaExternaPortalService propostaExternaPortalService;
+
+    @Inject PropostaAceiteService aceiteService;
 
     @Inject
     com.aerosuite.service.CapacidadeFilaService capacidadeFilaService;
@@ -567,6 +570,15 @@ public class AuthExternoResource {
                     .entity(new ErrorResponse(e.getMessage()))
                     .build();
         }
+    }
+
+    @POST
+    @Path("/me/{usuarioExternoId}/propostas/{propostaId}/solicitacao")
+    @RequiresFuncionalidades(onlyAuthenticated = true, allowExternalLegacy = true)
+    public Response abrirSolicitacaoProposta(@PathParam("usuarioExternoId") Integer id, @PathParam("propostaId") Long propostaId) {
+        externoAccessGuard.assertCanAccessUsuarioExterno(id);
+        propostaExternaPortalService.detalhe(id, propostaId);
+        return Response.ok(aceiteService.gerarLinkInterno(propostaId)).build();
     }
 
     // ========================================

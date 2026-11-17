@@ -57,6 +57,8 @@ public class PropostaComercialService {
     @Inject
     EmailService emailService;
 
+    @Inject PropostaAceiteService aceiteService;
+
     @Inject
     PropostaCcoEmailService propostaCcoEmailService;
 
@@ -794,6 +796,22 @@ public class PropostaComercialService {
         nova.servicoExecutado = original.servicoExecutado;
         nova.idTipoServico = original.idTipoServico;
         nova.tipoServicoNome = original.tipoServicoNome;
+        nova.tsn = original.tsn;
+        nova.tso = original.tso;
+        nova.csn = original.csn;
+        nova.cso = original.cso;
+        nova.pnMotor = original.pnMotor;
+        nova.modeloMotor = original.modeloMotor;
+        nova.tempoDesdeHsi = original.tempoDesdeHsi;
+        nova.servicosFlags = original.servicosFlags;
+        nova.reporteCliente = original.reporteCliente;
+        nova.incidenteAcidente = original.incidenteAcidente;
+        nova.submersoAgua = original.submersoAgua;
+        nova.descricaoIncidente = original.descricaoIncidente;
+        nova.solicitanteNome = original.solicitanteNome;
+        nova.solicitanteEmpresa = original.solicitanteEmpresa;
+        nova.solicitanteCargo = original.solicitanteCargo;
+        nova.solicitanteData = original.solicitanteData;
 
         // Copiar dados do cliente
         nova.clienteNome = original.clienteNome;
@@ -1042,6 +1060,8 @@ public class PropostaComercialService {
                 }
             }
             
+            String tokenAceite = aceiteService.garantirToken(proposta);
+            String urlAceite = aceiteService.buildAceiteUrl(tokenAceite);
             String htmlBody;
             String textBody;
             byte[] pdfAnexo = null;
@@ -1049,7 +1069,7 @@ public class PropostaComercialService {
 
             if ("anexo".equalsIgnoreCase(tipoEnvio)) {
                 // Quando for anexo, usar apenas a mensagem personalizada (sem HTML completo da proposta)
-                htmlBody = buildMensagemSimplesHtml(emailLocale, dto.mensagemAdicional, dto.signature);
+                htmlBody = buildMensagemSimplesHtml(emailLocale, dto.mensagemAdicional, dto.signature, urlAceite);
                 textBody = dto.mensagemAdicional != null && !dto.mensagemAdicional.isBlank() 
                     ? dto.mensagemAdicional 
                     : buildMensagemSimplesText(emailLocale, dto.signature);
@@ -1079,6 +1099,7 @@ public class PropostaComercialService {
                         emailLocale);
             }
 
+            textBody += "\n\nRevisar e autorizar online: " + urlAceite;
             // Enviar email
             LOGGER.info("Enviando email para: " + emailDestino + " (tipo: " + tipoEnvio + ")");
             boolean enviado = emailService.sendEmail(emailDestino, assunto, htmlBody, textBody, pdfAnexo, nomeAnexo,
@@ -1103,6 +1124,7 @@ public class PropostaComercialService {
                 envio.status = "ENVIADO";
                 envio.dataEnvio = LocalDateTime.now();
                 envio.persist();
+                result.put("aceiteUrl", urlAceite);
 
                 result.put("success", true);
                 result.put(
@@ -1154,6 +1176,7 @@ public class PropostaComercialService {
             String telefoneRemetente,
             String emailRemetente,
             String locale) {
+        String urlAceite = aceiteService.buildAceiteUrl(proposta.aceiteToken);
         PropostaComercialMessages.Lang lang = PropostaComercialMessages.toLang(locale);
         PropostaComercialMessages.Labels m = propostaLabels(locale);
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -1274,6 +1297,9 @@ public class PropostaComercialService {
             html.append("</div>");
         }
 
+        // CTA no topo (antes do conteúdo longo) — Gmail corta emails grandes
+        html.append(buildAceiteCtaHtml(urlAceite));
+
         // Dados do Cliente
         html.append("<div class=\"section\">");
         html.append("<div class=\"section-title\">").append(m.secDadosCliente()).append("</div>");
@@ -1301,9 +1327,9 @@ public class PropostaComercialService {
                     .append("</th><th style=\"text-align: center;\">")
                     .append(m.colQtd())
                     .append("</th><th style=\"text-align: right;\">")
-                    .append(m.colValorUnitUsd())
+                    .append(m.colValorUnitUsd().replace("USD", normalizeMoedaProposta(proposta.moedaProposta)))
                     .append("</th><th style=\"text-align: right;\">")
-                    .append(m.colTotalUsd())
+                    .append(m.colTotalUsd().replace("USD", normalizeMoedaProposta(proposta.moedaProposta)))
                     .append("</th></tr>");
             
             int totalQtd = 0;
@@ -1321,8 +1347,8 @@ public class PropostaComercialService {
                 html.append("<td style=\"text-align: left;\">").append(nullSafe(item.produtoPn)).append("</td>");
                 html.append("<td style=\"text-align: left;\">").append(nullSafe(item.produtoSn)).append("</td>");
                 html.append("<td style=\"text-align: center;\">").append(item.quantidade != null ? item.quantidade : 0).append("</td>");
-                html.append("<td style=\"text-align: right;\">").append(item.valorUnitario != null ? formatCurrencyUsd(item.valorUnitario) : "$0.00").append("</td>");
-                html.append("<td class=\"valor\" style=\"text-align: right;\">").append(item.valorTotal != null ? formatCurrencyUsd(item.valorTotal) : "$0.00").append("</td>");
+                html.append("<td style=\"text-align: right;\">").append(item.valorUnitario != null ? formatCurrencyUsd(proposta, item.valorUnitario) : "$0.00").append("</td>");
+                html.append("<td class=\"valor\" style=\"text-align: right;\">").append(item.valorTotal != null ? formatCurrencyUsd(proposta, item.valorTotal) : "$0.00").append("</td>");
                 html.append("</tr>");
                 
                 if (item.quantidade != null) totalQtd += item.quantidade;
@@ -1332,9 +1358,9 @@ public class PropostaComercialService {
             // Linha de Subtotal Produtos (USD)
             html.append("<tr class=\"totais-row\" style=\"background: #f8fafc;\">");
             html.append("<td colspan=\"5\" style=\"text-align: right; font-weight: 500; color: #64748b; padding: 12px 8px;\">")
-                    .append(m.subtotalProdutosUsd())
+                    .append(m.subtotalProdutosUsd().replace("USD", normalizeMoedaProposta(proposta.moedaProposta)))
                     .append("</td>");
-            html.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 600; color: #334155; padding: 12px 8px;\">").append(formatCurrencyUsd(totalValor)).append("</td>");
+            html.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 600; color: #334155; padding: 12px 8px;\">").append(formatCurrencyUsd(proposta, totalValor)).append("</td>");
             html.append("</tr>");
             
             // Custos Adicionais (se existirem)
@@ -1343,7 +1369,7 @@ public class PropostaComercialService {
                 html.append("<td colspan=\"5\" style=\"text-align: right; font-weight: 500; color: #64748b; padding: 10px 8px;\">")
                         .append(String.format(m.freteUsd(), formatCurrency(proposta.freteBrl)))
                         .append("</td>");
-                html.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 600; color: #16a34a; padding: 10px 8px;\">").append(formatCurrencyUsd(proposta.freteUsd)).append("</td>");
+                html.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 600; color: #16a34a; padding: 10px 8px;\">").append(formatCurrencyUsd(proposta, proposta.freteUsd)).append("</td>");
                 html.append("</tr>");
             }
             if (proposta.maoDeObraBrl != null && proposta.maoDeObraBrl.compareTo(java.math.BigDecimal.ZERO) > 0 && proposta.maoDeObraUsd != null) {
@@ -1351,7 +1377,7 @@ public class PropostaComercialService {
                 html.append("<td colspan=\"5\" style=\"text-align: right; font-weight: 500; color: #64748b; padding: 10px 8px;\">")
                         .append(String.format(m.maoDeObraUsd(), formatCurrency(proposta.maoDeObraBrl)))
                         .append("</td>");
-                html.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 600; color: #16a34a; padding: 10px 8px;\">").append(formatCurrencyUsd(proposta.maoDeObraUsd)).append("</td>");
+                html.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 600; color: #16a34a; padding: 10px 8px;\">").append(formatCurrencyUsd(proposta, proposta.maoDeObraUsd)).append("</td>");
                 html.append("</tr>");
             }
             
@@ -1359,13 +1385,13 @@ public class PropostaComercialService {
             java.math.BigDecimal totalGeral = proposta.totalGeralUsd != null ? proposta.totalGeralUsd : totalValor;
             html.append("<tr style=\"background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);\">");
             html.append("<td colspan=\"5\" style=\"text-align: right; font-weight: 700; color: white; padding: 14px 8px; font-size: 15px;\">")
-                    .append(m.totalGeralUsd())
+                    .append(m.totalGeralUsd().replace("USD", normalizeMoedaProposta(proposta.moedaProposta)))
                     .append("</td>");
-            html.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 700; color: white; padding: 14px 8px; font-size: 18px;\">").append(formatCurrencyUsd(totalGeral)).append("</td>");
+            html.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 700; color: white; padding: 14px 8px; font-size: 18px;\">").append(formatCurrencyUsd(proposta, totalGeral)).append("</td>");
             html.append("</tr>");
             html.append("</table>");
         } else {
-            // Fallback: usar campos da entidade (um produto só)
+            // Fallback: usar campos da entidade (um produto só) — sempre na moeda da proposta
             html.append("<table class=\"produto-table\">");
             html.append("<tr><th style=\"text-align: left;\">")
                     .append(m.colDesc())
@@ -1384,14 +1410,14 @@ public class PropostaComercialService {
             html.append("</td>");
             html.append("<td style=\"text-align: left;\">").append(nullSafe(proposta.produtoPn)).append("</td>");
             html.append("<td style=\"text-align: left;\">").append(nullSafe(proposta.produtoSn)).append("</td>");
-            html.append("<td class=\"valor\" style=\"text-align: right;\">").append(proposta.produtoValor != null ? formatCurrency(proposta.produtoValor) : m.aOrcar()).append("</td>");
+            html.append("<td class=\"valor\" style=\"text-align: right;\">").append(proposta.produtoValor != null ? formatCurrencyUsd(proposta, proposta.produtoValor) : m.aOrcar()).append("</td>");
             html.append("</tr>");
             // Linha de TOTAIS alinhada à esquerda
             html.append("<tr class=\"totais-row\">");
             html.append("<td style=\"text-align: left;\"><strong>").append(m.totais()).append("</strong></td>");
             html.append("<td style=\"text-align: left;\"></td>");
             html.append("<td style=\"text-align: left;\"></td>");
-            html.append("<td style=\"text-align: right;\"><strong>").append(proposta.produtoValor != null ? formatCurrency(proposta.produtoValor) : m.aOrcar()).append("</strong></td>");
+            html.append("<td style=\"text-align: right;\"><strong>").append(proposta.produtoValor != null ? formatCurrencyUsd(proposta, proposta.produtoValor) : m.aOrcar()).append("</strong></td>");
             html.append("</tr>");
             html.append("</table>");
         }
@@ -1531,6 +1557,9 @@ public class PropostaComercialService {
         html.append("</p>");
         html.append("</div>");
 
+        // CTA também no rodapé (quando o cliente abre a mensagem completa)
+        html.append(buildAceiteCtaHtml(urlAceite));
+
         html.append("</div>"); // end email-container
 
         html.append("</body>");
@@ -1621,8 +1650,8 @@ public class PropostaComercialService {
                 text.append("   ").append(m.colPn()).append(": ").append(nullSafe(item.produtoPn)).append("\n");
                 text.append("   ").append(m.colSn()).append(": ").append(nullSafe(item.produtoSn)).append("\n");
                 text.append("   ").append(m.colQtd()).append(": ").append(item.quantidade != null ? item.quantidade : 0).append("\n");
-                text.append("   ").append(m.lblValorUnit()).append(" ").append(item.valorUnitario != null ? formatCurrency(item.valorUnitario) : "R$ 0,00").append("\n");
-                text.append("   ").append(m.lblTotalItem()).append(" ").append(item.valorTotal != null ? formatCurrency(item.valorTotal) : "R$ 0,00").append("\n\n");
+                text.append("   ").append(m.lblValorUnit()).append(" ").append(item.valorUnitario != null ? formatCurrencyUsd(proposta, item.valorUnitario) : "R$ 0,00").append("\n");
+                text.append("   ").append(m.lblTotalItem()).append(" ").append(item.valorTotal != null ? formatCurrencyUsd(proposta, item.valorTotal) : "R$ 0,00").append("\n\n");
                 
                 if (item.quantidade != null) totalQtd += item.quantidade;
                 if (item.valorTotal != null) totalValor = totalValor.add(item.valorTotal);
@@ -1630,13 +1659,13 @@ public class PropostaComercialService {
             
             text.append(m.totais()).append(":\n");
             text.append("   ").append(m.lblQtdTotal()).append(" ").append(totalQtd).append("\n");
-            text.append("   ").append(m.lblValorTotal()).append(" ").append(formatCurrency(totalValor)).append("\n\n");
+            text.append("   ").append(m.lblValorTotal()).append(" ").append(formatCurrencyUsd(proposta, totalValor)).append("\n\n");
         } else {
             // Fallback: usar campos da entidade (um produto só)
             text.append(m.lblProduto()).append(" ").append(nullSafe(proposta.produtoNome)).append("\n");
             text.append(m.colPn()).append(": ").append(nullSafe(proposta.produtoPn)).append("\n");
             text.append(m.colSn()).append(": ").append(nullSafe(proposta.produtoSn)).append("\n");
-            text.append(m.colValor()).append(": ").append(proposta.produtoValor != null ? formatCurrency(proposta.produtoValor) : m.aOrcar()).append("\n");
+            text.append(m.colValor()).append(": ").append(proposta.produtoValor != null ? formatCurrencyUsd(proposta, proposta.produtoValor) : m.aOrcar()).append("\n");
         }
         
         if (proposta.servicoExecutado != null && !proposta.servicoExecutado.isBlank()) {
@@ -1702,9 +1731,14 @@ public class PropostaComercialService {
         return format.format(value);
     }
 
-    private String formatCurrencyUsd(java.math.BigDecimal value) {
-        java.text.NumberFormat format = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.US);
-        return format.format(value != null ? value : java.math.BigDecimal.ZERO);
+    private String formatCurrencyUsd(PropostaComercial proposta, java.math.BigDecimal value) {
+        String moeda = normalizeMoedaProposta(proposta.moedaProposta);
+        java.math.BigDecimal factor = java.math.BigDecimal.ONE;
+        if ("BRL".equals(moeda) && proposta.cotacaoDolar != null) factor = proposta.cotacaoDolar;
+        if ("EUR".equals(moeda) && proposta.totalGeralEur != null && proposta.totalGeralUsd != null && proposta.totalGeralUsd.signum() > 0) factor = proposta.totalGeralEur.divide(proposta.totalGeralUsd, 10, java.math.RoundingMode.HALF_UP);
+        java.text.NumberFormat format = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.forLanguageTag("BRL".equals(moeda) ? "pt-BR" : "EUR".equals(moeda) ? "pt-PT" : "en-US"));
+        format.setCurrency(java.util.Currency.getInstance(moeda));
+        return format.format((value != null ? value : java.math.BigDecimal.ZERO).multiply(factor));
     }
 
     private void appendCondicoesGeraisFixasHtml(StringBuilder html, String locale) {
@@ -1800,6 +1834,9 @@ public class PropostaComercialService {
      * Retorna URL absoluta para a logo
      * Usa a configuração do application.properties ou default
      */
+    public byte[] generatePropostaPdfPublic(PropostaComercial proposta, List<EnviarPropostaEmailDto.PropostaItemDto> items, EnviarPropostaEmailDto.SignatureDto signature) {
+        return generatePropostaPdf(proposta, items, signature, resolveClienteEmailLocale(proposta));
+    }
     private String getLogoUrl() {
         try {
             // Usar a URL base da API (substituir app por api no frontend.url)
@@ -1813,7 +1850,6 @@ public class PropostaComercialService {
             if (url == null || url.isEmpty() || url.equals(baseApiUrl)) {
                 url = "https://api.aerosuite.app";
             }
-            
             return url + "/api/logo";
         } catch (Exception e) {
             LOGGER.warning("Erro ao gerar URL da logo: " + e.getMessage());
@@ -1822,10 +1858,10 @@ public class PropostaComercialService {
     }
 
     /**
-     * Constrói HTML simples para email com anexo (apenas mensagem personalizada)
+     * HTML curto para envio com PDF em anexo: logo + mensagem + CTA de aceite (tudo dentro do </body>).
      */
     private String buildMensagemSimplesHtml(
-            String locale, String mensagemAdicional, EnviarPropostaEmailDto.SignatureDto signature) {
+            String locale, String mensagemAdicional, EnviarPropostaEmailDto.SignatureDto signature, String urlAceite) {
         PropostaComercialMessages.Lang lang = PropostaComercialMessages.toLang(locale);
         PropostaComercialMessages.Labels m = propostaLabels(locale);
         StringBuilder html = new StringBuilder();
@@ -1845,12 +1881,17 @@ public class PropostaComercialService {
         
         // Mensagem personalizada
         if (mensagemAdicional != null && !mensagemAdicional.isBlank()) {
-            html.append("<div class=\"mensagem\">").append(mensagemAdicional.replace("\n", "<br>")).append("</div>");
+            html.append("<div style=\"padding:14px 16px;background:#e0f2fe;border-radius:8px;margin-bottom:18px;color:#0c4a6e;font-size:14px;line-height:1.5;\">");
+            html.append(escapeHtml(mensagemAdicional).replace("\n", "<br>"));
+            html.append("</div>");
+        } else {
+            html.append("<p style=\"margin:0 0 18px;font-size:14px;line-height:1.5;\">Prezado(a) cliente, segue nossa proposta comercial em anexo.</p>");
         }
         
-        // Assinatura
+        html.append(buildAceiteCtaHtml(urlAceite));
+
         if (signature != null && signature.name != null && !signature.name.isBlank()) {
-            String fontFamily = signature.fontFamily != null ? signature.fontFamily : "'Dancing Script', cursive";
+            String fontFamily = signature.fontFamily != null ? signature.fontFamily : "Georgia, serif";
             String color = signature.color != null ? signature.color : "#0ea5e9";
             html.append("<div style=\"margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;\">");
             html.append("<p style=\"margin: 0; font-family: ").append(fontFamily).append("; font-size: 24px; color: ").append(color).append(";\">")
@@ -1995,8 +2036,8 @@ public class PropostaComercialService {
             produtosHtml.append("<th style=\"width: 100px; text-align: left;\">").append(m.colPn()).append("</th>");
             produtosHtml.append("<th style=\"width: 100px; text-align: left;\">").append(m.colSn()).append("</th>");
             produtosHtml.append("<th style=\"width: 60px; text-align: center;\">").append(m.colQtd()).append("</th>");
-            produtosHtml.append("<th style=\"width: 100px; text-align: right;\">").append(m.colValorUnitUsd()).append("</th>");
-            produtosHtml.append("<th style=\"width: 100px; text-align: right;\">").append(m.colTotalUsd()).append("</th>");
+            produtosHtml.append("<th style=\"width: 100px; text-align: right;\">").append(m.colValorUnitUsd().replace("USD", normalizeMoedaProposta(proposta.moedaProposta))).append("</th>");
+            produtosHtml.append("<th style=\"width: 100px; text-align: right;\">").append(m.colTotalUsd().replace("USD", normalizeMoedaProposta(proposta.moedaProposta))).append("</th>");
             produtosHtml.append("</tr>");
             produtosHtml.append("</thead>");
             produtosHtml.append("<tbody>");
@@ -2021,8 +2062,8 @@ public class PropostaComercialService {
                 produtosHtml.append("<td style=\"text-align: left;\">").append(escapeHtml(nullSafe(item.produtoPn))).append("</td>");
                 produtosHtml.append("<td style=\"text-align: left;\">").append(escapeHtml(nullSafe(item.produtoSn))).append("</td>");
                 produtosHtml.append("<td style=\"text-align: center;\">").append(item.quantidade != null ? item.quantidade : 0).append("</td>");
-                produtosHtml.append("<td style=\"text-align: right;\">").append(formatCurrencyUsd(item.valorUnitario != null ? item.valorUnitario : java.math.BigDecimal.ZERO)).append("</td>");
-                produtosHtml.append("<td style=\"text-align: right; font-weight: bold; color: #0ea5e9;\">").append(formatCurrencyUsd(itemTotal)).append("</td>");
+                produtosHtml.append("<td style=\"text-align: right;\">").append(formatCurrencyUsd(proposta, item.valorUnitario != null ? item.valorUnitario : java.math.BigDecimal.ZERO)).append("</td>");
+                produtosHtml.append("<td style=\"text-align: right; font-weight: bold; color: #0ea5e9;\">").append(formatCurrencyUsd(proposta, itemTotal)).append("</td>");
                 produtosHtml.append("</tr>");
             }
             
@@ -2031,9 +2072,9 @@ public class PropostaComercialService {
             // Subtotal Produtos (USD)
             produtosHtml.append("<tr style=\"background: #f8fafc; border-top: 1px solid #e2e8f0;\">");
             produtosHtml.append("<td colspan=\"5\" style=\"text-align: right; font-weight: 500; color: #64748b; padding: 12px 8px;\">")
-                    .append(m.subtotalProdutosUsd())
+                    .append(m.subtotalProdutosUsd().replace("USD", normalizeMoedaProposta(proposta.moedaProposta)))
                     .append("</td>");
-            produtosHtml.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 600; color: #334155; padding: 12px 8px;\">").append(formatCurrencyUsd(totalValor)).append("</td>");
+            produtosHtml.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 600; color: #334155; padding: 12px 8px;\">").append(formatCurrencyUsd(proposta, totalValor)).append("</td>");
             produtosHtml.append("</tr>");
             
             // Custos Adicionais (se existirem)
@@ -2042,7 +2083,7 @@ public class PropostaComercialService {
                 produtosHtml.append("<td colspan=\"5\" style=\"text-align: right; font-weight: 500; color: #64748b; padding: 10px 8px;\">")
                         .append(String.format(m.freteUsd(), formatCurrency(proposta.freteBrl)))
                         .append("</td>");
-                produtosHtml.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 600; color: #16a34a; padding: 10px 8px;\">").append(formatCurrencyUsd(proposta.freteUsd)).append("</td>");
+                produtosHtml.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 600; color: #16a34a; padding: 10px 8px;\">").append(formatCurrencyUsd(proposta, proposta.freteUsd)).append("</td>");
                 produtosHtml.append("</tr>");
             }
             if (proposta.maoDeObraBrl != null && proposta.maoDeObraBrl.compareTo(java.math.BigDecimal.ZERO) > 0 && proposta.maoDeObraUsd != null) {
@@ -2050,7 +2091,7 @@ public class PropostaComercialService {
                 produtosHtml.append("<td colspan=\"5\" style=\"text-align: right; font-weight: 500; color: #64748b; padding: 10px 8px;\">")
                         .append(String.format(m.maoDeObraUsd(), formatCurrency(proposta.maoDeObraBrl)))
                         .append("</td>");
-                produtosHtml.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 600; color: #16a34a; padding: 10px 8px;\">").append(formatCurrencyUsd(proposta.maoDeObraUsd)).append("</td>");
+                produtosHtml.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 600; color: #16a34a; padding: 10px 8px;\">").append(formatCurrencyUsd(proposta, proposta.maoDeObraUsd)).append("</td>");
                 produtosHtml.append("</tr>");
             }
             
@@ -2058,9 +2099,9 @@ public class PropostaComercialService {
             java.math.BigDecimal totalGeral = proposta.totalGeralUsd != null ? proposta.totalGeralUsd : totalValor;
             produtosHtml.append("<tr style=\"background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);\">");
             produtosHtml.append("<td colspan=\"5\" style=\"text-align: right; font-weight: 700; color: white; padding: 14px 8px; font-size: 15px;\">")
-                    .append(m.totalGeralUsd())
+                    .append(m.totalGeralUsd().replace("USD", normalizeMoedaProposta(proposta.moedaProposta)))
                     .append("</td>");
-            produtosHtml.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 700; color: white; padding: 14px 8px; font-size: 18px;\">").append(formatCurrencyUsd(totalGeral)).append("</td>");
+            produtosHtml.append("<td colspan=\"2\" style=\"text-align: right; font-weight: 700; color: white; padding: 14px 8px; font-size: 18px;\">").append(formatCurrencyUsd(proposta, totalGeral)).append("</td>");
             produtosHtml.append("</tr>");
             produtosHtml.append("</tfoot>");
             produtosHtml.append("</table>");
@@ -2233,6 +2274,9 @@ public class PropostaComercialService {
         html.append("</div>");
         html.append("</div>");
         
+        html.append(buildSolicitacaoServicosPrintHtml(proposta));
+        html.append(buildAutorizacaoClientePrintHtml(proposta));
+
         // Condições Gerais (conteúdo fixo em colunas)
         html.append("<div class=\"proposta-section condicoes-gerais-section informacoes-gerais-section\">");
         html.append("<h3>").append(m.secCondGerais()).append("</h3>");
@@ -2273,6 +2317,110 @@ public class PropostaComercialService {
         return commercialBranding.applyBrandPalette(html.toString());
     }
     
+    private String buildAceiteCtaHtml(String urlAceite) {
+        if (urlAceite == null || urlAceite.isBlank()) return "";
+        StringBuilder html = new StringBuilder();
+        html.append("<div style=\"margin:28px 0;padding:20px 22px;border:1px solid #c5d4e8;border-radius:8px;background:#f4f7fb;font-family:Verdana,Arial,sans-serif;\">");
+        html.append("<div style=\"font-size:11pt;font-weight:bold;color:#1F3864;margin-bottom:8px;\">Autorização online</div>");
+        html.append("<p style=\"margin:0 0 14px;font-size:10pt;color:#334155;line-height:1.45;\">Revise a proposta, complete a Solicitação de Serviços (FORM-MNT-045) e autorize a execução com segurança.</p>");
+        html.append("<a href=\"").append(escapeHtml(urlAceite)).append("\" style=\"display:inline-block;padding:12px 22px;background:#1F3864;color:#ffffff;text-decoration:none;border-radius:6px;font-size:10.5pt;font-weight:bold;\">Revisar e autorizar online</a>");
+        html.append("<p style=\"margin:12px 0 0;font-size:8.5pt;color:#64748b;\">Se o botão não funcionar, copie e cole este link no navegador:<br>");
+        html.append("<span style=\"color:#0563C1;word-break:break-all;\">").append(escapeHtml(urlAceite)).append("</span></p>");
+        html.append("</div>");
+        return html.toString();
+    }
+
+    private String buildSolicitacaoServicosPrintHtml(PropostaComercial proposta) {
+        boolean temDados = (proposta.tsn != null && !proposta.tsn.isBlank())
+            || (proposta.tso != null && !proposta.tso.isBlank())
+            || (proposta.csn != null && !proposta.csn.isBlank())
+            || (proposta.cso != null && !proposta.cso.isBlank())
+            || (proposta.pnMotor != null && !proposta.pnMotor.isBlank())
+            || (proposta.modeloMotor != null && !proposta.modeloMotor.isBlank())
+            || (proposta.tempoDesdeHsi != null && !proposta.tempoDesdeHsi.isBlank())
+            || (proposta.servicosFlags != null && !proposta.servicosFlags.isBlank())
+            || (proposta.reporteCliente != null && !proposta.reporteCliente.isBlank())
+            || proposta.incidenteAcidente != null
+            || (proposta.solicitanteNome != null && !proposta.solicitanteNome.isBlank());
+        if (!temDados) return "";
+        StringBuilder html = new StringBuilder();
+        html.append("<div class=\"proposta-section\">");
+        html.append("<h3>SOLICITAÇÃO DE SERVIÇOS · FORM-MNT-045</h3>");
+        html.append("<div class=\"section-content\">");
+        html.append("<p><strong>Artigo:</strong> ").append(escapeHtml(nullSafe(proposta.produtoNome))).append("</p>");
+        html.append("<p><strong>Prefixo da aeronave:</strong> ").append(escapeHtml(nullSafe(proposta.aeronavePrefixo))).append("</p>");
+        html.append("<p><strong>Modelo do motor:</strong> ").append(escapeHtml(nullSafe(firstNonBlank(proposta.modeloMotor, proposta.aplicacaoMotor)))).append("</p>");
+        html.append("<p><strong>P/N do motor:</strong> ").append(escapeHtml(nullSafe(proposta.pnMotor))).append("</p>");
+        html.append("<p><strong>TSN:</strong> ").append(escapeHtml(nullSafe(proposta.tsn)))
+            .append(" &#160; <strong>TSO:</strong> ").append(escapeHtml(nullSafe(proposta.tso))).append("</p>");
+        html.append("<p><strong>CSN:</strong> ").append(escapeHtml(nullSafe(proposta.csn)))
+            .append(" &#160; <strong>CSO:</strong> ").append(escapeHtml(nullSafe(proposta.cso))).append("</p>");
+        html.append("<p><strong>Tempo desde o último HSI:</strong> ").append(escapeHtml(nullSafe(proposta.tempoDesdeHsi))).append("</p>");
+        html.append("<p><strong>Serviço a ser executado:</strong> ").append(escapeHtml(formatServicosFlags(proposta.servicosFlags, proposta.servicoExecutado))).append("</p>");
+        if (proposta.reporteCliente != null && !proposta.reporteCliente.isBlank()) {
+            html.append("<p><strong>Reporte do cliente:</strong> ").append(escapeHtml(proposta.reporteCliente)).append("</p>");
+        }
+        html.append("<p><strong>Equipamento sofreu incidente/acidente?</strong> ").append(simNao(proposta.incidenteAcidente)).append("</p>");
+        if (Boolean.TRUE.equals(proposta.incidenteAcidente)) {
+            html.append("<p><strong>Foi submerso em água?</strong> ").append(simNao(proposta.submersoAgua)).append("</p>");
+            if (proposta.descricaoIncidente != null && !proposta.descricaoIncidente.isBlank()) {
+                html.append("<p><strong>Descrição:</strong> ").append(escapeHtml(proposta.descricaoIncidente)).append("</p>");
+            }
+        }
+        html.append("<p><strong>Solicitante:</strong> ").append(escapeHtml(nullSafe(proposta.solicitanteNome)));
+        if (proposta.solicitanteCargo != null && !proposta.solicitanteCargo.isBlank()) {
+            html.append(" · ").append(escapeHtml(proposta.solicitanteCargo));
+        }
+        if (proposta.solicitanteEmpresa != null && !proposta.solicitanteEmpresa.isBlank()) {
+            html.append(" · ").append(escapeHtml(proposta.solicitanteEmpresa));
+        }
+        html.append("</p>");
+        html.append("</div></div>");
+        return html.toString();
+    }
+
+    private String buildAutorizacaoClientePrintHtml(PropostaComercial proposta) {
+        if (!"ACEITA".equalsIgnoreCase(proposta.aceiteStatus) || proposta.aceitoEm == null) return "";
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        StringBuilder html = new StringBuilder();
+        html.append("<div class=\"proposta-section\">");
+        html.append("<h3>AUTORIZAÇÃO DO CLIENTE</h3>");
+        html.append("<div class=\"section-content\">");
+        html.append("<p>O responsável abaixo autorizou a execução do serviço conforme esta proposta.</p>");
+        html.append("<p><strong>Nome:</strong> ").append(escapeHtml(nullSafe(proposta.aceiteNome))).append("</p>");
+        html.append("<p><strong>Empresa:</strong> ").append(escapeHtml(nullSafe(proposta.aceiteEmpresa))).append("</p>");
+        html.append("<p><strong>Cargo:</strong> ").append(escapeHtml(nullSafe(proposta.aceiteCargo))).append("</p>");
+        html.append("<p><strong>E-mail:</strong> ").append(escapeHtml(nullSafe(proposta.aceiteEmail))).append("</p>");
+        html.append("<p><strong>Data/hora:</strong> ").append(escapeHtml(proposta.aceitoEm.format(fmt))).append("</p>");
+        html.append("<p style=\"font-size:9pt;color:#475569;margin-top:8px;\">Declaração de veracidade e autorização de execução registradas digitalmente.</p>");
+        html.append("</div></div>");
+        return html.toString();
+    }
+
+    private static String formatServicosFlags(String flagsJson, String fallback) {
+        if (flagsJson != null && !flagsJson.isBlank()) {
+            String f = flagsJson.toLowerCase(Locale.ROOT);
+            List<String> labels = new ArrayList<>();
+            if (f.contains("\"inspecao1800\":true")) labels.add("Inspeção 1800H");
+            if (f.contains("\"revisaogeral\":true")) labels.add("Revisão geral");
+            if (f.contains("\"hsi\":true")) labels.add("HSI");
+            if (f.contains("\"teste\":true")) labels.add("Teste");
+            if (f.contains("\"pesquisapane\":true")) labels.add("Pesquisa de pane");
+            if (!labels.isEmpty()) return String.join(", ", labels);
+        }
+        return fallback != null ? fallback : "";
+    }
+
+    private static String simNao(Boolean v) {
+        if (v == null) return "—";
+        return Boolean.TRUE.equals(v) ? "Sim" : "Não";
+    }
+
+    private static String firstNonBlank(String a, String b) {
+        if (a != null && !a.isBlank()) return a;
+        return b != null ? b : "";
+    }
+
     /**
      * Converte HTML para PDF usando OpenHTMLToPDF
      */
@@ -2316,6 +2464,8 @@ public class PropostaComercialService {
      */
     private String normalizeHtmlToXhtml(String html) {
         if (html == null) return "";
+        // OpenHTMLToPDF exige entidades XML; &nbsp; HTML quebra o parser
+        html = html.replace("&nbsp;", "&#160;");
         // Substituir tags auto-fecháveis que não estão fechadas
         // Nota: apenas para tags simples que aparecem sozinhas, não dentro de outras tags
         html = html.replaceAll("<img([^>]*?)(?<!/)>", "<img$1 />");
@@ -2496,6 +2646,7 @@ public class PropostaComercialService {
                 itensParaEnvio.add(itemDto);
             }
 
+            String urlAceite = aceiteService.buildAceiteUrl(aceiteService.garantirToken(proposta));
             String waLocale = resolveClienteEmailLocale(proposta);
             byte[] pdfBytes = generatePropostaPdf(proposta, itensParaEnvio, signature, waLocale);
 
@@ -2529,6 +2680,8 @@ public class PropostaComercialService {
             LOGGER.info("📊 Resultado do envio via API:");
             LOGGER.info("  Sucesso: " + enviadoViaApi);
             LOGGER.info("  Mensagem de erro: " + (mensagemErro != null ? mensagemErro : "[Nenhuma]"));
+
+            result.put("aceiteUrl", urlAceite);
 
             if (enviadoViaApi) {
                 statusEnvio = "ENVIADO";

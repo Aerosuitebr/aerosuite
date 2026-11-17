@@ -103,7 +103,7 @@ public class OsFluxoService {
     public Map<String,Object> resumoOs(OS o, List<OsFluxoRegistro> rs) {
         OsFluxoRegistro last=rs.isEmpty()?null:rs.get(rs.size()-1);
         return map("id",o.id,"codigo","OS"+o.id,"cliente",o.clienteNome,"partNumber",o.partNumber,"serialNumber",o.serialNumber,
-                "numOsOriginal",o.numOsOriginal,"mecanicoNome",o.mecanicoResponsavelNome,"statusOperacional",o.statusExecucao,
+                "numOsOriginal",o.numOsOriginal,"mecanicoNome",o.mecanicoResponsavelNome,"mecanicoResponsavelId",o.mecanicoResponsavelId,"statusOperacional",o.statusExecucao,
                 "fluxoSituacao",situacao(rs),"fluxoEtapaId",last==null?null:last.etapaId,"fluxoAtualizadoEm",last==null?null:last.saidaEm==null?last.entradaEm:last.saidaEm);
     }
     public Map<String,Object> estado(String codigo) { return estado(tenants.requireOS(idCodigo(codigo))); }

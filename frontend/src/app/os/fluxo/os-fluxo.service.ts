@@ -27,6 +27,7 @@ export interface FluxoOsResumo {
   serialNumber?: string | null;
   numOsOriginal?: string | null;
   mecanicoNome?: string | null;
+  mecanicoResponsavelId?: number | null;
   statusOperacional?: string | null;
   fluxoSituacao?: FluxoSituacao | null;
   fluxoEtapaId?: number | null;

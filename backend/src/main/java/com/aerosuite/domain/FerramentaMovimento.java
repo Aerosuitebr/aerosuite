@@ -12,6 +12,10 @@ public class FerramentaMovimento extends PanacheEntityBase {
     public Integer mecanicoId;
     public Integer solicitanteId;
     public String tipo;
+    @Column(name = "pn_solicitacao", length = 100)
+    public String pnSolicitacao;
+    @Column(name = "solicitacao_origem_id")
+    public Long solicitacaoOrigemId;
     public String terminalId;
     public String estacaoCodigo;
     public String estacaoNome;

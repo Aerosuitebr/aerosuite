@@ -20,6 +20,8 @@ import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { AccordionModule } from 'primeng/accordion';
 import { PaginatorModule } from 'primeng/paginator';
+import { CheckboxModule } from 'primeng/checkbox';
+import { PlanoFerramentasOsComponent } from '../ferramentas/plano-ferramentas-os.component';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ConfirmationService, MessageService, MenuItem } from 'primeng/api';
 import { Subject } from 'rxjs';
@@ -89,6 +91,9 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
     AccordionModule,
     PaginatorModule,
     MultiSelectModule,
+    CheckboxModule,
+    PlanoFerramentasOsComponent,
+    CheckboxModule,
     PageHelpComponent,
     ProgressBarModule,
     FileUploadModule,
@@ -389,6 +394,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
         (onHide)="closeOSModal()">
         
         <form [formGroup]="osForm" (ngSubmit)="saveOS()" class="os-form">
+          <label class="p-3 flex align-items-center gap-2"><p-checkbox formControlName="naoAtualizarEstoque" [binary]="true" inputId="naoAtualizarEstoque"></p-checkbox>Não atualizar Estoque</label>
           <!-- Número da OS (Readonly, sempre no topo) -->
           <div class="os-number-header">
             <div class="form-field">
@@ -536,10 +542,10 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                   <input 
                     pInputText 
                     id="pn"
-                    formControlName="pn"
+                    formControlName="pn" maxlength="100"
                     [placeholder]="'os.form.ph.partNumber' | translate"
                     class="form-input"
-                    [readonly]="isReadOnly">
+                    [readonly]="isReadOnly || !!osForm.get('fcuId')?.value">
                 </div>
 
                 <div class="form-field">
@@ -655,6 +661,9 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                     [readonly]="isReadOnly">
                 </div>
               </div>
+              <app-plano-ferramentas-os *ngIf="showOSModal"
+                [pn]="osForm.get('pn')?.value || ''" [osId]="osIdParaFerramentaria">
+              </app-plano-ferramentas-os>
             </p-accordionTab>
 
             <!-- Serviço -->
@@ -909,13 +918,27 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
                 <div class="form-field">
                   <label for="manualPn" class="field-label">
                     <i class="pi pi-bookmark"></i>
-                    {{ 'os.form.field.pn' | translate }}
+                    PN do Manual
                   </label>
                   <input 
                     pInputText 
                     id="manualPn"
                     formControlName="manualPn"
                     [placeholder]="'os.form.ph.manualPn' | translate"
+                    class="form-input"
+                    [readonly]="isReadOnly">
+                </div>
+
+                <div class="form-field">
+                  <label for="tipoManual" class="field-label">
+                    <i class="pi pi-bookmark"></i>
+                    Tipo de Manual
+                  </label>
+                  <input
+                    pInputText
+                    id="tipoManual"
+                    formControlName="tipoManual"
+                    placeholder="Tipo de Manual"
                     class="form-input"
                     [readonly]="isReadOnly">
                 </div>
@@ -1521,7 +1544,7 @@ import { createStaleRequestGuard, resolveLazyPageRequest, type LazyLoadEvent } f
     <p-menu #rowActionsMenu [popup]="true" [model]="rowActions" appendTo="body" styleClass="ops-row-action-menu"></p-menu>
       
       <!-- Confirmation Dialog -->
-      <p-confirmDialog [closeOnEscape]="true" [dismissableMask]="false"></p-confirmDialog>
+      <p-confirmDialog appendTo="body" [baseZIndex]="12000" styleClass="os-confirm-dialog" [closeOnEscape]="true" [dismissableMask]="false"></p-confirmDialog>
     </div>
   `,
   styleUrls: ['./os-list.component.scss', '../shared/styles/list-styles.scss']
@@ -1766,6 +1789,11 @@ export class OSListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initForm();
+    const proposta = history.state?.fromProposta;
+    if (proposta) {
+      this.addNew();
+      this.osForm.patchValue({ ...proposta, pn: proposta.partNumber });
+    }
     this.dashboardExtendido = this.tenantFeatures.isOn(TenantFeatureCodes.MRO_OS_DASHBOARD_EXTENDIDO);
     if (this.dashboardExtendido) {
       this.api.painelResumo().subscribe({
@@ -1832,12 +1860,15 @@ export class OSListComponent implements OnInit, OnDestroy {
       dtAbertura: [''],
       fabricanteId: [null, [Validators.min(0)]],
       fcuId: [null, [Validators.required, Validators.min(1)]],
+      /** Default true: não abre modal do kit nem debita estoque automaticamente */
+      naoAtualizarEstoque: [true],
       tsn: [''],
       tso: [''],
       marcasMatricula: [''],
       motor: [''],
       snMotor: [''],
       manualPn: [''],
+      tipoManual: [''],
       numOsOriginal: [''],
       numRevisao: [''],
       obsConclusaoServ: [''],
@@ -2117,10 +2148,12 @@ export class OSListComponent implements OnInit, OnDestroy {
     if (fcuId) {
       const selectedFcu = this.fcuList.find(fcu => fcu.id === fcuId);
       if (selectedFcu) {
-        // Abrir modal de produtos associados primeiro
-        this.selectedFcuForProducts = selectedFcu;
-        this.loadFcuAssociatedProducts(fcuId);
-        this.showFcuProductsModal = true;
+        this.fillFormWithFcuData(selectedFcu);
+        if (!this.osForm.get('naoAtualizarEstoque')?.value) {
+          this.selectedFcuForProducts = selectedFcu;
+          this.loadFcuAssociatedProducts(fcuId);
+          this.showFcuProductsModal = true;
+        }
       }
     } else {
       // Limpar campos quando FCU for desmarcado
@@ -2139,6 +2172,7 @@ export class OSListComponent implements OnInit, OnDestroy {
         dataRevManual: '',
         numRevisao: '',
         manualPn: '',
+        tipoManual: '',
         fabricanteNome: '',
         clienteNome: ''
       });
@@ -2172,6 +2206,57 @@ export class OSListComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** PN do Manual ← publicação.pnManual; Tipo de Manual ← publicação.tipoManual */
+  private patchReferenciaFromPublicacao(publicacao: {
+    publicacaoAtaManual?: string;
+    publicacaoNumeroRevisao?: string;
+    fcuDataRevManual?: string | Date | null;
+    publicacaoPnManual?: string;
+    publicacaoTipoManual?: string;
+  } | null, opts: { limparSeAusente?: boolean; incluirAtaRevisao?: boolean } = {}) {
+    const limpar = opts.limparSeAusente !== false;
+    const incluirAta = opts.incluirAtaRevisao !== false;
+    if (!publicacao) {
+      if (limpar) {
+        const vazio: Record<string, string> = { manualPn: '', tipoManual: '' };
+        if (incluirAta) {
+          vazio['ataManual'] = '';
+          vazio['numRevisao'] = '';
+          vazio['dataRevManual'] = '';
+        }
+        this.osForm.patchValue(vazio);
+      }
+      return;
+    }
+    const patch: Record<string, string> = {
+      // Fonte: cadastro de publicação (não inverter)
+      manualPn: publicacao.publicacaoPnManual || '',
+      tipoManual: publicacao.publicacaoTipoManual || ''
+    };
+    if (incluirAta) {
+      patch['ataManual'] = publicacao.publicacaoAtaManual || '';
+      patch['numRevisao'] = publicacao.publicacaoNumeroRevisao || '';
+      patch['dataRevManual'] = (publicacao.fcuDataRevManual as string) || '';
+    }
+    this.osForm.patchValue(patch);
+  }
+
+  private sincronizarPnTipoDaPublicacao(fcuId: number | null | undefined) {
+    if (!fcuId) return;
+    this.publicacaoTecnicaService.getPublicacaoByFcuId(fcuId).subscribe({
+      next: (publicacao) => {
+        if (publicacao && publicacao.publicacaoId) {
+          this.patchReferenciaFromPublicacao(publicacao, {
+            limparSeAusente: false,
+            incluirAtaRevisao: false
+          });
+          this.cdr.detectChanges();
+        }
+      },
+      error: () => { /* mantém valores já carregados da OS */ }
+    });
+  }
+
   fillFormWithFcuData(selectedFcu: Fcu) {
     // Auto-preenchimento dos campos básicos do FCU (Descrição do Artigo)
     this.osForm.patchValue({
@@ -2194,43 +2279,19 @@ export class OSListComponent implements OnInit, OnDestroy {
       this.publicacaoTecnicaService.getPublicacaoByFcuId(selectedFcu.id).subscribe({
         next: (publicacao) => {
           if (publicacao && publicacao.publicacaoId) {
-            // FCU está associado a uma publicação - preencher com dados da publicação
-            this.osForm.patchValue({
-              ataManual: publicacao.publicacaoAtaManual || '',
-              numRevisao: publicacao.publicacaoNumeroRevisao || '',
-              dataRevManual: publicacao.fcuDataRevManual || '', // Data de revisão vem da publicação
-              manualPn: publicacao.publicacaoTipoManual || ''
-            });
+            this.patchReferenciaFromPublicacao(publicacao, { incluirAtaRevisao: true });
             this.toast('info', 'os.list.toast.summary.pubFound', 'os.list.toast.pubAutoFill');
           } else {
-            // FCU não está associado a nenhuma publicação - campos vazios para preenchimento manual
-            this.osForm.patchValue({
-              ataManual: '',
-              numRevisao: '',
-              dataRevManual: '',
-              manualPn: ''
-            });
+            this.patchReferenciaFromPublicacao(null, { limparSeAusente: true, incluirAtaRevisao: true });
           }
           this.cdr.detectChanges();
         },
         error: () => {
-          // Em caso de erro, deixar campos vazios para preenchimento manual
-          this.osForm.patchValue({
-            ataManual: '',
-            numRevisao: '',
-            dataRevManual: '',
-            manualPn: ''
-          });
+          this.patchReferenciaFromPublicacao(null, { limparSeAusente: true, incluirAtaRevisao: true });
         }
       });
     } else {
-      // Se não houver ID do FCU, limpar campos de referência
-      this.osForm.patchValue({
-        ataManual: '',
-        numRevisao: '',
-        dataRevManual: '',
-        manualPn: ''
-      });
+      this.patchReferenciaFromPublicacao(null, { limparSeAusente: true, incluirAtaRevisao: true });
     }
   }
 
@@ -2292,12 +2353,14 @@ export class OSListComponent implements OnInit, OnDestroy {
       dtAbertura: '',
       fabricanteId: null,
       fcuId: null,
+      naoAtualizarEstoque: true,
       tsn: '',
       tso: '',
       marcasMatricula: '',
       motor: '',
       snMotor: '',
       manualPn: '',
+      tipoManual: '',
       numOsOriginal: '',
       numRevisao: '',
       obsConclusaoServ: '',
@@ -2358,12 +2421,14 @@ export class OSListComponent implements OnInit, OnDestroy {
       fabricanteId: fabricanteId,
       // Backend pode retornar: idFcuId, idFcu.id, fcu.id, ou fcuId
       fcuId: os.idFcuId || (os.idFcu?.id ? Number(os.idFcu.id) : null) || (os.fcu?.id ? Number(os.fcu.id) : null) || os.fcuId || null,
+      naoAtualizarEstoque: true,
       tsn: os.tsn || '',
       tso: os.tso || '',
       marcasMatricula: os.marcasMatricula || '',
       motor: os.motor || '',
       snMotor: os.snMotor || '',
       manualPn: os.manualPn || '',
+      tipoManual: os.tipoManual || '',
       numOsOriginal: os.numOsOriginal || '',
       numRevisao: os.numRevisao || '',
       obsConclusaoServ: os.obsConclusaoServ || '',
@@ -2378,7 +2443,7 @@ export class OSListComponent implements OnInit, OnDestroy {
       boletinsServAfins: os.boletinsServAfins || '',
       partNumber: os.partNumber || '',
       fabricanteNome: '',
-      pn: '',
+      pn: os.partNumber || os.fcuPn || '',
       modelo: '',
       nome: '',
       fileNames: []
@@ -2409,7 +2474,7 @@ export class OSListComponent implements OnInit, OnDestroy {
       
       // NÃO sobrescrever ataManual, dataRevManual e numRevisao - eles vêm da OS
       this.osForm.patchValue({
-        pn: fcuPn || os.partNumber || '',
+        pn: os.partNumber || fcuPn || '',
         modelo: fcuModelo || '',
         serialNumber: fcuSerialNumber || os.serialNumber || '',
         nome: fcuDescription || ''
@@ -2422,7 +2487,7 @@ export class OSListComponent implements OnInit, OnDestroy {
       const selectedFcu = this.fcuList.find(fcu => fcu.id === fcuIdValue);
       if (selectedFcu) {
         const patch: any = {
-          pn: selectedFcu.pn,
+          pn: os.partNumber || selectedFcu.pn,
           modelo: selectedFcu.modelo,
           serialNumber: selectedFcu.serialNumber || os.serialNumber || '',
           nome: selectedFcu.fcuDescription
@@ -2434,6 +2499,9 @@ export class OSListComponent implements OnInit, OnDestroy {
       }
     }
     
+    // PN do Manual e Tipo de Manual vêm do cadastro da publicação (corrige legado)
+    this.sincronizarPnTipoDaPublicacao(fcuIdValue != null ? Number(fcuIdValue) : null);
+
     // Buscar nome do fabricante se houver fabricanteId
     const fabricanteDto = (os as any).idFabricante || (os as any).fabricante;
     
@@ -2777,7 +2845,7 @@ export class OSListComponent implements OnInit, OnDestroy {
       if (os?.id && scope && scope !== 'TOTAL') {
         this.osForm.disable({ emitEvent: false });
         const fields = scope === 'MECANICO' ? ['tipoServicoId','inicioServico','fimServico','dataFechamento'] :
-          scope === 'BIBLIOTECA' ? ['manualPn','numRevisao','dataRevManual','ataManual','tituloAds','tituloAfins','boletinsServAfins'] : [];
+          scope === 'BIBLIOTECA' ? ['tipoManual','manualPn','numRevisao','dataRevManual','ataManual','tituloAds','tituloAfins','boletinsServAfins'] : [];
         fields.forEach(f => this.osForm.get(f)?.enable({emitEvent:false}));
       }
     }
@@ -2930,12 +2998,14 @@ export class OSListComponent implements OnInit, OnDestroy {
       dtAbertura: os.dtAbertura || '',
       fabricanteId: fabricanteId,
       fcuId: fcuId,
+      naoAtualizarEstoque: true,
       tsn: os.tsn || '',
       tso: os.tso || '',
       marcasMatricula: os.marcasMatricula || '',
       motor: os.motor || '',
       snMotor: os.snMotor || '',
       manualPn: os.manualPn || '',
+      tipoManual: os.tipoManual || '',
       numOsOriginal: os.numOsOriginal || '',
       numRevisao: os.numRevisao || '',
       obsConclusaoServ: os.obsConclusaoServ || '',
@@ -2950,7 +3020,7 @@ export class OSListComponent implements OnInit, OnDestroy {
       boletinsServAfins: os.boletinsServAfins || '',
       partNumber: os.partNumber || '',
       fabricanteNome: '',
-      pn: '',
+      pn: os.partNumber || os.fcuPn || '',
       modelo: '',
       nome: '',
       fileNames: []
@@ -2982,7 +3052,7 @@ export class OSListComponent implements OnInit, OnDestroy {
       
       // NÃO sobrescrever ataManual, dataRevManual e numRevisao - eles vêm da OS
       this.osForm.patchValue({
-        pn: fcuPn || os.partNumber || '',
+        pn: os.partNumber || fcuPn || '',
         modelo: fcuModelo || '',
         serialNumber: fcuSerialNumber || os.serialNumber || '',
         nome: fcuDescription || ''
@@ -2995,7 +3065,7 @@ export class OSListComponent implements OnInit, OnDestroy {
       const selectedFcu = this.fcuList.find(fcu => fcu.id === fcuIdValue);
       if (selectedFcu) {
         const patch: any = {
-          pn: selectedFcu.pn,
+          pn: os.partNumber || selectedFcu.pn,
           modelo: selectedFcu.modelo,
           serialNumber: selectedFcu.serialNumber || os.serialNumber || '',
           nome: selectedFcu.fcuDescription
@@ -3007,6 +3077,9 @@ export class OSListComponent implements OnInit, OnDestroy {
       }
     }
     
+    // PN do Manual e Tipo de Manual vêm do cadastro da publicação (corrige legado)
+    this.sincronizarPnTipoDaPublicacao(fcuIdValue != null ? Number(fcuIdValue) : null);
+
     // Buscar nome do fabricante
     // Primeiro tentar usar o objeto Fabricante que vem do backend
     const fabricanteDto = os.idFabricante || os.fabricante;
@@ -3584,6 +3657,10 @@ export class OSListComponent implements OnInit, OnDestroy {
     // Verifica déficit do kit FCU ANTES de salvar quando há FCU novo na OS.
     // Quando há déficit, abre confirmação informativa para o usuário decidir
     // se prossegue mesmo assim. O save em si só dispara após confirmar.
+    if (this.osForm.get('naoAtualizarEstoque')?.value) {
+      this.executarSalvarOS(formValue, null);
+      return;
+    }
     const previewFcuId = this.fcuIdParaPreviewDeficit();
     if (previewFcuId) {
       this.api.previewKitFcuDeficit(previewFcuId).subscribe({
@@ -3610,7 +3687,8 @@ export class OSListComponent implements OnInit, OnDestroy {
    * (datas vazias → null, renome de fcuId → idFcuId, remoção de campos auxiliares, etc.).
    */
   private buildSavePayloadFromForm(): any {
-    const formValue = { ...this.osForm.value };
+    const formValue = { ...this.osForm.getRawValue() };
+    formValue.partNumber = String(formValue.pn || '').trim() || null;
 
     // Remover idOs do payload - será gerado pelo backend
     delete formValue.idOs;
@@ -3624,7 +3702,7 @@ export class OSListComponent implements OnInit, OnDestroy {
     });
 
     // Limpar outros campos opcionais vazios
-    const optionalStringFields = ['adsDas', 'clienteNome', 'tsn', 'tso', 'manualPn', 'numOsOriginal',
+    const optionalStringFields = ['adsDas', 'clienteNome', 'tsn', 'tso', 'manualPn', 'tipoManual', 'numOsOriginal',
       'numRevisao', 'obsConclusaoServ', 'obsFimServ', 'serialNumber', 'obsIniServ',
       'tituloAds', 'tituloAfins', 'boletinsServAfins', 'partNumber', 'fabricanteNome', 'pn', 'modelo', 'nome',
       'solicitacaoTrocasComentario'];
@@ -3697,6 +3775,7 @@ export class OSListComponent implements OnInit, OnDestroy {
    * Se o usuário confirmar, prossegue com o save. Caso contrário, cancela.
    */
   private confirmarSalvarComDeficitKit(formValue: any, preview: KitFcuDeficitPreview): void {
+    const editando = !!this.isEditing;
     const linhas = (preview.itens || [])
       .map(it =>
         this.i18n.translate('confirm.os.kit.line', {
@@ -3708,17 +3787,20 @@ export class OSListComponent implements OnInit, OnDestroy {
         })
       )
       .join('\n');
+    const consequencia = editando
+      ? 'Se você prosseguir, a OS será atualizada e o que for possível será baixado do estoque (modo parcial). Os itens em déficit ficarão registrados na OS para acompanhamento.\n\nDeseja salvar a alteração do Produto Aeronáutico mesmo assim?'
+      : 'Se você prosseguir, a OS será aberta normalmente e o que for possível será baixado do estoque (modo parcial). Os itens em déficit ficarão registrados na OS para acompanhamento.\n\nDeseja abrir a OS mesmo assim?';
     const message =
       this.i18n.translate('confirm.os.kit.prefix') +
       '\n\n' +
       linhas +
       '\n\n' +
-      this.i18n.translate('confirm.os.kit.suffix');
+      consequencia;
     this.confirmationService.confirm({
-      header: 'confirm.header.kitDeficit',
+      header: editando ? 'Déficit no kit ao alterar o FCU' : 'confirm.header.kitDeficit',
       message,
       icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'confirm.yesOpenAnyway',
+      acceptLabel: editando ? 'Sim, salvar mesmo assim' : 'confirm.yesOpenAnyway',
       rejectLabel: 'common.confirm.cancel',
       acceptButtonStyleClass: 'p-button-warning',
       rejectButtonStyleClass: 'p-button-text',
@@ -3980,5 +4062,13 @@ export class OSListComponent implements OnInit, OnDestroy {
 
   formatDate(dateStr?: string): string {
     return formatUiDateTime(this.i18n.getCurrentLanguage(), dateStr, 'date');
+  }
+
+  get osIdParaFerramentaria(): number | null {
+    const os = this.currentOS;
+    if (!os || os.mecanicoResponsavelId !== this.authService.getCurrentUser()?.id) return null;
+    const pn = String(this.osForm.get('pn')?.value || '').trim().toUpperCase();
+    const pnSalvo = (os.partNumber || os.fcuPn || '').trim().toUpperCase();
+    return pn === pnSalvo ? os.id ?? null : null;
   }
 }

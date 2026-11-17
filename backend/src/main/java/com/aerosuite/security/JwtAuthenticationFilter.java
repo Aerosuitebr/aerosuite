@@ -208,6 +208,7 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter {
         if (p.startsWith("/api/public/sistema-empresa")) {
             return true;
         }
+        if (p.startsWith("/api/public/propostas/")) { return true; }
         if (p.startsWith("/api/public/health")) {
             return true;
         }

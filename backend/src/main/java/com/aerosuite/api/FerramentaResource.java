@@ -25,6 +25,34 @@ public class FerramentaResource {
         catch(jakarta.persistence.OptimisticLockException | jakarta.persistence.PessimisticLockException e){return Response.status(409).entity(Map.of("message","O exemplar foi atualizado em outra estação. Atualize e tente novamente.")).build();}
     }
     @GET @Path("/minhas") public Response minhas(){return executar(()->service.minhasFerramentas(usuarioAutenticado()));}
+    @GET @Path("/plano-pn/catalogo")
+    public Response buscarPns(@QueryParam("q") String termo) {
+        return executar(() -> service.buscarPns(termo, usuario()));
+    }
+    @GET @Path("/plano-pn/vinculos")
+    public Response listarVinculosPn() {
+        return executar(() -> service.listarVinculosPn(usuario()));
+    }
+    @PUT @Path("/plano-pn/vinculos")
+    public Response atualizarVinculosPn(AlteracaoVinculosPn pedido) {
+        return executar(() -> service.atualizarVinculosPn(pedido, usuario()));
+    }
+    public record VinculoPn(String pn, boolean vincular) {}
+    @PUT @Path("/plano-pn/{ferramentaId}")
+    public Response vincularPn(@PathParam("ferramentaId") Long ferramentaId, VinculoPn vinculo) {
+        return executar(() -> {
+            if (vinculo == null) throw new BadRequestException("Informe o vínculo com o PN.");
+            return service.vincularPn(vinculo.pn(), ferramentaId, vinculo.vincular(), usuario());
+        });
+    }
+    @POST @Path("/os/{osId}/solicitacoes-pn")
+    public Response solicitarPn(@PathParam("osId") Long osId, PedidoPn pedido) {
+        return executar(() -> service.solicitarPn(osId, pedido, usuarioAutenticado()));
+    }
+    @POST @Path("/movimentos/{id}/preparar-solicitacao-pn")
+    public Response prepararSolicitacaoPn(@PathParam("id") Long id, PreparacaoPn pedido) {
+        return executar(() -> service.prepararSolicitacaoPn(id, pedido, usuario()));
+    }
     @GET @Path("/contexto") public Response contexto(){return executar(()->service.contexto(usuario()));}
     @GET @Path("/terminal") public Response terminal(){return executar(()->{usuario();var info=terminal.info();if(info.vinculada())estacoes.registrarPresenca(info.terminalId(),null,headers.getHeaderString("User-Agent"));return info;});}
     @POST @Path("/terminal/pareamento") public Response pareamento(){return executar(()->{usuario();return estacoes.solicitar(headers.getHeaderString("X-Terminal-Id"),null,headers.getHeaderString("User-Agent"));});}

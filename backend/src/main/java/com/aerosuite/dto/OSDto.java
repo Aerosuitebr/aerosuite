@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class OSDto {
+    public Boolean naoAtualizarEstoque;
     public long naoConformidadesTotal;
     public Boolean jaEditada;
     public String statusOperacional;
@@ -65,6 +66,7 @@ public class OSDto {
     public String motor;
     public String snMotor;
     public String manualPn;
+    public String tipoManual;
     public String numOsOriginal;
     public String numRevisao;
     public String obsConclusaoServ;

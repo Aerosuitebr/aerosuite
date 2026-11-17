@@ -150,6 +150,14 @@ export const routes: Routes = [
   },
 
   // ========================================
+  // Aceite público de proposta (link mágico)
+  // ========================================
+  {
+    path: 'p/:token',
+    loadComponent: () => import('./comercial/proposta-aceite-publica.component').then(m => m.PropostaAceitePublicaComponent)
+  },
+
+  // ========================================
   // Rotas do Portal Externo (Clientes)
   // ========================================
   {
@@ -266,6 +274,10 @@ export const routes: Routes = [
       {
         path: 'documentos',
         loadComponent: () => import('./externo/externo-documentos/externo-documentos.component').then(m => m.ExternoDocumentosComponent)
+      },
+      {
+        path: 'propostas',
+        loadComponent: () => import('./externo/externo-propostas/externo-propostas-list.component').then(m => m.ExternoPropostasListComponent)
       },
       {
         path: 'perfil',

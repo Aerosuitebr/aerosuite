@@ -17,8 +17,12 @@ import com.aerosuite.service.PropostaComercialOsBridgeService;
 import com.aerosuite.service.PropostaComercialService;
 import com.aerosuite.service.PropostaPortalPublicacaoService;
 import com.aerosuite.service.WhatsAppService;
+import com.aerosuite.service.PropostaAceiteService;
+import com.aerosuite.service.WhatsAppSessionService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -42,6 +46,9 @@ public class PropostaComercialResource {
 
     @Inject
     WhatsAppService whatsAppService;
+
+    @Inject PropostaAceiteService aceiteService;
+    @Inject WhatsAppSessionService whatsAppSessionService;
 
     @Inject
     com.aerosuite.service.PropostaPortalV11Service propostaPortalV11Service;
@@ -271,5 +278,95 @@ public class PropostaComercialResource {
         return Response.ok(path.toFile())
                 .header("Content-Disposition", "attachment; filename=\"" + anexo.nomeArquivo + "\"")
                 .build();
+    }
+
+    @POST
+    @Path("/{id}/whatsapp-session/start")
+    public Response startWhatsAppSession(@PathParam("id") Long id, EnviarPropostaWhatsAppDto dto) {
+        try {
+            Map<String, Object> result = whatsAppSessionService.startSession(
+                    id,
+                    dto != null ? dto.telefoneDestino : null,
+                    dto != null ? dto.mensagemAdicional : null
+            );
+            return Response.ok(result).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("message", e.getMessage())).build();
+        } catch (BadRequestException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("message", e.getMessage())).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(Map.of("message", e.getMessage() != null ? e.getMessage() : "Falha ao iniciar sessão WhatsApp"))
+                    .build();
+        }
+    }
+
+    @GET
+    @Path("/whatsapp-session/{sessionId}/status")
+    public Response whatsAppSessionStatus(@PathParam("sessionId") String sessionId) {
+        try {
+            return Response.ok(whatsAppSessionService.sessionStatus(sessionId)).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("message", e.getMessage())).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(Map.of("message", e.getMessage() != null ? e.getMessage() : "Falha ao consultar sessão"))
+                    .build();
+        }
+    }
+
+    @POST
+    @Path("/whatsapp-session/{sessionId}/send")
+    public Response whatsAppSessionSend(@PathParam("sessionId") String sessionId, EnviarPropostaWhatsAppDto dto) {
+        try {
+            EnviarPropostaEmailDto.SignatureDto signature = dto != null ? dto.signature : null;
+            return Response.ok(whatsAppSessionService.sendAndDisconnect(sessionId, signature)).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("message", e.getMessage())).build();
+        } catch (BadRequestException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("message", e.getMessage())).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(Map.of("message", e.getMessage() != null ? e.getMessage() : "Falha ao enviar pela sessão"))
+                    .build();
+        }
+    }
+
+    @DELETE
+    @Path("/whatsapp-session/{sessionId}")
+    public Response whatsAppSessionDisconnect(@PathParam("sessionId") String sessionId) {
+        try {
+            return Response.ok(whatsAppSessionService.disconnect(sessionId)).build();
+        } catch (Exception e) {
+            return Response.ok(Map.of("sessionId", sessionId, "status", "disconnected")).build();
+        }
+    }
+
+    @POST
+    @Path("/{id}/gerar-link-aceite")
+    public Response gerarLinkAceite(@PathParam("id") Long id) {
+        try {
+            return Response.ok(aceiteService.gerarLinkInterno(id)).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("message", e.getMessage())).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                .entity(Map.of("message", e.getMessage() != null ? e.getMessage() : "Erro ao gerar link"))
+                .build();
+        }
+    }
+
+    @GET
+    @Path("/{id}/payload-os")
+    public Response payloadOs(@PathParam("id") Long id) {
+        try {
+            return Response.ok(aceiteService.payloadAbrirOs(id)).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("message", e.getMessage())).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                .entity(Map.of("message", e.getMessage() != null ? e.getMessage() : "Erro ao montar dados da OS"))
+                .build();
+        }
     }
 }

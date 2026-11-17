@@ -11,3 +11,5 @@ Cada navegador tem um vínculo por vez. Operações físicas exigem um terminal 
 A gestão de estações mostra a presença recente dos terminais e permite alternar entre cartões e lista. O resumo de máquinas abre a lista completa. As consultas automáticas param enquanto a página está oculta ou há edição em andamento. O sinal mostra atividade registrada pelo navegador, não comprova que a máquina esteja fisicamente indisponível.
 
 A migração V107 cria as tabelas da organização, os perfis e os itens de menu. Ela não importa acervo, custódias ou certificados da Bellows.
+
+Em **Acervo**, use **Vínculos por PN** para definir as ferramentas necessárias a cada artigo. A OS e o detalhe do fluxo mostram esse plano. O mecânico responsável pode solicitar o conjunto informando local de uso e previsão de retorno; o balcão prepara a solicitação e mantém a conferência física antes de transferir a custódia. Mudanças de PN ou de responsável exigem uma nova solicitação. Esses vínculos e movimentos adicionais são criados pela migração V112 e respeitam a organização da sessão.

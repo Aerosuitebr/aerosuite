@@ -27,6 +27,10 @@ public class PublicacaoTecnica extends PanacheEntityBase {
     @Column(name = "tipo_manual", length = 1000)
     public String tipoManual;
     
+    /** P/N do manual (alfanumérico, até 20). */
+    @Column(name = "pn_manual", length = 20)
+    public String pnManual;
+
     @Column(name = "is_active")
     public Boolean isActive = true;
     

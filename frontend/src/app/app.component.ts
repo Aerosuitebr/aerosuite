@@ -1,6 +1,9 @@
 import { SystemPageLayoutDirective } from './shared/page-hero/system-page-layout.directive';
-import { Component, OnInit, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { OnDestroy, Component, OnInit, inject } from '@angular/core';
+import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs';
+import { HeroFullscreenInjector } from './shared/fullscreen-toggle/hero-fullscreen.injector';
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { ThemeService } from './shared/themes/theme.service';
@@ -24,7 +27,10 @@ import { DeploymentBannerComponent } from './shared/deployment-banner/deployment
     <router-outlet systemPageLayout></router-outlet>
   `
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private navSub?: Subscription;
+  private heroFullscreen = inject(HeroFullscreenInjector);
   private theme = inject(ThemeService);
   private appearanceService = inject(AppearancePreferencesService);
   private translationService = inject(TranslationService);
@@ -35,6 +41,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.hangarPwa.registerIfSupported();
+    this.heroFullscreen.schedule();
+    this.navSub = this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => this.heroFullscreen.schedule());
     // Branding em background — não bloqueia bootstrap (padrão Bellows).
     void this.branding.load({ allowSessionTenant: !shouldSkipSessionHydrateOnStartup() });
     try {
@@ -49,5 +57,10 @@ export class AppComponent implements OnInit {
     } catch (error) {
       console.error('Failed to initialize AppComponent:', error);
     }
+  }
+
+  ngOnDestroy() {
+    this.navSub?.unsubscribe();
+    this.heroFullscreen.destroyAll();
   }
 }

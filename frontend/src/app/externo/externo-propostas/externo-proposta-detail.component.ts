@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
@@ -57,6 +57,8 @@ import { toastKey } from '../../core/toast-i18n.util';
           <p-tag [value]="statusLabel(proposta.status)" [severity]="statusSeverity(proposta.status)"></p-tag>
         </div>
 
+        <button pButton type="button" label="Solicitação de serviços e aceite digital" icon="pi pi-file-edit"
+                (click)="abrirSolicitacao()" class="my-3" *ngIf="proposta.status === 'ENVIADA'"></button>
         <div class="actions" *ngIf="proposta.podeAprovar || proposta.podeRejeitar">
           <button pButton type="button" icon="pi pi-check" class="p-button-success"
                   [label]="'externo.propostas.detail.approve' | translate"
@@ -156,6 +158,7 @@ import { toastKey } from '../../core/toast-i18n.util';
   `]
 })
 export class ExternoPropostaDetailComponent implements OnInit {
+  private router = inject(Router);
   private route = inject(ActivatedRoute);
   private usuarioExternoService = inject(UsuarioExternoService);
   private confirmationService = inject(ConfirmationService);
@@ -178,6 +181,13 @@ export class ExternoPropostaDetailComponent implements OnInit {
     this.load(id);
   }
 
+  abrirSolicitacao(): void {
+    if (!this.proposta?.id) return;
+    this.usuarioExternoService.abrirSolicitacaoProposta(this.proposta.id).subscribe({
+      next: result => this.router.navigate(['/p', result.aceiteToken]),
+      error: () => this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Não foi possível abrir a solicitação.'})
+    });
+  }
   load(id: number): void {
     this.loading = true;
     this.usuarioExternoService.getPropostaExterna(id).subscribe({

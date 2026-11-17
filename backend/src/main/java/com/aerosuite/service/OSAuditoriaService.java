@@ -53,7 +53,7 @@ public class OSAuditoriaService {
     /**
      * Registra a criação de uma nova OS
      */
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
     public void registrarCriacao(OS os, String usuarioNome, String usuarioEmail, Long usuarioId, String ipOrigem, String userAgent) {
         
         OSAuditoria auditoria = new OSAuditoria();
@@ -63,8 +63,8 @@ public class OSAuditoriaService {
         auditoria.usuarioId = usuarioId;
         auditoria.usuarioNome = usuarioNome;
         auditoria.usuarioEmail = usuarioEmail;
-        auditoria.ipOrigem = ipOrigem;
-        auditoria.userAgent = userAgent;
+        auditoria.ipOrigem = limitarIp(ipOrigem);
+        auditoria.userAgent = limitarUserAgent(userAgent);
         auditoria.dataHora = LocalDateTime.now();
         
         // Salvar snapshot completo da OS
@@ -103,8 +103,8 @@ public class OSAuditoriaService {
             auditoria.usuarioId = usuarioId;
             auditoria.usuarioNome = usuarioNome;
             auditoria.usuarioEmail = usuarioEmail;
-            auditoria.ipOrigem = ipOrigem;
-            auditoria.userAgent = userAgent;
+            auditoria.ipOrigem = limitarIp(ipOrigem);
+            auditoria.userAgent = limitarUserAgent(userAgent);
             auditoria.dataHora = LocalDateTime.now();
             
             auditoria.persist();
@@ -123,8 +123,8 @@ public class OSAuditoriaService {
         auditoria.usuarioId = usuarioId;
         auditoria.usuarioNome = usuarioNome;
         auditoria.usuarioEmail = usuarioEmail;
-        auditoria.ipOrigem = ipOrigem;
-        auditoria.userAgent = userAgent;
+        auditoria.ipOrigem = limitarIp(ipOrigem);
+        auditoria.userAgent = limitarUserAgent(userAgent);
         auditoria.dataHora = LocalDateTime.now();
         
         // Salvar snapshot completo da OS antes da exclusão
@@ -149,8 +149,8 @@ public class OSAuditoriaService {
         auditoria.usuarioId = usuarioId;
         auditoria.usuarioNome = usuarioNome;
         auditoria.usuarioEmail = usuarioEmail;
-        auditoria.ipOrigem = ipOrigem;
-        auditoria.userAgent = userAgent;
+        auditoria.ipOrigem = limitarIp(ipOrigem);
+        auditoria.userAgent = limitarUserAgent(userAgent);
         auditoria.dataHora = LocalDateTime.now();
         
         auditoria.persist();
@@ -185,9 +185,8 @@ public class OSAuditoriaService {
         auditoria.usuarioId = ctx.userId;
         auditoria.usuarioNome = ctx.nome;
         auditoria.usuarioEmail = ctx.email;
-        auditoria.ipOrigem = ctx.ip != null && ctx.ip.length() > 50 ? ctx.ip.substring(0, 50) : ctx.ip;
-        String ua = ctx.userAgent;
-        auditoria.userAgent = ua != null && ua.length() > 500 ? ua.substring(0, 500) : ua;
+        auditoria.ipOrigem = limitarIp(ctx.ip);
+        auditoria.userAgent = limitarUserAgent(ctx.userAgent);
         auditoria.dataHora = LocalDateTime.now();
         auditoria.persist();
     }
@@ -484,6 +483,21 @@ public class OSAuditoriaService {
         }
         
         return map;
+    }
+
+    private static String limitarIp(String ip) {
+        if (ip == null || ip.isBlank()) {
+            return ip;
+        }
+        String first = ip.split(",")[0].trim();
+        return first.length() > 255 ? first.substring(0, 255) : first;
+    }
+
+    private static String limitarUserAgent(String userAgent) {
+        if (userAgent == null) {
+            return null;
+        }
+        return userAgent.length() > 500 ? userAgent.substring(0, 500) : userAgent;
     }
 
     /**

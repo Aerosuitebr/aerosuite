@@ -15,6 +15,7 @@ public interface PropostaComercialMapper {
 
     // Ignorar relacionamentos ao converter para DTO (eles são carregados manualmente)
     @Mapping(target = "itens", ignore = true)
+    @Mapping(target = "aceiteUrl", ignore = true)
     PropostaComercialDto toDto(PropostaComercial entity);
 
     /**
@@ -74,6 +75,19 @@ public interface PropostaComercialMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "itens", ignore = true) // CRÍTICO: Ignorar itens - são salvos manualmente
     @Mapping(target = "envios", ignore = true) // Ignorar histórico de envios também
+    @Mapping(target = "aceiteToken", ignore = true)
+    @Mapping(target = "aceiteTokenExpiraEm", ignore = true)
+    @Mapping(target = "aceiteStatus", ignore = true)
+    @Mapping(target = "aceitoEm", ignore = true)
+    @Mapping(target = "aceitoIp", ignore = true)
+    @Mapping(target = "aceitoUserAgent", ignore = true)
+    @Mapping(target = "aceiteNome", ignore = true)
+    @Mapping(target = "aceiteEmail", ignore = true)
+    @Mapping(target = "aceiteCargo", ignore = true)
+    @Mapping(target = "aceiteEmpresa", ignore = true)
+    @Mapping(target = "aceiteDeclaracao", ignore = true)
+    @Mapping(target = "aceiteAutorizacao", ignore = true)
+    @Mapping(target = "recusaMotivo", ignore = true)
     @Mapping(target = "tenantId", ignore = true)
     PropostaComercial toEntity(PropostaComercialDto dto);
 
@@ -86,6 +100,19 @@ public interface PropostaComercialMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "itens", ignore = true) // CRÍTICO: Ignorar itens - são atualizados manualmente
     @Mapping(target = "envios", ignore = true) // Ignorar histórico de envios também
+    @Mapping(target = "aceiteToken", ignore = true)
+    @Mapping(target = "aceiteTokenExpiraEm", ignore = true)
+    @Mapping(target = "aceiteStatus", ignore = true)
+    @Mapping(target = "aceitoEm", ignore = true)
+    @Mapping(target = "aceitoIp", ignore = true)
+    @Mapping(target = "aceitoUserAgent", ignore = true)
+    @Mapping(target = "aceiteNome", ignore = true)
+    @Mapping(target = "aceiteEmail", ignore = true)
+    @Mapping(target = "aceiteCargo", ignore = true)
+    @Mapping(target = "aceiteEmpresa", ignore = true)
+    @Mapping(target = "aceiteDeclaracao", ignore = true)
+    @Mapping(target = "aceiteAutorizacao", ignore = true)
+    @Mapping(target = "recusaMotivo", ignore = true)
     @Mapping(target = "tenantId", ignore = true)
     // Campos do cliente serão atualizados explicitamente no Service para garantir que sejam salvos
     void updateEntityFromDto(PropostaComercialDto dto, @MappingTarget PropostaComercial entity);
