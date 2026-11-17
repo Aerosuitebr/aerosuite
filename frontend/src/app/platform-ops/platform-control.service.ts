@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { TenantStatsDto } from '../organizacoes/tenant.service';
 import { AccessAuditEntry } from '../organizacoes/access-audit.service';
+import type { LoginResponse } from '../auth/auth.service';
 
 export interface PlatformAuditSummary {
   loginSuccess24h: number;
@@ -182,6 +183,10 @@ export class PlatformControlService {
 
   private apiBase(): string {
     return environment.apiUrl || '/api';
+  }
+
+  openTenantSupport(tenantId: number): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiBase()}/platform/control/tenants/${tenantId}/support-session`, {});
   }
 
   getOverview(): Observable<PlatformControlOverview> {

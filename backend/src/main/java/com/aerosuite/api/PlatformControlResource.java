@@ -8,9 +8,11 @@ import com.aerosuite.service.PlatformControlService;
 import com.aerosuite.service.PlatformOnboardingService;
 import com.aerosuite.service.PlatformOperatorAccessService;
 import com.aerosuite.service.PlatformTelemetryService;
+import com.aerosuite.service.TenantSupportService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 /**
  * Centro de controle da plataforma: overview, billing cross-tenant e usuários por organização.
@@ -38,6 +40,17 @@ public class PlatformControlResource {
 
     @Inject
     PlatformOnboardingService onboardingService;
+
+    @Inject
+    TenantSupportService tenantSupport;
+
+    @POST
+    @Path("/tenants/{tenantId}/support-session")
+    public Response openTenantSupport(@PathParam("tenantId") long tenantId,
+            @HeaderParam("X-Forwarded-For") String ip, @HeaderParam("User-Agent") String userAgent) {
+        return Response.ok(tenantSupport.open(tenantId, ip, userAgent))
+                .header("Cache-Control", "no-store").build();
+    }
 
     @GET
     @Path("/overview")

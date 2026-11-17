@@ -185,6 +185,10 @@ export class AuthInterceptor implements HttpInterceptor {
         // Não redirecionar para login se for uma requisição de autenticação (login, forgot-password, etc)
         // O 401 durante o login é esperado quando as credenciais estão incorretas
         if (error.status === 401 && !isPublicAuthRequest && !isPlatformOpsAuthRequest) {
+          if (authService.hasTenantSupportSession() && !usePlatformOpsBearer) {
+            authService.leaveTenantSupport();
+            return throwError(() => error);
+          }
           const onExternoRoute = this.router.url.startsWith('/externo');
           authService.clearSessionSilently();
           if (!isPublicAppRoute(this.router.url)) {

@@ -81,6 +81,10 @@ public class PermissionAuthorizationFilter implements ContainerRequestFilter {
             return;
         }
 
+        if (internalUserContext.isTenantSupport() && internalUserContext.isPermissionsHydrated()) {
+            return;
+        }
+
         boolean needsSnapshot = requiresPermissionSnapshot(methodSpec, methodNonEmpty)
                 || requiresPermissionSnapshot(classSpec, classNonEmpty);
         PermissionProfileService.PermissionSnapshot snap;

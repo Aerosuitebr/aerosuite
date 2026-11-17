@@ -98,6 +98,14 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter {
             return;
         }
 
+        Optional<Claims> tenantSupportJwt = jwtTokenService.parseAndVerifyTenantSupport(raw);
+        if (tenantSupportJwt.isPresent()) {
+            if (applyInternalJwt(tenantSupportJwt.get(), requestContext, false)) {
+                internalUserContext.setTenantSupport(true);
+            }
+            return;
+        }
+
         if (isMfaAuthPath(path)) {
             Optional<Claims> mfaSetup = jwtTokenService.parseAndVerifyMfaSetup(raw);
             if (mfaSetup.isPresent()) {
@@ -142,6 +150,16 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter {
         }
         jwtTokenService.parseAndVerifyInternal(raw).ifPresent(c -> applyInternalJwt(c, requestContext, true));
         if (!internalUserContext.isAuthenticated()) {
+            jwtTokenService.parseAndVerifyPlatformOps(raw).ifPresent(c -> applyPlatformOpsJwt(c, requestContext, true));
+        }
+        if (!internalUserContext.isAuthenticated()) {
+            jwtTokenService.parseAndVerifyTenantSupport(raw).ifPresent(c -> {
+                if (applyInternalJwt(c, requestContext, true)) {
+                    internalUserContext.setTenantSupport(true);
+                }
+            });
+        }
+        if (!internalUserContext.isAuthenticated()) {
             jwtTokenService.tryParseLegacyInternalBase64(raw).ifPresent(t -> applyLegacyInternal(t, requestContext, true));
         }
     }
@@ -175,6 +193,7 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter {
             return false;
         }
         internalUserContext.setPlatformOpsElevated(true);
+        internalUserContext.setPlatformOpsExpiresAtEpochSec(c.getExpiration().toInstant().getEpochSecond());
         long mfaAt = JwtTokenService.extractMfaAtFromClaims(c);
         internalUserContext.setPlatformOpsMfaAtEpochSec(mfaAt > 0 ? mfaAt : null);
         return true;

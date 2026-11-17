@@ -4654,3 +4654,14 @@ $layout-compact-max: 1023px;
 // Long administrative groups must remain fully reachable in the sidebar scroll area.
 .sidebar--flight-deck .nav-flight-list.is-expanded { max-height: none; }
 .nav-section-card--administracao .nav-flight-item { animation-delay: 0ms; }
+.tenant-support-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 1rem;
+  padding: 0.35rem 1rem;
+  background: #fff3cd;
+  color: #513b00;
+  position: relative;
+}

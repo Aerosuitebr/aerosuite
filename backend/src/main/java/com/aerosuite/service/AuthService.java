@@ -79,6 +79,9 @@ public class AuthService {
     @Inject
     TenantModuleService tenantModuleService;
 
+    @Inject
+    TenantSupportService tenantSupport;
+
     private static final SecureRandom secureRandom = new SecureRandom();
 
     @Transactional
@@ -166,6 +169,9 @@ public class AuthService {
      * Utilizador autenticado: mesmo payload que no login (sem emitir novo token).
      */
     public UserDto getUserDtoForSession(Integer userId) {
+        if (internalUserContext.isTenantSupport()) {
+            return tenantSupport.currentSessionUser();
+        }
         if (userId == null) {
             return null;
         }

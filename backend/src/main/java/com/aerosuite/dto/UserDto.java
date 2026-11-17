@@ -10,6 +10,7 @@ public class UserDto {
     public Long tenantId;
     public String tenantCodigo;
     public String tenantNome;
+    public boolean tenantSupport;
     public String email;
     public String nome;
     public String role;

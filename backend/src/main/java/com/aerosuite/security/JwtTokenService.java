@@ -33,6 +33,7 @@ public class JwtTokenService {
     private static final String TYP_MFA_SETUP = "mfa_setup";
     /** Plano de controle da plataforma (sessão elevada, TTL curto). */
     private static final String TYP_PLATFORM_OPS = "pop";
+    private static final String TYP_TENANT_SUPPORT = "tenant_support";
     private static final String CLAIM_MFA_AT = "mfa_at";
     /** Claim opcional em tokens antigos; tokens novos incluem sempre o tenant do {@link Usuario}. */
     public static final String CLAIM_TID = "tid";
@@ -164,6 +165,27 @@ public class JwtTokenService {
     }
 
     public Optional<Claims> parseAndVerifyPlatformOps(String compactJwt) {
+        return parseType(compactJwt, TYP_PLATFORM_OPS);
+    }
+
+    public String mintTenantSupportToken(Usuario operator, long tenantId, Instant expiresAt) {
+        return Jwts.builder()
+                .subject(String.valueOf(operator.id))
+                .claim("email", operator.email)
+                .claim("name", operator.nome)
+                .claim(CLAIM_TID, tenantId)
+                .claim(CLAIM_TYP, TYP_TENANT_SUPPORT)
+                .issuedAt(Date.from(Instant.now()))
+                .expiration(Date.from(expiresAt))
+                .signWith(signingKey(), Jwts.SIG.HS256)
+                .compact();
+    }
+
+    public Optional<Claims> parseAndVerifyTenantSupport(String compactJwt) {
+        return parseType(compactJwt, TYP_TENANT_SUPPORT);
+    }
+
+    private Optional<Claims> parseType(String compactJwt, String expectedType) {
         if (compactJwt == null || compactJwt.isBlank()) {
             return Optional.empty();
         }
@@ -173,7 +195,7 @@ public class JwtTokenService {
                     .build()
                     .parseSignedClaims(compactJwt)
                     .getPayload();
-            if (!TYP_PLATFORM_OPS.equals(claims.get(CLAIM_TYP))) {
+            if (!expectedType.equals(claims.get(CLAIM_TYP))) {
                 return Optional.empty();
             }
             return Optional.of(claims);
@@ -201,22 +223,7 @@ public class JwtTokenService {
     }
 
     public Optional<Claims> parseAndVerifyInternal(String compactJwt) {
-        if (compactJwt == null || compactJwt.isBlank()) {
-            return Optional.empty();
-        }
-        try {
-            Claims claims = Jwts.parser()
-                    .verifyWith(signingKey())
-                    .build()
-                    .parseSignedClaims(compactJwt)
-                    .getPayload();
-            if (!TYP_INTERNAL.equals(claims.get(CLAIM_TYP))) {
-                return Optional.empty();
-            }
-            return Optional.of(claims);
-        } catch (JwtException | IllegalArgumentException e) {
-            return Optional.empty();
-        }
+        return parseType(compactJwt, TYP_INTERNAL);
     }
 
     /**
@@ -301,7 +308,7 @@ public class JwtTokenService {
         }
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String raw = authHeader.substring(7).trim();
-            Optional<Claims> jwt = parseAndVerifyInternal(raw);
+            Optional<Claims> jwt = parseAndVerifyInternal(raw).or(() -> parseAndVerifyTenantSupport(raw));
             if (jwt.isPresent()) {
                 Claims c = jwt.get();
                 Integer uid = Integer.parseInt(c.getSubject());

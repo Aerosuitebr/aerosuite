@@ -278,7 +278,7 @@ import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
             [class.sidebar-action-bar--collapsed]="sidebarCollapsed && !isCompactNav()">
             <div class="sidebar-action-bar__cluster" *ngIf="!sidebarCollapsed || isCompactNav()">
               <app-chat-icon *ngIf="mostraIconeChat"></app-chat-icon>
-              <app-notification-bell></app-notification-bell>
+              <app-notification-bell *ngIf="!currentUser?.tenantSupport"></app-notification-bell>
             </div>
             <button
               *ngIf="!isCompactNav()"
@@ -658,6 +658,11 @@ import { LocaleCurrencyService } from '../core/locale/locale-currency.service';
         
         <div class="main-content" [class.main-content--immersive]="mainContentImmersive">
           <app-route-loading-bar></app-route-loading-bar>
+          <div *ngIf="currentUser?.tenantSupport" class="tenant-support-banner">
+            <span>{{ 'platformOps.support.banner' | translate:{ tenant: currentUser?.tenantNome } }}</span>
+            <button type="button" pButton class="p-button-text" (click)="logout()"
+                    [label]="'platformOps.support.exit' | translate"></button>
+          </div>
           <app-contextual-onboarding-banner></app-contextual-onboarding-banner>
           <router-outlet systemPageLayout></router-outlet>
         </div>
@@ -897,7 +902,8 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private refreshPlatformOpsEligibility(): void {
-    if (!this.authService.getCurrentUser()) {
+    const user = this.authService.getCurrentUser();
+    if (!user || user.tenantSupport) {
       this.platformOpsEligible = false;
       this.platformOpsEligibility.invalidate();
       return;
@@ -1156,7 +1162,9 @@ export class AppLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
       this.servicesInitialized = true;
     }
     this.sessionIdle.startMonitoring();
-    this.iniciarPollingNotificacoesDeficitTroca();
+    if (!this.currentUser?.tenantSupport) {
+      this.iniciarPollingNotificacoesDeficitTroca();
+    }
   }
 
   /** Pendentes de “ciente” para perfis autorizados; modal em qualquer rota após login. */

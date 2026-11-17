@@ -33,7 +33,9 @@ export function completeMenuRoutes(items: Funcionalidade[], user: User | null): 
   const routes = new Set(items.filter(item => item.ativo && item.visivel).map(item => (item.rota || '').replace(/\/+$/, '') || '/'));
   const activeCodes = new Set(items.filter(item => item.ativo).map(item => item.codigo));
   const additions = MENU_ROUTE_ENTRIES.filter(entry =>
-    !routes.has(entry.route) && (entry.route === FERRAMENTARIA_PENDENCIAS
+    !routes.has(entry.route) &&
+    !(user.tenantSupport && (entry.route === '/perfil' || entry.route === '/privacidade-dados')) &&
+    (entry.route === FERRAMENTARIA_PENDENCIAS
       ? podeAcessarFerramentaria(user, activeCodes)
       : passesPermissaoRota(user, entry.perm))
   );

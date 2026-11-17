@@ -134,6 +134,7 @@
                 class="p-button-rounded p-button-primary btn-access-instance"
                 [attr.aria-label]="'tenants.action.accessInstance' | translate"
                 [pTooltip]="'tenants.action.accessInstance' | translate"
+                [disabled]="!row.ativo || supportOpening"
                 (click)="accessInstance(row)">
               </button>
               <button

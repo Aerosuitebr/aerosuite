@@ -31,6 +31,8 @@ public class InternalUserContext {
     private boolean platformOpsElevated;
     /** Epoch seconds da última confirmação MFA no token {@code pop}. */
     private Long platformOpsMfaAtEpochSec;
+    private Long platformOpsExpiresAtEpochSec;
+    private boolean tenantSupport;
 
     public void setInternalUser(Integer userId, String email, String nome, Long tenantId) {
         this.userId = userId;
@@ -43,6 +45,8 @@ public class InternalUserContext {
         this.permissionsHydrated = false;
         this.platformOpsElevated = false;
         this.platformOpsMfaAtEpochSec = null;
+        this.platformOpsExpiresAtEpochSec = null;
+        this.tenantSupport = false;
     }
 
     /**
@@ -80,6 +84,24 @@ public class InternalUserContext {
         this.permissionsHydrated = false;
         this.platformOpsElevated = false;
         this.platformOpsMfaAtEpochSec = null;
+        this.platformOpsExpiresAtEpochSec = null;
+        this.tenantSupport = false;
+    }
+
+    public boolean isTenantSupport() {
+        return tenantSupport;
+    }
+
+    public void setTenantSupport(boolean tenantSupport) {
+        this.tenantSupport = tenantSupport;
+    }
+
+    public Long getPlatformOpsExpiresAtEpochSec() {
+        return platformOpsExpiresAtEpochSec;
+    }
+
+    public void setPlatformOpsExpiresAtEpochSec(Long expiresAtEpochSec) {
+        this.platformOpsExpiresAtEpochSec = expiresAtEpochSec;
     }
 
     public void setPlatformOpsMfaAtEpochSec(Long platformOpsMfaAtEpochSec) {

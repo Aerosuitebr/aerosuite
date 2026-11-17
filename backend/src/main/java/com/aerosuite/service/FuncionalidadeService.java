@@ -62,6 +62,12 @@ public class FuncionalidadeService {
             Funcionalidade.class
         ).getResultList();
     }
+
+    public List<String> listarCodigosParaGestaoRbac() {
+        return entityManager.createQuery(
+                "SELECT f.codigo FROM Funcionalidade f WHERE f.ativo = true AND (f.gestaoRbac = true OR f.gestaoRbac IS NULL)",
+                String.class).getResultList();
+    }
     
     public Funcionalidade buscarPorId(Long id) {
         return entityManager.find(Funcionalidade.class, id);
@@ -221,6 +227,15 @@ public class FuncionalidadeService {
                         || TenantModuleCatalog.isFuncionalidadeAllowed(enabledModules, f.getCodigo()))
                 .map(this::converterParaDto)
                 .collect(Collectors.toList());
+    }
+
+    public List<FuncionalidadeDTO> menuSuporte(List<Funcionalidade> grants, Set<String> enabledModules) {
+        return grants.stream()
+                .filter(f -> Boolean.TRUE.equals(f.getVisivel()))
+                .filter(f -> f.getRota() == null || !f.getRota().matches("/?(perfil|privacidade-dados|chat|vitrine)(/.*)?"))
+                .filter(f -> TenantModuleCatalog.isFuncionalidadeAllowed(enabledModules, f.getCodigo()))
+                .map(this::converterParaDto)
+                .toList();
     }
 
     private List<Funcionalidade> listarMenuEfetivoParaUsuario(Usuario usuario) {

@@ -118,7 +118,11 @@ export class AccessAuditPageComponent implements OnInit {
 
       { label: 'LOGIN_FAILURE', value: 'LOGIN_FAILURE' },
 
-      { label: 'RBAC_DENIED', value: 'RBAC_DENIED' }
+      { label: 'RBAC_DENIED', value: 'RBAC_DENIED' },
+
+      { label: this.i18n.translate('platformOps.support.auditOpened'), value: 'PLATFORM_TENANT_SUPPORT_OPEN' },
+
+      { label: this.i18n.translate('platformOps.support.auditMutation'), value: 'PLATFORM_TENANT_SUPPORT_REQUEST' }
 
     ];
 

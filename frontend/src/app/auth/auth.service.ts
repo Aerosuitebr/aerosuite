@@ -50,6 +50,7 @@ export interface LoginResponse {
     tenantId?: number;
     tenantCodigo?: string;
     tenantNome?: string;
+    tenantSupport?: boolean;
     email: string;
     nome: string;
     role: string;
@@ -79,6 +80,7 @@ export interface User {
   /** Código da organização (tenant.codigo). */
   tenantCodigo?: string;
   tenantNome?: string;
+  tenantSupport?: boolean;
   email: string;
   nome: string;
   role: string;
@@ -110,6 +112,7 @@ export class AuthService {
   private readonly API_URL = ''; // Use relative URL to work with proxy
   private readonly TOKEN_KEY = 'aerosuite_token';
   private readonly USER_KEY = 'aerosuite_user';
+  private readonly SUPPORT_KEY = 'aerosuite_tenant_support';
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
@@ -130,6 +133,10 @@ export class AuthService {
   private readonly TENANT_CODIGO_KEY = 'aerosuite_tenant_codigo';
 
   getStoredTenantCodigo(): string {
+    const user = this.getCurrentUser();
+    if (user?.tenantSupport && user.tenantCodigo) {
+      return user.tenantCodigo;
+    }
     return localStorage.getItem(this.TENANT_CODIGO_KEY) ?? 'default';
   }
 
@@ -206,6 +213,10 @@ export class AuthService {
   }
 
   logout(): void {
+    if (this.hasTenantSupportSession()) {
+      this.leaveTenantSupport();
+      return;
+    }
     this.clearAuthData();
     this.router.navigate(['/login']);
   }
@@ -232,7 +243,43 @@ export class AuthService {
   }
 
   getToken(): string | null {
+    const support = this.readTenantSupportSession();
+    if (support) {
+      return support.token;
+    }
     return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  hasTenantSupportSession(): boolean {
+    return !!this.readTenantSupportSession();
+  }
+
+  startTenantSupport(session: LoginResponse): void {
+    sessionStorage.setItem(this.SUPPORT_KEY, JSON.stringify(session));
+    window.location.assign('/');
+  }
+
+  leaveTenantSupport(): void {
+    sessionStorage.removeItem(this.SUPPORT_KEY);
+    window.location.replace('/plataforma/organizacoes');
+  }
+
+  private readTenantSupportSession(): LoginResponse | null {
+    try {
+      return JSON.parse(sessionStorage.getItem(this.SUPPORT_KEY) ?? 'null') as LoginResponse | null;
+    } catch {
+      sessionStorage.removeItem(this.SUPPORT_KEY);
+      return null;
+    }
+  }
+
+  private persistUser(user: User): void {
+    const support = this.readTenantSupportSession();
+    if (support && user.tenantSupport) {
+      sessionStorage.setItem(this.SUPPORT_KEY, JSON.stringify({ ...support, user }));
+    } else {
+      localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+    }
   }
 
   getCurrentUser(): User | null {
@@ -259,7 +306,7 @@ export class AuthService {
     }
     const next = { ...prev, menuFuncionalidades };
     this.currentUserSubject.next(next);
-    localStorage.setItem(this.USER_KEY, JSON.stringify(next));
+    this.persistUser(next);
   }
 
   updateCurrentUser(user: User): void {
@@ -269,12 +316,12 @@ export class AuthService {
       return;
     }
     this.currentUserSubject.next(normalized);
-    localStorage.setItem(this.USER_KEY, JSON.stringify(normalized));
+    this.persistUser(normalized);
   }
 
   /** Evita reemitir sessão idêntica (ex.: GET /auth/me após login já completo). */
   private isSameUserPayload(a: User, b: User): boolean {
-    if (a.id !== b.id) {
+    if (a.id !== b.id || a.tenantId !== b.tenantId || a.tenantSupport !== b.tenantSupport) {
       return false;
     }
     const ac = [...(a.funcionalidadeCodigos ?? [])].sort().join('|');
@@ -311,6 +358,7 @@ export class AuthService {
 
   /** Persiste token + utilizador (login, primeira troca de senha, etc.). */
   applySessionFromLoginResponse(response: LoginResponse): void {
+    sessionStorage.removeItem(this.SUPPORT_KEY);
     this.clearExternalSession();
     this.sessionHydrate$ = undefined;
     this.sessionFreshFromLogin = true;
@@ -373,7 +421,20 @@ export class AuthService {
   }
 
   private loadStoredUser(): void {
-    const userStr = localStorage.getItem(this.USER_KEY);
+    const support = this.readTenantSupportSession();
+    if (support && this.isTokenExpired(support.token)) {
+      this.leaveTenantSupport();
+      return;
+    }
+    if (support) {
+      const payload = JSON.parse(this.decodeBase64Url(support.token.split('.')[1])) as { exp: number };
+      setTimeout(() => {
+        if (this.readTenantSupportSession()?.token === support.token) {
+          this.leaveTenantSupport();
+        }
+      }, Math.max(0, payload.exp * 1000 - Date.now()));
+    }
+    const userStr = support ? JSON.stringify(support.user) : localStorage.getItem(this.USER_KEY);
     const token = this.getToken();
     
     if (userStr && token && !this.isTokenExpired(token)) {
@@ -381,7 +442,7 @@ export class AuthService {
         const user = this.withNormalizedFoto(JSON.parse(userStr));
         this.currentUserSubject.next(user);
         this.tenantFeatureService.syncFromUser(user);
-        localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+        this.persistUser(user);
         if (user?.id != null && !shouldSkipSessionHydrateOnStartup()) {
           this.hydrateSessionFromServer().subscribe({ error: () => {} });
         }
@@ -396,6 +457,7 @@ export class AuthService {
 
   private clearAuthData(): void {
     this.sessionHydrate$ = undefined;
+    sessionStorage.removeItem(this.SUPPORT_KEY);
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
     this.currentUserSubject.next(null);

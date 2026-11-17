@@ -9,6 +9,7 @@ import com.aerosuite.security.InternalUserContext;
 import com.aerosuite.security.RequiresFuncionalidades;
 import com.aerosuite.service.FuncionalidadeService;
 import com.aerosuite.service.TenantModuleService;
+import com.aerosuite.service.TenantSupportService;
 import java.util.Set;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -24,6 +25,8 @@ import java.util.stream.Collectors;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class FuncionalidadeController {
+    @Inject
+    TenantSupportService tenantSupport;
     
     @Inject
     FuncionalidadeService funcionalidadeService;
@@ -198,6 +201,9 @@ public class FuncionalidadeController {
     @RequiresFuncionalidades(onlyAuthenticated = true)
     public Response listarMeuMenu() {
         try {
+            if (internalUserContext.isTenantSupport()) {
+                return Response.ok(tenantSupport.currentSessionUser().menuFuncionalidades).build();
+            }
             Integer uid = internalUserContext.getUserId();
             if (uid == null) {
                 return Response.status(Response.Status.UNAUTHORIZED)

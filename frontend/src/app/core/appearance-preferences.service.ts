@@ -1,7 +1,8 @@
-import { ApplicationRef, Injectable, inject } from '@angular/core';
+import { ApplicationRef, Injectable, Injector, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { AuthService } from '../auth/auth.service';
 
 export type ThemeMode = 'light' | 'dark' | 'auto';
 export type InterfaceDensity = 'compact' | 'normal' | 'spacious';
@@ -21,6 +22,7 @@ export interface AppearancePreferences {
 export class AppearancePreferencesService {
   private readonly appRef = inject(ApplicationRef);
   private readonly http = inject(HttpClient);
+  private readonly injector = inject(Injector);
   private readonly STORAGE_KEY = 'appearance_preferences';
   private readonly TOKEN_KEY = 'aerosuite_token';
 
@@ -211,7 +213,8 @@ export class AppearancePreferencesService {
   }
 
   private syncIdiomaToServer(language: string): void {
-    if (typeof localStorage === 'undefined' || !localStorage.getItem(this.TOKEN_KEY)) {
+    if (typeof localStorage === 'undefined' || !localStorage.getItem(this.TOKEN_KEY)
+      || this.injector.get(AuthService).hasTenantSupportSession()) {
       return;
     }
     const apiUrl = typeof environment.getApiUrl === 'function' ? environment.getApiUrl() : environment.apiUrl;

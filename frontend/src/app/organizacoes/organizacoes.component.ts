@@ -51,6 +51,7 @@ import {
 } from './tenant.service';
 import { slugFromOrganizationName, suggestSupportEmail } from './slug.util';
 import { AuthService } from '../auth/auth.service';
+import { PlatformControlService } from '../platform-ops/platform-control.service';
 import { ListDataStatesComponent } from '../shared/list-data-states/list-data-states.component';
 import { PageHeroComponent } from '../shared/page-hero/page-hero.component';
 import { DEFAULT_LIST_PAGE_SIZE, LIST_ROWS_PER_PAGE_OPTIONS } from '../core/list-pagination.constants';
@@ -116,6 +117,8 @@ export class OrganizacoesComponent implements OnInit, OnDestroy {
   private messageService = inject(MessageService);
   private i18n = inject(TranslationService);
   private authService = inject(AuthService);
+  private platformControl = inject(PlatformControlService);
+  supportOpening = false;
   private router = inject(Router);
   private confirmationService = inject(ConfirmationService);
   private destroy$ = new Subject<void>();
@@ -463,8 +466,11 @@ export class OrganizacoesComponent implements OnInit, OnDestroy {
   }
 
   accessInstance(row: TenantSummaryDto): void {
-    this.authService.setStoredTenantCodigo(row.codigo);
-    void this.router.navigate(['/login'], { queryParams: { tenant: row.codigo } });
+    this.supportOpening = true;
+    this.platformControl.openTenantSupport(row.id).pipe(takeUntil(this.destroy$)).subscribe({
+      next: session => this.authService.startTenantSupport(session),
+      error: () => { this.supportOpening = false; }
+    });
   }
 
   statPercent(value: number, total: number): number {
