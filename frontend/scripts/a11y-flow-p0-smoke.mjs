@@ -581,9 +581,13 @@ async function countDialogLabels(page) {
   });
 }
 
-async function waitForOsListReady(page) {
-  await page.waitForSelector('button.add-btn', { timeout: 20000 });
-  await page.waitForSelector('button.delete-btn', { visible: true, timeout: 20000 });
+async function clickOsRowAction(page, icon) {
+  const trigger = 'td.col-actions button[aria-haspopup="menu"]';
+  await page.waitForSelector(trigger, { visible: true, timeout: 20000 });
+  await clickButton(page, trigger);
+  const action = `.ops-row-action-menu .p-menuitem-link:has(.${icon})`;
+  await page.waitForSelector(action, { visible: true, timeout: 8000 });
+  await page.click(action);
 }
 
 async function testF1(page) {
@@ -617,9 +621,7 @@ async function testF6(page) {
   await page.goto(`${BASE_URL}os`, { waitUntil: 'networkidle0', timeout: 90000 });
   await waitForApp(page);
   await dismissOpenDialogs(page);
-  await waitForOsListReady(page);
-
-  await clickButton(page, 'button.delete-btn');
+  await clickOsRowAction(page, 'pi-trash');
   await page.waitForSelector('.p-confirm-dialog', { visible: true, timeout: 8000 });
 
   const headerText = await page.$eval('.p-confirm-dialog .p-dialog-title', el => el.textContent?.trim() ?? '');
@@ -823,9 +825,7 @@ async function testF9(page) {
   await page.goto(`${BASE_URL}os`, { waitUntil: 'networkidle0', timeout: 90000 });
   await waitForApp(page);
   await dismissOpenDialogs(page);
-  await waitForOsListReady(page);
-
-  await clickButton(page, 'button.edit-btn');
+  await clickOsRowAction(page, 'pi-pencil');
   await waitForVisibleDialog(page);
 
   const fileInputs = await page.$$eval('.p-dialog input[type="file"], input[type="file"]', inputs =>
