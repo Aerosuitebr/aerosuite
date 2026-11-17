@@ -114,6 +114,7 @@ public class JwtTokenService {
                 .claim("name", usuario.nome != null ? usuario.nome : "")
                 .claim(CLAIM_TID, tid)
                 .claim(CLAIM_TYP, TYP_INTERNAL)
+                .claim("perfis_rev", usuario.perfisRevisao)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(exp))
                 .signWith(signingKey(), Jwts.SIG.HS256)

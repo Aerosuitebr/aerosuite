@@ -3,11 +3,13 @@ package com.aerosuite.domain;
 import com.aerosuite.model.Perfil;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
+import org.hibernate.annotations.DynamicUpdate;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @Entity
+@DynamicUpdate
 @Table(
         name = "usuario",
         uniqueConstraints = @UniqueConstraint(
@@ -33,6 +35,9 @@ public class Usuario extends PanacheEntityBase {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "perfil_id")
     public Perfil perfil;
+
+    @Column(name = "perfis_revisao", nullable = false)
+    public long perfisRevisao;
     
     @Column(name = "ativo")
     public Boolean ativo = true;

@@ -4,24 +4,19 @@ import com.aerosuite.i18n.ApiI18nMessages;
 
 import com.aerosuite.dto.FuncionalidadeDTO;
 import com.aerosuite.model.Funcionalidade;
-import com.aerosuite.model.Perfil;
 import com.aerosuite.domain.Usuario;
 import com.aerosuite.p1.TenantModuleCatalog;
 import com.aerosuite.security.InternalUserContext;
 import com.aerosuite.security.PermissionProfileService;
-import com.aerosuite.security.SupplementalPermissionSource;
 import com.aerosuite.security.TenantDataAccess;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import org.hibernate.Hibernate;
 import org.jboss.logging.Logger;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,9 +33,6 @@ public class FuncionalidadeService {
 
     @Inject
     InternalUserContext internalUserContext;
-
-    @Inject
-    SupplementalPermissionSource supplementalPermissionSource;
 
     @Inject
     PerfilService perfilService;
@@ -188,27 +180,11 @@ public class FuncionalidadeService {
      * Lista funcionalidades por usuário baseado no perfil do usuário
      */
     public List<Funcionalidade> listarPorUsuario(Long usuarioId) {
-        return listarPorUsuario(usuarioId, tenantDataAccess.currentTenantId());
+        Usuario usuario = Usuario.find("id = ?1 and orgTenantId = ?2",
+                usuarioId.intValue(), tenantDataAccess.currentTenantId()).firstResult();
+        return listarMenuEfetivoParaUsuario(usuario);
     }
 
-    private List<Funcionalidade> listarPorUsuario(Long usuarioId, Long tenantId) {
-        return entityManager.createQuery(
-            "SELECT f FROM Usuario u " +
-            "JOIN u.perfil p " +
-            "JOIN p.funcionalidades f " +
-            "WHERE u.id = :usuarioId AND u.orgTenantId = :tenantId " +
-            "AND p.ativo = true AND (p.ownerTenantId IS NULL OR p.ownerTenantId = :tenantId) " +
-            "AND f.ativo = true " +
-            "AND f.visivel = true " +
-            "ORDER BY f.secao, f.posicao",
-            Funcionalidade.class
-        ).setParameter("usuarioId", usuarioId.intValue()).setParameter("tenantId", tenantId).getResultList();
-    }
-
-    /**
-     * Menu efetivo (perfil via {@link #listarPorPerfil} + delegações) — padrão Bellows, uma query
-     * indexada por perfil em vez de snapshot + IN em todos os códigos.
-     */
     public List<Funcionalidade> listarMenuEfetivoPorUsuarioId(int usuarioId) {
         Usuario usuario = Usuario.find(
                 "SELECT DISTINCT u FROM Usuario u LEFT JOIN FETCH u.perfil p WHERE u.id = ?1",
@@ -239,44 +215,9 @@ public class FuncionalidadeService {
     }
 
     private List<Funcionalidade> listarMenuEfetivoParaUsuario(Usuario usuario) {
-        if (usuario == null || usuario.id == null) {
-            return List.of();
-        }
-        List<Funcionalidade> menu = new ArrayList<>();
-        Perfil perfil = usuario.perfil;
-        if (perfil != null && perfil.getId() != null && Boolean.TRUE.equals(perfil.getAtivo())
-                && perfil.disponivelParaTenant(usuario.orgTenantId)) {
-            if (perfil.getFuncionalidades() != null && Hibernate.isInitialized(perfil.getFuncionalidades())) {
-                for (Funcionalidade f : perfil.getFuncionalidades()) {
-                    if (f != null
-                            && Boolean.TRUE.equals(f.getAtivo())
-                            && Boolean.TRUE.equals(f.getVisivel())) {
-                        menu.add(f);
-                    }
-                }
-            } else {
-                menu.addAll(listarPorUsuario(usuario.id.longValue(), usuario.orgTenantId));
-            }
-        }
-        Set<String> have = menu.stream()
-                .map(Funcionalidade::getCodigo)
-                .filter(Objects::nonNull)
-                .map(c -> c.trim().toUpperCase(Locale.ROOT))
-                .collect(Collectors.toCollection(HashSet::new));
-        Set<String> extras = supplementalPermissionSource.extraFuncionalidadeCodigosForUser(usuario.id);
-        if (extras != null && !extras.isEmpty()) {
-            Set<String> missing = extras.stream()
-                    .filter(Objects::nonNull)
-                    .map(c -> c.trim().toUpperCase(Locale.ROOT))
-                    .filter(c -> !c.isEmpty() && !have.contains(c))
-                    .collect(Collectors.toSet());
-            if (!missing.isEmpty()) {
-                menu.addAll(listarPorCodigos(missing));
-            }
-        }
-        return menu.stream()
-                .filter(f -> Boolean.TRUE.equals(f.getAtivo()) && Boolean.TRUE.equals(f.getVisivel()))
-                .collect(Collectors.toList());
+        Set<String> codigos = permissionProfileService.loadSnapshot(usuario).funcionalidadeCodigos().stream()
+                .map(code -> code.trim().toUpperCase(Locale.ROOT)).collect(Collectors.toSet());
+        return listarPorCodigos(codigos);
     }
 
     private List<Funcionalidade> listarPorCodigos(Set<String> upperCodes) {

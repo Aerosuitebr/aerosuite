@@ -33,6 +33,7 @@ public class InternalUserContext {
     private Long platformOpsMfaAtEpochSec;
     private Long platformOpsExpiresAtEpochSec;
     private boolean tenantSupport;
+    private Long perfisRevisao;
 
     public void setInternalUser(Integer userId, String email, String nome, Long tenantId) {
         this.userId = userId;
@@ -47,6 +48,7 @@ public class InternalUserContext {
         this.platformOpsMfaAtEpochSec = null;
         this.platformOpsExpiresAtEpochSec = null;
         this.tenantSupport = false;
+        this.perfisRevisao = null;
     }
 
     /**
@@ -86,6 +88,15 @@ public class InternalUserContext {
         this.platformOpsMfaAtEpochSec = null;
         this.platformOpsExpiresAtEpochSec = null;
         this.tenantSupport = false;
+        this.perfisRevisao = null;
+    }
+
+    public Long getPerfisRevisao() {
+        return perfisRevisao;
+    }
+
+    public void setPerfisRevisao(Long revisao) {
+        this.perfisRevisao = revisao;
     }
 
     public boolean isTenantSupport() {

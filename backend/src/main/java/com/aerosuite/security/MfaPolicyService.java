@@ -2,16 +2,20 @@ package com.aerosuite.security;
 
 import com.aerosuite.domain.SistemaConfig;
 import com.aerosuite.domain.Usuario;
+import com.aerosuite.service.UsuarioPerfilService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 /** Política MFA: tenant com autenticacao_dupla + perfis críticos Part 145 / admin. */
 @ApplicationScoped
 public class MfaPolicyService {
+    @Inject UsuarioPerfilService usuarioPerfis;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -32,10 +36,11 @@ public class MfaPolicyService {
     }
 
     public boolean isPerfilCritico(Usuario usuario) {
-        if (usuario == null || usuario.perfil == null || usuario.perfil.getCodigo() == null) {
-            return false;
-        }
-        return PERFIS_CRITICOS.contains(usuario.perfil.getCodigo().trim().toUpperCase());
+        return usuarioPerfis.efetivos(usuario).stream().anyMatch(perfil -> codigoCritico(perfil.getCodigo()));
+    }
+
+    private static boolean codigoCritico(String codigo) {
+        return codigo != null && PERFIS_CRITICOS.contains(codigo.trim().toUpperCase(Locale.ROOT));
     }
 
     public boolean isAutenticacaoDuplaEnabled(Long tenantId) {

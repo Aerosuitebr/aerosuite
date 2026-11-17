@@ -36,6 +36,7 @@ public class UsuarioService {
     @Inject UsuarioMapper mapper;
     @Inject UsuarioRepository repository;
     @Inject PerfilService perfilService;
+    @Inject UsuarioPerfilService usuarioPerfilService;
     @Inject AuthService authService;
     @Inject EmailService emailService;
     @Inject ServerUrlUtil serverUrlUtil;
@@ -74,7 +75,7 @@ public class UsuarioService {
             params.put("ativo", true);
         }
 
-        if (q != null && !q.isBlank()) { where.add("LOWER(nome) like :q or LOWER(email) like :q"); params.put("q", "%"+q.toLowerCase()+"%"); }
+        if (q != null && !q.isBlank()) { where.add("(LOWER(nome) like :q or LOWER(email) like :q)"); params.put("q", "%"+q.toLowerCase()+"%"); }
 
         where.add("orgTenantId = :filterTid");
         params.put("filterTid", tenantDataAccess.currentTenantId());
@@ -274,7 +275,7 @@ public class UsuarioService {
     public UsuarioDto update(Integer id, UsuarioDto dto) {
         
         // Usar findById diretamente do Panache para garantir que a entidade esteja gerenciada
-        Usuario e = Usuario.findById(id);
+        Usuario e = Usuario.findById(id, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
         if (e == null) {
             LOG.warnf("ERRO: Usuário não encontrado com ID: %s", id);
             throw new IllegalArgumentException(
@@ -336,7 +337,7 @@ public class UsuarioService {
                     throw new IllegalArgumentException(ApiI18nMessages.encode(
                             ApiI18nMessages.USER_PROFILE_NOT_FOUND, "id", String.valueOf(dto.perfilId())));
                 }
-                e.perfil = novoPerfil;
+                usuarioPerfilService.trocarPrincipal(e, novoPerfil);
                 changed = true;
             }
         }
@@ -388,7 +389,7 @@ public class UsuarioService {
 
     @Transactional
     public UsuarioDto associarPerfil(Integer usuarioId, Integer perfilId) {
-        Usuario usuario = repository.findById(usuarioId);
+        Usuario usuario = Usuario.findById(usuarioId, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
         if (usuario == null) {
             throw new IllegalArgumentException(
                     ApiI18nMessages.encode(ApiI18nMessages.USER_NOT_FOUND, "id", String.valueOf(usuarioId)));
@@ -406,7 +407,7 @@ public class UsuarioService {
         }
         
         // Associar o perfil ao usuário
-        usuario.perfil = perfil;
+        usuarioPerfilService.trocarPrincipal(usuario, perfil);
         repository.persist(usuario);
         
         return mapper.toDto(usuario);

@@ -1,0 +1,180 @@
+<p-toast></p-toast>
+<div class="as-page acesso-matriz">
+  <app-page-hero variant="navy" [titleKey]="key + 'title'" [subtitleKey]="key + 'matrix.subtitle'"
+                 titleIcon="pi-shield" [hasActions]="podeEditar">
+    <button actions *ngIf="podeEditar" pButton type="button" icon="pi pi-plus"
+            [label]="(key + 'btn.new') | translate" [disabled]="loading || erroLista" (click)="abrir()"></button>
+  </app-page-hero>
+
+  <section class="matriz-painel" [attr.aria-label]="(key + 'table.title') | translate">
+    <div class="matriz-filtros">
+      <div class="matriz-campo">
+        <label for="buscaAcesso">{{ (key + 'filter.user') | translate }}</label>
+        <div class="matriz-busca">
+          <i class="pi pi-search" aria-hidden="true"></i>
+          <input pInputText id="buscaAcesso" [(ngModel)]="busca" (ngModelChange)="filtrar()"
+                 [placeholder]="(key + 'matrix.search') | translate">
+        </div>
+      </div>
+      <div class="matriz-campo">
+        <label for="perfilAcesso">{{ (key + 'filter.profile') | translate }}</label>
+        <p-dropdown inputId="perfilAcesso" [options]="filtroPerfis" optionLabel="nome" optionValue="perfilId"
+                    [(ngModel)]="perfilFiltro" (onChange)="filtrar()" [showClear]="true"
+                    [placeholder]="(key + 'filter.allProfiles') | translate" appendTo="body"></p-dropdown>
+      </div>
+      <div class="matriz-campo">
+        <label for="statusAcesso">{{ (key + 'col.status') | translate }}</label>
+        <select id="statusAcesso" [(ngModel)]="statusFiltro" (ngModelChange)="filtrar()">
+          <option [ngValue]="null">{{ (key + 'matrix.allStatuses') | translate }}</option>
+          <option *ngFor="let estado of ['ativo', 'sem-perfis', 'inativa']" [ngValue]="estado">
+            {{ (key + 'matrix.status.' + estado) | translate }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div *ngIf="erroLista" class="matriz-erro" role="alert">
+      <span>{{ (key + 'matrix.loadError') | translate }}</span>
+      <button pButton type="button" class="p-button-text" (click)="carregar()"
+              [label]="(key + 'matrix.retry') | translate"></button>
+    </div>
+
+    <app-list-data-states *ngIf="!erroLista" [loading]="loading" [itemCount]="linhas.length"
+                         [skeletonRows]="5" [skeletonCols]="4" [emptyTitleKey]="key + 'empty'">
+      <p-table [value]="linhas" dataKey="id" [paginator]="true" [rows]="listPageSize" [first]="primeiraLinha"
+               (onPage)="primeiraLinha = $event.first ?? 0" [rowsPerPageOptions]="pageSizes"
+               [tableStyle]="{ 'min-width': '46rem' }" styleClass="matriz-tabela">
+        <ng-template pTemplate="header">
+          <tr>
+            <th scope="col">{{ (key + 'col.user') | translate }}</th>
+            <th scope="col">{{ (key + 'matrix.linked') | translate }}</th>
+            <th scope="col">{{ (key + 'col.status') | translate }}</th>
+            <th scope="col">{{ (key + 'col.actions') | translate }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-usuario>
+          <tr>
+            <td>
+              <div class="matriz-usuario">
+                <span class="matriz-avatar" [attr.data-cor]="cores[usuario.id % cores.length]" aria-hidden="true">
+                  {{ iniciais(usuario.nome) }}
+                </span>
+                <div><strong>{{ usuario.nome }}</strong><small>{{ usuario.email }}</small></div>
+              </div>
+            </td>
+            <td>
+              <div class="matriz-perfis">
+                <span *ngFor="let vinculo of usuario.perfis | slice:0:3" class="matriz-badge"
+                      [class.pausado]="!vinculo.ativo || !vinculo.perfilAtivo"
+                      [attr.aria-label]="vinculo.nome + ' · ' + ((key + (vinculo.ativo && vinculo.perfilAtivo ? 'status.active' : 'matrix.paused')) | translate)">
+                  <i [class]="vinculo.ativo && vinculo.perfilAtivo ? 'pi pi-circle-fill' : 'pi pi-pause'" aria-hidden="true"></i>
+                  {{ vinculo.nome }}
+                </span>
+                <button *ngIf="usuario.perfis.length > 3" type="button" class="matriz-excedentes"
+                        [pTooltip]="excedentes(usuario)" tooltipEvent="focus" [attr.title]="excedentes(usuario)">
+                  +{{ usuario.perfis.length - 3 }} {{ (key + 'matrix.profiles') | translate }}
+                </button>
+                <span *ngIf="!usuario.perfis.length" class="texto-secundario">{{ (key + 'matrix.noLinks') | translate }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="matriz-status" [attr.data-status]="status(usuario)">
+                {{ (key + 'matrix.status.' + status(usuario)) | translate }}
+              </span>
+            </td>
+            <td>
+              <button pButton type="button" icon="pi pi-shield" class="p-button-outlined p-button-sm"
+                      [label]="(key + (podeEditar ? 'matrix.manage' : 'matrix.view')) | translate"
+                      (click)="abrir(usuario)"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </app-list-data-states>
+  </section>
+</div>
+
+<p-sidebar [(visible)]="gavetaAberta" position="right" [style]="{ width: 'min(35rem, 100vw)' }"
+           [dismissible]="false" [showCloseIcon]="!salvando" [closeOnEscape]="!salvando" styleClass="matriz-gaveta">
+  <ng-template pTemplate="header">
+    <h2>{{ (key + (podeEditar ? 'matrix.drawerTitle' : 'matrix.linked')) | translate }}</h2>
+  </ng-template>
+  <div class="matriz-gaveta-corpo">
+    <div *ngIf="!selecionado" class="matriz-campo">
+      <label for="usuarioVinculo">{{ (key + 'dialog.user') | translate }}</label>
+      <p-dropdown inputId="usuarioVinculo" [options]="usuarios" optionLabel="nome" [filter]="true"
+                  filterBy="nome,email" (onChange)="selecionar($event.value)"
+                  [placeholder]="(key + 'dialog.userPh') | translate" appendTo="body">
+        <ng-template pTemplate="item" let-usuario>
+          <div class="matriz-opcao"><strong>{{ usuario.nome }}</strong><small>{{ usuario.email }}</small></div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+
+    <ng-container *ngIf="selecionado as usuario">
+      <div class="matriz-usuario matriz-usuario-detalhe">
+        <span class="matriz-avatar" [attr.data-cor]="cores[usuario.id % cores.length]" aria-hidden="true">{{ iniciais(usuario.nome) }}</span>
+        <div><strong>{{ usuario.nome }}</strong><small>{{ usuario.email }}</small></div>
+      </div>
+
+      <div *ngIf="podeEditar" class="matriz-campo">
+        <label for="adicionarPerfis">{{ (key + 'matrix.add') | translate }}</label>
+        <p-multiSelect inputId="adicionarPerfis" [options]="disponiveis" [(ngModel)]="novosIds" optionLabel="nome"
+                       optionValue="id" [filter]="true" filterBy="nome,descricao" [showToggleAll]="false" appendTo="body"
+                       [disabled]="salvando" (onChange)="adicionar($event.value)"
+                       [placeholder]="(key + 'matrix.selectProfiles') | translate">
+          <ng-template pTemplate="item" let-perfil>
+            <div class="matriz-opcao"><strong>{{ perfil.nome }}</strong><small *ngIf="perfil.descricao">{{ perfil.descricao }}</small></div>
+          </ng-template>
+        </p-multiSelect>
+      </div>
+
+      <div class="matriz-lista">
+        <h3>{{ (key + 'matrix.linked') | translate }} ({{ rascunho.length }})</h3>
+        <p *ngIf="!rascunho.length" class="texto-secundario">{{ (key + 'matrix.noLinks') | translate }}</p>
+        <article class="matriz-vinculo" *ngFor="let vinculo of rascunho" [class.pausado]="!vinculo.ativo || !vinculo.perfilAtivo">
+          <div class="matriz-opcao">
+            <strong>{{ vinculo.nome }}</strong>
+            <small *ngIf="vinculo.descricao">{{ vinculo.descricao }}</small>
+            <small *ngIf="vinculo.vinculadoEm">{{ (key + 'matrix.linkedOn') | translate }} {{ vinculo.vinculadoEm | date:'shortDate' }}</small>
+            <small *ngIf="novoVinculo(vinculo.perfilId)">{{ (key + 'matrix.pending') | translate }}</small>
+            <small *ngIf="!vinculo.perfilAtivo">{{ (key + 'matrix.profileDisabled') | translate }}</small>
+          </div>
+          <div class="matriz-vinculo-acoes">
+            <div class="matriz-switch">
+              <p-inputSwitch *ngIf="podeEditar" [inputId]="'ativo-' + vinculo.perfilId" [(ngModel)]="vinculo.ativo"
+                             [disabled]="salvando || (!vinculo.perfilAtivo && !vinculo.ativo)"></p-inputSwitch>
+              <label [attr.for]="'ativo-' + vinculo.perfilId">{{ (key + (vinculo.ativo && vinculo.perfilAtivo ? 'status.active' : 'matrix.paused')) | translate }}</label>
+            </div>
+            <button *ngIf="podeEditar && removerId !== vinculo.perfilId" pButton type="button" icon="pi pi-trash"
+                    class="p-button-text p-button-danger p-button-sm" [disabled]="salvando"
+                    [attr.aria-label]="((key + 'matrix.remove') | translate) + ': ' + vinculo.nome"
+                    (click)="removerId = vinculo.perfilId"></button>
+            <div *ngIf="removerId === vinculo.perfilId" class="matriz-confirmar">
+              <button pButton type="button" class="p-button-text p-button-danger p-button-sm" [disabled]="salvando"
+                      [label]="(key + 'matrix.remove') | translate" (click)="remover(vinculo.perfilId)"></button>
+              <button pButton type="button" class="p-button-text p-button-sm" [disabled]="salvando"
+                      [label]="'common.actions.cancel' | translate" (click)="removerId = null"></button>
+            </div>
+          </div>
+        </article>
+      </div>
+      <p *ngIf="erroEdicao" class="matriz-erro" role="alert">{{ (key + erroEdicao) | translate }}</p>
+    </ng-container>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="matriz-rodape">
+      <span *ngIf="selecionado" aria-live="polite">
+        {{ (key + 'matrix.summary') | translate:{ ativos: ativos, inativos: rascunho.length - ativos } }}
+      </span>
+      <div>
+        <button pButton type="button" class="p-button-text" [disabled]="salvando"
+                [label]="(podeEditar ? 'common.actions.cancel' : key + 'matrix.close') | translate" (click)="gavetaAberta = false"></button>
+        <button *ngIf="podeEditar" pButton type="button" icon="pi pi-check" [loading]="salvando"
+                [label]="(key + 'matrix.save') | translate" [disabled]="!selecionado || !alterado || salvando"
+                (click)="salvar()"></button>
+      </div>
+    </div>
+  </ng-template>
+</p-sidebar>

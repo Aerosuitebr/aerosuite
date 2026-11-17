@@ -9,11 +9,38 @@ export interface Page<T> { items: T[]; totalElements: number; totalPages: number
 
 export interface Usuario { id?: number; [key: string]: any; }
 
+export interface VinculoUsuarioPerfil {
+  perfilId: number;
+  nome: string;
+  descricao?: string;
+  ativo: boolean;
+  perfilAtivo: boolean;
+  vinculadoEm?: string | null;
+}
+
+export interface UsuarioPerfis {
+  id: number;
+  nome: string;
+  email: string;
+  ativo: boolean;
+  revisao: number;
+  perfis: VinculoUsuarioPerfil[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
   private http = inject(HttpClient);
   private i18n = inject(TranslationService);
   private base = `${environment.apiUrl}/usuarios`;
+  private vinculosUrl = `${environment.apiUrl}/controle-acesso/vinculos`;
+
+  listarVinculosDePerfis() {
+    return this.http.get<UsuarioPerfis[]>(this.vinculosUrl);
+  }
+
+  salvarVinculosDePerfis(id: number, revisao: number, perfis: Pick<VinculoUsuarioPerfil, 'perfilId' | 'ativo'>[]) {
+    return this.http.put<UsuarioPerfis>(`${this.vinculosUrl}/${id}`, { revisao, perfis });
+  }
   list(params: any = {}, opts?: { suppressForbiddenToast?: boolean }) {
     let hp = new HttpParams();
     // Filtrar apenas registros ativos por padrão (backend usa 'ativo' ao invés de 'isActive')

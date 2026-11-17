@@ -84,9 +84,7 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter {
 
         Optional<Claims> internalJwt = jwtTokenService.parseAndVerifyInternal(raw);
         if (internalJwt.isPresent()) {
-            if (!applyInternalJwt(internalJwt.get(), requestContext, false)) {
-                return;
-            }
+            applyNormalInternalJwt(internalJwt.get(), requestContext, false);
             return;
         }
 
@@ -148,7 +146,7 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter {
             authRequestAttributes.setExternalLegacyUser(ext.userId(), ext.email(), orgTenantId);
             return;
         }
-        jwtTokenService.parseAndVerifyInternal(raw).ifPresent(c -> applyInternalJwt(c, requestContext, true));
+        jwtTokenService.parseAndVerifyInternal(raw).ifPresent(c -> applyNormalInternalJwt(c, requestContext, true));
         if (!internalUserContext.isAuthenticated()) {
             jwtTokenService.parseAndVerifyPlatformOps(raw).ifPresent(c -> applyPlatformOpsJwt(c, requestContext, true));
         }
@@ -199,10 +197,18 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter {
         return true;
     }
 
+    private void applyNormalInternalJwt(Claims claims, ContainerRequestContext request, boolean optionalAuth) {
+        if (applyInternalJwt(claims, request, optionalAuth)) {
+            Object revision = claims.get("perfis_rev");
+            internalUserContext.setPerfisRevisao(revision instanceof Number n ? n.longValue() : 0L);
+        }
+    }
+
     private boolean applyLegacyInternal(
             JwtTokenService.LegacyInternalToken t, ContainerRequestContext requestContext, boolean optionalAuth) {
         internalUserContext.setInternalUser(
                 t.userId(), t.email() != null ? t.email() : "", null, TenantConstants.DEFAULT_TENANT_ID);
+        internalUserContext.setPerfisRevisao(0L);
         return true;
     }
 
