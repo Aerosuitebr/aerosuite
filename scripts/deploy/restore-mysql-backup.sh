@@ -29,9 +29,9 @@ docker exec -e MYSQL_PWD="${mysql_pwd}" aerosuite-mysql-local mysql -uroot -e \
 
 echo "==> Restaurar ${BACKUP}"
 if [[ "${BACKUP}" == *.gz ]]; then
-  gunzip -c "${BACKUP}" | docker exec -i -e MYSQL_PWD="${mysql_pwd}" aerosuite-mysql-local mysql -uroot
+  gunzip -c "${BACKUP}" | docker exec -i -e MYSQL_PWD="${mysql_pwd}" aerosuite-mysql-local mysql --default-character-set=utf8mb4 -uroot
 else
-  docker exec -i -e MYSQL_PWD="${mysql_pwd}" aerosuite-mysql-local mysql -uroot < "${BACKUP}"
+  docker exec -i -e MYSQL_PWD="${mysql_pwd}" aerosuite-mysql-local mysql --default-character-set=utf8mb4 -uroot < "${BACKUP}"
 fi
 
 echo "==> Subir stack"

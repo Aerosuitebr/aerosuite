@@ -40,7 +40,7 @@ files=(
 for f in "${files[@]}"; do
   [[ -f "${f}" ]] || continue
   echo "  -> ${f}"
-  docker exec -e MYSQL_PWD="${mysql_pwd}" -i aerosuite-mysql-local mysql -uroot aerosuite < "${f}"
+  docker exec -e MYSQL_PWD="${mysql_pwd}" -i aerosuite-mysql-local mysql --default-character-set=utf8mb4 -uroot aerosuite < "${f}"
 done
 
 docker exec -e MYSQL_PWD="${mysql_pwd}" aerosuite-mysql-local mysql -uroot aerosuite -e \

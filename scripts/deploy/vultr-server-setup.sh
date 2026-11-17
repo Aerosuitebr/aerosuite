@@ -103,7 +103,7 @@ import_domain_schema_if_needed() {
   for f in "${files[@]}"; do
     [[ -f "${f}" ]] || continue
     echo "  -> ${f}"
-    docker exec -i aerosuite-mysql-local mysql -uroot --password="${mysql_pwd}" aerosuite < "${f}"
+    docker exec -i aerosuite-mysql-local mysql --default-character-set=utf8mb4 -uroot --password="${mysql_pwd}" aerosuite < "${f}"
   done
   docker exec aerosuite-mysql-local mysql -uroot --password="${mysql_pwd}" aerosuite -e \
     "INSERT INTO usuario (nome,email,senha,perfil_id,ativo,data_cadastro,tenant_id,precisa_trocar_senha) VALUES ('Administrador','admin@aerosuite.com','admin123',1,1,CURDATE(),1,0) ON DUPLICATE KEY UPDATE senha='admin123', ativo=1, tenant_id=1;"
