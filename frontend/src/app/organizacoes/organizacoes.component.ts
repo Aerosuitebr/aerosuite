@@ -290,7 +290,9 @@ export class OrganizacoesComponent implements OnInit, OnDestroy {
         this.codigoChecking = false;
         this.codigoAvailable = res.available;
         this.codigoSuggestion = res.suggestion ?? null;
-        this.codigoStatusLabel = this.mapCodigoReason(res.reason);
+        this.codigoStatusLabel = res.available
+          ? (res.reason === 'INCOMPLETE' ? 'tenants.field.codigo.incomplete' : 'tenants.field.codigo.available')
+          : this.mapCodigoReason(res.reason);
       });
 
     this.loadTenants();

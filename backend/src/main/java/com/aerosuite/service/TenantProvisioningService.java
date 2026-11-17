@@ -16,6 +16,7 @@ import com.aerosuite.util.ServerUrlUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.ForbiddenException;
@@ -119,65 +120,73 @@ public class TenantProvisioningService {
         if (TenantConstants.DEFAULT_CODIGO.equals(codigo)) {
             return new CodigoAvailabilityDto(codigo, false, "RESERVED", suggestCodigo(codigoRaw + "-org"));
         }
-        if (Tenant.find("codigo = ?1", codigo).firstResult() != null) {
+        Tenant existing = Tenant.find("codigo = ?1", codigo).firstResult();
+        if (existing != null) {
+            if (canResumeProvision(existing)) {
+                return new CodigoAvailabilityDto(codigo, true, "INCOMPLETE", null);
+            }
             return new CodigoAvailabilityDto(codigo, false, "TAKEN", suggestCodigo(codigo + "-2"));
         }
         return new CodigoAvailabilityDto(codigo, true, null, null);
     }
 
-    @Transactional
+    @Transactional(Transactional.TxType.NOT_SUPPORTED)
     public ProvisionTenantResponse provision(CreateTenantRequest req) {
         requirePlatformOperator();
         validateCreate(req);
         String codigo = normalizeCodigo(req.codigo);
 
         final String tenantNome = req.nome.trim();
-        final long newTenantId = tenantHibernateScope.createTenantRow(codigo, tenantNome);
-        Tenant created = Tenant.findById(newTenantId);
-        tenantModuleService.applyModulos(created, req.modulosHabilitados);
-        created.persist();
-        final String[] generatedHolder = { null };
+        Tenant existing = Tenant.find("codigo = ?1", codigo).firstResult();
+        if (existing != null && (!tenantNome.equals(existing.nome) || !canResumeProvision(existing))) {
+            throw tenantCodeInUse(codigo);
+        }
+        long newTenantId = existing == null
+                ? tenantHibernateScope.createTenantRow(codigo, tenantNome) : existing.id;
+
+        ProvisionTenantResponse result = new ProvisionTenantResponse();
         tenantHibernateScope.runInNewTransaction(newTenantId, () -> {
+            Tenant tenant = entityManager.find(Tenant.class, newTenantId, LockModeType.PESSIMISTIC_WRITE);
+            if (tenant == null || !tenantNome.equals(tenant.nome) || !canResumeProvision(tenant)) {
+                throw tenantCodeInUse(codigo);
+            }
+            tenantModuleService.applyModulos(tenant, req.modulosHabilitados);
             tenantBillingService.initBillingForNewTenant(newTenantId, false);
             createDefaultEmpresaConfig(req, tenantNome, codigo, newTenantId);
+            result.tenant = toDto(tenant);
             if (req.adminEmail != null && !req.adminEmail.isBlank()) {
-                generatedHolder[0] = createInitialAdmin(req, newTenantId);
+                result.adminSenhaTemporaria = createInitialAdmin(req, newTenantId);
+                result.senhaGeradaAutomaticamente = result.adminSenhaTemporaria != null;
+                Usuario admin = usuarioRepository.findByEmailAndOrgTenantId(
+                        req.adminEmail.trim().toLowerCase(Locale.ROOT), newTenantId);
+                result.adminUserId = admin.id;
+                result.adminEmail = admin.email;
+                result.adminCreated = true;
             }
         });
 
-        String adminSenhaTemporaria = generatedHolder[0];
-        boolean senhaGerada = adminSenhaTemporaria != null;
-        Integer adminUserId = null;
-        String adminEmail = null;
-        boolean adminCreated = false;
-
-        if (req.adminEmail != null && !req.adminEmail.isBlank()) {
-            String emailNorm = req.adminEmail.trim().toLowerCase(Locale.ROOT);
-            Usuario admin = usuarioRepository.findByEmailAndOrgTenantId(emailNorm, newTenantId);
-            if (admin != null) {
-                adminUserId = admin.id;
-                adminEmail = admin.email;
-                adminCreated = true;
-            }
-        }
-
-        boolean welcomeEmailSent = false;
-        if (adminCreated && shouldSendWelcome(req)) {
+        if (result.adminCreated && shouldSendWelcome(req)) {
             String nomeAdmin = req.adminNome != null && !req.adminNome.isBlank()
                     ? req.adminNome.trim()
                     : "Administrador";
             Tenant tenant = requireTenant(newTenantId);
-            welcomeEmailSent = dispatchWelcomeEmail(tenant, adminEmail, nomeAdmin, adminSenhaTemporaria);
+            result.welcomeEmailSent = dispatchWelcomeEmail(
+                    tenant, result.adminEmail, nomeAdmin, result.adminSenhaTemporaria);
         }
+        return result;
+    }
 
-        return new ProvisionTenantResponse(
-                toDto(requireTenant(newTenantId)),
-                adminUserId,
-                adminEmail,
-                adminCreated,
-                adminSenhaTemporaria,
-                senhaGerada,
-                welcomeEmailSent);
+    private boolean canResumeProvision(Tenant tenant) {
+        return Boolean.TRUE.equals(tenant.ativo)
+                && tenant.id != TenantConstants.DEFAULT_TENANT_ID
+                && countNative("SELECT COUNT(*) FROM sistema_empresa_config WHERE tenant_id = ?1", tenant.id) == 0
+                && Usuario.count("orgTenantId", tenant.id) == 0;
+    }
+
+    private BadRequestException tenantCodeInUse(String codigo) {
+        return new BadRequestException(
+                com.aerosuite.i18n.ApiI18nMessages.encode(
+                        com.aerosuite.i18n.ApiI18nMessages.TENANT_CODE_IN_USE, "codigo", codigo));
     }
 
     @Transactional
@@ -314,11 +323,6 @@ public class TenantProvisioningService {
             throw new BadRequestException(
                     com.aerosuite.i18n.ApiI18nMessages.encode(
                             com.aerosuite.i18n.ApiI18nMessages.TENANT_RESERVED_CODE, "codigo", codigo));
-        }
-        if (Tenant.find("codigo = ?1", codigo).firstResult() != null) {
-            throw new BadRequestException(
-                    com.aerosuite.i18n.ApiI18nMessages.encode(
-                            com.aerosuite.i18n.ApiI18nMessages.TENANT_CODE_IN_USE, "codigo", codigo));
         }
         if (req.adminSenha != null && !req.adminSenha.isBlank()) {
             PasswordPolicyValidator.requireValid(req.adminSenha);

@@ -410,7 +410,7 @@
             <i class="pi pi-spin pi-spinner"></i> {{ 'tenants.field.codigo.checking' | translate }}
           </div>
           <div class="codigo-status ok" *ngIf="!codigoChecking && codigoAvailable === true">
-            <i class="pi pi-check-circle"></i> {{ 'tenants.field.codigo.available' | translate }}
+            <i class="pi pi-check-circle"></i> {{ codigoStatusLabel | translate }}
           </div>
           <div class="codigo-status err" *ngIf="!codigoChecking && codigoAvailable === false">
             <i class="pi pi-times-circle"></i>
