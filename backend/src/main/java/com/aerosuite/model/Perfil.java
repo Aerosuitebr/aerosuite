@@ -18,8 +18,23 @@ public class Perfil {
     @Column(name = "descricao", length = 255)
     private String descricao;
     
-    @Column(name = "codigo", nullable = false, unique = true, length = 50)
+    @Column(name = "codigo", nullable = false, length = 50)
     private String codigo;
+
+    @Column(name = "owner_tenant_id")
+    private Long ownerTenantId;
+
+    public Long getOwnerTenantId() {
+        return ownerTenantId;
+    }
+
+    public void setOwnerTenantId(Long ownerTenantId) {
+        this.ownerTenantId = ownerTenantId;
+    }
+
+    public boolean disponivelParaTenant(Long tenantId) {
+        return ownerTenantId == null || ownerTenantId.equals(tenantId);
+    }
 
     @Column(name = "ativo", nullable = false)
     private Boolean ativo = true;

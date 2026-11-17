@@ -88,6 +88,8 @@ public class PerfilController {
                     .build();
             }
             return Response.ok(converterParaDTO(perfil)).build();
+        } catch (WebApplicationException e) {
+            throw e;
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST)
                 .entity(Map.of("message", ApiI18nMessages.withDetail(
@@ -115,6 +117,8 @@ public class PerfilController {
             response.put("message", ApiI18nMessages.encode(ApiI18nMessages.PERFIL_DEACTIVATED));
             response.put("id", id);
             return Response.ok(response).build();
+        } catch (WebApplicationException e) {
+            throw e;
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
             error.put("success", false);
@@ -133,6 +137,8 @@ public class PerfilController {
         try {
             perfilService.atribuirFuncionalidades(perfilId, funcionalidadeIds);
             return Response.ok().build();
+        } catch (WebApplicationException e) {
+            throw e;
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST)
                 .entity(Map.of("message", ApiI18nMessages.withDetail(
@@ -150,6 +156,8 @@ public class PerfilController {
                 .map(this::converterFuncionalidadeParaDTO)
                 .collect(Collectors.toList());
             return Response.ok(dtos).build();
+        } catch (WebApplicationException e) {
+            throw e;
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity(Map.of("message", ApiI18nMessages.withDetail(
@@ -165,6 +173,7 @@ public class PerfilController {
         dto.setDescricao(perfil.getDescricao());
         dto.setCodigo(perfil.getCodigo());
         dto.setAtivo(perfil.getAtivo());
+        dto.setEditavel(perfil.getOwnerTenantId() != null);
         dto.setCreatedAt(perfil.getCreatedAt());
         dto.setUpdatedAt(perfil.getUpdatedAt());
         

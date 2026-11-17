@@ -9,6 +9,15 @@ public class PerfilDTO {
     private String descricao;
     private String codigo;
     private Boolean ativo;
+    private boolean editavel;
+
+    public boolean isEditavel() {
+        return editavel;
+    }
+
+    public void setEditavel(boolean editavel) {
+        this.editavel = editavel;
+    }
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Set<Long> funcionalidadeIds;

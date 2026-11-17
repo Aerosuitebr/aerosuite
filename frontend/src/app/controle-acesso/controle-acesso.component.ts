@@ -86,7 +86,7 @@ import { Subscription } from 'rxjs';
                     [label]="'controleAcesso.btn.assign' | translate"
                     class="p-button-outlined btn-assign-feature"
                     size="small"
-                    [disabled]="!perfilSelecionado"
+                    [disabled]="!perfilSelecionado?.editavel"
                     (click)="adicionarFuncionalidadeAoPerfil(funcionalidade)">
                   </button>
                 </div>
@@ -139,7 +139,8 @@ import { Subscription } from 'rxjs';
                 <span class="total-funcionalidades">
                   {{ featuresAssignedLabel(funcionalidadesDoPerfil.length) }}
                 </span>
-                <button 
+                <button
+                  *ngIf="perfilSelecionado.editavel"
                   pButton 
                   type="button" 
                   [label]="'controleAcesso.btn.save' | translate" 
@@ -164,7 +165,8 @@ import { Subscription } from 'rxjs';
                     </div>
                   </div>
                   <div class="funcionalidade-actions">
-                    <button 
+                    <button
+                      *ngIf="perfilSelecionado.editavel"
                       pButton 
                       type="button" 
                       icon="pi pi-times" 

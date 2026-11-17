@@ -60,11 +60,12 @@ public class PermissionProfileService {
         }
 
         Perfil perfil = u.perfil;
-        String perfilCodigo = perfil != null ? perfil.getCodigo() : null;
-        boolean perfilAtivo = perfil == null || Boolean.TRUE.equals(perfil.getAtivo());
+        boolean perfilValido = perfil != null && Boolean.TRUE.equals(perfil.getAtivo())
+                && perfil.disponivelParaTenant(u.orgTenantId);
+        String perfilCodigo = perfilValido ? perfil.getCodigo() : null;
 
         Set<String> codes = new HashSet<>();
-        if (perfil != null && perfilAtivo) {
+        if (perfilValido) {
             codes.addAll(loadPerfilFuncionalidadeCodigos(u));
         }
         codes.addAll(supplementalPermissionSource.extraFuncionalidadeCodigosForUser(u.id));

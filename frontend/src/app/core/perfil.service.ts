@@ -10,6 +10,7 @@ export interface Perfil {
   descricao?: string;
   codigo: string;
   ativo: boolean;
+  editavel?: boolean;
   createdAt: string;
   updatedAt: string;
   funcionalidadeIds?: number[];

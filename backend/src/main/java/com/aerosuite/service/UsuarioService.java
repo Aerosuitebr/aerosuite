@@ -143,7 +143,7 @@ public class UsuarioService {
         
         // Associar perfil se fornecido
         if (dto.perfilId() != null) {
-            Perfil perfil = perfilService.buscarPorId(dto.perfilId().longValue());
+            Perfil perfil = perfilService.buscarAtribuivel(dto.perfilId().longValue());
             if (perfil == null) {
                 throw new IllegalArgumentException(
                         ApiI18nMessages.encode(
@@ -331,15 +331,14 @@ public class UsuarioService {
         if (dto.perfilId() != null) {
             Integer perfilAtualId = e.perfil != null ? e.perfil.getId().intValue() : null;
             if (!dto.perfilId().equals(perfilAtualId)) {
-                Perfil novoPerfil = perfilService.buscarPorId(dto.perfilId().longValue());
-                if (novoPerfil != null) {
-                    e.perfil = novoPerfil;
-                    changed = true;
-                } else {
+                Perfil novoPerfil = perfilService.buscarAtribuivel(dto.perfilId().longValue());
+                if (novoPerfil == null) {
+                    throw new IllegalArgumentException(ApiI18nMessages.encode(
+                            ApiI18nMessages.USER_PROFILE_NOT_FOUND, "id", String.valueOf(dto.perfilId())));
                 }
-            } else {
+                e.perfil = novoPerfil;
+                changed = true;
             }
-        } else {
         }
         
         // Garantir que ativo não seja alterado pelo update normal (só pode ser alterado via delete)
@@ -400,7 +399,7 @@ public class UsuarioService {
         }
         
         // Buscar o perfil
-        Perfil perfil = perfilService.buscarPorId(perfilId.longValue());
+        Perfil perfil = perfilService.buscarAtribuivel(perfilId.longValue());
         if (perfil == null) {
             throw new IllegalArgumentException(
                     ApiI18nMessages.encode(ApiI18nMessages.USER_PROFILE_NOT_FOUND, "id", String.valueOf(perfilId)));

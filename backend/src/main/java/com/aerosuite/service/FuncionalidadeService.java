@@ -10,6 +10,7 @@ import com.aerosuite.p1.TenantModuleCatalog;
 import com.aerosuite.security.InternalUserContext;
 import com.aerosuite.security.PermissionProfileService;
 import com.aerosuite.security.SupplementalPermissionSource;
+import com.aerosuite.security.TenantDataAccess;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -40,6 +41,12 @@ public class FuncionalidadeService {
 
     @Inject
     SupplementalPermissionSource supplementalPermissionSource;
+
+    @Inject
+    PerfilService perfilService;
+
+    @Inject
+    TenantDataAccess tenantDataAccess;
     
     public List<Funcionalidade> listarTodas() {
         return entityManager.createQuery(
@@ -120,6 +127,9 @@ public class FuncionalidadeService {
 
 
     public List<Funcionalidade> listarPorPerfil(Long perfilId) {
+        if (perfilService.buscarPorId(perfilId) == null) {
+            return List.of();
+        }
         // Usar SQL nativo para garantir que buscamos diretamente do banco, sem cache
         // Isso evita problemas com cache do Hibernate/JPA
         @SuppressWarnings("unchecked")
@@ -172,16 +182,21 @@ public class FuncionalidadeService {
      * Lista funcionalidades por usuário baseado no perfil do usuário
      */
     public List<Funcionalidade> listarPorUsuario(Long usuarioId) {
+        return listarPorUsuario(usuarioId, tenantDataAccess.currentTenantId());
+    }
+
+    private List<Funcionalidade> listarPorUsuario(Long usuarioId, Long tenantId) {
         return entityManager.createQuery(
             "SELECT f FROM Usuario u " +
             "JOIN u.perfil p " +
             "JOIN p.funcionalidades f " +
-            "WHERE u.id = :usuarioId " +
+            "WHERE u.id = :usuarioId AND u.orgTenantId = :tenantId " +
+            "AND p.ativo = true AND (p.ownerTenantId IS NULL OR p.ownerTenantId = :tenantId) " +
             "AND f.ativo = true " +
             "AND f.visivel = true " +
             "ORDER BY f.secao, f.posicao",
             Funcionalidade.class
-        ).setParameter("usuarioId", usuarioId.intValue()).getResultList();
+        ).setParameter("usuarioId", usuarioId.intValue()).setParameter("tenantId", tenantId).getResultList();
     }
 
     /**
@@ -214,7 +229,8 @@ public class FuncionalidadeService {
         }
         List<Funcionalidade> menu = new ArrayList<>();
         Perfil perfil = usuario.perfil;
-        if (perfil != null && perfil.getId() != null && Boolean.TRUE.equals(perfil.getAtivo())) {
+        if (perfil != null && perfil.getId() != null && Boolean.TRUE.equals(perfil.getAtivo())
+                && perfil.disponivelParaTenant(usuario.orgTenantId)) {
             if (perfil.getFuncionalidades() != null && Hibernate.isInitialized(perfil.getFuncionalidades())) {
                 for (Funcionalidade f : perfil.getFuncionalidades()) {
                     if (f != null
@@ -224,7 +240,7 @@ public class FuncionalidadeService {
                     }
                 }
             } else {
-                menu.addAll(listarPorUsuario(usuario.id.longValue()));
+                menu.addAll(listarPorUsuario(usuario.id.longValue(), usuario.orgTenantId));
             }
         }
         Set<String> have = menu.stream()
@@ -314,24 +330,6 @@ public class FuncionalidadeService {
     
     @Transactional
     public void atribuirFuncionalidades(Long perfilId, Set<Long> funcionalidadeIds) {
-        Perfil perfil = entityManager.find(Perfil.class, perfilId);
-        if (perfil == null) {
-            throw new RuntimeException(ApiI18nMessages.encode(ApiI18nMessages.USER_PROFILE_NOT_FOUND_GENERIC));
-        }
-        
-        // Limpar funcionalidades existentes
-        perfil.getFuncionalidades().clear();
-        
-        // Adicionar novas funcionalidades
-        if (funcionalidadeIds != null && !funcionalidadeIds.isEmpty()) {
-            List<Funcionalidade> funcionalidades = entityManager.createQuery(
-                "SELECT f FROM Funcionalidade f WHERE f.id IN :ids AND f.ativo = true", 
-                Funcionalidade.class
-            ).setParameter("ids", funcionalidadeIds).getResultList();
-            
-            perfil.getFuncionalidades().addAll(funcionalidades);
-        }
-        
-        entityManager.merge(perfil);
+        perfilService.atribuirFuncionalidades(perfilId, funcionalidadeIds == null ? null : List.copyOf(funcionalidadeIds));
     }
 }

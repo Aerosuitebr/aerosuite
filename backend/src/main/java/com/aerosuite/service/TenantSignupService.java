@@ -129,7 +129,7 @@ public class TenantSignupService {
             throw new BadRequestException(ApiI18nMessages.encode(ApiI18nMessages.TENANT_SIGNUP_EMAIL_EXISTS));
         }
         Perfil perfilAdmin = entityManager
-                .createQuery("SELECT p FROM Perfil p WHERE p.codigo = :codigo AND p.ativo = true", Perfil.class)
+                .createQuery("SELECT p FROM Perfil p WHERE p.ownerTenantId IS NULL AND p.codigo = :codigo AND p.ativo = true", Perfil.class)
                 .setParameter("codigo", "ADMIN")
                 .getResultStream()
                 .findFirst()

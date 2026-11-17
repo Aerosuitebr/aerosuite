@@ -114,7 +114,7 @@ import { ListDataStatesComponent } from '../shared/list-data-states/list-data-st
                 </p-tag>
               </td>
               <td>
-                <div class="actions">
+                <div class="actions" *ngIf="perfil.editavel">
                   <button 
                     pButton 
                     type="button" 
