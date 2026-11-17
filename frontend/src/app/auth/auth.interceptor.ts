@@ -133,6 +133,8 @@ export class AuthInterceptor implements HttpInterceptor {
         !isPublicAuthRequest &&
         !!opsToken &&
         (isPlatformControlApi || isPlatformTenantApi || isPlatformOpsElevatedApi);
+    const useTenantSupportBearer = !usePlatformOpsBearer && !useExternalBearer
+      && isInternalApi && !isPublicAuthRequest && authService.hasTenantSupportSession();
 
     if (useExternalBearer || useInternalBearer || usePlatformOpsBearer) {
       const token = usePlatformOpsBearer
@@ -185,8 +187,10 @@ export class AuthInterceptor implements HttpInterceptor {
         // Não redirecionar para login se for uma requisição de autenticação (login, forgot-password, etc)
         // O 401 durante o login é esperado quando as credenciais estão incorretas
         if (error.status === 401 && !isPublicAuthRequest && !isPlatformOpsAuthRequest) {
-          if (authService.hasTenantSupportSession() && !usePlatformOpsBearer) {
-            authService.leaveTenantSupport();
+          if (useTenantSupportBearer) {
+            if (authService.hasTenantSupportSession()) {
+              authService.leaveTenantSupport();
+            }
             return throwError(() => error);
           }
           const onExternoRoute = this.router.url.startsWith('/externo');

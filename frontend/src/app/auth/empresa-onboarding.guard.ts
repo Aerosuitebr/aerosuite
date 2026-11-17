@@ -2,12 +2,16 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { catchError, map, of } from 'rxjs';
 import { SistemaEmpresaService } from '../core/sistema-empresa.service';
+import { AuthService } from './auth.service';
 
 /**
  * Se a empresa ainda não concluiu o assistente e o utilizador é administrativo,
  * redireciona para a configuração inicial antes do layout principal.
  */
 export const empresaOnboardingGuard: CanActivateFn = (_route, state) => {
+  if (inject(AuthService).getCurrentUser()?.tenantSupport) {
+    return true;
+  }
   const api = inject(SistemaEmpresaService);
   const router = inject(Router);
   const path = (state.url || '').split('?')[0];
