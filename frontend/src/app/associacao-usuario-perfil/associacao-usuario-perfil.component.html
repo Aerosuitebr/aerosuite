@@ -94,17 +94,17 @@
   </section>
 </div>
 
-<p-sidebar [(visible)]="gavetaAberta" position="right" [style]="{ width: 'min(35rem, 100vw)' }"
-           [dismissible]="false" [showCloseIcon]="!salvando" [closeOnEscape]="!salvando" styleClass="matriz-gaveta">
+<p-sidebar [(visible)]="gavetaAberta" position="right" appendTo="body" [style]="{ width: 'min(35rem, 100vw)' }"
+           [dismissible]="false" [showCloseIcon]="!salvando" [closeOnEscape]="!salvando">
   <ng-template pTemplate="header">
-    <h2>{{ (key + (podeEditar ? 'matrix.drawerTitle' : 'matrix.linked')) | translate }}</h2>
+    <h2 class="matriz-gaveta-titulo">{{ (key + (podeEditar ? 'matrix.drawerTitle' : 'matrix.linked')) | translate }}</h2>
   </ng-template>
   <div class="matriz-gaveta-corpo">
     <div *ngIf="!selecionado" class="matriz-campo">
       <label for="usuarioVinculo">{{ (key + 'dialog.user') | translate }}</label>
       <p-dropdown inputId="usuarioVinculo" [options]="usuarios" optionLabel="nome" [filter]="true"
                   filterBy="nome,email" (onChange)="selecionar($event.value)"
-                  [placeholder]="(key + 'dialog.userPh') | translate" appendTo="body">
+                  [placeholder]="(key + 'dialog.userPh') | translate" appendTo="body" [overlayOptions]="{ autoZIndex: true }">
         <ng-template pTemplate="item" let-usuario>
           <div class="matriz-opcao"><strong>{{ usuario.nome }}</strong><small>{{ usuario.email }}</small></div>
         </ng-template>
@@ -121,7 +121,7 @@
         <label for="adicionarPerfis">{{ (key + 'matrix.add') | translate }}</label>
         <p-multiSelect inputId="adicionarPerfis" [options]="disponiveis" [(ngModel)]="novosIds" optionLabel="nome"
                        optionValue="id" [filter]="true" filterBy="nome,descricao" [showToggleAll]="false" appendTo="body"
-                       [disabled]="salvando" (onChange)="adicionar($event.value)"
+                       [overlayOptions]="{ autoZIndex: true }" [disabled]="salvando" (onChange)="adicionar($event.value)"
                        [placeholder]="(key + 'matrix.selectProfiles') | translate">
           <ng-template pTemplate="item" let-perfil>
             <div class="matriz-opcao"><strong>{{ perfil.nome }}</strong><small *ngIf="perfil.descricao">{{ perfil.descricao }}</small></div>
