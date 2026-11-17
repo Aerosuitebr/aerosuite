@@ -15,7 +15,7 @@ interface RascunhoEtapa extends FluxoEtapaEdicao { chave: number; }
   imports: [CommonModule, FormsModule, DragDropModule, DialogModule, ButtonModule, InputTextModule],
   styleUrls: ['./os-fluxo-editor-etapas.component.css'],
   template: `
-    <p-dialog styleClass="flow-editor" [visible]="true" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body"
+    <p-dialog styleClass="flow-editor" [baseZIndex]="11000" [visible]="true" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body"
       header="Editar etapas do fluxo" [style]="{width:'1080px',maxWidth:'96vw'}" [closable]="!salvando" [closeOnEscape]="!salvando" (onHide)="fechar.emit()">
       <div class="flow-editor-intro"><span><i class="pi pi-sort-alt" aria-hidden="true"></i> Sequência de trabalho</span><h3>Organize o caminho de cada OS</h3><p>Arraste pelo ícone à esquerda ou use as setas. Edite os dados e insira novas etapas na posição desejada.</p></div>
       <div class="flow-impact"><i class="pi pi-info-circle" aria-hidden="true"></i><p>As mudanças valem para as etapas pendentes das OS em andamento. Etapas já realizadas não serão repetidas e OS concluídas permanecem concluídas. Os códigos de barras das etapas existentes são mantidos.</p></div>

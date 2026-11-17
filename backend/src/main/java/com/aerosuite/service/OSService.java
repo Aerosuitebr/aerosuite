@@ -55,6 +55,7 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class OSService {
+    @Inject FerramentaService ferramentas;
     @Inject OperacaoProntidaoGuard operacaoProntidao;
     @Inject OsAccessPolicy osAccess;
 
@@ -652,6 +653,16 @@ public class OSService {
         return result;
     }
 
+    private void conferirFerramentas(OS os) {
+        OS.getEntityManager().lock(os, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
+        ferramentas.exigirOsSemPendencias(os.id);
+    }
+
+    private void conferirFechamento(OS os) {
+        conferirFerramentas(os);
+        operacaoProntidao.conferir(os.id, "ENTREGA");
+    }
+
     @Transactional
     public OSDto update(Long id, OSDto dto) {
         
@@ -670,7 +681,7 @@ public class OSService {
                     entity.tipoServico = tipo.nome;
                 }
                 entity.inicioServico = dto.inicioServico; entity.fimServico = dto.fimServico;
-                if (dto.dataFechamento != null) operacaoProntidao.conferir(entity.id, "ENTREGA");
+                if (dto.dataFechamento != null) conferirFechamento(entity);
                 entity.dataFechamento = dto.dataFechamento;
             } else {
                 entity.manualPn = dto.manualPn; entity.numRevisao = dto.numRevisao; entity.dataRevManual = dto.dataRevManual;
@@ -699,7 +710,8 @@ public class OSService {
         // Salvar o valor atual de isActive antes do update
         Boolean currentIsActive = entity.isActive;
         entity.jaEditada = true;
-        if (dto.dataFechamento != null) operacaoProntidao.conferir(entity.id, "ENTREGA");
+        if (dto.dataFechamento != null) conferirFechamento(entity);
+        else if (dto.dataConclusaoServ != null && entity.dataConclusaoServ == null) conferirFerramentas(entity);
         mapper.updateEntityFromDto(dto, entity);
         entity.updatedAt = LocalDateTime.now();
         // Restaurar o valor de isActive (não permitir alterar diretamente pelo update normal)

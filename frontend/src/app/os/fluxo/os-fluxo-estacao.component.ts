@@ -1,3 +1,4 @@
+import { obterTerminalId } from '../../core/terminal-id';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -63,24 +64,8 @@ interface Feedback {
 
 const STORAGE_KEY = 'osFluxo.estacao.v1';
 const STORAGE_VISAO = 'osFluxo.estacao.visaoFila';
-const STORAGE_TERMINAL = 'osFluxo.terminalId';
 const CODIGO_CANCELAR = 'XCANCELAR';
 const TIMEOUT_PENDENCIA_SEG = 45;
-
-/** Identificador desta máquina, gerado uma vez e guardado no navegador (crypto.randomUUID exige HTTPS). */
-function obterTerminalId(): string {
-  const gerar = () => `T${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}${Math.random().toString(36).slice(2, 10)}`;
-  try {
-    let id = localStorage.getItem(STORAGE_TERMINAL);
-    if (!id || !/^[A-Za-z0-9-]{8,64}$/.test(id)) {
-      id = gerar();
-      localStorage.setItem(STORAGE_TERMINAL, id);
-    }
-    return id;
-  } catch {
-    return gerar();
-  }
-}
 
 @Component({
   standalone: true,
@@ -2455,7 +2440,7 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
     this.api.estacoes(this.terminalId).subscribe({
       next: (r) => {
         this.carregandoEstacoes = false;
-        this.estacoes = r?.estacoes || [];
+        this.estacoes = (r?.estacoes || []).filter(e => e.codigo !== 'FERRAMENTARIA');
         if (resolver) this.resolverEstacao(r?.estacaoDesteTerminal ?? null, r?.maquinaDesteTerminal ?? null);
       },
       error: () => {
@@ -2466,6 +2451,10 @@ export class OsFluxoEstacaoComponent implements OnInit, OnDestroy {
   }
 
   private resolverEstacao(codigoServidor: string | null, maquina: string | null): void {
+    if (codigoServidor === 'FERRAMENTARIA') {
+      void this.router.navigate(['/ferramentas'], { replaceUrl: true });
+      return;
+    }
     const doServidor = codigoServidor ? this.estacoes.find(e => e.codigo === codigoServidor) : null;
     if (doServidor) {
       this.aplicarEstacao(doServidor, undefined, maquina);

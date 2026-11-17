@@ -47,7 +47,7 @@ public class VertxCorsFilter {
                         // Usar putHeader (substitui) para garantir valores corretos
                         response.putHeader("Access-Control-Allow-Origin", originHeader);
                         response.putHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH");
-                        response.putHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, Last-Event-ID");
+                        response.putHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Terminal-Id, Cache-Control, Last-Event-ID");
                         response.putHeader("Access-Control-Allow-Credentials", "true");
                         response.putHeader("Access-Control-Max-Age", "3600");
                         

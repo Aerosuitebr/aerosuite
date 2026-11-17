@@ -17,6 +17,17 @@ public class OsFluxoEstacaoService {
     @Inject InternalUserContext user;
     @Inject OsFluxoService fluxo;
     private static final SecureRandom RANDOM=new SecureRandom();
+    public static final String FERRAMENTARIA = "FERRAMENTARIA";
+    public record TerminalInfo(boolean vinculada, boolean ferramentaria, String terminalId, String estacaoCodigo, String estacaoNome, String maquina) {}
+
+    public TerminalInfo terminalInfo(String id) {
+        OsFluxoTerminal t = id != null && id.matches("[A-Za-z0-9-]{8,64}") ? terminal(id) : null;
+        if (t == null || !Boolean.TRUE.equals(t.ativa)) return new TerminalInfo(false, false, id, null, null, null);
+        Estacao e = catalogo().stream().filter(st -> st.codigo.equals(t.estacaoCodigo)).findFirst().orElse(null);
+        return e == null ? new TerminalInfo(false, false, id, null, null, null)
+            : new TerminalInfo(true, FERRAMENTARIA.equals(e.codigo), id, e.codigo, nome(e), t.apelido);
+    }
+
     private record Estacao(String codigo,String nome,String setor,int ordem,String cor,List<Long> etapas) {}
     private void gestao() {
         if(!Set.of("ADMIN","ADMINISTRADOR","DIRETOR").contains(Objects.toString(user.getPerfilCodigo(),""))&&!user.hasFuncionalidadeCodigo("OS_FLUXO_ESTACOES"))
@@ -39,7 +50,7 @@ public class OsFluxoEstacaoService {
             if(Boolean.FALSE.equals(e.ativa)) {list.removeIf(s->s.codigo.equals(e.codigo));continue;}
             Estacao padrao=list.stream().filter(st->st.codigo.equals(e.codigo)).findFirst().orElse(null);
             String setor=e.setor!=null?e.setor:padrao==null?null:padrao.setor;
-            if(e.etapaIds!=null||setores.containsKey(setor)) {
+            if(!FERRAMENTARIA.equals(e.codigo)&&(e.etapaIds!=null||setores.containsKey(setor))) {
                 List<OsFluxoEtapa> etapas=e.etapaIds==null?setores.get(setor).stream().filter(et->Boolean.TRUE.equals(et.ativo)).toList():todasEtapas.stream()
                     .filter(et->Arrays.asList(e.etapaIds.split(",")).contains(et.id.toString())).toList();
                 list.removeIf(st->st.codigo.equals(e.codigo));
@@ -47,13 +58,14 @@ public class OsFluxoEstacaoService {
                     etapas.isEmpty()?null:etapas.get(0).cor,etapas.stream().map(et->et.id).toList()));
             }
         }
+        list.add(new Estacao(FERRAMENTARIA, "Ferramentaria", null, ++ordem, "#0369a1", List.of()));
         return list;
     }
     private Estacao estacao(String codigo) {return catalogo().stream().filter(e->e.codigo.equals(codigo)).findFirst().orElseThrow(()->new BadRequestException("Estação inválida."));}
     private String nome(Estacao e) {OsFluxoEstacaoNome custom=OsFluxoEstacaoNome.find("codigo",e.codigo).firstResult();return custom==null?e.nome:custom.nome;}
     private void validarTerminal(String terminal) {if(terminal==null||!terminal.matches("[A-Za-z0-9-]{8,64}"))throw new BadRequestException("Terminal inválido.");}
     private OsFluxoTerminal terminal(String id) {validarTerminal(id);return OsFluxoTerminal.find("terminalId",id).firstResult();}
-    public void exigirPareada(String terminal) {OsFluxoTerminal t=terminal(terminal);if(t==null||!Boolean.TRUE.equals(t.ativa)||t.estacaoCodigo==null||catalogo().stream().noneMatch(e->e.codigo.equals(t.estacaoCodigo)))throw new ForbiddenException("Máquina não pareada. Solicite o pareamento à gestão.");}
+    public void exigirPareada(String terminal) {OsFluxoTerminal t=terminal(terminal);if(t!=null&&Boolean.TRUE.equals(t.ativa)&&FERRAMENTARIA.equals(t.estacaoCodigo)) throw new ForbiddenException("Esta máquina está vinculada à Ferramentaria.");if(t==null||!Boolean.TRUE.equals(t.ativa)||t.estacaoCodigo==null||catalogo().stream().noneMatch(e->e.codigo.equals(t.estacaoCodigo)))throw new ForbiddenException("Máquina não pareada. Solicite o pareamento à gestão.");}
     @Transactional
     public void anotarOrigem(String terminalId, String ip, String agent) { OsFluxoTerminal t=terminal(terminalId); if(t!=null) anotarOrigem(t, ip, agent); }
     /** A Estação de Bipagem consulta a fila a cada 30 s. Isso mantém o último acesso e o IP, como o pulso do Bellows. */
@@ -86,7 +98,7 @@ public class OsFluxoEstacaoService {
         List<Map<String,Object>> result=catalogo().stream().map(e->{
             List<OsFluxoTerminal> ts=terminais.stream().filter(t->e.codigo.equals(t.estacaoCodigo)).toList();
             OsFluxoTerminal ultimo=ts.stream().filter(t->t.ultimoAcesso!=null).max(Comparator.comparing(t->t.ultimoAcesso)).orElse(null);
-            return map("codigo",e.codigo,"nome",nome(e),"setor",e.setor,"ordem",e.ordem,"cor",e.cor,"etapaIds",e.etapas,
+            return map("codigo",e.codigo,"nome",nome(e),"setor",e.setor,"ordem",e.ordem,"cor",e.cor,"ferramentaria",FERRAMENTARIA.equals(e.codigo),"etapaIds",e.etapas,
                     "desteTerminal",atual!=null&&Boolean.TRUE.equals(atual.ativa)&&e.codigo.equals(atual.estacaoCodigo),
                     "emUso",ultimo!=null&&ultimo.ultimoAcesso.isAfter(LocalDateTime.now().minusMinutes(15)),"emUsoPor",ultimo==null?null:ultimo.usuarioNome,
                     "ultimoAcesso",ultimo==null?null:ultimo.ultimoAcesso,"terminais",ts.size());
@@ -98,7 +110,7 @@ public class OsFluxoEstacaoService {
     public Map<String,Object> gestaoEstacoes() {
         gestao();catalogo().forEach(e->monitor(e.codigo));List<OsFluxoTerminal> ts=OsFluxoTerminal.list("ativa = true order by estacaoCodigo, apelido");
         return map("versaoFluxo",versaoFluxo(fluxo.etapas()),"etapasDisponiveis",fluxo.etapas().stream().map(et->map("id",et.id,"nome",et.nome,"setor",et.setor,"ordem",et.ordem,"cor",et.cor,"metaMinutos",et.metaMinutos)).toList(),"setores",setores(),"estacoes",catalogo().stream().map(e->map("codigo",e.codigo,"nome",nome(e),"nomePadrao",e.nome,"nomePersonalizado",!nome(e).equals(e.nome),
-                "monitoradoDesde",monitor(e.codigo).monitoradoDesde,"semVinculoDesde",monitor(e.codigo).semVinculoDesde,"setor",e.setor,"cor",e.cor,"etapaIds",e.etapas,"etapas",fluxo.etapas().stream().filter(et->e.etapas.contains(et.id)).map(et->et.nome).toList(),"maquinas",ts.stream().filter(t->e.codigo.equals(t.estacaoCodigo)).count())).toList(),
+                "monitoradoDesde",monitor(e.codigo).monitoradoDesde,"semVinculoDesde",monitor(e.codigo).semVinculoDesde,"setor",e.setor,"cor",e.cor,"ferramentaria",FERRAMENTARIA.equals(e.codigo),"etapaIds",e.etapas,"etapas",fluxo.etapas().stream().filter(et->e.etapas.contains(et.id)).map(et->et.nome).toList(),"maquinas",ts.stream().filter(t->e.codigo.equals(t.estacaoCodigo)).count())).toList(),
                 "pendentes",OsFluxoTerminal.<OsFluxoTerminal>list("ativa = false and expiraEm > ?1",LocalDateTime.now()).stream().map(t->map("terminalId",t.terminalId,"usuarioNome",t.usuarioNome,"userAgent",t.userAgent,"ip",t.ip,"ultimoAcesso",t.ultimoAcesso,"expiraEm",t.expiraEm)).toList(),"maquinas",ts.stream().map(t->map("terminalId",t.terminalId,"apelido",t.apelido,"estacaoCodigo",t.estacaoCodigo,"estacaoNome",nome(estacao(t.estacaoCodigo)),
                         "usuarioNome",t.usuarioNome,"ip",t.ip,"userAgent",t.userAgent,"vinculadoEm",t.vinculadoEm,"ultimoAcesso",t.ultimoAcesso,"ativa",t.ativa)).toList());
     }
@@ -121,6 +133,7 @@ public class OsFluxoEstacaoService {
     }
     @Transactional
     public Map<String,Object> atualizarEstacao(String codigo,String nome,String setor,List<Long> etapaIds) {
+        if(FERRAMENTARIA.equals(codigo)) return renomear(codigo,nome);
         gestao();Estacao original=estacao(codigo);
         nome=validarNome(nome);
         if(setor==null||!setores().contains(setor)) throw new BadRequestException("Escolha um setor válido.");
@@ -225,6 +238,7 @@ public class OsFluxoEstacaoService {
     @Transactional
     public Map<String,Object> excluirEstacao(String codigo) {
         gestao();Estacao original=estacao(codigo);
+        if(FERRAMENTARIA.equals(codigo)) throw new ForbiddenException("A estação Ferramentaria é permanente.");
         if(OsFluxoTerminal.count("estacaoCodigo = ?1 and ativa = true",codigo)>0)
             throw new ClientErrorException("Reatribua ou remova as máquinas vinculadas antes de excluir a estação.",409);
         OsFluxoEstacaoNome e=OsFluxoEstacaoNome.find("codigo",codigo).firstResult();
@@ -238,6 +252,14 @@ public class OsFluxoEstacaoService {
         estacao(codigo);if(apelido!=null&&apelido.length()>120)throw new BadRequestException("Apelido muito longo.");
         String anterior=Boolean.TRUE.equals(t.ativa)?t.estacaoCodigo:null;
         bloquearEstacoes(anterior,codigo);
+        String nomeMaquina = apelido == null ? null : apelido.trim().replaceAll("\\s+", " ");
+        if (FERRAMENTARIA.equals(codigo) && (nomeMaquina == null || nomeMaquina.isEmpty()))
+            throw new BadRequestException("Informe o nome do balcão.");
+        if (nomeMaquina != null && !nomeMaquina.isEmpty() && OsFluxoTerminal.count(
+                "estacaoCodigo = ?1 and ativa = true and terminalId <> ?2 and lower(trim(apelido)) = lower(?3)",
+                codigo, t.terminalId, nomeMaquina) > 0)
+            throw new ClientErrorException("Já existe uma máquina com este nome na estação.", 409);
+        apelido = nomeMaquina;
         t.estacaoCodigo=codigo;t.apelido=apelido;t.usuarioNome=user.getNome();t.ativa=true;t.codigoPareamento=null;t.expiraEm=null;
         if(!Objects.equals(anterior,codigo))t.vinculadoEm=LocalDateTime.now();
         registrar(t,anterior,codigo,Objects.equals(anterior,codigo)?"ATUALIZADO":anterior==null?"VINCULADO":"TRANSFERIDO");

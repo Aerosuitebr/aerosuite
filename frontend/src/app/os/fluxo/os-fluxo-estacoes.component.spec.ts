@@ -17,6 +17,18 @@ function tela(): any {
 }
 
 describe('Gestão de estações', () => {
+  it('preserva o formulário ao atualizar o fluxo e remove somente seleções excluídas', () => {
+    const c = tela();
+    Object.assign(c, { mostrarEstacao: true, estacaoNome: 'Bancada nova', estacaoSetor: 'Oficina', estacaoEtapaIds: [3, 4], buscaEtapas: 'Montagem', somenteSelecionadas: true });
+    c.aplicarFluxoEditado({ ...dados, etapasDisponiveis: [{ id: 3, nome: 'Montagem revisada', setor: 'Oficina', ordem: 1 }] });
+    expect(c.mostrarEstacao).toBe(true);
+    expect(c.estacaoNome).toBe('Bancada nova');
+    expect(c.estacaoSetor).toBe('Oficina');
+    expect(c.estacaoEtapaIds).toEqual([3]);
+    expect(c.buscaEtapas).toBe('Montagem');
+    expect(c.somenteSelecionadas).toBe(true);
+  });
+
   it('edita o nome em um rascunho e permite cancelar sem salvar', () => {
     const c = tela();
     c.editarNome(estacao);

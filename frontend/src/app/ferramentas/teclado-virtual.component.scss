@@ -1,0 +1,29 @@
+:host { display: block; min-width: 0; }
+* { box-sizing: border-box; }
+.virtual-keyboard { padding: 12px; border: 1px solid #cbd5e1; border-radius: 12px; background: #f1f5f9; color: #334155; font-family: 'IBM Plex Sans','Segoe UI',sans-serif; }
+header,header > div { display: flex; align-items: center; gap: 8px; }
+header { justify-content: space-between; margin-bottom: 10px; }
+header strong { font-size: 13px; }
+header > div > i { color: #0284c7; }
+button { cursor: pointer; font: inherit; border: 1px solid #cbd5e1; border-radius: 7px; min-width: 0; min-height: 48px; padding: 8px 4px; background: #fff; color: #334155; touch-action: manipulation; user-select: none; }
+button:hover { border-color: #38bdf8; background: #f0f9ff; }
+button:active { background: #bae6fd; }
+button:focus-visible { outline: 3px solid #38bdf8; outline-offset: 2px; }
+header > button { width: 44px; min-height: 44px; background: transparent; border-color: transparent; }
+.keyboard-modes { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 10px; }
+.keyboard-modes button { padding: 7px 12px; font-size: 12px; min-height: 44px; }
+.keyboard-modes span { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #64748b; margin-left: auto; }
+button.active { background: #e0f2fe; border-color: #7dd3fc; color: #0369a1; }
+.keyboard-row { display: grid; gap: 5px; margin-bottom: 6px; }
+.keyboard-row button { font-size: 16px; font-weight: 600; }
+.keyboard-actions { display: flex; gap: 5px; margin-top: 9px; }
+.keyboard-actions button { flex: 1; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+.keyboard-actions .keyboard-enter { background: #0284c7; color: #fff; border-color: #0284c7; }
+@media(max-width:600px) {
+  .virtual-keyboard { padding: 9px; }
+  .keyboard-row { gap: 3px; }
+  .keyboard-row button { font-size: 14px; padding: 6px 0; }
+  .keyboard-actions { flex-wrap: wrap; }
+  .keyboard-actions button { flex: 1 1 35%; }
+  .keyboard-modes span { width: 100%; margin: 0; font-size: 11px; }
+}

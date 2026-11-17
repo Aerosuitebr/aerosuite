@@ -1,0 +1,29 @@
+<main class="personal-tools">
+  <header class="hero">
+    <div><p class="eyebrow">FERRAMENTARIA · CONSULTA PESSOAL</p><h1>Minhas ferramentas</h1><p>{{ nome }}, acompanhe os exemplares registrados sob sua responsabilidade.</p></div>
+    <div class="hero-actions">
+      <a *ngIf="operador" routerLink="/ferramentas" class="hero-button"><i class="pi pi-arrow-left" aria-hidden="true"></i> Acessar ferramentaria</a>
+      <button type="button" (click)="carregar()" [disabled]="carregando"><i class="pi pi-sync" [class.pi-spin]="carregando" aria-hidden="true"></i> {{ carregando ? 'Atualizando…' : 'Atualizar' }}</button>
+    </div>
+  </header>
+  <section class="flow-note" aria-label="Como funciona"><i class="pi pi-info-circle" aria-hidden="true"></i><div><strong>A movimentação é feita pela ferramentaria</strong><p>Retiradas, devoluções, transferências e ajustes de prazo são registrados pelo responsável do setor. Para devolver um item, solicitar uma alteração ou informar uma avaria, procure a ferramentaria. Não é necessário confirmar recebimentos nesta tela.</p></div></section>
+  <p class="error" *ngIf="erro" role="alert">{{ erro }}</p>
+  <p class="sync" role="status">{{ sincronizado ? 'Última atualização: '+(sincronizado | date:'dd/MM/yyyy · HH:mm:ss') : carregando ? 'Consultando suas ferramentas…' : 'Consulta ainda não disponível' }} · Horário de São Paulo</p>
+  <section class="summary" aria-label="Resumo das suas ferramentas" [attr.aria-busy]="carregando">
+    <div><span>Sob sua responsabilidade</span><strong>{{ sincronizado ? itens.length : '—' }}</strong></div>
+    <div><span>Retorno em atraso</span><strong>{{ sincronizado ? atrasadas : '—' }}</strong></div>
+    <div><span>Recolhimento ou restrição</span><strong>{{ sincronizado ? recolher : '—' }}</strong></div>
+  </section>
+  <section class="inventory" aria-labelledby="personal-list-title">
+    <h2 id="personal-list-title">Ferramentas comigo</h2>
+    <div class="filters"><label>Buscar ferramenta ou OS<input [(ngModel)]="busca" placeholder="Código, descrição, série ou OS"></label><label>Situação<select [(ngModel)]="filtro"><option value="TODOS">Todas</option><option value="ATRASADAS">Retorno em atraso</option><option value="RECOLHER">Recolhimento ou restrição</option></select></label></div>
+    <p role="status" *ngIf="sincronizado">{{ filtrados.length }} {{ filtrados.length === 1 ? 'ferramenta encontrada' : 'ferramentas encontradas' }}</p>
+    <div class="tools-grid"><article class="tool-card" *ngFor="let i of filtrados" [class.attention]="i.atrasada || i.recolher || i.restricao">
+      <div class="tool-title"><span class="code">{{ i.ferramenta.codigo }}</span><span class="badge" [class.warning]="i.recolher || i.restricao">{{ i.recolher || i.restricao ? 'Não utilizar' : 'Sob sua responsabilidade' }}</span></div>
+      <h3>{{ i.ferramenta.descricao }}</h3><p *ngIf="i.ferramenta.serie">Série: {{ i.ferramenta.serie }}</p>
+      <dl><div><dt>Ordem de serviço</dt><dd>OS {{ i.osNumero }}</dd></div><div><dt>Localização registrada</dt><dd>{{ i.localizacao || i.custodia?.localizacao || 'Não informada' }}</dd></div><div><dt>Retirada registrada em</dt><dd>{{ i.custodia?.retiradaEm | date:'dd/MM/yyyy · HH:mm' }}</dd></div><div><dt>Previsão de devolução</dt><dd [class.overdue]="i.atrasada">{{ i.custodia?.retornoPrevisto | date:'dd/MM/yyyy · HH:mm' }}<span *ngIf="i.atrasada">Retorno em atraso · procure a ferramentaria</span></dd></div><div><dt>Registrado por</dt><dd>{{ i.entreguePor || 'Ferramentaria' }}</dd></div><div *ngIf="i.ferramenta.exigeCalibracao"><dt>Validade da calibração</dt><dd>{{ i.ferramenta.proximaCalibracao ? (i.ferramenta.proximaCalibracao | date:'dd/MM/yyyy') : 'Sem calibração aprovada' }}</dd></div></dl>
+      <p class="restriction" *ngIf="i.recolher || i.restricao" role="status"><i class="pi pi-exclamation-triangle" aria-hidden="true"></i> {{ i.restricao || 'Recolhimento necessário.' }} Suspenda o uso e procure a ferramentaria.</p>
+    </article></div>
+    <div class="empty" *ngIf="sincronizado && !filtrados.length"><i class="pi pi-wrench" aria-hidden="true"></i><h3>{{ itens.length ? 'Nenhuma ferramenta neste filtro' : 'Você não tem ferramentas sob sua responsabilidade' }}</h3><p>{{ itens.length ? 'Ajuste a busca ou a situação selecionada.' : 'Os itens aparecem aqui após o registro da retirada pela ferramentaria.' }}</p></div>
+  </section>
+</main>

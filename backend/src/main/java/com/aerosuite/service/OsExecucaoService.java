@@ -15,6 +15,7 @@ import java.util.*;
 
 @ApplicationScoped
 public class OsExecucaoService {
+    @Inject FerramentaService ferramentas;
     @Inject OperacaoProntidaoGuard operacaoProntidao;
     @Inject TenantDataAccess tenants;
     @Inject InternalUserContext user;
@@ -66,7 +67,10 @@ public class OsExecucaoService {
         if (acao.equals("iniciar")) { operacaoProntidao.conferir(os.id, "EXECUCAO"); os.execucaoIniciadaEm = agora; }
         if (acao.equals("pausar")) os.execucaoPausadaEm = agora;
         if (acao.equals("retomar")) os.execucaoPausadaEm = null;
-        if (acao.equals("finalizar")) os.execucaoFinalizadaEm = agora;
+        if (acao.equals("finalizar")) {
+            ferramentas.exigirOsSemPendencias(os.id);
+            os.execucaoFinalizadaEm = agora;
+        }
         os.statusExecucao = destino;
         evento(os, acao.toUpperCase(Locale.ROOT), observacao);
         return mapper.toDto(os);

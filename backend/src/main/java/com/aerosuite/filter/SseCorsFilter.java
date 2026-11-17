@@ -40,7 +40,7 @@ public class SseCorsFilter implements ContainerRequestFilter, ContainerResponseF
             Response.ResponseBuilder responseBuilder = Response.ok()
                 .header("Access-Control-Allow-Origin", originHeader)
                 .header("Access-Control-Allow-Methods", "GET, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, Last-Event-ID")
+                .header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Terminal-Id, Cache-Control, Last-Event-ID")
                 .header("Access-Control-Allow-Credentials", "true")
                 .header("Access-Control-Expose-Headers", "Content-Type, Cache-Control, Last-Event-ID")
                 .header("Access-Control-Max-Age", "3600");
@@ -79,7 +79,7 @@ public class SseCorsFilter implements ContainerRequestFilter, ContainerResponseF
         // Adicionar headers CORS específicos para SSE
         responseContext.getHeaders().add("Access-Control-Allow-Origin", originHeader);
         responseContext.getHeaders().add("Access-Control-Allow-Methods", "GET, OPTIONS");
-        responseContext.getHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, Last-Event-ID");
+        responseContext.getHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Terminal-Id, Cache-Control, Last-Event-ID");
         responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
         responseContext.getHeaders().add("Access-Control-Expose-Headers", "Content-Type, Cache-Control, Last-Event-ID");
         responseContext.getHeaders().add("Access-Control-Max-Age", "3600");

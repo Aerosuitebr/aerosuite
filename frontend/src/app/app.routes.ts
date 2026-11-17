@@ -1,3 +1,4 @@
+import { ferramentasGuard } from './ferramentas/ferramentas.guard';
 import { fluxoOsGuard, OS_FLUXO_FUNCIONALIDADE as F } from './auth/fluxo-os.guard';
 import { Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
@@ -418,6 +419,22 @@ export const routes: Routes = [
         loadComponent: () => import('./hangar/hangar-job-card.component').then(m => m.HangarJobCardComponent),
         canActivate: [FuncionalidadeGuard],
         data: { perm: { funcionalidadesAny: ['HANGAR_JOB_CARD', 'ORDEM_SERVICO'] } }
+      },
+      {
+        path: 'ferramentas/minhas',
+        canActivate: [ferramentasGuard],
+        data: { pessoal: true },
+        loadComponent: () => import('./ferramentas/minhas-ferramentas.component').then(m => m.MinhasFerramentasComponent)
+      },
+      {
+        path: 'ferramentas',
+        canActivate: [ferramentasGuard],
+        loadComponent: () => import('./ferramentas/ferramentas.component').then(m => m.FerramentasComponent)
+      },
+      {
+        path: 'ferramentas/:visao',
+        canActivate: [ferramentasGuard],
+        loadComponent: () => import('./ferramentas/ferramentas.component').then(m => m.FerramentasComponent)
       },
       {
         path: 'nrc',

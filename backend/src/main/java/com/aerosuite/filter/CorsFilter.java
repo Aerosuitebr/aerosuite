@@ -39,7 +39,7 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
                 Response.ResponseBuilder responseBuilder = Response.ok()
                     .header("Access-Control-Allow-Origin", originHeader)
                     .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH")
-                    .header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, Last-Event-ID")
+                    .header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Terminal-Id, Cache-Control, Last-Event-ID")
                     .header("Access-Control-Allow-Credentials", "true")
                     .header("Access-Control-Max-Age", "3600");
                 
@@ -70,7 +70,7 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
             // Usar putSingle para evitar duplicação
             responseContext.getHeaders().putSingle("Access-Control-Allow-Origin", originHeader);
             responseContext.getHeaders().putSingle("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH");
-            responseContext.getHeaders().putSingle("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, Last-Event-ID");
+            responseContext.getHeaders().putSingle("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Terminal-Id, Cache-Control, Last-Event-ID");
             responseContext.getHeaders().putSingle("Access-Control-Allow-Credentials", "true");
             responseContext.getHeaders().putSingle("Access-Control-Max-Age", "3600");
             
@@ -95,7 +95,7 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
         if (!responseContext.getHeaders().containsKey("Access-Control-Allow-Origin")) {
             responseContext.getHeaders().putSingle("Access-Control-Allow-Origin", originHeader);
             responseContext.getHeaders().putSingle("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH");
-            responseContext.getHeaders().putSingle("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin");
+            responseContext.getHeaders().putSingle("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Terminal-Id");
             responseContext.getHeaders().putSingle("Access-Control-Allow-Credentials", "true");
         }
     }

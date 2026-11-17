@@ -38,6 +38,15 @@ describe('Pareamento obrigatório da máquina', () => {
     expect(tela.router.navigate).toHaveBeenCalledWith(['/os/fluxo']);
   });
 
+  it('encaminha um balcão pareado para a Ferramentaria sem consultar a fila de produção', () => {
+    const tela = estacao(false);
+    tela.router = { navigate: vi.fn() };
+    tela.resolverEstacao('FERRAMENTARIA', 'Balcão 01');
+    expect(tela.router.navigate).toHaveBeenCalledWith(['/ferramentas'], { replaceUrl: true });
+    expect(tela.carregarFila).not.toHaveBeenCalled();
+    expect(tela.iniciarPareamento).not.toHaveBeenCalled();
+  });
+
   it('libera a máquina quando o servidor confirma a estação', () => {
     const tela = estacao(false);
     tela.resolverEstacao('ESTACAO', 'Computador 01');

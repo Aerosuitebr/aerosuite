@@ -299,6 +299,8 @@ public class OSResource {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(ApiI18nMessages.messageOrFallback(ApiI18nMessages.OS_NOT_FOUND, e.getMessage()))
                     .build();
+        } catch (jakarta.ws.rs.ClientErrorException e) {
+            return Response.status(e.getResponse().getStatus()).entity(java.util.Map.of("message", e.getMessage())).build();
         } catch (Exception e) {
             LOG.warnf(e, "Erro inesperado");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)

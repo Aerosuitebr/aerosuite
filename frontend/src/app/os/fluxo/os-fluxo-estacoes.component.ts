@@ -1,3 +1,4 @@
+import { obterTerminalId } from '../../core/terminal-id';
 import { Component, ElementRef, HostListener, OnInit, OnDestroy, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +17,6 @@ import { FluxoEstacaoGestao, FluxoEstacoesGestao, FluxoMaquina, FluxoPareamentoI
 
 import { OsFluxoEditorEtapasComponent } from './os-fluxo-editor-etapas.component';
 
-const STORAGE_TERMINAL = 'osFluxo.terminalId';
 
 interface EdicaoMaquina {
   estacaoCodigo: string;
@@ -109,9 +109,9 @@ type NivelEstacao = 'linked' | 'stale' | 'fault' | 'fresh' | 'watch' | 'hour' | 
           <section class="ge-ops" [class.ge-ops--clear]="!acaoNecessaria" [attr.aria-label]="'fluxo.estacoes.ops.aria' | translate">
             <p class="ge-ops-head">{{ (acaoNecessaria ? 'fluxo.estacoes.ops.title' : 'fluxo.estacoes.ops.clear') | translate }}</p>
             <div class="ge-ops-items">
-              <button type="button" [class.ge-ops-warn]="estacoesSemVinculo > 0" [class.ge-ops-ok]="!estacoesSemVinculo" [attr.aria-pressed]="filtroVinculo==='sem'" (click)="filtroVinculo=filtroVinculo==='sem'?'todos':'sem';setorFiltro='';secoes.estacoes=true"><i class="pi pi-desktop" aria-hidden="true"></i>{{ opsTexto('unpaired') }}</button>
-              <button type="button" [class.ge-ops-warn]="maquinasSemSinalRecente > 0" [class.ge-ops-ok]="!maquinasSemSinalRecente" [attr.aria-pressed]="filtroVinculo==='sinal'" (click)="filtroVinculo=filtroVinculo==='sinal'?'todos':'sinal';setorFiltro='';secoes.estacoes=true"><i class="pi pi-clock" aria-hidden="true"></i>{{ opsTexto('stale') }}</button>
-              <button type="button" class="ge-ops-ok" [attr.aria-pressed]="filtroVinculo==='com'" (click)="filtroVinculo=filtroVinculo==='com'?'todos':'com';secoes.estacoes=true"><i class="pi pi-link" aria-hidden="true"></i>{{ opsTexto('active') }}</button>
+              <button type="button" [class.ge-ops-warn]="estacoesSemVinculo > 0" [class.ge-ops-ok]="!estacoesSemVinculo" [attr.aria-pressed]="filtroVinculo==='sem'" (click)="filtroVinculo=filtroVinculo==='sem'?'todos':'sem';setorFiltro='';buscaEstacao='';secoes.estacoes=true"><i class="pi pi-desktop" aria-hidden="true"></i>{{ opsTexto('unpaired') }}</button>
+              <button type="button" [class.ge-ops-warn]="maquinasSemSinalRecente > 0" [class.ge-ops-ok]="!maquinasSemSinalRecente" [attr.aria-pressed]="filtroVinculo==='sinal'" (click)="filtroVinculo=filtroVinculo==='sinal'?'todos':'sinal';setorFiltro='';buscaEstacao='';secoes.estacoes=true"><i class="pi pi-clock" aria-hidden="true"></i>{{ opsTexto('stale') }}</button>
+              <button type="button" class="ge-ops-ok" (click)="mostrarTodasMaquinas()"><i class="pi pi-link" aria-hidden="true"></i>{{ opsTexto('active') }}</button>
               <button type="button" [class.ge-ops-warn]="aprovacoesPendentes > 0" [class.ge-ops-ok]="!aprovacoesPendentes" (click)="focarDescoberta()"><i class="pi pi-inbox" aria-hidden="true"></i>{{ opsTexto('pending') }}</button>
             </div>
             <div class="ge-exception-names" *ngIf="estacoesSemVinculo && !focoMaquinas">
@@ -174,7 +174,7 @@ type NivelEstacao = 'linked' | 'stale' | 'fault' | 'fresh' | 'watch' | 'hour' | 
               </div>
               <button type="button" class="ge-primary" (click)="abrirPareamento()"><i class="pi pi-link"></i> {{ 'fluxo.estacoes.pairTitle' | translate }}</button>
             </div>
-            <nav class="ge-quick-filters" aria-label="Filtros rápidos de setor"><button type="button" [attr.aria-pressed]="!setorFiltro" (click)="setorFiltro=''">Todos os setores</button><button type="button" *ngFor="let setor of opcoesSetor" [attr.aria-pressed]="setorFiltro===setor" (click)="setorFiltro=setorFiltro===setor?'':setor">{{ setor }}</button></nav><div class="ge-search"><div class="ge-filter ge-vinculo" (click)="$event.stopPropagation()"><span>{{ 'fluxo.estacoes.filter.link' | translate }}</span><button type="button" class="ge-vinculo-btn" [attr.aria-expanded]="vinculoAberto" aria-haspopup="listbox" (click)="vinculoAberto=!vinculoAberto">{{ rotuloFiltroVinculo() }}<i class="pi pi-chevron-down" aria-hidden="true"></i></button><ul class="ge-vinculo-list" *ngIf="vinculoAberto" role="listbox" [attr.aria-label]="'fluxo.estacoes.filter.link' | translate"><li role="option" [attr.aria-selected]="filtroVinculo==='todos'"><button type="button" (click)="escolherVinculo('todos')">{{ 'fluxo.estacoes.filter.all' | translate }}</button></li><li role="option" [attr.aria-selected]="filtroVinculo==='sem'"><button type="button" (click)="escolherVinculo('sem')">{{ 'fluxo.estacoes.filter.without' | translate }}</button></li><li role="option" [attr.aria-selected]="filtroVinculo==='com'"><button type="button" (click)="escolherVinculo('com')">{{ 'fluxo.estacoes.filter.with' | translate }}</button></li><li role="option" [attr.aria-selected]="filtroVinculo==='sinal'"><button type="button" (click)="escolherVinculo('sinal')">{{ 'fluxo.estacoes.filter.stale' | translate }}</button></li></ul></div><div class="ge-view" role="group" aria-label="Visualização"><button type="button" [attr.aria-pressed]="visao==='tabela'" (click)="visao='tabela'">Tabela</button><button type="button" [attr.aria-pressed]="visao==='cards'" (click)="visao='cards'">Cards</button></div>
+            <nav class="ge-quick-filters" aria-label="Filtros rápidos de setor"><button type="button" [attr.aria-pressed]="!setorFiltro" (click)="setorFiltro=''">Todos os setores</button><button type="button" *ngFor="let setor of opcoesSetor" [attr.aria-pressed]="setorFiltro===setor" (click)="setorFiltro=setorFiltro===setor?'':setor">{{ setor }}</button></nav><div class="ge-search"><div class="ge-filter ge-vinculo" (click)="$event.stopPropagation()"><span>{{ 'fluxo.estacoes.filter.link' | translate }}</span><button type="button" class="ge-vinculo-btn" [attr.aria-expanded]="vinculoAberto" aria-haspopup="listbox" (click)="vinculoAberto=!vinculoAberto">{{ rotuloFiltroVinculo() }}<i class="pi pi-chevron-down" aria-hidden="true"></i></button><ul class="ge-vinculo-list" *ngIf="vinculoAberto" role="listbox" [attr.aria-label]="'fluxo.estacoes.filter.link' | translate"><li role="option" [attr.aria-selected]="filtroVinculo==='todos'"><button type="button" (click)="escolherVinculo('todos')">{{ 'fluxo.estacoes.filter.all' | translate }}</button></li><li role="option" [attr.aria-selected]="filtroVinculo==='sem'"><button type="button" (click)="escolherVinculo('sem')">{{ 'fluxo.estacoes.filter.without' | translate }}</button></li><li role="option" [attr.aria-selected]="filtroVinculo==='com'"><button type="button" (click)="escolherVinculo('com')">{{ 'fluxo.estacoes.filter.with' | translate }}</button></li><li role="option" [attr.aria-selected]="filtroVinculo==='sinal'"><button type="button" (click)="escolherVinculo('sinal')">{{ 'fluxo.estacoes.filter.stale' | translate }}</button></li></ul></div><div class="ge-view" role="group" aria-label="Visualização"><button type="button" [attr.aria-pressed]="visao==='tabela'" (click)="definirVisao('estacoes', 'tabela')">Tabela</button><button type="button" [attr.aria-pressed]="visao==='cards'" (click)="definirVisao('estacoes', 'cards')">Cards</button></div>
               <label class="ge-search-field">
                 <i class="pi pi-search" aria-hidden="true"></i>
                 <input pInputText [(ngModel)]="buscaEstacao" [attr.aria-label]="'fluxo.estacoes.searchLabel' | translate" placeholder="Buscar estação, máquina, usuário ou código…" list="ge-sugestoes" />
@@ -309,7 +309,22 @@ type NivelEstacao = 'linked' | 'stale' | 'fault' | 'fresh' | 'watch' | 'hour' | 
             </div>
 
             <p class="ge-drag-hint" *ngIf="d.maquinas.length"><i class="pi pi-arrows-alt" aria-hidden="true"></i> {{ 'fluxo.estacoes.drag.hint' | translate }}</p>
-            <div class="ge-table-wrap" *ngIf="d.maquinas.length">
+            <div class="ge-view" role="group" aria-label="Visualização das máquinas" *ngIf="d.maquinas.length">
+              <button type="button" [attr.aria-pressed]="visaoMaquinas==='tabela'" (click)="definirVisao('maquinas','tabela')">Lista</button>
+              <button type="button" [attr.aria-pressed]="visaoMaquinas==='cards'" (click)="definirVisao('maquinas','cards')">Cartões</button>
+            </div>
+            <p *ngIf="d.maquinas.length" aria-live="polite">Mostrando {{ maquinasFiltradas.length }} de {{ d.maquinas.length }} máquinas</p>
+            <div class="ge-grid" *ngIf="visaoMaquinas==='cards'">
+              <article class="ge-operation" *ngFor="let m of maquinasFiltradas; trackBy: trackMaquina">
+                <div class="ge-card-main">
+                  <strong>{{ m.apelido || ('fluxo.estacoes.unnamed' | translate) }}</strong>
+                  <p>{{ nomeEstacao(m.estacaoCodigo) }} · {{ presencaMaquina(m) }}</p>
+                  <p>{{ navegador(m.userAgent) }}</p>
+                  <button type="button" class="ge-text-btn" (click)="abrirMaquina(m)">Editar vínculo</button>
+                </div>
+              </article>
+            </div>
+            <div class="ge-table-wrap" *ngIf="d.maquinas.length && visaoMaquinas==='tabela'">
               <table class="fx-table ge-table">
                 <thead>
                   <tr>
@@ -450,9 +465,9 @@ type NivelEstacao = 'linked' | 'stale' | 'fault' | 'fresh' | 'watch' | 'hour' | 
             <div class="station-section-title"><span class="station-step-number">01</span><div><h3>{{ 'fluxo.estacoes.editor.identity' | translate }}</h3><p>{{ 'fluxo.estacoes.editor.identityHelp' | translate }}</p></div></div>
             <label class="ge-label" for="ge-est-nome">{{ 'fluxo.estacoes.field.name' | translate }}</label>
             <input pInputText id="ge-est-nome" [(ngModel)]="estacaoNome" maxlength="120" [placeholder]="'fluxo.estacoes.field.nameExample' | translate" [disabled]="salvandoEstacao || salvandoCatalogo" />
-            <div class="station-field-heading"><label class="ge-label" for="ge-est-setor">{{ 'fluxo.estacoes.field.section' | translate }}</label><button type="button" class="ge-text-btn" (click)="abrirCadastroCatalogo('setor')" [disabled]="salvandoEstacao || salvandoCatalogo"><i class="pi pi-plus" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.newSector' | translate }}</button></div>
-            <p-dropdown inputId="ge-est-setor" [options]="opcoesSetor" [(ngModel)]="estacaoSetor" [filter]="true" appendTo="body" [style]="{ width: '100%' }" [placeholder]="'fluxo.estacoes.field.sectionPlaceholder' | translate" [disabled]="salvandoEstacao || salvandoCatalogo"></p-dropdown>
-            <small class="gp-opc">{{ 'fluxo.estacoes.editor.sectorHelp' | translate }}</small>
+            <ng-container *ngIf="!editandoFerramentaria"><div class="station-field-heading"><label class="ge-label" for="ge-est-setor">{{ 'fluxo.estacoes.field.section' | translate }}</label><button type="button" class="ge-text-btn station-create-btn" (click)="abrirCadastroCatalogo('setor')" [disabled]="salvandoEstacao || salvandoCatalogo"><i class="pi pi-plus" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.newSector' | translate }}</button></div>
+            <p-dropdown inputId="ge-est-setor" [options]="opcoesSetor" [(ngModel)]="estacaoSetor" [filter]="true" appendTo="body" [style]="{ width: '100%' }" [placeholder]="'fluxo.estacoes.editor.physicalSector' | translate" [disabled]="salvandoEstacao || salvandoCatalogo"></p-dropdown>
+            <small class="gp-opc">{{ 'fluxo.estacoes.editor.sectorHelp' | translate }}</small></ng-container><p *ngIf="editandoFerramentaria">Estação de balcão, sem etapas de produção.</p>
           </section>
           <section class="station-inline-create" *ngIf="cadastroCatalogo" [attr.aria-label]="(cadastroCatalogo === 'setor' ? 'fluxo.estacoes.editor.newSector' : 'fluxo.estacoes.editor.newStage') | translate">
             <div class="station-field-heading"><h3>{{ (cadastroCatalogo === 'setor' ? 'fluxo.estacoes.editor.newSector' : 'fluxo.estacoes.editor.newStage') | translate }}</h3><button type="button" class="ge-text-btn" [disabled]="salvandoCatalogo" (click)="cadastroCatalogo = null">{{ 'fluxo.estacoes.cancel' | translate }}</button></div>
@@ -467,8 +482,8 @@ type NivelEstacao = 'linked' | 'stale' | 'fault' | 'fresh' | 'watch' | 'hour' | 
             <p class="gp-erro" role="alert" *ngIf="erroCatalogo">{{ erroCatalogo }}</p>
             <button pButton type="button" icon="pi pi-plus" [label]="'fluxo.estacoes.editor.addAndSelect' | translate" [loading]="salvandoCatalogo" [disabled]="!catalogoNome.trim() || (cadastroCatalogo === 'etapa' && (!catalogoSetor || (catalogoMeta !== null && (catalogoMeta < 1 || catalogoMeta > 525600))))" (click)="salvarCatalogo()"></button>
           </section>
-          <section class="station-step" [attr.aria-label]="'fluxo.estacoes.field.stages' | translate">
-            <div class="station-section-title"><span class="station-step-number">02</span><div><h3>{{ 'fluxo.estacoes.field.stages' | translate }}</h3><p>{{ 'fluxo.estacoes.editor.stagesHelp' | translate }}</p></div><button type="button" class="ge-text-btn" (click)="abrirCadastroCatalogo('etapa')" [disabled]="salvandoEstacao || salvandoCatalogo"><i class="pi pi-plus" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.newStage' | translate }}</button></div>
+          <section class="station-step" *ngIf="!editandoFerramentaria" [attr.aria-label]="'fluxo.estacoes.field.stages' | translate">
+            <div class="station-section-title"><span class="station-step-number">02</span><div><h3>{{ 'fluxo.estacoes.field.stages' | translate }}</h3><p>{{ 'fluxo.estacoes.editor.stagesHelp' | translate }}</p></div><button type="button" class="ge-text-btn station-create-btn" (click)="abrirCadastroCatalogo('etapa')" [disabled]="salvandoEstacao || salvandoCatalogo"><i class="pi pi-plus" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.newStage' | translate }}</button></div>
             <button type="button" class="ge-text-btn" (click)="mostrarEditorFluxo = true" [disabled]="salvandoEstacao || salvandoCatalogo"><i class="pi pi-sort-alt" aria-hidden="true"></i> Editar nomes, excluir ou reordenar etapas</button>
             <div class="station-stage-tools"><label class="station-search" for="ge-etapas-busca"><i class="pi pi-search" aria-hidden="true"></i><input pInputText id="ge-etapas-busca" [(ngModel)]="buscaEtapas" [placeholder]="'fluxo.estacoes.editor.searchStages' | translate" /></label><label class="station-selected-filter"><input type="checkbox" [(ngModel)]="somenteSelecionadas" /> {{ 'fluxo.estacoes.editor.selectedOnly' | translate }}</label></div>
             <div class="station-stage-actions"><span aria-live="polite">{{ estacaoEtapaIds.length }} / {{ dados?.etapasDisponiveis?.length || 0 }} {{ 'fluxo.estacoes.editor.selected' | translate }}</span><div><button type="button" class="ge-text-btn" [disabled]="salvandoEstacao || salvandoCatalogo || !etapasCadastroVisiveis.length" (click)="selecionarEtapas(etapasCadastroVisiveis)">{{ 'fluxo.estacoes.editor.selectVisible' | translate }}</button><button type="button" class="ge-text-btn" [disabled]="salvandoEstacao || salvandoCatalogo || !estacaoEtapaIds.length" (click)="estacaoEtapaIds = []">{{ 'fluxo.estacoes.editor.clear' | translate }}</button></div></div>
@@ -480,18 +495,18 @@ type NivelEstacao = 'linked' | 'stale' | 'fault' | 'fresh' | 'watch' | 'hour' | 
                   <span class="station-stage-order">{{ etapa.ordem }}</span><span class="station-stage-name">{{ etapa.nome }}</span><i *ngIf="estacaoEtapaIds.includes(etapa.id)" class="pi pi-check" aria-hidden="true"></i>
                 </label>
               </section>
-              <div class="station-empty" *ngIf="!etapasCadastroVisiveis.length"><i class="pi pi-search" aria-hidden="true"></i><p>{{ 'fluxo.estacoes.editor.noStages' | translate }}</p><button type="button" class="ge-text-btn" (click)="buscaEtapas = ''; somenteSelecionadas = false">{{ 'fluxo.estacoes.editor.resetFilters' | translate }}</button></div>
+              <div class="station-empty" *ngIf="!etapasCadastroVisiveis.length"><i class="pi pi-search" aria-hidden="true"></i><p>{{ (somenteSelecionadas && !estacaoEtapaIds.length ? 'fluxo.estacoes.editor.noneSelected' : 'fluxo.estacoes.editor.noStages') | translate }}</p><button type="button" class="ge-text-btn" (click)="buscaEtapas = ''; somenteSelecionadas = false">{{ 'fluxo.estacoes.editor.resetFilters' | translate }}</button></div>
             </div>
           </section>
         </main>
         <aside class="station-editor-aside">
-          <div class="station-preview"><span class="station-preview-eyebrow"><i class="pi pi-desktop" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.preview' | translate }}</span><h3>{{ estacaoNome.trim() || ('fluxo.estacoes.newStation' | translate) }}</h3><p>{{ estacaoSetor || ('fluxo.estacoes.field.sectionPlaceholder' | translate) }}</p><div class="station-preview-count"><strong>{{ estacaoEtapaIds.length }}</strong><span>{{ 'fluxo.estacoes.field.stages' | translate }}</span></div><ol class="station-preview-stages"><li *ngFor="let etapa of etapasSelecionadas"><span [style.background]="etapa.cor || '#2563eb'"></span>{{ etapa.nome }}</li></ol><p class="station-preview-hint" *ngIf="!estacaoEtapaIds.length">{{ 'fluxo.estacoes.editor.chooseStages' | translate }}</p></div>
-          <p class="station-save-note"><i class="pi pi-check-circle" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.saveNote' | translate }}</p>
+          <div class="station-preview" *ngIf="!editandoFerramentaria"><span class="station-preview-eyebrow"><i class="pi pi-desktop" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.preview' | translate }}</span><h3>{{ estacaoNome.trim() || ('fluxo.estacoes.newStation' | translate) }}</h3><p>{{ estacaoSetor || ('fluxo.estacoes.field.sectionPlaceholder' | translate) }}</p><div class="station-preview-count"><strong>{{ estacaoEtapaIds.length }}</strong><span>{{ 'fluxo.estacoes.field.stages' | translate }}</span></div><ol class="station-preview-stages"><li *ngFor="let etapa of etapasSelecionadas"><span [style.background]="etapa.cor || '#2563eb'"></span>{{ etapa.nome }}</li></ol><p class="station-preview-hint" *ngIf="!estacaoEtapaIds.length">{{ 'fluxo.estacoes.editor.chooseStages' | translate }}</p></div>
+          <p class="station-save-note" *ngIf="!editandoFerramentaria"><i class="pi pi-info-circle" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.saveNote' | translate }}</p>
           <details class="station-link-details" *ngIf="estacaoEmEdicao as e"><summary>{{ 'fluxo.estacoes.editor.links' | translate }} ({{ e.maquinas }})</summary><p *ngIf="!e.maquinas">{{ 'fluxo.estacoes.editor.noMachines' | translate }}</p><p *ngFor="let m of maquinasDa(e.codigo)">{{ m.apelido || m.terminalId }}</p><button type="button" class="ge-text-btn" (click)="abrirPareamento(e.codigo)">{{ 'fluxo.estacoes.menu.pair' | translate }}</button><p *ngIf="e.monitoradoDesde">{{ e.monitoradoDesde | date:'dd/MM/yyyy HH:mm' }}</p><p *ngIf="erroHistorico" role="alert">{{ erroHistorico }}</p><ol class="ge-history"><li *ngFor="let evento of eventosVinculo"><strong>{{ evento.acao }} · {{ evento.apelido || evento.terminalId }}</strong><span>{{ evento.responsavel }} · {{ evento.ocorridoEm | date:'dd/MM/yyyy HH:mm' }}</span></li></ol></details>
         </aside>
       </div>
       <p class="gp-erro station-editor-error" *ngIf="erroEstacao" role="alert">{{ erroEstacao }}</p>
-      <ng-template pTemplate="footer"><div class="station-editor-footer"><span><i class="pi pi-info-circle" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.required' | translate }}</span><div><button pButton type="button" [label]="'fluxo.estacoes.cancel' | translate" class="p-button-text" [disabled]="salvandoEstacao || salvandoCatalogo" (click)="mostrarEstacao = false"></button><button pButton type="button" [label]="estacaoEmEdicao ? ('fluxo.estacoes.saveChanges' | translate) : ('fluxo.estacoes.create' | translate)" icon="pi pi-check" [loading]="salvandoEstacao" [disabled]="!estacaoNome.trim() || !estacaoSetor || !estacaoEtapaIds.length || salvandoCatalogo || !!cadastroCatalogo" (click)="salvarEstacao()"></button></div></div></ng-template>
+      <ng-template pTemplate="footer"><div class="station-editor-footer"><span *ngIf="!editandoFerramentaria"><i class="pi pi-info-circle" aria-hidden="true"></i> {{ 'fluxo.estacoes.editor.required' | translate }}</span><div><button pButton type="button" [label]="'fluxo.estacoes.cancel' | translate" class="p-button-text" [disabled]="salvandoEstacao || salvandoCatalogo" (click)="mostrarEstacao = false"></button><button pButton type="button" [label]="estacaoEmEdicao ? ('fluxo.estacoes.saveChanges' | translate) : ('fluxo.estacoes.create' | translate)" icon="pi pi-check" [loading]="salvandoEstacao" [disabled]="!estacaoNome.trim() || (!editandoFerramentaria && (!estacaoSetor || !estacaoEtapaIds.length)) || salvandoCatalogo || !!cadastroCatalogo" (click)="salvarEstacao()"></button></div></div></ng-template>
     </p-dialog>
 
     <p-dialog styleClass="ge-dialog ge-dialog--danger" [(visible)]="mostrarExcluirEstacao" [modal]="true" [draggable]="false" [resizable]="false" appendTo="body" [header]="'fluxo.estacoes.deleteTitle' | translate"
@@ -687,9 +702,10 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
     if (n === 1) return this.tx('fluxo.estacoes.discovery.pending.one', '1 máquina aguardando aprovação');
     return this.tx('fluxo.estacoes.discovery.pending.many', `${n} máquinas aguardando aprovação`, { n: String(n) });
   }
-  secoes: Record<'situacao' | 'estacoes' | 'maquinas', boolean> = { situacao: true, estacoes: true, maquinas: false };
+  secoes: Record<'situacao' | 'estacoes' | 'maquinas', boolean> = { situacao: this.lerPreferencia('situacao-aberta') !== 'false', estacoes: this.lerPreferencia('estacoes-aberta') !== 'false', maquinas: this.lerPreferencia('maquinas-aberta') === 'true' };
   alternarSecao(nome: 'situacao' | 'estacoes' | 'maquinas', origem?: Event): void {
     this.secoes[nome] = !this.secoes[nome];
+    try { localStorage.setItem('aerosuite.gestaoEstacoes.' + nome + '-aberta', String(this.secoes[nome])); } catch { /* preferência opcional */ }
     if (!this.secoes[nome]) return;
     const secao = (origem?.currentTarget as HTMLElement | undefined)?.closest('section');
     if (!secao) return;
@@ -731,8 +747,8 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
   }
   vincularEstaMaquina(): void {
     if(this.preparandoPropria)return;
-    this.erroDescoberta='';let id:string;
-    try { id=localStorage.getItem(STORAGE_TERMINAL)||crypto.randomUUID();localStorage.setItem(STORAGE_TERMINAL,id); } catch { this.erroDescoberta='Permita o armazenamento do navegador para identificar esta máquina.';return; }
+    this.erroDescoberta='';
+    const id = this.terminalAtual;
     const existente=this.dados?.maquinas.find(m=>m.terminalId===id);if(existente){this.abrirMaquina(existente);return;}
     this.preparandoPropria=true;
     this.api.solicitarPareamento(id).subscribe({next:r=>{this.preparandoPropria=false;if(r.vinculada){this.carregar();return;}this.selecionarPendente({terminalId:id,userAgent:navigator.userAgent});},error:e=>{this.preparandoPropria=false;this.erroDescoberta=e?.error?.mensagem||'Não foi possível identificar esta máquina.';}});
@@ -740,11 +756,28 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
   focoMaquinas = false;
   setorFiltro = '';
   buscaMaquina = '';
+  mostrarTodasMaquinas(): void {
+    this.buscaMaquina = '';
+    this.buscaEstacao = '';
+    this.setorFiltro = '';
+    this.filtroVinculo = 'todos';
+    this.secoes.maquinas = true;
+  }
   get estacoesPendentes(): FluxoEstacaoGestao[] { return (this.dados?.estacoes || []).filter(e => !e.maquinas).sort((a, b) => this.compararPrioridade(a, b)); }
   get sugestoesBusca(): string[] { return [...new Set([...(this.dados?.estacoes || []).flatMap(e=>[e.nome,e.codigo,e.setor || '']),...(this.dados?.maquinas || []).flatMap(m=>[m.apelido || '',m.usuarioNome || '',m.terminalId,m.ip || ''])].filter(Boolean))]; }
   get maquinasFiltradas(): FluxoMaquina[] { const q=this.buscaMaquina.trim().toLocaleLowerCase('pt-BR'); return (this.dados?.maquinas || []).filter(m=>!q || [m.apelido,m.usuarioNome,m.terminalId,m.ip,this.nomeEstacao(m.estacaoCodigo)].join(' ').toLocaleLowerCase('pt-BR').includes(q)); }
   ultimoAcessoEstacao(codigo:string): string | null { return this.maquinasDa(codigo).map(m=>m.ultimoAcesso).filter((v):v is string=>!!v).sort().reverse()[0] || null; }
-  visao: 'tabela' | 'cards' = 'cards';
+  visao: 'tabela' | 'cards' = this.lerPreferencia('estacoes') === 'tabela' ? 'tabela' : 'cards';
+  visaoMaquinas: 'tabela' | 'cards' = this.lerPreferencia('maquinas') === 'cards' ? 'cards' : 'tabela';
+
+  private lerPreferencia(chave: string): string | null {
+    try { return localStorage.getItem('aerosuite.gestaoEstacoes.' + chave); } catch { return null; }
+  }
+
+  definirVisao(chave: 'estacoes' | 'maquinas', visao: 'tabela' | 'cards'): void {
+    if (chave === 'estacoes') this.visao = visao; else this.visaoMaquinas = visao;
+    try { localStorage.setItem('aerosuite.gestaoEstacoes.' + chave, visao); } catch { /* preferência opcional */ }
+  }
   filtroVinculo: 'todos' | 'com' | 'sem' | 'sinal' = 'todos';
   vinculoAberto = false;
   @HostListener('document:click')
@@ -869,11 +902,11 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
   pareando = false;
   erroPar = '';
 
-  readonly terminalAtual = this.lerTerminalAtual();
+  readonly terminalAtual = obterTerminalId();
 
   ngOnInit(): void {
     this.carregar();
-    this.timerAtualizacao=setInterval(()=>{ if(!this.carregando && !this.mostrarEstacao && !this.mostrarEditarMaquina && !this.mostrarPareamento && !this.mostrarRemocao && !this.salvandoMaquina && !this.maquinaDrag && !this.edicaoSuja())this.carregar(); },30000);
+    this.timerAtualizacao=setInterval(()=>{ if(document.visibilityState !== 'hidden' && !this.carregando && !this.editandoNome && !this.mostrarExcluirEstacao && !this.mostrarEditorFluxo && !this.mostrarEstacao && !this.mostrarEditarMaquina && !this.mostrarPareamento && !this.mostrarRemocao && !this.salvandoMaquina && !this.maquinaDrag && !this.edicaoSuja())this.carregar(); },30000);
   }
 
   carregar(): void {
@@ -1067,8 +1100,7 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
     this.acoesEstacao = [
       { label: this.tx('fluxo.estacoes.menu.edit', 'Editar estação'), icon: 'pi pi-pencil', command: () => this.abrirEstacao(e) },
       { label: this.tx('fluxo.estacoes.menu.pair', 'Parear máquina'), icon: 'pi pi-link', command: () => this.abrirPareamento(e.codigo) },
-      { separator: true },
-      { label: this.tx('fluxo.estacoes.menu.delete', 'Excluir estação…'), icon: 'pi pi-trash', command: () => this.pedirExclusaoEstacao(e) }
+      ...(e.codigo === 'FERRAMENTARIA' ? [] : [{ separator: true }, { label: this.tx('fluxo.estacoes.menu.delete', 'Excluir estação…'), icon: 'pi pi-trash', command: () => this.pedirExclusaoEstacao(e) }])
     ];
   }
 
@@ -1106,12 +1138,16 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
     });
   }
 
+  get editandoFerramentaria(): boolean { return this.estacaoEmEdicao?.codigo === 'FERRAMENTARIA'; }
+
   salvarEstacao(): void {
     const nome = this.estacaoNome.trim();
-    if (this.salvandoEstacao || this.salvandoCatalogo || this.cadastroCatalogo || !nome || !this.estacaoSetor || !this.estacaoEtapaIds.length) return;
+    if (this.salvandoEstacao || this.salvandoCatalogo || this.cadastroCatalogo || !nome || (!this.editandoFerramentaria && (!this.estacaoSetor || !this.estacaoEtapaIds.length))) return;
     this.salvandoEstacao = true;
     this.erroEstacao = '';
-    const requisicao = this.estacaoEmEdicao
+    const requisicao = this.editandoFerramentaria
+      ? this.api.renomearEstacao(this.estacaoEmEdicao!.codigo, nome)
+      : this.estacaoEmEdicao
       ? this.api.atualizarEstacao(this.estacaoEmEdicao.codigo, nome, this.estacaoSetor!, this.estacaoEtapaIds)
       : this.api.criarEstacao(nome, this.estacaoSetor!, this.estacaoEtapaIds);
     requisicao.subscribe({
@@ -1130,6 +1166,7 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
   }
 
   pedirExclusaoEstacao(e: FluxoEstacaoGestao): void {
+    if (e.codigo === 'FERRAMENTARIA') return;
     this.estacaoParaExcluir = e;
     this.erroExclusao = '';
     this.confirmacaoExclusao = '';
@@ -1303,11 +1340,4 @@ export class OsFluxoEstacoesComponent implements OnInit, OnDestroy {
   trackEstacao = (_: number, e: FluxoEstacaoGestao) => e.codigo;
   trackMaquina = (_: number, m: FluxoMaquina) => m.terminalId;
 
-  private lerTerminalAtual(): string | null {
-    try {
-      return localStorage.getItem(STORAGE_TERMINAL);
-    } catch {
-      return null;
-    }
-  }
 }
