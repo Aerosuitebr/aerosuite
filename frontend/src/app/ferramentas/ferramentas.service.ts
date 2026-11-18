@@ -31,7 +31,17 @@ export interface ResultadoPedidoPn { criadas: number; plano: PlanoPn; }
 export interface SugestaoPn { pn: string; descricao: string | null; temFerramentas: boolean; }
 export interface ResumoVinculoPn {
   pn: string;
+  descricao: string | null;
   ferramentas: { id: number; codigo: string; descricao: string }[];
+}
+
+export function requerAtencaoCalibracao(item: ItemFerramenta): boolean {
+  return item.ferramenta.exigeCalibracao && (item.diasCalibracao == null
+    || item.diasCalibracao <= janelaCalibracao(item));
+}
+
+export function janelaCalibracao(item: ItemFerramenta): number {
+  return Math.max(...item.ferramenta.alertas.split(',').map(Number));
 }
 
 @Injectable({providedIn: 'root'})

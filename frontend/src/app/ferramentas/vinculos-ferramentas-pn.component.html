@@ -1,10 +1,16 @@
 <section *ngIf="central; else acessoAcervo" class="pn-central" aria-labelledby="pn-central-titulo">
   <header class="pn-central-header">
     <div>
-      <h3 id="pn-central-titulo">Ferramentas por PN</h3>
-      <p>Consulte as ferramentas previstas para cada artigo.</p>
+      <div class="pn-central-titulo">
+        <h3 id="pn-central-titulo">Ferramentas por PN</h3>
+        <span *ngIf="resumo.length" class="pn-contagem">{{ resumoFiltrado.length }} {{ resumoFiltrado.length === 1 ? 'artigo' : 'artigos' }}</span>
+      </div>
+      <p>Consulte as ferramentas previstas e a situação operacional de cada uma.</p>
     </div>
-    <button *ngIf="podeEditar" pButton type="button" icon="pi pi-link" label="Gerenciar vínculos" (click)="abrir()"></button>
+    <button *ngIf="podeEditar" type="button" class="pn-acao-icone" aria-label="Gerenciar vínculos"
+            pTooltip="Gerenciar vínculos" tooltipEvent="both" tooltipPosition="top" (click)="abrir()">
+      <i class="pi pi-link" aria-hidden="true"></i>
+    </button>
   </header>
   <p *ngIf="aviso" role="status" class="pn-aviso">{{ aviso }}</p>
   <p *ngIf="carregandoResumo" role="status">Carregando vínculos…</p>
@@ -13,22 +19,73 @@
   </div>
   <ng-container *ngIf="!carregandoResumo && !erroResumo">
     <p *ngIf="!resumo.length" class="pn-vazio">Nenhum PN com ferramentas vinculadas.</p>
-    <label *ngIf="resumo.length" class="pn-campo pn-busca-central">
-      <span>Buscar vínculos</span>
-      <input type="search" [(ngModel)]="termoCentral" placeholder="PN, código ou descrição da ferramenta">
-    </label>
+    <div *ngIf="resumo.length" class="pn-barra-central">
+      <label class="pn-campo pn-busca-central">
+        <span>Buscar vínculos</span>
+        <input type="search" [ngModel]="termoCentral" (ngModelChange)="buscarResumo($event)"
+               placeholder="PN, artigo, código ou descrição da ferramenta">
+      </label>
+      <div class="pn-controles-expansao" role="group" aria-label="Expansão dos artigos">
+        <button type="button" class="pn-acao-icone" aria-label="Expandir todos"
+                pTooltip="Expandir todos" tooltipEvent="both" tooltipPosition="top"
+                [disabled]="!resumoFiltrado.length" (click)="definirExpansao(true)">
+          <i class="pi pi-angle-double-down" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="pn-acao-icone" aria-label="Recolher todos"
+                pTooltip="Recolher todos" tooltipEvent="both" tooltipPosition="top"
+                [disabled]="!resumoFiltrado.length" (click)="definirExpansao(false)">
+          <i class="pi pi-angle-double-up" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
     <div class="pn-cards" *ngIf="resumoFiltrado.length">
-      <article class="pn-card" *ngFor="let grupo of resumoFiltrado">
-        <header><h4>{{ grupo.pn }}</h4><span>{{ grupo.ferramentas.length }} {{ grupo.ferramentas.length === 1 ? 'ferramenta' : 'ferramentas' }}</span></header>
-        <ul>
-          <li *ngFor="let f of grupo.ferramentas"><strong>{{ f.codigo }}</strong> <span>{{ f.descricao }}</span></li>
-        </ul>
-        <button *ngIf="podeEditar" type="button" class="pn-link" (click)="abrir(grupo.pn)" [attr.aria-label]="'Editar vínculos de ' + grupo.pn">Editar vínculos</button>
+      <article class="pn-card" *ngFor="let grupo of resumoFiltrado; let indice = index">
+        <header [class.pn-card-aberto]="expandidos.has(grupo.pn)">
+          <h4>
+            <button type="button" class="pn-expandir" [attr.aria-expanded]="expandidos.has(grupo.pn)"
+                    [attr.aria-controls]="'pn-ferramentas-' + indice" (click)="alternarGrupo(grupo.pn)">
+              <i class="pi" [ngClass]="expandidos.has(grupo.pn) ? 'pi-chevron-down' : 'pi-chevron-right'" aria-hidden="true"></i>
+              <span class="pn-codigo"><ng-container *ngTemplateOutlet="destaque; context: {$implicit: grupo.pn}"></ng-container></span>
+              <span *ngIf="grupo.descricao" class="pn-nome-artigo"><ng-container *ngTemplateOutlet="destaque; context: {$implicit: grupo.descricao}"></ng-container></span>
+              <span class="pn-contagem">{{ grupo.ferramentas.length }} {{ grupo.ferramentas.length === 1 ? 'ferramenta' : 'ferramentas' }}</span>
+            </button>
+          </h4>
+          <button *ngIf="podeEditar" type="button" class="pn-acao-icone" pTooltip="Editar vínculos"
+                  tooltipEvent="both" tooltipPosition="top" (click)="abrir(grupo.pn, grupo.descricao)"
+                  [attr.aria-label]="'Editar vínculos de ' + grupo.pn">
+            <i class="pi pi-pencil" aria-hidden="true"></i>
+          </button>
+        </header>
+        <div [id]="'pn-ferramentas-' + indice" [hidden]="!expandidos.has(grupo.pn)">
+          <ul *ngIf="expandidos.has(grupo.pn)">
+            <li *ngFor="let f of ferramentasDoResumo(grupo)">
+              <strong class="pn-codigo"><ng-container *ngTemplateOutlet="destaque; context: {$implicit: f.codigo}"></ng-container></strong>
+              <span class="pn-descricao-ferramenta"><ng-container *ngTemplateOutlet="destaque; context: {$implicit: descricaoFerramenta(f)}"></ng-container></span>
+              <div class="pn-status-ferramenta" *ngIf="itensPorId.get(f.id) as item; else statusIndisponivel">
+                <span class="pn-local" *ngIf="item.localizacao || item.custodia?.localizacao || item.ferramenta.posicao as local">
+                  <i class="pi pi-map-marker" aria-hidden="true"></i> {{ local }}
+                </span>
+                <span class="pn-status" [class.pn-status-disponivel]="item.situacao === 'DISPONIVEL'" [class.pn-status-custodia]="item.custodia">
+                  {{ rotuloDisponibilidade(item) }}
+                </span>
+                <span class="pn-status pn-status-calibracao" *ngIf="requerAtencaoCalibracao(item)">Atenção à calibração</span>
+              </div>
+              <ng-template #statusIndisponivel><span class="pn-status">Status indisponível</span></ng-template>
+            </li>
+          </ul>
+        </div>
       </article>
     </div>
-    <p *ngIf="resumo.length && !resumoFiltrado.length" class="pn-vazio">Nenhum vínculo encontrado para essa busca.</p>
+    <p *ngIf="resumo.length && !resumoFiltrado.length" class="pn-vazio" role="status">Nenhum vínculo encontrado para essa busca.</p>
   </ng-container>
 </section>
+
+<ng-template #destaque let-texto>
+  <ng-container *ngFor="let trecho of trechosDestaque(texto)">
+    <mark *ngIf="trecho.marcado; else textoSemDestaque">{{ trecho.texto }}</mark>
+    <ng-template #textoSemDestaque>{{ trecho.texto }}</ng-template>
+  </ng-container>
+</ng-template>
 
 <ng-template #acessoAcervo>
   <button pButton type="button" icon="pi pi-link" label="Ferramentas por PN" class="p-button-outlined" (click)="abrir()"></button>
@@ -41,26 +98,37 @@
           [style]="{width: '66rem', maxWidth: '96vw'}" [draggable]="false" [resizable]="false"
           [closable]="!salvando" [closeOnEscape]="!salvando" (onHide)="limparPn()">
   <div class="pn-modal">
-    <p>Selecione um PN. Marque as ferramentas e use as setas, ou arraste entre as colunas. Depois, salve os vínculos.</p>
+    <p *ngIf="podeMover" class="pn-orientacao">Marque as ferramentas e clique em Adicionar ou Remover. Você também pode arrastá-las para a outra coluna.</p>
     <div class="pn-colunas">
       <section class="pn-coluna" [class.pn-soltar]="destinoArraste === 'vinculadas'"
                (dragover)="permitirArraste($event, 'vinculadas')" (drop)="soltar($event, 'vinculadas')" aria-label="PN e ferramentas vinculadas">
         <div class="pn-coluna-topo">
           <i class="pi pi-tag" aria-hidden="true"></i>
           <h3>PN e ferramentas vinculadas</h3>
-          <span class="pn-contagem" *ngIf="pn">{{ totalVinculadas }}</span>
+          <span class="pn-contagem" *ngIf="podeMover || salvando">{{ totalVinculadas }}</span>
         </div>
         <ng-container *ngIf="!pn; else pnSelecionado">
           <label class="pn-campo">
             <span>Buscar PN do artigo</span>
             <input type="search" maxlength="100" [ngModel]="termoPn" (ngModelChange)="pesquisarPn($event)"
-                   placeholder="PN, descrição ou modelo" (keydown.enter)="sugestoes.length ? abrirPn(sugestoes[0].pn) : abrirPn(pnDigitado)">
+                   placeholder="PN, descrição ou modelo" (keydown.enter)="confirmarBuscaPn()">
           </label>
           <div class="pn-sugestoes" aria-label="Resultados de PN">
-            <p *ngIf="!termoPn.trim()" class="pn-vazio">Digite parte do PN, da descrição ou do modelo.</p>
-            <p *ngIf="buscando" role="status" class="pn-vazio">Buscando PNs…</p>
-            <p *ngIf="erroBusca" role="alert" class="pn-erro">{{ erroBusca }}</p>
-            <button class="pn-sugestao" type="button" *ngFor="let sugestao of sugestoes" [class.pn-com-ferramentas]="sugestao.temFerramentas" (click)="abrirPn(sugestao.pn)">
+            <p *ngIf="!termoPn.trim() && sugestoes.length" class="pn-orientacao">Selecione um PN sugerido ou pesquise no catálogo para gerenciar seus vínculos.</p>
+            <p *ngIf="buscando" role="status" class="pn-vazio">Carregando PNs…</p>
+            <p *ngIf="erroBusca" role="alert" class="pn-erro">{{ erroBusca }}
+              <button type="button" class="pn-link" (click)="pesquisarPn(termoPn)">Tentar novamente</button>
+            </p>
+            <ng-container *ngIf="!buscando && !erroBusca && !sugestoes.length">
+              <p *ngIf="termoPn.trim(); else catalogoVazio" role="status" class="pn-vazio">Nenhum PN encontrado para esta busca.</p>
+              <ng-template #catalogoVazio>
+                <div class="pn-orientacao">
+                  <p class="pn-catalogo-vazio" role="status">Nenhum PN disponível. Cadastre um artigo com PN para começar.</p>
+                  <a class="pn-link" routerLink="/fcu/new" (click)="fechar()">Cadastrar artigo com PN</a>
+                </div>
+              </ng-template>
+            </ng-container>
+            <button class="pn-sugestao" type="button" *ngFor="let sugestao of sugestoes" [class.pn-com-ferramentas]="sugestao.temFerramentas" (click)="abrirPn(sugestao.pn, sugestao.descricao)">
               <span><strong>{{ sugestao.pn }}</strong><small *ngIf="sugestao.descricao">{{ sugestao.descricao }}</small><small *ngIf="sugestao.temFerramentas" class="pn-vinculo-indicador"><i class="pi pi-check-circle" aria-hidden="true"></i> Ferramentas associadas</small></span>
               <i class="pi pi-chevron-right" aria-hidden="true"></i>
             </button>
@@ -71,42 +139,57 @@
         </ng-container>
         <ng-template #pnSelecionado>
           <div class="pn-atual">
-            <span><small>PN selecionado</small><strong>{{ pn }}</strong></span>
-            <button type="button" class="pn-link" (click)="limparPn()" [disabled]="salvando || alterado">Trocar PN</button>
+            <span>
+              <small>PN selecionado</small>
+              <strong>{{ pn }}</strong>
+              <span *ngIf="descricaoPn" class="pn-descricao-artigo">{{ descricaoPn }}</span>
+            </span>
+            <button type="button" class="pn-link" (click)="trocarPn()" [disabled]="salvando || alterado">Trocar PN</button>
           </div>
           <p *ngIf="carregando" role="status" class="pn-vazio">Carregando ferramentas vinculadas…</p>
           <ng-container *ngIf="podeMover || salvando">
             <ng-container *ngTemplateOutlet="lista; context: {coluna: 'vinculadas', linhas: linhasVinculadas}"></ng-container>
-            <p *ngIf="!totalVinculadas" class="pn-vazio">Arraste ferramentas para cá ou use a seta para a esquerda.</p>
+            <p *ngIf="!totalVinculadas" class="pn-vazio">Nenhuma ferramenta vinculada a este PN.</p>
           </ng-container>
         </ng-template>
       </section>
 
       <div class="pn-setas" aria-label="Mover ferramentas">
-        <button pButton type="button" icon="pi pi-arrow-left" class="p-button-outlined" aria-label="Associar ferramentas selecionadas"
-                title="Associar selecionadas" [disabled]="!podeMover || !idsSelecionados('acervo').length" (click)="mover('acervo')"></button>
-        <button pButton type="button" icon="pi pi-arrow-right" class="p-button-outlined" aria-label="Dissociar ferramentas selecionadas"
-                title="Dissociar selecionadas" [disabled]="!podeMover || !idsSelecionados('vinculadas').length" (click)="mover('vinculadas')"></button>
+        <button pButton type="button" label="Adicionar" icon="pi pi-plus" aria-label="Adicionar ferramentas selecionadas ao PN"
+                [disabled]="!podeMover || !idsSelecionados('acervo').length" (click)="mover('acervo')"></button>
+        <button pButton type="button" label="Remover" icon="pi pi-minus" class="p-button-outlined" aria-label="Remover vínculos das ferramentas selecionadas"
+                [disabled]="!podeMover || !idsSelecionados('vinculadas').length" (click)="mover('vinculadas')"></button>
       </div>
 
       <section class="pn-coluna" [class.pn-soltar]="destinoArraste === 'acervo'"
                (dragover)="permitirArraste($event, 'acervo')" (drop)="soltar($event, 'acervo')" aria-label="Ferramentas do acervo">
         <div class="pn-coluna-topo">
-          <i class="pi pi-box" aria-hidden="true"></i><h3>Ferramentas do acervo</h3><span class="pn-contagem">{{ linhasAcervo.length }}</span>
+          <i class="pi pi-box" aria-hidden="true"></i><h3>Ferramentas do acervo</h3>
+          <span *ngIf="podeMover || salvando" class="pn-contagem">{{ linhasAcervo.length }}</span>
         </div>
-        <label class="pn-campo">
-          <span>Buscar ferramenta</span>
-          <input type="search" [ngModel]="termoFerramenta" (ngModelChange)="buscarFerramenta($event)"
-                 placeholder="Código, descrição, modelo ou série" [disabled]="salvando">
-        </label>
-        <ng-container *ngTemplateOutlet="lista; context: {coluna: 'acervo', linhas: linhasAcervo}"></ng-container>
-        <p *ngIf="!linhasAcervo.length" class="pn-vazio">Nenhuma ferramenta disponível nesta lista.</p>
+        <p *ngIf="!pn" class="pn-vazio">Selecione um PN para ver as ferramentas disponíveis para vínculo.</p>
+        <p *ngIf="carregando" role="status" class="pn-vazio">Carregando o acervo disponível para {{ pn }}…</p>
+        <ng-container *ngIf="podeMover || salvando">
+          <p *ngIf="destinoArraste === 'acervo'" class="pn-orientacao">Solte aqui para remover o vínculo.</p>
+          <label class="pn-campo">
+            <span>Buscar ferramenta</span>
+            <input type="search" [ngModel]="termoFerramenta" (ngModelChange)="buscarFerramenta($event)"
+                   placeholder="Código, descrição, modelo ou série" [disabled]="salvando">
+          </label>
+          <ng-container *ngTemplateOutlet="lista; context: {coluna: 'acervo', linhas: linhasAcervo}"></ng-container>
+          <p *ngIf="!linhasAcervo.length" class="pn-vazio">
+            {{ termoFerramenta.trim() ? 'Nenhuma ferramenta encontrada para esta busca.' : 'Nenhuma ferramenta disponível para vincular.' }}
+          </p>
+        </ng-container>
       </section>
     </div>
     <p *ngIf="erro" role="alert" class="pn-erro">{{ erro }}</p>
   </div>
   <ng-template pTemplate="footer">
-    <button pButton type="button" class="p-button-text" label="Cancelar" [disabled]="salvando" (click)="fechar()"></button>
+    <p *ngIf="!alterado && podeMover" class="pn-aviso-salvar" role="status">
+      Adicione ou remova vínculos para habilitar o salvamento.
+    </p>
+    <button pButton type="button" class="p-button-text p-button-secondary pn-cancelar" label="Cancelar" [disabled]="salvando" (click)="fechar()"></button>
     <button pButton type="button" icon="pi pi-check" label="Salvar vínculos" [loading]="salvando"
             [disabled]="!alterado || salvando" (click)="salvar()"></button>
   </ng-template>
@@ -126,8 +209,12 @@
         <label>
           <input type="checkbox" [checked]="selecionado(coluna, f.id)" [disabled]="!podeMover"
                  (change)="selecionar(coluna, f.id, $any($event.target).checked)">
-          <span><strong>{{ f.codigo }}</strong><small>{{ f.descricao }}</small><small *ngIf="f.modelo || f.serie">{{ f.modelo }}{{ f.modelo && f.serie ? ' · ' : '' }}{{ f.serie }}</small></span>
-          <i class="pi pi-bars" aria-hidden="true"></i>
+          <span>
+            <strong>{{ f.codigo }}</strong>
+            <small *ngIf="descricaoFerramenta(f) as descricao">{{ descricao }}</small>
+            <small *ngIf="detalhesFerramenta(f) as detalhes">{{ detalhes }}</small>
+          </span>
+          <i *ngIf="podeMover" class="pi pi-bars" aria-hidden="true"></i>
         </label>
       </li>
     </ul>

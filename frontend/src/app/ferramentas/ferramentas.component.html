@@ -1,4 +1,4 @@
-<main class="tool-hub fx-shell">
+<main class="tool-hub fx-shell" [class.central-shell]="visao === 'operacoes'">
   <header class="page-header fx-hero">
     <div class="hero-title"><span class="hero-icon"><i class="pi" [ngClass]="iconeVisao" aria-hidden="true"></i></span><div><p class="fx-eyebrow">Operação · Ferramentaria</p><h1>{{ titulo }}</h1><p class="fx-lead">{{ subtitulo }}</p></div></div>
     <div class="header-actions">
@@ -17,6 +17,25 @@
       <a routerLink="/ferramentas/pendencias" class="pending-nav" [class.has-pending]="pendentes.length > 0" [class.active]="visao === 'pendencias'" [attr.aria-label]="'Pendências: ' + pendentes.length + ' solicitações ou confirmações'"><i class="pi pi-inbox" aria-hidden="true"></i> Pendências <span class="nav-count" *ngIf="pendentes.length">{{ pendentes.length }}</span></a>
       <a routerLink="/ferramentas/minhas" [class.active]="visao === 'minhas'" *ngIf="tem('MECANICO')"><i class="pi pi-user" aria-hidden="true"></i> Minhas ferramentas</a>
     </nav>
+    <section *ngIf="visao === 'operacoes'; else terminalCompleto" class="terminal-strip" [class.is-ready]="terminalPronto"
+             aria-label="Identificação da máquina">
+      <details>
+        <summary>
+          <i class="pi" [ngClass]="terminalPronto ? 'pi-check-circle' : 'pi-desktop'" aria-hidden="true"></i>
+          <strong aria-live="polite">{{ terminalPronto ? terminal?.estacaoNome + ' · ' + (terminal?.maquina || 'Balcão') : terminal?.vinculada ? 'Máquina vinculada à produção' : terminalErro ? 'Verificação do terminal indisponível' : 'Pareie esta máquina à Ferramentaria' }}</strong>
+          <span *ngIf="pareamento?.codigo && !terminal?.vinculada" class="terminal-code mono" [attr.aria-label]="'Código de pareamento ' + pareamento?.codigo">{{ pareamento?.codigo }}</span>
+        </summary>
+        <div class="terminal-strip-details">
+          <p *ngIf="terminalPronto">Balcão liberado para operações físicas.</p>
+          <p *ngIf="!terminalPronto && terminal?.vinculada">Vínculo atual: {{ terminal?.estacaoNome }} · {{ terminal?.maquina }}. Utilize um balcão da Ferramentaria ou solicite à gestão a alteração do vínculo.</p>
+          <p *ngIf="!terminalPronto && !terminal?.vinculada">{{ terminalErro || 'Um Administrador ou Diretor pode usar o código em Gerenciar estações → Parear máquina e selecionar Ferramentaria.' }}</p>
+          <p *ngIf="!terminalPronto">Consultas e cadastro continuam disponíveis. Operações físicas exigem um balcão pareado.</p>
+          <p *ngIf="pareamento?.codigo && !terminal?.vinculada">Código válido até {{ pareamento?.expiraEm | date:'HH:mm' }} · renovação automática.</p>
+        </div>
+      </details>
+      <button type="button" class="soft-button compact" (click)="atualizarTerminal()" [disabled]="verificandoTerminal" aria-label="Verificar terminal"><i class="pi pi-refresh" [class.pi-spin]="verificandoTerminal" aria-hidden="true"></i> <span>Verificar</span></button>
+    </section>
+    <ng-template #terminalCompleto>
     <section class="terminal-panel" [class.is-ready]="terminalPronto" aria-label="Identificação da máquina">
       <span class="terminal-icon"><i class="pi" [class.pi-desktop]="!terminalPronto" [class.pi-check-circle]="terminalPronto" aria-hidden="true"></i></span>
       <div class="terminal-copy" aria-live="polite">
@@ -29,6 +48,7 @@
       </div>
       <button type="button" class="soft-button" (click)="atualizarTerminal()" [disabled]="verificandoTerminal"><i class="pi pi-refresh" [class.pi-spin]="verificandoTerminal" aria-hidden="true"></i> Verificar terminal</button>
     </section>
+    </ng-template>
     <div class="notice" [class.error]="avisoErro" role="status" aria-live="polite" *ngIf="aviso"><i class="pi" [class.pi-check-circle]="!avisoErro" [class.pi-exclamation-circle]="avisoErro" aria-hidden="true"></i><span>{{ aviso }}</span><button class="icon-button" type="button" aria-label="Fechar aviso" (click)="aviso = ''"><i class="pi pi-times" aria-hidden="true"></i></button></div>
     <ng-template #resumoFiltro>
       <div class="kpi-filter-banner" *ngIf="filtro!=='TODOS'">
@@ -38,15 +58,21 @@
     </ng-template>
     <ng-template #valorKpiPendente><span *ngIf="carregando" class="kpi-skeleton" aria-hidden="true"></span><strong *ngIf="!carregando" class="kpi-empty" aria-label="Indicador indisponível">—</strong></ng-template>
     <div class="metrics" [attr.aria-busy]="carregando" [attr.aria-label]="carregando ? 'Atualizando resumo operacional' : 'Resumo operacional'">
-      <button class="metric" type="button" [class.is-selected]="filtro==='DISPONIVEL'" [attr.aria-pressed]="filtro==='DISPONIVEL'" [disabled]="!sincronizado" (click)="verFiltro('DISPONIVEL')"><span class="metric-icon mint"><i class="pi pi-check-circle" aria-hidden="true"></i></span><span><span class="metric-label">Disponíveis agora</span><strong *ngIf="sincronizado; else valorKpiPendente">{{ disponiveis | number:'2.0-0' }}</strong><small>Prontas para a operação</small></span><i class="pi pi-arrow-up-right metric-arrow" aria-hidden="true"></i></button>
-      <button class="metric" type="button" [class.is-selected]="filtro==='SOB_CUSTODIA'" [attr.aria-pressed]="filtro==='SOB_CUSTODIA'" [disabled]="!sincronizado" (click)="verFiltro('SOB_CUSTODIA')"><span class="metric-icon blue"><i class="pi pi-wrench" aria-hidden="true"></i></span><span><span class="metric-label">Sob custódia</span><strong *ngIf="sincronizado; else valorKpiPendente">{{ emUso | number:'2.0-0' }}</strong><small>Com responsável identificado</small></span><i class="pi pi-arrow-up-right metric-arrow" aria-hidden="true"></i></button>
-      <button class="metric" type="button" [class.is-selected]="filtro==='ATRASADAS'" [attr.aria-pressed]="filtro==='ATRASADAS'" [disabled]="!sincronizado" (click)="verFiltro('ATRASADAS')"><span class="metric-icon amber"><i class="pi pi-clock" aria-hidden="true"></i></span><span><span class="metric-label">Retorno e recolhimento</span><strong *ngIf="sincronizado; else valorKpiPendente">{{ atrasadas | number:'2.0-0' }}</strong><small>Itens que precisam de atenção</small></span><i class="pi pi-arrow-up-right metric-arrow" aria-hidden="true"></i></button>
-      <button class="metric" type="button" [class.is-selected]="filtro==='CALIBRACAO_ATENCAO'" [attr.aria-pressed]="filtro==='CALIBRACAO_ATENCAO'" [disabled]="!sincronizado" (click)="verFiltro('CALIBRACAO_ATENCAO')"><span class="metric-icon violet"><i class="pi pi-verified" aria-hidden="true"></i></span><span><span class="metric-label">Atenção à calibração</span><strong *ngIf="sincronizado; else valorKpiPendente">{{ atencaoCal | number:'2.0-0' }}</strong><small>Próximas, vencidas ou sem análise</small></span><i class="pi pi-arrow-up-right metric-arrow" aria-hidden="true"></i></button>
+      <button class="metric" type="button" [class.is-selected]="filtro==='DISPONIVEL'" [attr.aria-pressed]="filtro==='DISPONIVEL'" [disabled]="!sincronizado" (click)="verFiltro('DISPONIVEL')"><span class="metric-icon mint"><i class="pi pi-check-circle" aria-hidden="true"></i></span><span><span class="metric-label">Disponíveis agora</span><strong *ngIf="sincronizado; else valorKpiPendente" [class.kpi-zero]="disponiveis === 0">{{ disponiveis | number:'2.0-0' }}</strong><small>Prontas para a operação</small></span><i class="pi pi-arrow-up-right metric-arrow" aria-hidden="true"></i></button>
+      <button class="metric" type="button" [class.is-selected]="filtro==='SOB_CUSTODIA'" [attr.aria-pressed]="filtro==='SOB_CUSTODIA'" [disabled]="!sincronizado" (click)="verFiltro('SOB_CUSTODIA')"><span class="metric-icon blue"><i class="pi pi-wrench" aria-hidden="true"></i></span><span><span class="metric-label">Sob custódia</span><strong *ngIf="sincronizado; else valorKpiPendente" [class.kpi-zero]="emUso === 0">{{ emUso | number:'2.0-0' }}</strong><small>Com responsável identificado</small></span><i class="pi pi-arrow-up-right metric-arrow" aria-hidden="true"></i></button>
+      <button class="metric" type="button" [class.is-selected]="filtro==='ATRASADAS'" [attr.aria-pressed]="filtro==='ATRASADAS'" [disabled]="!sincronizado" (click)="verFiltro('ATRASADAS')"><span class="metric-icon amber"><i class="pi pi-clock" aria-hidden="true"></i></span><span><span class="metric-label">Retorno e recolhimento</span><strong *ngIf="sincronizado; else valorKpiPendente" [class.kpi-zero]="atrasadas === 0">{{ atrasadas | number:'2.0-0' }}</strong><small>Itens que precisam de atenção</small></span><i class="pi pi-arrow-up-right metric-arrow" aria-hidden="true"></i></button>
+      <button class="metric" type="button" [class.is-selected]="filtro==='CALIBRACAO_ATENCAO'" [attr.aria-pressed]="filtro==='CALIBRACAO_ATENCAO'" [disabled]="!sincronizado" (click)="verFiltro('CALIBRACAO_ATENCAO')"><span class="metric-icon violet"><i class="pi pi-verified" aria-hidden="true"></i></span><span><span class="metric-label">Atenção à calibração</span><strong *ngIf="sincronizado; else valorKpiPendente" [class.kpi-zero]="atencaoCal === 0">{{ atencaoCal | number:'2.0-0' }}</strong><small>Próximas, vencidas ou sem análise</small></span><i class="pi pi-arrow-up-right metric-arrow" aria-hidden="true"></i></button>
     </div>
 
-    <section class="operations-center" *ngIf="visao==='operacoes'" aria-label="Central de operações de ferramentaria e calibração">
+    <section class="operations-center" *ngIf="visao==='operacoes' && filtro==='TODOS'" aria-label="Central de operações de ferramentaria e calibração">
+      <div class="central-modos" role="group" aria-label="Modo de visualização da Central">
+        <button type="button" [attr.aria-pressed]="modoCentral==='integrada'" (click)="modoCentral='integrada'">Visão integrada</button>
+        <button type="button" [attr.aria-pressed]="modoCentral==='operacional'" (click)="modoCentral='operacional'">Operacional</button>
+        <button type="button" [attr.aria-pressed]="modoCentral==='apoio'" (click)="modoCentral='apoio'">Apoio técnico</button>
+      </div>
+      <div class="central-grid" [class.central-foco]="modoCentral!=='integrada'">
+      <section class="central-fluxo" [hidden]="modoCentral==='apoio'" aria-label="Fluxo operacional">
       <div class="operations-command"><div><span class="mini-label">ACOMPANHAMENTO OPERACIONAL</span><h2>O próximo passo de cada instrumento</h2><p>Localize a OS, acompanhe as confirmações e trate os retornos e a calibração.</p></div><button type="button" class="primary-button" *ngIf="tem('ESTACAO','MECANICO')" [disabled]="!osOperacoes" (click)="operarOs()"><i class="pi pi-barcode" aria-hidden="true"></i> Preparar retirada para a OS</button></div>
-      <app-vinculos-ferramentas-pn [central]="true" [podeEditar]="tem('GESTAO')" [itens]="itens"></app-vinculos-ferramentas-pn>
       <div class="operations-filters"><label>Ordem de serviço<select [(ngModel)]="osOperacoes"><option [ngValue]="null">Todas as ordens</option><option *ngFor="let o of contexto.ordens" [ngValue]="o.id">OS {{ o.numero }} · {{ o.descricao }}</option></select></label><label>Buscar instrumento ou responsável<input [(ngModel)]="buscaOperacoes" placeholder="Código, descrição, responsável ou OS"></label><button type="button" class="soft-button" (click)="osOperacoes=null;buscaOperacoes=''">Limpar filtros</button></div>
       <p class="operation-note" *ngIf="osOperacoes">A visão por OS mostra ferramentas sob sua custódia e movimentos destinados a ela. Os ciclos de calibração só aparecem quando o instrumento ainda tem esse vínculo.</p>
       <div class="operations-board">
@@ -54,7 +80,23 @@
         <section class="operations-column"><header><span class="metric-icon amber"><i class="pi pi-clock" aria-hidden="true"></i></span><h3>Custódia e retorno</h3><b>{{ operacoesRetornos.length }}</b></header><p>Responsáveis, previsão de devolução e recolhimentos.</p><article *ngFor="let i of operacoesRetornos" [class.operations-alert]="i.atrasada || i.recolher"><span class="mini-label">OS {{ i.osNumero }} · {{ i.ferramenta.codigo }}</span><h4>{{ i.ferramenta.descricao }}</h4><p>{{ i.mecanico }} · {{ i.localizacao || i.custodia?.localizacao }}</p><strong>{{ i.recolher ? 'Recolhimento necessário' : i.atrasada ? 'Retorno em atraso' : 'Sob custódia' }}</strong><p>Previsão: {{ i.custodia?.retornoPrevisto | date:'dd/MM/yyyy HH:mm' }}</p><button type="button" class="text-button" [disabled]="!terminalPronto" *ngIf="tem('ESTACAO')" (click)="abrir('devolver',i)">Conferir devolução <i class="pi pi-arrow-right" aria-hidden="true"></i></button></article><div class="operations-empty" *ngIf="!operacoesRetornos.length">Nenhuma custódia nesta seleção.</div></section>
         <section class="operations-column"><header><span class="metric-icon violet"><i class="pi pi-verified" aria-hidden="true"></i></span><h3>Calibração</h3><b>{{ operacoesCiclos.length }}</b></header><p>Envio, retorno físico e decisão técnica.</p><article *ngFor="let c of operacoesCiclos" [class.operations-alert]="cicloAtrasado(c)"><span class="mini-label">{{ itemDoCiclo(c)?.ferramenta?.codigo }}</span><h4>{{ itemDoCiclo(c)?.ferramenta?.descricao }}</h4><strong>{{ rotulo(c.status) }}</strong><p>Retorno: {{ c.retornoPrevisto | date:'dd/MM/yyyy' }}</p><span *ngIf="cicloAtrasado(c)">Retorno do laboratório em atraso</span><button type="button" class="text-button" *ngIf="tem('CALIBRACAO')" [disabled]="c.status==='EM_LABORATORIO' && !terminalPronto" (click)="abrir(c.status==='EM_LABORATORIO'?'receber':'analisar',itemDoCiclo(c),c)">{{ c.status==='EM_LABORATORIO' ? 'Conferir retorno' : 'Analisar certificado' }} <i class="pi pi-arrow-right" aria-hidden="true"></i></button></article><div class="operations-empty" *ngIf="!operacoesCiclos.length">Nenhum ciclo aberto nesta seleção.</div></section>
       </div>
-      <section class="operations-watch"><h3>Planejar calibração · {{ operacoesCalibracao.length }} instrumentos em atenção</h3><p>Confira vencimentos e restrições antes de disponibilizar o instrumento.</p><div class="operations-watch-grid"><article *ngFor="let i of operacoesCalibracao"><strong>{{ i.ferramenta.codigo }} · {{ i.ferramenta.descricao }}</strong><span>{{ i.ferramenta.proximaCalibracao ? ('Vencimento: '+(i.ferramenta.proximaCalibracao | date:'dd/MM/yyyy')) : 'Sem calibração aprovada' }}</span><small>{{ i.restricao || rotulo(i.situacao) }}</small><button class="text-button" type="button" (click)="navegar('calibracao')">Abrir calibração <i class="pi pi-arrow-right" aria-hidden="true"></i></button></article></div><p *ngIf="!operacoesCalibracao.length">Nenhum instrumento em atenção nesta seleção.</p></section>
+      </section>
+      <aside class="central-apoio" [hidden]="modoCentral==='operacional'" aria-label="Apoio técnico">
+        <app-vinculos-ferramentas-pn class="central-pn" [central]="true" [podeEditar]="tem('GESTAO')" [itens]="itens"></app-vinculos-ferramentas-pn>
+        <section class="operations-watch">
+          <header><i class="pi pi-bell" aria-hidden="true"></i><h3>Alertas de calibração</h3><b>{{ operacoesCalibracao.length }}</b></header>
+          <p *ngIf="!operacoesCalibracao.length">Nenhum alerta de planejamento nesta seleção.</p>
+          <div class="operations-watch-grid">
+            <article *ngFor="let i of operacoesCalibracao">
+              <strong>{{ i.ferramenta.codigo }} · {{ i.ferramenta.descricao }}</strong>
+              <span>{{ i.ferramenta.proximaCalibracao ? ('Vencimento: '+(i.ferramenta.proximaCalibracao | date:'dd/MM/yyyy')) : 'Sem calibração aprovada' }}</span>
+              <small>{{ i.restricao || rotulo(i.situacao) }}</small>
+              <button class="text-button" type="button" (click)="ver(i)">Ver instrumento <i class="pi pi-arrow-right" aria-hidden="true"></i></button>
+            </article>
+          </div>
+        </section>
+      </aside>
+      </div>
     </section>
     <section class="station-grid" *ngIf="visao === 'estacao'">
       <div class="station-main">
@@ -104,7 +146,8 @@
       </aside>
     </section>
 
-    <section #resultadoCards tabindex="-1" class="panel inventory-panel kpi-results" *ngIf="visao==='acervo'">
+    <section #resultadoCards tabindex="-1" class="panel inventory-panel kpi-results"
+             *ngIf="visao==='acervo' || (visao==='operacoes' && filtro!=='TODOS')" aria-label="Resultados de ferramentas">
       <app-vinculos-ferramentas-pn *ngIf="tem('GESTAO')" [itens]="itens"></app-vinculos-ferramentas-pn>
       <ng-container *ngTemplateOutlet="resumoFiltro"></ng-container>
       <div class="panel-heading"><div><span class="mini-label">UM PATRIMÔNIO, UM HISTÓRICO</span><h3>Acervo de ferramentas <span class="count-chip">{{ filtrados.length }}</span></h3></div><button class="primary-button compact" type="button" (click)="abrir('cadastro')" *ngIf="tem('GESTAO')"><i class="pi pi-plus" aria-hidden="true"></i> Novo exemplar</button></div>

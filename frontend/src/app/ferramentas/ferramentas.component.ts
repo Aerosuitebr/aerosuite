@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { combineLatest, firstValueFrom, forkJoin, Subscription, timer } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
-import { Calibracao, Contexto, Evento, Ferramenta, FerramentasService, ItemFerramenta, Pendente } from './ferramentas.service';
+import { Calibracao, Contexto, Evento, Ferramenta, FerramentasService, ItemFerramenta, Pendente, janelaCalibracao, requerAtencaoCalibracao } from './ferramentas.service';
 import { criterioProvisorio } from './criterio-aceitacao';
 import { TerminalFerramentaria, PareamentoFerramentaria } from './ferramentas.service';
 import { FullscreenToggleComponent } from '../shared/fullscreen-toggle/fullscreen-toggle.component';
@@ -95,12 +95,12 @@ export class FerramentasComponent implements OnInit, OnDestroy {
     if(filtro==='TODOS')return true;
     if(filtro==='SOB_CUSTODIA')return !!i.custodia;
     if(filtro==='ATRASADAS')return i.atrasada || i.recolher;
-    if(filtro==='CALIBRACAO_ATENCAO')return i.ferramenta.exigeCalibracao && (i.diasCalibracao==null || i.diasCalibracao<=this.janela(i));
+    if(filtro==='CALIBRACAO_ATENCAO')return requerAtencaoCalibracao(i);
     return i.situacao===filtro;
   }
   get tituloFiltro() {return ({DISPONIVEL:'Disponíveis agora',SOB_CUSTODIA:'Sob custódia',EM_USO:'Em uso',ATRASADAS:'Retorno e recolhimento',BLOQUEADA:'Ferramentas bloqueadas',EM_LABORATORIO:'Em laboratório',CALIBRACAO_ATENCAO:'Atenção à calibração'} as Record<string,string>)[this.filtro] || 'Todas as ferramentas';}
   get descricaoFiltro() {return ({DISPONIVEL:'Exemplares regulares e livres para retirada.',SOB_CUSTODIA:'Todas as custódias ativas, incluindo ferramentas bloqueadas que precisam ser recolhidas.',ATRASADAS:'Exemplares com retorno em atraso ou restrição que exige recolhimento.',CALIBRACAO_ATENCAO:'Instrumentos dentro da janela de alerta, vencidos ou sem calibração aprovada.'} as Record<string,string>)[this.filtro] || 'Exemplares que correspondem à situação selecionada.';}
-  janela(i: ItemFerramenta) {return Math.max(...i.ferramenta.alertas.split(',').map(Number));}
+  janela(i: ItemFerramenta) {return janelaCalibracao(i);}
   get filtrados() {
     const q=this.busca.trim().toLocaleLowerCase('pt-BR');
     return this.itens.filter(i => (!q || [i.ferramenta.codigo,i.ferramenta.descricao,i.ferramenta.serie,i.mecanico,i.osNumero].some(v=>v?.toLocaleLowerCase('pt-BR').includes(q))) &&
@@ -111,7 +111,11 @@ export class FerramentasComponent implements OnInit, OnDestroy {
   get operacoesPendentes(){const q=this.buscaOperacoes.trim().toLocaleLowerCase('pt-BR');return this.pendentes.filter(p=>(!this.osOperacoes || p.movimento.osId===this.osOperacoes) && (!q || [p.codigo,p.descricao,p.mecanico,p.osNumero].join(' ').toLocaleLowerCase('pt-BR').includes(q)));}
   get operacoesRetornos(){return this.operacoesItens.filter(i=>i.custodia).sort((a,b)=>Number(b.recolher || b.atrasada)-Number(a.recolher || a.atrasada) || (a.custodia!.retornoPrevisto || '').localeCompare(b.custodia!.retornoPrevisto || ''));}
   get operacoesCiclos(){const ids=new Set(this.operacoesItens.map(i=>i.ferramenta.id));return this.ciclosAbertos.filter(c=>ids.has(c.ferramentaId));}
-  get operacoesCalibracao(){return this.operacoesItens.filter(i=>this.correspondeFiltro(i,'CALIBRACAO_ATENCAO'));}
+  modoCentral: 'integrada' | 'operacional' | 'apoio' = 'integrada';
+  get operacoesCalibracao() {
+    const emCiclo = new Set(this.ciclosAbertos.map(ciclo => ciclo.ferramentaId));
+    return this.operacoesItens.filter(item => !emCiclo.has(item.ferramenta.id) && requerAtencaoCalibracao(item));
+  }
   async operarOs(){if(this.osOperacoes)await this.router.navigate(['/ferramentas'],{queryParams:{osId:this.osOperacoes}});}
   get ciclosAbertos() {return this.ciclos.filter(c=>['EM_LABORATORIO','EM_ANALISE'].includes(c.status));}
   get titulo() {return ({operacoes:'Central de operações',estacao:'Estação de ferramentas',acervo:'Acervo de ferramentas',calibracao:'Gestão de calibração',pendencias:'Movimentações pendentes',minhas:'Minhas ferramentas'} as any)[this.visao] || 'Estação de ferramentas';}
@@ -132,6 +136,12 @@ export class FerramentasComponent implements OnInit, OnDestroy {
   }
   async navegar(v: string){await this.router.navigate(v==='estacao'?['/ferramentas']:['/ferramentas',v]);}
   async verFiltro(filtro: string){
+    if (this.visao === 'operacoes') {
+      const proximoFiltro = this.filtro === filtro ? 'TODOS' : filtro;
+      await this.alterarFiltro(proximoFiltro);
+      if (proximoFiltro !== 'TODOS') setTimeout(() => this.focarResultados());
+      return;
+    }
     this.busca='';
     await this.router.navigate(['/ferramentas',filtro==='CALIBRACAO_ATENCAO'?'calibracao':'acervo'],{queryParams:{filtro}});
     setTimeout(()=>this.focarResultados());

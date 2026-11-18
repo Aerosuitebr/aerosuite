@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { TooltipModule } from 'primeng/tooltip';
 import { Subscription, firstValueFrom, switchMap, timer } from 'rxjs';
-import { Ferramenta, FerramentasService, ItemFerramenta, PlanoPn, ResumoVinculoPn, SugestaoPn } from './ferramentas.service';
+import { Ferramenta, FerramentasService, ItemFerramenta, PlanoPn, ResumoVinculoPn, SugestaoPn, requerAtencaoCalibracao } from './ferramentas.service';
 
 type Coluna = 'vinculadas' | 'acervo';
 type Linha = Pick<Ferramenta, 'id' | 'codigo' | 'descricao'> & Partial<Ferramenta>;
@@ -13,12 +14,18 @@ type Linha = Pick<Ferramenta, 'id' | 'codigo' | 'descricao'> & Partial<Ferrament
 @Component({
   selector: 'app-vinculos-ferramentas-pn',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, ButtonModule, DialogModule],
+  imports: [CommonModule, FormsModule, RouterLink, ButtonModule, DialogModule, TooltipModule],
   templateUrl: './vinculos-ferramentas-pn.component.html',
   styleUrl: './vinculos-ferramentas-pn.component.scss'
 })
 export class VinculosFerramentasPnComponent implements OnInit, OnDestroy {
-  @Input() itens: ItemFerramenta[] = [];
+  private acervo: ItemFerramenta[] = [];
+  itensPorId = new Map<number, ItemFerramenta>();
+  @Input() set itens(valor: ItemFerramenta[]) {
+    this.acervo = valor;
+    this.itensPorId = new Map(valor.map(item => [item.ferramenta.id, item]));
+  }
+  get itens() { return this.acervo; }
   @Input() central = false;
   @Input() podeEditar = true;
   private readonly api = inject(FerramentasService);
@@ -27,9 +34,14 @@ export class VinculosFerramentasPnComponent implements OnInit, OnDestroy {
   private consultaResumo?: Subscription;
   aberto = false;
   pn = '';
+  descricaoPn = '';
   termoPn = '';
   termoFerramenta = '';
   termoCentral = '';
+  private destaqueCentral?: RegExp;
+  private trechosPorTexto = new Map<string, { texto: string; marcado: boolean }[]>();
+  expandidos = new Set<string>();
+  readonly requerAtencaoCalibracao = requerAtencaoCalibracao;
   sugestoes: SugestaoPn[] = [];
   resumo: ResumoVinculoPn[] = [];
   buscando = false;
@@ -67,7 +79,52 @@ export class VinculosFerramentasPnComponent implements OnInit, OnDestroy {
         || a.codigo.localeCompare(b.codigo, 'pt-BR', { numeric: true }));
   }
   get resumoFiltrado() {
-    return this.resumo.filter(r => this.combina([r.pn, ...r.ferramentas.flatMap(f => [f.codigo, f.descricao])], this.termoCentral));
+    return this.resumo.filter(grupo => this.ferramentasDoResumo(grupo).length > 0);
+  }
+  ferramentasDoResumo(grupo: ResumoVinculoPn) {
+    if (this.combina([grupo.pn, grupo.descricao ?? undefined], this.termoCentral)) return grupo.ferramentas;
+    return grupo.ferramentas.filter(f => this.combina([f.codigo, f.descricao], this.termoCentral));
+  }
+  buscarResumo(termo: string) {
+    this.termoCentral = termo;
+    this.trechosPorTexto.clear();
+    const busca = this.normalizar(termo);
+    const termos = busca.split(/\s+/).filter(Boolean).sort((a, b) => b.length - a.length);
+    const literal = termos.map(palavra => palavra.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+    const compacto = busca.replace(/[^\p{L}\p{N}]/gu, '');
+    const comSeparadores = [...compacto].join('[^\\p{L}\\p{N}]*');
+    this.destaqueCentral = literal ? new RegExp([comSeparadores, literal].filter(Boolean).join('|'), 'gu') : undefined;
+  }
+  definirExpansao(expandir: boolean) {
+    this.expandidos = new Set(expandir ? this.resumoFiltrado.map(grupo => grupo.pn) : []);
+  }
+  alternarGrupo(pn: string) {
+    if (this.expandidos.has(pn)) this.expandidos.delete(pn);
+    else this.expandidos.add(pn);
+  }
+  trechosDestaque(texto: string) {
+    const anteriores = this.trechosPorTexto.get(texto);
+    if (anteriores) return anteriores;
+    const normalizado = texto.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('pt-BR');
+    const partes: { texto: string; marcado: boolean }[] = [];
+    let inicio = 0;
+    for (const ocorrencia of this.destaqueCentral ? normalizado.matchAll(this.destaqueCentral) : []) {
+      const posicao = ocorrencia.index!;
+      if (posicao > inicio) partes.push({ texto: texto.slice(inicio, posicao), marcado: false });
+      inicio = posicao + ocorrencia[0].length;
+      partes.push({ texto: texto.slice(posicao, inicio), marcado: true });
+    }
+    if (inicio < texto.length) partes.push({ texto: texto.slice(inicio), marcado: false });
+    this.trechosPorTexto.set(texto, partes);
+    return partes;
+  }
+  rotuloDisponibilidade(item: ItemFerramenta) {
+    const rotulos: Record<string, string> = {
+      DISPONIVEL: 'Disponível agora', BLOQUEADA: 'Bloqueada', EM_LABORATORIO: 'No laboratório',
+      EM_ANALISE: 'Em análise', EM_USO: 'Em uso', BAIXA: 'Baixada'
+    };
+    if (item.custodia) return item.osNumero ? `Sob custódia (OS #${item.osNumero})` : 'Sob custódia';
+    return rotulos[item.situacao] ?? item.situacao.replaceAll('_', ' ').toLocaleLowerCase('pt-BR');
   }
 
   ngOnInit() {
@@ -83,19 +140,23 @@ export class VinculosFerramentasPnComponent implements OnInit, OnDestroy {
     this.carregandoResumo = true;
     this.erroResumo = '';
     this.consultaResumo = this.api.get<ResumoVinculoPn[]>('/plano-pn/vinculos').subscribe({
-      next: resumo => { this.resumo = resumo; this.carregandoResumo = false; },
+      next: resumo => {
+        this.resumo = resumo;
+        this.carregandoResumo = false;
+      },
       error: err => {
         this.erroResumo = err.error?.message || 'Não foi possível carregar os vínculos.';
         this.carregandoResumo = false;
       }
     });
   }
-  abrir(pn?: string) {
+  abrir(pn?: string, descricao?: string | null) {
     this.limparPn();
     this.termoFerramenta = '';
     this.aviso = '';
     this.aberto = true;
-    if (pn) this.abrirPn(pn);
+    if (pn) this.abrirPn(pn, descricao);
+    else this.pesquisarPn('');
   }
   fechar() {
     if (!this.salvando) this.aberto = false;
@@ -104,6 +165,7 @@ export class VinculosFerramentasPnComponent implements OnInit, OnDestroy {
     this.buscaPn?.unsubscribe();
     this.consultaPlano?.unsubscribe();
     this.pn = '';
+    this.descricaoPn = '';
     this.termoPn = '';
     this.sugestoes = [];
     this.buscando = false;
@@ -121,9 +183,8 @@ export class VinculosFerramentasPnComponent implements OnInit, OnDestroy {
     this.buscaPn?.unsubscribe();
     this.erroBusca = '';
     this.sugestoes = [];
-    this.buscando = !!termo.trim();
-    if (!this.buscando) return;
-    this.buscaPn = timer(220).pipe(switchMap(() =>
+    this.buscando = true;
+    this.buscaPn = timer(termo.trim() ? 220 : 0).pipe(switchMap(() =>
       this.api.get<SugestaoPn[]>(`/plano-pn/catalogo?q=${encodeURIComponent(termo.trim())}`)
     )).subscribe({
       next: sugestoes => { this.sugestoes = sugestoes; this.buscando = false; },
@@ -133,10 +194,17 @@ export class VinculosFerramentasPnComponent implements OnInit, OnDestroy {
       }
     });
   }
-  abrirPn(pn: string) {
+  confirmarBuscaPn() {
+    if (!this.pnDigitado || this.buscando || this.erroBusca) return;
+    const exato = this.sugestoes.find(s => s.pn === this.pnDigitado);
+    const sugestao = exato ?? (this.sugestoes.length === 1 ? this.sugestoes[0] : undefined);
+    if (sugestao) this.abrirPn(sugestao.pn, sugestao.descricao);
+  }
+  abrirPn(pn: string, descricao?: string | null) {
     this.limparPn();
     this.pn = pn.trim();
     if (!this.pn) return;
+    this.descricaoPn = descricao?.trim() ?? '';
     this.carregando = true;
     this.consultaPlano = this.api.planoPn(this.pn).subscribe({
       next: plano => { this.aplicarPlano(plano); this.carregando = false; },
@@ -145,6 +213,30 @@ export class VinculosFerramentasPnComponent implements OnInit, OnDestroy {
         this.carregando = false;
       }
     });
+    if (descricao === undefined) {
+      const pnConsultado = this.pn.toUpperCase();
+      this.consultaPlano.add(this.api.get<SugestaoPn[]>(`/plano-pn/catalogo?q=${encodeURIComponent(pnConsultado)}`).subscribe({
+        next: sugestoes => {
+          this.descricaoPn = sugestoes.find(s => s.pn === pnConsultado)?.descricao?.trim() ?? '';
+        },
+        error: () => { this.descricaoPn = ''; }
+      }));
+    }
+  }
+  descricaoFerramenta(ferramenta: Linha) {
+    const descricao = ferramenta.descricao.trim();
+    const codigo = ferramenta.codigo.trim();
+    const inicioCodigo = descricao.length - codigo.length;
+    if (codigo && descricao.slice(inicioCodigo).toUpperCase() === codigo.toUpperCase()
+        && (inicioCodigo === 0 || /\s/.test(descricao[inicioCodigo - 1]))) {
+      return descricao.slice(0, inicioCodigo).trimEnd();
+    }
+    return descricao;
+  }
+  detalhesFerramenta(ferramenta: Linha) {
+    const serie = ferramenta.serie?.trim() ?? '';
+    const serieDistinta = serie.toUpperCase() === ferramenta.codigo.trim().toUpperCase() ? '' : serie;
+    return [ferramenta.modelo?.trim(), serieDistinta].filter(Boolean).join(' · ');
   }
   get podeMover() { return !!this.plano && !this.salvando; }
   get pnDigitado() { return this.termoPn.trim().toUpperCase(); }

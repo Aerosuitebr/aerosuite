@@ -108,12 +108,11 @@ public class FerramentaService {
     public record ResultadoPedidoPn(int criadas, PlanoPn plano) {}
     public record SugestaoPn(String pn, String descricao, boolean temFerramentas) {}
     public record FerramentaVinculada(Long id, String codigo, String descricao) {}
-    public record ResumoVinculoPn(String pn, List<FerramentaVinculada> ferramentas) {}
+    public record ResumoVinculoPn(String pn, String descricao, List<FerramentaVinculada> ferramentas) {}
     public record AlteracaoVinculosPn(String pn, List<Long> adicionar, List<Long> remover) {}
 
     public List<SugestaoPn> buscarPns(String termo, Usuario u) {
         exigir(u, GESTAO);
-        if (termo == null || termo.isBlank()) return List.of();
         String busca = normalizarPn(termo);
         String compacto = busca.replaceAll("[^\\p{L}\\p{N}]", "");
         String filtro = "%" + busca.replace("!", "!!").replace("%", "!%").replace("_", "!_").replaceAll("\\s+", "%") + "%";
@@ -132,7 +131,10 @@ public class FerramentaService {
             ) candidatos
             WHERE CONVERT(CONCAT_WS(' ', pn, descricao) USING utf8mb4) COLLATE utf8mb4_0900_ai_ci LIKE :filtro ESCAPE '!'
                OR (:compacto <> '' AND REGEXP_REPLACE(pn, '[^[:alnum:]]', '') LIKE CONCAT('%', :compacto, '%'))
-            GROUP BY pn ORDER BY (pn = :busca) DESC, (pn LIKE CONCAT(:busca, '%')) DESC, pn LIMIT 20
+            GROUP BY pn
+            ORDER BY (pn = :busca) DESC, (pn LIKE CONCAT(:busca, '%')) DESC,
+                     CASE WHEN :busca = '' THEN tem_ferramentas ELSE 0 END DESC, pn
+            LIMIT 20
             """).setParameter("filtro", filtro).setParameter("compacto", compacto)
             .setParameter("busca", busca).setParameter("tid", tenants.currentTenantIdStr()).getResultList();
         return linhas.stream().map(linha -> {
@@ -152,7 +154,22 @@ public class FerramentaService {
             porPn.computeIfAbsent((String) linha[0], ignorado -> new ArrayList<>())
                 .add(new FerramentaVinculada((Long) linha[1], (String) linha[2], (String) linha[3]));
         }
-        return porPn.entrySet().stream().map(v -> new ResumoVinculoPn(v.getKey(), v.getValue())).toList();
+        if (porPn.isEmpty()) return List.of();
+        List<?> artigos = em.createNativeQuery("""
+            SELECT vinculados.pn,
+                   MAX(NULLIF(CONCAT_WS(' · ', NULLIF(TRIM(f.fcu_description), ''), NULLIF(TRIM(f.modelo), '')), ''))
+            FROM (SELECT DISTINCT pn FROM ferramenta_pn WHERE tenant_id = :tid) vinculados
+            JOIN fcu f ON CONVERT(UPPER(TRIM(f.pn)) USING utf8mb4) COLLATE utf8mb4_bin = vinculados.pn
+                      AND f.tenant_id = :tid
+            GROUP BY vinculados.pn
+            """).setParameter("tid", tenants.currentTenantIdStr()).getResultList();
+        Map<String, String> descricoes = new HashMap<>();
+        for (Object artigo : artigos) {
+            Object[] campos = (Object[]) artigo;
+            descricoes.put((String) campos[0], (String) campos[1]);
+        }
+        return porPn.entrySet().stream()
+            .map(v -> new ResumoVinculoPn(v.getKey(), descricoes.get(v.getKey()), v.getValue())).toList();
     }
 
     private String normalizarPn(String pn) {
