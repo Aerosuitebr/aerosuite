@@ -16,7 +16,6 @@ import { extractApiErrorMessage } from '../../core/backend-i18n-message.util';
 import { TranslatePipe } from '../../core/translate.pipe';
 import { AuthShellComponent } from '../../shared/auth-shell/auth-shell.component';
 import { AuthBrandHeaderComponent } from '../../shared/auth-brand-header/auth-brand-header.component';
-import { VitrineLoginPreviewComponent } from '../../vitrine/vitrine-login-preview.component';
 import { sanitizeInternalReturnUrl } from '../auth-return-url.util';
 import { MfaSetupComponent } from '../mfa-setup/mfa-setup.component';
 import { enrichTenantLoginOptions, defaultTenantOptionLabelParts } from '../tenant-login-option.util';
@@ -36,8 +35,7 @@ import { enrichTenantLoginOptions, defaultTenantOptionLabelParts } from '../tena
     DropdownModule,
     TranslatePipe,
     AuthShellComponent,
-    AuthBrandHeaderComponent,
-    VitrineLoginPreviewComponent
+    AuthBrandHeaderComponent
   ],
   template: `
     <app-auth-shell [cardMaxWidth]="480">
@@ -153,8 +151,6 @@ import { enrichTenantLoginOptions, defaultTenantOptionLabelParts } from '../tena
       <div authFooter class="auth-footer">
         <p class="auth-copyright">© {{ currentYear }} {{ branding.config().copyrightEntity }} — {{ 'login.copyrightReserved' | translate }}</p>
       </div>
-
-      <app-vitrine-login-preview authBelow />
     </app-auth-shell>
   `
 })
